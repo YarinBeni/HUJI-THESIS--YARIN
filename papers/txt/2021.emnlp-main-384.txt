@@ -1,0 +1,84 @@
+Here is a clean summary of the paper "Filling the Gaps in Ancient Akkadian Texts: A Masked Language Modelling Approach," organized by its internal sections.
+
+## Abstract
+
+[cite_start]The paper presents models designed to complete missing text in Latinized transliterations of ancient Mesopotamian cuneiform tablets (2500 BCE - 100 CE)[cite: 8]. [cite_start]This task is traditionally a subjective and time-consuming manual process for scholars[cite: 9]. [cite_start]The authors identify that this challenge can be formulated as a masked language modeling (MLM) task[cite: 10]. [cite_start]They develop several architectures for Akkadian, the *lingua franca* of the time[cite: 11]. [cite_start]Despite the data scarcity (only 1 million tokens), they achieve state-of-the-art performance (89% hit@5) by using a greedy decoding scheme and leveraging pretraining on other languages[cite: 12]. [cite_start]A human evaluation with experts confirms the models' applicability in assisting with the transcription of extinct languages[cite: 13].
+
+---
+
+## 1. Introduction
+
+[cite_start]Akkadian was the *lingua franca* of the ancient Middle East, written in cuneiform on clay tablets[cite: 15, 16]. [cite_start]These tablets, which are the main record of Mesopotamian cultures, suffer from deterioration, forcing scholars to manually "fill in the gaps" based on context[cite: 17, 40]. [cite_start]The paper's core idea is that this scholarly task directly corresponds to the **Masked Language Modeling (MLM)** objective used in modern NLP[cite: 41].
+
+[cite_start]The authors experiment with BERT-based models on the **Open Richly Annotated Cuneiform Corpus (Oracc)**, a major collection of Akkadian transcriptions[cite: 20, 42]. [cite_start]They focus on the effect of multilingual pretraining and use a greedy decoding scheme to predict multi-word gaps[cite: 42, 43].
+
+[cite_start]Their automatic evaluation shows that combining multilingual pretraining with Akkadian finetuning achieves state-of-the-art results[cite: 46]. [cite_start]Strikingly, the **zero-shot performance** of a multilingual model (never trained on Akkadian) **surpasses a monolingual Akkadian model** trained from scratch, suggesting the pretraining signal is more important than the small target dataset[cite: 47]. [cite_start]A controlled human study confirms that the model's predictions are useful to domain experts[cite: 49, 50].
+
+---
+
+## 2. Background
+
+### 2.1 The Akkadian Language and the Oracc Dataset
+
+[cite_start]Akkadian is an ancient Semitic language, related to modern Hebrew and Arabic[cite: 63]. [cite_start]The paper uses the **Oracc** dataset, a large collection of Latinized transliterations of cuneiform texts[cite: 65, 66]. [cite_start]The corpus contains about 10,000 texts, totaling 1 million words and 2.3 million signs[cite: 68]. [cite_start]Crucially for this work, editors often estimate the number of missing signs from a tablet's physical damage and mark them with an 'x' in the transliteration[cite: 69].
+
+### 2.2 Multilingual Masked Language Modeling
+
+[cite_start]MLM is a task where a model predicts masked (hidden) parts of a text given the surrounding context[cite: 75]. [cite_start]Recent work has shown that training on multiple languages at once (multilingual MLM) is highly beneficial for downstream tasks, especially in low-resource settings[cite: 77]. [cite_start]This paper identifies that the MLM objective is a direct formalization of the "filling in the gaps" task in Akkadian texts[cite: 78].
+
+---
+
+## 3. Task Definition
+
+[cite_start]The task is to predict missing signs within a transliterated Akkadian document[cite: 81]. [cite_start]The model is given the surrounding text and, importantly, the **number of missing signs** (represented by a sequence of 'x's), which researchers can often estimate from the physical tablet[cite: 83, 84, 87]. [cite_start]The model's output should be the specific sequence of signs that fills the gap[cite: 88].
+
+---
+
+## 4. Model
+
+[cite_start]The paper's approach is based on BERT models[cite: 90].
+
+* [cite_start]**Preprocessing:** Before training, all editorial annotations (like uncertainty marks, superscripts, and subscripts) are removed from the Oracc text to isolate only the original transcribed text[cite: 100, 101, 103]. [cite_start]During inference, the 'x' characters indicating missing signs are replaced with [MASK] tokens[cite: 105].
+* **Masked Language Models:** Two main models are compared:
+    1.  [cite_start]**BERT+AKK(mono):** A smaller BERT model trained from scratch *only* on the Akkadian texts from Oracc[cite: 119].
+    2.  [cite_start]**MBERT+Akk:** A standard pretrained **multilingual BERT (M-BERT)** that is then finetuned on the Akkadian texts[cite: 120]. [cite_start]M-BERT was chosen because its pretraining data included other Semitic languages (like Hebrew and Arabic) which are typologically similar to Akkadian[cite: 120].
+* [cite_start]**Decoding:** Since a gap can span multiple signs (and thus multiple tokens), a **greedy decoding algorithm** is used to extend the BERT's single-token predictions into a full sequence of signs[cite: 123, 124, 126].
+
+---
+
+## 5. Automatic Evaluation
+
+[cite_start]The models were evaluated by masking 15% of known tokens in the test set and measuring the model's ability to predict them[cite: 135, 143].
+
+* [cite_start]**Models Compared:** The two new models (BERT+AKK(mono), MBERT+Akk) were compared against an LSTM baseline, a zero-shot M-BERT (not finetuned), and an M-BERT finetuned on both Akkadian and its English translations (MBERT+Akk+Eng)[cite: 138, 139, 140, 141, 142].
+* [cite_start]**Metrics:** Performance was measured using **Mean Reciprocal Rank (MRR)** and **Hit@k** (the percentage of time the correct answer is in the top-k predictions)[cite: 162].
+* **Results:**
+    * [cite_start]**State-of-the-Art:** The finetuned **MBERT+Akk** model achieved the best performance by a large margin, outperforming all other models by at least 20% on both metrics (e.g., 89% overall Hit@5)[cite: 153, 177].
+    * [cite_start]**Zero-shot > Monolingual:** In a striking finding, the **zero-shot MBERT-base** (which never saw Akkadian data) **outperformed the BERT+AKK(mono)** model that was trained *only* on Akkadian[cite: 179]. [cite_start]This strongly suggests that for such a low-resource language, the signal from large-scale multilingual pretraining is more valuable than the signal from the small monolingual dataset itself[cite: 180].
+    * [cite_start]**No Benefit from English:** Finetuning on the parallel English translations (MBERT+Akk+Eng) provided **no additional benefit** over finetuning on Akkadian alone[cite: 222].
+    * [cite_start]**Sequence Length:** Performance was high for single-token predictions but degraded sharply as the number of signs to predict increased[cite: 223, 226].
+
+---
+
+## 6. Human Evaluation and User Studies
+
+[cite_start]Automatic metrics are an "upper bound" because a gap can often have *multiple* plausible completions, not just the single "correct" one from the original text[cite: 229].
+
+* [cite_start]**Setup:** To measure real-world applicability, two professional **Assyriologists** (experts in Akkadian) evaluated the model's predictions[cite: 268]. [cite_start]For each gap, they were shown 5 options in a random order: 3 predictions from the model, the "gold" original text, and a "distractor" (a random text span)[cite: 246, 247]. [cite_start]The experts, who did not know which text was which, marked each as "plausible" or "implausible"[cite: 247, 248].
+* **Results:**
+    * [cite_start]**Practical Utility:** The model was found to be **applicably useful**[cite: 288]. [cite_start]For gaps of 1-2 signs, the experts accepted **at least one** of the model's suggestions as plausible, on average[cite: 288]. [cite_start]This is highly significant, as 1-2 sign gaps make up the majority (57%) of missing spans in the Oracc dataset[cite: 289].
+    * **Underestimation:** The experts tended to **underestimate** the model's performance. [cite_start]They frequently marked the "gold" (original) text as implausible, but almost never accepted the "distractor"[cite: 293, 295]. [cite_start]This suggests the experts were very strict and may have also ruled out other plausible predictions from the model[cite: 295].
+
+---
+
+## 7. Related Work
+
+[cite_start]The most similar prior work (Fetaya et al., 2020) used an LSTM model, but it focused on smaller, highly-structured texts (like lists) and did not use multilingual pretraining[cite: 297, 298, 299]. [cite_start]When the authors retrained this LSTM model on their new dataset, it underperformed all the BERT-based models, including the zero-shot M-BERT, further highlighting the value of multilingual pretraining[cite: 300].
+
+---
+
+## 8. Conclusions and Future Work
+
+[cite_start]The paper presented a state-of-the-art model for completing missing signs in Akkadian texts by finetuning a multilingual BERT model[cite: 310]. [cite_start]The key discovery is that in this extremely low-resource setting, the signal from **multilingual pretraining is more important than the finetuning data itself**, with a zero-shot model outperforming a monolingual one[cite: 313, 314]. [cite_start]A controlled user study with experts confirmed the model's practical utility in aiding human editors[cite: 314].
+
+[cite_start]Future work includes designing better decoding schemes to handle longer gaps (e.g., using SpanBERT) [cite: 316] [cite_start]and systematically exploring the specific contribution of related Semitic languages (like Arabic and Hebrew) in the pretraining process[cite: 317].

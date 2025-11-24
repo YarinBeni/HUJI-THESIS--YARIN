@@ -1,0 +1,90 @@
+Here is a summary of the paper "Restoring and attributing ancient texts using deep neural networks," organized by its sections.
+
+## Abstract
+
+[cite_start]Ancient inscriptions are vital historical evidence, but many are damaged, displaced, or undated[cite: 11]. [cite_start]This paper introduces **Ithaca**, a deep neural network designed to assist historians by performing **textual restoration**, **geographical attribution** (determining original location), and **chronological attribution** (dating) for ancient Greek inscriptions[cite: 13]. [cite_start]Ithaca focuses on **collaboration**, **decision support**, and **interpretability**[cite: 15]. [cite_start]While Ithaca achieves **62% accuracy** on restoration alone, historians using Ithaca improved their accuracy significantly from **25% to 72%**[cite: 16]. [cite_start]The model attributes inscriptions to their origin with **71% accuracy** and dates them within **30 years** of their ground-truth ranges[cite: 17]. [cite_start]It has been used to redate important Athenian texts, contributing to historical debates[cite: 17]. [cite_start]The research highlights the potential for **cooperation between AI and historians**[cite: 18].
+
+---
+
+## Introduction
+
+[cite_start]**Epigraphy**, the study of inscriptions on durable materials, provides direct access to the ancient world[cite: 19]. [cite_start]However, inscriptions often suffer from damage (requiring **restoration**), displacement from their original context (requiring **geographical attribution**), and lack clear dating evidence (requiring **chronological attribution**)[cite: 20, 21, 22]. [cite_start]These tasks are essential for historical understanding but are complex and time-consuming using traditional methods, which rely heavily on finding parallels through memory or basic string matching[cite: 23, 24, 25, 26]. [cite_start]Attributing inscriptions often involves generalization, especially when internal clues are missing[cite: 28, 29, 30].
+
+---
+
+## Deep Learning for Epigraphy
+
+[cite_start]This work uses deep neural networks, inspired by biological brains, to overcome the limitations of traditional epigraphic methods[cite: 32, 33]. [cite_start]The paper presents **Ithaca**, a deep neural network trained to simultaneously perform the three key tasks: restoration, geographical attribution, and chronological attribution[cite: 34]. [cite_start]Ithaca was trained on ancient Greek inscriptions spanning the 7th century BC to the 5th century AD, chosen due to the richness of the Greek epigraphic record and the availability of digitized corpora[cite: 35, 36].
+
+---
+
+## Working with Greek Inscriptions / Generating the I.PHI Corpus
+
+[cite_start]Ithaca was trained on the **Packard Humanities Institute (PHI)** dataset of transcribed Greek inscriptions[cite: 82]. [cite_start]A complex pipeline was developed to make the text machine-actionable, normalize epigraphic symbols, handle irregularities, and process metadata (place and date)[cite: 83, 84, 85]. [cite_start]The resulting dataset, **I.PHI**, is the largest multitask, machine-actionable epigraphic corpus known, containing **78,608 inscriptions** after filtering duplicates and very short texts[cite: 85, 286]. [cite_start]Date information, often fuzzy or non-standard in PHI, was processed into well-defined intervals for about 60% of the inscriptions[cite: 85, 291, 292]. [cite_start]The dataset was split into training, validation, and test sets based on inscription IDs[cite: 294].
+
+---
+
+## Ithaca is a Model for Epigraphic Tasks / Ithaca Architecture
+
+[cite_start]Ithaca's architecture is tailored for the epigraphic tasks and human-machine cooperation[cite: 87].
+
+* [cite_start]**Input:** Processes text using both **character** and **word** representations simultaneously to handle context and damaged words (represented by `[unk]`)[cite: 90]. [cite_start]Positional information is added[cite: 92].
+* [cite_start]**Torso:** Uses a **transformer** architecture (based on BigBird) with sparse attention mechanisms to handle long sequences efficiently[cite: 91, 302, 303]. [cite_start]It consists of stacked blocks processing the input representations[cite: 93].
+* [cite_start]**Task Heads:** The final output from the torso is fed into three separate, shallow feedforward neural networks, each specialized for one task: **restoration**, **geographical attribution** (classifying among 84 regions), and **chronological attribution** (dating between 800 BC and AD 800)[cite: 94, 95, 96, 97, 98]. [cite_start]The first output embedding is used for attribution tasks, similar to DocBERT[cite: 310].
+
+[cite_start] [cite: 102]
+
+---
+
+## Interpreting the Outputs
+
+[cite_start]To maximize collaboration, Ithaca provides interpretable outputs[cite: 100, 101]:
+
+* [cite_start]**Restoration:** Offers the **top 20** most probable restoration hypotheses, ranked, allowing historians to use their contextual knowledge[cite: 106, 107].
+* [cite_start]**Geographical Attribution:** Visualizes the probability distribution across 84 regions using both a **map** and a **bar chart**[cite: 109].
+* [cite_start]**Chronological Attribution:** Predicts a **probability distribution over 10-year bins** (decades) between 800 BC and AD 800, allowing it to handle uncertain date intervals from the input data[cite: 110, 111, 112]. [cite_start]The mean of this distribution is also provided[cite: 157].
+* [cite_start]**Saliency Maps:** Identify which input characters/words most influenced the model's predictions for all tasks, aiding understanding[cite: 108, 159].
+
+---
+
+## Experimental Evaluation
+
+[cite_start]Ithaca's performance was compared against several methods using metrics like Character Error Rate (CER), top-k accuracy, and distance in years from ground-truth dates[cite: 115, 120, 121, 122, 164, 165]:
+
+* **Methods Compared:**
+    * [cite_start]`Ithaca` (solo model) [cite: 166]
+    * [cite_start]`Pythia` (previous RNN restoration model baseline) [cite: 118]
+    * [cite_start]`Ancient historian` (epigraphy experts working solo) [cite: 116]
+    * [cite_start]`Ancient historian and Ithaca` (experts using Ithaca's top-20 restorations) [cite: 117]
+    * [cite_start]`Onomastics` (baseline using only personal names for attribution) [cite: 119]
+* **Results (Table 1):**
+    * [cite_start]**Restoration:** Ithaca achieved a **26.3% CER** and **61.8% top-1 accuracy**, significantly outperforming Pythia and solo historians[cite: 166]. [cite_start]When historians used Ithaca's suggestions (`Ancient historian and Ithaca`), their performance dramatically improved to **18.3% CER** and **71.7% top-1 accuracy**, demonstrating a strong synergistic effect[cite: 175]. [cite_start]Ithaca's top-20 accuracy was 78.3%[cite: 174].
+    * [cite_start]**Geographical Attribution:** Ithaca achieved **70.8% top-1** and **82.1% top-3 accuracy**[cite: 176].
+    * [cite_start]**Chronological Attribution:** Ithaca's predictions were on average **29.3 years** from the ground-truth ranges (median: 3 years), vastly better than the onomastics baseline (average: 144.4 years)[cite: 177].
+
+---
+
+## Contributing to Historical Debates
+
+[cite_start]Ithaca's ability to process large amounts of data allows it to discover epigraphic patterns at scale[cite: 180]. [cite_start]The synergistic results show the value of combining historian expertise with Ithaca's assistive capabilities, enhanced by its interpretable outputs[cite: 181, 182]. [cite_start]This can help refine dating and contribute to historical debates[cite: 183].
+
+* [cite_start]**Case Study: Redating Athenian Decrees:** Ithaca was applied to a set of Athenian decrees whose dating is disputed, relating to the "three-bar sigma" convention[cite: 184, 185]. [cite_start]These decrees were held out from training[cite: 188]. [cite_start]Ithaca's predicted dates for these inscriptions **independently aligned with recent scholarly revisions** that proposed later dates (average 421 BC), contradicting the older, conventional dates present in the dataset (pre-446/5 BC)[cite: 189, 190, 192]. [cite_start]For example, Ithaca dated the Chalcis decree to 420 BC and the Kleinias decree to 424 BC, matching modern "lower" dating hypotheses[cite: 444, 445]. [cite_start]This demonstrates Ithaca's potential to contribute significantly to historical methodology and understanding, even challenging established views[cite: 191, 447, 448].
+
+---
+
+## Conclusions
+
+[cite_start]Ithaca is presented as the first AI model to holistically tackle the core epigraphic tasks of restoration, geographical attribution, and chronological attribution[cite: 195]. [cite_start]By improving accuracy and speed, it can assist historians with new or uncertain inscriptions, enhancing their value as historical sources[cite: 196]. [cite_start]An open-source interface ([https://ithaca.deepmind.com](https://ithaca.deepmind.com)) allows historians to use the tool[cite: 197]. [cite_start]The methods are potentially applicable to other ancient texts, languages, and disciplines, and the interactive design supports future human-in-the-loop AI research[cite: 198, 199]. [cite_start]The work highlights the transformative potential of AI as a research aid in ancient history and the humanities[cite: 200].
+
+---
+
+## Methods (Selected Points)
+
+* [cite_start]**I.PHI Corpus Generation:** Detailed rules were used to filter PHI data, handle annotations (like retaining bracketed restorations), normalize text, remove duplicates, filter short inscriptions (<50 chars), and parse complex date metadata into intervals[cite: 285, 286, 287, 288, 291, 292]. [cite_start]The final dataset (I.PHI) has 78,608 inscriptions[cite: 85].
+* [cite_start]**Data Augmentation:** To mitigate overfitting on the relatively small dataset, techniques like text clipping (using random segments), text masking (hiding up to 50% with geometric sampling), word deletion (20% probability), and sentence swapping (25% probability, for NSP task) were crucial[cite: 314, 315, 317, 318, 320, 321, 322, 323, 324, 325].
+* [cite_start]**Data Circularity:** The paper acknowledges that training on texts containing previous scholarly restorations introduces potential circularity[cite: 331, 332]. [cite_start]However, it argues Ithaca is an assistive tool for scholarly induction, not aiming for a single objective truth[cite: 333, 334]. [cite_start]Including restorations provides more data and generates plausible hypotheses for evaluation, mirroring the scholarly process[cite: 335, 336, 337, 338]. [cite_start]For dating, Ithaca learns textual patterns correlated with broadly derived dates, refining the process[cite: 339, 340, 341, 342, 343].
+* [cite_start]**Training Details:** Trained for 1 week on 128 TPUv4 pods[cite: 358]. [cite_start]Used LAMB optimizer[cite: 359]. [cite_start]Loss functions combined via Bayesian optimization: L = 3×L\_Restoration + 2×L\_Region + 1.25×L\_Date + 0.01×L\_NSP[cite: 360]. [cite_start]Label smoothing was applied[cite: 348].
+* [cite_start]**Restoration Decoding:** Used non-sequential Beam Search (beam width 100), restoring characters with the highest certainty first, which performed better than standard sequential beam search[cite: 362, 365, 366].
+* [cite_start]**Baselines:** The `Ancient historian` baseline involved two graduate students specializing in Greek epigraphy restoring texts over 2 hours using the training set for parallels[cite: 371, 373]. [cite_start]The `Onomastics` baseline involved five annotators using the Lexicon of Greek Personal Names (LGPN) database to attribute texts based solely on name distributions[cite: 379, 380].
+* [cite_start]**Metrics Calculation:** Restoration CER and accuracy were macro-averaged across lengths 1-10 to ensure fair comparison given varying difficulties and potential dataset imbalances in evaluation subsets[cite: 386, 393, 395, 396, 401]. [cite_start]The chronological distance metric measures years between the predicted mean and the closest boundary of the ground-truth interval[cite: 405, 406].
+* [cite_start]**Delphi Manumissions Case Study:** Ithaca correctly identified Delphi as the origin for many manumission (slave freeing) inscriptions, a genre common there[cite: 429, 431]. [cite_start]Word statistics showed high accuracy correlated with terms typical of these Delphic texts (e.g., ἐπίστευσε - 'entrusted', βεβαιωτήρ - 'guarantor')[cite: 432]. [cite_start]Saliency maps confirmed the model focused on these distinctive words[cite: 434, 435].

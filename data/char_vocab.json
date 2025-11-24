@@ -1,0 +1,1249 @@
+{
+  "input_path": "data/eBL_fragments.json",
+  "total_fragments": 23289,
+  "fragments_without_atf": 0,
+  "total_characters": 10232379,
+  "unique_characters": 248,
+  "vocab": [
+    {
+      "char": "-",
+      "count": 708346,
+      "codepoint": "U+002D"
+    },
+    {
+      "char": "a",
+      "count": 566462,
+      "codepoint": "U+0061"
+    },
+    {
+      "char": ".",
+      "count": 514785,
+      "codepoint": "U+002E"
+    },
+    {
+      "char": "i",
+      "count": 442964,
+      "codepoint": "U+0069"
+    },
+    {
+      "char": "u",
+      "count": 419496,
+      "codepoint": "U+0075"
+    },
+    {
+      "char": "n",
+      "count": 363120,
+      "codepoint": "U+006E"
+    },
+    {
+      "char": "e",
+      "count": 361263,
+      "codepoint": "U+0065"
+    },
+    {
+      "char": "r",
+      "count": 248907,
+      "codepoint": "U+0072"
+    },
+    {
+      "char": "'",
+      "count": 232644,
+      "codepoint": "U+0027"
+    },
+    {
+      "char": "t",
+      "count": 227393,
+      "codepoint": "U+0074"
+    },
+    {
+      "char": "s",
+      "count": 219713,
+      "codepoint": "U+0073"
+    },
+    {
+      "char": "U",
+      "count": 214196,
+      "codepoint": "U+0055"
+    },
+    {
+      "char": "l",
+      "count": 212613,
+      "codepoint": "U+006C"
+    },
+    {
+      "char": "#",
+      "count": 211097,
+      "codepoint": "U+0023"
+    },
+    {
+      "char": "x",
+      "count": 210137,
+      "codepoint": "U+0078"
+    },
+    {
+      "char": "I",
+      "count": 204287,
+      "codepoint": "U+0049"
+    },
+    {
+      "char": "A",
+      "count": 188555,
+      "codepoint": "U+0041"
+    },
+    {
+      "char": "m",
+      "count": 158133,
+      "codepoint": "U+006D"
+    },
+    {
+      "char": "š",
+      "count": 141838,
+      "codepoint": "U+0161"
+    },
+    {
+      "char": "o",
+      "count": 123947,
+      "codepoint": "U+006F"
+    },
+    {
+      "char": "G",
+      "count": 123937,
+      "codepoint": "U+0047"
+    },
+    {
+      "char": "g",
+      "count": 122893,
+      "codepoint": "U+0067"
+    },
+    {
+      "char": "b",
+      "count": 112203,
+      "codepoint": "U+0062"
+    },
+    {
+      "char": "M",
+      "count": 106745,
+      "codepoint": "U+004D"
+    },
+    {
+      "char": "N",
+      "count": 106254,
+      "codepoint": "U+004E"
+    },
+    {
+      "char": "Š",
+      "count": 103372,
+      "codepoint": "U+0160"
+    },
+    {
+      "char": "d",
+      "count": 98896,
+      "codepoint": "U+0064"
+    },
+    {
+      "char": "k",
+      "count": 91372,
+      "codepoint": "U+006B"
+    },
+    {
+      "char": "R",
+      "count": 90379,
+      "codepoint": "U+0052"
+    },
+    {
+      "char": "h",
+      "count": 87216,
+      "codepoint": "U+0068"
+    },
+    {
+      "char": "E",
+      "count": 87087,
+      "codepoint": "U+0045"
+    },
+    {
+      "char": "D",
+      "count": 75064,
+      "codepoint": "U+0044"
+    },
+    {
+      "char": "K",
+      "count": 70508,
+      "codepoint": "U+004B"
+    },
+    {
+      "char": "%",
+      "count": 69891,
+      "codepoint": "U+0025"
+    },
+    {
+      "char": "?",
+      "count": 66169,
+      "codepoint": "U+003F"
+    },
+    {
+      "char": "L",
+      "count": 64638,
+      "codepoint": "U+004C"
+    },
+    {
+      "char": "B",
+      "count": 60760,
+      "codepoint": "U+0042"
+    },
+    {
+      "char": ":",
+      "count": 53275,
+      "codepoint": "U+003A"
+    },
+    {
+      "char": "p",
+      "count": 50332,
+      "codepoint": "U+0070"
+    },
+    {
+      "char": "@",
+      "count": 42845,
+      "codepoint": "U+0040"
+    },
+    {
+      "char": "$",
+      "count": 39591,
+      "codepoint": "U+0024"
+    },
+    {
+      "char": "f",
+      "count": 39047,
+      "codepoint": "U+0066"
+    },
+    {
+      "char": "S",
+      "count": 38408,
+      "codepoint": "U+0053"
+    },
+    {
+      "char": "/",
+      "count": 37757,
+      "codepoint": "U+002F"
+    },
+    {
+      "char": "T",
+      "count": 35553,
+      "codepoint": "U+0054"
+    },
+    {
+      "char": "v",
+      "count": 32124,
+      "codepoint": "U+0076"
+    },
+    {
+      "char": "c",
+      "count": 32083,
+      "codepoint": "U+0063"
+    },
+    {
+      "char": ",",
+      "count": 26900,
+      "codepoint": "U+002C"
+    },
+    {
+      "char": "&",
+      "count": 24976,
+      "codepoint": "U+0026"
+    },
+    {
+      "char": "z",
+      "count": 24242,
+      "codepoint": "U+007A"
+    },
+    {
+      "char": "q",
+      "count": 18754,
+      "codepoint": "U+0071"
+    },
+    {
+      "char": "y",
+      "count": 18192,
+      "codepoint": "U+0079"
+    },
+    {
+      "char": "Z",
+      "count": 16119,
+      "codepoint": "U+005A"
+    },
+    {
+      "char": "w",
+      "count": 14919,
+      "codepoint": "U+0077"
+    },
+    {
+      "char": "H",
+      "count": 14726,
+      "codepoint": "U+0048"
+    },
+    {
+      "char": "ṣ",
+      "count": 12789,
+      "codepoint": "U+1E63"
+    },
+    {
+      "char": "!",
+      "count": 10425,
+      "codepoint": "U+0021"
+    },
+    {
+      "char": "ṭ",
+      "count": 7188,
+      "codepoint": "U+1E6D"
+    },
+    {
+      "char": "+",
+      "count": 6433,
+      "codepoint": "U+002B"
+    },
+    {
+      "char": "ĝ",
+      "count": 5626,
+      "codepoint": "U+011D"
+    },
+    {
+      "char": "P",
+      "count": 5370,
+      "codepoint": "U+0050"
+    },
+    {
+      "char": "<",
+      "count": 4774,
+      "codepoint": "U+003C"
+    },
+    {
+      "char": ">",
+      "count": 4771,
+      "codepoint": "U+003E"
+    },
+    {
+      "char": "F",
+      "count": 4740,
+      "codepoint": "U+0046"
+    },
+    {
+      "char": "}",
+      "count": 3380,
+      "codepoint": "U+007D"
+    },
+    {
+      "char": ";",
+      "count": 3037,
+      "codepoint": "U+003B"
+    },
+    {
+      "char": "ʾ",
+      "count": 2982,
+      "codepoint": "U+02BE"
+    },
+    {
+      "char": "\"",
+      "count": 2518,
+      "codepoint": "U+0022"
+    },
+    {
+      "char": "]",
+      "count": 2485,
+      "codepoint": "U+005D"
+    },
+    {
+      "char": "|",
+      "count": 2286,
+      "codepoint": "U+007C"
+    },
+    {
+      "char": "°",
+      "count": 1912,
+      "codepoint": "U+00B0"
+    },
+    {
+      "char": "V",
+      "count": 1796,
+      "codepoint": "U+0056"
+    },
+    {
+      "char": "Y",
+      "count": 1648,
+      "codepoint": "U+0059"
+    },
+    {
+      "char": "C",
+      "count": 1589,
+      "codepoint": "U+0043"
+    },
+    {
+      "char": "§",
+      "count": 1436,
+      "codepoint": "U+00A7"
+    },
+    {
+      "char": "ā",
+      "count": 1308,
+      "codepoint": "U+0101"
+    },
+    {
+      "char": "“",
+      "count": 1299,
+      "codepoint": "U+201C"
+    },
+    {
+      "char": "”",
+      "count": 1287,
+      "codepoint": "U+201D"
+    },
+    {
+      "char": "*",
+      "count": 1227,
+      "codepoint": "U+002A"
+    },
+    {
+      "char": "O",
+      "count": 1214,
+      "codepoint": "U+004F"
+    },
+    {
+      "char": "=",
+      "count": 1033,
+      "codepoint": "U+003D"
+    },
+    {
+      "char": "ī",
+      "count": 1020,
+      "codepoint": "U+012B"
+    },
+    {
+      "char": "’",
+      "count": 1012,
+      "codepoint": "U+2019"
+    },
+    {
+      "char": "\\",
+      "count": 944,
+      "codepoint": "U+005C"
+    },
+    {
+      "char": "j",
+      "count": 905,
+      "codepoint": "U+006A"
+    },
+    {
+      "char": "W",
+      "count": 872,
+      "codepoint": "U+0057"
+    },
+    {
+      "char": "X",
+      "count": 843,
+      "codepoint": "U+0058"
+    },
+    {
+      "char": "ا",
+      "count": 800,
+      "codepoint": "U+0627"
+    },
+    {
+      "char": "ل",
+      "count": 724,
+      "codepoint": "U+0644"
+    },
+    {
+      "char": "ē",
+      "count": 586,
+      "codepoint": "U+0113"
+    },
+    {
+      "char": "û",
+      "count": 519,
+      "codepoint": "U+00FB"
+    },
+    {
+      "char": "î",
+      "count": 509,
+      "codepoint": "U+00EE"
+    },
+    {
+      "char": "ū",
+      "count": 505,
+      "codepoint": "U+016B"
+    },
+    {
+      "char": "½",
+      "count": 502,
+      "codepoint": "U+00BD"
+    },
+    {
+      "char": "Ā",
+      "count": 452,
+      "codepoint": "U+0100"
+    },
+    {
+      "char": "ي",
+      "count": 438,
+      "codepoint": "U+064A"
+    },
+    {
+      "char": "′",
+      "count": 437,
+      "codepoint": "U+2032"
+    },
+    {
+      "char": "{",
+      "count": 432,
+      "codepoint": "U+007B"
+    },
+    {
+      "char": "‘",
+      "count": 426,
+      "codepoint": "U+2018"
+    },
+    {
+      "char": "م",
+      "count": 416,
+      "codepoint": "U+0645"
+    },
+    {
+      "char": "ر",
+      "count": 407,
+      "codepoint": "U+0631"
+    },
+    {
+      "char": "–",
+      "count": 390,
+      "codepoint": "U+2013"
+    },
+    {
+      "char": "ن",
+      "count": 359,
+      "codepoint": "U+0646"
+    },
+    {
+      "char": "و",
+      "count": 337,
+      "codepoint": "U+0648"
+    },
+    {
+      "char": "ḫ",
+      "count": 297,
+      "codepoint": "U+1E2B"
+    },
+    {
+      "char": "⅓",
+      "count": 282,
+      "codepoint": "U+2153"
+    },
+    {
+      "char": "⅔",
+      "count": 273,
+      "codepoint": "U+2154"
+    },
+    {
+      "char": "J",
+      "count": 253,
+      "codepoint": "U+004A"
+    },
+    {
+      "char": ")",
+      "count": 246,
+      "codepoint": "U+0029"
+    },
+    {
+      "char": "ت",
+      "count": 238,
+      "codepoint": "U+062A"
+    },
+    {
+      "char": "ₓ",
+      "count": 209,
+      "codepoint": "U+2093"
+    },
+    {
+      "char": "ö",
+      "count": 203,
+      "codepoint": "U+00F6"
+    },
+    {
+      "char": "ب",
+      "count": 195,
+      "codepoint": "U+0628"
+    },
+    {
+      "char": "د",
+      "count": 187,
+      "codepoint": "U+062F"
+    },
+    {
+      "char": "ع",
+      "count": 185,
+      "codepoint": "U+0639"
+    },
+    {
+      "char": "ü",
+      "count": 174,
+      "codepoint": "U+00FC"
+    },
+    {
+      "char": "̂",
+      "count": 163,
+      "codepoint": "U+0302"
+    },
+    {
+      "char": "ة",
+      "count": 156,
+      "codepoint": "U+0629"
+    },
+    {
+      "char": "س",
+      "count": 153,
+      "codepoint": "U+0633"
+    },
+    {
+      "char": "ك",
+      "count": 147,
+      "codepoint": "U+0643"
+    },
+    {
+      "char": "ش",
+      "count": 146,
+      "codepoint": "U+0634"
+    },
+    {
+      "char": "ä",
+      "count": 140,
+      "codepoint": "U+00E4"
+    },
+    {
+      "char": "ح",
+      "count": 131,
+      "codepoint": "U+062D"
+    },
+    {
+      "char": "Ḫ",
+      "count": 129,
+      "codepoint": "U+1E2A"
+    },
+    {
+      "char": "̄",
+      "count": 121,
+      "codepoint": "U+0304"
+    },
+    {
+      "char": "̌",
+      "count": 117,
+      "codepoint": "U+030C"
+    },
+    {
+      "char": "٠",
+      "count": 109,
+      "codepoint": "U+0660"
+    },
+    {
+      "char": "Q",
+      "count": 107,
+      "codepoint": "U+0051"
+    },
+    {
+      "char": "—",
+      "count": 106,
+      "codepoint": "U+2014"
+    },
+    {
+      "char": "ʹ",
+      "count": 105,
+      "codepoint": "U+02B9"
+    },
+    {
+      "char": "ج",
+      "count": 105,
+      "codepoint": "U+062C"
+    },
+    {
+      "char": "ه",
+      "count": 96,
+      "codepoint": "U+0647"
+    },
+    {
+      "char": "ß",
+      "count": 95,
+      "codepoint": "U+00DF"
+    },
+    {
+      "char": "ق",
+      "count": 94,
+      "codepoint": "U+0642"
+    },
+    {
+      "char": "ف",
+      "count": 94,
+      "codepoint": "U+0641"
+    },
+    {
+      "char": "⅚",
+      "count": 92,
+      "codepoint": "U+215A"
+    },
+    {
+      "char": "â",
+      "count": 79,
+      "codepoint": "U+00E2"
+    },
+    {
+      "char": "Ĝ",
+      "count": 79,
+      "codepoint": "U+011C"
+    },
+    {
+      "char": "أ",
+      "count": 72,
+      "codepoint": "U+0623"
+    },
+    {
+      "char": "ز",
+      "count": 70,
+      "codepoint": "U+0632"
+    },
+    {
+      "char": "،",
+      "count": 70,
+      "codepoint": "U+060C"
+    },
+    {
+      "char": "١",
+      "count": 65,
+      "codepoint": "U+0661"
+    },
+    {
+      "char": "إ",
+      "count": 62,
+      "codepoint": "U+0625"
+    },
+    {
+      "char": "خ",
+      "count": 60,
+      "codepoint": "U+062E"
+    },
+    {
+      "char": "α",
+      "count": 60,
+      "codepoint": "U+03B1"
+    },
+    {
+      "char": "ط",
+      "count": 59,
+      "codepoint": "U+0637"
+    },
+    {
+      "char": "ُ",
+      "count": 56,
+      "codepoint": "U+064F"
+    },
+    {
+      "char": "ث",
+      "count": 54,
+      "codepoint": "U+062B"
+    },
+    {
+      "char": "ê",
+      "count": 52,
+      "codepoint": "U+00EA"
+    },
+    {
+      "char": "ᵇ",
+      "count": 48,
+      "codepoint": "U+1D47"
+    },
+    {
+      "char": "ص",
+      "count": 46,
+      "codepoint": "U+0635"
+    },
+    {
+      "char": "ι",
+      "count": 43,
+      "codepoint": "U+03B9"
+    },
+    {
+      "char": "َ",
+      "count": 42,
+      "codepoint": "U+064E"
+    },
+    {
+      "char": "Ṣ",
+      "count": 40,
+      "codepoint": "U+1E62"
+    },
+    {
+      "char": "~",
+      "count": 38,
+      "codepoint": "U+007E"
+    },
+    {
+      "char": "٢",
+      "count": 38,
+      "codepoint": "U+0662"
+    },
+    {
+      "char": "ِ",
+      "count": 37,
+      "codepoint": "U+0650"
+    },
+    {
+      "char": "٥",
+      "count": 36,
+      "codepoint": "U+0665"
+    },
+    {
+      "char": "ض",
+      "count": 36,
+      "codepoint": "U+0636"
+    },
+    {
+      "char": "٦",
+      "count": 30,
+      "codepoint": "U+0666"
+    },
+    {
+      "char": "σ",
+      "count": 30,
+      "codepoint": "U+03C3"
+    },
+    {
+      "char": "٣",
+      "count": 29,
+      "codepoint": "U+0663"
+    },
+    {
+      "char": "ε",
+      "count": 28,
+      "codepoint": "U+03B5"
+    },
+    {
+      "char": "ø",
+      "count": 26,
+      "codepoint": "U+00F8"
+    },
+    {
+      "char": "٤",
+      "count": 25,
+      "codepoint": "U+0664"
+    },
+    {
+      "char": "Ṭ",
+      "count": 24,
+      "codepoint": "U+1E6C"
+    },
+    {
+      "char": "ـ",
+      "count": 24,
+      "codepoint": "U+0640"
+    },
+    {
+      "char": "λ",
+      "count": 24,
+      "codepoint": "U+03BB"
+    },
+    {
+      "char": "(",
+      "count": 21,
+      "codepoint": "U+0028"
+    },
+    {
+      "char": "ο",
+      "count": 21,
+      "codepoint": "U+03BF"
+    },
+    {
+      "char": "é",
+      "count": 20,
+      "codepoint": "U+00E9"
+    },
+    {
+      "char": "ρ",
+      "count": 19,
+      "codepoint": "U+03C1"
+    },
+    {
+      "char": "⸢",
+      "count": 18,
+      "codepoint": "U+2E22"
+    },
+    {
+      "char": "φ",
+      "count": 18,
+      "codepoint": "U+03C6"
+    },
+    {
+      "char": "θ",
+      "count": 18,
+      "codepoint": "U+03B8"
+    },
+    {
+      "char": "⸣",
+      "count": 17,
+      "codepoint": "U+2E23"
+    },
+    {
+      "char": "̣",
+      "count": 14,
+      "codepoint": "U+0323"
+    },
+    {
+      "char": "„",
+      "count": 14,
+      "codepoint": "U+201E"
+    },
+    {
+      "char": "μ",
+      "count": 14,
+      "codepoint": "U+03BC"
+    },
+    {
+      "char": "δ",
+      "count": 14,
+      "codepoint": "U+03B4"
+    },
+    {
+      "char": "ء",
+      "count": 12,
+      "codepoint": "U+0621"
+    },
+    {
+      "char": "غ",
+      "count": 12,
+      "codepoint": "U+063A"
+    },
+    {
+      "char": "ν",
+      "count": 12,
+      "codepoint": "U+03BD"
+    },
+    {
+      "char": "ú",
+      "count": 11,
+      "codepoint": "U+00FA"
+    },
+    {
+      "char": "ᵃ",
+      "count": 11,
+      "codepoint": "U+1D43"
+    },
+    {
+      "char": "ّ",
+      "count": 11,
+      "codepoint": "U+0651"
+    },
+    {
+      "char": "β",
+      "count": 11,
+      "codepoint": "U+03B2"
+    },
+    {
+      "char": "«",
+      "count": 10,
+      "codepoint": "U+00AB"
+    },
+    {
+      "char": "»",
+      "count": 10,
+      "codepoint": "U+00BB"
+    },
+    {
+      "char": "ᵗ",
+      "count": 10,
+      "codepoint": "U+1D57"
+    },
+    {
+      "char": "χ",
+      "count": 10,
+      "codepoint": "U+03C7"
+    },
+    {
+      "char": "ʰ",
+      "count": 9,
+      "codepoint": "U+02B0"
+    },
+    {
+      "char": "٧",
+      "count": 9,
+      "codepoint": "U+0667"
+    },
+    {
+      "char": "υ",
+      "count": 9,
+      "codepoint": "U+03C5"
+    },
+    {
+      "char": "Ü",
+      "count": 8,
+      "codepoint": "U+00DC"
+    },
+    {
+      "char": "²",
+      "count": 8,
+      "codepoint": "U+00B2"
+    },
+    {
+      "char": "٩",
+      "count": 8,
+      "codepoint": "U+0669"
+    },
+    {
+      "char": "á",
+      "count": 7,
+      "codepoint": "U+00E1"
+    },
+    {
+      "char": "٨",
+      "count": 7,
+      "codepoint": "U+0668"
+    },
+    {
+      "char": "Ú",
+      "count": 6,
+      "codepoint": "U+00DA"
+    },
+    {
+      "char": "^",
+      "count": 6,
+      "codepoint": "U+005E"
+    },
+    {
+      "char": "آ",
+      "count": 6,
+      "codepoint": "U+0622"
+    },
+    {
+      "char": "ذ",
+      "count": 6,
+      "codepoint": "U+0630"
+    },
+    {
+      "char": "γ",
+      "count": 6,
+      "codepoint": "U+03B3"
+    },
+    {
+      "char": "τ",
+      "count": 6,
+      "codepoint": "U+03C4"
+    },
+    {
+      "char": "؟",
+      "count": 5,
+      "codepoint": "U+061F"
+    },
+    {
+      "char": "ى",
+      "count": 5,
+      "codepoint": "U+0649"
+    },
+    {
+      "char": "ξ",
+      "count": 5,
+      "codepoint": "U+03BE"
+    },
+    {
+      "char": "ω",
+      "count": 5,
+      "codepoint": "U+03C9"
+    },
+    {
+      "char": "κ",
+      "count": 5,
+      "codepoint": "U+03BA"
+    },
+    {
+      "char": "ó",
+      "count": 4,
+      "codepoint": "U+00F3"
+    },
+    {
+      "char": "í",
+      "count": 4,
+      "codepoint": "U+00ED"
+    },
+    {
+      "char": "⌈",
+      "count": 4,
+      "codepoint": "U+2308"
+    },
+    {
+      "char": "⌉",
+      "count": 4,
+      "codepoint": "U+2309"
+    },
+    {
+      "char": "ئ",
+      "count": 4,
+      "codepoint": "U+0626"
+    },
+    {
+      "char": "‚",
+      "count": 3,
+      "codepoint": "U+201A"
+    },
+    {
+      "char": "ŋ",
+      "count": 3,
+      "codepoint": "U+014B"
+    },
+    {
+      "char": "[",
+      "count": 3,
+      "codepoint": "U+005B"
+    },
+    {
+      "char": "η",
+      "count": 3,
+      "codepoint": "U+03B7"
+    },
+    {
+      "char": "̀",
+      "count": 2,
+      "codepoint": "U+0300"
+    },
+    {
+      "char": "̮",
+      "count": 2,
+      "codepoint": "U+032E"
+    },
+    {
+      "char": "À",
+      "count": 2,
+      "codepoint": "U+00C0"
+    },
+    {
+      "char": "Ì",
+      "count": 2,
+      "codepoint": "U+00CC"
+    },
+    {
+      "char": "ù",
+      "count": 2,
+      "codepoint": "U+00F9"
+    },
+    {
+      "char": "Ē",
+      "count": 2,
+      "codepoint": "U+0112"
+    },
+    {
+      "char": "ظ",
+      "count": 2,
+      "codepoint": "U+0638"
+    },
+    {
+      "char": "ζ",
+      "count": 2,
+      "codepoint": "U+03B6"
+    },
+    {
+      "char": "Ū",
+      "count": 2,
+      "codepoint": "U+016A"
+    },
+    {
+      "char": "⅛",
+      "count": 2,
+      "codepoint": "U+215B"
+    },
+    {
+      "char": "à",
+      "count": 1,
+      "codepoint": "U+00E0"
+    },
+    {
+      "char": "́",
+      "count": 1,
+      "codepoint": "U+0301"
+    },
+    {
+      "char": "˹",
+      "count": 1,
+      "codepoint": "U+02F9"
+    },
+    {
+      "char": "˺",
+      "count": 1,
+      "codepoint": "U+02FA"
+    },
+    {
+      "char": "Á",
+      "count": 1,
+      "codepoint": "U+00C1"
+    },
+    {
+      "char": "ْ",
+      "count": 1,
+      "codepoint": "U+0652"
+    },
+    {
+      "char": "р",
+      "count": 1,
+      "codepoint": "U+0440"
+    },
+    {
+      "char": "è",
+      "count": 1,
+      "codepoint": "U+00E8"
+    },
+    {
+      "char": "ě",
+      "count": 1,
+      "codepoint": "U+011B"
+    },
+    {
+      "char": "Ä",
+      "count": 1,
+      "codepoint": "U+00C4"
+    },
+    {
+      "char": "ˢ",
+      "count": 1,
+      "codepoint": "U+02E2"
+    },
+    {
+      "char": "º",
+      "count": 1,
+      "codepoint": "U+00BA"
+    },
+    {
+      "char": "Κ",
+      "count": 1,
+      "codepoint": "U+039A"
+    },
+    {
+      "char": "ί",
+      "count": 1,
+      "codepoint": "U+03AF"
+    },
+    {
+      "char": "ς",
+      "count": 1,
+      "codepoint": "U+03C2"
+    },
+    {
+      "char": "\u0002",
+      "count": 1,
+      "codepoint": "U+0002"
+    },
+    {
+      "char": "¼",
+      "count": 1,
+      "codepoint": "U+00BC"
+    },
+    {
+      "char": "‎",
+      "count": 1,
+      "codepoint": "U+200E"
+    },
+    {
+      "char": "⅙",
+      "count": 1,
+      "codepoint": "U+2159"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+Okay, here's a summary of the paper "Contextualizing ancient texts with generative neural networks," organized by its key themes and sections.
+
+## Abstract / Introduction
+
+[cite_start]Inscriptions are crucial primary sources for understanding ancient civilizations, but interpreting them is challenging due to damage, lack of context (dates, locations), and abbreviations[cite: 448, 460, 461]. [cite_start]Historians traditionally **contextualize** inscriptions by finding **parallels**—other texts with similar phrasing, function, or cultural settings—which helps with restoration, geographical attribution (placing), and chronological attribution (dating)[cite: 449, 462, 463]. [cite_start]However, finding parallels manually is laborious and often limited by scholarly specialization, while current digital methods are restricted to exact text matches[cite: 450, 465, 466, 467].
+
+[cite_start]This paper introduces **Aeneas**, a generative neural network designed to address this challenge for ancient Latin inscriptions[cite: 451, 468, 486]. [cite_start]Aeneas retrieves relevant textual and contextual parallels, incorporates visual information from inscription images, handles text restoration even when the length of the missing section is unknown (**arbitrary-length restoration**), and improves upon the state of the art in the key epigraphic tasks[cite: 452, 486, 488].
+
+[cite_start]A large study involving historians found Aeneas's retrieved parallels useful as research starting points in **90%** of cases, boosting historians' confidence by **44%**[cite: 453, 454]. [cite_start]When historians worked *with* Aeneas, their results for restoration and geographical attribution surpassed what either humans or AI could achieve alone[cite: 455]. [cite_start]Aeneas achieved an average dating accuracy within **13 years** of ground-truth ranges[cite: 456]. [cite_start]The paper demonstrates Aeneas's value through a case study on the famous *Res Gestae Divi Augusti* inscription[cite: 457].
+
+---
+
+## Integrating Latin Epigraphic Data
+
+[cite_start]Latin inscriptions are the most abundant epigraphic evidence from the ancient world, yet they have received relatively little attention from machine learning compared to Latin literature[cite: 494, 496]. [cite_start]The authors created the **Latin Epigraphic Dataset (LED)** by combining and standardizing data from three major databases (EDR, EDH, EDCS\_ETL)[cite: 498, 499]. [cite_start]This dataset covers the 7th century BCE to the 8th century CE across the Roman Empire[cite: 501]. [cite_start]The final LED contains **176,861 inscriptions** (16 million characters), with images available for about 5%[cite: 502]. [cite_start]The data was carefully processed to be machine-actionable, preserving original text features while standardizing metadata and removing duplicates [cite: 499, 831-840].
+
+---
+
+## Contextualizing Inscriptions with Aeneas
+
+[cite_start]Aeneas is a **multimodal** generative neural network that takes an inscription's text and image as input[cite: 486, 506]. 
+* [cite_start]**Architecture:** It uses a character-level T5 transformer decoder (the 'torso') augmented with rotary positional embeddings to process text[cite: 507, 510]. [cite_start]A separate vision network (ResNet) processes the image[cite: 508, 538]. [cite_start]Outputs from these feed into specialized 'heads' for the three tasks: restoration, geographical attribution (which uses both text and image input), and chronological attribution (dating)[cite: 511, 513, 514, 517].
+* [cite_start]**Arbitrary-Length Restoration:** A novel auxiliary head predicts if more than one character is missing, enabling restoration even when the gap length is unknown (marked by '#')[cite: 488, 508, 512]. [cite_start]Known-length gaps are marked with '-'[cite: 508]. [cite_start]Restoration hypotheses are generated using beam search[cite: 515].
+* [cite_start]**Contextualization Mechanism:** The core innovation is the retrieval of relevant **epigraphic parallels**[cite: 487, 562]. [cite_start]Aeneas creates **historically rich embeddings** by combining intermediate representations from the torso and task heads[cite: 563, 564]. [cite_start]These embeddings capture not just textual similarity but also historical context (time, place, function) derived from the tasks[cite: 565]. [cite_start]The model then ranks inscriptions from the training set based on cosine similarity to the input's embedding, presenting the top parallels (with metadata) to the historian[cite: 567, 568]. [cite_start]This goes beyond simple string matching to find conceptual and contextual links[cite: 566].
+* [cite_start]**Explainability:** Aeneas provides **saliency maps** to highlight which parts of the text and image most influenced its predictions[cite: 516].
+
+---
+
+## Contributing to Historical Research (Evaluation)
+
+[cite_start]A comprehensive human-centric evaluation was conducted with **23 historians** to assess Aeneas's impact as a research tool[cite: 570, 592].
+
+* [cite_start]**Metrics:** Standard metrics were used: Character Error Rate (CER) for restoration, top-1/top-3 accuracy for geographical attribution (placing), and distance in years from ground-truth ranges for chronological attribution (dating) [cite: 576, 586-588]. [cite_start]A new measure assessed the usefulness of Aeneas's retrieved parallels[cite: 571, 589]. [cite_start]An automated 'onomastics' baseline (using personal names) simulated traditional methods[cite: 590, 591].
+* **Study Design (3 Stages):**
+    1.  [cite_start]**Baseline:** Historians tackled tasks solo using a provided dataset subset for manual searching[cite: 593, 594, 595].
+    2.  [cite_start]**Parallels Only:** Historians repeated the tasks, but were given the top 10 parallels suggested by Aeneas[cite: 596].
+    3.  [cite_start]**Parallels + Predictions:** Historians received both Aeneas's parallels *and* its predictions for the tasks[cite: 597, 608].
+    * [cite_start]Participants alternated between stages 2 and 3 for different inscriptions[cite: 609]. [cite_start]Confidence scores and qualitative feedback were collected[cite: 610].
+* **Contextualization Impact:**
+    * [cite_start]Historians incorporated an average of **1.5 parallels suggested by Aeneas** into their own manually selected lists[cite: 611, 999].
+    * [cite_start]When given parallels, historians found them useful as research starting points **75%** of the time; this rose to **90%** when predictions were also included[cite: 613, 614, 1003, 1004].
+    * [cite_start]Confidence increased by **23%** with parallels, and by another **21%** (total 44%) with predictions added[cite: 615, 1000, 1001].
+    * [cite_start]Qualitative feedback highlighted Aeneas's ability to **accelerate research**, **broaden the scope** of parallels beyond narrow searches, and **change historians' perceptions** of inscriptions [cite: 617, 618, 619, 620, 1006, 1017-1020].
+* **Synergistic Performance (Table 1):**
+    * [cite_start]**Restoration:** Historian CER improved from 39% (solo) to 33.9% (with parallels) to **21.4%** (with parallels + predictions), beating Aeneas alone (23.1%)[cite: 600, 624].
+    * [cite_start]**Geographical Attribution:** Historian top-1 accuracy rose from 27% (solo) to 36.7% (with parallels) to **68.3%** (with parallels + predictions), again beating Aeneas alone (66.7%)[cite: 600, 626, 628]. [cite_start]Top-3 accuracy showed similar gains[cite: 600, 626, 628].
+    * [cite_start]**Dating:** Historian average distance dropped from 31.3 years (solo, similar to onomastics baseline) to 21.1 years (with parallels) to **14.1 years** (with parallels + predictions), approaching Aeneas's solo 12.8 years[cite: 600, 629, 630].
+    * [cite_start]All improvements were statistically significant[cite: 631]. [cite_start]The greatest synergy occurred when both parallels and predictions were provided[cite: 631].
+
+---
+
+## Breaking New Ground in Epigraphy (Automated Performance Comparison)
+
+* [cite_start]**Comparison with Ithaca (Previous State-of-the-Art):** Aeneas consistently outperformed Ithaca (retrained on LED) and the onomastics baseline across all tasks in automated evaluations (Table 2)[cite: 632, 642].
+* [cite_start]**Restoration:** Aeneas achieved a CER of **40.5%** for fixed-length restoration (better than Ithaca's 43.5%)[cite: 633, 642]. [cite_start]Crucially, even when tackling the harder task of **unknown-length restoration**, its CER was only moderately higher at **66.1%**[cite: 634, 635, 642].
+* [cite_start]**Geographical Attribution:** Aeneas reached **72.3% top-1 accuracy** (vs. Ithaca's 61.3%), benefiting significantly from the visual (image) input modality[cite: 636, 637, 642].
+* [cite_start]**Chronological Attribution:** Aeneas achieved an average distance of **13.4 years** (vs. Ithaca's 14.1 years)[cite: 638, 642].
+* [cite_start]Results were statistically significant[cite: 640, 647].
+
+---
+
+## Evaluating Aeneas in the Real World: Case Studies
+
+### Grounding the Res Gestae Divi Augusti (RGDA)
+
+[cite_start]To demonstrate Aeneas in a complex historical workflow, it was applied to the RGDA, Augustus's own account of his life, inscribed most famously at Ancyra (modern Ankara)[cite: 649, 650, 651].
+
+* [cite_start]**Dating:** Aeneas's dating prediction for the full text showed a **bimodal distribution** (peaks around 10-1 BCE and 10-20 CE), reflecting scholarly debate about the text's composition history (drafted over time vs. written near Augustus's death in 14 CE)[cite: 657, 658, 1106, 1107]. [cite_start]Saliency maps showed Aeneas focused on chronologically significant linguistic features (like archaic spelling 'aheneis'), institutions ('princeps iuventutis'), monuments ('Ara Pacis'), and names, rather than being misled by dates mentioned *within* the text[cite: 659, 660, 661, 662, 663, 664, 665, 666].
+* [cite_start]**Parallels:** The top parallels identified were primarily texts composed in Rome related to **imperial political discourse**, like decrees honoring Augustus's family members, sharing similar language and archaizing features[cite: 668, 669, 670, 671, 700]. [cite_start]This suggests Aeneas captured the shared function and context, despite varied findspots[cite: 701, 702].
+* [cite_start]**Conclusion:** Aeneas's analysis aligned well with expert insights, demonstrating its ability to support in-depth historical analysis by identifying relevant patterns and parallels quantitatively[cite: 705, 706].
+
+### Retrieving Parallels Across the Roman Empire (Mainz Altar)
+
+[cite_start]Aeneas was tested on a typical votive altar from Mainz (Germania Superior), dated 211 CE, dedicated by a *beneficiarius consularis* (military staffer)[cite: 708, 709, 1071, 1072, 1073].
+
+* [cite_start]**Attribution:** Aeneas correctly dated the altar (predicted 214 CE) and placed it (top prediction: Germania Superior)[cite: 710, 1079]. [cite_start]Saliency maps highlighted diagnostic features like the consular dating formula and the names of the worshipped goddesses (Deae Aufaniae)[cite: 711, 1080]. [cite_start]It also accurately restored an artificially damaged section[cite: 712, 1084].
+* [cite_start]**Crucial Parallel:** Aeneas's **top parallel** was another altar found nearby, dedicated in 197 CE by a different *beneficiarius* (Iulius Bellator)[cite: 713, 714, 1086, 1087, 1089]. [cite_start]These two altars share extremely rare textual formulae and iconography, leading scholars to believe the later one (Cogitatus's) copied the earlier one (Bellator's)[cite: 715, 1091, 1092, 1093]. [cite_start]Aeneas identified this **critical connection** despite lacking the archaeological context (findspot proximity) that humans use[cite: 717, 1094]. [cite_start]It retrieved this parallel based on recognizing subtle historical, linguistic, and epigraphic affinities, going beyond simple text matching[cite: 1095, 1098].
+* [cite_start]**Conclusion:** This case study highlights Aeneas's power in reconstructing **epigraphic networks** and identifying meaningful connections that mirror expert reasoning, even without access to all the contextual information a human historian possesses[cite: 1099, 1100].
+
+---
+
+## Conclusions
+
+[cite_start]Aeneas marks a significant advance in applying AI to ancient texts[cite: 721]. [cite_start]Its **contextualization mechanism** helps historians uncover large-scale connections[cite: 722, 724]. [cite_start]It outperforms previous models, offers multimodality, handles unknown-length restoration, and is adaptable to other languages/media[cite: 725]. [cite_start]Case studies (RGDA, Mainz altar) confirm its reliability as a specialized research aid, complementing traditional methods [cite: 727-731]. [cite_start]The historian-AI evaluation demonstrated its successful integration into research workflows, enhancing collaboration between humans and AI[cite: 732, 734]. [cite_start]A public interface is available[cite: 733].
+
+---
+
+## Methods (Selected Points)
+
+* [cite_start]**Dataset Limitations:** The LED, while large for epigraphy, is small by NLP standards[cite: 847]. [cite_start]Data is skewed by survival bias[cite: 849]. [cite_start]Only ~5% of texts have images, limiting multimodal potential, especially for dating[cite: 850, 853]. [cite_start]Performance varies across regions/periods, partly due to data availability and publication rates[cite: 854, 1039, 1040].
+* [cite_start]**Data Circularity:** The training data retains text restorations previously made by editors (in square brackets)[cite: 859]. [cite_start]While this risks confirmation bias, excluding this data significantly reduced dataset size (by 20% in a previous project)[cite: 861, 864]. [cite_start]Experiments showed models trained *with* these restorations performed slightly better than those trained without, so they were kept for improved performance and comparability with prior work (Ithaca)[cite: 868, 869, 870]. [cite_start]The risk of bias from specific conjectures is considered low due to the model's abstraction process[cite: 872, 873].
+* [cite_start]**Architecture Details:** Input is text (max 768 chars) + 224x224 greyscale image[cite: 880]. [cite_start]Torso is T5-based, 16 layers, 8 heads[cite: 883, 885]. [cite_start]Trained for 1 week on 64 TPUs[cite: 889]. [cite_start]Data augmentation used extensively[cite: 893, 894].
+* [cite_start]**Contextualization Embedding:** Combines the first torso output (used for attribution) with the average of subsequent outputs (used for restoration)[cite: 926, 927, 929]. [cite_start]UMAP visualizations suggest these embeddings capture historical structure better than standard T5 embeddings[cite: 934, 935, 936].
+* [cite_start]**Historian Evaluation Protocol:** 23 epigraphers participated anonymously online[cite: 982, 1680, 1683]. [cite_start]Paired evaluation design compared solo work vs. AI assistance[cite: 990]. [cite_start]Strict time limits and use of a basic spreadsheet for manual searching were necessary experimental constraints[cite: 994, 1022, 1023]. [cite_start]Ethical approval obtained[cite: 981, 1153].
+* [cite_start]**RGDA Compositional Complexities:** The Methods section details the scholarly debate on *when* the RGDA was written (incrementally vs. late in life), adding context to Aeneas's bimodal dating prediction [cite: 1105-1118].
+* [cite_start]**Teaching:** A curriculum using Aeneas for high school students and teacher training has been developed, focusing on digital literacy and AI in humanities[cite: 1122, 1124, 1125, 1126].
+
+---
+
+## Future Directions
+
+* [cite_start]Integrate Aeneas into large dialogue models for interactive querying[cite: 1130, 1131].
+* [cite_start]Develop better methods for handling uncertainty in dating (wide brackets)[cite: 1132, 1133].
+* [cite_start]Conduct ablation studies to quantify component contributions (e.g., visual input)[cite: 1134].
+* [cite_start]Improve multimodality with larger, standardized datasets[cite: 1136].
+* [cite_start]Expand beyond Latin inscriptions[cite: 1136].
+* [cite_start]Deepen interdisciplinary collaboration[cite: 1138].
+
+---
+
+## Ethics and Inclusion
+
+[cite_start]The project involved interdisciplinary collaboration[cite: 1140]. [cite_start]Epigraphy provides evidence for marginalized groups (enslaved people, women)[cite: 1142]. [cite_start]AI tools require human oversight to avoid reinforcing biases or misrepresenting history[cite: 1145, 1146]. [cite_start]AI should complement, not replace, human expertise, allowing historians to focus on interpretation[cite: 1147, 1148]. [cite_start]The study promotes responsible and transparent AI use in humanities[cite: 1150, 1151].
