@@ -1,0 +1,49 @@
+Here is the technical summary of the files and data structure provided by Shahar Spencer, translated and organized based on your correspondence:
+
+### **I. General Preprocessing Note**
+* **Exclusion Criteria:** A specific filter was applied to the processed data (`full_data_corpus`). Words containing breaks or incomplete fragments (e.g., `maḫ-à[m (...)`) were **removed** and are not included in the final dataframes.
+
+---
+
+### **II. Archibab Corpus (Private Collection)**
+* **File Name:** `archibab.csv`
+* **Volume:** Contains 1,541 texts.
+* **Structure:** A single CSV file where each fragment is represented by a sequence of rows.
+* **Schema (Columns):**
+    * `fragment_id`: Unique identifier for the fragment.
+    * `fragment_line_num`: The line number within the fragment.
+    * `index_in_line`: The position of the word within the specific line.
+    * `word_language`: The language of the specific word.
+    * `domain`: The genre or domain of the text (e.g., religious text).
+    * `place_discovery`: Archaeological site where the fragment was found.
+    * `place_composition`: The location where the text was originally composed.
+    * `value`: The original raw text of the word.
+    * `clean_value`: A cleaned version of the word.
+    * `lemma`: The lemma (base form) of the word.
+
+---
+
+### **III. eBL Corpus (Electronic Babylonian Library)**
+This data is split into three distinct components:
+
+#### **1. Raw Source Data**
+* **Directory:** `filtered_json_files` (inside ZIP).
+* **Format:** JSON files (chunked).
+* **Description:** A filtered version of the original eBL source. It contains only fragments that actually possess text lines. The data is split into chunks for easier handling.
+* **Usage:** Use this if you need to validate against the source or perform your own custom processing from scratch. Concatenating these files yields the full dataset.
+
+#### **2. Processed Data**
+* **Directory:** `full_corpus_dir` (inside ZIP).
+* **Format:** CSV files (one file per fragment).
+* **Description:** The output of Shahar's preprocessing pipeline applied to the `filtered_json_files`.
+* **Schema:** Follows the same structure/column layout as the `archibab.csv` file described above.
+
+#### **3. Metadata / Enrichment**
+* **File Name:** `Genres.json`
+* **Description:** Created via web scraping the eBL website.
+* **Usage:** In the `full_corpus_dir` files, the `domain` column may sometimes contain a placeholder value (e.g., "see genres json"). You should use this JSON file to look up and fill in the missing genre/domain values for those entries.
+
+---
+
+### **IV. Next Steps for You**
+Would you like me to write a Python script to load the `archibab.csv` or one of the `full_corpus_dir` CSVs to inspect the data distribution?

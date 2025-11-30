@@ -1,0 +1,23 @@
+name: torso-sae
+channels:
+  - conda-forge
+  - pytorch
+  - defaults
+dependencies:
+  - python=3.10
+  - pytorch::pytorch=2.1.0
+  - pytorch::torchvision
+  - pytorch::torchaudio
+  - pip
+  - pip:
+    - sae-lens>=3.16.0
+    - transformer-lens
+    - einops
+    - datasets
+    - transformers
+    - jupyter
+    - ipykernel
+    - matplotlib
+    - seaborn
+    - pandas
+    - numpy
