@@ -1,0 +1,25 @@
+Akkadian LLM Dataset Statistics
+========================================
+
+Total words: 2,450,094
+Total texts: 40,429
+Total signs: 4,894,744
+Unique signs: 16,748
+
+Source Distribution:
+  oracc: 1,385,932
+  ebl: 998,353
+  archibab: 65,809
+
+Certainty Distribution:
+  SURE: 2,334,953
+  MISSING_BUT_COMPLETED: 52,244
+  BLURRED: 34,245
+  FIXED_BY_EDITOR: 10,662
+  FORGOTTEN_SIGN: 9,329
+  HAS_DOUBTS: 8,661
+
+Train/Val/Test Split:
+  Train: 1,960,636 words (32343 texts)
+  Val: 253,798 words (4042 texts)
+  Test: 235,660 words (4044 texts)

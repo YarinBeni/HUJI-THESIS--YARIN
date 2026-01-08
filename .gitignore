@@ -14,5 +14,10 @@ venv/
 # Large files (optional, if you want to exclude PDFs)
 *.pdf
 
-# All data directories (too large for GitHub, store separately)
-v_1/data/
+# Large data directories (too large for GitHub)
+v_1/data/raw/
+v_1/data/prepared/
+v_1/data/processed/archibab/
+v_1/data/processed/ebl/
+v_1/data/processed/oracc/
+# Keep v_1/data/processed/unified/ (small enough for GitHub)
