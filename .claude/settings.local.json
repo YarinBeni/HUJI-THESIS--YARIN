@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(mkdir:*)",
+      "Bash(pip3 install:*)",
+      "Bash(cat:*)",
+      "Bash(kill:*)",
+      "Bash(# Create new directory structure mkdir -p v_1/src/preprocessing mkdir -p v_1/src/training/baseline mkdir -p v_1/src/training/mmbert mkdir -p v_1/src/analysis mkdir -p v_1/models/baseline mkdir -p v_1/models/mmbert # Move existing scripts folder contents to preprocessing if [ -d \"\"v_1/scripts\"\" ]; then mv v_1/scripts/* v_1/src/preprocessing/ || true rmdir v_1/scripts || true fi # Move new src files to training/baseline mv v_1/src/data_utils.py v_1/src/training/baseline/ || true mv v_1/src/model.py v_1/src/training/baseline/ || true mv v_1/src/01_prepare_data.py v_1/src/training/baseline/ || true mv v_1/src/02_train.py v_1/src/training/baseline/ || true echo \"\"New structure:\"\" find v_1/src -type f -name \"\"*.py\"\")",
+      "Bash(pkill:*)",
+      "Bash(pip3 show:*)",
+      "Bash(rm:*)",
+      "Bash(git reset:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

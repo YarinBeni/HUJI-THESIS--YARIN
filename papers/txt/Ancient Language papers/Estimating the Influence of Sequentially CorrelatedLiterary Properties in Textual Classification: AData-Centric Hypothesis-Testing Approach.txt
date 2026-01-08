@@ -1,0 +1,1302 @@
+Estimating the Influence of Sequentially Correlated
+Literary Properties in Textual Classification: A
+Data-Centric Hypothesis-Testing Approach
+Gideon Yoffe a, Nachum Dershowitzb, Ariel Vishnea and Barak Sobera
+aDepartment of Statistics and Data Science, The Hebrew University of Jerusalem, Jerusalem,
+Israel; bSchool of Computer Science and AI, Tel Aviv University, Tel Aviv, Israel
+ABSTRACT
+We introduce a data-centric hypothesis-testing framework to quantify the influence
+of sequentially correlated literary properties – such as thematic continuity – on
+textual classification tasks. Our method models label sequences as stochastic
+processes and uses an empirical autocovariance matrix to generate surrogate
+labelings that preserve sequential dependencies. This enables statistical testing to
+determine whether classification outcomes are primarily driven by thematic struc-
+ture or by non-sequential features like authorial style. Applying this framework to
+a diverse corpus of English prose, we compare traditional (word n-grams and
+character k-mers) and neural (contrastively trained) embeddings in both supervised
+and unsupervised settings. Crucially, our method identifies when classifications are
+confounded by sequentially correlated similarity, showing that supervised and
+neural models are more prone to false positives – mistaking shared themes or
+cross-genre differences for stylistic signals. In contrast, unsupervised models using
+traditional features often yield high true positive rates with minimal false positives,
+especially in genre-consistent settings. By disentangling sequential from non-
+sequential influences, our approach provides a principled way to assess classifica-
+tion reliability. This is particularly impactful for authorship attribution, forensic
+linguistics, and the analysis of redacted or composite texts. Controlling for sequen-
+tial correlation is essential for reducing false positives and ensuring classification
+outcomes reflect genuine stylistic distinctions.
+1. Introduction
+When considering the process of text composition, numerous properties come
+into play, with genre, style, and theme being particularly significant. Identifying
+CONTACT Gideon Yoffe gideon.yoffe@mail.huji.ac.il
+This article was originally published with errors, which have now been corrected in the online version.
+Please see Correction (https://doi.org/10.1080/09296174.2025.2515338)
+Supplemental data for this article can be accessed online at https://doi.org/10.1080/09296174.2025.
+2496172
+JOURNAL OF QUANTITATIVE LINGUISTICS
+2025, VOL. 32, NO. 4, 313–345
+https://doi.org/10.1080/09296174.2025.2496172
+© 2025 The Author(s). Published by Informa UK Limited, trading as Taylor & Francis Group.
+This is an Open Access article distributed under the terms of the Creative Commons Attribution-NonCommercial-
+NoDerivatives License (http://creativecommons.org/licenses/by-nc-nd/4.0/), which permits non-commercial re-use,
+distribution, and reproduction in any medium, provided the original work is properly cited, and is not altered,
+transformed, or built upon in any way. The terms on which this article has been published allow the posting of the
+Accepted Manuscript in a repository by the author(s) or with their consent.
+the primary factor distinguishing texts among these three is crucial for tasks like
+authorship attribution and forensic linguistics (Holmes, 1994; Koppel & Schler,
+2004).
+Style, theme, and genre are fundamental properties that play distinct
+yet intertwined roles in the composition and interpretation of textual
+content. Style refers to the distinctive manner in which a writer expresses
+ideas, characterized by choices in vocabulary, sentence structure, tone,
+and rhetorical devices. It encompasses the unique linguistic fingerprint of
+an author and contributes to the overall aesthetic and readability of the
+text (e.g. Saukkonen, 2003). The theme, conversely, pertains to the central
+ideas, messages, or subjects explored within the text. It reflects the under-
+lying concepts or motifs that recur throughout the narrative, conveying
+deeper meaning and resonance to the reader (e.g. Brinker, 1995). Genre,
+meanwhile, categorizes texts into distinct literary or textual forms based
+on shared conventions, structures, and expectations (e.g. Chandler, 1997).
+It provides a framework for understanding and classifying texts according
+to their overarching narrative structures, plot elements, and stylistic
+conventions.
+In computational linguistics, characterizing specific desired properties of
+a text – such as theme, style, or genre – poses significant challenges due to
+their abstract and multifaceted nature (Rybicki et al., 2016). These para-
+meters encompass a broad range of linguistic elements, making them diffi-
+cult to quantify and model computationally. Furthermore, these parameters
+vary widely across authors and texts, posing challenges for developing uni-
+versal computational models (Serrano et al., 2009). Identifying patterns and
+connections within these parameters involves deciphering complex semantic
+and conceptual relationships, which can be context-dependent and subject to
+individual interpretation. This variability makes it challenging to automate
+analysis reliably across diverse texts. Additionally, the classification of texts
+based on these parameters faces similar challenges, as texts often defy tradi-
+tional categorization and exhibit hybrid or evolving conventions.
+Additionally, such classification relies on intricate intertextual and extratex-
+tual factors, such as cultural context and reader expectations, which are
+challenging to formalize computationally. Overall, literary works’ abstract
+and multidimensional nature presents formidable obstacles in computa-
+tional linguistics, demanding innovative approaches and interdisciplinary
+collaborations for adequate characterization.
+Of particular interest is the discipline of stylometry, which presupposes
+the possibility of distinguishing between distinct authorial styles (that are
+independent of thematic content) based on statistical learning analyses
+(Kestemont, 2014). Identifying such a stylistic property is helpful in
+a variety of real-world settings (e.g. forensic linguistics (Lambers &
+Veenman, 2009), plagiarism detection (Ainsworth & Juola, 2018), and
+314 G. YOFFE ET AL.
+authorship analysis (Kestemont et al., 2016) – where it has been shown that
+other textual properties are often misleading in asserting authorship
+(Stamatatos, 2009, 2018)).
+Stylometric approaches are typically categorized into supervised and
+unsupervised settings (Juola 2008). In supervised tasks, a set of authors and
+their works are provided for training, with the goal of attributing an unat-
+tributed text to one of the authors – known as authorship attribution. Two
+assumptions can apply: (1) the author must be among the provided set
+(Koppel et al., 2009), or (2) the author may not be in the set (Koppel et al.,
+2011). Alternatively, authorship verification aims to determine if an
+unknown work was written by a known author or someone else (e.g. Juola
+2008; Kestemont et al., 2016; Koppel et al., 2007). Other supervised tasks
+include authorship profiling, where texts are attributed to a shared group
+profile (e.g. historical era, gender, language) (Argamon et al., 2009), as well as
+cross-genre and cross-domain settings (e.g. Kestemont et al., 2012;
+Stamatatos, 2018). These tasks have been applied across different languages,
+eras, and text sizes (Schwartz et al., 2013).
+In the unsupervised setting, no prior author information is given. The task
+is to identify whether pairs of unlabelled texts (or text units like sentences or
+paragraphs) were written by the same author. The core question is: Did the
+same author write these texts? This work introduces a novel approach to
+identifying whether sequentially correlated literary properties contribute to
+text classification. We apply a hypothesis-testing framework to analyse such
+correlations in label sequences, which are often linked to thematic content,
+rather than authorial style. Our stochastic model of sequential correlations
+offers an empirical basis for distinguishing between stylistic versus certain
+non-stylistic influences.
+We test our approach on English prose texts of varying genre similarity,
+authored either by the same or by different authors. Using both unsupervised
+and supervised methods with traditional and state-of-the-art neural embed-
+dings – optimized for capturing authorial style, we apply our hypothesis-
+testing framework to assess whether the classification is primarily driven by
+sequential correlations, as seen in same-author, genre-similar texts, or by
+other factors. These experiments affirm that accounting for the influence of
+sequential correlations in textual classification consistently improves the
+distinction between stylistic and non-stylistic classification outcomes in all
+the setups we tried.
+This research is motivated by the challenges posed by multilayered and
+redacted historical texts, which require interdisciplinary approaches across
+linguistics, history, and computer science to trace their evolution from origin
+to extant form (e.g. Bühler et al., 2024). These texts frequently include
+annotations, marginalia, and modifications made by scribes or editors,
+obscuring the original authorial intent (e.g. Müller et al., 2014), and are
+JOURNAL OF QUANTITATIVE LINGUISTICS 315
+often written in archaic or obsolete languages that complicate automated
+analysis (e.g. Baum, 2017). Additionally, their interpretation demands care-
+ful consideration of historical context, including cultural norms, linguistic
+conventions, and socio-political factors, to ensure accurate analysis
+(Chapman, 2017). While our current work does not directly address histor-
+ical texts, it seeks to validate our approach by applying it to modern texts
+with undisputed authorial and stylistic qualities, thereby providing a robust
+foundation for fu- ture applications to more complex historical material.
+2. The State of Stylometry
+Stylometry, the quantitative study of literary style, can be traced to the mid-
+20th century when scholars such as Mosteller and Wallace applied statistical
+methods to assess the authorship of the Federalist Papers, demonstrating the
+effectiveness of function word frequencies and statistical inference in distin-
+guishing authorship (Mosteller & Wallace, 1963). This pioneering work
+provided early evidence that consistent, measurable linguistic signals could
+be exploited to resolve long-standing literary and historical debates, laying
+the groundwork for contemporary computational stylometry.
+With the growth of computational linguistics and data-driven approaches
+in the late 20th and early 21st centuries, the scope of stylometric research
+broadened considerably. Beyond basic authorship attribution, researchers
+developed models for authorship verification, author profiling, genre classi-
+fication, and clustering of anonymous or disputed texts (e.g. Juola et al.,
+2006; Juola 2008; Rybicki & Heydel, 2013). One influential contribution from
+this period is Burrows’ Delta method (Burrows, 2002), which quantifies
+stylistic distance using Z-score-based comparisons of function word fre-
+quencies. Its simplicity, language independence, and empirical robustness
+have made it afoundational benchmark in both literary and forensic stylo-
+metry. As awidely adopted baseline for measuring authorial similarity, Delta
+offers anatural point of comparison for the present work, which introduces
+asequential correlation-based framework aimed at disentangling stylistic
+signals from theme-driven textual structure.
+A landmark machine learning-oriented approach by Koppel et al. (2007)
+demonstrated the robustness of stylometric classification using frequent
+features such as common lexical items, function words, and character-level
+statistics. Their work laid the foundation for high-accuracy authorship
+identification across genres and languages. Further refinements – incorpor-
+ating punctuation patterns (Darmon et al., 2021) and syntactic features –
+showed that such frequent signals could capture authorial style more reliably
+than topic- or content-driven lexical features, which are often more variable
+and less discriminative.
+316 G. YOFFE ET AL.
+Nonetheless, growing evidence has shown that traditional frequency-
+based features can be confounded by thematic content. Mikros and Argiri
+(2007) demonstrated that many widely-used stylometric variables are
+topic-sensitive, and may mislead attribution systems when stylistic and
+thematic patterns overlap. This has led to a critical reassessment of
+assumptions underlying feature selection. Studies such as Savoy (2013),
+Lagutina et al. (2019), and Grieve (2023) argue that true stylistic model-
+ling requires more than frequency analysis – it requires incorporating
+structural, syntactic, and discourse-level features capable of representing
+deeper authorial patterns.
+To address these limitations, several works have proposed syntactic and
+structural approaches. For example, Feng et al. (2012) employed syntactic
+parse tree structures to detect deception and authorial signals, while
+Hollingsworth (2012) showed that dependency parsing can help distinguish
+authorial style from topic. These syntactic methods provide a level of
+abstraction that is less sensitive to thematic variation and more robust across
+genres and text types.
+Information-theoretic and compression-based approaches have also
+gained traction, particularly due to their robustness and language-agnostic
+nature. Cilibrasi and Vitányi (2005) introduced normalized compression
+distance (NCD), a compression-based measure of similarity that operates
+without pre-defined linguistic features or language-specific preprocessing.
+By quantifying the shared information content between two texts using
+standard compression algorithms, NCD provides a robust, domain-
+agnostic method for clustering and comparison. This approach offers
+a valuable alternative to traditional feature-engineered methods, and its
+emphasis on holistic textual similarity complements the data-centric per-
+spective of the current work – particularly in high- lighting classification
+signals that emerge from structural regularities rather than explicitly engi-
+neered feature sets.
+Stylometry has also become increasingly relevant in forensic linguistics,
+where the need for interpretable, defensible results is paramount. Juola
+(2007) emphasized the importance of transparency and reproducibility in
+authorship analysis, especially in legal or historical contexts where the
+evidentiary burden is high. More recent work has focused on evaluating
+the reliability and statistical significance of classification results, often calling
+for hypothesis-driven models that can quantify uncertainty and isolate con-
+founding factors.
+The rise of neural language models has brought a new wave of high-
+performance tools to stylometry. Studies such as Ding et al. (2017) and
+Canbay et al. (2020) explore deep learning models trained for stylometric
+tasks, including authorship attribution and genre classification. These mod-
+els leverage high-dimensional contextual embeddings, often derived from
+JOURNAL OF QUANTITATIVE LINGUISTICS 317
+large pre-trained transformers. While they show strong empirical results,
+they are frequently criticized for their lack of interpretability and for their
+potential sensitivity to thematic and structural artefacts (Dror et al., 2018,
+2020).
+Despite these methodological advances, a major gap persists in under-
+standing what type of information – style, theme, or genre – drives classifica-
+tion success. Litvinova (2020), Hou and Huang (2020), and Schuster et al.
+(2020) highlight the risks of misattributing thematic similarity as stylistic
+consistency. This concern is especially salient in historical, redacted, or
+multi-author texts where thematic coherence may coexist with significant
+stylistic variation. Without tools to differentiate these axes, stylometric
+analyses risk drawing misleading conclusions.
+This distinction is especially crucial in the analysis of complex or redacted
+texts, such as those found in the biblical corpus. Many of the books in the
+Hebrew Bible, for instance, are widely believed to be composite, incorporat-
+ing contributions from multiple authorial sources, traditions, and editorial
+strata over time (e.g. Gunkel, 1895; Holzinger, 1893; Wellhausen, 1885).
+Within the framework of the documentary hypothesis, texts such as the
+Book of Exodus and the Book of Genesis have been segmented into distinct
+sources (e.g. Priestly, Elohistic, Yahwistic) based on recurring stylistic, lex-
+ical, and thematic features. Yet, these divisions are often based on assump-
+tions that thematic consistency necessarily reflects authorship or redaction
+(Albertz, 2018; Wellhausen, 1885). Recent work has sought to bring more
+computational rigour to these debates. For example, Dershowitz et al. (2015),
+Yoffe et al. (2023), Bühler et al. (2024), and Faigenbaum-Golovin et al. (2024)
+employed stylometric clustering to detect internal textual divisions corre-
+sponding to hypothesized strata – but even these results are subject to
+interpretative ambiguity, as stylistic boundaries may be blurred by thematic
+layering or editorial interpolation.
+A related example comes from the domain of classical literature. In their
+stylometric analysis of Latin texts, Kestemont et al. (2016) developed an
+authorship verification framework to assess the authenticity of disputed
+works attributed to Julius Caesar. By training classifiers on known Caesar
+texts and testing against contested pieces, they achieved strong empirical
+results – but the interpretation of these classifications again hinged on
+whether the distinguishing signals reflected Caesar’s unique stylistic finger-
+print or domain-specific content (e.g. military vocabulary, rhetorical form).
+While their framework operated under the assumption that thematic bias
+could be mitigated through feature design and normalization, our approach
+would enable a more explicit assessment: namely, whether the classification
+boundaries align with patterns of sequential thematic development rather
+than true stylistic divergence.
+318 G. YOFFE ET AL.
+In both historical-critical and classical philological settings, the challenge
+remains the same: when classification succeeds, what exactly is being distin-
+guished? Our hypothesis-testing framework is designed to answer this ques-
+tion directly. By modelling the expected distribution of label sequences that
+arise from sequentially structured (but non-stylistic) sources, we provide
+a principled way to separate theme-driven partitions from genuinely stylistic
+ones. This opens the door for more cautious and informed interpretations of
+stylometric findings, particularly in cases where authorial boundaries are
+unknown, or the text has been shaped by centuries of redaction, translation,
+and reuse.
+In response to this gap, the present work introduces a hypothesis-testing
+framework for assessing the influence of sequentially correlated properties –
+such as theme – on classification outcomes. By generating surrogate label
+sequences that preserve observed auto-correlation patterns, we estimate
+whether classification results are likely driven by sequential structure or by
+non-sequential stylistic signals. This approach complements existing stylo-
+metric methods by offering a data-centric, statistically grounded test of
+interpretability – particularly valuable in contexts where both style and
+theme may be entangled.
+3. Hypothesis-Testing Scheme
+We propose a data-centric approach that treats labels as correlated random
+variables in the sequential domain. This embedding-invariant method can be
+applied to texts (or other datasets) embedded densely, sparsely, or with any
+subset of features from neural or traditional language models. By estimating
+the intrinsic average correlations between text units at different lags (i.e.
+distances along the textual sequence), we generate a multivariate distribution
+from which we draw label sequences that reflect these sequential correla-
+tions. This provides a null hypothesis that simulates the inherent sequential
+dependencies in the text.
+We consider the null hypothesis labelling-generation routine for the
+simplest scenario of a text composed by one or two authors. Once this
+sampling mechanism for our null distribution is established, we can compute
+the p-value indicating the likelihood that the distinction between the two
+parts of the text indicated by labels L is made due to classifi- cation driven by
+sequentially correlated literary properties.
+Reference label sequence L(real) of a textual data set. We consider correla-
+tions in the label space. Let D ∈ Rm×f denote a textual data set
+containing m samples (text units – a sequence of words of some length) of
+f dimensions (features). We denote a sequence of labels representing some
+hypothesized or real partition between or within texts as L(real).
+JOURNAL OF QUANTITATIVE LINGUISTICS 319
+Label sequence L of a classification algorithm applied to D. We apply
+some classification algorithm with two labels to D and receive a sequence of
+labels L ∈{0, 1}m.
+Auto-covariance of L. We proceed to compute the average auto-covariance
+of L for all lags, to receive a vector A ∈ Rm, where Aℓ (ℓ = 1, . . . , m) is the
+average auto-covariance of L at lag ℓ, given by
+Where �L ¼ 1
+m
+P
+i
+Li is the average of the elements of L = (L1, . . . , Lm)T . To
+impose inear decay as a function of lag (i.e. that the strength of the correla-
+tion between farther separated text units decays linearly), all terms in A are
+scaled by 1/m, rather than the expected term for averages 1/(m − ℓ). In other
+words, Equation 1 is equivalent to
+which approaches zero linearly as ℓ → m.
+Average auto-covariance matrix M.Let M ∈ Rm×m denote the average
+autocovariance matrix, whose entries are defined by
+Thus, the correlation between every ith and jth entries in L is given by the
+(linearly decaying) average autocovariance of L at lag |i − j|. This
+approach represents the empirical expectation value of the global correla-
+tion trend in the text of every two labels at some fixed lag of size |i − j|.
+Generating a correlated label sequence L(null).We use the autocovariance
+matrix M to draw a random sequence of correlated labels L(null) ∈ Rm in the
+following manner: consider the multivariate normal distribution V ∼ N
+(L¯ , M), where L¯ = (L¯, . . . , L¯)T ∈ Rm.
+The choice of V as a multivariate normal distribution stems from the ease
+of embedding the average autocovariance matrix M as a covariance matrix.
+Let X = (X1, . . ., Xm) ∈ Rm be drawn from V, which can be transformed into
+a vector of correlated labels (L(null)) using element-wise thresholding (Leisch
+et al., 1998):
+320 G. YOFFE ET AL.
+Intuition. The multivariate normal distribution V offers a convenient and
+analytically tractable method for generating stochastic binary label sequences
+that preserve the sequential dependencies observed in a reference sequence
+L. This model couples two essential components: (1) the marginal probability
+of a label being 1, which is assumed to be constant across entries and
+estimated by the empirical mean of L (i.e. L¯), and (2) the average autocovar-
+iance matrix M, which encodes the expected correlation between each label
+and every other label in the sequence based solely on their relative distance.
+The matrix M is constructed as a symmetric Toeplitz matrix, with entries
+defined by (M)ij = A|i−j|, where A is the vector of average autocovariance
+across all lags. This Toeplitz structure reflects an important modelling
+assumption: that the correlation between labels is translation-invariant –
+that is, the degree of correlation between any two labels depends only on how
+far apart they are, not on their absolute position in the sequence. This aligns
+with the hypothesis that thematic or stylistic coherence decays smoothly with
+distance in natural language, regardless of context or boundary location.
+A sample vector X drawn from V is thus a continuous-valued realization
+that preserves the second-order (i.e. pairwise) sequential correlations of L. To
+convert this to a binary label sequence, we apply element-wise thresholding
+(e.g. assigning a value of 1 if Xi >0.5 and 0 otherwise). This produces a new
+binary sequence that shares the same correlation structure as the original,
+without inheriting any specific content or higher-order dependencies.
+Within a hypothesis-testing framework, this allows us to define a null
+hypothesis: that the observed reference label sequence L reflects nothing
+more than the natural sequential correlations found in the text. Under this
+null, L is treated as a representative draw from the multivariate normal
+model V, which is then used to simulate a distribution of surrogate label
+sequences possessing similar sequential properties.
+We then evaluate the degree of agreement between each surrogate
+sequence and a target label sequence L(real) — which may represent
+a hypothesized or externally assigned partition of the text (e.g. by authorship
+or stylistic phase). If the agreement between L and L(real) can be explained by
+sequential correlations alone, then the overlap between the surrogate
+sequences and L(real) should be statistically comparable. However, if the
+overlap between L and L(real) significantly exceeds what is expected under
+the null, we infer that their agreement likely reflects a meaningful, non-
+sequential structure – such as a real authorial distinction.
+This approach thus enables a principled test of whether the separability in
+a classification task is driven by underlying literary structure rather than
+being an artefact of natural sequential coherence in language. In Figure 1, we
+visualize the autocovariance vector A and matrix M computed from a label
+sequence L of length 1213, illustrating the sequential correlation structure
+modelled in our hypothesis-testing framework.
+JOURNAL OF QUANTITATIVE LINGUISTICS 321
+Matthews correlation coefficient (MCC). We consider the MCC model
+evaluation metric, given by
+where T (F) stands for true (false) and P (N) stands for positive (nega-
+tive), which are evaluations of some sequence against another. We use
+MCC to evaluate the agreement between the reference label sequence
+L(real) and L, or a drawn label sequence L(null) as our statistic of choice,
+normalized to percent within the range of 50%–100%, where 50% suggests
+an arbitrary overlap between two label sequences, and 100% suggests
+perfect overlap. By drawing multiple random correlated label sequences
+L(null), we empirically estimate the null distribution of MCC between the
+random and L(real). We can derive the probability of the MCC score
+between the latter and L to be drawn from that distribution – implying
+that the unsupervised partition is based predominantly on sequentially
+correlated literary properties.
+We present the procedure of generating a null label sequence L(null) using
+this method schematically in Algorithm 1.
+Figure 1. Flowchart of the hypothesis-testing framework. Starting from an embedded
+text corpus D ∈ Rm×n, a binary label sequence L ∈{0, 1}m is obtained via 2-means
+clustering. The autocovariance vector a and corresponding matrix M are computed from
+L. A stochastic vector V ∼ N ( L
+→¯ , M) is drawn and thresholded to generate null sequences
+L(null). Repeating this process yields a null distribution of MCC scores against L, from
+which a p-value is estimated.
+322 G. YOFFE ET AL.
+4. Experiments
+4.1. Rationale
+Rather than relying solely on state-of-the-art neural language models, we
+emphasize the value of traditional features that have demonstrated long-
+standing efficacy in textual analysis. This is particularly relevant for unan-
+notated historical texts, which are often redacted or multilayered, and pre-
+sent stylistic and structural complexities not easily captured by modern
+embeddings (e.g. Bühler et al., 2024). Frequency-based representations
+such as tf-idf over word or character n-grams remain powerful tools in
+such contexts.
+Algorithm 1 Hypothesis-Testing Scheme: Generating a null label sequence L(null)
+1: Apply a classification algorithm on an embedded corpus D ∈ Rm×f and receive a label sequence
+L ∈ Rm.
+2: Calculate the (decaying) average autocovariance array A of L, where Aℓ is computed with Eq 1, and ℓ
+∈{1, . . . , m}.
+3: Generate the average autocovariance matrix M, such that (M)ij = A|i−j|.
+4: Generate a multivariate normal distribution V ∼ N (L¯ , M), where L¯ = (L¯, . . . , L¯) ∈Rm.
+5: Draw a vector X = {X1, . . . , Xm} from V.
+6: Impose element-wise thresholding on X, such that Xi = 1 ⇔ Xi >0.5, and Xi = 0 otherwise.
+7: X is now L(null).
+To complement these, we incorporate a Delta-like embedding scheme
+inspired by Burrows’ Delta (Burrows, 2002), which uses Z-score standar-
+dized frequencies of the most frequent n-grams or k-mers to construct
+interpretable, content-agnostic stylistic profiles. This representation
+enhances interpretability and serves as a valuable baseline for clustering
+and comparison, aligning our pipeline with stylometric tradition.
+Our aim is to evaluate how effectively various embeddings capture non-
+sequentially correlated literary properties. In supervised experiments, we
+train models to differentiate between text pairs authored either by the same
+or different individuals. This allows us to examine how supervised systems
+may encode implicit biases from training labels, potentially reflecting the-
+matic or structural assumptions.
+Unsupervised experiments, by contrast, reveal the intrinsic structure of
+stylistic variation without relying on annotation. By applying clustering to
+traditional, Delta-style, and neural embeddings, we probe whether modern
+embeddings offer finer stylistic discrimination or whether classic stylometric
+indicators remain competitive, especially in genre-diverse or data-scarce
+contexts.
+To further enhance interpretability, we apply a hypothesis-testing frame-
+work that quantifies the degree to which classifications rely on sequentially
+versus non-sequentially correlated features. This enables us to distinguish
+between classifications driven by authorial style and those influenced by
+JOURNAL OF QUANTITATIVE LINGUISTICS 323
+thematic content, offering a deeper understanding of model behaviour and
+interpretive validity.
+4.2. Corpora
+We conduct our analysis on several curated English prose corpora selected to
+represent a broad range of literary styles, genres, and narrative structures.
+This diversity is designed to stress-test our hypothesis-testing framework
+under realistic stylometric challenges and to reflect both classical and con-
+temporary authorial voices.
+Our datasets are as follows: (1) the Harry Potter series by J. K. Rowling,1 2)
+four books from the Percy Jackson series by Rick Riordan,2 3) works by
+J. R. R. Tolkien, including The Lord of the Rings trilogy and The
+Silmarillion,3 4) selected novels by Charles Dickens,4
+5) selected works by C. S. Lewis,5 6) major works by Jane Austen,6 7)
+detective fiction by Sir Arthur Conan Doyle,7 and 8) a spooky corpus of short
+fiction by Edgar Allan Poe, H. Lovecraft, and Mary Shelley.8
+We list all texts, their authors, and abbreviations in Table A.1 (Appendix
+A). All texts were preprocessed to retain only uncontracted words.9
+Punctuation was excluded to maintain compatibility with historically noisy
+or inconsistently punctuated texts, as motivated in Section 4.1.
+The corpora span multiple stylistic and thematic regimes: contemporary
+fan-tasy (the Harry Potter series by J. K. Rowling and the Percy Jackson series
+by Rick Riordan), 19th-century literary fiction (works by Charles Dickens
+and Jane Austen), Christian allegory (The Screwtape Letters by C. S. Lewis),
+Gothic and epistolary fiction (Frankenstein by Mary Shelley and selected
+short stories by Edgar Allan Poe), and epic fantasy (The Lord of the Rings
+trilogy and The Silmarillion by J. R. R. Tolkien). This enables anal-yses
+across: (1) different-author comparisons, (2) intra-author comparisons
+across genres (e.g. The Chronicles of Narnia vs. The Screwtape Letters, both
+by C. S. Lewis), and (3) intra-text variation within a single work. Such
+diversity offers a comprehensive platform for assessing when classification
+outcomes are thematically or stylistically motivated.
+We evaluate 50 randomly selected inter-author pairs and all 55 intra-
+author permutations. Sampling was stratified by author group, and for each
+inter-author pair, the number of texts drawn from each author was randomly
+chosen (up to three), ensuring balanced representation and mitigating genre-
+specific biases (see Table A.2 in Appendix A).
+This sampling strategy captures the stylistic range within authors while
+enabling assessment of stylistic consistency under theme shifts, a key con-
+found in stylometry. By analysing both inter- and intra-author comparisons,
+we build a more nuanced picture of how style interacts with genre and
+structure.
+324 G. YOFFE ET AL.
+Tables A.3 and A.4 (Appendix A) detail the 50 inter-author and 55 intra-
+author pairs. The latter include genre-similarity annotations, with uncertain
+cases marked ‘?’. These annotations support the interpretation of classifica-
+tion outcomes and help evaluate the method’s sensitivity to stylistic versus
+thematic properties.
+4.3. Preprocessing
+In our preprocessing pipeline, we employ several techniques to standardize
+and prepare the text data for embedding. First, we convert all texts to low-
+ercase to ensure uniformity and mitigate the impact of case sensitivity on
+subsequent processing steps. Additionally, we systematically remove punc-
+tuation marks to focus solely on the textual content. Following this, we
+concatenate all the texts into a single continuous string, facilitating the
+segmentation of the corpus into text units of a desired length.
+In the traditional embedding setup (§4.4.1), all texts undergo named
+entity recognition and removal using spaCy’s entity extraction routine,10
+(Vasiliev, 2020) to decrease the number of features that are of predominantly
+thematic and semantic merit (R´ıos-Toledo et al., 2017).
+To simulate realistic document mixing, we split the text composed by
+the second author in the pair into segments, based on a Poisson distribution
+with λ = 3, which introduces variability in the length of the segment. These
+segments are then inserted into arbitrary locations within the first text, rather
+than concatenated linearly.11 This method enhances the realism of document
+integration by mimicking potential co-authored document inter-spersion. It
+avoids oversimplified models and tests the robustness of our approach under
+various conditions. A λ value of 3 strikes a balance by avoiding excessively
+short segments that could disrupt coherence, while still allowing larger (and
+fewer) blocks to be effectively probed.
+4.4. Embedding
+4.4.1. Traditional Embedding Setup
+We use two complementary feature extraction methods: traditional tf-idf
+vectorization (Aizawa, 2003) and a Z-score-based embedding inspired by
+Burrows’ Delta (Burrows, 2002) (see Appendix C). Tf-idf has been shown to
+perform robustly in unsupervised classification, especially when neural
+models are unavailable (e.g. Fabien et al., 2020; Marcin´czuk et al., 2021). In
+contrast, the Delta embedding standardizes n-gram or k-mer frequencies,
+yielding interpretable stylistic profiles that suppress topical bias. This dual
+representation enables comparison between raw and normalized frequency-
+based embeddings. In line with the rest of our experimental setup, we use
+Z-score standardized vectors in conjunction with k-means clustering rather
+JOURNAL OF QUANTITATIVE LINGUISTICS 325
+than applying Cosine Delta directly. However, Z-score embeddings yield
+Euclidean-compatible vectors that can be meaningfully averaged, making
+them a methodologically coherent choice for unsupervised clustering within
+our pipeline (Evert et al., 2015).
+Each text pair is embedded using parameter grids over n and ℓ: word
+n-grams with n ∈ 1, 2, 3, 4, character k-mers with n ∈ 1, 2, 3, 4, 5, 6, and text
+unit lengths ℓ ∈ 10, 50, 100, 250, 500, 750, 1000, 2000. These ranges span
+fine- to coarse-grained representations and allow us to probe stylistic pat-
+terns across linguistic levels (e.g. Antonia et al., 2014). Increasing n in word
+n-grams captures syntactic structure, while character k-mers track morphol-
+ogy and orthography. Varying ℓ helps us assess stability from sentence level
+to discourse level.
+For both tf-idf and Z-score embeddings, we select the top f ∈ 100, 200, 300
+most frequent features across the joint corpus. This reduces noise from rare or
+content-specific tokens (Akiva & Koppel, 2012). Importantly, the same feature
+set is used for both embeddings to ensure comparability. Focusing on shared
+high-frequency features improves signal-to-noise ratio and reduces sparsity –
+a known challenge in stylometric modelling (Lagutina et al., 2019).
+To ensure robustness, we apply consistent subsampling: a random subset
+of c · min m(ℓ), m(ℓ) text units is selected per document, with c = 0.2 fixed
+across all settings. This choice balances computational cost and classification
+stability based on preliminary tests of MCC variance. Evaluating each (n, ℓ,f)
+configuration across both embeddings provides a rigorous framework for
+analysing the interplay between feature space design and stylistic
+classification.
+4.4.2. Neural Embedding Setup
+We use an off-the-shelf implementation of the STAR12 (Style Transformer
+for Authorship Representations) embedding (Huertas-Tato et al., 2023) to
+test the validity of our approach when using a state-of-the-art authorship-
+attribution-oriented neural embedding. STAR is a contrastively trained
+model fit to learn authorship embeddings instead of semantics. Similarly
+to the traditional embeddings, we implement STAR in two scenarios: (1)
+The unsupervised approach (§4.5.1), whereby we cluster texts using
+a 2-means clustering algorithm on STAR-embedded pairs of texts and
+apply our hypothesis-testing framework to that classification. (2)
+A supervised cosine similarity approach (§4.5.2), as implemented in
+Huertas-Tato et al. (2023). In this case, a comparison between the tradi-
+tional style-bearing features and STAR emphasizes the potential advan-
+tage novel neural models that are optimized to preserve and isolate the
+stylistic signal may have therein.
+326 G. YOFFE ET AL.
+4.5. Classification
+4.5.1. Unsupervised Approach
+For our unsupervised experiments, we adopt k-means clustering with k = 2
+— a standard and interpretable algorithm compatible with our embedding
+choices and suited to our binary classification framework. Each pair of texts
+is embed- ded using varying combinations of word n-gram or character
+k-mer sizes and text unit lengths, producing a feature matrix T(ℓ,n,f) where
+n, ℓ, and f represent the token granularity, text unit length, and number of
+selected features, respectively. k-means clustering is then applied to this
+matrix to generate cluster labels, which are evaluated using the Matthews
+correlation coefficient (MCC) against the known binary labels of com-
+mingled text segments.
+Each batch subsample is clustered using k-means, producing a predicted
+label sequence L. We then compare L to the true partition L(real) using MCC
+to assess alignment. To evaluate whether such alignment arises from intrinsic
+stylistic divergence rather than from sequential correlation alone, we apply
+our hypothesis-testing framework (§3). Specifically, we generate a null dis-
+tribution of MCC scores using 1000 synthetic labelings L(null) that match the
+autocorrelation structure of L but are otherwise random. The p-value for
+each observed MCC is computed relative to this distribution, quantifying the
+probability of obtaining such a result under the null hypothesis of sequential
+correlation alone.
+As part of our embedding design, we include both tf-idf vectorization and
+a Z-score – based embedding inspired by Burrows’ Delta (Burrows, 2002)
+(Appendix C). The Z-score embedding uses standardized frequency profiles
+of the most common n-grams or k-mers across the corpus. This approach
+emphasizes deviations from corpus-level norms, yielding stylistically inter-
+pretable feature vectors. While not explicitly designed for supervised classi-
+fication, such embeddings have demonstrated strong performance in
+unsupervised authorship attribution tasks and are particularly effective
+when paired with distance-based methods such as clustering (Evert et al.,
+2015). Evert et al. (2015) show that Delta-style embeddings, especially when
+paired with normalization strategies, can achieve competitive clustering
+results without supervision. These properties make Z-score embeddings
+well-suited as an unsupervised baseline for evaluating stylistic separability,
+particularly in contexts where interpretability and content-agnostic analysis
+are essential. Moreover, since k-means operates in Euclidean space, Z-score
+embeddings – unlike Cosine Delta – are naturally compatible with centroid-
+based clustering, as discussed in §4.4.1.
+After completing batch sampling and clustering, we compute the empiri-
+cal distributions of MCC scores and corresponding p-values for each para-
+meter combination. To address the issue of multiple hypothesis testing, we
+JOURNAL OF QUANTITATIVE LINGUISTICS 327
+apply the Benjamini-Hochberg false-discovery rate (FDR) procedure
+(Benjamini & Hochberg, 1995) across all (n, ℓ) settings. The resulting average
+MCC scores and FDR-corrected p-values are used as summary statistics to
+interpret classifier performance.
+To quantify the stability of each test result, we compute a 95% Wilson
+score confidence interval for the unadjusted p-value, before FDR correction.
+For all reported significant results (p < 0.05), we confirm that the upper
+bound of this interval also falls below 0.05. While this interval applies only
+to unadjusted p-values, its use supports a more conservative and stable
+interpretation of statistical significance prior to correction.
+4.5.2. Supervised Approach (General Imposters/Cosine Similarity
+Methods)
+Here, our goal is to test the susceptibility of supervised classification
+methods to false- positive classifications of texts that are attributed to,
+for example, differences in authorial style, while being indeed affected
+by sequentially correlated literary properties, such as thematic content.
+This susceptibility arises because the chosen subsets of features often
+encapsulate multiple facets of the text, such as vocabulary, syntax, and
+punctuation, leading to a blending of stylistic and genre-wise character-
+istics within the classification process. Moreover, traditional features are
+not optimized to represent some desired literary property; rather, they
+are selected based on theoretical frameworks or limited empirical find-
+ings, potentially overlooking nuanced stylistic distinctions. We consider
+two supervised classification approaches: (1) The General Imposters13
+(GI) framework (Koppel & Winter, 2014) – a gold-standard supervised
+method used in multiple authorship-attribution scenarios (e.g. Juola,
+2021). The GI model is designed to account for the possibility that
+authors might mimic or imitate the writing styles of others, either
+intentionally or unintentionally. This means the model doesn’t just
+rely on a single set of features to identify an author’s style but rather
+considers multiple feature subsets that capture various aspects of writing
+style. (2) Cosine similarity. In this approach, as implemented in
+Huertas-Tato et al. (2023), classification is performed by attributing an
+embedded text unit to either one or another centroid of a training-set
+sample of each class (using the original partition Lreal) by measuring the
+cosine similarity between them. In this case, all features are used to
+compute the cosine similarity.
+Neural embeddings, unlike traditional features such as word n-grams,
+inherently capture diverse linguistic properties without manual selection.
+Attempting to under-sample or select subsets of features from neural embed-
+dings, as in the GI framework, may not be suitable due to their holistic
+representation of text. Utilizing all features in neural embed- dings is often
+328 G. YOFFE ET AL.
+more effective for classification, leveraging their rich linguistic representa-
+tions encoded in high-dimensional spaces. Therefore, in our analysis, we
+apply the GI framework to classify the traditionally-embedded texts, whereas
+in the neurally-embedded case, we apply the cosine similarity classification.
+We set a consistent train/test split ratio of 20%–80% in all supervised
+scenarios to evaluate the model’s performance and assess the model’s gen-
+eralization ability without favouring either the training or test.
+The supervised classification procedure using the GI and cosine similarity
+frameworks for some parameter combination of n (only in the GI case) and ℓ
+and a feature space f is summarized in Algorithms 2 and 3 in Appendix B,
+respectively.
+5. Results
+Here, we present the results of experiments where we (1) distinguish 50 pairs
+of texts composed by different authors and all (55) permutations of pairs of
+texts written by the same author in our corpus, and (2) apply our hypothesis-
+testing method on all resulting classifications to determine whether it is
+based on predominantly sequentially correlated literary properties or not.
+We perform these experiments in four configurations, where in all cases, we
+split the texts into units of varying length (§4.4):
+● Unsupervised Classification of Traditionally-Embedded Texts: We
+apply the 2-means algorithm (§4.5.1) to classify texts embedded accord-
+ing to either word n-grams
+or character k-mers of varying sizes and numbers of corpus-wise-weighed
+most-frequent features (§4.4.1).
+● Supervised Classification of Traditionally-Embedded Texts: We
+apply the supervised GI framework (§4.5.2) to classify texts embedded
+according to either word n-grams or character k-mers of varying sizes
+and numbers of corpus-wise-weighed most-frequent features (§4.4.1).
+● Unsupervised Classification of Neurally-Embedded Texts: We apply
+2-means (§4.5.1) to classify texts embedded using the pretrained STAR
+model (§4.4.2).
+● Supervised Classification of Neurally-Embedded Texts: We apply the
+supervised cosine similarity framework (§4.5.2) to classify texts
+embedded using the pretrained STAR model (§4.4.2).
+In Figure 2, we illustrate the output of one such experiment for the
+case of 50 pairs of texts composed by distinct authors, embedded using
+JOURNAL OF QUANTITATIVE LINGUISTICS 329
+word n-grams with f = 300 features, and classified using the unsuper-
+vised 2-means clustering approach. The x-axis represents all tested
+parameter combinations of n-gram size (n) and text unit length (ℓ),
+while the y-axis corresponds to the 50 evaluated text pairs. Each cell in
+the matrix is colour-coded by the normalized Matthews correlation
+coefficient (MCC) score for that pair under the given (n, ℓ) configura-
+tion, but only if the classification was found to be statistically significant
+under our hypothesis-testing framework (i.e. p < 0.05 after FDR correc-
+tion). Cells where the classification was not deemed significant are left
+blank.
+This visualization highlights parameter regimes where stylistic signals
+dominate over sequential correlations, as evidenced by high MCC scores
+passing the hypothesis test. Importantly, we observe that certain configura-
+tions – particularly smaller n-grams and moderate unit lengths (e.g. n = 1–2,
+ℓ = 100–500) – tend to yield more consistent success in distinguishing
+authorial style across text pairs. Conversely, longer text unit lengths or higher
+n-gram values often lead to sparsity and reduced classification power,
+reflected in fewer significant cells.
+The blank entries serve as a visual cue for parameter settings where
+classification success was likely driven by sequentially correlated properties
+(e.g. theme or narrative flow), as such cases fail to reject the null hypothesis.
+This reinforces the utility of our method in diagnosing when classification is
+style-driven versus thematically biased. We note that results for smaller
+feature set sizes (f = 100, 200) were qualitatively similar to those of f = 300,
+and are therefore omitted for clarity.
+We report performance using the following metrics. A positive indicates
+a classification driven by non-sequentially correlated properties (i.e. beyond
+what is expected under the null), while a negative indicates no such classi-
+fication. True and false refer to whether the result aligns with ground truth
+(i.e. different or same author). Binary metrics refer to the presence of at least
+one significant parameter setting per text pair, while total metrics account for
+all parameter combinations.
+In Tables 1–4, we list all true/false positive rates for each experimental
+setup of traditionally- and neurally-embedded texts. Below, we discuss our
+results for the traditionally- and neurally-embedded texts. In Appendices
+C and D, we provide graphic representations of these experiments.
+5.1. Results: Traditionally-Embedded Texts
+An intriguing observation arises from the results, highlighting the remark-
+able true positive rates achieved by unsupervised methods, particularly
+notable in traditionally-embedded texts. This finding holds significance as
+unsupervised approaches, such as the k-means algorithm, operate without
+330 G. YOFFE ET AL.
+explicit optimization for authorship attribution tasks. Despite this, they
+exhibit robust performance in identifying texts by the same author, suggest-
+ing that these methods capture intrinsic textual similarities effectively. This
+success underscores the potential of unsupervised techniques in authorship
+attribution tasks, especially in scenarios where text representations are not
+specifically tailored for such purposes. As we demonstrate below, further
+exploration of these unsupervised methods could offer valuable insights into
+textual data’s underlying structures and patterns, enhancing our understand-
+ing of authorial styles and linguistic nuances.
+Another notable aspect of the results is the relatively low false positive rate
+observed in the unsupervised method, particularly evident in traditionally-
+embedded texts. Despite their inherent lack of optimization for authorship
+attribution, unsupervised methods exhibit the ability to minimize misclassi-
+fications of texts by different authors as authored by the same individual.
+This finding suggests that unsupervised approaches are adept at discerning
+subtle textual differences that distinguish authors, contributing to their
+effectiveness in authorship attribution tasks. That said, it is evidently
+a nontrivial task to discern between cases where false positive classifications
+Figure 2. Significance map for applying 2-means classification to 50 pairs of texts by
+different authors (see table A.2 in appendix 1), embedded using word n-grams with f =
+300. The x-axis shows all feature combinations (n and l), and the y-axis lists 50 text pairs.
+Colored cells indicate parameter combinations yielding classifications predominantly
+affected by non-sequentially correlated properties with high statistical significance,
+color-coded by normalized MCC score. Blank cells denote classifications where the
+hypothesistest yielded a p-value > 0.05.
+JOURNAL OF QUANTITATIVE LINGUISTICS 331
+are made based on genre-wise differences or not, as is demonstrated in our
+results.
+In contrast, the supervised GI method demonstrates a strong true
+positive identification capability, but its performance is marred by high
+false positive rates. This issue highlights a significant challenge faced by
+supervised classification approaches, where the classifier erroneously
+identifies texts by the same author as authored by different ones. Such
+false positives can be attributed to various factors, including the com-
+plexity of linguistic features captured by the embedding techniques and
+the classifier’s susceptibility to common stylistic elements across an
+author’s works.
+In Figure 3, we apply the important features extraction method intro-
+duced in Yoffe et al. (2023) on the false positive classification between
+[Dickens Copperfield, Dickens ̲ OliverTwist], embedded using word n-gram
+size 2 with text unit length of 1000.
+This embedding yields an average MCC score of ≈ 90% and an average
+p-value of ≈ 0.01 –rendering it a classification that is not driven by sequential
+correlations with high statistical significance, despite the two texts having
+both been composed by Charles Dickens. In this case, as demonstrated in
+Figure 3, the distributions between first- and third-person speech features
+Table 1. Confusion matrices for word n-gram embedded texts for the unsupervised
+(k-means) and supervised (GI) classification approaches, with f = 300 (see §4.4.1). True
+positives and false negatives refer to attempting to distinguish pairs of texts composed
+by different authors. In contrast, false positives and true negatives refer to attempting to
+distinguish pairs of texts composed by the same author. The bracketed rates indicate the
+results when overlooking false-positive classifications of texts of explicitly different
+genres, which we consider to be: [Lotr ̲ 1, Silmarillion], [Lotr ̲ 2, Silmarillion], [Lotr ̲ 3,
+Silmarillion], [Kipling ̲ JungleBook, Kipling ̲ Ballads], [Kipling ̲ JungleBook2, Kipling ̲
+Ballads], [Narnia, Screwtape], [Caspian, Screwtape] (amounting to 16% of all pairs of
+texts composed by the same author in our corpus).
+(k-means) Positive (k-means) Negative (GI) Positive (GI) Negative
+(Binary) True 100% 70.9% (74.5%) 100% 0.0% (0.0%)
+(Binary) False 29.1% (25.5%) 0.0% 100% (100%) 0.0%
+(Total) True 44.0% 92.1% (94.9%) 77.6% 66.0% (68.4%)
+(Total) False 7.9% (5.1%) 56.0% 44.0% (42.6%) 22.4%
+Table 2. Confusion matrices for character k-mer embedded texts for the unsupervised
+(k-means) and supervised (GI) classification approaches, with f = 300, similarly to
+Table 1.
+(k-means) Positive (k-means) Negative (GI) Positive (GI) Negative
+(Binary) True 98.0% 69.1% (79.2%) 100% 10.9% (12.5%)
+(Binary) False 21.9% (18.8%) 2.0% 89.1% (87.5%) 0%
+(Total) True 58.9% 89.0% (95.1%) 93.4% 59.1% (66.1%)
+(Total) False 11.0% (4.9%) 34.9% 40.9% (33.9%) 31.1%
+332 G. YOFFE ET AL.
+vary significantly, essentially a difference in genre stemming from the fact
+that David Copperfield is composed as a semi-auto-biography, leading to the
+false positive classification. Thus, by assessing the features yielding the
+classification – a considerably less challenging task in the case of traditional
+embeddings, such as word n-grams – interpretability analysis can provide
+valuable insight into the reason for false positive classifications and aid in
+tuning relevant feature subsets to avoid or detect them.
+Further insight emerges when comparing tf-idf – based embeddings
+with those generated using the Z-score framework. As shown in Table 3,
+Z–score – based unsupervised classification achieves moderately strong
+true positive rates but slightly underperforms relative to tf-idf, particularly
+in managing false positives. While both approaches rely on the same set of
+top 300 most frequent features, the key distinction lies in how these
+features are encoded. In tf-idf, feature values are weighted by their relative
+frequency across documents, suppressing tokens that appear uniformly
+throughout the corpus and emphasizing those that are discriminative but
+not ubiquitous. This weighting scheme attenuates noise from common
+tokens and boosts stylistic signals, ultimately improving classification
+precision. In contrast, Z-score embeddings reflect raw frequency devia-
+tions from expected counts, which may be more vulnerable to fluctuations
+due to topic or unit length, especially in sparse settings. This difference in
+encoding – not in feature selection – likely explains tf-idf’s superior
+performance in capturing authorial style with fewer spurious signals.
+A notable artefact of the Z-score – based approach is the complete absence
+of binary true negatives in the n-gram case – that is, none of the same-author
+pairs are deemed stylistically indistinguishable across any tested configura-
+tion. This effect is especially concentrated in high-order n-grams (e.g. n =
+3, 4) paired with short text unit lengths (ℓ = 100, 250), as shown in Figure D.6
+in Appendix
+D. In such cases, the resulting feature space becomes highly sparse: long
+n-grams are unlikely to repeat across short units, even within texts by the
+same author. Consequently, minor topical or structural differences can
+artificially inflate statistical dissimilarity, leading to false positive classifica-
+tions. In contrast, character k-mers exhibit much higher robustness in the
+same Z-score framework – reflected in the presence of a substantial number
+of binary true negatives (70.9%, rising to 81.2% after genre adjustment). This
+discrepancy is explained by the inherently denser nature of character k-mers,
+which are more likely to recur across units even in short spans, enabling
+them to better preserve shared stylistic signals. These findings collectively
+underscore the importance of choosing features that balance discriminability
+with statistical stability – an objective well-served by tf-idf weighting and
+character-level representations.
+JOURNAL OF QUANTITATIVE LINGUISTICS 333
+Our findings provide insight into the widespread effectiveness of various
+traditional embeddings in distinguishing between text units of varying
+lengths.
+Figure 3. Extracted important features for the classification of the texts pair [Dickens
+Copperfield, Dickens OliverTwist], embedded using word n-gram size 2 with text unit
+length of 1000.
+Table 3. Confusion matrices for Z-score-based unsupervised classification of texts using
+word n-gram and character k-mer embeddings, with f = 300, similarly to Table 1.
+(n-grams) Positive (n-grams) Negative (k-mers) Positive (k-mers) Negative
+(Binary) True 100% 0% (0%) 100% 70.9% (81.2%)
+(Binary) False 100% (100%) 0% 29.1% (18.8%) 0%
+(Total) True 50.5% 81.5% (83.9%) 61.7% 88.7% (94.8%)
+(Total) False 19.5% (16.1%) 49.5% 11.3% (5.2%) 38.3%
+334 G. YOFFE ET AL.
+5.2. Results: Neurally-Embedded Texts
+Here, an interesting result begs attention: in the unsupervised classification
+of pairs of text by different authors, neurally embedded texts achieve out-
+standing performance in binary true and total positive identification rates. In
+the supervised cosine case, however, both rates drop dramatically. Indeed,
+the expectation for neural embeddings coupled with supervised classification
+to outperform all other configurations proved false within our analysis’s
+scope and merits further exploration.
+In contrast to the traditionally-embedded texts scenario, the low false
+positive rates demonstrate that neural embeddings, such as STAR, can isolate
+the desired literary component (in this case – stylistic) and minimize the
+effect of undesirable influences such as those of thematic content. These
+results indicate the effectiveness of neural models tai- lored to the author-
+ship-attribution task in minimizing misclassifications of texts by the same
+author as authored by different authors, even in supervised classification
+approaches. Comparing these results with the performance of supervised
+methods in traditionally- embedded texts, we observe a considerable dis-
+parity in false positive rates.While traditionally-embedded texts presented
+challenges for supervised methods, leading to rela- tively high false positive
+rates, neurally-embedded texts showcase the ability of supervised methods to
+achieve lower false positive rates. This discrepancy suggests that the inherent
+characteristics of neurally-embedded representations may offer advantages
+in mitigating false positives, thereby enhancing the reliability and accuracy of
+supervised authorship attribution systems. Further investigation into the
+underlying mechanisms driving these differences could yield valuable
+insights into the optimization and refinement of authorship attribution
+techniques across text embedding methodologies.
+One limitation inherent in the exploration of neurally-embedded texts is
+the challenge of interpretability, which restricts the depth of analysis, parti-
+cularly regarding phenomena such as false positives. Unlike traditional
+embedding methods, which often provide explicit linguistic features that
+can be examined and manipulated to understand model behaviour, neural
+embeddings operate more abstractly, making it challenging to dissect the
+underlying representations comprehensively. Consequently, while we could
+Table 4. Confusion matrices for STAR embedded texts for the unsupervised (k-means)
+and supervised (cosine) classification approaches, similarly to Table 1.
+(k-means) Positive (k-means) Negative (cosine) Positive (cosine) Negative
+(Binary) True 100% 61.8% (70.8%) 92.0% 60.0% (68.8%)
+(Binary) False 38.2% (29.2%) 0.0% 30.9% (25%) 8.0%
+(Total) True 100% 65.8% (75.3%) 85.3% 64.2% (72.9%)
+(Total) False 34.2% (24.7%) 0.0% 35.8% (27.1%) 14.7%
+JOURNAL OF QUANTITATIVE LINGUISTICS 335
+delve into false positives and their implications in the context of tradition-
+ally-embedded texts, a similar level of interpretability may not be achievable
+with neural embeddings. This limitation under- scores the trade-off between
+the richness of representation offered by neural embeddings and the inter-
+pretability required for in-depth analysis, highlighting the need for innova-
+tive approaches to bridge this gap and unlock the full potential of neurally-
+embedded represen- tations in authorship attribution tasks.
+5.3. Comparative Discussion
+The central goal of this work is to evaluate the extent to which textual classifi-
+cation is influenced by sequentially correlated properties (e.g. thematic conti-
+nuity), as opposed to non-sequential features such as stylistic markers, across
+a range of corpora and methods. Our experimental design – spanning both
+supervised and unsupervised classification, as well as traditional and neural
+embeddings – was applied to corpora with clearly attributed authorship.
+Here we discuss cross-method and cross-corpus trends observed in the
+results.
+Our experiments show that unsupervised k-means clustering using tradi-
+tional tf-idf-based embeddings (word n-grams and character k-mers) consis-
+tently yields high true positive rates when distinguishing between texts by
+different authors. This is especially evident in author pairs with distinct
+genres and vocabularies (e.g. Charles Dickens vs. J. R. R. Tolkien, Jane
+Austen vs. H. P. Lovecraft). Importantly, our hypothesis-testing framework
+confirms that many of these classifications are driven by non-sequential
+properties, indicating a robust capture of authorial style.
+False positives in unsupervised traditional embeddings are largely
+restricted to intra-author comparisons involving genre variation. A notable
+case is David Copperfield vs. Oliver Twist by Charles Dickens, where stylistic
+misclassifi- cation likely results from narrative mode differences (first-person
+vs. third- person), as visualized in Figure 3. This example demonstrates the
+sensitivity of unsupervised methods to intra-author variation, particularly
+when accom- panied by structural or genre shifts.
+Supervised classification using the General Imposters framework achieves
+strong true positive performance but exhibits high false positive rates in
+same-author comparisons. This behaviour is likely due to its reliance on
+frequent feature subsets, which may be overly responsive to topical or genre-
+specific elements. As such, it can overfit superficial differences between
+same-author texts. Our hypothesis-testing procedure helps detect these mis-
+classifications by quantifying whether they reflect genuine stylistic diver-
+gence or merely thematic shifts.
+The Z-score embedding results offer additional insight. While the
+Z-score – based approach performs slightly below tf-idf in terms of true
+336 G. YOFFE ET AL.
+positive rates, particularly for word n-grams, it yields interpretable and
+stylistically grounded embeddings. Notably, Z-score classification exhibits
+high false positive rates for same-author word n-gram comparisons – largely
+driven by feature sparsity at higher n and shorter text units. This sparsity
+leads to exaggerated stylistic differences between texts that share a genre or
+topic but diverge structurally. In contrast, Z-score embeddings using char-
+acter k-mers perform substantially better in terms of binary true negatives,
+confirming their robustness in same-author settings and their lower sensi-
+tivity to sparsity.
+Neural embeddings (STAR) present a nuanced pattern. In unsupervised
+classification, they deliver strong true positive rates with relatively low false
+positives. However, supervised classification using cosine similarity shows
+a marked increase in false positives – particularly for genre-divergent works
+by the same author (e.g. C. S. Lewis’s The Chronicles of Narnia vs. The
+Screwtape Letters). This suggests that even embeddings optimized for author-
+ial style can conflate stylistic and thematic dimensions when coupled with
+supervised similarity measures.
+Across all methods, authors like J. K. Rowling and Jane Austen show
+consis- tent intra-author classification, reflecting stable stylistic patterns. By
+contrast, authors like Rudyard Kipling, Charles Dickens, and J. R. R. Tolkien
+demonstrate greater intra-author variability, consistent with their genre-
+spanning out-puts. These patterns highlight the importance of contextualiz-
+ing classification outcomes with genre and narrative structure in mind.
+Overall, unsupervised approaches using tf-idf and Z-score embed-
+dings – particularly with character k-mers – yield the most interpretable
+and stable results, combining high true positive rates with comparatively
+low false positives. While supervised methods offer stronger discrimina-
+tive power, they are more vulnerable to misclassification in the presence
+of genre or topic shifts. Neural embeddings are competitive, but less
+interpretable and more sensitive to genre effects. In all cases, our hypoth-
+esis-testing framework plays a central role in disentangling whether clas-
+sification decisions reflect genuine stylistic distinction or are confounded
+by sequential correlations.
+Lastly, we assess the stylometric strength of traditional feature configura-
+tions. Figure 4 reports MCC scores across all true positive classifications.
+Character k-mers perform robustly across all k values, especially with shorter
+text units. Unlike word n-grams, they avoid the sparsity problem at higher
+or- ders and remain informative even at k = 6. Word n-grams, by contrast,
+exhibit declining performance with increasing n, as longer n-grams intro-
+duce sparsity and reduce the consistency of stylistic capture. These findings
+emphasize the value of short n-grams and character-level features in produ-
+cing dense, reliable stylistic signals.
+JOURNAL OF QUANTITATIVE LINGUISTICS 337
+6. Conclusions and Limitations
+We propose a novel method for modelling sequential correlations in texts by
+encoding the dependencies of a label sequence into a correlated multivariate
+normal distribution. This enables the stochastic generation of label
+sequences that preserve the sequential structure of the original data, forming
+the foundation of ahypothesis-testing framework designed to assess whether
+observed classification results are primarily driven by these correlations.
+We evaluate this method on English prose texts – both by the same and
+different authors – to distinguish classifications influenced by sequentially
+correlated literary properties, such as thematic content, from those driven by
+non-sequential features like stylistic variation. Using traditional word
+n-grams, character k-mers, and neural embeddings optimized for authorial
+style, we apply both supervised and unsupervised classification methods. Our
+results show that the proposed approach effectively identifies theme-driven
+classification behaviour and enhances interpretability in stylometric tasks.
+We find that unsupervised methods – particularly those using tradi-
+tional embeddings – perform remarkably well in distinguishing texts
+by different authors, yielding high true positive rates and low false
+positives. Neural embeddings, while powerful in distinguishing
+between authors, sometimes misclassify texts by the same author
+when those texts differ in genre, suggesting a degree of sensitivity to
+thematic or structural variation. Supervised methods show higher sus-
+ceptibility to false positives, especially when relying on feature sets that
+Figure 4. Average distinguishing power of traditional feature configurations across all
+true positive cases. Each value reflects the mean and standard deviation of the MCC
+scores over text pairs composed by different authors. Left Panel: Character k-mers (k =
+2–6). Right Panel: Word n-grams (n = 1–4).
+338 G. YOFFE ET AL.
+blend thematic and stylistic cues – underscoring the value of inter-
+pretability and the importance of disentangling confounding
+influences.
+Performance is also modulated by text unit length: character k-mers tend
+to yield consistent results across unit sizes, whereas the effectiveness of word
+n-grams decreases with longer units and larger n. These findings offer
+guidance for feature selection strategies and classification granularity in
+stylometric analysis.
+Limitations and Future Directions. Despite its effectiveness in English,
+our approach assumes structural and statistical regularities that may not
+generalize to languages with different typological properties. For example,
+languages with freer word order (e.g. Russian, Finnish), extensive inflection
+(e.g. Turkish, Latin), or logographic writing systems (e.g. Chinese) may not
+exhibit the same linear decay of sequential correlations or frequency dis-
+tributions of stylistic features. This could affect the validity of the autocovar-
+iance model and the interpretability of n-gram-based features. Furthermore,
+our use of tf-idf and clustering assumes a stable tokenization scheme, which
+may break down in morphologically rich or script-divergent languages.
+Additionally, while our use of the multivariate normal distribution offers
+computational tractability, it is a second-order approximation that may not
+capture higher-order sequential dependencies – such as long-range thematic
+recurrence or stylistic modulation across chapters. Extensions to more
+expressive models (e.g. non-Gaussian graphical models or sequence-aware
+deep embeddings) could improve sensitivity to such patterns.
+Future work will focus on evaluating the cross-linguistic robustness of our
+framework and adapting it for morphologically complex or typologically
+diverse languages. We also aim to integrate language-specific preprocessing
+pipelines (e.g. lemmatization, morphological analysis) and explore alterna-
+tive models for simulating correlated binary sequences with more flexible
+dependence structures.
+In summary, our data-centric hypothesis-testing approach provides
+a principled method for quantifying the influence of sequential corre-
+lations in text classification. It contributes to a more refined under-
+standing of how theme, style, and genre shape computational
+judgements, and highlights the ongoing challenge of disentangling
+these components – especially in supervised settings. We believe this
+work lays the groundwork for more interpretable and language-adap-
+tive tools in computational stylometry.
+Notes
+1. Freely available at https://github.com/formcept/whiteboard/tree/master/nbvie
+wer/notebooks/data/harrypotter
+JOURNAL OF QUANTITATIVE LINGUISTICS 339
+2. Freely available at https://archive.org/details/PercyJacksonTheLightningThief
+3. Freely available at https://archive.org/details/TheSilmarillionIllustratedJ.R.R.
+TolkienTedNasmith
+4. Freely available at https://www.gutenberg.org
+5. https://gutenberg.ca/ebooks
+6. Freely available at https://sherlock-holm.es/ascii
+7. Freely available at https://sherlock-holm.es/ascii
+8. Freely available at https://www.kaggle.com/competitions/spooky-author-iden
+tification/data
+9. Preprocessing code available at Anon.
+10. All entities apart from the following are removed: CARDINAL, ORDINAL,
+QUANTITY, PERCENT, TIME, DATE, LANGUAGE, PRODUCT.
+11. A list of how each pair of texts was commingled can be found at Anon.
+12. Available at: https://huggingface.co/AIDA-UPM/star
+13. We used the version available at https://github.com/bnagy/ruzicka, originally
+developed within the scope of the work of Kestemont et al. (2016).
+Acknowledgments
+We thank the anonymous referees whose valuable insight helped improve this work.
+Disclosure Statement
+No potential conflict of interest was reported by the author(s).
+Funding
+The research was funded in part by the Hebrew University of Jerusalem and by the
+European Union [ERC, MiDRASH, Project No. 101071829]. Views and opinions
+expressed are, however, those of the authors only and do not necessarily reflect those
+of the European Union or the European Research Council Executive Agency. Neither
+the European Union nor the granting authority can be held responsible for them.
+ORCID
+Gideon Yoffe http://orcid.org/0000-0002-1451-6492
+Data Availability Statement
+The datasets analysed in this study are derived from publicly available literary
+corpora. Texts from J.K. Rowling’s Harry Potter series, Rick Riordan’s Percy
+Jackson series, J.R.R. Tolkien’s works, Charles Dickens’s novels, C.S. Lewis’s writings,
+Jane Austen’s novels, Arthur Conan Doyle’s Sherlock Holmes stories, and selected
+works by Edgar Allan Poe, H. P. Lovecraft, and Mary Shelley are available through
+public repositories including Project Gutenberg (https://www.gutenberg.org), the
+Internet Archive (https://archive.org), the Sherlock Holmes ASCII corpus (https://
+sherlock-holm.es/ascii), and Kaggle (https://www.kaggle.com/competitions/spooky-
+340 G. YOFFE ET AL.
+author-identification/data). No new datasets were generated during this study. All
+data used are openly accessible and properly cited in the manuscript.
+References
+Ainsworth, J., & Juola, P. (2018). Who wrote this: Modern forensic authorship
+analysis as a model for valid forensic science. Wash UL Rev, 96, 1159.
+Aizawa, A. (2003). An information-theoretic perspective of tf–idf measures.
+Information Processing & Management, 39(1), 45–65. https://doi.org/10.1016/
+S0306-4573(02)00021-3
+Akiva, N., & Koppel, M. (2012). Identifying distinct components of a multi-author
+docu- ment. 2012 European Intelligence and Security Informatics Conference (pp.
+205–209). IEEE.
+Albertz, R. (2018). The recent discussion on the formation of the Pentateuch/
+Hexateuch. Hebrew Studies, 59(1), 65–92. https://doi.org/10.1353/hbr.2018.0003
+Antonia, A., Craig, H., & Elliott, J. (2014). Language chunking, data sparseness, and
+the value of a long marker list: Explorations with word n-grams and authorial
+attribution. Literary and Linguistic Computing, 29(2), 147–163. https://doi.org/10.
+1093/llc/fqt028
+Argamon, S., Koppel, M., Pennebaker, J. W., & Schler, J. (2009, 2). Automatically
+profiling the author of an anonymous text. Communications of the ACM, 52(2),
+119–123. https://doi.org/10.1145/1461928.1461959
+Baum, A. D. (2017). Content and form: Authorship attribution and pseudonymity in
+ancient speeches, letters, lectures, and translations—A rejoinder to Bart Ehrman.
+Journal of Biblical Literature, 136(2), 381–403. https://doi.org/10.1353/jbl.2017.
+0025
+Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate:
+A practical and powerful approach to multiple testing. Journal of the Royal
+Statistical Society: Series B (Methodological), 57(1), 289–300. https://doi.org/10.
+1111/j.2517-6161.1995.tb02031.x
+Brinker, M. (1995). Theme and interpretation. Thematics: New Approaches, 33–44.
+Bühler, A., Yoffe, G., Römer, T., Sober, B., Finkelstein, I., Piasetzky, E., &
+Dershowitz, N. (2024). Exploring the stylistic uniqueness of the Priestly source
+in Genesis and Exodus through a statistical/computational lens. Zeitschrift für die
+alttestamentliche Wissenschaft, 136, 165–190. https://doi.org/10.1515/zaw-2024-
+2001
+Burrows, J. (2002). ‘Delta’: A measure of stylistic difference and a guide to likely
+authorship. Literary and Linguistic Computing, 17(3), 267–287. https://doi.org/10.
+1093/llc/17.3.267
+Canbay, P., Sezer, E. A., & Sever, H. (2020). Deep combination of stylometry features
+for authorship analysis. International Journal of Information Security Science, 9(3),
+154–163.
+Chandler, D. (1997). An introduction to genre theory. http://www.aber.ac.uk/media/
+Documents/intgenre/intgenre.html
+Chapman, A. (2017). Historical interpretations. In I. Davies (Ed.), Debates in history
+teaching (pp. 100–112). Routledge.
+Cilibrasi, R., & Vit´anyi, P. M. (2005). Clustering by compression. IEEE Transactions
+on Information Theory, 51(4), 1523–1545. https://doi.org/10.1109/TIT.2005.
+844059
+JOURNAL OF QUANTITATIVE LINGUISTICS 341
+Darmon, A. N. M., Bazzi, M., Howison, S. D., & Porter, M. A. (2021). Pull out all the
+stops: Textual analysis via punctuation sequences. European Journal of Applied
+Mathematics, 32(6), 1069–1105. https://doi.org/10.1017/S0956792520000157
+Dershowitz, I., Akiva, N., Koppel, M., & Dershowitz, N. (2015). Computerized source
+criticism of biblical texts. Journal of Biblical Literature, 134(2), 253–271. https://
+doi.org/10.15699/jbl.1342.2015.2754
+Ding, S. H. H., Fung, B. C. M., Iqbal, F., & Cheung, W. K. (2017). Learning
+stylometric representations for authorship analysis. IEEE Transactions on
+Cybernetics, 49(1), 107–121. https://doi.org/10.1109/TCYB.2017.2766189
+Dror, R., Baumer, G., Shlomov, S., & Reichart, R. (2018). The hitchhiker’s guide to
+testing statistical significance in natural language processing. In I. Gurevych & Y.
+Miyao (Eds.), Proceedings of the 56th Annual Meeting of the Association for
+Computational Linguistics (Volume, 1: Long Papers) (pp. 1383–1392).
+Association for Computational Linguistics (ACL).
+Dror, R., Peled-Cohen, L., Shlomov, S., & Reichart, R. (2020). Statistical significance
+testing for natural language processing. Synthesis Lectures on Human Language
+Tech- Nologies, 13(2), 1–116.
+Evert, S., Proisl, T., Vitt, T., Schöch, C., Jannidis, F., & Pielström, S. (2015). Towards
+a better understanding of Burrows’s Delta in literary authorship attribution.
+Proceedings of the Fourth Workshop on Computational Linguistics for Literature
+(pp. 79–88). Association for Computational Linguistics (ACL).
+Fabien, M., Villatoro-Tello, E., Motlicek, P., & Parida, S. (2020). BertAA: Bert fine-
+tuning for authorship attribution. In P. Bhattacharyya, S. Dipti Misra & R. Sangal
+(Eds.), Proceedings of the 17th International Conference on Natural Language
+Processing (ICON) (pp. 127–137). NLP Association of India (NLPAI).
+Faigenbaum-Golovin, S., Kipnis, A., Bühler, A., Piasetzky, E., Römer, T., &
+Finkelstein, I. (2024). Critical biblical studies via word frequency analysis:
+Unveiling text authorship. arXiv preprint arXiv: 2410.19883.
+Feng, S., Banerjee, R., & Choi, Y. (2012). Syntactic stylometry for deception detec-
+tion. In H. Li, C.-Y. Lin, M. Osborne, G. G. Lee & J. C. Park (Eds.), Proceedings of
+the 50th Annual Meeting of the Association for Computational Linguistics (Vol. 2.
+pp. 171–175). Association for Computational Linguistics (ACL).
+Grieve, J. (2023). Register variation explains stylometric authorship analysis. Corpus
+Linguistics and Linguistic Theory, 19(1), 47–77. https://doi.org/10.1515/cllt-2022-
+0040
+Gunkel, H. (1895). Creation and chaos in the primeval Era and the eschaton: Religio-
+historical study of Genesis 1 and Revelation 12. Eerdmans.
+Hollingsworth, C. (2012). Using dependency-based annotations for authorship iden-
+tifica- tion. In P. Sojka, A. Horák, I. Kopeček & K. Pala (Eds.), Text, speech and
+dialogue: 15th International Conference, TSD 2012 (pp. 314–319). Springer.
+Holmes, D. I. (1994). Authorship attribution. Computers and the Humanities, 28(2),
+87–106. https://doi.org/10.1007/BF01830689
+Holzinger, H. (1893). Einleitung in den Hexateuch (Vol. 1). Mohr Siebeck.
+Hou, R., & Huang, C.-R. (2020). Robust stylometric analysis and author attribution
+based on tones and rimes. Natural Language Engineering, 26(1), 49–71. https://doi.
+org/10.1017/S135132491900010X
+Huertas-Tato, J., Mart´ın, A., & Camacho, D. (2023, October). Understanding writ-
+ing style in social media with a supervised contrastively pre-trained transformer.
+arXiv, 296, 111867. https://doi.org/10.1016/j.knosys.2024.111867
+342 G. YOFFE ET AL.
+Juola, P. (2007). Future trends in authorship attribution. In C. Philip & S. Shenoi
+(Eds.), Advances in Digital Forensics III: IFIP International Conference on Digital
+Forensics, National Centre for Forensic Science (Vol. 3, pp. 119–132). Springer,
+January 28-January 31, 2007.
+Juola, P. (2008). Authorship attribution. Foundations and Trends in Information
+Retrieval, 1(3), 233–334. https://doi.org/10.1561/1500000005
+Juola, P. (2021). Verifying authorship for forensic purposes: A computational pro-
+tocol and its validation. Forensic Science International, 325, 110824. https://doi.
+org/10.1016/j.forsciint.2021.110824
+Juola, P., Sofko, J., & Brennan, P. (2006). A prototype for authorship attribution
+studies. Literary and Linguistic Computing, 21(2), 169–178. https://doi.org/10.
+1093/llc/fql019
+Kestemont, M. (2014). Function words in authorship attribution: From black magic
+to theory? Proceedings of the 3rd Workshop on Computational Linguistics for
+Literature (CLFL) (pp. 59–66). Association for Computational Linguistics (ACL).
+Kestemont, M., Luyckx, K., Daelemans, W., & Crombez, T. (2012). Cross-genre
+authorship verification using unmasking. English Studies, 93(3), 340–356.
+https://doi.org/10.1080/0013838X.2012.668793
+Kestemont, M., Stover, J., Koppel, M., Karsdorp, F., & Daelemans, W. (2016).
+Authenti- cating the writings of Julius Caesar. Expert Systems with Applications,
+63, 86–96. https://doi.org/10.1016/j.eswa.2016.06.029
+Koppel, M., & Schler, J. (2004). Authorship verification as a one-class classification
+prob- lem. In C. E. Brodley (Ed.), Proceedings of the Twenty-First International
+Conference on Machine Learning (pp. 62). Association for Computing Machinery
+(ACM).
+Koppel, M., Schler, J., & Argamon, S. (2009, 1). Computational methods in author-
+ship attribution. Journal of the American Society for Information Science and
+Technology, 60(1), 9–26. https://doi.org/10.1002/asi.20961
+Koppel, M., Schler, J., & Argamon, S. (2011, 3). Authorship attribution in the wild.
+Language Resources and Evaluation, 45(1), 83–94. https://doi.org/10.1007/s10579-
+009-9111-2
+Koppel, M., Schler, J., & Bonchek-Dokow, E. (2007). Measuring differentiability: Un-
+masking pseudonymous authors. Journal of Machine Learning Research, 8,
+1261–1276.
+Koppel, M., & Winter, Y. (2014). Determining if two documents are written by the
+same author. Journal of the Association for Information Science and Technology, 65
+(1), 178–187. https://doi.org/10.1002/asi.22954
+Lagutina, K., Lagutina, N., Boychuk, E., Vorontsova, I., Shliakhtina, E., Belyaeva, O.,
+Monov, I.-P., & Demidov, P. G. (2019). A survey on stylometric text features. 2019
+25th Conference of Open Innovations Association (FRUCT) (pp. 184–195). IEEE.
+Lambers, M., & Veenman, C. J. (2009). Forensic authorship attribution using com-
+pression distances to prototypes. In Z. J. M. H. Geradts, K. Y. Franke, &
+C. J. Veenman (Eds.), Computational Forensics (pp. 13–24). Springer.
+Leisch, F., Weingessel, A., & Hornik, K. (1998). On the generation of correlated
+artificial binary data. Working paper 13, SFB adaptive information systems and
+modelling in economics and management science. WU Vienna University of
+Economics and Business.
+Litvinova, T. (2020). Stylometrics features under domain shift: Do they really “con-
+textindependent”? Speech and Computer: 22nd International Conference, SPECOM
+JOURNAL OF QUANTITATIVE LINGUISTICS 343
+2020, St. Petersburg, Russia, October 7-9, 2020, Proceedings 22 (pp. 279–290).
+Springer.
+Marcin´czuk, M., Gniewkowski, M., Walkowiak, T., & Bkedkowski, M. (2021). Text
+doc- ument clustering: Wordnet vs. tf-idf vs. word embeddings. In S. Bosch, C.
+Fellbaum, M. Griesel, A. Rademaker & P. Vossen (Eds.), Proceedings of the 11th
+Global Wordnet Conference (pp. 207–214). Global Wordnet Association.
+Mikros, G. K., & Argiri, E. K. (2007). Investigating topic influence in authorship
+attribution. Proceedings of the SIGIR 2007 International Workshop on Plagiarism
+Analysis (PAN), 1, 29–35.
+Mosteller, F., & Wallace, D. L. (1963). Inference in an authorship problem:
+A comparative study of discrimination methods applied to the authorship of the
+disputed Federalist Papers. Journal of the American Statistical Association, 58
+(302), 275–309. https://doi.org/10.1080/01621459.1963.10500849
+Müller, R., Pakkala, J., & Ter Haar, R. B. (2014). Evidence of editing: Growth and
+change of texts in the Hebrew Bible. Number 75. Society of Biblical Lit.
+R´ıos-Toledo, G., Sidorov, G., Castro S´anchez, N. A., Nava-Zea, A., & Chanona-
+Hern´andez, L. (2017). Relevance of named entities in authorship attribution.
+Advances in Computational Intelligence: 15th Mexican International Conference
+on Artificial Intelligence, MICAI 2016, Cancu´n, Mexico, October 23-28, 2016,
+Proceedings, Part I 15 (pp. 3–15). Springer.
+Rybicki, J., Eder, M., & Hoover, D. L. (2016). Computational stylistics and text
+analysis. In C. Crompton, J. L. Richard & S. Ray (Eds.), Doing digital humanities
+(pp. 159–180). Routledge.
+Rybicki, J., & Heydel, M. (2013). The stylistics and stylometry of collaborative
+translation: Woolf’s Night and Day in Polish. Literary and Linguistic Computing,
+28(4), 708–717. https://doi.org/10.1093/llc/fqt027
+Saukkonen, P. (2003). How to define and describe genres and styles. Folia Linguis-
+tica XXXVII, 37(3–4), 3–4. https://doi.org/10.1515/flin.2003.37.3-4.399
+Savoy, J. (2013). Feature selections for authorship attribution. In S. Y. Shin & J. C.
+Maldonado (Eds.), Proceedings of the 28th Annual ACM Symposium on Applied
+Computing (pp. 939–941). Association for Computing Machinery (ACM).
+Schuster, T., Schuster, R., Shah, D. J., & Barzilay, R. (2020). The limitations of
+stylometry for detecting machine-generated fake news. Computational
+Linguistics, 46(2), 499–510. https://doi.org/10.1162/coli_a_00380
+Schwartz, R., Tsur, O., Rappoport, A., & Koppel, M. (2013, October). Authorship
+attribution of micro-messages. In D. Yarowsky, T. Baldwin, A. Korhonen,
+K. Livescu, & S. Bethard Eds Proceedings of the 2013 Conference on Empirical
+Methods in Natural Language Processing (pp. 1880–1891). Association for
+Computational Linguistics.
+Serrano, M. A., Flammini, A., Menczer, F., & Scalas, E. (2009). Modeling statistical
+properties of written text. PLOS ONE, 4(4), e5372. https://doi.org/10.1371/journal.
+pone.0005372
+Stamatatos, E. (2009, 3). A survey of modern authorship attribution methods. Journal
+of the American Society for Information Science and Technology, 60(3), 538–556.
+https://doi.org/10.1002/asi.21001
+Stamatatos, E. (2018). Masking topic-related information to enhance authorship
+attribution. Journal of the Association for Information Science and Technology, 69
+(3), 461–473. https://doi.org/10.1002/asi.23968
+Vasiliev, Y. (2020). Natural language processing with Python and spaCy: A practical
+introduction. No Starch Press.
+344 G. YOFFE ET AL.
+Wellhausen, J. (1885). Prolegomena to the history of Israel: With a reprint of the article
+Israel from the Encyclopaedia Britannica. A. & C. Black.
+Yoffe, G., Bühler, A., Dershowitz, N., Römer, T., Piasetzky, E., Finkelstein, I., &
+Sober, B. (2023). A statistical exploration of text partition into constituents: The
+case of the priestly source in the books of genesis and exodus. In A. Rogers, J.
+Boyd-Graber & N. Okazaki (Eds.), Findings of the Association for Computational
+Linguistics: ACL 2023 (pp. 1918–1940). Association for Computational
+Linguistics.
+JOURNAL OF QUANTITATIVE LINGUISTICS 345

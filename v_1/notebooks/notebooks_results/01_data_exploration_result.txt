@@ -1,0 +1,302 @@
+# raw results:
+Data directory exists: True
+
+Corpus directory exists: True
+
+
+
+Data directory exists: True
+
+Corpus directory exists: True
+
+Total number of fragment files: 28194
+
+
+
+First 5 files:
+
+  EBL_1881,0727.111.csv
+
+  EBL_K.11322.csv
+
+  EBL_BM.134828.csv
+
+  EBL_NBC.5298.csv
+
+  EBL_K.18460.csv
+
+
+
+Fragment: EBL_1881,0727.111.csv
+
+Shape: (10, 10)
+
+
+
+Columns: ['fragment_id', 'fragment_line_num', 'index_in_line', 'word_language', 'value', 'clean_value', 'lemma', 'domain', 'place_discovery', 'place_composition']
+
+
+
+First few rows:
+
+fragment_id	fragment_line_num	index_in_line	word_language	value	clean_value	lemma	domain	place_discovery	place_composition
+
+0	1881,0727.111	3	1	AKKADIAN	SAG.DU-su	SAG.DU-su	['qaqqadu I']	['CANONICAL ➝ Technical ➝ Ritual texts']	NaN	NaN
+
+1	1881,0727.111	4	2	AKKADIAN	a	a	[]	['CANONICAL ➝ Technical ➝ Ritual texts']	NaN	NaN
+
+2	1881,0727.111	4	3	AKKADIAN	šu₂	šu₂	['-šu I']	['CANONICAL ➝ Technical ➝ Ritual texts']	NaN	NaN
+
+3	1881,0727.111	5	1	AKKADIAN	du	du	[]	['CANONICAL ➝ Technical ➝ Ritual texts']	NaN	NaN
+
+4	1881,0727.111	10	0	AKKADIAN	an	an	[]	['CANONICAL ➝ Technical ➝ Ritual texts']	NaN	NaN
+
+5	1881,0727.111	10	1	AKKADIAN	an	an	[]	['CANONICAL ➝ Technical ➝ Ritual texts']	NaN	NaN
+
+6	1881,0727.111	12	0	AKKADIAN	EN₂	EN₂	['šiptu I']	['CANONICAL ➝ Technical ➝ Ritual texts']	NaN	NaN
+
+7	1881,0727.111	14	0	AKKADIAN	u₃	u₃	['u I']	['CANONICAL ➝ Technical ➝ Ritual texts']	NaN	NaN
+
+8	1881,0727.111	16	0	AKKADIAN	EN₂	EN₂	['šiptu I']	['CANONICAL ➝ Technical ➝ Ritual texts']	NaN	NaN
+
+9	1881,0727.111	18	0	AKKADIAN	MIN	MIN	[]	['CANONICAL ➝ Technical ➝ Ritual texts']	NaN
+
+
+
+Fragment ID(s): ['1881,0727.111']
+
+
+
+Number of lines: 8
+
+Total words: 10
+
+
+
+Languages: {'AKKADIAN': 10}
+
+
+
+Domain: ["['CANONICAL ➝ Technical ➝ Ritual texts']"]
+
+
+
+
+
+Reconstructed text:
+
+
+
+Line 3: SAG.DU-su
+
+Line 4: a šu₂
+
+Line 5: du
+
+Line 10: an an
+
+Line 12: EN₂
+
+Line 14: u₃
+
+Line 16: EN₂
+
+Line 18: MIN
+
+
+
+Loaded 100 fragments, Total shape: (3759, 10)
+
+
+
+
+
+=== DATA STATISTICS ===
+
+Total fragments: 100
+
+Total words: 3759
+
+
+
+=== LANGUAGE DISTRIBUTION ===
+
+word_language
+
+AKKADIAN    3502
+
+SUMERIAN     234
+
+EMESAL        23
+
+Name: count, dtype: int64
+
+
+
+=== TOP 10 DOMAINS ===
+
+domain
+
+[]                                                                                                   729
+
+see genres.json file                                                                                 617
+
+['CANONICAL ➝ Divination ➝ Celestial ➝ Enūma Anu Enlil ➝ Ištar (EAE 50–68)']                         520
+
+['CANONICAL ➝ Technical ➝ Astronomy ➝ Astronomical Diaries']                                         285
+
+[['ARCHIVAL', 'Letter', 'Extispicy Query']]                                                          188
+
+[['CANONICAL', 'Magic']]                                                                             138
+
+['CANONICAL ➝ Divination ➝ Celestial']                                                               124
+
+['CANONICAL ➝ Literature ➝ Hymns ➝ Divine']                                                          111
+
+['ARCHIVAL']                                                                                         102
+
+['CANONICAL ➝ Divination ➝ Extispicy ➝ Bārûtu ➝ 4. Padānu', 'CANONICAL ➝ Technical ➝ Commentary']     82
+
+Name: count, dtype: int64
+
+
+
+
+
+Akkadian words: 3502
+
+Unique clean values: 1430
+
+
+
+Top 20 most common words:
+
+  ina: 180
+
+  ana: 84
+
+  ša₂: 76
+
+  MIN: 64
+
+  DIŠ: 55
+
+  la: 53
+
+  u: 51
+
+  ŠA₃: 50
+
+  KUR: 45
+
+  LUGAL: 45
+
+  NU: 43
+
+  {d}MIN: 34
+
+  BE: 31
+
+  AN: 28
+
+  E₂: 25
+
+  IGI: 25
+
+  a-na: 23
+
+  LU₂: 18
+
+  GE₆: 18
+
+  GIM: 18
+
+
+
+# summarized results:
+Perfect! Let me analyze the EDA results and help you understand the data for MLM (Masked Language Modeling) training.
+
+## 📊 Key Insights from Your EDA
+
+### 1. **Data Scale**
+- **28,194 fragments** total
+- Sample of 100 fragments = **3,759 words**
+- Extrapolating: ~**1.06 million words** in full dataset
+- Average fragment size: ~**38 words** per fragment
+
+### 2. **Language Distribution** (Critical for MLM)
+```
+AKKADIAN: 3,502 words (93%)  ← Your main training target
+SUMERIAN: 234 words (6%)
+EMESAL: 23 words (0.6%)
+```
+
+**Important for MLM**: You have a multi-lingual corpus. You'll need to decide:
+- Train on **Akkadian only** (cleaner, focused)
+- Train on **all languages** (more data, but mixed)
+
+### 3. **Vocabulary Size**
+- From 100 fragments: **1,430 unique tokens** (Akkadian only)
+- Full dataset estimate: ~**40,000-60,000 unique tokens**
+- This is a **small vocabulary** compared to modern languages (good for low-resource NLP!)
+
+### 4. **Most Common Tokens** (Your MLM will learn these first)
+Top tokens are:
+- `ina` (180 occurrences) - preposition "in/at"
+- `ana` (84) - preposition "to/for"
+- `ša₂` (76) - relative pronoun "of/which"
+- `MIN`, `DIŠ` - logographic markers (determinatives)
+
+These are **function words** - grammatical glue, not content words.
+
+### 5. **Data Quality Issues**
+
+**🚨 Critical observations:**
+
+1. **Empty lemmas**: Many words have `lemma = []`
+   - This means no dictionary form available
+   - ~30-40% of words might lack lemmas
+
+2. **Missing domain metadata**: 
+   - `[]` (empty): 729 words
+   - `"see genres.json file"`: 617 words
+   - You're missing metadata for ~35% of your sample
+
+3. **Missing provenance**: All `place_discovery` and `place_composition` are NaN
+
+---
+
+## 🤔 What This Means for MLM Training
+
+### Your MLM Task Options:
+
+**Option 1: Token-level MLM (Recommended)**
+- Use `clean_value` column as your tokens
+- Mask random tokens, predict them
+- Simple, works well for morphologically rich languages
+
+**Option 2: Lemma-level MLM**
+- Use `lemma` column
+- Problem: 30-40% are empty (`[]`)
+- Would need to filter or fill these first
+
+**Option 3: Character-level MLM**
+- Break `clean_value` into characters
+- Good for morphology, but loses word boundaries
+
+---
+
+## 📋 Next Steps I Recommend
+
+Let me create a new notebook that will help you:
+
+1. **Analyze vocabulary more deeply**
+   - Full vocabulary size on ALL 28k fragments
+   - Token frequency distribution
+   - OOV (out-of-vocabulary) rate estimation
+
+2. **Check data quality**
+   - How many fragments have empty lemmas?
+   - How many are multilingual vs pure Akkadian?
+   - Fragment length distribution
+
