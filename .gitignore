@@ -11,6 +11,9 @@ venv/
 # OS
 .DS_Store
 
+# IDE / local config
+.claude/
+
 # Large files (optional, if you want to exclude PDFs)
 *.pdf
 
@@ -20,4 +23,8 @@ v_1/data/prepared/
 v_1/data/processed/archibab/
 v_1/data/processed/ebl/
 v_1/data/processed/oracc/
+v_1/data/external/
 # Keep v_1/data/processed/unified/ (small enough for GitHub)
+
+# Primary source material (referenced from STATUS_SUMMARY.md, not for git)
+yarin/emails_phase/

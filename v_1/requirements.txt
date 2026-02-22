@@ -5,4 +5,10 @@ seaborn
 jupyter
 ipykernel
 tqdm
+pyarrow
+
+# LLM Baseline Evaluation (Phase 2)
+requests            # OpenRouter API calls
+tenacity>=8.2.0     # Retry logic for API calls (optional)
+scikit-learn        # Evaluation metrics
 
