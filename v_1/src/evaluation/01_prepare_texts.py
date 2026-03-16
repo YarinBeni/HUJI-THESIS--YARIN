@@ -74,7 +74,6 @@ def extract_metadata(group: pd.DataFrame) -> dict:
     return {
         'temporal_group': first_valid(group['temporal_group']),
         'period': first_valid(group['period']),
-        'period_approx': first_valid(group.get('period_approx', pd.Series())),
         'domain_standard': first_valid(group['domain_standard']),
         'domain_finegrained': first_valid(group.get('domain_finegrained', pd.Series())),
         'place_discovery': first_valid(group['place_discovery']),
@@ -138,21 +137,42 @@ def main():
     # Create output DataFrame
     result_df = pd.DataFrame(records)
 
+    # =========================================================================
+    # Domain Label Cleanup
+    # =========================================================================
+    # Remove texts with Unknown/nan/Other domain labels for clean evaluation.
+    # This was previously done manually in notebook 04_eda_evaluation.ipynb
+    # (sections 13-14). Now integrated into the pipeline for reproducibility.
+    # See: yarin/justification/domain_label_cleanup.md
+    # =========================================================================
+    print("\nDomain label cleanup...")
+    before_count = len(result_df)
+
+    # Normalize: actual NaN and string "nan" in domain_finegrained → "Unknown"
+    result_df['domain_finegrained'] = result_df['domain_finegrained'].fillna('Unknown')
+    result_df.loc[result_df['domain_finegrained'] == 'nan', 'domain_finegrained'] = 'Unknown'
+
+    # Normalize: "Other" in domain_standard → "Unknown"
+    result_df['domain_standard'] = result_df['domain_standard'].replace('Other', 'Unknown')
+
+    # Drop rows with Unknown domain_standard or domain_finegrained
+    result_df = result_df[result_df['domain_standard'] != 'Unknown'].copy()
+    result_df = result_df[result_df['domain_finegrained'] != 'Unknown'].copy()
+
+    removed = before_count - len(result_df)
+    print(f"  Removed {removed} texts with Unknown/nan/Other domain labels")
+    print(f"  Corpus: {before_count:,} → {len(result_df):,} texts")
+
     # Save parquet
     print(f"\nSaving parquet to {TEXTS_PARQUET}...")
     result_df.to_parquet(TEXTS_PARQUET, index=False)
     print(f"  Saved {len(result_df):,} texts")
 
-    # Save JSONL for batch processing
+    # Save JSONL for batch processing (all fields for downstream use)
     print(f"\nSaving JSONL to {TEXTS_JSONL}...")
     with open(TEXTS_JSONL, 'w', encoding='utf-8') as f:
         for _, row in result_df.iterrows():
-            record = {
-                'id': row['fragment_id'],
-                'text': row['full_text'],
-                'word_count': row['word_count'],
-            }
-            f.write(json.dumps(record, ensure_ascii=False) + '\n')
+            f.write(json.dumps(row.to_dict(), ensure_ascii=False, default=str) + '\n')
     print(f"  Saved {len(result_df):,} lines")
 
     # Calculate token statistics

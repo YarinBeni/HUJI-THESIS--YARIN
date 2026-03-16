@@ -58,19 +58,16 @@ print(f"\n✓ Adding metadata columns...")
 # Group 1 metadata
 group1['temporal_group'] = 'Group 1'
 group1['period'] = 'Old Babylonian'
-group1['period_approx'] = '2nd millennium BCE (~1800 BCE)'
 group1['corpus_source'] = 'archibab'
 
 # Group 2 metadata
 group2['temporal_group'] = 'Group 2'
 group2['period'] = 'Neo-Assyrian'
-group2['period_approx'] = '9-7 cent BCE'
 group2['corpus_source'] = 'oracc'
 
 # Group 3 metadata
 group3['temporal_group'] = 'Group 3'
 group3['period'] = 'Late Babylonian'
-group3['period_approx'] = '6-4 cent BCE (~600 BCE)'
 group3['corpus_source'] = 'lbl'
 
 # ============================================================================
@@ -164,7 +161,7 @@ print(f"✓ Standardizing column types...")
 string_cols = ['fragment_id', 'fragment_line_num', 'word_language', 'domain',
                'place_discovery', 'place_composition', 'value', 'clean_value', 'lemma',
                'domain_original', 'domain_standard', 'domain_finegrained',
-               'temporal_group', 'period', 'period_approx', 'corpus_source']
+               'temporal_group', 'period', 'corpus_source']
 
 for col in string_cols:
     if col in combined.columns:
@@ -207,7 +204,7 @@ print(f"  - Group 3: {g3_pct:5.1f}%")
 print(f"\nColumns in unified dataset: {len(combined.columns)}")
 print(f"  Original columns: fragment_id, fragment_line_num, index_in_line, word_language,")
 print(f"                    domain, place_discovery, place_composition, value, clean_value, lemma")
-print(f"  Added metadata:   temporal_group, period, period_approx, corpus_source,")
+print(f"  Added metadata:   temporal_group, period, corpus_source,")
 print(f"                    domain_original, domain_standard, domain_finegrained")
 
 # ============================================================================

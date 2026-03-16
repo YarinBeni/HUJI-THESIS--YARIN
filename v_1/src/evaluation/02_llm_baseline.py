@@ -92,12 +92,11 @@ def parse_llm_response(response_text: str) -> dict:
     Parse LLM response in markdown field format.
 
     Expected format:
+        **Reasoning**: Multi-line reasoning about period and century...
         **Period**: Old Babylonian
-        **Century**: 18th century BCE
-        **Domain**: Administrative Letter
+        **Century**: 1800 BCE
         **Place**: Mari
-        **Confidence**: high
-        **Reasoning**: Brief explanation here.
+        **Catalog ID**: ARM 10 33
 
     Falls back to JSON parsing if markdown fields not found.
 
@@ -112,16 +111,25 @@ def parse_llm_response(response_text: str) -> dict:
     text = response_text.strip()
 
     # Field patterns: **Label**: value (case-insensitive)
+    # Reasoning may span multiple lines, so we capture until the next **Field**
     field_map = {
         'period': r'\*\*Period\*\*\s*:\s*(.+)',
         'century_estimate': r'\*\*Century\*\*\s*:\s*(.+)',
-        'domain': r'\*\*Domain\*\*\s*:\s*(.+)',
         'place_discovery': r'\*\*Place\*\*\s*:\s*(.+)',
-        'confidence': r'\*\*Confidence\*\*\s*:\s*(.+)',
-        'reasoning': r'\*\*Reasoning\*\*\s*:\s*(.+)',
+        'catalog_id': r'\*\*Catalog\s*ID\*\*\s*:\s*(.+)',
     }
 
     result = {}
+
+    # Parse reasoning separately (may span multiple lines)
+    reasoning_match = re.search(
+        r'\*\*Reasoning\*\*\s*:\s*(.*?)(?=\*\*Period\*\*|\*\*Century\*\*|\*\*Place\*\*|\*\*Catalog|$)',
+        text, re.IGNORECASE | re.DOTALL
+    )
+    if reasoning_match:
+        result['reasoning'] = reasoning_match.group(1).strip()
+
+    # Parse single-line fields
     for field, pattern in field_map.items():
         match = re.search(pattern, text, re.IGNORECASE)
         if match:
@@ -129,8 +137,8 @@ def parse_llm_response(response_text: str) -> dict:
 
     # If we got at least period, consider it a success
     if 'period' in result:
-        # Fill missing fields
-        for field in field_map:
+        all_fields = ['reasoning', 'period', 'century_estimate', 'place_discovery', 'catalog_id']
+        for field in all_fields:
             if field not in result:
                 result[field] = 'Unknown'
         result['raw_response'] = text[:500]
@@ -153,7 +161,7 @@ def parse_llm_response(response_text: str) -> dict:
             json_text = json_text[start:end]
 
         parsed = json.loads(json_text)
-        for field in ['period', 'domain', 'place_discovery', 'confidence']:
+        for field in ['period', 'place_discovery', 'catalog_id']:
             if field not in parsed:
                 parsed[field] = 'Unknown'
         return parsed
@@ -163,12 +171,11 @@ def parse_llm_response(response_text: str) -> dict:
 
     # Nothing worked
     return {
+        'reasoning': 'Could not parse response',
         'period': 'Parse Error',
         'century_estimate': 'Parse Error',
-        'domain': 'Parse Error',
         'place_discovery': 'Parse Error',
-        'confidence': 'low',
-        'reasoning': f'Could not parse response',
+        'catalog_id': 'Parse Error',
         'raw_response': text[:500],
     }
 
@@ -288,7 +295,7 @@ def run_predictions(
         print(f"  Found {len(cached_ids):,} cached predictions")
 
     # Filter to unprocessed texts
-    texts_to_process = [t for t in texts if t['id'] not in cached_ids]
+    texts_to_process = [t for t in texts if t['fragment_id'] not in cached_ids]
     print(f"  Texts to process: {len(texts_to_process):,}")
 
     if not texts_to_process:
@@ -343,8 +350,8 @@ def run_predictions(
 
     with open(cache_path, 'a', encoding='utf-8') as cache_file:
         for text_record in tqdm(texts_to_process, desc=f"[{model_name}]"):
-            fragment_id = text_record['id']
-            full_text = text_record['text']
+            fragment_id = text_record['fragment_id']
+            full_text = text_record['full_text']
 
             # Create prompt
             prompt = create_prompt(full_text)
@@ -372,9 +379,8 @@ def run_predictions(
                         prediction = {
                             'period': 'API Error',
                             'century_estimate': 'API Error',
-                            'domain': 'API Error',
                             'place_discovery': 'API Error',
-                            'confidence': 'low',
+                            'catalog_id': 'API Error',
                             'reasoning': f'API error: {str(e)}',
                         }
                         usage = {'prompt_tokens': 0, 'completion_tokens': 0, 'total_tokens': 0}

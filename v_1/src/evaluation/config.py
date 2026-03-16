@@ -84,31 +84,44 @@ DEFAULT_TIMEOUT = 60  # seconds
 # =============================================================================
 # Prompt Template
 # =============================================================================
-PROMPT_TEMPLATE = """
-You are an expert in ancient Akkadian cuneiform texts and Assyriology.
+PROMPT_TEMPLATE = """You are an expert in ancient Akkadian cuneiform texts and Assyriology.
 Analyze the following transliterated Akkadian text and predict its metadata.
 
 === TEXT ===
 {full_text}
 === END TEXT ===
 
-Predict the following metadata fields. Keep your reasoning to 1-2 sentences.
+First reason about the text, then provide your predictions.
 
-**Period**: (choose one) Old Babylonian | Neo-Assyrian | Late Babylonian
-**Century**: (specific range, e.g. "18th century BCE" or "7th century BCE")
-**Domain**: (choose one) Administrative Letter | Political Letter | Private Letter | Diplomatic Letter | Neo-Assyrian Letter | Late Babylonian Letter | Unknown
-**Place**: (likely provenance) e.g. Mari, Nineveh, Babylon, Sippar, Assur, Uruk, or Unknown
-**Confidence**: high | medium | low
-**Reasoning**: (1-2 sentences only)
+**Reasoning**: (up to 3 lines) Explain why you assigned this period and century.
+**Period**: (e.g. Old Babylonian, Middle Babylonian, Neo-Babylonian, Late Babylonian, Old Assyrian, Middle Assyrian, Neo-Assyrian, Old Akkadian, etc.)
+**Century**: (100-year estimate, e.g. "1700 BCE" meaning approximately 1700-1600 BCE)
+**Place**: (likely provenance, e.g. Mari, Nineveh, Babylon, Sippar, Assur, Uruk, Nimrud, Larsa)
+**Catalog ID**: (publication number or CDLI P-number, e.g. ARM 10 33, P224378, AO 8957)
 
-=== EXAMPLE RESPONSE ===
+=== EXAMPLE 1 ===
+**Reasoning**: The greeting formula "a-na ... qi2-bi2-ma / um-ma ... -ma" is characteristic of Old Babylonian epistolary conventions. The mention of Hammurabi and administrative land allocation points to the 18th century BCE Larsa region.
 **Period**: Old Babylonian
-**Century**: 18th century BCE
-**Domain**: Administrative Letter
-**Place**: Mari
-**Confidence**: high
-**Reasoning**: The text uses typical Old Babylonian epistolary formulae and references Mari administrative officials.
-=== END EXAMPLE ===
+**Century**: 1800 BCE
+**Place**: Larsa
+**Catalog ID**: AbB 11 166
+=== END EXAMPLE 1 ===
+
+=== EXAMPLE 2 ===
+**Reasoning**: The phrase "a-bat LUGAL" (word of the king) and the administrative tone with date formulae using month names (iti-GAN) are typical Neo-Assyrian royal correspondence. The mention of BAD3-MAN-GIN (Dur-Sharrukin) situates this in the Sargonid period.
+**Period**: Neo-Assyrian
+**Century**: 700 BCE
+**Place**: Nimrud (Kalhu)
+**Catalog ID**: P224403
+=== END EXAMPLE 2 ===
+
+=== EXAMPLE 3 ===
+**Reasoning**: The text uses Late Babylonian orthographic conventions and the blessing formula invoking Bel and Nabu (d-EN u d-AG) is characteristic of Late Babylonian private correspondence from the Uruk region.
+**Period**: Late Babylonian
+**Century**: 500 BCE
+**Place**: Uruk
+**Catalog ID**: AOAT 25 46
+=== END EXAMPLE 3 ===
 
 Respond using EXACTLY the format above. Do NOT add any extra text before or after."""
 
@@ -120,18 +133,9 @@ MAX_COMPLETION_TOKENS = 4096
 GROUND_TRUTH_COLUMNS = {
     'period': 'period',
     'temporal_group': 'temporal_group',
-    'domain': 'domain_standard',
     'place': 'place_discovery',
+    'catalog_id': 'fragment_id',
 }
 
-# Valid period labels
+# Valid period labels (ground truth in our corpus — models may predict others)
 VALID_PERIODS = ['Old Babylonian', 'Neo-Assyrian', 'Late Babylonian']
-
-# Valid domain labels
-VALID_DOMAINS = [
-    'Administrative Letter',
-    'Political Letter',
-    'Private Letter',
-    'Diplomatic Letter',
-    'Unknown',
-]

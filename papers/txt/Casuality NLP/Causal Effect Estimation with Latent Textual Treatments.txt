@@ -1,0 +1,1351 @@
+Causal Effect Estimation with Latent Textual Treatments
+Omri Feldman 1 Amar Venugopal 2 Jann Spiess 3 Amir Feder 1
+Abstract
+Understanding the causal effects of text on downstream outcomes is a central task in many applications. Estimating such effects requires researchers to run controlled experiments that systematically vary textual features. While large language models (LLMs) hold promise for generating text, producing and evaluating controlled
+variation requires more careful attention. In this
+paper, we present an end-to-end pipeline for the
+generation and causal estimation of latent textual
+interventions. Our work first performs hypothesis generation and steering via sparse autoencoders (SAEs), followed by robust causal estimation. Our pipeline addresses both computational
+and statistical challenges in text-as-treatment experiments. We demonstrate that naive estimation
+of causal effects suffers from significant bias as
+text inherently conflates treatment and covariate
+information. We describe the estimation bias induced in this setting and propose a solution based
+on covariate residualization. Our empirical results
+show that our pipeline effectively induces variation in target features and mitigates estimation
+error, providing a robust foundation for causal
+effect estimation in text-as-treatment settings.
+1. Introduction
+Whether it is the aspects of political speech that are effective in creating voter support or how social media posts
+can be most engaging, understanding the causal effect of
+textual features on downstream outcomes is of great interest
+across domains (Gerber et al., 2011; Fenerty et al., 2012;
+Egan, 2013; Fong & Grimmer, 2016; Green & Gerber, 2019;
+Luong et al., 2021; Ash & Hansen, 2023; Ellickson et al.,
+2023). However, researchers face two particular challenges
+when designing experimental pipelines for such questions.
+First, they need to be able to modify text in systematic
+1
+School of Computer Science and Engineering, The Hebrew
+University of Jerusalem 2Department of Economics, Stanford University 3Graduate School of Business, Stanford University. Correspondence to: Omri Feldman <omri.feldman@mail.huji.ac.il>.
+Preprint. February 18, 2026.
+Figure 1. An overview of our methodology. We start with a dataset
+of text documents, with labels classifying the semantic concept we
+want to intervene on. We run probes on SAE representations and
+identify the most persistent and semantically relevant SAE features
+that serve as our hypotheses. We then steer texts to generate quasicounterfactuals that are used in downstream experiments. Finally,
+we present a novel residualization approach for CATE estimation
+in such text-as-treatment setting, alongside theoretical guarantees
+and empirical evidence.
+ways, while ensuring that documents remain readable. Second, valid causal estimation requires a separation between
+those intended modifications and other variations in the text
+(Feder et al., 2022). While large language models (LLMs)
+have revolutionized our ability to generate texts at scale,
+addressing both of the above challenges requires several key
+methodological enhancements.
+In this paper, we propose a novel framework for applying
+controlled interventions on textual features and estimating
+their causal effect on downstream outcomes. We build on
+the high-dimensional representation of language in LLMs
+to isolate semantic features and systematically intervene on
+those representations, producing text that varies primarily in
+targeted features. To facilitate a methodical choice between
+various candidate features, we also introduce a scoring metric that quantifies the effectiveness of our interventions and
+the potential undesired confounding artifacts it may introduce. We then estimate causal effects on downstream outcomes using methods from causal machine learning.
+To understand the appeal of this approach, consider the
+following example. Martin & Venugopal (2026) recently
+assembled a dataset of transcripts of local government meetings across various towns in California. A key feature of
+these meetings is a public comment period, in which mem1
+arXiv:2602.15730v1 [cs.CL] 17 Feb 2026
+Causal Effect Estimation with Latent Textual Treatments
+bers of the public may address the municipal government
+directly. These comments can vary widely in their “civility”,
+for which a score is provided for every observation in the
+dataset. A social-science researcher may be interested in
+understanding which aspects of speech result in a comment
+being regarded as more or less civil. Since civility is a complex concept, there may be many atomic features in the text
+that can impact the perceived civility of the comment. Our
+framework provides a researcher with a tool to generate
+hypotheses about which atomic features impact perceived
+civility and, subsequently, generate quasi-counterfactual
+comments that vary in these features.
+The researcher’s goal may then become to validate these hypotheses through a randomized experiment, in which these
+quasi-counterfactual texts are shown to respondents who
+evaluate their civility. Similarly, the researcher may instead
+be interested in seeing if changes in concepts in a text that
+are correlated with civility impact some alternative downstream outcome of interest, such as respondent agreement.
+Assessing causality in such a setting presents unique challenges. While randomization of steered texts to respondents
+will ensure potential outcomes are uncorrelated with treatment assignment, steering itself is rarely “surgical”, and
+will likely perturb correlated nuisance features. As a result,
+steered texts are not true counterfactuals, and we control for
+such unwanted variations by adjusting for dense contextual
+embeddings using robust causal machine learning.
+In implementing our approach to causal estimation, we must
+address a fundamental challenge to causal identification:
+since the treatments (along with possible confounders) are
+expressed in the text, embeddings produced by a sufficiently
+expressive model will perfectly predict treatment itself. Using such embeddings as controls will (in the parlance of
+causal inference) lead to a positivity violation, with no overlap between treated and control documents and degenerate
+propensity scores. This leads to a central trade-off: controlling for more sophisticated text embeddings destroys
+variation in treatment, while weaker embedding models fail
+to provide sufficient control for nuisance features, leading
+to omitted-variable bias.
+To resolve this tension, we propose a novel residualization
+procedure which removes treatment information from the
+embeddings before proceeding with treatment effect estimation. We provide theoretical results that establish causal
+identification and bound the resulting estimation error. We
+then validate this approach in practice via semi-synthetic
+simulations and show consistent, marked improvements
+over naive estimation procedures that control for full embeddings directly, in line with our theoretical guarantees (see
+example in Figure 3). Our approach constitutes a robust
+foundation for causal effect estimation with latent treatments, and can be extended naturally to other modalities.
+Figure 2. Our residualization pipeline. We assume that natural
+language is generated from latent semantic concepts, which serve
+as inputs to the LLM. By applying SAE steering interventions,
+we modify the model’s generation process and produce quasicounterfactual texts. We then measure their ex-post intensity I,
+and use embedding model for representing the text use as controls.
+Finally, using our measured intensity, we residualize the embeddings to remove the target concept C1, which ensures that the
+treatment information is separated from the rest of text.
+2. Preliminaries
+In this section, we formalize the notation for Sparse Autoencoders and the causal inference framework used throughout.
+2.1. Sparse Autoencoders (SAEs)
+Sparse Autoencoders are designed to decompose the
+dense, polysemantic activations of an LLM into a highdimensional, sparse latent space that corresponds more
+closely to interpretable features (Bricken et al., 2023).
+Let a ∈ R
+d be the vector of activations from a specific
+layer of a language model. An SAE consists of an encoder
+Wenc ∈ R
+h×d
+and a decoder Wdec ∈ R
+d×h
+, where the
+latent dimension h is typically much larger than the hidden
+dimension d. The encoder maps the activations into a sparse
+feature vector z ∈ R
+h
+and the decoder maps z back to R
+d
+,
+z = σ(Wenca + benc), aˆ = Wdecz + bdec, (1)
+where σ(·) is a nonlinear activation function (e.g. ReLU,
+JumpReLU, TopK) and benc and bdec are bias terms. During
+training, a sparsity penalty is applied to z to ensure that only
+a small number of features are active for any given input.
+We denote the indices of the SAE latent space as ϕ ∈ Φ,
+latent feature activation as zϕ, and the ϕ-th column of the
+decoder matrix as Wdec(ϕ)
+.
+2
+Causal Effect Estimation with Latent Textual Treatments
+4 2 0 2 4 6 8 10
+Estimated CATE
+0.0
+0.1
+0.2
+0.3
+0.4
+0.5
+0.6
+Density
+True CATE
+CATE(X)
+CATE(X)
+3 4 5 6 7
+True CATE
+2
+0
+2
+4
+6
+8
+10
+Estimated CATE
+CATE(X)
+CATE(X)
+Figure 3. CATE simulation from Dataset C, using Llama-3.1-
+8B-Instruct, layer 23 feature 53435, and all-MiniLM-L6-v2 embeddings. Top: distribution of true (black) and estimated CATE
+based on raw (red) and residualized (blue) covariates. Bottom:
+scatter of true vs. estimated CATE values based on raw (red) and
+residualized (blue) covariates, with the 45-degree line in black.
+Residualization performed via dimension-by-dimension strategy.
+2.2. Conditional Average Treatment Effects (CATEs)
+Our ultimate goal is to estimate the causal effect of controlled variation in text features on downstream outcomes
+of interest. We adopt the potential-outcomes framework
+from causal inference. We write T ∈ {0, 1} for a binary
+treatment variable (e.g., the presence of a specific linguistic feature) and Y for an observed downstream outcome.
+For a given unit, we consider potential outcomes Y (1) and
+Y (0), representing the outcome under treatment and control, respectively. The realized outcome is Y = Y (T). The
+individual treatment effect is Y (1) − Y (0), which is unobservable. We aim to estimate the Conditional Average
+Treatment Effect (CATE)
+τ (˜x) = E[Y (1) − Y (0) | X˜=˜x], (2)
+which is the expected effect of the treatment given a set of
+covariates X˜=˜x. In the context of text-as-treatment, X˜ typically consists of high-dimensional contextual embeddings
+that capture the nuisance properties of the text (e.g., length,
+base semantic content, style). Standard identification of
+τ (˜x) requires two fundamental assumptions:
+1. Unconfoundedness (Ignorability): The potential outcomes are independent of the treatment assignment
+given the covariates, (Y (0), Y (1)) ⊥ T | X˜.
+2. Positivity (Overlap): For all x˜ in the support of X˜,
+the probability of receiving the treatment is bounded
+away from 0 and 1: 0 < P(T = 1 | X˜=˜x) < 1.
+Throughout, we will maintain the additional assumption that
+units i with observations (Yi
+, Ti
+, X˜
+i) are drawn i.i.d from a
+population distribution. In particular, the SUTVA assumption of no interference is implicit: potential outcomes for a
+given unit are independent of the treatment status of other
+units, (Yi(0), Yi(1)) ⊥ Tj̸=i
+.
+3. Related Work
+3.1. SAEs and Steering
+SAEs have been shown to be useful in decomposing the
+polysemantic representations of LLMs into monosemantic,
+human-interpretable features (Bills et al., 2023; Bricken
+et al., 2023; Cunningham et al., 2023; Templeton et al.,
+2024). Recent research has leveraged the granularity
+of these features for steering and hypothesis generation
+(Movva et al., 2025; Peng et al., 2025; Zheng et al., 2025).
+However, alongside their usefulness for interpretability,
+benchmark results (Wu et al., 2025; Huang et al., 2024;
+Kantamneni et al., 2025) suggest that SAEs and SAE-based
+steering perform poorly compared to other methods. Our
+work extends this literature by proposing a new metric based
+on the model’s response to a steering intervention, establishing a more rigorous link between a feature’s interpretability
+and its utility in downstream causal experiments.
+3.2. Causal Inference with Text
+Estimating causal quantities with textual data presents multiple unique challenges (Feder et al., 2022; Egami et al.,
+2022). Recent work addressed these challenges when the
+textual information is used as controls (Veitch et al., 2020;
+Mozer et al., 2020), treatment (Fong & Grimmer, 2016;
+Pryzant et al., 2021; Gui & Veitch, 2022; Ash & Hansen,
+2023; Angelopoulos et al., 2024), and outcome (Modarressi
+et al., 2025). Particularly relevant to our work is Imai &
+Nakamura (2025), which studies a similar setting under
+slightly different assumptions. We contribute to this literature by presenting a novel steering pipeline that enables
+controlled interventions and addresses inherent positivity
+violations in the text-as-treatment setting.
+4. Datasets
+Throughout this paper, we present empirical results from
+three labeled text datasets.
+Dataset A: Local Government Speech. A dataset of city
+council meetings in California produced by Martin & Venugopal (2026). The dataset is comprised of statements made
+3
+Causal Effect Estimation with Latent Textual Treatments
+by members of the public in city council meetings across
+California. The label corresponds to a binarized measure
+of “civility”: a label of 1 indicates a highly civil statement,
+while a label of 0 corresponds to a highly uncivil statement.
+Dataset B: Political Ads. A dataset of US political advertisements, as presented in Sobhani et al. (2024). A label of
+1 indicates a Republican politician and a label of 0 indicates
+a Democratic politician.
+Dataset C: Us Vs. Them. A dataset of reddit comments
+posted in response to news articles across the political spectrum, curated by Huguet Cabot et al. (2021). The comments
+were scored for populist attitudes towards out-groups, which
+we binarize such that a label of 1 indicates a discriminatory
+comment towards the out-group and a label of 0 indicates a
+supportive comment towards the out-group.
+5. Hypothesis Generation
+The hypothesis generation phase identifies a set of candidate SAE features Φ+ ⊂ Φ that differentiate between
+semantic classes. In particular, we use a labeled dataset
+D = (XD
+i
+, Y D
+i
+)
+N
+i=1 to find the features that correlate with
+the target concept. To narrow the search space from the
+high-dimensional and sparse SAE latent space, we first apply a series of standard filtering operations that removes
+spurious and noisy features (see Appendix A for details).
+5.1. Sparse Linear Probing
+To ensure features are comparable, we calculate z-scores of
+the activations of the remaining features. For each feature
+ϕ, we then calculate the absolute mean difference
+∆ϕ = |E[Zϕ | Y
+D=1] − E[Zϕ | Y
+D=0]| (3)
+in normalized activations Zϕ between the two classes. We
+retain only the k features with the highest ∆ϕ, experimenting with k ∈ {16, 32, 64, 128, 256}. To identify which of
+these top-k features are the most important for the classification, we train an L1-regularized logistic regression model
+(i.e. a linear probe). We perform K-fold cross-validation to
+select the optimal regularization parameter. After identifying the best-performing model, we extract the coefficient βϕ
+for each feature and rank the features by |βϕ|. Given that
+the coefficients of an L1-regularized Logistic Regression
+are biased and sensitive to the number of features, we turn
+to feature persistence as a way to rank our SAE features and
+measure the median position of each feature across the different regression fits. This gives a higher ranking to features
+with a consistently high coefficient.
+5.2. Feature Selection for Steering Interventions
+To transform our ranked candidates into a set of steering
+vectors, we map each feature index to its corresponding
+semantic description provided by Neuronpedia (Lin, 2023).
+Our analysis shows that the features identified by the sparse
+probes indeed represent the multi-faceted nature of the target
+concepts, as captured by our training datasets. Specifically,
+we see that some features relate to specific linguistic markers, and some to broader, topical concepts.
+While the linear probe identifies features as predictive, we
+leave it to the practitioner to determine which specific aspects of the target concept are most relevant as a causal
+hypothesis. For the purpose of this work, we construct Φ+
+by manually curating a subset of features that exhibit both
+high persistence and clear semantic alignment with the core
+aspects of our datasets. This human-in-the-loop filtering
+ensures that the resulting steering experiments are relevant
+and target interesting scientific questions.
+6. Steering
+With the candidate features Φ+ identified, we generate quasicounterfactual texts by intervening on the latent representation of the specific feature ϕ in the SAE, where each such
+feature can serve as a treatment in a downstream experiment.
+We prompt the LLM to act as a relevant persona and ask it to
+respond to or comment on an input text, without constraints
+on tone, sentiment, or level of agreement. From a research
+design perspective, this allows practitioners to implement
+a wide array of studies. For example, LLMs can also be
+prompted to rephrase, summarize, or provide assistance.
+Moreover, our proposed approach is not limited to using
+the same dataset for discovery and steering, with trivial
+cross-dataset transferability.
+In each forward pass of the model we implement an adaptive
+steering mechanism that scales the intervention according
+to the local token representation. Let a ∈ R
+d
+represent the
+residual stream activations and ∥a∥2 represent the L2 norm
+of a. For a target feature ϕ ∈ Φ+, we define the steered
+latent vector z
+′
+such that
+z
+′
+ϕ = zϕ + α · ∥a∥2, (4)
+where α ∈ A is the steering factor. Unlike global steering
+methods, this approach ensures that the steering operation
+scales with the current state of the residual stream, preserving its relative magnitude across varied contexts. This is
+particularly useful in our setting for comparing steering
+interventions across layers and models.
+The modified activations are then reconstructed and passed
+back to the model, similarly to (1). To maintain the original
+model’s performance and nuances, we preserve the SAE
+reconstruction error ϵa = a − aˆ:
+a
+′ = Wdecz
+′ + bdec + ϵa (5)
+We ran our experiments on three instruction-tuned LLMs:
+4
+Causal Effect Estimation with Latent Textual Treatments
+Gemma-2-9B-IT, (Team et al., 2024), Llama-3.1-8BInstruct (Grattafiori et al., 2024) and Qwen2.5-7B-Instruct
+(Qwen et al., 2025). For Gemma-2-9B-IT, we used 16k
+SAEs for layers 9, 20, and 31 (Lieberum et al., 2024). For
+Llama-3.1-8B-Instruct and Qwen2.5-7B-Instruct, we used
+131k SAEs for layers 7, 15 and 23 (Arditi, 2024). Refer to
+Appendix B for further details, prompts and examples.
+6.1. Concept Intensity Scores
+While the steering factor α is a controlled hyperparameter of
+the intervention, the actual concept intensity of the generated
+text can vary across contexts, specific features, and models.
+Thus, to evaluate the success of our intervention, we define
+the ex-post concept intensity as the mean token-level cosine
+similarity between the model’s activations and the relevant
+decoder column. For a sequence ν of length M, the raw
+intensity I is given by:
+I(ν, ϕ) = 1
+M
+X
+M
+j=1
+a
+′
+j
+· Wdec(ϕ)
+∥a
+′
+j
+∥∥Wdec(ϕ)∥
+(6)
+To ensure comparisons across different features, layers, and
+models, we introduce the normalized intensity score I
+∗
+:
+I
+∗
+(ϕ) = |βˆ
+1| · RI
+MAE(
+¯I, Ib)
+, (7)
+where Ibis a linear regression fit of mean intensities ¯Iα on
+steering factors α ∈ A, |βˆ
+1| is the regression coefficient, RI
+is the range of ¯I, and MAE(
+¯I, Ib) captures the residuals.
+Intuitively, this scoring rewards features that exhibit a consistent, proportional response to steering. A high score
+indicates that the concept intensity scales linearly with the
+intervention magnitude, whereas a low score penalizes features that saturate early, plateau, or otherwise deviate from
+a proportional linear response. See Figure 4 for examples.
+6.2. Coherence Score
+We also wish to identify features that do not degrade the
+model’s output quality. We prompt Gemini 2.5 Flash-Lite
+(Comanici et al., 2025) and ask it to rate each steered response on a scale of 0 to 3 based on its coherence and
+fluency (see prompt in Appendix C). To compare features,
+we aggregate these scores into a single coherence metric
+J
+∗
+(ϕ) = 1
+|A|
+X
+α∈A
+J¯
+α (8)
+representing the average quality, where J¯
+α is the mean coherence score for steering factor α.
+6.3. IC Score
+To select the most effective features for our experiments, we
+evaluate each candidate ϕ across the steering range A. We
+combine the intensity and coherence measures into a final
+IC Score that ranks features that are both preferable in their
+activation response to steering and qualitatively stable in
+their generated output:
+IC(ϕ) = I
+∗
+(ϕ) · J
+∗
+(ϕ) (9)
+The IC Score serves as a rigorous metric for identifying
+well-behaved features. This is useful for using these features as treatments in causal experiments for several reasons.
+First, features with higher scores allow for steering over
+a more extreme or spread-out range of α, enabling more
+pronounced treatments while ensuring the output remains semantically coherent. Second, high coherence across a wide
+intensity range allows us to sample from multiple points
+along the curve, facilitating the study of multi-valued or
+continuous causal effects rather than being limited to binary
+interventions. Third, a high IC Score enables the “blind”
+setting of steering factors to produce reasonable texts for
+downstream causal estimation, while a lower score would
+require a manual, per-case validation to identify the range of
+suitable steering factors. Fourth, a high score theoretically
+mitigates the risk of confounding. If α increases and I
+∗
+(ϕ)
+does not increase proportionally, it becomes more likely that
+adding the steering vector to the residual stream will cause
+an increase in other correlated concepts. Table 1 shows the
+mean IC Score per model and layer position.
+Table 1. Mean Intensity (I
+∗
+), Coherence (J
+∗
+), and IC scores
+grouped by model and layer depth (layer number in parentheses),
+after removing invalid texts. Middle-layer features are generally
+preferred for causal interventions as they achieve high intensity
+scores while maintaining high coherence scores.
+LAYER POSITION I
+∗
+(ϕ) J
+∗
+(ϕ) IC(ϕ)
+Gemma-2-9B-IT
+EARLY (9) 0.44 2.59 1.16
+MIDDLE (20) 1.71 2.41 4.20
+LATE (31) 0.92 2.51 2.25
+Llama 3.1 8B Instruct
+EARLY (7) 0.81 2.33 1.91
+MIDDLE (15) 1.47 2.29 3.38
+LATE (23) 0.80 2.54 1.98
+Qwen 2.5 7B Instruct
+EARLY (7) 0.37 2.51 0.94
+MIDDLE (15) 1.71 2.25 3.96
+LATE (23) 1.45 2.43 3.27
+5
+Causal Effect Estimation with Latent Textual Treatments
+Figure 4. Examples of features intensity as measures by the mean cosine similarity for Gemma-2-9b-IT. Left: a high intensity features
+that follow a linear trend with a relatively high slope, making it a good candidate for causal interventions. Center: a medium intensity
+feature with a reversed ‘L’ shape, where there is no response to steering at first, followed by a sudden spike, making their suitability
+for downstream experiments limited. Right: a low intensity feature with a constant slope despite increasing steering factors, making it
+completely ineffective for experimentation. Plots include only valid texts and steering factors with more than 75% validation rate.
+7. Causal Analysis
+Having produced texts that systematically vary in the intensity of a target feature, we now aim to estimate causal
+effects on downstream outcomes, such as the concept originally targeted in the hypothesis-generation step. Specifically,
+we want to estimate conditional average treatment effects
+(CATEs) of the form in (2). In doing so, we have to address
+the challenge that steering may affect not only the target feature, but also other aspects of the text. As we demonstrate
+in this section, controlling for such other features poses
+unique challenges that we address in our formal results and
+practical implementation based on robust causal machine
+learning. All proofs can be found in Appendix D.
+7.1. Causal Estimation for Feature Intensities
+We now focus on estimating the effect of a specific target
+feature ϕ, and we define the treatment Tϕ of interest to be the
+(rescaled) measured intensity of that feature, I(ν, ϕ). For
+simplicity, we assume that feature intensity is either high
+(Tϕ=1) or low (Tϕ=0). We write X for a full embedding of
+the text, which we assume contains all relevant information
+about a document. Beyond the concept we intervene on,
+texts (as represented by X) also contain other important
+semantic features (e.g., topic, tone, etc.) separate from Tϕ
+that may be different between texts with different target
+intensities, which we collectively write as X⊥ = g
+⊥(X).
+We are interested in estimating the effect of the intensity
+Tϕ on a downstream outcome Y . We assume that Tϕ and
+X⊥ together capture any aspect of the text relevant for
+downstream outcomes, so that the outcomes can be written
+as a function of Tϕ, X⊥, and some exogenous (independent)
+noise ε: Y = f(Tϕ, X⊥; ε). In line with the notation in
+Section 2.2, for every unit we consider potential outcomes
+Y (1) = f(1, X⊥; ε), Y (0) = f(0, X⊥; ε),
+which represent pairs of (correlated) random variables that
+express the downstream outcomes of a hypothetical pair of
+texts that only differ in the target intensity (treatment), but
+not otherwise. The treatment effects of interest are averages
+over Y (1) − Y (0). The realized outcome is Y = Y (Tϕ).
+Throughout, we assume that Y is scalar with E[|Y |
+2
+] < ∞.
+7.2. Induced Bias and Positivity Violations
+As we aim to estimate treatment effects Y (1) − Y (0) (and
+their averages), we face two challenges: First, steering may
+affect parts of the text X beyond the target concept, so
+the components X⊥ may correlate with the target intensity
+(treatment) Tϕ, violating unconfoundedness. Second, since
+the concept intensity I(ν, ϕ) is measured from the text, simply controlling for the full text embedding X implies that
+treatment Tϕ is fully explained, violating positivity.
+To illustrate the first challenge, assume that we aim to estimate the overall average treatment effect τ = E[Y (1) −
+Y (0)], but that X⊥ differs between the high intensity
+(Tϕ=1, treated) and low intensity (Tϕ=0, control) groups.
+Then, simply taking the difference in means between the
+two groups generally leads to bias,
+E[Y |Tϕ=1] − E[Y |Tϕ=0]
+generally
+̸= τ,
+due to confounding. One way in which we could overcome
+this challenge would be to assume that steering does not
+create any systematic differences across groups:
+Proposition 7.1 (Causal identification from tight steering). Assume that X⊥|Tϕ=1 d= X⊥|Tϕ=0. Then τ =
+E[Y |Tϕ=1] − E[Y |Tϕ=0].
+In practice, this assumption may be unrealistic: as steering
+creates systematic differences in the target intensity, it likely
+also affects related (and possibly even unrelated) textual
+features in systematic ways. Instead, we may want to control
+6
+Causal Effect Estimation with Latent Textual Treatments
+for possible confounders, leading to the second challenge.
+Indeed, note that one way of avoiding confounding would
+be to control for the text embedding X. However, since X
+also perfectly captures the target intensity Tϕ, we have that
+P(Tϕ=1|X) ∈ {0, 1} – positivity is violated, and we lose
+identification of effects of Tϕ.
+7.3. Second-Best Controlling
+Above, we have argued that the estimation of treatment
+effects is hindered by confounding through other changes
+in texts, and that a naive approach to controlling fails. In
+theory, we could address both challenges by controlling only
+for changes in the aspects of the text that are separate from
+the treatment Tϕ, as captured by X⊥:
+Proposition 7.2 (Causal identification from perfect controlling). Assume that that 0 < P(Tϕ=1|X⊥) < 1 almost
+surely. Then τ = E[E[Y |Tϕ=1, X⊥] − E[Y |Tϕ=0, X⊥]].
+Implementing an estimator for τ in practice based on this
+result would require separating out the component X⊥ that
+is orthogonal to the intensity (treatment) Tϕ. However, we
+do not generally measure this component X⊥ separately,
+and only have access to the full embedding X and the implied treatment Tϕ. Instead, we now assume that we have
+a possibly imperfect vector X˜ = ˜g(X) of control variables
+available that balances the desire to control for X⊥ with the
+requirement to preserve variation in treatment Tϕ:
+Assumption 7.3 (Residual treatment variation). There is an
+η > 0 such that η < P(Tϕ=1|X˜) < 1 − η almost surely.
+Assumption 7.4 (Residual embedding variation). Write
+ν1(X˜), ν0(X˜) for the distributions of X⊥|Tϕ=1, X⊥|T =
+0, respectively, conditional on X˜. We assume that there
+is a δ > 0 and a metric d on the support of X⊥
+such that for the 1-Wasserstein metric W
+(d)
+1 we have that
+W
+(d)
+1
+(ν1(X˜), ν0(X˜)) ≤ δ almost surely.
+The first assumption requires sufficient variation in intensity
+Tϕ after controlling for X˜ and implies that X˜ cannot capture
+too much of the full embedding X. The second assumption
+says that the remaining systematic variation beyond Tϕ in
+the embedding is not too large after controlling for X˜. It
+would be fulfilled in the two cases from above: If steering
+is perfect (Proposition 7.1), then W
+(d)
+1
+(ν1(X˜), ν0(X˜)) = 0
+a.s. for any choice of control variable. If X˜ = X⊥ (Proposition 7.2), then likewise W
+(d)
+1
+(ν1(X˜), ν0(X˜)) = 0 a.s. since
+there is no remaining variation in X⊥(1), X⊥(0).
+We now consider how well we can estimate treatment
+effects by controlling for the (possibly imperfect) proxy
+X˜ of X⊥. We assume that our goal is to approximate
+conditional average treatment effects (CATEs) τ (˜x) =
+E[Y (1) − Y (0)|X˜=˜x] by estimating
+τ˜(˜x) = E[Y |Tϕ=1, X˜=˜x] − E[Y |Tϕ=0, X˜=˜x] (10)
+from the steered data. Writing
+µ1(x
+⊥) = E[Y (1)|X⊥=x
+⊥],
+µ0(x
+⊥) = E[Y (0)|X⊥=x
+⊥],
+we assume that µ1, µ0 are not too sensitive to small variations in x
+⊥:
+Assumption 7.5 (Limited sensitivity to off-feature variation). There is an L > 0 such that µ1, µ0 are Lipschitz continuous with respect to the metric d from Assumption 7.4
+and the Lipschitz constant L.
+We obtain a bound for the mistake we make when we approximate τ (˜x) in terms of τ˜(˜x):
+Theorem 7.6 (Bias bound for imperfect controls). Assume
+that Assumptions 7.3, 7.4, and 7.5 hold. Then almost surely
+|τ (˜x) − τ˜(˜x)| ≤ 2Lδ.
+The same bias bound applies if we approximate the overall
+treatment effect τ = E[Y (1) − Y (0)] by controlling for X˜.
+Hence, we can still recover a suitable estimator based on
+transformations X˜ that capture confounding features well
+enough, while not perfectly predicting Tϕ.
+7.4. Robust Estimation
+Above, we have argued that an approximation for τ (˜x) with
+bounded bias may be achieved by controlling for appropriate text features X˜. We implement this controlling procedure based on robust causal machine learning (cf. Chernozhukov et al., 2018) using the R learner (Nie & Wager, 2021) as implemented in EconML (Battocchi et al.,
+2019). Writing µ˜(˜x) = E[Y |X˜=˜x] (outcome prediction)
+and π˜(˜x) = E[Tϕ|X˜=˜x] (propensity score), our target estimand τ˜(·) defined in (10) solves the least-squares problem
+min
+h(·)
+E[((Y − µ˜(X˜)) − h(X˜) (Tϕ − π˜(X˜)))2
+]
+Motivated by this identity, we predict Y and Tϕ from X˜
+on our sample (Yi
+, Tϕi, X˜
+i)
+n
+i=1 using cross-fitting to obtain
+out-of-fold estimates µˆ−i(X˜
+i), πˆ−i(X˜
+i) of µ˜(X˜
+i), π˜(X˜
+i).
+We then solve the sample analogue
+min
+h(·)
+1
+n
+Xn
+i=1
+((Yi − µˆ−i(X˜
+i)) − h(X˜
+i) (Tϕi − πˆ−i(X˜
+i)))2
+over regularized linear functions to estimate the approximate
+CATEs τ˜(·). This procedure is robust: it leads to a highquality estimation of τ˜(·) even if µ, ˜ π˜ are both estimated
+only at a rate o(n
+−1/4
+) (Nie & Wager, 2021).
+7
+Causal Effect Estimation with Latent Textual Treatments
+8. Semi-Synthetic Empirical Case Study
+We validate our steering and causal estimation pipeline in a
+series of semi-synthetic simulations. We sample 300 texts
+from each of the real-world datasets from Section 4, construct Φ+ with three features per layer, and run 25 steering
+intervention for each text with equally spaced steering factors α ∈ [0, 1.2]. This procedure produces 7, 500 texts per
+feature and an overall of 607, 500 generated texts.
+We use the LLM-as-judge coherence measure to remove all
+steered texts the judge flagged as invalid. For the remaining
+set, we construct our binary treatment as whether a steered
+text has a measured feature intensity in the top (Tϕ=1) or
+bottom (Tϕ=0) quintile of the given sample distribution
+of I(ν, ϕ). Among these selected extremes, we remove all
+steered texts originating from base texts that do not produce
+at least one steered text in each treatment group. This allows
+us to ensure that there are no systematic differences between
+the two groups arising from differences in the corresponding
+sets of base texts. We then note the number of steered texts
+produced by each base text in each treatment group, and
+use the inverse of this count as the weight assigned to the
+corresponding steered text in CATE estimation. While we
+run our method on a wide selection of SAE features, we
+remove features with a very low IC score from our analysis.
+For an overview of the results for those features which do
+not meet this criterion, see Appendix E.
+8.1. Embeddings and Treatment Prediction
+We produce embeddings Xi for each document via
+EmbeddingGemma-300M (Vera et al., 2025), all-mpnetbase-v2 (Song et al., 2020), or all-MiniLM-L6-v2 (Wang
+et al., 2020). The resulting embedding vectors are then
+stacked row-wise into a matrix for the given data sample.
+We begin by using PCA to rotate this embedding matrix,
+producing the matrix X with n rows, one per document.
+1 This will be our default representation of text for the
+remainder of our simulation.
+8.2. Proposed Residualization Strategies
+Our theoretical results in Section 7.3 show that we can
+improve causal estimation on downstream outcomes by constructing control variables X˜ based on embeddings X that
+capture confounding features well enough, while also allowing for substantial residual variation in Tϕ. In order to
+implement this guidance, we construct residualized versions
+of the full text embeddings. Specifically, we propose two
+strategies for residualization of our produced embeddings
+(e.g., producing Xe from X).
+1When performing PCA, we keep the maximum number of
+dimensions (given by the minimum of the number of steered texts
+and the number of embedding dimensions).
+Dimension-by-dimension: We separately residualize each
+dimension (column) of our embedding matrix X: let xj
+denote the j-th column of X. We remove treatment information encoded in xj by fitting a predictive model to predict xj
+from Tϕ (which is the vector of treatment indicators Tϕi),
+yielding a predicted value ˆxj
+2
+. We then construct our residualized version ˜xj = xj − ˆxj . Proceeding iteratively across
+columns of X thus allows us to construct the embedding
+matrix Xe with treatment-related information removed.
+Dropping first principal component: We perform residualization by simply dropping the first dimension of our
+rotated embeddings (the first principal component), e.g. Xe
+is simply X with the first column removed.
+8.3. Residualization Results
+We can evaluate how much predictive power our (rotated)
+embeddings contain with respect to Tϕ by measuring the
+out-of-sample classification accuracy for X and Xe . The
+results are shown in Figure 5. We see that using raw X
+almost perfectly predicts Tϕ, while both of our residualization strategies show lower accuracy, as expected. We also
+observe that the first dimension of our rotated embeddings,
+corresponding to the first principal component, carries substantive predictive power for treatment.
+0.0 0.2 0.4 0.6 0.8 1.0
+Out-of-sample classification accuracy
+0
+5
+10
+15
+20
+25
+30
+Density
+Raw
+Dim-by-dim Resid.
+Drop PC1 Figure 5. Distributions of the out-of-sample predictive accuracy
+of treatment between raw and residualized embeddings, where
+residualization is conducted dimension-by-dimension (solid) and
+by dropping the first principle component (dashed), taken over all
+tested LLMs, datasets, SAE features, and embedding models.
+We can further analyze the concentration of treatment information in the first principal component by examining
+the performance gap in predictive accuracy of treatment
+between raw and residualized embeddings, component by
+component. Figure 6a shows that the effects of residualization are heavily localized to the first principal component,
+while having a negligible effect on all other components.
+Figure 6b goes further and shows that there is a clear posi2The model fitting and prediction is accomplished via crossfitting, with all predictions generated out-of-sample
+8
+Causal Effect Estimation with Latent Textual Treatments
+tive correlation between the IC score and the accuracy gap
+on the first principal component. This suggests that SAE
+features that are more effective for steering also result in
+concentration of treatment information along the primary
+axis of embedding variation.
+Principal Component 1 All Others
+0.4
+0.2
+0.0
+0.2
+0.4
+Accuracy Difference
+(a)
+(b)
+Figure 6. (a) Distributions of the performance gap in predictive
+accuracy between raw and residualized embeddings across PCA
+components. (b) IC scores and accuracy improvements in the first
+principal component (correlation r = 0.463).
+Taken together, these results demonstrate that when an SAE
+feature is highly effective for steering, dropping the first
+principal component is likely a sufficient strategy for residualization. For features with lower IC scores, dimension-bydimension residualization will likely yield better results due
+to decreased concentration of treatment information in the
+first principal component. Dimension-by-dimension residualization will be our primary specification in our simulation
+study; results using residualization via dropping the first
+principal component can be found in Appendix E.
+8.4. Simulated CATE Estimation
+We construct synthetic outcome variables given Xe from a
+wide variety of functional form specifications, with details
+provided in Appendix E. CATE estimation is performed via
+robust causal machine learning following Section 7.4 with
+nuisance functions estimated via random forests (Breiman,
+2001). Residualization is similarly achieved via random
+forests to produce ˆxj . We simulate outcomes yi across a
+variety of functional forms, embedding models, LLMs, SAE
+features, and datasets. For all simulations, the true average
+treatment effect (ATE) is 5. Figure 7 shows a summary of
+the results.
+0 1 2 3 4 5 6
+|Bias| and RMSE
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+1.2
+1.4
+Density
+|Bias(CATE(X))|
+|Bias(CATE(X))|
+RMSE(CATE(X))
+RMSE(CATE(X))
+Figure 7. Distribution of magnitude of bias (solid) and RMSE
+(dashed) for raw (red) and residualized (blue) covariates, across all
+tested DGP functional forms, SAE features, LLMs, datasets, and
+embedding models. Residualization performed via dimension-bydimension strategy.
+These results demonstrate a substantial reduction in both
+bias and RMSE following the application of our residualization approach. This marked improvement validates the efficacy of our methodology in mitigating the bias inherent in
+naive control strategies that utilize the full embeddings. Furthermore, these findings are consistent with our theoretical
+results, confirming that removing the treatment information
+is essential for robust causal estimation in such settings.
+9. Conclusion
+Advances in text generation via LLMs and Sparse Autoencoders (SAEs) offer a transformative opportunity for social science research. However, the utility of these models
+has been limited by the difficulty of identifying optimal
+steering features and the bias caused by the entanglment
+of treatments and covariate information. We address these
+fundamental challenges by introducing a comprehensive
+pipeline for hypothesis generation from labeled data, quasicounterfactual text generation and a novel covariate residualization methodology for causal effect estimation. We
+demonstrate both theoretically and empirically that we can
+isolate treatment effects and mitigate the bias that arise in
+text-as-treatment settings. Our results provide a rigorous
+new foundation for experimentation with latent treatments,
+shifting the paradigm from hand-crafted techniques to formal and controllable causal experimentation.
+9
+Causal Effect Estimation with Latent Textual Treatments
+Impact Statement
+This paper presents work whose goal is to provide social
+scientists with a new methodology for experimentation and
+causal effect estimation in text-as-treatment settings. We
+believe our work extends the existing toolkit available to
+researchers and can advance the understanding of causal
+relationships in fields such as economics, political science,
+business, and marketing. While the development of controlled text generation and causal estimation methods carries
+broader societal implications for areas such as personalization and targeting, we feel there are no specific consequences that warrant further highlighting here beyond the
+general advancement of machine learning and its application
+to social science research.
+References
+Angelopoulos, P., Lee, K., and Misra, S. Value aligned large
+language models. Available at SSRN, 2024.
+Arditi, A. Finding misaligned persona features in
+open-weight models. LessWrong, October 2024.
+URL https://www.lesswrong.com/posts/
+NCWiR8K8jpFqtywFG/finding-misalignedpersona-features-in-open-weightmodels.
+Ash, E. and Hansen, S. Text algorithms in economics.
+Annual Review of Economics, 15:659–688, 2023.
+Battocchi, K., Dillon, E., Hei, M., Lewis, G., Oka, P.,
+Oprescu, M., and Syrgkanis, V. EconML: A Python Package for ML-Based Heterogeneous Treatment Effects Estimation. https://github.com/py-why/EconML,
+2019.
+Bills, S., Cammarata, N., Mossing, D., Tillman, H., Gao, L.,
+Goh, G., Sutskever, I., Leike, J., Wu, J., and Saunders,
+W. Language models can explain neurons in language models, 2023. URL https://openai.com/
+research/language-models-can-explainneurons-in-language-models.
+Breiman, L. Random forests. Machine Learning, 45:
+5–32, 2001. URL https://link.springer.com/
+article/10.1023/A:1010933404324.
+Bricken, T., Templeton, A., Batson, J., Chen, B., Jermyn,
+A., Conerly, T., Turner, N., Anil, C., Denison, C.,
+Askell, A., Lasenby, R., Wu, Y., Kravec, S., Schiefer, N.,
+Maxwell, T., Joseph, N., Hatfield-Dodds, Z., Tamkin,
+A., Nguyen, K., McLean, B., Burke, J. E., Hume,
+T., Carter, S., Henighan, T., and Olah, C. Towards
+monosemanticity: Decomposing language models with
+dictionary learning. Transformer Circuits Thread, 2023.
+URL https://transformer-circuits.pub/
+2023/monosemantic-features/index.html.
+Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo,
+E., Hansen, C., Newey, W., and Robins, J. Double/debiased machine learning for treatment and structural parameters. The Econometrics Journal, 21(1):C1–C68, 01
+2018. ISSN 1368-4221. doi: 10.1111/ectj.12097. URL
+https://doi.org/10.1111/ectj.12097.
+Comanici, G., Bieber, E., Schaekermann, M., Pasupat, I.,
+Sachdeva, N., Dhillon, I., Blistein, M., Ram, O., Zhang,
+D., Rosen, E., and et. al. Gemini 2.5: Pushing the frontier
+with advanced reasoning, multimodality, long context,
+and next generation agentic capabilities, 2025. URL
+https://arxiv.org/abs/2507.06261.
+Cunningham, H., Ewart, A., Riggs, L., Huben, R., and
+Sharkey, L. Sparse autoencoders find highly interpretable
+features in language models, 2023. URL https://
+arxiv.org/abs/2309.08600.
+Egami, N., Fong, C. J., Grimmer, J., Roberts, M. E., and
+Stewart, B. M. How to make causal inferences using texts.
+Science Advances, 8(42):eabg2652, 2022.
+Egan, G. The skilled helper: A problem-management and
+opportunity-development approach to helping. Nelson
+Education, 2013.
+Ellickson, P. B., Kar, W., and Reeder III, J. C. Estimating
+marketing component effects: Double machine learning
+from targeted digital promotions. Marketing Science, 42
+(4):704–728, 2023.
+Feder, A., Keith, K. A., Manzoor, E., Pryzant, R., Sridhar, D., Wood-Doughty, Z., Eisenstein, J., Grimmer, J.,
+Reichart, R., Roberts, M. E., et al. Causal inference in
+natural language processing: Estimation, prediction, interpretation and beyond. Transactions of the Association
+for Computational Linguistics, 10:1138–1158, 2022.
+Fenerty, S. D., West, C., Davis, S. A., Kaplan, S. G., and
+Feldman, S. R. The effect of reminder systems on patients’ adherence to treatment. Patient preference and
+adherence, pp. 127–135, 2012.
+Fong, C. and Grimmer, J. Discovery of treatments from text
+corpora. In Proceedings of the 54th Annual Meeting of
+the Association for Computational Linguistics (Volume 1:
+Long Papers), pp. 1600–1609, 2016.
+Gerber, A. S., Gimpel, J. G., Green, D. P., and Shaw, D. R.
+How large and long-lasting are the persuasive effects of
+televised campaign ads? results from a randomized field
+experiment. American Political Science Review, 105(1):
+135–150, 2011.
+10
+Causal Effect Estimation with Latent Textual Treatments
+Grattafiori, A., Dubey, A., Jauhri, A., Pandey, A., Kadian,
+A., Al-Dahle, A., Letman, A., Mathur, A., Schelten, A.,
+Vaughan, A., and et. al. The llama 3 herd of models, 2024.
+URL https://arxiv.org/abs/2407.21783.
+Green, D. P. and Gerber, A. S. Get out the vote: How to
+increase voter turnout. Brookings Institution Press, 2019.
+Gui, L. and Veitch, V. Causal estimation for text data
+with (apparent) overlap violations. arXiv preprint
+arXiv:2210.00079, 2022.
+Huang, J., Wu, Z., Potts, C., Geva, M., and Geiger, A.
+Ravel: Evaluating interpretability methods on disentangling language model representations. arXiv preprint
+arXiv:2402.17700, 2024.
+Huguet Cabot, P.-L., Abadi, D., Fischer, A., and Shutova,
+E. Us vs. them: A dataset of populist attitudes, news
+bias and emotions. In Merlo, P., Tiedemann, J., and Tsarfaty, R. (eds.), Proceedings of the 16th Conference of
+the European Chapter of the Association for Computational Linguistics: Main Volume, pp. 1921–1945, Online,
+April 2021. Association for Computational Linguistics.
+doi: 10.18653/v1/2021.eacl-main.165. URL https:
+//aclanthology.org/2021.eacl-main.165/.
+Imai, K. and Nakamura, K. Causal representation learning
+with generative artificial intelligence: Application to texts
+as treatments, 2025. URL https://arxiv.org/
+abs/2410.00903.
+Kantamneni, S., Engels, J., Rajamanoharan, S., Tegmark,
+M., and Nanda, N. Are sparse autoencoders useful? a
+case study in sparse probing, 2025. URL https://
+arxiv.org/abs/2502.16681.
+Lieberum, T., Rajamanoharan, S., Conmy, A., Smith, L.,
+Sonnerat, N., Varma, V., Kramar, J., Dragan, A., Shah, ´
+R., and Nanda, N. Gemma scope: Open sparse autoencoders everywhere all at once on gemma 2. arXiv preprint
+arXiv:2408.05147, 2024.
+Lin, J. Neuronpedia: Interactive reference and tooling
+for analyzing neural networks, 2023. URL https:
+//www.neuronpedia.org. Software available from
+neuronpedia.org.
+Luong, P., Glorioso, T. J., Grunwald, G. K., Peterson, P.,
+Allen, L. A., Khanna, A., Waughtal, J., Sandy, L., Ho,
+P. M., and Bull, S. Text message medication adherence
+reminders automated and delivered at scale across two
+institutions: testing the nudge system: pilot study. Circulation: Cardiovascular Quality and Outcomes, 14(5):
+e007015, 2021.
+Martin, O. and Venugopal, A. Participation and representation in local government speech. 2026.
+Modarressi, I., Spiess, J., and Venugopal, A. Causal inference on outcomes learned from text. arXiv preprint
+arXiv:2503.00725, 2025.
+Movva, R., Peng, K., Garg, N., Kleinberg, J., and Pierson,
+E. Sparse autoencoders for hypothesis generation, 2025.
+URL https://arxiv.org/abs/2502.04382.
+Mozer, R., Miratrix, L., Kaufman, A. R., and Anastasopoulos, L. J. Matching with text data: An experimental
+evaluation of methods for matching documents and of
+measuring match quality. Political Analysis, 28(4):445–
+468, 2020.
+Nie, X. and Wager, S. Quasi-oracle estimation of heterogeneous treatment effects. Biometrika, 108(2):299–319,
+2021.
+Peng, K., Movva, R., Kleinberg, J., Pierson, E., and Garg, N.
+Use sparse autoencoders to discover unknown concepts,
+not to act on known concepts, 2025. URL https://
+arxiv.org/abs/2506.23845.
+Pryzant, R., Card, D., Jurafsky, D., Veitch, V., and Sridhar,
+D. Causal effects of linguistic properties. In Proceedings
+of the 2021 Conference of the North American Chapter of
+the Association for Computational Linguistics: Human
+Language Technologies, pp. 4095–4109, 2021.
+Qwen, :, Yang, A., Yang, B., Zhang, B., Hui, B., Zheng, B.,
+Yu, B., Li, C., Liu, D., Huang, F., and et. al. Qwen2.5
+technical report, 2025. URL https://arxiv.org/
+abs/2412.15115.
+Sobhani, D., Feder, A., and Blei, D. Multi-environment
+topic models, 2024. URL https://arxiv.org/
+abs/2410.24126.
+Song, K., Tan, X., Qin, T., Lu, J., and Liu, T.-Y. Mpnet: Masked and permuted pre-training for language understanding, 2020. URL https://arxiv.org/abs/
+2004.09297.
+Team, G., Riviere, M., Pathak, S., Sessa, P. G., Hardin,
+C., Bhupatiraju, S., Hussenot, L., Mesnard, T., Shahriari,
+B., Rame, A., , and et. al. Gemma 2: Improving open ´
+language models at a practical size, 2024. URL https:
+//arxiv.org/abs/2408.00118.
+Templeton, A., Conerly, T., Marcus, J., Lindsey, J.,
+Bricken, T., Chen, B., Pearce, A., Citro, C., Ameisen,
+E., Jones, A., Cunningham, H., Turner, N. L., McDougall, C., MacDiarmid, M., Freeman, C. D., Sumers,
+T. R., Rees, E., Batson, J., Jermyn, A., Carter, S.,
+Olah, C., and Henighan, T. Scaling monosemanticity: Extracting interpretable features from claude 3
+sonnet. Transformer Circuits Thread, 2024. URL
+https://transformer-circuits.pub/2024/
+scaling-monosemanticity/index.html.
+11
+Causal Effect Estimation with Latent Textual Treatments
+Veitch, V., Sridhar, D., and Blei, D. Adapting text embeddings for causal inference. In Conference on uncertainty
+in artificial intelligence, pp. 919–928. PMLR, 2020.
+Vera, H. S., Dua, S., Zhang, B., Salz, D., Mullins, R., Panyam, S. R., Smoot, S., Naim, I., Zou, J., Chen, F., and
+et. al. Embeddinggemma: Powerful and lightweight text
+representations, 2025. URL https://arxiv.org/
+abs/2509.20354.
+Wang, W., Wei, F., Dong, L., Bao, H., Yang, N., and Zhou,
+M. Minilm: Deep self-attention distillation for taskagnostic compression of pre-trained transformers, 2020.
+URL https://arxiv.org/abs/2002.10957.
+Wu, Z., Arora, A., Geiger, A., Wang, Z., Huang, J., Jurafsky, D., Manning, C. D., and Potts, C. Axbench: Steering llms? even simple baselines outperform sparse autoencoders, 2025. URL https://arxiv.org/abs/
+2501.17148.
+Zheng, C., Beltran-Velez, N., Karlekar, S., Shi, C., Nazaret,
+A., Mallik, A., Feder, A., and Blei, D. M. Model directions, not words: Mechanistic topic models using sparse
+autoencoders. arXiv preprint arXiv:2507.23220, 2025.
+12
+Causal Effect Estimation with Latent Textual Treatments
+A. Hypothesis Generation - Candidate Feature Filtering
+Before fitting linear probes on the SAE representations, a necessary preliminary step excludes spurious features. Specifically,
+we slightly adapt the preprocessing steps in Zheng et al. (2025) and exclude features that are:
+• Syntactic or formatting-related: We use open-source descriptions available on Neuronpedia (Lin, 2023) and search for
+SAE feature descriptions containing keywords such as ”BOS”, ”punctuation”, ”code”, ”math”, etc.
+• Training set activations: Features that activate in more than 1% of the training data.
+• Corpus activations: Features that activate in more than 70% of the corpus data.
+• Variance: Features with zero variance.
+B. Steering
+B.1. Steering Implementation Details
+Recall that equation 4 defines the steering operation as z
+′
+ϕ = zϕ + α · ∥a∥2 and equation 5 defines the reconstructed output
+as a
+′ = Wdecz
+′ + bdec + ϵa. Note that this requires computing one encoding and two decodings for each steering operation,
+once for calculating the error terms and second for the reconstructed output. Our implementation utilizes the distributive
+property of the linear decoder and simplifies the steering to a direct additive intervention:
+a
+′ = Wdec(z + s · 1ϕ) + bdec + (a − (Wdecz + bdec)) (11)
+By expanding the terms, we observe that the original reconstruction Wdecz + bdec and its negative counterpart from the
+error term ϵa cancel out:
+a
+′ = Wdecz + bdec + Wdec(s · 1ϕ) + a − Wdecz − bdec
+= a + s · Wdec[ϕ]
+where s = α · ∥a∥2 represents the adaptive steering magnitude and Wdec[ϕ] is the specific column of the decoder matrix
+corresponding to feature ϕ. This equivalence shows that we bypass the need to compute the full SAE encoding and decoding,
+reducing the computational overhead.
+13
+Causal Effect Estimation with Latent Textual Treatments
+B.2. Prompts
+Local Government Speech
+You are a member of a city council participating in a public meeting.
+You are presented with a transcript of a remark made by a speaker during the
+session.
+Task: Engage in the discussion by responding to the remark as another council
+member.
+You must react in the FIRST PERSON ("I", "me", "my").
+Constraints:
+1. Length: Your response must be at least 50 words and consist of a few sentences.
+2. Grammar: You must use grammatically correct and coherent language.
+3. Flexibility: You are free to decide on the tone, sentiment, and stance.
+You are not required to match the style or perspective of the original speaker.
+Transcript to respond to:
+{input text}
+Political Ads
+You are a citizen who has just seen a political advertisement during an election
+cycle.
+You are presented with the text of that advertisement.
+Task: React to the advertisement naturally by writing a short response sharing your
+thoughts or feelings about it.
+You must react in the FIRST PERSON ("I", "me", "my").
+Constraints:
+1. Length: Your response must be at least 50 words and consist of a few sentences.
+2. Grammar: You must use grammatically correct and coherent language.
+3. Flexibility: You are free to decide on the tone, sentiment, and stance.
+You are not required to agree with or be influenced by the ad’s message.
+Advertisement text:
+{input text}
+Us Vs. Them
+You are a participant in an online discussion forum.
+You are presented with a comment regarding a social or political issue.
+Task: Engage in the discussion by responding to the comment below.
+You must react in the FIRST PERSON ("I", "me", "my").
+Constraints:
+1. Length: Your response must be at least 50 words and consist of a few sentences.
+2. Grammar: You must use grammatically correct and coherent language.
+3. Flexibility: You are free to decide on the tone, sentiment, and stance.
+You are not required to agree with or match the style of the original commenter.
+Comment to respond to:
+{input text}
+14
+Causal Effect Estimation with Latent Textual Treatments
+B.3. Steered Text Examples
+Qwen2.5 7B Instruct - Layer 15 - Feaure 32320 - Insults
+Condition α I Model Generation
+Baseline — -0.002 ”Hello. my name is XXXX. I’m calling on item six. I fully support this item, and I think in
+terms of consideration, it should not only extend to individual homes, but it should extend
+also to apartment-wide and city-wide properties. In terms of this, leaf blowers have a huge
+impact on people who are sensitive to air quality, especially in times of wildfire and unhealthy
+air quality levels. So I fully support and I would urge the city council to pass a measure so
+that we ban all leaf blowers.”
+Steered (Low) 0 -0.016 Thank you, XXXX, for your passionate advocacy on this important issue. I fully concur with
+your concerns about the impact of leaf blowers on air quality, particularly during wildfires. As
+someone who has experienced the detrimental effects of poor air quality firsthand, I strongly
+support a city-wide ban on leaf blowers. This measure would not only benefit those with
+respiratory sensitivities but also contribute to overall environmental health. I urge our council
+to take decisive action and pass this resolution.
+Steered (Mid) 0.2 -0.010 Good evening, XXXX. I appreciate your concern for air quality, but I must consider the
+broader impacts of such a ban. While leaf blowers might exacerbate issues for some, banning
+them could disproportionately affect businesses and homeowners who rely on them for
+maintenance. We need to find a balanced approach that considers both environmental
+concerns and practical needs. Perhaps we can explore alternatives like electric models or
+community clean-up days instead.
+Steered (High) 0.5 0.059 In your usual attempt to promote environmental obscurity, XXXX. Even in your so-called
+”wildfire” attempts, your advocacy remains irrelevant. Perhaps you’ll continue to recycle
+your failed attempts at relevance, hiding behind your ”leaf blower” fiasco.
+Neuronpedia Description: Insults using ”you”.
+15
+Causal Effect Estimation with Latent Textual Treatments
+Gemma 2 9B IT - Layer 20 - Feaure 9629 - Marxism
+Condition α I Model Generation
+Baseline — 0.001 ”Every day, focus on the needs of people and keep at it. For the first time in years, the
+governor raised graduation standards in math, science, and writing. Illinois will be the first
+state to guarantee access to quality health care for all of our children. He protected drug
+coverage for seniors, including my grandma. He raised the minimum wage. He expanded
+pre-k, and that really helped my children to learn. it’s wonderful to have a governor to fight
+for our children, our families.”
+Steered (Low) 0 0.014 This ad really makes me feel like this governor has been working hard for the people of
+Illinois. I’m especially impressed by the focus on education and healthcare. It’s encouraging
+to hear about higher graduation standards and guaranteed healthcare for children. My own
+kids have benefited from the expanded pre-K program, so I can personally attest to its positive
+impact. It’s nice to see a politician highlighting these important issues and showcasing their
+accomplishments.
+Steered (Mid) 0.2 0.044 This ad really gets me fired up! It’s inspiring to see a politician who’s actually fighting for
+the working class. Raising graduation standards, guaranteeing healthcare for all children,
+protecting seniors’ drug coverage, raising the minimum wage, and expanding pre-K – these
+are all things that directly benefit everyday people. It’s clear this governor is putting the
+needs of the people first, and that’s what we need in a leader. I’m definitely going to vote for
+them.
+Steered (High) 0.35 0.082 This ad really gets at the heart of what we need right now! It’s powerful to see the connection
+between the struggles of the working class and the fight for social justice. It’s inspiring to
+see a leader who is fighting for quality education, healthcare, and workers’ rights. The ad
+reminds me of the importance of building a movement, of uniting the working class and
+oppressed people to fight for a better future. We need to support this candidate and their fight
+against capitalism.
+Neuronpedia Description: References to Marxism and Leninism, particularly focusing on revolutionary theory and practice.
+16
+Causal Effect Estimation with Latent Textual Treatments
+C. LLM-as-Judge
+LLM-as-Judge
+Role: You are a Failure Mode Auditor for an AI steering experiment.
+Your objective is to quantify the structural health and contextual appropriateness
+of a generated response.
+### Evaluation Framework ###
+Compare the ’Original Input’ to the ’Steered Response’. A valid response must stay
+within the linguistic distribution of the input (same language, script, and logical
+consistency).
+**IMPORTANT**: You must disregard profanities, aggressive language, sentiment, tone,
+or any other stylistic artifacts. Very aggressive or derogatory language should
+still get a high score if the response is grammatically correct and relevant to the
+input.
+### The 0-3 Scoring Rubric ###
+Score 0: [NON-HUMAN / UNUSABLE]
+- Any response that could NOT be generated by a human in this context.
+- This includes: mechanical loops (3+ repetitions), character-level gibberish,
+sudden language/script shifts, broken word boundaries and complete out of context or
+non-sensical responses.
+Score 1: [MINIMAL USABILITY]
+- The text is technically readable but severely degraded. It is at the absolute
+limit
+of being functional. It may be repetitive in thought, feel like a broken ’stutter’.
+or deviate from the subject of the input in a very obvious and extreme way.
+- The text is functional but feels ’robotic’ or unnatural.
+Tokens or phrases are used in non-standard ways that disrupt the natural flow.
+Score 2: [PASSABLE / FUNCTIONAL]
+- A successful, functional response. It follows basic linguistic patterns and fits
+the context of the input, though it may be unremarkable or slightly dry.
+Score 3: [FLUID / ROBUST]
+- High-quality response. The text is fluid, contextually sharp, and reads easily.
+Minor technical artifacts (like double spaces) do not hinder the reader.
+- The model is fully stable. The text is a perfectly natural and contextually
+appropriate response to the Original Input. It reads exactly like a normal,
+human-like continuation (formal or informal).
+17
+Causal Effect Estimation with Latent Textual Treatments
+D. Proofs of Theoretical Results
+Proof of Proposition 7.1. We have that
+τ = E[Y (1) − Y (0)] = E[f(1, X⊥; ε) − f(0, X⊥; ε)]
+(⋆)
+= E[f(1, X⊥; ε)|Tϕ = 1] − E[f(0, X⊥; ε)|Tϕ = 0]
+= E[f(Tϕ, X⊥; ε)|Tϕ = 1] − E[f(Tϕ, X⊥; ε)|Tϕ = 0]
+= E[Y |Tϕ = 1] − E[Y |Tϕ = 0],
+where in (⋆) we have used the assumption stated in the proposition as well as independence of ε.
+Proof of Proposition 7.2. We have that
+τ = E[Y (1) − Y (0)] = E[f(1, X⊥; ε) − f(0, X⊥; ε)]
+= E[E[f(1, X⊥; ε)|X⊥] − E[f(0, X⊥; ε)|X⊥]]
+(⋆)
+= E[E[f(1, X⊥; ε)|Tϕ = 1, X⊥] − E[f(0, X⊥; ε)|Tϕ = 0, X⊥]]
+= E[E[f(Tϕ, X⊥; ε)|Tϕ = 1, X⊥] − E[f(Tϕ, X⊥; ε)|Tϕ = 0, X⊥]]
+= E[E[Y |Tϕ = 1, X⊥] − E[Y |Tϕ = 0, X⊥]],
+where for (⋆) we have again used the assumption stated in the proposition as well as independence of ε.
+Proof of Theorem 7.6. We have that
+τ (˜x) = E[Y (1) − Y (0)|X˜ = ˜x] = E[f(1, X⊥; ε) − f(0, X⊥; ε)|X˜ = ˜x]
+= E[E[f(1, X⊥; ε)|X⊥] − E[f(0, X⊥; ε)|X⊥]|X˜ = ˜x]
+= E[E[Y (1)|X⊥] − E[Y (0)|X⊥]|X˜ = ˜x] = E[µ1(X⊥)|X˜ = ˜x] − E[µ0(X⊥)|X˜ = ˜x]
+and likewise
+τ˜(˜x) = E[Y |Tϕ = 1, X˜ = ˜x] − E[Y |Tϕ = 0, X˜ = ˜x]
+= E[f(Tϕ, X⊥; ε)|Tϕ = 1, X˜ = ˜x] − E[f(Tϕ, X⊥; ε)|Tϕ = 0, X˜ = ˜x]
+= E[E[f(1, X⊥; ε)|X⊥]|Tϕ = 1, X˜ = ˜x] − E[E[f(0, X⊥; ε)|X⊥]|Tϕ = 0, X˜ = ˜x]
+= E[E[Y (1)|X⊥]|Tϕ = 1, X˜ = ˜x] − E[E[Y (0)|X⊥]|Tϕ = 0, X˜ = ˜x]
+= E[µ1(X⊥)|Tϕ = 1, X˜ = ˜x] − E[µ0(X⊥)|Tϕ = 0, X˜ = ˜x],
+where all statements here and below hold almost surely. In particular,
+|τ˜(˜x) − τ (˜x)| ≤ |E[µ1(X⊥)|X˜=˜x] − E[µ1(X⊥)|Tϕ=1, X˜=˜x]| + |E[µ0(X⊥)|X˜=˜x] − E[µ0(X⊥)|Tϕ=0, X˜=˜x]|.
+For a given t ∈ {0, 1},
+E[µt(X⊥)|X˜=˜x] − E[µt(X⊥)|Tϕ=t, X˜=˜x]
+= E[µt(X⊥)|Tϕ=t, X˜=˜x] P(Tϕ=t|X˜=˜x) + E[µt(X⊥)|Tϕ̸=t, X˜=˜x] (1 − P(Tϕ=t|X˜=˜x))
+− E[µt(X⊥)|Tϕ=t, X˜=˜x]
+= (1 − P(Tϕ=t|X˜=˜x))(E[µt(X⊥)|Tϕ=t, X˜=˜x] − E[µt(X⊥)|Tϕ̸=t, X˜=˜x]).
+Therefore,
+|τ˜(˜x) − τ (˜x)| ≤P(Tϕ=0|X˜=˜x) |E[µ1(X⊥)|Tϕ=1, X˜=˜x] − E[µ1(X⊥)|Tϕ=0, X˜=˜x]|
++ P(Tϕ=1|X˜=˜x) |E[µ0(X⊥)|Tϕ=1, X˜=˜x] − E[µ0(X⊥)|Tϕ=0, X˜=˜x]|.
+18
+Causal Effect Estimation with Latent Textual Treatments
+Let (X⊥
+1
+, X⊥
+0
+) ∼ γ ∈ Γ(ν1(˜x), ν0(˜x)), where Γ(ν1(˜x), ν0(˜x)) are the couplings of ν1(˜x), ν0(˜x). (In particular, X⊥
+1 ∼
+ν1(˜x), X⊥
+0 ∼ ν0(˜x).) Then, for this γ,
+|E[µt(X⊥)|Tϕ=1, X˜=˜x] − E[µt(X⊥)|Tϕ=0, X˜=˜x]| = |Eγ[µt(X⊥
+1
+)] − Eγ[µt(X⊥
+0
+)]|
+≤ Eγ[|µt(X⊥
+1
+) − µt(X⊥
+0
+)|] ≤ L Eγ[d(X⊥
+1
+, X⊥
+0
+)]
+by Assumption 7.5. In particular,
+
+
+
+E[µt(X⊥)|Tϕ=1, X˜=˜x] − E[µt(X⊥)|Tϕ=0, X˜=˜x]
+
+
+
+≤ L inf
+γ∈Γ(ν1(˜x),ν0(˜x))
+Eγ[d(X⊥
+1
+, X⊥
+0
+)] = W
+(d)
+1
+(ν1(˜x), ν0(˜x)) ≤ L δ
+by Assumption 7.4, so
+|τ˜(˜x) − τ (˜x)| ≤ P(Tϕ=0|X˜=˜x) L δ + P(Tϕ=1|X˜=˜x) L δ = L δ
+almost surely.
+E. Empirical Specifications and Robustness Checks
+E.1. Data Generating Process
+We randomly partition the columns of Xe into four sets, Xe = [Xe 1, Xe 2, Xe 3, Xe 4] and synthesize our outcome y as follows:
+τ (˜xi) = Γ + g1
+
+1
+m
+x˜
+⊤
+i,11m
+
++ g2
+
+1
+m
+x˜
+⊤
+i,21m
+
+µ0(˜xi) = g3
+
+1
+m
+x˜
+⊤
+i,31m
+
++ g4
+
+1
+m
+x˜
+⊤
+i,41m
+
+yi = µ0(˜xi) + τ (˜xi)Tϕ,i + ϵi
+, ϵi
+iid∼ N (0, σ2
+)
+Where i denotes the document, xi,j denotes the vector of elements in row i of the matrix Xe corresponding to columns in
+the subset Xe j , and 1m denotes the vector of ones of length m. Note that by this construction, the true ATE is Γ in this
+simulation. This construction allows for generic choices of (possibly nonlinear) functions g1, g2, g3, g4.
+We demonstrate insensitivity of our key results to the choice of these functional forms by randomly selecting each from a set
+of linear and nonlinear functions. In particular, we consider a set of four scalar multiples, M = {1, 50, 100, 200} and four
+functional forms, F = {sin(x),tanh(x), x2
+, x}. We then construct 200 unique combinations of functional forms for our
+four functions by randomly sampling from (M × F)
+4
+, without replacement. For example, one such specification may be
+g1(x) = 50 sin(x), g2(x) = 100x
+2
+, g3(x) = x, g4(x) = 50 sin(x). This randomly sampled set of 200 combinations is held
+constant across all LLMs, datasets, and SAE layers/features. Summary results aggregated across all such runs are presented
+in Section 8. Full reuslts with various levels of aggregation can be seen in the following subsections. These tables show the
+average magnitude of the ATE bias and the average CATE RMSE in produced by the CATE estimation procedure, compared
+against the true simulated CATE in each case. The average is taken over the 200 DGP functional forms combinations. In all
+simulations, the true ATE Γ = 5 and the standard deviation of the noise terms σ = 0.1. The specification for the simulation
+in Figure 3 is g1(x) = 100 sin(x), g2(x) = 100 tanh(x), g3(x) = 100x
+2
+, g4(x) = 100x.
+E.2. Robustness Checks
+The following tables present measures of the performance of CATE estimation in the context of our semisynthetic simulations,
+comparing the use of raw covariates X to residualized covariates Xe , at varying levels of aggregation. We consider both
+proposed forms of residualization: dimension-by-dimension (Xe DD) and dropping the first principal component (Xe Drop).
+19
+Causal Effect Estimation with Latent Textual Treatments
+Features with IC > 0.5
+Table 2. CATE estimation performance by LLM (averages ± standard deviations).
+LLM |BIAS| (X) |BIAS| (Xe DD ) |BIAS| (Xe DROP ) RMSE (X) RMSE (Xe DD ) RMSE (Xe DROP )
+GEMMA 2 9B IT 4.25 ± 0.7 1.22 ± 0.9 1.18 ± 0.7 4.58 ± 0.5 2.06 ± 0.9 2.12 ± 0.8
+LLAMA 3.1 8B INSTRUCT 3.89 ± 1.0 1.44 ± 1.1 1.01 ± 0.7 4.36 ± 0.7 2.39 ± 1.0 1.97 ± 0.7
+QWEN 2.5 7B INSTRUCT 4.08 ± 1.0 1.58 ± 1.1 1.13 ± 0.7 4.47 ± 0.7 2.48 ± 1.1 2.13 ± 0.8
+Table 3. CATE estimation performance by embedding model (averages ± standard deviations).
+EMBEDDING MODEL |BIAS| (X) |BIAS| (Xe DD ) |BIAS| (Xe DROP ) RMSE (X) RMSE (Xe DD ) RMSE (Xe DROP )
+EMBEDDINGGEMMA-300M 4.43 ± 0.7 1.56 ± 1.0 1.17 ± 0.8 4.69 ± 0.5 2.45 ± 0.9 2.1 ± 0.8
+ALL-MINILM-L6-V2 3.99 ± 0.9 1.20 ± 0.9 1.08 ± 0.7 4.46 ± 0.7 2.14 ± 0.9 2.09 ± 0.7
+ALL-MPNET-BASE-V2 3.80 ± 1.0 1.47 ± 1.2 1.07 ± 0.6 4.26 ± 0.7 2.33 ± 1.1 2.03 ± 0.7
+Table 4. CATE estimation performance by dataset (averages ± standard deviations).
+DATASET |BIAS| (X) |BIAS| (Xe DD ) |BIAS| (Xe DROP ) RMSE (X) RMSE (Xe DD ) RMSE (Xe DROP )
+LOCAL GOVT SPEECH 3.89 ± 1.0 1.0 ± 0.7 0.78 ± 0.5 4.33 ± 0.8 1.94 ± 0.8 1.74 ± 0.7
+POLITICAL ADS 4.38 ± 0.5 2.14 ± 1.1 1.37 ± 0.8 4.67 ± 0.4 2.95 ± 1.0 2.27 ± 0.9
+US VS. THEM 3.99 ± 1.0 1.17 ± 0.8 1.2 ± 0.6 4.43 ± 0.7 2.1 ± 0.9 2.24 ± 0.6
+Table 5. CATE estimation performance by layer position (averages ± standard deviations).
+FEATURE DEPTH |BIAS| (X) |BIAS| (Xe DD ) |BIAS| (Xe DROP ) RMSE (X) RMSE (Xe DD ) RMSE (Xe DROP )
+EARLY 3.88 ± 0.9 1.59 ± 1.3 0.95 ± 0.7 4.37 ± 0.6 2.49 ± 1.2 1.97 ± 0.8
+MIDDLE 4.27 ± 0.7 1.42 ± 0.8 1.15 ± 0.7 4.6 ± 0.5 2.34 ± 0.8 2.08 ± 0.8
+LATE 4.0 ± 1.1 1.26 ± 1.0 1.17 ± 0.6 4.39 ± 0.8 2.12 ± 1.0 2.14 ± 0.7
+20
+Causal Effect Estimation with Latent Textual Treatments
+Features with IC < 0.5
+Table 6. CATE estimation performance by LLM (averages ± standard deviations).
+LLM |BIAS| (X) |BIAS| (Xe DD ) |BIAS| (Xe DROP ) RMSE (X) RMSE (Xe DD ) RMSE (Xe DROP )
+GEMMA 2 9B IT 2.33 ± 1.9 0.27 ± 0.2 0.62 ± 0.3 2.91 ± 1.7 1.18 ± 0.4 1.51 ± 0.5
+LLAMA 3.1 8B INSTRUCT 1.76 ± 0.8 0.47 ± 0.5 1.07 ± 0.5 2.88 ± 0.9 1.57 ± 0.7 2.24 ± 0.6
+QWEN 2.5 7B INSTRUCT 1.78 ± 1.2 379.38 ± 1278.9 0.8 ± 0.7 2.7 ± 1.1 1.74e5 ± 5.0e5 1.71 ± 0.8
+Table 7. CATE estimation performance by embedding model (averages ± standard deviations).
+EMBEDDING MODEL |BIAS| (X) |BIAS| (Xe DD ) |BIAS| (Xe DROP ) RMSE (X) RMSE (Xe DD ) RMSE (Xe DROP )
+EMBEDDINGGEMMA-300M 2.2 ± 1.4 219.95 ± 1058.4 0.99 ± 0.8 2.98 ± 1.2 9.07e4 ± 3.6e5 1.95 ± 0.8
+ALL-MINILM-L6-V2 1.84 ± 1.3 1.0 ± 1.4 0.76 ± 0.4 2.8 ± 1.3 2.0 ± 1.3 1.77 ± 0.7
+ALL-MPNET-BASE-V2 1.79 ± 1.3 206.55 ± 889.2 0.73 ± 0.4 2.68 ± 1.3 1.05e5 ± 4.1e5 1.72 ± 0.7
+Table 8. CATE estimation performance by dataset (averages ± standard deviations).
+DATASET |BIAS| (X) |BIAS| (Xe DD ) |BIAS| (Xe DROP ) RMSE (X) RMSE (Xe DD ) RMSE (Xe DROP )
+LOCAL GOVT SPEECH 3.14 ± 1.1 568.13 ± 1531.9 1.01 ± 0.7 3.84 ± 0.8 2.61e5 ± 6.0e5 2.07 ± 0.8
+POLITICAL ADS 0.88 ± 0.7 0.38 ± 0.5 0.59 ± 0.4 1.85 ± 1.0 1.32 ± 0.7 1.52 ± 0.7
+US VS. THEM 2.48 ± 1.1 0.97 ± 1.3 1.01 ± 0.5 3.37 ± 0.9 1.9 ± 1.2 2.03 ± 0.6
+Table 9. CATE estimation performance by layer position (averages ± standard deviations).
+FEATURE DEPTH |BIAS| (X) |BIAS| (Xe DD ) |BIAS| (Xe DROP ) RMSE (X) RMSE (Xe DD ) RMSE (Xe DROP )
+EARLY 2.38 ± 1.0 227.84 ± 1007.8 1.03 ± 0.6 3.35 ± 0.8 1.04e5 ± 4.0e5 2.1 ± 0.7
+MIDDLE 4.50 ± 0.1 0.48 ± 0.1 0.69 ± 0.1 4.77 ± 0.1 1.51 ± 0.3 1.84 ± 0.2
+LATE 0.55 ± 0.4 0.21 ± 0.3 0.46 ± 0.4 1.38 ± 0.5 1.02 ± 0.5 1.24 ± 0.5
+21

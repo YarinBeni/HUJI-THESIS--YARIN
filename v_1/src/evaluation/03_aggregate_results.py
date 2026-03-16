@@ -49,9 +49,8 @@ def load_cache(cache_path: Path) -> pd.DataFrame:
                     'model': data.get('model', cache_path.stem),
                     'pred_period': pred.get('period', 'Unknown'),
                     'pred_century': pred.get('century_estimate', 'Unknown'),
-                    'pred_domain': pred.get('domain', 'Unknown'),
                     'pred_place': pred.get('place_discovery', 'Unknown'),
-                    'pred_confidence': pred.get('confidence', 'Unknown'),
+                    'pred_catalog_id': pred.get('catalog_id', 'Unknown'),
                     'pred_reasoning': pred.get('reasoning', ''),
                     'input_tokens': usage.get('prompt_tokens', 0),
                     'output_tokens': usage.get('completion_tokens', 0),
@@ -114,7 +113,7 @@ def main():
     print(f"  Loaded {len(ground_truth):,} texts")
 
     # Select ground truth columns
-    gt_cols = ['fragment_id', 'temporal_group', 'period', 'period_approx',
+    gt_cols = ['fragment_id', 'temporal_group', 'period',
                'domain_standard', 'domain_finegrained', 'place_discovery', 'corpus_source']
     ground_truth = ground_truth[[c for c in gt_cols if c in ground_truth.columns]]
 
@@ -122,7 +121,6 @@ def main():
     ground_truth = ground_truth.rename(columns={
         'period': 'true_period',
         'temporal_group': 'true_temporal_group',
-        'period_approx': 'true_period_approx',
         'domain_standard': 'true_domain',
         'domain_finegrained': 'true_domain_fine',
         'place_discovery': 'true_place',
@@ -161,9 +159,8 @@ def main():
         rename_cols = {
             'pred_period': f'pred_period{model_suffix}',
             'pred_century': f'pred_century{model_suffix}',
-            'pred_domain': f'pred_domain{model_suffix}',
             'pred_place': f'pred_place{model_suffix}',
-            'pred_confidence': f'pred_confidence{model_suffix}',
+            'pred_catalog_id': f'pred_catalog_id{model_suffix}',
             'pred_reasoning': f'pred_reasoning{model_suffix}',
             'input_tokens': f'input_tokens{model_suffix}',
             'output_tokens': f'output_tokens{model_suffix}',
