@@ -27,14 +27,18 @@
 v_1/
 ├── src/
 │   ├── evaluation/       # Track A pipeline (LLM baseline via OpenRouter)
-│   ├── preprocessing/    # Corpus preparation scripts
+│   ├── corpus/           # Full Akkadian corpus pipeline (download → unified)
 │   ├── cluster/          # Schmidt Sciences cluster scripts
-│   ├── analysis/         # Analysis scripts
-│   └── training/         # Phase 1 MLM training (superseded)
+│   └── archive/          # Phase 1 MLM training code (superseded)
 ├── data/
-│   ├── evaluation_corpora/   # 4,957 texts, LLM predictions, metrics
-│   └── processed/            # Chunrong's normalized CSVs + unified dataset
-└── notebooks/                # EDA notebooks (01–04)
-justification/                # Documented decisions for thesis/paper
-RESEARCH_LOG.md               # Condensed milestone + results history
+│   ├── raw/              # Source data (eBL zips, CDLI dump, Chungrong CSVs)
+│   ├── processed/        # Per-source parquets: ebl/, oracc/, archibab/
+│   ├── unified/          # Merged corpus + train/val/test splits
+│   ├── training_ready/   # Tokenized fragment parquets + vocab.json
+│   ├── evaluation/       # corpora/ (test sets) + baselines/ (model outputs)
+│   ├── analysis_outputs/ # Plots and JSON from analysis scripts
+│   └── external/         # External reference data
+└── notebooks/            # EDA notebooks (01–04)
+justification/            # Documented decisions for thesis/paper
+RESEARCH_LOG.md           # Condensed milestone + results history
 ```

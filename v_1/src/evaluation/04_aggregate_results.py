@@ -6,8 +6,8 @@ Reads all model prediction caches and combines into a single table
 with ground truth labels for evaluation.
 
 Usage:
-    python 03_aggregate_results.py
-    python 03_aggregate_results.py --models gpt-oss-20b qwen-2.5-72b  # Specific models
+    python 04_aggregate_results.py
+    python 04_aggregate_results.py --models gpt-oss-20b qwen-2.5-72b  # Specific models
 """
 import argparse
 import json
@@ -90,7 +90,7 @@ def main():
     cache_files = get_available_caches()
     if not cache_files:
         print("\nNo cache files found in", CACHE_DIR)
-        print("Run 02_llm_baseline.py first to generate predictions.")
+        print("Run 03_llm_baseline.py first to generate predictions.")
         sys.exit(1)
 
     print(f"\nFound {len(cache_files)} cache files:")

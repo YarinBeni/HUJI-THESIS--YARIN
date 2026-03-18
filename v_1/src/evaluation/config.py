@@ -10,19 +10,23 @@ from pathlib import Path
 # =============================================================================
 BASE_DIR = Path(__file__).parent.parent.parent
 DATA_DIR = BASE_DIR / "data"
-EVAL_DIR = DATA_DIR / "evaluation_corpora"
-CACHE_DIR = EVAL_DIR / "cache"
+EVAL_DIR = DATA_DIR / "evaluation"
+CORPORA_DIR = EVAL_DIR / "corpora"
+BASELINES_DIR = EVAL_DIR / "baselines"
+CACHE_DIR = BASELINES_DIR / "cache"
 
 # Source data
-SOURCE_PARQUET = EVAL_DIR / "unified_3groups_akkadian_letters.parquet"
+SOURCE_PARQUET = CORPORA_DIR / "unified_3groups_akkadian_letters.parquet"
 
-# Output files
-TEXTS_PARQUET = EVAL_DIR / "texts_for_evaluation.parquet"
-TEXTS_JSONL = EVAL_DIR / "texts_for_evaluation.jsonl"
-TOKEN_STATS_JSON = EVAL_DIR / "texts_token_stats.json"
-PREDICTIONS_PARQUET = EVAL_DIR / "baseline_predictions.parquet"
-RESULTS_REPORT_MD = EVAL_DIR / "baseline_results_report.md"
-METRICS_JSON = EVAL_DIR / "baseline_metrics.json"
+# Corpus output files (written by 01_create_corpus.py / 02_prepare_texts.py)
+TEXTS_PARQUET = CORPORA_DIR / "texts_for_evaluation.parquet"
+TEXTS_JSONL = CORPORA_DIR / "texts_for_evaluation.jsonl"
+TOKEN_STATS_JSON = CORPORA_DIR / "texts_token_stats.json"
+
+# Baseline output files (written by 04_aggregate_results.py / 05_evaluate_baseline.py)
+PREDICTIONS_PARQUET = BASELINES_DIR / "baseline_predictions.parquet"
+RESULTS_REPORT_MD = BASELINES_DIR / "baseline_results_report.md"
+METRICS_JSON = BASELINES_DIR / "baseline_metrics.json"
 
 # =============================================================================
 # Model Registry

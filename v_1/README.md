@@ -8,21 +8,30 @@ Current working directory for the thesis. All active code and data live here.
 v_1/
 ├── src/
 │   ├── evaluation/       # Track A: LLM baseline pipeline (OpenRouter API)
-│   ├── preprocessing/    # Corpus preparation (merge, filter, normalize)
+│   ├── corpus/           # Full Akkadian corpus pipeline (download → unified)
 │   ├── cluster/          # Schmidt Sciences cluster scripts
-│   ├── analysis/         # Embedding + manifold analysis (Track B)
-│   └── training/         # Phase 1 MLM training artifacts (superseded)
+│   └── archive/          # Superseded MLM training code
 ├── data/
-│   ├── evaluation_corpora/   # Final evaluation corpus + LLM predictions
-│   │   ├── texts_for_evaluation.parquet / .jsonl   # 4,957 texts, text-level
-│   │   ├── unified_3groups_akkadian_letters.parquet # Word-level unified corpus
-│   │   ├── baseline_predictions.parquet             # Aggregated LLM predictions
-│   │   ├── baseline_metrics.json                    # Accuracy / F1 results
-│   │   └── cache/                                   # Per-model prediction caches
+│   ├── raw/
+│   │   ├── chungrong/        # Normalized source CSVs from Chungrong (archibab, oracc, lbl)
+│   │   ├── cdli/             # CDLI catalogue + ATF dump
+│   │   └── zip/              # Original downloaded archives (read-only)
 │   ├── processed/
-│   │   ├── from_chungrong/   # Normalized source CSVs (archibab, oracc, lbl)
-│   │   └── unified/          # Full unified corpus (Phase 1 training data)
-│   └── raw/                  # Original downloaded data (read-only)
+│   │   ├── ebl/              # Processed eBL corpus (one row per word)
+│   │   ├── oracc/            # Processed ORACC corpus (one row per word)
+│   │   └── archibab/         # Processed Archibab corpus (one row per word)
+│   ├── unified/              # Merged corpus + train/val/test splits (one row per word)
+│   ├── training_ready/       # Tokenized fragment parquets + vocab.json (model input)
+│   ├── evaluation/           # Evaluation data (corpora + baseline results)
+│   │   ├── corpora/          # Evaluation test sets (input to LLM pipeline)
+│   │   │   ├── texts_for_evaluation.parquet / .jsonl   # 4,957 texts, text-level
+│   │   │   └── unified_3groups_akkadian_letters.parquet # Word-level unified corpus
+│   │   └── baselines/        # Baseline model outputs
+│   │       ├── baseline_predictions.parquet             # Aggregated LLM predictions
+│   │       ├── baseline_metrics.json                    # Accuracy / F1 results
+│   │       └── cache/                                   # Per-model prediction caches
+│   ├── analysis_outputs/     # Plots and JSON from analysis scripts
+│   └── external/             # External reference data
 └── notebooks/
     ├── 01_data_exploration.ipynb     # eBL + Archibab EDA
     ├── 02_unified_dataset_eda.ipynb  # Unified dataset EDA
@@ -36,8 +45,8 @@ See `src/evaluation/README.md` for full instructions. Quick start:
 
 ```bash
 export OPENROUTER_API_KEY="your-key"
-python v_1/src/evaluation/02_llm_baseline.py --model gpt-oss-20b --dry-run
-python v_1/src/evaluation/02_llm_baseline.py --model gpt-oss-20b
+python v_1/src/evaluation/03_llm_baseline.py --model gpt-oss-20b --dry-run
+python v_1/src/evaluation/03_llm_baseline.py --model gpt-oss-20b
 ```
 
 All commands run from repo root (`lititure-review/`).
@@ -46,9 +55,9 @@ All commands run from repo root (`lititure-review/`).
 
 | File | Description |
 |------|-------------|
-| `data/evaluation_corpora/texts_for_evaluation.jsonl` | 4,957 Akkadian texts ready for LLM evaluation |
-| `data/processed/from_chungrong/*.csv` | Normalized source data from Chunrong Ni |
-| `data/evaluation_corpora/baseline_predictions.parquet` | Aggregated predictions from all models run so far |
+| `data/evaluation/corpora/texts_for_evaluation.jsonl` | 4,957 Akkadian texts ready for LLM evaluation |
+| `data/raw/chungrong/*.csv` | Normalized source data from Chunrong Ni |
+| `data/evaluation/baselines/baseline_predictions.parquet` | Aggregated predictions from all models run so far |
 
 ## Documentation
 

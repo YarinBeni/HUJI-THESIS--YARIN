@@ -22,7 +22,8 @@ from config import (
     TEXTS_PARQUET,
     TEXTS_JSONL,
     TOKEN_STATS_JSON,
-    EVAL_DIR,
+    CORPORA_DIR,
+    BASELINES_DIR,
     CACHE_DIR,
 )
 
@@ -95,7 +96,8 @@ def main():
     print("=" * 60)
 
     # Ensure output directories exist
-    EVAL_DIR.mkdir(parents=True, exist_ok=True)
+    CORPORA_DIR.mkdir(parents=True, exist_ok=True)
+    BASELINES_DIR.mkdir(parents=True, exist_ok=True)
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
     # Load source data

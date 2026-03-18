@@ -396,7 +396,7 @@ if __name__ == "__main__":
     print("Testing data_utils.py...")
 
     # Load a small sample
-    train_path = "v_1/data/processed/unified/train.parquet"
+    train_path = "v_1/data/unified/train.parquet"
     df = pd.read_parquet(train_path)
 
     print(f"Loaded {len(df):,} rows")

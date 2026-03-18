@@ -183,48 +183,48 @@ These 3 models are evaluated in Track A, probed for temporal representations in 
 
 ```bash
 # Phase A: Free models (refine prompt)
-python 02_llm_baseline.py --model gpt-oss-20b --sample 100
-python 02_llm_baseline.py --model gpt-oss-120b --sample 100
-python 02_llm_baseline.py --model deepseek-r1-0528-free --sample 100
-python 02_llm_baseline.py --model mistral-small-3.1-free --sample 100
-python 02_llm_baseline.py --model llama-3.3-70b-free --sample 100
-python 02_llm_baseline.py --model qwen3-next-80b-free --sample 100
+python 03_llm_baseline.py --model gpt-oss-20b --sample 100
+python 03_llm_baseline.py --model gpt-oss-120b --sample 100
+python 03_llm_baseline.py --model deepseek-r1-0528-free --sample 100
+python 03_llm_baseline.py --model mistral-small-3.1-free --sample 100
+python 03_llm_baseline.py --model llama-3.3-70b-free --sample 100
+python 03_llm_baseline.py --model qwen3-next-80b-free --sample 100
 
 # >> REVIEW WITH MENTORS, FINALIZE PROMPT <<
 
 # Phase B: Open-source Small+Mid (full corpus ~5K texts)
-python 02_llm_baseline.py --model qwen-2.5-7b          # ★ SAE model
-python 02_llm_baseline.py --model qwen3-32b
-python 02_llm_baseline.py --model llama-3.1-8b          # ★ SAE model
-python 02_llm_baseline.py --model llama-3.3-70b
-python 02_llm_baseline.py --model deepseek-chat-v3.1
-python 02_llm_baseline.py --model deepseek-v3.2
-python 02_llm_baseline.py --model gemma-2-9b-it         # ★ SAE model
-python 02_llm_baseline.py --model gemma-2-27b-it
+python 03_llm_baseline.py --model qwen-2.5-7b          # ★ SAE model
+python 03_llm_baseline.py --model qwen3-32b
+python 03_llm_baseline.py --model llama-3.1-8b          # ★ SAE model
+python 03_llm_baseline.py --model llama-3.3-70b
+python 03_llm_baseline.py --model deepseek-chat-v3.1
+python 03_llm_baseline.py --model deepseek-v3.2
+python 03_llm_baseline.py --model gemma-2-9b-it         # ★ SAE model
+python 03_llm_baseline.py --model gemma-2-27b-it
 
 # Phase C: Open-source Large
-python 02_llm_baseline.py --model qwen-2.5-72b
-python 02_llm_baseline.py --model deepseek-r1-distill-llama-70b
-python 02_llm_baseline.py --model hermes-3-llama-405b
+python 03_llm_baseline.py --model qwen-2.5-72b
+python 03_llm_baseline.py --model deepseek-r1-distill-llama-70b
+python 03_llm_baseline.py --model hermes-3-llama-405b
 
 # Phase D: Commercial
 # Small tier
-python 02_llm_baseline.py --model gpt-4o-mini
-python 02_llm_baseline.py --model claude-3-haiku
-python 02_llm_baseline.py --model gemini-2.0-flash
-python 02_llm_baseline.py --model grok-4-fast
+python 03_llm_baseline.py --model gpt-4o-mini
+python 03_llm_baseline.py --model claude-3-haiku
+python 03_llm_baseline.py --model gemini-2.0-flash
+python 03_llm_baseline.py --model grok-4-fast
 
 # Mid tier
-python 02_llm_baseline.py --model gpt-4o
-python 02_llm_baseline.py --model claude-sonnet-4.5
-python 02_llm_baseline.py --model gemini-3-flash
-python 02_llm_baseline.py --model grok-3-mini
+python 03_llm_baseline.py --model gpt-4o
+python 03_llm_baseline.py --model claude-sonnet-4.5
+python 03_llm_baseline.py --model gemini-3-flash
+python 03_llm_baseline.py --model grok-3-mini
 
 # Large/SOTA tier
-python 02_llm_baseline.py --model gpt-5.1
-python 02_llm_baseline.py --model claude-opus-4.6
-python 02_llm_baseline.py --model gemini-3-pro
-python 02_llm_baseline.py --model grok-4
+python 03_llm_baseline.py --model gpt-5.1
+python 03_llm_baseline.py --model claude-opus-4.6
+python 03_llm_baseline.py --model gemini-3-pro
+python 03_llm_baseline.py --model grok-4
 ```
 
 ---

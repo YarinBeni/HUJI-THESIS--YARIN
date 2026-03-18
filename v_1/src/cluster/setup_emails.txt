@@ -1,0 +1,54 @@
+
+
+---
+We will be offering awardees access to the Schmidt Sciences’ research cluster to cover compute needs throughout the duration of the development award. This cluster consists of 8 servers located in a U.S. data center, with a total of 64 NVIDIA H100 80GB GPUs, 832 Intel Xeon Platinum 8470 CPUs, 8 TB of DDR5 system RAM, and 500 TB of shared NFS storage.  These resources are managed through the Slurm workload management system, which is accessible via a secure, MFA-protected web browser command line interface.  
+
+On-boarding Form: In order to on-board your project to the research cluster, please complete this form on or before February 5th, 2026. 
+
+Webinar: We also invite you to attend the informational webinar to discuss the on-boarding process to the cluster. We will record the webinar and share it with all users after the webinar session. If you have any questions, please reach out to our team at compute@schmidtsciences.org. 
+
+Wednesday, February 4th from 3:00-4:00pm ET – Sign up here
+
+Thursday, February 12th from 10:00-11:00am ET – Sign up here
+
+
+----
+Dear Schmidt Sciences Grantee,
+
+
+Welcome to the Schmidt Sciences’ NVIDIA Hopper 100 Compute Cluster. We have created a user account for you on the cluster. You can set your account password and access the system via a convenient web UI interface at https://schmidtsciences.parallel.works/. Please follow the steps below to make your account:
+
+During the initial on-boarding login, please read through the User Legal Terms and Conditions and acknowledge your understanding and acceptance of the Terms by clicking on the password login button. 
+
+Once you have agreed, click the “Forgot password?” button. Submit the password reset request using the same email address with which you registered for cluster access (i.e., should be the same email address as where we sent this notice). 
+
+Check your email for the password reset link (it should only take a minute or two for the reset token to be sent to you), and then follow the instructions to set your password. 
+
+Please Note: You will be required to configure a two-factor authentication (2FA) access method as part of this workflow. Feel free to use any standard 2FA mobile application that you normally use.
+
+
+Once you’ve logged into the web UI, you can transfer files and source code into your home directory (and we can assist you with setting up shared spaces for collaboration). The most performant approach for large data transfers is to initiate a download request from the Schmidt Sciences cluster, however you can also use SSH to transfer smaller code repositories and samples. Instructions for submitting Slurm workloads are available from https://parallelworks.com/docs/compute/submitting-jobs
+
+
+The Parallel Works Command Line Interface (CLI) utility may be useful for daily work with the cluster. Here are the relevant documentation links to consider:
+
+Overview: https://parallelworks.com/docs/cli
+
+Authentication: https://parallelworks.com/docs/cli/pw/auth
+
+SSH: https://parallelworks.com/docs/cli/pw/ssh
+
+
+Once your local instance of the CLI is configured and authorized, you should be able to issue this command from your local Linux, MacOS, or Windows terminal environment to connect directly to the Slurm headnode from your workstation:
+
+
+pw ssh schmidt
+
+
+You can then use regular Slurm commands to submit jobs, track their progress, etc.
+
+
+We’re very excited to offer this compute resource as part of your Schmidt Sciences award, and look forward to your feedback and recommendations on adjusting system parameters and services to better support your work. We will reach out during your usage period to learn about your experience using the cluster and improvements for the future. Please feel free to contact us at compute@schmidtsciences.org with any questions and concerns.
+
+
+Best,

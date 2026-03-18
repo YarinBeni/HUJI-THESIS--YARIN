@@ -10,8 +10,8 @@ Computes evaluation metrics for LLM baseline predictions:
 - Cross-model comparison
 
 Usage:
-    python 04_evaluate_baseline.py
-    python 04_evaluate_baseline.py --models gpt-oss-20b qwen-2.5-72b
+    python 05_evaluate_baseline.py
+    python 05_evaluate_baseline.py --models gpt-oss-20b qwen-2.5-72b
 """
 import argparse
 import json
@@ -380,7 +380,7 @@ def main():
     # Load predictions
     if not PREDICTIONS_PARQUET.exists():
         print(f"\nError: {PREDICTIONS_PARQUET} not found")
-        print("Run 03_aggregate_results.py first.")
+        print("Run 04_aggregate_results.py first.")
         sys.exit(1)
 
     print(f"\nLoading predictions from {PREDICTIONS_PARQUET}...")

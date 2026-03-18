@@ -8,10 +8,10 @@ Combines:
 - ORACC corpus (v_1/data/processed/oracc/oracc_corpus.parquet)
 
 Output:
-- v_1/data/processed/unified/unified_corpus.parquet (all data)
-- v_1/data/processed/unified/train.parquet (80%)
-- v_1/data/processed/unified/val.parquet (10%)
-- v_1/data/processed/unified/test.parquet (10%)
+- v_1/data/unified/unified_corpus.parquet (all data)
+- v_1/data/unified/train.parquet (80%)
+- v_1/data/unified/val.parquet (10%)
+- v_1/data/unified/test.parquet (10%)
 
 The split is done at the fragment/text level to ensure no data leakage.
 """
@@ -195,7 +195,7 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         '--output_dir',
-        default=str(script_dir / 'data/processed/unified'),
+        default=str(script_dir / 'data/unified'),
         help='Output directory for unified dataset'
     )
 

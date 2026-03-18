@@ -65,7 +65,7 @@ He validated that the **5,005-text corpus** is appropriate for evaluation.
 
 ## Implementation
 
-The filtering is implemented in [`v_1/src/preprocessing/06_create_test_letters_copra.py`](../../v_1/src/preprocessing/06_create_test_letters_copra.py) at lines 44-51:
+The filtering is implemented in [`v_1/src/evaluation/01_create_corpus.py`](../../v_1/src/evaluation/01_create_corpus.py) at lines 44-51:
 
 ```python
 # STEP 3: Filter Group 2 (oracc) for letters only
@@ -139,8 +139,8 @@ For full details of all cleaning decisions and justifications, see: [Chunrong Da
 ## Related Files
 
 - Source data: [`v_1/data/processed/from_chungrong/`](../../v_1/data/processed/from_chungrong/)
-- Preprocessing script: [`v_1/src/preprocessing/06_create_test_letters_copra.py`](../../v_1/src/preprocessing/06_create_test_letters_copra.py)
+- Preprocessing script: [`v_1/src/evaluation/01_create_corpus.py`](../../v_1/src/evaluation/01_create_corpus.py)
 - Evaluation corpus: [`v_1/data/evaluation_corpora/unified_3groups_akkadian_letters.parquet`](../../v_1/data/evaluation_corpora/unified_3groups_akkadian_letters.parquet)
-- Text preparation: [`v_1/src/evaluation/01_prepare_texts.py`](../../v_1/src/evaluation/01_prepare_texts.py)
+- Text preparation: [`v_1/src/evaluation/02_prepare_texts.py`](../../v_1/src/evaluation/02_prepare_texts.py)
 - Domain cleanup notebook: [`v_1/notebooks/04_eda_evaluation.ipynb`](../../v_1/notebooks/04_eda_evaluation.ipynb) (Section 13-14)
 - Data cleaning decisions: [chunrong_data_cleaning_decisions.md](chunrong_data_cleaning_decisions.md)

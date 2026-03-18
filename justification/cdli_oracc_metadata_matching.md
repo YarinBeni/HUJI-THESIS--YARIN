@@ -162,9 +162,9 @@ For the embedding evaluation, we need same-genre texts from different periods:
 
 | Script | Purpose |
 |--------|---------|
-| `v_1/src/analysis/corpus_diagnostic.py` | Initial metadata analysis |
-| `v_1/src/analysis/oracc_catalog_explorer.py` | ORACC project catalog exploration |
-| `v_1/src/analysis/cdli_period_matcher.py` | CDLI P-number matching |
+| `v_1/src/corpus/06_corpus_diagnostic.py` | Initial metadata analysis |
+| `v_1/src/corpus/09_oracc_catalog_explorer.py` | ORACC project catalog exploration |
+| `v_1/src/corpus/07_cdli_period_matcher.py` | CDLI P-number matching |
 
 ---
 

@@ -84,7 +84,7 @@ def verify_source_parquets(data_dir: Path):
             print()
 
 
-def verify_unified_dataset(data_dir: Path):
+def verify_unified_dataset(unified_dir: Path):
     """
     STEP 2: Verify the unified dataset (merged sources, still one row per word).
 
@@ -92,10 +92,10 @@ def verify_unified_dataset(data_dir: Path):
     """
     print_header("STEP 2: UNIFIED DATASET (Merged Sources, One Row Per Word)")
 
-    unified_path = data_dir / 'unified' / 'unified_corpus.parquet'
+    unified_path = unified_dir / 'unified_corpus.parquet'
 
     if not unified_path.exists():
-        print(f"[NOT FOUND] {unified_path}")
+        print(f"  [NOT FOUND] {unified_path}")
         return
 
     df = pd.read_parquet(unified_path)
@@ -128,7 +128,7 @@ def verify_unified_dataset(data_dir: Path):
             print()
 
 
-def verify_train_val_test_splits(data_dir: Path):
+def verify_train_val_test_splits(unified_dir: Path):
     """
     STEP 3: Verify train/val/test splits (still one row per word).
 
@@ -139,7 +139,7 @@ def verify_train_val_test_splits(data_dir: Path):
     splits = ['train', 'val', 'test']
 
     for split in splits:
-        path = data_dir / 'unified' / f'{split}.parquet'
+        path = unified_dir / f'{split}.parquet'
 
         if not path.exists():
             print(f"  [{split.upper()}] NOT FOUND: {path}")
@@ -332,7 +332,7 @@ def verify_training_dataset(prepared_dir: Path):
     """)
 
 
-def trace_single_fragment_full_pipeline(data_dir: Path, prepared_dir: Path):
+def trace_single_fragment_full_pipeline(unified_dir: Path, prepared_dir: Path):
     """
     BONUS: Trace a single fragment through the entire pipeline.
     """
@@ -341,7 +341,7 @@ def trace_single_fragment_full_pipeline(data_dir: Path, prepared_dir: Path):
     from data_utils import load_vocabulary, tokenize_text
 
     # Load unified data
-    unified_path = data_dir / 'unified' / 'train.parquet'
+    unified_path = unified_dir / 'train.parquet'
     if not unified_path.exists():
         print("  Unified data not found.")
         return
@@ -426,19 +426,21 @@ def main():
     # Paths
     base_dir = Path(__file__).parent.parent  # v_1/
     data_dir = base_dir / 'data' / 'processed'
-    prepared_dir = base_dir / 'data' / 'prepared'
+    unified_dir = base_dir / 'data' / 'unified'
+    prepared_dir = base_dir / 'data' / 'training_ready'
 
     print(f"Base directory: {base_dir.absolute()}")
     print(f"Processed data: {data_dir.absolute()}")
-    print(f"Prepared data: {prepared_dir.absolute()}")
+    print(f"Unified data:   {unified_dir.absolute()}")
+    print(f"Prepared data:  {prepared_dir.absolute()}")
 
     # Run all verification steps
     verify_source_parquets(data_dir)
-    verify_unified_dataset(data_dir)
-    verify_train_val_test_splits(data_dir)
+    verify_unified_dataset(unified_dir)
+    verify_train_val_test_splits(unified_dir)
     verify_fragment_texts(prepared_dir)
     verify_training_dataset(prepared_dir)
-    trace_single_fragment_full_pipeline(data_dir, prepared_dir)
+    trace_single_fragment_full_pipeline(unified_dir, prepared_dir)
 
     print_header("SUMMARY")
     print("""

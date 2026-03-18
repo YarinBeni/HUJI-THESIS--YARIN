@@ -11,7 +11,7 @@ This script:
 
 Usage:
     cd v_1/src/training/baseline
-    python 02_train.py --data_dir ../../../data/prepared --output_dir ../../../models/baseline
+    python 02_train.py --data_dir ../../../data/training_ready --output_dir ../../../models/baseline
 
     # Or from repo root:
     python v_1/src/training/baseline/02_train.py
@@ -226,7 +226,7 @@ def validate(
 
 def main():
     parser = argparse.ArgumentParser(description="Train Akkadian MLM model")
-    parser.add_argument("--data_dir", type=Path, default=Path("v_1/data/prepared"))
+    parser.add_argument("--data_dir", type=Path, default=Path("v_1/data/training_ready"))
     parser.add_argument("--output_dir", type=Path, default=Path("v_1/models/baseline"))
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--batch_size", type=int, default=16)

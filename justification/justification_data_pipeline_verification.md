@@ -26,7 +26,7 @@ This document provides full visibility into the data transformation pipeline, pr
 
 STAGE 1: SOURCE CSVs → PARQUETS (One Row Per WORD)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Files: v_1/src/preprocessing/{02_process_ebl.py, 03_process_archibab.py, 04_process_oracc.py}
+Files: v_1/src/corpus/{02_process_ebl.py, 03_process_archibab.py, 04_process_oracc.py}
 
 Input:  Raw CSV files from eBL, ORACC, Archibab
 Process: Apply EvaCun 2025 tokenization (sign-level)
@@ -52,7 +52,7 @@ KEY: Each word is a separate row. The value_signs column contains
 
 STAGE 2: UNIFIED DATASET (Merge Sources)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-File: v_1/src/preprocessing/05_create_unified.py
+File: v_1/src/corpus/05_create_unified.py
 
 Input:  ebl_corpus.parquet + oracc_corpus.parquet + archibab_corpus.parquet
 Process: pd.concat() with source column added
@@ -66,7 +66,7 @@ Distribution:
 
 STAGE 3: TRAIN/VAL/TEST SPLIT (80/10/10)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-File: v_1/src/preprocessing/05_create_unified.py
+File: v_1/src/corpus/05_create_unified.py
 
 Process: Split by fragment_id to prevent data leakage
   1. Get unique fragment IDs: 40,429 fragments
@@ -84,7 +84,7 @@ Verification: ✅ Zero overlapping fragment_ids between splits
 
 STAGE 4: FRAGMENT TEXTS (One Row Per Fragment)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-File: v_1/src/training/baseline/01_prepare_data.py
+File: v_1/src/archive/baseline_mlm/01_prepare_data.py
 Function: data_utils.py::reconstruct_fragment_text()
 
 THIS IS THE CRITICAL TRANSFORMATION:
@@ -127,7 +127,7 @@ ALL signs from the fragment in their original order.
 
 STAGE 5: TRAINING DATASET (Tokenized Sequences)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-File: v_1/src/training/baseline/data_utils.py
+File: v_1/src/archive/baseline_mlm/data_utils.py
 Class: AkkadianMLMDataset
 
 Input:  Fragment text (e.g., "a na be lí ù ka ka bi")
@@ -167,11 +167,11 @@ The model must predict token 10329 ('be') from the masked input.
 
 We created a comprehensive verification script that traces data through all stages:
 
-**Location:** `v_1/src/verify_data_pipeline.py`
+**Location:** `v_1/src/archive/baseline_mlm/verify_data_pipeline.py`
 
 **Usage:**
 ```bash
-python3 v_1/src/verify_data_pipeline.py
+python3 v_1/src/archive/baseline_mlm/verify_data_pipeline.py
 ```
 
 **What It Verifies:**
@@ -268,7 +268,7 @@ The `value_signs` column **already contains sign-level tokens**. This is critica
 - Word "a-na" becomes "a na" (two signs separated by space)
 - Word "ka-ka-bi" becomes "ka ka bi" (three signs separated by space)
 
-**Verification Code:** `v_1/src/preprocessing/02_process_ebl.py:24-72` (`tokenize_to_signs()`)
+**Verification Code:** `v_1/src/corpus/02_process_ebl.py:24-72` (`tokenize_to_signs()`)
 
 ### 2. Fragment Reconstruction is Simple Concatenation
 
@@ -288,7 +288,7 @@ signs_list = ['a na', 'be lí', 'ù']
 text = ' '.join(signs_list)  # → "a na be lí ù"
 ```
 
-**Verification Code:** `v_1/src/training/baseline/data_utils.py:43-74`
+**Verification Code:** `v_1/src/archive/baseline_mlm/data_utils.py:43-74`
 
 ### 3. Model Tokenization is Space-Split
 
@@ -309,7 +309,7 @@ signs = text.split()  # → ['a', 'na', 'be', 'lí']
 token_ids = [vocab[s] for s in signs]  # → [5745, 10329, 1902, 9027]
 ```
 
-**Verification Code:** `v_1/src/training/baseline/data_utils.py:179-224`
+**Verification Code:** `v_1/src/archive/baseline_mlm/data_utils.py:179-224`
 
 ### 4. No Data Leakage Between Splits
 
@@ -330,7 +330,7 @@ test_df = df[df['fragment_id'].isin(test_ids)]
 
 **Verification:** `train_ids ∩ val_ids = ∅` and `train_ids ∩ test_ids = ∅`
 
-**Verification Code:** `v_1/src/preprocessing/05_create_unified.py:36-67`
+**Verification Code:** `v_1/src/corpus/05_create_unified.py:36-67`
 
 ---
 
@@ -338,15 +338,15 @@ test_df = df[df['fragment_id'].isin(test_ids)]
 
 | Pipeline Stage | Code File | Output File | Key Function |
 |----------------|-----------|-------------|--------------|
-| **1. Source Processing** | [02_process_ebl.py](../v_1/src/preprocessing/02_process_ebl.py) | `ebl_corpus.parquet` | `tokenize_to_signs()` (line 24-72) |
-| | [03_process_archibab.py](../v_1/src/preprocessing/03_process_archibab.py) | `archibab_corpus.parquet` | Similar tokenization |
-| | [04_process_oracc.py](../v_1/src/preprocessing/04_process_oracc.py) | `oracc_corpus.parquet` | Similar tokenization |
-| **2. Unification** | [05_create_unified.py](../v_1/src/preprocessing/05_create_unified.py) | `unified_corpus.parquet` | `create_unified_dataset()` (line 70) |
-| **3. Splitting** | [05_create_unified.py](../v_1/src/preprocessing/05_create_unified.py) | `train/val/test.parquet` | `create_train_val_test_split()` (line 36) |
-| **4. Fragment Building** | [01_prepare_data.py](../v_1/src/training/baseline/01_prepare_data.py) | `*_fragments.parquet` | Uses `build_fragment_texts()` |
-| | [data_utils.py](../v_1/src/training/baseline/data_utils.py) | | `reconstruct_fragment_text()` (line 43) |
+| **1. Source Processing** | [02_process_ebl.py](../v_1/src/corpus/02_process_ebl.py) | `ebl_corpus.parquet` | `tokenize_to_signs()` (line 24-72) |
+| | [03_process_archibab.py](../v_1/src/corpus/03_process_archibab.py) | `archibab_corpus.parquet` | Similar tokenization |
+| | [04_process_oracc.py](../v_1/src/corpus/04_process_oracc.py) | `oracc_corpus.parquet` | Similar tokenization |
+| **2. Unification** | [05_create_unified.py](../v_1/src/corpus/05_create_unified.py) | `unified_corpus.parquet` | `create_unified_dataset()` (line 70) |
+| **3. Splitting** | [05_create_unified.py](../v_1/src/corpus/05_create_unified.py) | `train/val/test.parquet` | `create_train_val_test_split()` (line 36) |
+| **4. Fragment Building** | [01_prepare_data.py](../v_1/src/archive/baseline_mlm/01_prepare_data.py) | `*_fragments.parquet` | Uses `build_fragment_texts()` |
+| | [data_utils.py](../v_1/src/archive/baseline_mlm/data_utils.py) | | `reconstruct_fragment_text()` (line 43) |
 | | | | `build_fragment_texts()` (line 77) |
-| **5. MLM Dataset** | [data_utils.py](../v_1/src/training/baseline/data_utils.py) | PyTorch tensors | `AkkadianMLMDataset` (line 227) |
+| **5. MLM Dataset** | [data_utils.py](../v_1/src/archive/baseline_mlm/data_utils.py) | PyTorch tensors | `AkkadianMLMDataset` (line 227) |
 | | | | `tokenize_text()` (line 179) |
 | | | | `_apply_mlm_masking()` (line 298) |
 | **Training** | [run_training.py](../v_1/run_training.py) | Model checkpoints | Loads dataset and trains |
@@ -359,7 +359,7 @@ To verify the entire pipeline:
 
 ```bash
 # 1. Verify all stages
-python3 v_1/src/verify_data_pipeline.py
+python3 v_1/src/archive/baseline_mlm/verify_data_pipeline.py
 
 # 2. Verify source parquets exist
 ls -lh v_1/data/processed/*/*.parquet

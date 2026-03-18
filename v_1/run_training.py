@@ -268,7 +268,7 @@ def main():
     print()
 
     # Set up paths
-    data_dir = script_dir / "data" / "prepared"
+    data_dir = script_dir / "data" / "training_ready"
     output_dir = script_dir / "models" / "baseline"
 
     # Check if data is prepared

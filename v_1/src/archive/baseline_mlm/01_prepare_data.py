@@ -31,13 +31,13 @@ def main():
     parser.add_argument(
         "--data_dir",
         type=Path,
-        default=Path("v_1/data/processed/unified"),
+        default=Path("v_1/data/unified"),
         help="Directory containing train/val/test parquet files"
     )
     parser.add_argument(
         "--output_dir",
         type=Path,
-        default=Path("v_1/data/prepared"),
+        default=Path("v_1/data/training_ready"),
         help="Output directory for prepared data"
     )
     parser.add_argument(

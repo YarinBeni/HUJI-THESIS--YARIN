@@ -153,10 +153,10 @@ Signs: LUGAL a na aš šur MAN PAB
 
 | Script | Purpose |
 |--------|---------|
-| `v_1/src/analysis/corpus_diagnostic.py` | Initial metadata audit |
-| `v_1/src/analysis/cdli_period_matcher.py` | CDLI P-number matching |
-| `v_1/src/analysis/cdli_join_diagnostic.py` | Join verification & visualization |
-| `v_1/src/analysis/oracc_catalog_explorer.py` | ORACC project exploration |
+| `v_1/src/corpus/06_corpus_diagnostic.py` | Initial metadata audit |
+| `v_1/src/corpus/07_cdli_period_matcher.py` | CDLI P-number matching |
+| `v_1/src/corpus/08_cdli_join_diagnostic.py` | Join verification & visualization |
+| `v_1/src/corpus/09_oracc_catalog_explorer.py` | ORACC project exploration |
 
 ## Output Files
 

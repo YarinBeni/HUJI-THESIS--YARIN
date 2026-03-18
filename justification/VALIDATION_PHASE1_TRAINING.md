@@ -24,14 +24,14 @@ For each component, I provide:
 We tokenize at the **sign level**, splitting `value_signs` on spaces. Example: `"a na be li"` becomes 4 tokens: `["a", "na", "be", "li"]`.
 
 **Where to Verify in Code:**
-- [data_utils.py:133-135](../../../v_1/src/training/baseline/data_utils.py#L133-L135):
+- [data_utils.py:133-135](../../../v_1/src/archive/baseline_mlm/data_utils.py#L133-L135):
 ```python
 for value_signs in df['value_signs'].dropna():
     signs = value_signs.split()  # <-- SPLIT ON SPACES
     sign_counter.update(signs)
 ```
 
-- [data_utils.py:197](../../../v_1/src/training/baseline/data_utils.py#L197):
+- [data_utils.py:197](../../../v_1/src/archive/baseline_mlm/data_utils.py#L197):
 ```python
 signs = text.split()  # <-- TOKENIZE BY SPLITTING ON SPACES
 ```
@@ -104,7 +104,7 @@ print(f'Val-Test overlap: {len(val_ids & test_ids)}')
 A fixed set of 500 fragments is used for pre/post training hidden state extraction, ensuring comparability.
 
 **Where to Verify in Code:**
-- [data_utils.py:350-380](../../../v_1/src/training/baseline/data_utils.py#L350-L380): `create_eval_subset()` function
+- [data_utils.py:350-380](../../../v_1/src/archive/baseline_mlm/data_utils.py#L350-L380): `create_eval_subset()` function
 - Seed is fixed at 42 for reproducibility
 
 **Proof from Logs:**
@@ -144,7 +144,7 @@ We implemented the "Simplified Aeneas Twin" with these exact specs from the Aene
 - ~37M parameters
 
 **Where to Verify in Code:**
-- [model.py:15-30](../../../v_1/src/training/baseline/model.py#L15-L30): `AeneasConfig` class
+- [model.py:15-30](../../../v_1/src/archive/baseline_mlm/model.py#L15-L30): `AeneasConfig` class
 ```python
 class AeneasConfig:
     def __init__(
@@ -245,7 +245,7 @@ We use Masked Language Modeling (MLM) with BERT-style 80/10/10 masking:
 - 10% unchanged
 
 **Where to Verify in Code:**
-- [data_utils.py:298-347](../../../v_1/src/training/baseline/data_utils.py#L298-L347): `_apply_mlm_masking()` method
+- [data_utils.py:298-347](../../../v_1/src/archive/baseline_mlm/data_utils.py#L298-L347): `_apply_mlm_masking()` method
 ```python
 def _apply_mlm_masking(self, input_ids, attention_mask):
     """
@@ -267,7 +267,7 @@ Epoch 10/10: train_loss=2.6506, val_loss=3.0204
 ```bash
 python3 -c "
 import sys
-sys.path.insert(0, 'v_1/src/training/baseline')
+sys.path.insert(0, 'v_1/src/archive/baseline_mlm')
 from data_utils import AkkadianMLMDataset, load_vocabulary
 import pandas as pd
 

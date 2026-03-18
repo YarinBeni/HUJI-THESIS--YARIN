@@ -19,7 +19,7 @@ import re
 import json
 
 # Paths
-DATA_DIR = Path('/Users/yarin.b/git/lititure-review/v_1/data')
+DATA_DIR = Path(__file__).parent.parent / 'data'
 OUTPUT_DIR = DATA_DIR / 'analysis_outputs'
 OUTPUT_DIR.mkdir(exist_ok=True)
 
@@ -50,7 +50,7 @@ def main():
     print(f"ORACC corpus: {len(oracc):,} words, {oracc['fragment_id'].nunique():,} fragments")
 
     # Load CDLI catalog
-    cdli = pd.read_csv(DATA_DIR / 'external/cdli_data/cdli_cat.csv', low_memory=False)
+    cdli = pd.read_parquet(DATA_DIR / 'raw/cdli/cdli_cat.parquet')
     print(f"CDLI catalog: {len(cdli):,} records")
 
     # Load matched metadata
@@ -295,8 +295,8 @@ def main():
     fig2.suptitle('Evaluation Corpora Comparison', fontsize=14, fontweight='bold')
 
     # Load evaluation corpora
-    corpus_a = pd.read_parquet(DATA_DIR / 'evaluation_corpora/corpus_a_archibab_2nd_mill.parquet')
-    corpus_b = pd.read_parquet(DATA_DIR / 'evaluation_corpora/corpus_b_oracc_1st_mill.parquet')
+    corpus_a = pd.read_parquet(DATA_DIR / 'evaluation/corpora/corpus_a_archibab_2nd_mill.parquet')
+    corpus_b = pd.read_parquet(DATA_DIR / 'evaluation/corpora/corpus_b_oracc_1st_mill.parquet')
 
     # Corpus size comparison
     ax = axes2[0]

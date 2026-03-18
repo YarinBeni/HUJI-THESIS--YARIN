@@ -2,8 +2,8 @@ import pandas as pd
 from pathlib import Path
 
 # Define paths
-DATA_DIR = Path('v_1/data/processed/from_chungrong')  # Where the source CSVs are
-OUTPUT_DIR = Path('v_1/data/evaluation_corpora')  # Where to save
+DATA_DIR = Path('v_1/data/raw/chungrong')  # Where the source CSVs are
+OUTPUT_DIR = Path('v_1/data/evaluation/corpora')  # Where to save
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 print("Creating unified dataset with all 3 groups...")

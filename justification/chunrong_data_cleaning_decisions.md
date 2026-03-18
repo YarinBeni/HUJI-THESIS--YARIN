@@ -159,13 +159,13 @@ Verified programmatically — the new main files contain essentially no uppercas
 
 Chungrong explained: "Some administrative texts (not always) are also letters. These two corpus contain many repeated texts. So many texts appear twice. E.g., P224378, NALet + P224378, NAAdm."
 
-**Decision**: "For the main files, do not use texts with NAAdm." This is already handled by the pipeline — `06_create_test_letters_copra.py` filters to `NALet` only.
+**Decision**: "For the main files, do not use texts with NAAdm." This is already handled by the pipeline — `01_create_corpus.py` filters to `NALet` only.
 
 ### Only Transliteration Used — Confirmed
 
 Chungrong asked: "Only the transliteration is used, right?"
 
-**Answer**: Yes. The pipeline (`01_prepare_texts.py`) reconstructs texts using only the `clean_value` column. The `lemma`, `value`, and other columns are not used in the LLM baseline evaluation.
+**Answer**: Yes. The pipeline (`02_prepare_texts.py`) reconstructs texts using only the `clean_value` column. The `lemma`, `value`, and other columns are not used in the LLM baseline evaluation.
 
 ### Green Light
 
@@ -187,8 +187,8 @@ Chungrong confirmed: "I think you can run the baseline evaluation."
 
 **Steps required:**
 1. Replace source files in `v_1/data/processed/from_chungrong/` with the March 13 versions
-2. Re-run `v_1/src/preprocessing/06_create_test_letters_copra.py` to rebuild the unified corpus
-3. Re-run `v_1/src/evaluation/01_prepare_texts.py` to rebuild `texts_for_evaluation.parquet`
+2. Re-run `v_1/src/evaluation/01_create_corpus.py` to rebuild the unified corpus
+3. Re-run `v_1/src/evaluation/02_prepare_texts.py` to rebuild `texts_for_evaluation.parquet`
 4. Verify new text counts before running LLM baseline
 
 **LBL future update**: When the corrected edition and 40 additional tablets arrive, the corpus will need another rebuild. This is expected but not blocking the current baseline run.

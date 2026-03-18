@@ -120,10 +120,10 @@ Received 3 normalized CSVs for temporal classification:
 Zero-shot classification of Akkadian letters by temporal period (OB / NA / LB) using general-purpose LLMs via OpenRouter API.
 
 ### Pipeline (built Jan 28, 2026)
-- `v_1/src/preprocessing/06_create_test_letters_copra.py` — merge + filter corpora
-- `v_1/src/evaluation/01_prepare_texts.py` — reconstruct texts from word-level rows
-- `v_1/src/evaluation/02_llm_baseline.py` — OpenRouter API calls, resume-safe caching
-- `v_1/src/evaluation/03_aggregate_results.py` — merge all model predictions
+- `v_1/src/evaluation/01_create_corpus.py` — merge + filter corpora
+- `v_1/src/evaluation/02_prepare_texts.py` — reconstruct texts from word-level rows
+- `v_1/src/evaluation/03_llm_baseline.py` — OpenRouter API calls, resume-safe caching
+- `v_1/src/evaluation/04_aggregate_results.py` — merge all model predictions
 
 ### Initial Test Results (10 texts, GPT-OSS-20B, Jan 2026)
 - Parse rate: 90% (9/10)

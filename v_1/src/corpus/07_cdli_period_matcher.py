@@ -19,7 +19,7 @@ Option 1: GitHub Repository (Recommended for bulk data)
 -------------------------------------------------------
 1. Install Git LFS: https://git-lfs.github.com/
 2. Clone: git clone https://github.com/cdli-gh/data
-3. The catalog is in: cdli_cat.csv
+3. The catalog is in: cdli_cat.parquet (or cdli_cat.csv)
 
 Option 2: CDLI Search Export
 ----------------------------
@@ -253,7 +253,7 @@ To extract 1st millennium corpus, filter ORACC by these P-numbers.
 
 To proceed, you need to:
 1. Download CDLI catalog (see instructions at top of script)
-2. Re-run this script with: --cdli_catalog /path/to/cdli_cat.csv
+2. Re-run this script with: --cdli_catalog v_1/data/raw/cdli/cdli_cat.parquet
 3. The script will identify 1st millennium texts
 """)
 
@@ -290,7 +290,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='Match ORACC P-numbers to CDLI metadata')
     parser.add_argument('--cdli_catalog', type=str, default=None,
-                        help='Path to CDLI catalog CSV (cdli_cat.csv)')
+                        help='Path to CDLI catalog (cdli_cat.parquet or cdli_cat.csv)')
     parser.add_argument('--output_dir', type=str, default=None,
                         help='Directory to save filtered corpora')
 
@@ -333,7 +333,7 @@ def main():
    OR export from https://cdli.earth/search
 
 2. RUN WITH CATALOG:
-   python3 cdli_period_matcher.py --cdli_catalog /path/to/cdli_cat.csv
+   python3 cdli_period_matcher.py --cdli_catalog v_1/data/raw/cdli/cdli_cat.parquet
 
 3. CREATE FILTERED CORPORA:
    The script will identify 1st millennium P-numbers
