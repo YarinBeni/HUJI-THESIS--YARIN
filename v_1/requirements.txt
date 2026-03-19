@@ -1,14 +1,25 @@
-pandas
-numpy
-matplotlib
-seaborn
+# Core data
+pandas==2.3.3
+numpy==2.4.0
+pyarrow==22.0.0
+
+# Visualization
+matplotlib==3.10.8
+seaborn==0.13.2
+
+# Notebooks
 jupyter
 ipykernel
-tqdm
-pyarrow
 
-# LLM Baseline Evaluation (Phase 2)
-requests            # OpenRouter API calls
-tenacity>=8.2.0     # Retry logic for API calls (optional)
-scikit-learn        # Evaluation metrics
+# Evaluation pipeline (Track A)
+requests==2.32.5
+urllib3==2.5.0
+tenacity>=8.2.0       # Retry logic for OpenRouter API calls
+scipy==1.15.3
+scikit-learn==1.8.0
+tiktoken==0.12.0      # Token counting before API calls
+tqdm==4.67.1
 
+# MLM training (archive — only needed if rerunning Phase 1)
+torch==2.9.1
+transformers            # AutoTokenizer, AutoModelForCausalLM
