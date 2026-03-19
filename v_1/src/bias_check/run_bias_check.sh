@@ -16,7 +16,7 @@ echo "Start: $(date)"
 # --- Environment setup ---
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
-cd ~/projects/lititure-review
+cd ~/projects/HUJI-THESIS--YARIN
 git pull origin main
 
 # Install/update dependencies
