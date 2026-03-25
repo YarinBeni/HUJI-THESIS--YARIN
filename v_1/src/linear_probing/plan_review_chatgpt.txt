@@ -1,0 +1,137 @@
+## Findings
+
+1. **The success criterion is too weak, and it conflicts with the repo’s own bias-check conclusion.**  
+`PLAN.md` treats beating the unigram baseline as evidence the LLM may add something beyond character statistics, but the project’s bias analysis on the same letters corpus already shows near-perfect classification from surface transliteration features alone. On this dataset, `>84.8%` is not a meaningful bar for “deeper representation.”
+
+```4:15:v_1/src/linear_probing/PLAN.md
+## Goal
+Replicate Gurnee & Tegmark's linear probing methodology on Akkadian letters data.
+Test whether open-source LLMs encode temporal period (OB/NA/LB) linearly in their activations.
+
+## Baseline to Beat
+From the bias check (TF-IDF + logistic regression on the same 4,957 letters):
+- Unigrams: 84.8% (69.1% after maximal cleaning)
+- Bigrams: 98.3% (91.2% after cleaning)
+- 2-5 grams: 99.2% (96.7% after cleaning)
+
+If the linear probe does WORSE than unigrams (84.8%), the LLM adds nothing beyond character statistics.
+If it does BETTER, or peaks at mid-layers rather than early layers, the LLM may encode something deeper.
+```
+
+```48:59:v_1/data/evaluation/bias_check/bias_check_report.md
+## Results Summary
+
+| Model | Accuracy | F1 Macro | p-value | Verdict |
+|-------|----------|----------|---------|---------|
+| mlp_1layer | 0.993 | 0.992 | 0.0000 | ❌ FAIL |
+| mlp_2layer | 0.995 | 0.994 | 0.0000 | ❌ FAIL |
+| mlp_3layer | 0.992 | 0.991 | 0.0000 | ❌ FAIL |
+| mlp_5layer | 0.991 | 0.989 | 0.0000 | ❌ FAIL |
+| attn1_mlp3 | 0.984 | 0.983 | 0.0000 | ❌ FAIL |
+| attn2_mlp3 | 0.988 | 0.986 | 0.0000 | ❌ FAIL |
+| attn3_mlp3 | 0.974 | 0.975 | 0.0000 | ❌ FAIL |
+| attn5_mlp3 | 0.983 | 0.981 | 0.0000 | ❌ FAIL |
+```
+
+2. **The planned probe metrics are not directly comparable to the existing baselines.**  
+The plan proposes `5-fold stratified CV` for probes, while the bias-check pipeline is built around a fixed train/val/test split plus permutation testing. If you plot probe CV accuracy against the existing TF-IDF numbers as horizontal lines, that comparison is methodologically shaky.
+
+```83:96:v_1/src/linear_probing/PLAN.md
+For each layer L:
+1. Load activations (4957, D)
+2. Load period labels (4957,) — OB/NA/LB
+3. Train ridge classifier (sklearn `RidgeClassifier` or `LogisticRegression` with L2) using 5-fold stratified CV
+4. Record: accuracy, F1 macro, per-class precision/recall
+
+**Output:**
+- `results/probe_results_{model_name}.json` — per-layer metrics
+- **Layer-accuracy curve** plot: x=layer, y=probe accuracy, with TF-IDF baselines as horizontal lines
+
+**Key comparisons:**
+- Probe accuracy vs. TF-IDF unigram baseline (84.8%) — are LLM activations more informative than character frequencies?
+- Probe accuracy vs. TF-IDF 2-5 gram baseline (99.2%) — can the probe match the best simple model?
+```
+
+```55:85:v_1/src/bias_check/README.md
+## Pipeline Flow
+
+v_1/data/evaluation/corpora/texts_for_evaluation.parquet
+        │   (4,957 texts, 3 classes)
+        ▼
+[01_featurize.py]   TF-IDF char n-grams (2–5) → stratified 70/15/15 splits
+        │
+        ▼
+v_1/data/evaluation/bias_check/features/
+├── train.npz  val.npz  test.npz   ← sparse TF-IDF matrices
+...
+[03_evaluate.py]   test metrics + permutation test (1000 perms, LR proxy)
+```
+
+3. **Outcome interpretation is too strong for a corpus already known to contain heavy surface confounds.**  
+The plan maps “mid-layer peak” to “deeper representation” and “early-layer peak” to “surface statistics,” but the bias docs already flag orthography, morphology, names, and provenance markers as exploitable. Those can survive many layers and still produce a mid-layer peak. Without explicit control experiments, Outcome A is overclaimed.
+
+```108:128:v_1/src/linear_probing/PLAN.md
+Based on Step 2 results, one of three outcomes:
+
+### Outcome A: Probe works well (accuracy > 85%, peaks at mid-layers)
+→ LLM encodes temporal info beyond surface statistics. Proceed to:
+...
+### Outcome B: Probe works but only at early layers (accuracy ~85%, peak at layers 1-3)
+→ LLM is probably just encoding surface token statistics (similar to TF-IDF). This means:
+...
+### Outcome C: Probe fails (accuracy near chance, no layer works)
+→ LLMs do not encode temporal information for extreme OOD data.
+```
+
+```8:13:v_1/data/evaluation/bias_check/bias_check_report.md
+## Context
+
+Before running LLM evaluation (Track A), we verify that the test set carries no exploitable surface-level temporal signal. A simple classifier that can distinguish Old Babylonian / Neo-Assyrian / Late Babylonian texts from transliteration alone would indicate dataset bias.
+
+Bias risks flagged by Chungrong: orthography, morphology, geographical/deity names, and provenance markers.
+```
+
+4. **You identify tokenization/length confounds in Step 0, but the later pipeline does not actually control for them.**  
+The plan explicitly worries that periods may differ in token counts or tokenization behavior, but Step 1 mean-pools all token positions and Step 2 never includes token-count, text-length, or cleaned-vs-raw ablations. That leaves a major confound unaddressed.
+
+```36:48:v_1/src/linear_probing/PLAN.md
+Pick 10 texts (mix of OB/NA/LB, short/long). For each model's tokenizer:
+- Print raw text → tokenized tokens → decoded tokens
+- Count: tokens per text, unknown/fallback tokens, average token length
+- Check: do different periods produce systematically different token counts or patterns?
+
+**What we're looking for:**
+- If Akkadian is tokenized into single-character or byte-level pieces → the model treats it as raw bytes, probing may still work but the "representation" is shallow
+- If some Akkadian words survive as recognizable subwords → the model has partial knowledge
+- If token counts differ wildly by period → another surface feature the probe could exploit (like text length in the bias check)
+```
+
+```56:66:v_1/src/linear_probing/PLAN.md
+For each text in the 4,957 letters:
+1. Apply tier0 cleaning (same as bias check — strip `@v` markup, encoding artifacts)
+2. Tokenize with the model's tokenizer
+3. Forward pass through the model (inference only, no grad)
+4. At every layer L (0 to N), extract the residual stream activations
+5. Aggregate across token positions using **mean pooling** (average all token positions into one vector per layer)
+
+**Pooling strategy:**
+- Primary: mean pool across all tokens → one vector (4957, D) per layer
+- Secondary (if time permits): also save last-token activations for comparison
+```
+
+## Open Questions / Assumptions
+
+I could not read `yarin/research_plan.md` or `yarin/emails_phase/round4/emails.txt` because those files are not present in the accessible repo; `README.md` also labels `yarin/research_plan.md` as “local only.” So this review is grounded in the repo-visible context: `README.md`, `RESEARCH_LOG.md`, and the bias-check docs.
+
+If your real aim is narrower, like “measure whether *any* linear separability exists in an extreme OOD language,” then the plan is basically fine as an execution checklist. But if the aim is the stronger claim in the doc, “the model encodes temporal info beyond surface statistics,” then I think the current plan is not yet strong enough.
+
+## Bottom Line
+
+My view: the plan is promising operationally, but not yet convincing scientifically. The biggest fix is to redefine success around **controlled comparisons**, not raw accuracy.
+
+I’d revise it before implementation in three ways:
+1. Use the **same splits/protocol** for probe and TF-IDF baselines.
+2. Add **control probes/ablations**: token count, text length, cleaned corpus, names/provenance masking, random-label sanity check.
+3. Tone down Outcome A/B claims so a mid-layer peak is treated as **suggestive**, not decisive.
+
+If you want, I can next turn this into a tighter `PLAN.md` rewrite with concrete replacement text for the risky sections.

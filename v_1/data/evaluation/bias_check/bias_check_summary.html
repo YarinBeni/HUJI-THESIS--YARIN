@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pre-Track A Bias Check — Summary</title>
+  <style>
+    :root {
+      --ob: #4e8fcb;
+      --na: #7c4dbb;
+      --lb: #d95f4b;
+      --bg: #f9f9f9;
+      --card: #ffffff;
+      --border: #e0e0e0;
+      --text: #1a1a1a;
+      --muted: #555;
+      --fail: #c0392b;
+      --pass: #27ae60;
+      --accent: #2c3e50;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 0 16px 60px;
+    }
+    .page { max-width: 960px; margin: 0 auto; }
+
+    /* Header */
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 36px 40px 28px;
+      margin: 0 -16px 40px;
+    }
+    header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; }
+    header p { font-size: 0.95rem; opacity: 0.75; }
+
+    /* Verdict banner */
+    .verdict-banner {
+      background: #fdecea;
+      border-left: 5px solid var(--fail);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      font-size: 1.05rem;
+    }
+    .verdict-banner strong { color: var(--fail); font-size: 1.1rem; }
+
+    /* Sections */
+    section { margin-bottom: 48px; }
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 28px 0 12px;
+    }
+    p { margin-bottom: 14px; color: var(--text); }
+    code {
+      background: #f0f0f0;
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 0.88em;
+    }
+    strong { font-weight: 600; }
+    em { font-style: italic; }
+
+    /* Period pills */
+    .pill {
+      display: inline-block;
+      border-radius: 12px;
+      padding: 2px 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .pill-ob { background: var(--ob); }
+    .pill-na { background: var(--na); }
+    .pill-lb { background: var(--lb); }
+
+    /* Dataset cards */
+    .dataset-cards {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .dataset-card {
+      flex: 1 1 140px;
+      border-radius: 8px;
+      padding: 16px 20px;
+      color: #fff;
+      font-weight: 600;
+    }
+    .dataset-card .count { font-size: 1.8rem; line-height: 1.1; }
+    .dataset-card .label { font-size: 0.85rem; opacity: 0.85; }
+    .card-total  { background: var(--accent); }
+    .card-ob     { background: var(--ob); }
+    .card-na     { background: var(--na); }
+    .card-lb     { background: var(--lb); }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; margin: 16px 0 24px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    thead tr { background: var(--accent); color: #fff; }
+    thead th { padding: 10px 14px; text-align: left; font-weight: 600; }
+    tbody tr:nth-child(even) { background: #f4f4f4; }
+    tbody td { padding: 9px 14px; border-bottom: 1px solid var(--border); }
+    .acc-high { color: var(--fail); font-weight: 700; }
+    .acc-drop { color: #888; }
+    .drop-neg { color: var(--fail); }
+
+    /* Plot figure */
+    figure {
+      margin: 24px 0 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    figure img {
+      width: 100%;
+      display: block;
+    }
+    figcaption {
+      padding: 12px 18px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      background: #fafafa;
+      border-top: 1px solid var(--border);
+      line-height: 1.55;
+    }
+    figcaption strong { color: var(--text); }
+
+    /* Setup box */
+    .setup-box {
+      background: #f0f4f8;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 0.92rem;
+    }
+
+    /* Filter table — evidence col smaller */
+    .filter-table td:last-child { font-size: 0.82rem; color: var(--muted); }
+
+    /* Key features table — type col colored */
+    .feat-phon { color: #1a6b3e; font-weight: 500; }
+    .feat-morph { color: #7b4b00; font-weight: 500; }
+    .feat-conv  { color: #2b4d8a; font-weight: 500; }
+    .feat-onom  { color: #6a2d8a; font-weight: 500; }
+
+    /* Conclusion box */
+    .conclusion-box {
+      background: #eaf4ea;
+      border-left: 5px solid var(--pass);
+      border-radius: 6px;
+      padding: 18px 22px;
+      margin-top: 12px;
+    }
+    .conclusion-box p:last-child { margin-bottom: 0; }
+
+    /* Methodological notes */
+    .notes ul { padding-left: 20px; }
+    .notes li { margin-bottom: 8px; font-size: 0.92rem; color: var(--muted); }
+
+    /* N-gram summary highlight row */
+    .highlight-row { background: #fff8e1 !important; font-weight: 600; }
+
+    hr { display: none; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <h1>Pre-Track A Bias Check: Summary</h1>
+  <p>Can a simple classifier date Akkadian texts from transliteration alone?</p>
+</header>
+
+<!-- ─── VERDICT ─── -->
+<div class="verdict-banner">
+  <strong>Verdict: ❌ FAIL</strong> — All 8 classifiers scored 97–99% accuracy (chance = 33%), p = 0.000 across the board. Period is strongly and irreducibly encoded in the text surface.
+</div>
+
+<!-- ─── MOTIVATION ─── -->
+<section>
+  <h2>Motivation</h2>
+  <p>Before running LLM evaluation (Track A — "can an LLM date Akkadian texts?"), we must verify that period labels are not trivially recoverable from surface features alone. If a simple classifier can distinguish <span class="pill pill-ob">OB</span> <span class="pill pill-na">NA</span> <span class="pill pill-lb">LB</span> from raw transliteration, an LLM could score well by pattern-matching rather than understanding.</p>
+</section>
+
+<!-- ─── DATASET ─── -->
+<section>
+  <h2>Dataset</h2>
+  <div class="dataset-cards">
+    <div class="dataset-card card-total"><div class="count">4,957</div><div class="label">Total texts (all letters)</div></div>
+    <div class="dataset-card card-ob"><div class="count">1,497</div><div class="label">Old Babylonian</div></div>
+    <div class="dataset-card card-na"><div class="count">2,435</div><div class="label">Neo-Assyrian</div></div>
+    <div class="dataset-card card-lb"><div class="count">1,025</div><div class="label">Late Babylonian</div></div>
+  </div>
+  <p>Each period comes from a single corpus source: <code>archibab</code> → OB, <code>oracc</code> → NA, <code>lbl</code> → LB (zero overlap).</p>
+</section>
+
+<!-- ─── EXPERIMENT 1 ─── -->
+<section>
+  <h2>Experiment 1 — The Bias Check (HPC cluster)</h2>
+  <div class="setup-box">
+    <strong>Setup:</strong> TF-IDF character n-grams (2–5 grams, 10,000 features). 8 neural classifiers: 4 MLPs (1–5 layers) and 4 Attention+MLP hybrids. Train/val/test split: 70/15/15, stratified. Permutation test: 1,000 shuffles.
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Model</th><th>Accuracy</th><th>F1 Macro</th><th>p-value</th></tr></thead>
+      <tbody>
+        <tr><td>MLP 1-layer</td><td class="acc-high">99.3%</td><td>0.992</td><td>0.0000</td></tr>
+        <tr><td>MLP 2-layer</td><td class="acc-high">99.5%</td><td>0.994</td><td>0.0000</td></tr>
+        <tr><td>MLP 3-layer</td><td class="acc-high">99.2%</td><td>0.991</td><td>0.0000</td></tr>
+        <tr><td>MLP 5-layer</td><td class="acc-high">99.1%</td><td>0.989</td><td>0.0000</td></tr>
+        <tr><td>Attn1+MLP3</td><td class="acc-high">98.4%</td><td>0.983</td><td>0.0000</td></tr>
+        <tr><td>Attn2+MLP3</td><td class="acc-high">98.8%</td><td>0.986</td><td>0.0000</td></tr>
+        <tr><td>Attn3+MLP3</td><td class="acc-high">97.4%</td><td>0.975</td><td>0.0000</td></tr>
+        <tr><td>Attn5+MLP3</td><td class="acc-high">98.3%</td><td>0.981</td><td>0.0000</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure>
+    <img src="plots/training_curves.png" alt="Training Curves">
+    <figcaption><strong>Training curves (loss) for all 8 models.</strong> The MLP family (top row) converges cleanly to near-zero loss within ~10 epochs with train and val tracking closely — no overfitting, the task is simply easy. The Attention+MLP models (bottom row) show noisier val curves but still converge, confirming the result is not an artifact of early stopping. All models reach the same end-point: a task so separable it is learned almost immediately.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="plots/permutation_test.png" alt="Permutation Test Distributions">
+    <figcaption><strong>Permutation test distributions for all 8 models.</strong> The blue histogram is accuracy under 1,000 random label shuffles (centered near chance, ~33–50%); the red vertical line is the real accuracy. In every panel the real accuracy is completely separated from the null distribution — p = 0.000 for all models. This is the formal statistical proof of FAIL.</figcaption>
+  </figure>
+</section>
+
+<!-- ─── EXPERIMENT 2 ─── -->
+<section>
+  <h2>Experiment 2 — Ablation: Can We Clean Out the Signal?</h2>
+  <div class="setup-box">
+    <strong>Setup:</strong> Logistic regression with 5-fold cross-validation on all 4,957 texts. We applied 11 text-cleaning filters, first individually and then stacked greedily (each step adds the filter that drops accuracy the most).
+  </div>
+
+  <figure>
+    <img src="plots/bias_vocab_overlap.png" alt="Vocabulary Overlap Across Periods">
+    <figcaption><strong>Vocabulary overlap across periods.</strong> Each period has a large block of period-exclusive tokens (OB=160, NA=199, LB=348) and only 383 tokens are shared by all three. Simply restricting to shared vocabulary cannot eliminate the signal — as confirmed by the ablation, where even the 383 shared tokens yield 98.5% accuracy because their frequency distributions differ by up to 813× across periods.</figcaption>
+  </figure>
+
+  <h3>What We Tested and Why</h3>
+  <div class="table-wrap">
+    <table class="filter-table">
+      <thead><tr><th>Filter</th><th>What it removes</th><th>Example</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td><code>tier0 baseline</code></td><td>ORACC markup (<code>@v</code>) and encoding artifacts</td><td><code>TA@v → TA</code></td><td><code>@v</code> appears 968× in NA, zero in OB/LB — pure corpus artifact</td></tr>
+        <tr><td><code>normalize long vowels</code></td><td>Macron vowels (ā ī ū ē)</td><td><code>ūmī → umi</code></td><td>Zero occurrences in entire dataset — no effect</td></tr>
+        <tr><td><code>lowercase</code></td><td>Upper/lower distinction</td><td><code>ARAD → arad</code></td><td>Logogram ratio: OB=25.7%, NA=44.0%, LB=52.0%</td></tr>
+        <tr><td><code>strip determinatives</code></td><td>Semantic-classifier prefixes (lu2-, I-, d-, uru-)</td><td><code>lu2-ARAD → ARAD</code></td><td>lu2- is 18× more frequent in NA than OB; I- is 7× more in LB</td></tr>
+        <tr><td><code>strip w and y</code></td><td>West Semitic consonants exclusive to OB</td><td><code>a-wa-rum → a-a-rum</code></td><td>w: 1,345 occurrences in OB, zero in NA/LB (phoneme lost after OB)</td></tr>
+        <tr><td><code>strip -meš</code></td><td>Sumerian plural suffix</td><td><code>ARAD-meš → ARAD</code></td><td>Usage: OB=0.9/text, NA=2.4, LB=1.8</td></tr>
+        <tr><td><code>strip case endings</code></td><td>Akkadian grammatical endings (-am, -im, -um)</td><td><code>al-tim → al</code></td><td>OB ventive -am: 2.77/text in OB vs 0.10 in NA (28× ratio)</td></tr>
+        <tr><td><code>strip ALL digits</code></td><td>Subscript numbers and all digits</td><td><code>ša2 → ša</code></td><td>Same sign read ša in OB but ša2 in LB; rate_4 is #1 important feature</td></tr>
+        <tr><td><code>truncate to N tokens</code></td><td>Text beyond first N words</td><td><code>word31... → removed</code></td><td>Length differs: OB median=39 words, NA=40, LB=53</td></tr>
+        <tr><td><code>remove ALL logograms</code></td><td>All uppercase tokens (Sumerian words)</td><td><code>ARAD → removed</code></td><td>Logogram rate: OB=25.7% vs LB=52.0% (2× ratio)</td></tr>
+        <tr><td><code>keep only syllabic</code></td><td>Everything except lowercase phonetic Akkadian</td><td><code>LUGAL → removed</code></td><td>Combines logogram + determinative + uppercase removal</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure>
+    <img src="plots/bias_top_ngrams.png" alt="Most Discriminative Char N-Grams per Period">
+    <figcaption><strong>Top 25 character n-grams by log-odds ratio per period.</strong> OB is dominated by <code>w</code>- and <code>wa</code>-containing sequences (the West Semitic /w/ phoneme, phonologically absent in NA and LB). NA's top features are almost entirely <code>@v</code> ORACC markup — a pure corpus artifact, not language. LB is dominated by subscript-4 sequences (<code>tu4</code>, <code>ša2</code>, <code>uru3</code>) reflecting its distinctive sign-reading conventions. Once <code>@v</code> is stripped from NA, genuine NA linguistic markers surface.</figcaption>
+  </figure>
+
+  <h3>Table 1 — Individual Filters (each tested alone), char 2-5 grams</h3>
+  <p><strong>Nothing individually drops accuracy below 97%.</strong></p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Filter</th><th>Example</th><th>Accuracy</th><th>Drop</th></tr></thead>
+      <tbody>
+        <tr><td><code>tier0 baseline</code></td><td><code>TA@v → TA</code></td><td class="acc-high">99.2%</td><td>—</td></tr>
+        <tr><td><code>normalize long vowels</code></td><td><code>ūmī → umi</code></td><td>99.2%</td><td class="acc-drop">0.0</td></tr>
+        <tr><td><code>lowercase</code></td><td><code>ARAD → arad</code></td><td>99.2%</td><td class="acc-drop">0.0</td></tr>
+        <tr><td><code>strip determinatives</code></td><td><code>lu2-ARAD → ARAD</code></td><td>99.2%</td><td class="acc-drop">0.0</td></tr>
+        <tr><td><code>strip w and y</code></td><td><code>a-wa-rum → a-a-rum</code></td><td>99.2%</td><td class="acc-drop">0.0</td></tr>
+        <tr><td><code>strip -meš plural</code></td><td><code>ARAD-meš → ARAD</code></td><td>99.2%</td><td class="acc-drop">0.0</td></tr>
+        <tr><td><code>strip case endings</code></td><td><code>al-tim → al</code></td><td>99.1%</td><td class="drop-neg">-0.1</td></tr>
+        <tr><td><code>strip ALL digits</code></td><td><code>ša2 → ša</code></td><td>99.0%</td><td class="drop-neg">-0.2</td></tr>
+        <tr><td><code>truncate 30 tokens</code></td><td><code>word31... → removed</code></td><td>98.7%</td><td class="drop-neg">-0.4</td></tr>
+        <tr><td><code>remove ALL logograms</code></td><td><code>ARAD → removed</code></td><td>98.4%</td><td class="drop-neg">-0.8</td></tr>
+        <tr><td><code>keep only syllabic</code></td><td><code>LUGAL → removed</code></td><td>98.1%</td><td class="drop-neg">-1.1</td></tr>
+        <tr><td><code>truncate 10 tokens</code></td><td><code>word11... → removed</code></td><td>97.4%</td><td class="drop-neg">-1.8</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Table 2 — Greedy Stacking, char 2-5 grams</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Step</th><th>Filter added</th><th>Accuracy</th><th>Total drop</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>tier0 baseline</td><td class="acc-high">99.2%</td><td>—</td></tr>
+        <tr><td>1</td><td>+ keep only syllabic</td><td>98.1%</td><td class="drop-neg">-1.1</td></tr>
+        <tr><td>2</td><td>+ truncate 30 tokens</td><td>97.4%</td><td class="drop-neg">-1.8</td></tr>
+        <tr><td>3</td><td>+ strip determinatives</td><td>97.2%</td><td class="drop-neg">-2.0</td></tr>
+        <tr><td>4</td><td>+ strip subscript digits</td><td>96.9%</td><td class="drop-neg">-2.3</td></tr>
+        <tr><td>5</td><td>+ strip case endings</td><td>96.7%</td><td class="drop-neg">-2.5</td></tr>
+        <tr class="highlight-row"><td>6–11</td><td>+ all remaining filters</td><td>96.7%</td><td class="drop-neg">-2.5</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>After stacking every possible cleaning step: 96.7%.</strong> Only 2.5 percentage points lost.</p>
+
+  <h3>Table 3 — Greedy Stacking, char unigrams only</h3>
+  <p>Harshest test: classifier sees only single-character frequencies, no morphological patterns.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Step</th><th>Filter added</th><th>Accuracy</th><th>Total drop</th><th>Chars left</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>tier0 baseline</td><td class="acc-high">84.8%</td><td>—</td><td>41</td></tr>
+        <tr><td>1</td><td>+ strip ALL digits</td><td>79.6%</td><td class="drop-neg">-5.1</td><td>31</td></tr>
+        <tr><td>2</td><td>+ truncate 30 tokens</td><td>77.7%</td><td class="drop-neg">-7.1</td><td>31</td></tr>
+        <tr><td>3</td><td>+ strip case endings</td><td>75.8%</td><td class="drop-neg">-9.0</td><td>31</td></tr>
+        <tr><td>4</td><td>+ strip w and y</td><td>74.1%</td><td class="drop-neg">-10.7</td><td>31</td></tr>
+        <tr><td>5</td><td>+ remove logograms</td><td>71.7%</td><td class="drop-neg">-13.0</td><td>28</td></tr>
+        <tr><td>6</td><td>+ strip determinatives</td><td>69.4%</td><td class="drop-neg">-15.4</td><td>28</td></tr>
+        <tr class="highlight-row"><td>7–11</td><td>+ all remaining</td><td>69.1%</td><td class="drop-neg">-15.7</td><td>26</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Even single-character frequencies alone, after maximal cleaning, yield <strong>69%</strong> (chance = 33%).</p>
+
+  <h3>Table 4 — Greedy Stacking, char bigrams (2,2) only</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Step</th><th>Filter added</th><th>Accuracy</th><th>Total drop</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>tier0 baseline</td><td class="acc-high">98.3%</td><td>—</td></tr>
+        <tr><td>1</td><td>+ keep only syllabic</td><td>96.6%</td><td class="drop-neg">-1.8</td></tr>
+        <tr><td>2</td><td>+ strip ALL digits</td><td>94.9%</td><td class="drop-neg">-3.5</td></tr>
+        <tr><td>3</td><td>+ truncate 30 tokens</td><td>93.5%</td><td class="drop-neg">-4.9</td></tr>
+        <tr><td>4</td><td>+ strip case endings</td><td>92.4%</td><td class="drop-neg">-5.9</td></tr>
+        <tr><td>5</td><td>+ strip determinatives</td><td>91.5%</td><td class="drop-neg">-6.9</td></tr>
+        <tr><td>6</td><td>+ strip w/y</td><td>91.3%</td><td class="drop-neg">-7.1</td></tr>
+        <tr class="highlight-row"><td>7–11</td><td>+ all remaining</td><td>91.2%</td><td class="drop-neg">-7.2</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Summary Across N-gram Modes</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>N-gram range</th><th>Baseline</th><th>After full cleaning</th><th>Total drop</th></tr></thead>
+      <tbody>
+        <tr><td>2-5 grams</td><td>99.2%</td><td class="acc-high">96.7%</td><td class="drop-neg">-2.5 pts</td></tr>
+        <tr><td>Bigrams (2,2)</td><td>98.3%</td><td class="acc-high">91.2%</td><td class="drop-neg">-7.2 pts</td></tr>
+        <tr><td>Unigrams (1,1)</td><td>84.8%</td><td class="acc-high">69.1%</td><td class="drop-neg">-15.7 pts</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Longer n-grams are more robust to cleaning because they capture morphological and syllabic patterns that are genuine linguistic features.</p>
+
+  <figure>
+    <img src="plots/bias_cleaning_ablation.png" alt="Effect of Cumulative Cleaning on Classifier Accuracy">
+    <figcaption><strong>Effect of cumulative cleaning on classifier accuracy.</strong> The three curves show greedy-stacked cleaning for 2-5 grams (blue), bigrams (green), and unigrams (red). Each step on the x-axis adds the next most effective filter. All three curves decline slowly and plateau well above chance (33%, dashed line). The 2-5 gram curve barely moves (−2.5 pts total); unigrams are most sensitive but still floor at 69%. No cleaning combination breaks the period signal.</figcaption>
+  </figure>
+</section>
+
+<!-- ─── KEY FEATURES ─── -->
+<section>
+  <h2>Key Linguistic Features Driving Separation</h2>
+  <p>These are real diachronic differences, not corpus artifacts:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Feature</th><th>OB</th><th>NA</th><th>LB</th><th>Type</th></tr></thead>
+      <tbody>
+        <tr><td><code>w</code> consonant</td><td>1,345 occ.</td><td>0</td><td>0</td><td><span class="feat-phon">Phonological (West Semitic /w/ lost after OB)</span></td></tr>
+        <tr><td>Ventive <code>-am</code></td><td>2.77/text</td><td>0.10/text</td><td>—</td><td><span class="feat-morph">Morphological (28× ratio)</span></td></tr>
+        <tr><td>Ventive <code>-im</code></td><td>2.30/text</td><td>0.05/text</td><td>—</td><td><span class="feat-morph">Morphological (46× ratio)</span></td></tr>
+        <tr><td><code>ma-a</code> quotative</td><td>rare</td><td>high-freq</td><td>rare</td><td><span class="feat-morph">Discourse marker (NA-exclusive)</span></td></tr>
+        <tr><td><code>lu2-</code> determinative</td><td>0.1/text</td><td>1.8/text</td><td>—</td><td><span class="feat-conv">Convention (18× ratio)</span></td></tr>
+        <tr><td><code>I-</code> name prefix</td><td>0.6/text</td><td>—</td><td>3.9/text</td><td><span class="feat-onom">Onomastic (7× ratio)</span></td></tr>
+        <tr><td>Logogram rate</td><td>25.7%</td><td>44.0%</td><td>52.0%</td><td><span class="feat-conv">Writing system preference</span></td></tr>
+        <tr><td>Subscript conventions</td><td>ša</td><td>ša</td><td>ša2</td><td><span class="feat-conv">Editorial (same sign, different reading)</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure>
+    <img src="plots/bias_dim_reduction.png" alt="TF-IDF Period Separation — Char N-gram Feature Space">
+    <figcaption><strong>t-SNE projection of TF-IDF char n-gram features</strong> (cosine distance, after tier0 cleaning) for all 4,957 texts — shown for unigrams, bigrams, and 2-5 grams. Even at the unigram level (single characters), OB (blue), NA (purple), and LB (red) form largely separate clusters. By 2-5 grams the three periods are almost completely linearly separable. This is a bag-of-characters model — no word boundaries, no syntax — yet period separates cleanly, confirming the signal is deep in the character statistics of each language stage.</figcaption>
+  </figure>
+
+  <p>Only one feature was a pure corpus artifact: <code>@v</code> ORACC markup (968 occurrences in NA, zero elsewhere). Removing it had zero effect on accuracy.</p>
+</section>
+
+<!-- ─── EXPERIMENT 3 ─── -->
+<section>
+  <h2>Experiment 3 — Replication on Full Finetune Dataset</h2>
+  <p>Experiments 1–2 used only the curated 4,957-text evaluation set (letters only). To confirm the signal is not an artifact of that corpus, we replicated the analysis on the <strong>full finetune dataset</strong> — a broader, mixed-genre collection at fragment level.</p>
+
+  <div class="setup-box">
+    <strong>Setup:</strong> All three finetune parquets (train/val/test, 40,429 total fragments). Period labels derived: <code>archibab</code> → OB; ORACC joined with CDLI catalog → OB/NA/LB; eBL dropped (no period metadata). Same TF-IDF + logistic regression + 5-fold CV as Experiment 2.
+  </div>
+
+  <h3>Dataset Construction</h3>
+  <div class="dataset-cards">
+    <div class="dataset-card card-total"><div class="count">10,435</div><div class="label">Usable fragments (of 40,429)</div></div>
+    <div class="dataset-card card-ob"><div class="count">3,649</div><div class="label">Old Babylonian</div></div>
+    <div class="dataset-card card-na"><div class="count">5,829</div><div class="label">Neo-Assyrian</div></div>
+    <div class="dataset-card card-lb"><div class="count">957</div><div class="label">Late Babylonian</div></div>
+  </div>
+
+  <p><strong>Dropped (29,994 fragments, 71.6%):</strong></p>
+  <ul style="margin: 8px 0 16px 24px; color: var(--muted);">
+    <li><strong>eBL — 24,909 fragments:</strong> no period metadata exists in the eBL corpus</li>
+    <li><strong>ORACC without CDLI match — 3,569 fragments:</strong> fragment_id not in CDLI catalog</li>
+    <li><strong>ORACC other periods — 1,516 fragments:</strong> Uruk III, Middle Babylonian, ED IIIa, etc.</li>
+  </ul>
+
+  <h3>3a. TF-IDF + Logistic Regression (5-fold CV)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>N-gram</th><th>Accuracy</th><th>F1 Macro</th></tr></thead>
+      <tbody>
+        <tr><td>Unigrams (1,1)</td><td>83.1% ± 12.9%</td><td>0.766 ± 0.150</td></tr>
+        <tr><td>Bigrams (2,2)</td><td>86.0% ± 11.6%</td><td>0.803 ± 0.135</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Higher variance than the evaluation set reflects shorter fragments (median 35 signs vs ~40 words), class imbalance (LB = 9.2%), and mixed genres.</p>
+
+  <h3>3b. Greedy Cleaning Ablation on Finetune Data</h3>
+  <p>Same 11 filters, same greedy stacking. <strong>Incremental Δ</strong> = drop caused by that filter alone (not cumulative from baseline).</p>
+
+  <h4>Table 5 — Greedy Stacking, Finetune Unigrams (1,1)</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Step</th><th>Filter added</th><th>Accuracy</th><th>Incremental Δ</th><th>Total drop</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>tier0 baseline</td><td class="acc-high">83.1%</td><td>—</td><td>—</td></tr>
+        <tr><td>1</td><td>+ keep only syllabic</td><td>71.6%</td><td class="drop-neg"><strong>−11.5</strong></td><td class="drop-neg">−11.5</td></tr>
+        <tr><td>2</td><td>+ strip w/y</td><td>64.8%</td><td class="drop-neg"><strong>−6.8</strong></td><td class="drop-neg">−18.3</td></tr>
+        <tr class="highlight-row"><td>3–11</td><td>+ all remaining filters</td><td>64.8%</td><td>0.0</td><td class="drop-neg">−18.3</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Table 6 — Greedy Stacking, Finetune Bigrams (2,2)</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Step</th><th>Filter added</th><th>Accuracy</th><th>Incremental Δ</th><th>Total drop</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>tier0 baseline</td><td class="acc-high">86.0%</td><td>—</td><td>—</td></tr>
+        <tr><td>1</td><td>+ keep only syllabic</td><td>83.1%</td><td class="drop-neg"><strong>−2.9</strong></td><td class="drop-neg">−2.9</td></tr>
+        <tr><td>2</td><td>+ truncate 30 tokens</td><td>81.9%</td><td class="drop-neg">−1.2</td><td class="drop-neg">−4.1</td></tr>
+        <tr><td>3</td><td>+ strip w/y</td><td>81.4%</td><td class="drop-neg">−0.5</td><td class="drop-neg">−4.7</td></tr>
+        <tr class="highlight-row"><td>4–11</td><td>+ all remaining filters</td><td>81.3%</td><td>≈0.0</td><td class="drop-neg">−4.7</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure>
+    <img src="plots/finetune_cleaning_ablation.png" alt="Effect of Cumulative Cleaning on Finetune Accuracy">
+    <figcaption><strong>Greedy-stacked cleaning on the finetune dataset.</strong> Bigrams (green) and unigrams (red) both plateau well above chance (33%). On unigrams, just two filters (keep only syllabic + strip w/y) account for the entire 18.3-pt drop; all remaining 9 filters add nothing. Both curves floor far above chance.</figcaption>
+  </figure>
+
+  <h3>3c. Cross-Dataset Comparison (Incremental Δ per Step)</h3>
+  <p>The table below shows the <strong>incremental</strong> accuracy drop per greedy step — i.e., the effect of each filter in isolation from the previous state, <em>not</em> cumulative from baseline.</p>
+
+  <h4>Unigrams (1,1)</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Step</th><th>Eval Set filter</th><th>Eval Δ</th><th>Finetune filter</th><th>FT Δ</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>strip ALL digits</td><td class="drop-neg">−5.1</td><td>keep only syllabic</td><td class="drop-neg"><strong>−11.5</strong></td></tr>
+        <tr><td>2</td><td>truncate 30 tokens</td><td class="drop-neg">−2.0</td><td>strip w/y</td><td class="drop-neg"><strong>−6.8</strong></td></tr>
+        <tr><td>3</td><td>strip case endings</td><td class="drop-neg">−1.9</td><td>(plateau)</td><td>0.0</td></tr>
+        <tr><td>4</td><td>strip w/y</td><td class="drop-neg">−1.7</td><td>—</td><td>—</td></tr>
+        <tr><td>5</td><td>remove logograms</td><td class="drop-neg">−2.3</td><td>—</td><td>—</td></tr>
+        <tr><td>6</td><td>strip determinatives</td><td class="drop-neg">−2.3</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Bigrams (2,2)</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Step</th><th>Eval Set filter</th><th>Eval Δ</th><th>Finetune filter</th><th>FT Δ</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>keep only syllabic</td><td class="drop-neg">−1.8</td><td>keep only syllabic</td><td class="drop-neg"><strong>−2.9</strong></td></tr>
+        <tr><td>2</td><td>strip ALL digits</td><td class="drop-neg">−1.7</td><td>truncate 30 tokens</td><td class="drop-neg">−1.2</td></tr>
+        <tr><td>3</td><td>truncate 30 tokens</td><td class="drop-neg">−1.4</td><td>strip w/y</td><td class="drop-neg">−0.5</td></tr>
+        <tr><td>4</td><td>strip case endings</td><td class="drop-neg">−1.0</td><td>normalize long vowels</td><td class="drop-neg">−0.1</td></tr>
+        <tr><td>5</td><td>strip determinatives</td><td class="drop-neg">−1.0</td><td>(plateau)</td><td>0.0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>3d. PLS-DA — Feature Interpretability</h3>
+  <p><strong>What is VIP?</strong> VIP (Variable Importance in Projection, Wold 1993) summarises how much each feature contributes across all PLS latent components, weighted by how much each component explains of Y (the period labels). Features with VIP &gt; 1.0 contribute more than average to class separation. Unlike log-odds (which is per-class), VIP is <em>multivariate</em> — it integrates contribution across all three class separations simultaneously.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Rank</th><th>Feature (bigrams)</th><th>VIP</th><th>Period</th><th>Linguistic meaning</th></tr></thead>
+      <tbody>
+        <tr><td>1–2</td><td><code>60</code>, <code> 6</code></td><td>7.3</td><td><span class="pill pill-lb">LB</span></td><td>Subscript-6 sequences — LB sign-reading convention</td></tr>
+        <tr><td>3</td><td><code>qa</code></td><td>4.9</td><td><span class="pill pill-lb">LB</span></td><td>/q/ consonant, more common in LB sign readings</td></tr>
+        <tr><td>5</td><td><code>un</code></td><td>4.7</td><td><span class="pill pill-ob">OB</span></td><td>Common OB syllable</td></tr>
+        <tr><td>7</td><td><code>í</code>, <code>ú</code></td><td>4.5–4.2</td><td><span class="pill pill-ob">OB</span></td><td>Accented vowels, higher frequency in OB syllabic writing</td></tr>
+        <tr><td>10</td><td><code>bí</code></td><td>4.0</td><td><span class="pill pill-ob">OB</span></td><td>OB syllabic pattern</td></tr>
+        <tr><td>17</td><td><code>me</code></td><td>3.7</td><td><span class="pill pill-lb">LB</span></td><td>From <code>-meš</code> plural or LB vocabulary</td></tr>
+        <tr><td>19–21</td><td><code>i)</code>, <code>d)</code>, <code>(d</code></td><td>3.4–3.3</td><td><span class="pill pill-na">NA</span></td><td>Determinative <code>{d}</code> for divine names, more frequent in NA</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure>
+    <img src="plots/finetune_pls_scores.png" alt="PLS-DA Score Plot — Finetune">
+    <figcaption><strong>PLS-DA score plot on the finetune dataset.</strong> Unlike t-SNE, PLS is supervised — it finds the projection that maximally separates the three periods. OB (blue), NA (purple), and LB (red) form distinct clusters in both n-gram modes, confirming that the period signal is linearly separable in the char n-gram feature space.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="plots/finetune_pls_vip.png" alt="PLS-DA VIP Scores — Finetune">
+    <figcaption><strong>PLS-DA Variable Importance in Projection (VIP) — top 30 features per n-gram mode.</strong> Bar color indicates which period the feature most discriminates (blue=OB, purple=NA, red=LB). Features to the right of the dashed line (VIP &gt; 1.0) are above-average discriminators. The same features identified by the cleaning ablation dominate: subscript-6 conventions (LB), the /w/ phoneme (OB), and logogram/number-notation patterns.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="plots/finetune_dim_reduction.png" alt="t-SNE — Finetune Dataset">
+    <figcaption><strong>t-SNE of TF-IDF char n-gram features on the 10,435 finetune fragments.</strong> Clusters are more fragmented than the evaluation set due to shorter fragments and genre diversity, but period separation remains visible in both unigram and bigram space.</figcaption>
+  </figure>
+
+  <h3>3e. What Drives the Signal — Three Tiers</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Tier</th><th>Feature type</th><th>Key filters / VIP features</th><th>Why it separates periods</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1 — Writing system</strong></td>
+          <td>Logogram rate, number notation, subscript digits</td>
+          <td>"keep only syllabic" (biggest single drop in both datasets); VIP: <code>6</code>, <code>60</code>, <code>(</code>, <code>)</code></td>
+          <td>Logogram rate increases OB→NA→LB (25%→44%→52%). Subscript conventions (<code>ša</code> vs <code>ša₂</code>) differ by period editorial tradition.</td>
+        </tr>
+        <tr>
+          <td><strong>2 — Phonology &amp; morphology</strong></td>
+          <td>/w/ phoneme, case endings</td>
+          <td>"strip w/y" (2nd biggest on FT unigrams); VIP: <code>w</code>, <code>qa</code>, <code>qí</code></td>
+          <td>/w/ exists only in OB (lost after 1600 BC). Case endings (−am, −im) productive in OB, vestigial in NA/LB — 28× frequency ratio.</td>
+        </tr>
+        <tr>
+          <td><strong>3 — Scribal conventions</strong></td>
+          <td>Text length, determinatives</td>
+          <td>"truncate 30 tokens"; "strip determinatives"</td>
+          <td>Median length differs by period. Determinative <code>lu2-</code> is 18× more frequent in NA than OB.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>None of these are corpus artifacts.</strong> They are well-documented diachronic changes in Akkadian spanning 1,000+ years, consistent with standard Assyriological literature.</p>
+</section>
+
+<!-- ─── CONCLUSION ─── -->
+<section>
+  <h2>Conclusion</h2>
+  <div class="conclusion-box">
+    <p><strong>The bias cannot be cleaned because it is not bias — it is language change.</strong></p>
+    <p>OB, NA, and LB are separated by 500–1,000 years each and differ at every linguistic level: phonology, morphology, vocabulary, formulaic conventions, sign-reading traditions, and logographic usage. A simple classifier detects this trivially because a human Assyriologist would too, using the exact same features.</p>
+    <p>This conclusion holds across both the <strong>evaluation set</strong> (4,957 curated letters, 97–99% neural accuracy, 69–99% after maximal cleaning) and the <strong>finetune dataset</strong> (10,435 mixed-genre fragments, 83–86% logistic regression accuracy, 65–81% after maximal cleaning). The finetune replication confirms the signal is not an artifact of evaluation corpus curation.</p>
+    <p><strong>What the FAIL means for Track A:</strong> Period is strongly encoded in the text. This is a <em>precondition</em> for the LLM evaluation being meaningful, not a flaw. The research question is whether the LLM <em>understands</em> why these features signal the period, or merely pattern-matches on them blindly.</p>
+  </div>
+</section>
+
+<!-- ─── METHODOLOGICAL NOTES ─── -->
+<section class="notes">
+  <h2>Methodological Notes</h2>
+  <ul>
+    <li><strong>Experiment 1</strong> (bias check): 8 neural networks, 70/15/15 split, TF-IDF char 2-5 grams, held-out test set.</li>
+    <li><strong>Experiment 2</strong> (ablation): logistic regression, 5-fold cross-validation, multiple n-gram ranges, on evaluation set (4,957 texts).</li>
+    <li><strong>Experiment 3</strong> (finetune replication): logistic regression, 5-fold CV, PLS-DA with VIP scores, greedy cleaning, on finetune fragments (10,435 usable / 40,429 total). Notebook: <code>src/bias_check/bias_analysis_finetune.ipynb</code>.</li>
+    <li>The ablation deliberately used a simpler model. If even logistic regression can't be fooled by cleaning, the signal is genuinely in the language.</li>
+    <li>Experiments 2 and 3 use different datasets and granularity, so accuracy numbers should not be directly compared — but the conclusion is identical.</li>
+  </ul>
+</section>
+
+</div>
+</body>
+</html>

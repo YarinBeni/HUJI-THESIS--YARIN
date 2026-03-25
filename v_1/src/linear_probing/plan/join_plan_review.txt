@@ -1,0 +1,88 @@
+Here is my full synthesis of the 4 reviews.
+
+---
+
+## What All 4 Reviews Agree On
+
+These points are raised by **every single reviewer** — they form the strongest signal:
+
+### 1. The plan is aimed at the wrong dataset
+All 4 reviewers flag that the plan is built around the **4,957 letters**, while the email thread concluded the team should **pivot away from letters** (too easy, trivially separable by n-grams). The plan mentions SEAL only in passing ("Later: SEAL literary texts..."). Every reviewer says to either reframe letters as a pipeline sanity check or make SEAL the primary target.
+
+### 2. The success threshold (>85%) is dangerously weak
+The Outcome A threshold of `>85%` is barely above the unigram baseline (84.8%) and far below the n-gram baselines (96-99%). All reviewers agree this means:
+- A probe hitting 86-90% could be **worse than a trivial n-gram model** but still be declared a success
+- Noise from cross-validation could flip the story at that margin
+- The plan risks claiming "deeper temporal representation" for what is essentially an expensive n-gram detector
+
+### 3. Surface confounds are not controlled for
+All 4 note that the data is **known** to be trivially separable by surface features (orthography, names, morphology, length). The plan identifies this risk in Step 0 (tokenization check) but then never actually controls for it in Steps 1-2. Mean pooling + no length/token-count ablations leaves the door open for the probe to exploit the same shallow signals.
+
+### 4. Outcome A/B interpretations are overclaimed
+All reviewers say that mapping "mid-layer peak" to "deeper representation" is too strong. Surface features like names, provenance markers, and orthographic conventions can survive many layers and produce a mid-layer peak without any genuine "understanding." The claims need softening.
+
+### 5. Step 0 (tokenization check) is excellent
+Universal praise. This is the right first move for extreme OOD data and should stay exactly as-is.
+
+### 6. The plan is operationally solid
+All agree the execution pipeline — scripts, storage estimates, compute assumptions, file structure — is well-structured and ready to implement. The issue is the **scientific inference**, not the engineering.
+
+---
+
+## Where They Differ
+
+| Topic | Gemini | ChatGPT | Auto | Premium |
+|-------|--------|---------|------|---------|
+| **Primary focus** | Dataset pivot, missing EDA step | Controlled comparisons, split alignment | Narrative framing, PLS alignment | Evaluation rigor, reproducibility |
+| **Letters data** | Drop entirely, use only for debugging | Should still run, but reframe | Keep as "controlled lab setting" | Use as calibration, SEAL as endpoint |
+| **EDA step** | Wants explicit "Step 0.5" with UMAP/PCA on final-layer embeddings | Not mentioned | Not mentioned | Not mentioned |
+| **Eval protocol mismatch** | Not raised | Detailed: 5-fold CV vs. fixed 70/15/15 splits in bias check makes comparison "methodologically shaky" | Not raised | Raised: wants nested CV or held-out test |
+| **Double-dipping / layer selection bias** | Not raised | Not raised | Not raised | **Unique finding**: picking the best layer and reporting its CV score is optimistically biased without held-out or nested CV |
+| **Reproducibility** | Not raised | Not raised | Not raised | **Unique finding**: seeds, fold assignments, regularization grids, deterministic settings not pinned |
+| **Grouped structure** | Not raised | Not raised | Not raised | **Unique finding**: asks if same archive/site/scribe creates leakage across folds |
+| **Probe-weight analysis** | Not raised | Wants probe weights correlated with TF-IDF feature importances | Wants CKA-style alignment with bag-of-n-grams | Not raised |
+| **PLS alignment** | Not raised | Not raised | Notes PLS is "additional" in plan but "primary" in Track B — may cause Track B/C misalignment | Not raised |
+| **Tone** | Most prescriptive ("rewrite these sections") | Most detailed and cautious | Most balanced and pragmatic | Most structured (severity-tagged) |
+
+---
+
+## Good Suggestions vs. Less Critical Ones
+
+### Must-do (raised by multiple reviewers, clearly correct):
+1. **Reframe letters vs. SEAL narrative** — letters = validation/calibration, SEAL = primary evaluation
+2. **Raise the success bar** — define success as beating the **cleaned** baselines on **matched splits**, not just >85%
+3. **Add confound controls** — length-matched subsets, token-count residualization, random-label sanity check
+4. **Soften Outcome A/B/C claims** — mid-layer peak is "suggestive," not "conclusive"
+5. **Align evaluation protocol** — use the same train/val/test splits as the bias check, or at least nested CV
+
+### Should-do (unique but strong, from single reviewers):
+6. **Nested CV or held-out test for layer selection** (Premium) — standard ML practice, avoids optimistic bias from picking the best of 32 layers
+7. **Pin reproducibility details** (Premium) — seeds, folds, regularization grid
+8. **Add EDA step before full extraction** (Gemini) — quick final-layer UMAP/PCA could save hours of GPU time if clustering is obvious or absent
+9. **Check for grouped structure** (Premium) — same archive/scribe splitting across folds is data leakage
+
+### Nice-to-have (interesting but can defer):
+10. **CKA-style alignment with bag-of-n-grams** (Auto) — rigorous but may be overkill at this stage
+11. **Probe-weight vs. TF-IDF correlation** (ChatGPT) — already partially covered in Outcome B interpretation
+
+Nothing suggested across the 4 reviews is actively bad — all are constructive and relevant.
+
+---
+
+## Bottom Line: What the Plan Must Adjust
+
+Here are the concrete changes, in priority order:
+
+1. **Add a "Relationship to Letters vs. SEAL" subsection** — one paragraph clarifying that letters are a controlled experiment / pipeline test, and SEAL literary texts are the thesis-facing evaluation. New TF-IDF baselines must be computed for SEAL when data arrives.
+
+2. **Redefine success criteria** — replace the `>85%` threshold with: (a) beating the **maximally-cleaned unigram baseline (69.1%)** on matched splits as minimum, (b) competing with cleaned bigram/n-gram baselines as strong evidence, and (c) using layer-peak shape + statistical significance (permutation test) rather than a single accuracy number.
+
+3. **Fix the evaluation protocol** — either use the same 70/15/15 splits as the bias check, or use nested CV (inner loop for hyperparams, outer for evaluation). Select the best layer on validation, report final number on a held-out test set **once**.
+
+4. **Add confound control experiments** — (a) random-label baseline to verify the probe isn't trivially fitting noise, (b) length/token-count as explicit covariates or length-matched subsets, (c) optionally correlate probe weights with TF-IDF feature importances to quantify overlap.
+
+5. **Soften interpretation language** — Outcome A should say "suggestive of representation beyond surface statistics, pending confound controls" rather than a definitive claim. Outcome B should note that early-layer signal is *consistent with* but *not proof of* surface-only encoding.
+
+6. **Pin reproducibility details** — add a small section specifying random seeds, fold assignment method, regularization search grid, and torch deterministic flags.
+
+7. **Consider a quick EDA step** — extract final-layer embeddings only, run UMAP/PCA, check for obvious clustering before committing to full 32-layer extraction on GPU. This is cheap insurance.

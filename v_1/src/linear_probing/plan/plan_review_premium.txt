@@ -1,0 +1,63 @@
+Key issues first, then my overall take.
+
+## Findings
+
+- **High — Success threshold is too low relative to your own baseline, so conclusions can be false-positive.**  
+  The plan treats `>85%` as “works well,” but your context shows simple n-gram models already hit `98–99%` on letters. That means a probe at 86–90% could still be strictly worse than shallow lexical baselines, yet be interpreted as deeper temporal representation.  
+```110:122:v_1/src/linear_probing/PLAN.md
+### Outcome A: Probe works well (accuracy > 85%, peaks at mid-layers)
+→ LLM encodes temporal info beyond surface statistics. Proceed to:
+...
+### Outcome B: Probe works but only at early layers (accuracy ~85%, peak at layers 1-3)
+→ LLM is probably just encoding surface token statistics
+```
+  Suggestion: redefine “strong evidence” as beating **cleaned bigram/2-5gram baselines on matched splits**, or at minimum clearly separate “above unigram” vs “competitive with strongest shallow baseline.”
+
+- **High — Risk of selection bias (double-dipping) when choosing best layer and reporting its CV score.**  
+  You CV each layer, then pick the best layer for interpretation/outcome decisions. Without a held-out test or nested CV, best-layer performance is optimistically biased.  
+```83:91:v_1/src/linear_probing/PLAN.md
+For each layer L:
+...
+3. Train ridge classifier ... using 5-fold stratified CV
+4. Record: accuracy, F1 macro, per-class precision/recall
+```
+  Suggestion: split once into train/val/test (or nested CV), select layer/hyperparams on val, report final once on untouched test.
+
+- **Medium — Potential confound mismatch with prior bias findings (length/surface artifacts) is not controlled in probe step.**  
+  You already found strong surface separability in prior work; mean pooling + no explicit confound controls can let probe exploit token-count/length artifacts again.  
+```61:67:v_1/src/linear_probing/PLAN.md
+5. Aggregate across token positions using mean pooling
+...
+- Secondary (if time permits): also save last-token activations for comparison
+```
+  Suggestion: add explicit controls now (length-matched subsets, residualizing length/token-count, report probe with and without these controls).
+
+- **Medium — Team-direction drift risk: plan is letters-first, while latest thread indicates pivot away from letters benchmark as main task.**  
+  In the emails, the agreed next step was dropping letters classification benchmark and moving to SEAL-centric analysis plus probing. Current plan still anchors primary evaluation and decision logic on letters.  
+```25:29:v_1/src/linear_probing/PLAN.md
+## Data
+- Source: `v_1/data/evaluation/corpora/texts_for_evaluation.parquet`
+- 4,957 letters, 3 classes...
+- Later: SEAL literary texts (~400+ from Chungrong, when available)
+```
+  Suggestion: make letters a calibration sanity check, but define SEAL/OOD behavior as primary endpoint.
+
+- **Low — Reproducibility details are underspecified.**  
+  Seeds, fold assignment persistence, class-weight policy, regularization grid, and deterministic settings are not yet pinned, which will make results hard to defend/reproduce.
+```155:160:v_1/src/linear_probing/PLAN.md
+## Dependencies
+- transformers ...
+- torch ...
+- sklearn ...
+```
+
+## Open Questions / Assumptions
+
+- Are you aiming to claim “LLM adds value over shallow lexical models,” or just “temporal signal exists somewhere in activations”? These need different acceptance criteria.
+- Will SEAL data include reliable labels/metadata for supervised probing, or do you need weak labels / nearest-period mapping first?
+- Is there grouped structure (same archive/site/scribe) that requires grouped splits to avoid leakage across folds?
+
+## Overall take
+
+The plan is strong operationally (clear scripts, outputs, and compute assumptions), but the **inference logic needs tightening** before implementation.  
+If you fix thresholding + evaluation protocol (held-out/nested, matched baselines, confound controls), this can become a solid and defensible probing study rather than “another high-accuracy-on-easy-data” result.
