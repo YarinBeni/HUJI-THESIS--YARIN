@@ -20,6 +20,13 @@ _THIS_DIR = Path(__file__).resolve().parent
 DATA_PATH = _THIS_DIR / '../../data/evaluation/corpora/texts_for_evaluation.parquet'
 RESULTS_DIR = _THIS_DIR / 'results'
 
+# Mapping from full period names in parquet -> short labels used throughout
+PERIOD_MAP = {
+    'Old Babylonian': 'OB',
+    'Neo-Assyrian':   'NA',
+    'Late Babylonian': 'LB',
+}
+
 PERIODS = ['OB', 'NA', 'LB']  # label order for encoding
 
 PERIOD_COLORS = {
@@ -54,10 +61,17 @@ SPLIT_SEED = 42
 def load_letters() -> pd.DataFrame:
     """Load the 4,957 letters with columns: text, period, fragment_id, etc."""
     df = pd.read_parquet(DATA_PATH)
-    # Ensure required columns exist
+    # Rename full_text -> text for consistent downstream usage
+    if 'full_text' in df.columns and 'text' not in df.columns:
+        df = df.rename(columns={'full_text': 'text'})
     assert 'text' in df.columns, f"Missing 'text' column. Columns: {df.columns.tolist()}"
     assert 'period' in df.columns, f"Missing 'period' column. Columns: {df.columns.tolist()}"
     assert len(df) == 4957, f"Expected 4,957 rows, got {len(df)}"
+    # Normalize period labels to short form (OB/NA/LB)
+    if df['period'].iloc[0] in PERIOD_MAP:
+        df = df.copy()
+        df['period'] = df['period'].map(PERIOD_MAP)
+    assert set(df['period'].unique()) <= set(PERIODS), f"Unexpected period values: {df['period'].unique()}"
     return df
 
 
