@@ -7,6 +7,7 @@ import re
 import json
 import numpy as np
 import pandas as pd
+import torch
 from pathlib import Path
 from sklearn.model_selection import StratifiedShuffleSplit
 
@@ -186,6 +187,26 @@ def mean_pool(hidden_states, attention_mask):
     summed = (hidden_states * mask).sum(dim=1)    # (batch, hidden_dim)
     counts = mask.sum(dim=1).clamp(min=1)         # (batch, 1)
     return summed / counts
+
+
+def last_token_pool(hidden_states, attention_mask):
+    """Extract the last non-padding token's hidden state per sequence.
+
+    For decoder-only models, the last token has attended to all previous
+    tokens, so it carries the full context representation.
+
+    Args:
+        hidden_states: (batch, seq_len, hidden_dim) tensor
+        attention_mask: (batch, seq_len) tensor of 0/1
+
+    Returns:
+        (batch, hidden_dim) tensor
+    """
+    # Find the index of the last 1 in each row of attention_mask
+    last_idx = attention_mask.sum(dim=1) - 1  # (batch,)
+    last_idx = last_idx.long()
+    batch_idx = torch.arange(hidden_states.size(0), device=hidden_states.device)
+    return hidden_states[batch_idx, last_idx, :]
 
 
 # =============================================================================

@@ -4,7 +4,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
-#SBATCH --time=04:00:00
+#SBATCH --time=08:00:00
 #SBATCH --output=v_1/src/linear_probing/logs/extract_%j.out
 
 echo "=== Extract Activations ==="
@@ -20,19 +20,39 @@ cd ~/projects/HUJI-THESIS--YARIN
 
 mkdir -p v_1/src/linear_probing/logs
 
-echo "=== Extracting activations (tier0) ==="
+# --- Mean pooling (default, comparable to bias check) ---
+echo "=== Extracting activations (tier0, mean pooling) ==="
 python v_1/src/linear_probing/01_extract_activations.py \
     --model Qwen/Qwen2.5-7B-Instruct \
     --cleaning tier0 \
+    --pooling mean \
     --batch-size 8 \
-    || { echo "FAILED: tier0 extraction"; exit 1; }
+    || { echo "FAILED: tier0 mean extraction"; exit 1; }
 
-echo "=== Extracting activations (maximal cleaning) ==="
+echo "=== Extracting activations (maximal, mean pooling) ==="
 python v_1/src/linear_probing/01_extract_activations.py \
     --model Qwen/Qwen2.5-7B-Instruct \
     --cleaning maximal \
+    --pooling mean \
     --batch-size 8 \
-    || { echo "FAILED: maximal extraction"; exit 1; }
+    || { echo "FAILED: maximal mean extraction"; exit 1; }
+
+# --- Last-token pooling (decoder-only models attend causally) ---
+echo "=== Extracting activations (tier0, last_token pooling) ==="
+python v_1/src/linear_probing/01_extract_activations.py \
+    --model Qwen/Qwen2.5-7B-Instruct \
+    --cleaning tier0 \
+    --pooling last_token \
+    --batch-size 8 \
+    || { echo "FAILED: tier0 last_token extraction"; exit 1; }
+
+echo "=== Extracting activations (maximal, last_token pooling) ==="
+python v_1/src/linear_probing/01_extract_activations.py \
+    --model Qwen/Qwen2.5-7B-Instruct \
+    --cleaning maximal \
+    --pooling last_token \
+    --batch-size 8 \
+    || { echo "FAILED: maximal last_token extraction"; exit 1; }
 
 echo "=== Done ==="
 echo "End: $(date)"

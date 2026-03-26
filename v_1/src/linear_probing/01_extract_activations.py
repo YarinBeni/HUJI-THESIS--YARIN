@@ -1,7 +1,8 @@
 """
 Step 1 — Extract Activations at ALL Layers.
-For each of the 4,957 texts, extract mean-pooled activations at every
+For each of the 4,957 texts, extract pooled activations at every
 transformer layer (including embedding layer 0). Save one .npz per layer.
+Supports both mean-pooling and last-token pooling.
 """
 
 import argparse
@@ -14,7 +15,8 @@ from pathlib import Path
 from datetime import datetime
 
 from utils import (
-    load_letters, clean_tier0, clean_maximal, model_short_name, mean_pool,
+    load_letters, clean_tier0, clean_maximal, model_short_name,
+    mean_pool, last_token_pool,
     activations_dir, RESULTS_DIR, SEED,
 )
 
@@ -67,6 +69,8 @@ def run(args):
     n_layers = None
     hidden_dim = None
 
+    pool_fn = mean_pool if args.pooling == 'mean' else last_token_pool
+    print(f"Pooling method: {args.pooling}")
     print(f"Processing {len(texts)} texts in {n_batches} batches "
           f"(batch_size={batch_size}, max_length={args.max_length})...")
 
@@ -102,9 +106,9 @@ def run(args):
                       f"({n_layers - 1} transformer layers + embedding), "
                       f"hidden_dim={hidden_dim}")
 
-            # Mean pool each layer and collect
+            # Pool each layer and collect
             for layer_idx in range(n_layers):
-                pooled = mean_pool(hidden_states[layer_idx], attention_mask)
+                pooled = pool_fn(hidden_states[layer_idx], attention_mask)
                 per_layer_acts[layer_idx].append(pooled.cpu().float().numpy())
 
             # Free GPU memory
@@ -117,7 +121,9 @@ def run(args):
                       f"({elapsed / 60:.1f} min elapsed)")
 
     # ── Stack and save ──────────────────────────────────────────────────────
-    out_dir = activations_dir(short_name, args.cleaning)
+    # Include pooling in path: activations/{model}/{cleaning}_{pooling}/
+    cleaning_tag = f"{args.cleaning}_{args.pooling}" if args.pooling != 'mean' else args.cleaning
+    out_dir = activations_dir(short_name, cleaning_tag)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"\nSaving {n_layers} layer files to {out_dir}/")
@@ -141,6 +147,7 @@ def run(args):
         'model_id': args.model,
         'model_short_name': short_name,
         'cleaning': args.cleaning,
+        'pooling': args.pooling,
         'n_texts': len(df),
         'n_layers': n_layers,
         'hidden_dim': int(hidden_dim),
@@ -163,12 +170,15 @@ def run(args):
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description='Step 1: Extract mean-pooled activations at all layers')
+        description='Step 1: Extract pooled activations at all layers')
     parser.add_argument('--model', type=str, required=True,
                         help='HuggingFace model ID')
     parser.add_argument('--cleaning', type=str, required=True,
                         choices=['tier0', 'maximal'],
                         help='Cleaning mode: tier0 or maximal')
+    parser.add_argument('--pooling', type=str, default='mean',
+                        choices=['mean', 'last_token'],
+                        help='Pooling method: mean or last_token (default: mean)')
     parser.add_argument('--batch-size', type=int, default=8,
                         help='Batch size for inference (default: 8)')
     parser.add_argument('--max-length', type=int, default=512,
