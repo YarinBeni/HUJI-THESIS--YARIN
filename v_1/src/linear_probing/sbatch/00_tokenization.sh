@@ -21,7 +21,7 @@ cd ~/projects/HUJI-THESIS--YARIN
 mkdir -p v_1/src/linear_probing/logs
 
 python v_1/src/linear_probing/00_tokenization_check.py \
-    --model meta-llama/Llama-3.1-8B-Instruct \
+    --model Qwen/Qwen2.5-7B-Instruct \
     || { echo "FAILED: tokenization check"; exit 1; }
 
 echo "=== Done ==="

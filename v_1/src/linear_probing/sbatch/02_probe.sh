@@ -19,7 +19,7 @@ cd ~/projects/HUJI-THESIS--YARIN
 mkdir -p v_1/src/linear_probing/logs
 
 python v_1/src/linear_probing/02_linear_probe.py \
-    --model llama-3.1-8b-instruct \
+    --model qwen2.5-7b-instruct \
     --n-permutations 1000 \
     || { echo "FAILED: linear probe"; exit 1; }
 

@@ -22,14 +22,14 @@ mkdir -p v_1/src/linear_probing/logs
 
 echo "=== Extracting activations (tier0) ==="
 python v_1/src/linear_probing/01_extract_activations.py \
-    --model meta-llama/Llama-3.1-8B-Instruct \
+    --model Qwen/Qwen2.5-7B-Instruct \
     --cleaning tier0 \
     --batch-size 8 \
     || { echo "FAILED: tier0 extraction"; exit 1; }
 
 echo "=== Extracting activations (maximal cleaning) ==="
 python v_1/src/linear_probing/01_extract_activations.py \
-    --model meta-llama/Llama-3.1-8B-Instruct \
+    --model Qwen/Qwen2.5-7B-Instruct \
     --cleaning maximal \
     --batch-size 8 \
     || { echo "FAILED: maximal extraction"; exit 1; }
