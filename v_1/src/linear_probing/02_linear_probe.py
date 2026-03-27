@@ -86,8 +86,7 @@ def run(args):
             for C in C_GRID:
                 clf = LogisticRegression(
                     C=C, penalty='l2', max_iter=1000,
-                    random_state=SEED, multi_class='multinomial',
-                    solver='lbfgs',
+                    random_state=SEED, solver='lbfgs',
                 )
                 acc_scores = cross_val_score(clf, X_tv, y_tv, cv=skf, scoring='accuracy')
                 f1_scores = cross_val_score(clf, X_tv, y_tv, cv=skf, scoring='f1_macro')
@@ -134,7 +133,7 @@ def run(args):
         y_shuffled = np.random.RandomState(SEED + i).permutation(y_tv)
         clf = LogisticRegression(
             C=best_C_tier0, max_iter=1000, random_state=SEED,
-            multi_class='multinomial', solver='lbfgs',
+            solver='lbfgs',
         )
         acc = cross_val_score(clf, X_best_tv, y_shuffled, cv=skf, scoring='accuracy').mean()
         null_accs.append(acc)
@@ -165,7 +164,7 @@ def run(args):
 
         clf = LogisticRegression(
             C=best_C, max_iter=1000, random_state=SEED,
-            multi_class='multinomial', solver='lbfgs',
+            solver='lbfgs',
         )
         clf.fit(X_tv, y_tv)
         y_pred = clf.predict(X_te)
