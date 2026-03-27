@@ -9,6 +9,8 @@ import argparse
 import json
 import sys
 import time
+import warnings
+warnings.filterwarnings('ignore', category=FutureWarning, module='sklearn')
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -48,8 +50,9 @@ def run(args):
     # ── Load data and splits ────────────────────────────────────────────────
     df = load_letters()
     le = LabelEncoder()
-    le.fit(PERIODS)  # fixed order: OB=0, NA=1, LB=2
+    le.fit(PERIODS)  # LabelEncoder sorts: LB=0, NA=1, OB=2
     y_all = le.transform(df['period'].values)
+    label_order = list(le.classes_)  # ['LB', 'NA', 'OB'] — actual order used
 
     train_idx, val_idx, test_idx = get_splits(df)
     train_val_idx = np.concatenate([train_idx, val_idx])
@@ -96,7 +99,7 @@ def run(args):
                     best_acc_std = acc_scores.std()
                     best_f1 = f1_scores.mean()
 
-            results[cleaning][layer] = {
+            results[cleaning_label][layer] = {
                 'accuracy': float(best_acc),
                 'accuracy_std': float(best_acc_std),
                 'f1_macro': float(best_f1),
@@ -173,7 +176,7 @@ def run(args):
         test_f1 = f1_score(y_test, y_pred, average='macro')
         cm = confusion_matrix(y_test, y_pred)
         per_class = classification_report(
-            y_test, y_pred, target_names=PERIODS, output_dict=True
+            y_test, y_pred, target_names=label_order, output_dict=True
         )
 
         test_results[cleaning_label] = {
@@ -182,7 +185,7 @@ def run(args):
             'test_accuracy': float(test_acc),
             'test_f1_macro': float(test_f1),
             'confusion_matrix': cm.tolist(),
-            'per_class': {k: v for k, v in per_class.items() if k in PERIODS},
+            'per_class': {k: v for k, v in per_class.items() if k in label_order},
             'cv_accuracy': float(results[cleaning_label][best_layer]['accuracy']),
         }
         print(f"\n  [{cleaning_label}] Layer {best_layer}, C={best_C}")
@@ -248,11 +251,11 @@ def run(args):
     # --- Plot 3: t-SNE at 3 layers (early / best / late) ---
     _plot_tsne_layers(
         model_name, cleaning_tags, n_layers, best_layer_tier0, best_layer_maximal,
-        y_all, plots_dir, pooling,
+        y_all, label_order, plots_dir, pooling,
     )
 
     # --- Plot 4: Confusion matrix ---
-    _plot_confusion_matrix(test_results, plots_dir, pooling)
+    _plot_confusion_matrix(test_results, label_order, plots_dir, pooling)
 
     elapsed = time.time() - t0
     print(f"\nTotal wall time: {elapsed / 60:.1f} min")
@@ -322,7 +325,7 @@ def _plot_null_distribution(null_accs, real_acc, p_value, plots_dir, pooling='me
 
 
 def _plot_tsne_layers(model_name, cleaning_tags, n_layers, best_layer_tier0, best_layer_maximal,
-                      y_all, plots_dir, pooling='mean'):
+                      y_all, label_order, plots_dir, pooling='mean'):
     """t-SNE at early / best / late layers, 3x2 grid (top=tier0, bottom=maximal)."""
     early_layer = 2
     late_layer = n_layers - 2  # second to last
@@ -344,7 +347,7 @@ def _plot_tsne_layers(model_name, cleaning_tags, n_layers, best_layer_tier0, bes
             tsne = TSNE(n_components=2, perplexity=40, random_state=SEED, max_iter=1000)
             X_2d = tsne.fit_transform(X)
 
-            for pi, period in enumerate(PERIODS):
+            for pi, period in enumerate(label_order):
                 mask = y_all == pi
                 ax.scatter(
                     X_2d[mask, 0], X_2d[mask, 1],
@@ -375,13 +378,13 @@ def _plot_tsne_layers(model_name, cleaning_tags, n_layers, best_layer_tier0, bes
     print(f"Saved {path}")
 
 
-def _plot_confusion_matrix(test_results, plots_dir, pooling='mean'):
+def _plot_confusion_matrix(test_results, label_order, plots_dir, pooling='mean'):
     """Confusion matrices for tier0 and maximal on test set."""
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
     for ax, (cleaning, res) in zip(axes, test_results.items()):
         cm = np.array(res['confusion_matrix'])
-        disp = ConfusionMatrixDisplay(cm, display_labels=PERIODS)
+        disp = ConfusionMatrixDisplay(cm, display_labels=label_order)
         disp.plot(ax=ax, cmap='Blues', colorbar=False)
         ax.set_title(f'{cleaning} — Layer {res["best_layer"]}\n'
                      f'Acc={res["test_accuracy"]:.3f}, F1={res["test_f1_macro"]:.3f}',
