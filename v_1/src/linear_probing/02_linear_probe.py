@@ -91,8 +91,8 @@ def run(args):
                     C=C, penalty='l2', max_iter=1000,
                     random_state=SEED, solver='lbfgs',
                 )
-                acc_scores = cross_val_score(clf, X_tv, y_tv, cv=skf, scoring='accuracy')
-                f1_scores = cross_val_score(clf, X_tv, y_tv, cv=skf, scoring='f1_macro')
+                acc_scores = cross_val_score(clf, X_tv, y_tv, cv=skf, scoring='accuracy', n_jobs=-1)
+                f1_scores = cross_val_score(clf, X_tv, y_tv, cv=skf, scoring='f1_macro', n_jobs=-1)
                 if acc_scores.mean() > best_acc:
                     best_C = C
                     best_acc = acc_scores.mean()
@@ -138,7 +138,7 @@ def run(args):
             C=best_C_tier0, max_iter=1000, random_state=SEED,
             solver='lbfgs',
         )
-        acc = cross_val_score(clf, X_best_tv, y_shuffled, cv=skf, scoring='accuracy').mean()
+        acc = cross_val_score(clf, X_best_tv, y_shuffled, cv=skf, scoring='accuracy', n_jobs=-1).mean()
         null_accs.append(acc)
         if (i + 1) % 200 == 0:
             print(f"  Permutation {i + 1}/{n_permutations}")
@@ -248,9 +248,9 @@ def run(args):
     # --- Plot 2: Random-label null distribution ---
     _plot_null_distribution(null_accs, real_acc_tier0, p_value, plots_dir, pooling)
 
-    # --- Plot 3: t-SNE at 3 layers (early / best / late) ---
-    _plot_tsne_layers(
-        model_name, cleaning_tags, n_layers, best_layer_tier0, best_layer_maximal,
+    # --- Plot 3: t-SNE at best layer (all data) ---
+    _plot_tsne_best_layer(
+        model_name, cleaning_tags, best_layer_tier0, best_layer_maximal,
         y_all, label_order, plots_dir, pooling,
     )
 
@@ -324,55 +324,39 @@ def _plot_null_distribution(null_accs, real_acc, p_value, plots_dir, pooling='me
     print(f"Saved {path}")
 
 
-def _plot_tsne_layers(model_name, cleaning_tags, n_layers, best_layer_tier0, best_layer_maximal,
-                      y_all, label_order, plots_dir, pooling='mean'):
-    """t-SNE at early / best / late layers, 3x2 grid (top=tier0, bottom=maximal)."""
-    early_layer = 2
-    late_layer = n_layers - 2  # second to last
-
-    layer_picks = {
-        cleaning_tags[0]: [early_layer, best_layer_tier0, late_layer],
-        cleaning_tags[1]: [early_layer, best_layer_maximal, late_layer],
-    }
+def _plot_tsne_best_layer(model_name, cleaning_tags, best_layer_tier0, best_layer_maximal,
+                          y_all, label_order, plots_dir, pooling='mean'):
+    """t-SNE at best layer only (all data), 1x2 grid (tier0 | maximal)."""
     tag_labels = ['tier0', 'maximal']
+    best_layers = [best_layer_tier0, best_layer_maximal]
 
-    fig, axes = plt.subplots(2, 3, figsize=(18, 10))
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
-    for row, (cleaning_tag, cleaning_label) in enumerate(zip(cleaning_tags, tag_labels)):
-        for col, layer in enumerate(layer_picks[cleaning_tag]):
-            ax = axes[row, col]
-            X = load_layer_activations(model_name, cleaning_tag, layer)
+    for ax, cleaning_tag, cleaning_label, best_layer in zip(
+        axes, cleaning_tags, tag_labels, best_layers
+    ):
+        X = load_layer_activations(model_name, cleaning_tag, best_layer)
 
-            # Use a subset for speed if too many
-            tsne = TSNE(n_components=2, perplexity=40, random_state=SEED, max_iter=1000)
-            X_2d = tsne.fit_transform(X)
+        tsne = TSNE(n_components=2, perplexity=40, random_state=SEED, max_iter=1000)
+        X_2d = tsne.fit_transform(X)
 
-            for pi, period in enumerate(label_order):
-                mask = y_all == pi
-                ax.scatter(
-                    X_2d[mask, 0], X_2d[mask, 1],
-                    c=PERIOD_COLORS[period],
-                    label=f'{period} (n={mask.sum()})',
-                    alpha=0.35, s=7, linewidths=0, rasterized=True,
-                )
+        for pi, period in enumerate(label_order):
+            mask = y_all == pi
+            ax.scatter(
+                X_2d[mask, 0], X_2d[mask, 1],
+                c=PERIOD_COLORS[period],
+                label=f'{period} (n={mask.sum()})',
+                alpha=0.35, s=7, linewidths=0, rasterized=True,
+            )
 
-            label_map = {
-                layer_picks[cleaning_tag][0]: 'Early',
-                layer_picks[cleaning_tag][1]: 'Best',
-                layer_picks[cleaning_tag][2]: 'Late',
-            }
-            title_prefix = label_map.get(layer, '')
-            ax.set_title(f'{cleaning_label} — Layer {layer} ({title_prefix})', fontsize=11)
-            ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
-            if col == 0:
-                ax.set_ylabel(f'{cleaning_label}', fontsize=12, fontweight='bold')
-            if row == 0 and col == 2:
-                ax.legend(markerscale=4, fontsize=8, loc='best', framealpha=0.8)
+        ax.set_title(f'{cleaning_label} — Best Layer {best_layer}', fontsize=11)
+        ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
+        ax.legend(markerscale=4, fontsize=8, loc='best', framealpha=0.8)
 
-    fig.suptitle('t-SNE of Activations at Early / Best / Late Layers', fontsize=14, y=1.01)
+    fig.suptitle(f't-SNE at Best Layer ({pooling} pooling)', fontsize=14, y=1.02)
     plt.tight_layout()
     ptag = f'_{pooling}' if pooling != 'mean' else ''
-    path = plots_dir / f'tsne_by_layer{ptag}.png'
+    path = plots_dir / f'tsne_best_layer{ptag}.png'
     plt.savefig(path, bbox_inches='tight', dpi=200)
     plt.close()
     print(f"Saved {path}")
