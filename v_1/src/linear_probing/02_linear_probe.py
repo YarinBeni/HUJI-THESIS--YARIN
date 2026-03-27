@@ -35,6 +35,15 @@ def run(args):
 
     model_name = args.model
     n_permutations = args.n_permutations
+    pooling = args.pooling
+
+    # Determine directory suffix for this pooling method
+    suffix = '' if pooling == 'mean' else f'_{pooling}'
+    cleaning_tags = [f'tier0{suffix}', f'maximal{suffix}']
+    tag_labels = ['tier0', 'maximal']  # short labels for display/keys
+
+    print(f"Pooling method: {pooling}")
+    print(f"Reading from directories: {cleaning_tags}")
 
     # ── Load data and splits ────────────────────────────────────────────────
     df = load_letters()
@@ -56,21 +65,21 @@ def run(args):
     skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=SEED)
 
     # ── Load metadata to determine number of layers ─────────────────────────
-    meta_tier0 = load_metadata(model_name, 'tier0')
-    n_layers = meta_tier0['n_layers']
-    hidden_dim = meta_tier0['hidden_dim']
+    meta = load_metadata(model_name, cleaning_tags[0])
+    n_layers = meta['n_layers']
+    hidden_dim = meta['hidden_dim']
     print(f"Model: {model_name}, {n_layers} layers, hidden_dim={hidden_dim}")
 
     # ── 2a. Layer-accuracy curve ────────────────────────────────────────────
     results = {}
-    for cleaning in ['tier0', 'maximal']:
+    for cleaning_tag, cleaning_label in zip(cleaning_tags, tag_labels):
         print(f"\n{'='*70}")
-        print(f"PROBING — {cleaning} cleaning")
+        print(f"PROBING — {cleaning_label} cleaning ({pooling} pooling)")
         print(f"{'='*70}")
-        results[cleaning] = {}
+        results[cleaning_label] = {}
 
         for layer in range(n_layers):
-            X = load_layer_activations(model_name, cleaning, layer)
+            X = load_layer_activations(model_name, cleaning_tag, layer)
             X_tv = X[train_val_idx]
 
             best_C, best_acc, best_f1, best_acc_std = None, 0, 0, 0
@@ -117,7 +126,7 @@ def run(args):
     print(f"RANDOM-LABEL BASELINE ({n_permutations} permutations at layer {best_layer_tier0})")
     print(f"{'='*70}")
 
-    X_best = load_layer_activations(model_name, 'tier0', best_layer_tier0)
+    X_best = load_layer_activations(model_name, cleaning_tags[0], best_layer_tier0)
     X_best_tv = X_best[train_val_idx]
 
     null_accs = []
@@ -146,11 +155,11 @@ def run(args):
     print(f"{'='*70}")
 
     test_results = {}
-    for cleaning, best_layer, best_C in [
-        ('tier0', best_layer_tier0, best_C_tier0),
-        ('maximal', best_layer_maximal, best_C_maximal),
+    for cleaning_tag, cleaning_label, best_layer, best_C in [
+        (cleaning_tags[0], 'tier0', best_layer_tier0, best_C_tier0),
+        (cleaning_tags[1], 'maximal', best_layer_maximal, best_C_maximal),
     ]:
-        X = load_layer_activations(model_name, cleaning, best_layer)
+        X = load_layer_activations(model_name, cleaning_tag, best_layer)
         X_tv = X[train_val_idx]
         X_te = X[test_idx]
 
@@ -168,26 +177,27 @@ def run(args):
             y_test, y_pred, target_names=PERIODS, output_dict=True
         )
 
-        test_results[cleaning] = {
+        test_results[cleaning_label] = {
             'best_layer': int(best_layer),
             'best_C': float(best_C),
             'test_accuracy': float(test_acc),
             'test_f1_macro': float(test_f1),
             'confusion_matrix': cm.tolist(),
             'per_class': {k: v for k, v in per_class.items() if k in PERIODS},
-            'cv_accuracy': float(results[cleaning][best_layer]['accuracy']),
+            'cv_accuracy': float(results[cleaning_label][best_layer]['accuracy']),
         }
-        print(f"\n  [{cleaning}] Layer {best_layer}, C={best_C}")
+        print(f"\n  [{cleaning_label}] Layer {best_layer}, C={best_C}")
         print(f"    Test accuracy:  {test_acc:.4f}")
         print(f"    Test F1 macro:  {test_f1:.4f}")
-        print(f"    CV accuracy:    {results[cleaning][best_layer]['accuracy']:.4f}")
-        print(f"    CV-Test gap:    {results[cleaning][best_layer]['accuracy'] - test_acc:+.4f}")
+        print(f"    CV accuracy:    {results[cleaning_label][best_layer]['accuracy']:.4f}")
+        print(f"    CV-Test gap:    {results[cleaning_label][best_layer]['accuracy'] - test_acc:+.4f}")
         print(f"    Confusion matrix:\n{cm}")
 
     # ── Save all results to JSON ────────────────────────────────────────────
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     output = {
         'model': model_name,
+        'pooling': pooling,
         'n_layers': n_layers,
         'hidden_dim': hidden_dim,
         'n_texts': len(df),
@@ -220,7 +230,8 @@ def run(args):
         'tfidf_baselines': TFIDF_BASELINES,
     }
 
-    results_path = RESULTS_DIR / f'probe_results_{model_name}.json'
+    pooling_tag = f'_{pooling}' if pooling != 'mean' else ''
+    results_path = RESULTS_DIR / f'probe_results_{model_name}{pooling_tag}.json'
     with open(results_path, 'w') as f:
         json.dump(output, f, indent=2)
     print(f"\nSaved results to {results_path}")
@@ -230,19 +241,19 @@ def run(args):
     plots_dir.mkdir(parents=True, exist_ok=True)
 
     # --- Plot 1: Layer-accuracy curve ---
-    _plot_layer_curve(results, n_layers, plots_dir)
+    _plot_layer_curve(results, n_layers, plots_dir, pooling)
 
     # --- Plot 2: Random-label null distribution ---
-    _plot_null_distribution(null_accs, real_acc_tier0, p_value, plots_dir)
+    _plot_null_distribution(null_accs, real_acc_tier0, p_value, plots_dir, pooling)
 
     # --- Plot 3: t-SNE at 3 layers (early / best / late) ---
     _plot_tsne_layers(
-        model_name, n_layers, best_layer_tier0, best_layer_maximal,
-        train_val_idx, y_all, plots_dir,
+        model_name, cleaning_tags, n_layers, best_layer_tier0, best_layer_maximal,
+        y_all, plots_dir, pooling,
     )
 
     # --- Plot 4: Confusion matrix ---
-    _plot_confusion_matrix(test_results, plots_dir)
+    _plot_confusion_matrix(test_results, plots_dir, pooling)
 
     elapsed = time.time() - t0
     print(f"\nTotal wall time: {elapsed / 60:.1f} min")
@@ -252,7 +263,7 @@ def run(args):
 # Plotting functions
 # =============================================================================
 
-def _plot_layer_curve(results, n_layers, plots_dir):
+def _plot_layer_curve(results, n_layers, plots_dir, pooling='mean'):
     """Layer-accuracy curve for tier0 and maximal, with TF-IDF baselines."""
     fig, ax = plt.subplots(figsize=(12, 6))
     layers = list(range(n_layers))
@@ -278,18 +289,19 @@ def _plot_layer_curve(results, n_layers, plots_dir):
 
     ax.set_xlabel('Layer', fontsize=12)
     ax.set_ylabel('5-fold CV Accuracy', fontsize=12)
-    ax.set_title('Linear Probe Accuracy by Layer', fontsize=14)
+    ax.set_title(f'Linear Probe Accuracy by Layer ({pooling} pooling)', fontsize=14)
     ax.legend(fontsize=9, loc='lower right', ncol=2)
     ax.set_ylim(0.25, 1.02)
     ax.grid(axis='y', alpha=0.3)
     plt.tight_layout()
-    path = plots_dir / 'layer_accuracy_curve.png'
+    ptag = f'_{pooling}' if pooling != 'mean' else ''
+    path = plots_dir / f'layer_accuracy_curve{ptag}.png'
     plt.savefig(path, bbox_inches='tight', dpi=200)
     plt.close()
     print(f"Saved {path}")
 
 
-def _plot_null_distribution(null_accs, real_acc, p_value, plots_dir):
+def _plot_null_distribution(null_accs, real_acc, p_value, plots_dir, pooling='mean'):
     """Histogram of null (random-label) accuracies + real accuracy line."""
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.hist(null_accs, bins=50, color='#90CAF9', edgecolor='white', alpha=0.8,
@@ -303,33 +315,31 @@ def _plot_null_distribution(null_accs, real_acc, p_value, plots_dir):
     ax.set_title(f'Random-Label Baseline (p = {p_value})', fontsize=14)
     ax.legend(fontsize=10)
     plt.tight_layout()
-    path = plots_dir / 'confound_random_label.png'
+    ptag = f'_{pooling}' if pooling != 'mean' else ''
+    path = plots_dir / f'confound_random_label{ptag}.png'
     plt.savefig(path, bbox_inches='tight', dpi=200)
     plt.close()
     print(f"Saved {path}")
 
 
-def _plot_tsne_layers(model_name, n_layers, best_layer_tier0, best_layer_maximal,
-                      train_val_idx, y_all, plots_dir):
+def _plot_tsne_layers(model_name, cleaning_tags, n_layers, best_layer_tier0, best_layer_maximal,
+                      y_all, plots_dir, pooling='mean'):
     """t-SNE at early / best / late layers, 3x2 grid (top=tier0, bottom=maximal)."""
     early_layer = 2
     late_layer = n_layers - 2  # second to last
 
     layer_picks = {
-        'tier0': [early_layer, best_layer_tier0, late_layer],
-        'maximal': [early_layer, best_layer_maximal, late_layer],
+        cleaning_tags[0]: [early_layer, best_layer_tier0, late_layer],
+        cleaning_tags[1]: [early_layer, best_layer_maximal, late_layer],
     }
+    tag_labels = ['tier0', 'maximal']
 
     fig, axes = plt.subplots(2, 3, figsize=(18, 10))
-    periods = y_all  # integer-encoded
 
-    le = LabelEncoder()
-    le.fit(PERIODS)
-
-    for row, cleaning in enumerate(['tier0', 'maximal']):
-        for col, layer in enumerate(layer_picks[cleaning]):
+    for row, (cleaning_tag, cleaning_label) in enumerate(zip(cleaning_tags, tag_labels)):
+        for col, layer in enumerate(layer_picks[cleaning_tag]):
             ax = axes[row, col]
-            X = load_layer_activations(model_name, cleaning, layer)
+            X = load_layer_activations(model_name, cleaning_tag, layer)
 
             # Use a subset for speed if too many
             tsne = TSNE(n_components=2, perplexity=40, random_state=SEED, max_iter=1000)
@@ -345,27 +355,28 @@ def _plot_tsne_layers(model_name, n_layers, best_layer_tier0, best_layer_maximal
                 )
 
             label_map = {
-                layer_picks[cleaning][0]: 'Early',
-                layer_picks[cleaning][1]: 'Best',
-                layer_picks[cleaning][2]: 'Late',
+                layer_picks[cleaning_tag][0]: 'Early',
+                layer_picks[cleaning_tag][1]: 'Best',
+                layer_picks[cleaning_tag][2]: 'Late',
             }
             title_prefix = label_map.get(layer, '')
-            ax.set_title(f'{cleaning} — Layer {layer} ({title_prefix})', fontsize=11)
+            ax.set_title(f'{cleaning_label} — Layer {layer} ({title_prefix})', fontsize=11)
             ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
             if col == 0:
-                ax.set_ylabel(f'{cleaning}', fontsize=12, fontweight='bold')
+                ax.set_ylabel(f'{cleaning_label}', fontsize=12, fontweight='bold')
             if row == 0 and col == 2:
                 ax.legend(markerscale=4, fontsize=8, loc='best', framealpha=0.8)
 
     fig.suptitle('t-SNE of Activations at Early / Best / Late Layers', fontsize=14, y=1.01)
     plt.tight_layout()
-    path = plots_dir / 'tsne_by_layer.png'
+    ptag = f'_{pooling}' if pooling != 'mean' else ''
+    path = plots_dir / f'tsne_by_layer{ptag}.png'
     plt.savefig(path, bbox_inches='tight', dpi=200)
     plt.close()
     print(f"Saved {path}")
 
 
-def _plot_confusion_matrix(test_results, plots_dir):
+def _plot_confusion_matrix(test_results, plots_dir, pooling='mean'):
     """Confusion matrices for tier0 and maximal on test set."""
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
@@ -379,7 +390,8 @@ def _plot_confusion_matrix(test_results, plots_dir):
 
     fig.suptitle('Test-Set Confusion Matrices', fontsize=14, y=1.02)
     plt.tight_layout()
-    path = plots_dir / 'confusion_matrix_best_layer.png'
+    ptag = f'_{pooling}' if pooling != 'mean' else ''
+    path = plots_dir / f'confusion_matrix_best_layer{ptag}.png'
     plt.savefig(path, bbox_inches='tight', dpi=200)
     plt.close()
     print(f"Saved {path}")
@@ -389,6 +401,9 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Step 2: Linear probe at every layer')
     parser.add_argument('--model', type=str, required=True,
                         help='Model short name (matching activations directory)')
+    parser.add_argument('--pooling', type=str, default='mean',
+                        choices=['mean', 'last_token'],
+                        help='Pooling method (default: mean)')
     parser.add_argument('--n-permutations', type=int, default=1000,
                         help='Number of permutations for random-label test (default: 1000)')
     return parser.parse_args()
