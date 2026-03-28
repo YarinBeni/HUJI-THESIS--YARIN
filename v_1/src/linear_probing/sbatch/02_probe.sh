@@ -3,7 +3,7 @@
 #SBATCH --partition=voltagepark
 #SBATCH --cpus-per-task=64
 #SBATCH --mem=32G
-#SBATCH --time=04:00:00
+#SBATCH --time=08:00:00
 #SBATCH --output=v_1/src/linear_probing/logs/probe_%j.out
 
 echo "=== Linear Probe ==="
