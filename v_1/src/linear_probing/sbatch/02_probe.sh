@@ -2,7 +2,7 @@
 #SBATCH --job-name=lin_probe
 #SBATCH --partition=voltagepark
 #SBATCH --cpus-per-task=64
-#SBATCH --mem=32G
+#SBATCH --mem=128G
 #SBATCH --time=08:00:00
 #SBATCH --output=v_1/src/linear_probing/logs/probe_%j.out
 
