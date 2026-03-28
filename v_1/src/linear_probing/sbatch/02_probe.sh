@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=lin_probe
 #SBATCH --partition=voltagepark
-#SBATCH --cpus-per-task=32
+#SBATCH --cpus-per-task=64
 #SBATCH --mem=32G
 #SBATCH --time=04:00:00
 #SBATCH --output=v_1/src/linear_probing/logs/probe_%j.out
@@ -22,14 +22,14 @@ echo "=== Probing (mean pooling) ==="
 python -u v_1/src/linear_probing/02_linear_probe.py \
     --model qwen2.5-7b-instruct \
     --pooling mean \
-    --n-permutations 200 \
+    --n-permutations 1000 \
     || { echo "FAILED: linear probe (mean)"; exit 1; }
 
 echo "=== Probing (last_token pooling) ==="
 python -u v_1/src/linear_probing/02_linear_probe.py \
     --model qwen2.5-7b-instruct \
     --pooling last_token \
-    --n-permutations 200 \
+    --n-permutations 1000 \
     || { echo "FAILED: linear probe (last_token)"; exit 1; }
 
 echo "=== Done ==="

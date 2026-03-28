@@ -17,7 +17,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from pathlib import Path
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import StratifiedKFold, cross_val_score, GridSearchCV
+from sklearn.model_selection import StratifiedKFold, cross_val_score, GridSearchCV, permutation_test_score
 from sklearn.metrics import (
     accuracy_score, f1_score, classification_report,
     confusion_matrix, ConfusionMatrixDisplay,
@@ -158,22 +158,17 @@ def run(args):
     X_best = load_layer_activations(model_name, cleaning_tags[0], best_layer_tier0)
     X_best_tv = X_best[train_val_idx]
 
-    null_accs = []
-    for i in range(n_permutations):
-        y_shuffled = np.random.RandomState(SEED + i).permutation(y_tv)
-        clf = make_pipeline(
-            StandardScaler(),
-            LogisticRegression(C=best_C_tier0, max_iter=1000, random_state=SEED,
-                               solver='lbfgs'),
-        )
-        acc = cross_val_score(clf, X_best_tv, y_shuffled, cv=skf, scoring='accuracy', n_jobs=-1).mean()
-        null_accs.append(acc)
-        if (i + 1) % 200 == 0:
-            print(f"  Permutation {i + 1}/{n_permutations}")
-
-    null_accs = np.array(null_accs)
-    real_acc_tier0 = results['tier0'][best_layer_tier0]['accuracy']
-    p_value = float((null_accs >= real_acc_tier0).mean())
+    clf_perm = make_pipeline(
+        StandardScaler(),
+        LogisticRegression(C=best_C_tier0, max_iter=1000, random_state=SEED, solver='lbfgs'),
+    )
+    real_acc_tier0, null_accs, p_value = permutation_test_score(
+        clf_perm, X_best_tv, y_tv,
+        cv=skf, n_permutations=n_permutations,
+        scoring='accuracy', n_jobs=-1, random_state=SEED,
+        verbose=0,
+    )
+    p_value = float(p_value)
     print(f"  Null distribution: mean={null_accs.mean():.4f}, "
           f"std={null_accs.std():.4f}, max={null_accs.max():.4f}")
     print(f"  Real accuracy: {real_acc_tier0:.4f}")
