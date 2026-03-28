@@ -23,7 +23,8 @@ from sklearn.metrics import (
     confusion_matrix, ConfusionMatrixDisplay,
 )
 from sklearn.manifold import TSNE
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.pipeline import make_pipeline
 
 from utils import (
     load_letters, get_splits, load_layer_activations, load_metadata,
@@ -87,9 +88,10 @@ def run(args):
 
             best_C, best_acc, best_f1, best_acc_std = None, 0, 0, 0
             for C in C_GRID:
-                clf = LogisticRegression(
-                    C=C, penalty='l2', max_iter=1000,
-                    random_state=SEED, solver='lbfgs',
+                clf = make_pipeline(
+                    StandardScaler(),
+                    LogisticRegression(C=C, penalty='l2', max_iter=1000,
+                                       random_state=SEED, solver='lbfgs'),
                 )
                 acc_scores = cross_val_score(clf, X_tv, y_tv, cv=skf, scoring='accuracy', n_jobs=-1)
                 f1_scores = cross_val_score(clf, X_tv, y_tv, cv=skf, scoring='f1_macro', n_jobs=-1)
@@ -134,9 +136,10 @@ def run(args):
     null_accs = []
     for i in range(n_permutations):
         y_shuffled = np.random.RandomState(SEED + i).permutation(y_tv)
-        clf = LogisticRegression(
-            C=best_C_tier0, max_iter=1000, random_state=SEED,
-            solver='lbfgs',
+        clf = make_pipeline(
+            StandardScaler(),
+            LogisticRegression(C=best_C_tier0, max_iter=1000, random_state=SEED,
+                               solver='lbfgs'),
         )
         acc = cross_val_score(clf, X_best_tv, y_shuffled, cv=skf, scoring='accuracy', n_jobs=-1).mean()
         null_accs.append(acc)
@@ -165,9 +168,10 @@ def run(args):
         X_tv = X[train_val_idx]
         X_te = X[test_idx]
 
-        clf = LogisticRegression(
-            C=best_C, max_iter=1000, random_state=SEED,
-            solver='lbfgs',
+        clf = make_pipeline(
+            StandardScaler(),
+            LogisticRegression(C=best_C, max_iter=1000, random_state=SEED,
+                               solver='lbfgs'),
         )
         clf.fit(X_tv, y_tv)
         y_pred = clf.predict(X_te)
