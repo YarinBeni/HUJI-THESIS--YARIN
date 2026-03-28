@@ -22,14 +22,14 @@ echo "=== Probing (mean pooling) ==="
 python -u v_1/src/linear_probing/02_linear_probe.py \
     --model qwen2.5-7b-instruct \
     --pooling mean \
-    --n-permutations 1000 \
+    --n-permutations 200 \
     || { echo "FAILED: linear probe (mean)"; exit 1; }
 
 echo "=== Probing (last_token pooling) ==="
 python -u v_1/src/linear_probing/02_linear_probe.py \
     --model qwen2.5-7b-instruct \
     --pooling last_token \
-    --n-permutations 1000 \
+    --n-permutations 200 \
     || { echo "FAILED: linear probe (last_token)"; exit 1; }
 
 echo "=== Done ==="

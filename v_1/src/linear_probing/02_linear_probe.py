@@ -135,6 +135,21 @@ def run(args):
     print(f"Best layer (maximal): {best_layer_maximal} "
           f"(acc={results['maximal'][best_layer_maximal]['accuracy']:.4f})")
 
+    # ── Checkpoint: save layer results immediately so they survive a timeout ──
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    pooling_tag = f'_{pooling}' if pooling != 'mean' else ''
+    checkpoint_path = RESULTS_DIR / f'layer_results_checkpoint_{model_name}{pooling_tag}.json'
+    with open(checkpoint_path, 'w') as f:
+        json.dump({
+            'model': model_name, 'pooling': pooling,
+            'layer_results': {
+                cleaning: {str(l): v for l, v in d.items()}
+                for cleaning, d in results.items()
+            },
+            'best_layers': {'tier0': int(best_layer_tier0), 'maximal': int(best_layer_maximal)},
+        }, f, indent=2)
+    print(f"Checkpoint saved to {checkpoint_path}")
+
     # ── 2b. Random-label baseline (at best tier0 layer) ─────────────────────
     print(f"\n{'='*70}")
     print(f"RANDOM-LABEL BASELINE ({n_permutations} permutations at layer {best_layer_tier0})")
