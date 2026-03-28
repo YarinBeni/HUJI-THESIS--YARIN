@@ -17,7 +17,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from pathlib import Path
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import StratifiedKFold, cross_val_score
+from sklearn.model_selection import StratifiedKFold, cross_val_score, GridSearchCV
 from sklearn.metrics import (
     accuracy_score, f1_score, classification_report,
     confusion_matrix, ConfusionMatrixDisplay,
@@ -86,20 +86,30 @@ def run(args):
             X = load_layer_activations(model_name, cleaning_tag, layer)
             X_tv = X[train_val_idx]
 
-            best_C, best_acc, best_f1, best_acc_std = None, 0, 0, 0
-            for C in C_GRID:
-                clf = make_pipeline(
-                    StandardScaler(),
-                    LogisticRegression(C=C, penalty='l2', max_iter=1000,
-                                       random_state=SEED, solver='lbfgs'),
-                )
-                acc_scores = cross_val_score(clf, X_tv, y_tv, cv=skf, scoring='accuracy', n_jobs=-1)
-                f1_scores = cross_val_score(clf, X_tv, y_tv, cv=skf, scoring='f1_macro', n_jobs=-1)
-                if acc_scores.mean() > best_acc:
-                    best_C = C
-                    best_acc = acc_scores.mean()
-                    best_acc_std = acc_scores.std()
-                    best_f1 = f1_scores.mean()
+            pipe = make_pipeline(
+                StandardScaler(),
+                LogisticRegression(penalty='l2', max_iter=1000,
+                                   random_state=SEED, solver='lbfgs'),
+            )
+            grid = GridSearchCV(
+                pipe,
+                param_grid={'logisticregression__C': C_GRID},
+                cv=skf,
+                scoring={'accuracy': 'accuracy', 'f1_macro': 'f1_macro'},
+                refit=False,
+                n_jobs=-1,  # parallelizes 6 C × 5 folds = 30 fits at once
+            )
+            grid.fit(X_tv, y_tv)
+
+            # Extract best result (by accuracy)
+            mean_accs = grid.cv_results_['mean_test_accuracy']
+            std_accs = grid.cv_results_['std_test_accuracy']
+            mean_f1s = grid.cv_results_['mean_test_f1_macro']
+            best_idx = np.argmax(mean_accs)
+            best_C = C_GRID[best_idx]
+            best_acc = mean_accs[best_idx]
+            best_acc_std = std_accs[best_idx]
+            best_f1 = mean_f1s[best_idx]
 
             results[cleaning_label][layer] = {
                 'accuracy': float(best_acc),
