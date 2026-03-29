@@ -134,10 +134,142 @@ Each `.npz` file contains a matrix of shape (4957, 3584) — one 3584-dimensiona
 ---
 
 ## Step 02 — Linear Probe
-*Not yet run*
+**Jobs:** 2251 (final successful) | **Node:** g0377 | **Date:** 2026-03-28 13:27–15:07 UTC
+**Duration:** 58.3 min (mean pooling) + 26.1 min (last_token pooling) = ~84 min total
+**Status:** ✅ SUCCESS
 
-### What this will do
-Train a logistic regression classifier at each of the 29 layers to predict period (OB/NA/LB) from the activation vectors. This answers: "at which layer does the model encode the most temporal information?" The layer-accuracy curve and comparison to TF-IDF baselines are the main deliverables.
+### What this step does
+Trains logistic regression probes at every layer of the model to answer: "at which layer does Qwen encode temporal period most linearly?" For each of the 29 layers × 2 cleaning conditions, we run a 5-fold cross-validated grid search over 6 regularization values (C ∈ {0.001, 0.01, 0.1, 1.0, 10.0, 100.0}). Then we run a 1000-permutation random-label test at the best layer to confirm statistical significance. Finally, we evaluate the best probe on the held-out test set (744 texts, 15%).
+
+**Key implementation details:**
+- `StandardScaler` inside a `sklearn.Pipeline` (fitted per fold, no leakage)
+- `GridSearchCV(n_jobs=-1)` parallelizes 6 C × 5 folds = 30 fits simultaneously on 64 CPUs
+- `permutation_test_score(n_jobs=-1)` parallelizes 1000 permutations across 64 CPUs
+- Split: 70/15/15 stratified (train=3469, val=744, test=744), same seed as bias check
+
+**Engineering issues encountered and fixed:**
+| Problem | Fix |
+|---------|-----|
+| lbfgs no convergence, 860/1000 iterations | Added StandardScaler → 10x speedup (23.6s → 2.2s per fit) |
+| Permutation test sequential, ~6 hours | Replaced loop with `permutation_test_score(n_jobs=-1)` → ~3 min |
+| OOM kill with 64 workers × 32GB | Bumped memory to 256GB |
+| Output buffered, no live logs | Added `python -u` flag |
+| Job killed at 4h time limit | Bumped to 8h |
+
+### Results — Mean Pooling
+
+**Layer accuracy curve (tier0 cleaning):**
+| Layer | Acc (CV) | F1 | Best C |
+|-------|----------|----|--------|
+| 0 | 0.9822 | 0.9802 | 0.01 |
+| **4 (BEST)** | **0.9910** | **0.9900** | **1.0** |
+| 14 | 0.9881 | 0.9868 | 0.1 |
+| 28 | 0.9862 | 0.9849 | 0.1 |
+
+Pattern: peaks early at layer 4, stays flat ~98-99% throughout all layers.
+
+**Layer accuracy curve (maximal cleaning):**
+| Layer | Acc (CV) | F1 | Best C |
+|-------|----------|----|--------|
+| 0 | 0.9378 | 0.9311 | 0.01 |
+| **3 (BEST)** | **0.9625** | **0.9584** | **0.1** |
+| 28 | 0.9461 | 0.9414 | 0.1 |
+
+Pattern: peaks very early at layer 3, then gradually declines through middle layers, slight recovery at end.
+
+**Permutation test (1000 permutations at layer 4, tier0):**
+- Null distribution: mean=0.3746, std=0.0087, max=0.3995
+- Real accuracy: 0.9907
+- p-value: **0.001** (0/1000 permutations exceeded real accuracy — minimum achievable)
+
+**Final test-set evaluation:**
+
+| Cleaning | Best Layer | C | Test Acc | Test F1 | CV Acc | CV-Test Gap |
+|----------|-----------|---|----------|---------|--------|-------------|
+| tier0 | 4 | 1.0 | **0.9973** | **0.9969** | 0.9910 | -0.0063 |
+| maximal | 3 | 0.1 | **0.9825** | **0.9803** | 0.9625 | -0.0200 |
+
+**Confusion matrix (tier0, layer 4, test set — 744 texts):**
+```
+         LB    NA    OB
+LB  [ 153    1    0 ]   → 99.3% correct
+NA  [   1  364    0 ]   → 99.7% correct
+OB  [   0    0  225 ]   → 100%  correct
+```
+
+### Results — Last-Token Pooling
+
+**Key difference from mean pooling:** Last-token pooling shows a completely different layer profile — starts near chance (59% at layer 0), rises monotonically, peaks at the LAST layer (28).
+
+**Layer accuracy curve (tier0 cleaning):**
+| Layer | Acc (CV) | Pattern |
+|-------|----------|---------|
+| 0 | 0.5896 | Near chance (3-class = 33%) |
+| 2 | 0.8789 | Early peak then dip |
+| **28 (BEST)** | **0.9554** | Monotonically rises to final layer |
+
+**Layer accuracy curve (maximal cleaning):**
+| Layer | Acc (CV) | Pattern |
+|-------|----------|---------|
+| 0 | 0.5455 | Near chance |
+| **28 (BEST)** | **0.9003** | Monotonically rises |
+
+**Permutation test (1000 permutations at layer 28, tier0):**
+- Null distribution: mean=0.3961, std=0.0081, max=0.4178
+- Real accuracy: 0.9554
+- p-value: **0.001**
+
+**Final test-set evaluation:**
+
+| Cleaning | Best Layer | Test Acc | Test F1 |
+|----------|-----------|----------|---------|
+| tier0 | 28 | **0.9651** | **0.9622** |
+| maximal | 28 | **0.9086** | **0.9009** |
+
+### Comparison to TF-IDF Baselines (from Bias Check)
+
+| Method | Tier0/Raw | Maximal/Cleaned |
+|--------|-----------|-----------------|
+| TF-IDF Unigram | 84.8% | 69.1% |
+| TF-IDF Bigram | 98.3% | 91.2% |
+| TF-IDF 2-5gram | 99.2% | 96.7% |
+| **Qwen mean pooling (best layer)** | **99.7%** | **98.25%** |
+| **Qwen last-token (best layer)** | **96.5%** | **90.9%** |
+
+### Scientific Interpretation
+
+**Finding 1 — Mean pooling, early peak (layer 4):**
+Temporal period information is linearly encoded already in the early layers of Qwen and maintained throughout the entire network. The model doesn't need deep processing to separate OB/NA/LB — this happens in the first ~15% of layers.
+
+**Finding 2 — Last-token pooling, late peak (layer 28):**
+This is the opposite pattern — consistent with how autoregressive attention works. The last token accumulates context from all previous tokens progressively. Information is not concentrated until the final layers.
+
+**Finding 3 — Maximal cleaning drop is moderate:**
+Removing logograms, determinatives and all surface temporal markers drops accuracy from 99.7% → 98.25% (mean) and 96.5% → 90.9% (last-token). The signal survives aggressive cleaning — temporal information is encoded in the syllabic content, not just vocabulary markers.
+
+**Finding 4 — Both p=0.001:**
+Zero of 1000 permutations exceeded real accuracy in both pooling conditions. The result is not a statistical artifact.
+
+### Plots Saved
+- `results/plots/layer_accuracy_curve.png` — layer curve for mean pooling (both cleanings + TF-IDF baselines)
+- `results/plots/layer_accuracy_curve_last_token.png` — same for last-token
+- `results/plots/confound_random_label.png` — permutation test null distribution (mean)
+- `results/plots/confound_random_label_last_token.png` — same for last-token
+- `results/plots/tsne_best_layer.png` — t-SNE at best layer (all 4957 texts, mean pooling)
+- `results/plots/tsne_best_layer_last_token.png` — same for last-token
+- `results/plots/confusion_matrix_best_layer.png` — confusion matrices (mean)
+- `results/plots/confusion_matrix_best_layer_last_token.png` — same for last-token
+
+### Validity Tests Done and Still Needed
+| Test | Status | Notes |
+|------|--------|-------|
+| Permutation test (shuffle Y, 1000x) | ✅ Done | p=0.001 both poolings |
+| Layer accuracy curve | ✅ Done | Diagnostic |
+| t-SNE at best layer | ✅ Done | Visual confirmation |
+| **Untrained model baseline** | ❌ TODO | Highest priority — rules out architecture artifacts |
+| **Hewitt & Liang selectivity** | ❌ TODO | Rules out probe memorization |
+| **Linear vs. MLP probe** | ❌ TODO | Validates linearity claim |
+| Cross-genre generalization | ❌ TODO | Rules out corpus-specific artifacts |
 
 ---
 
