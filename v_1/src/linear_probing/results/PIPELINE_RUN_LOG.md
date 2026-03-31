@@ -497,8 +497,95 @@ Zero of 1000 permutations exceeded real accuracy in both pooling conditions. The
 - `results/plots/confusion_matrix_best_layer.png` — confusion matrices (mean)
 - `results/plots/confusion_matrix_best_layer_last_token.png` — same for last-token
 
-### Validity Tests Done and Still Needed
-Need to read relevent knowldge on linear probing and create tests to validate results.
+---
+
+## Step 01b — Extract Random-Weights Baseline Activations
+**Job:** 2301 | **Node:** g0381 | **Date:** 2026-03-30 13:03–13:33 UTC (~30 min)
+**Status:** ✅ SUCCESS
+
+### What this step does
+Initialize Qwen2.5-7B with the same architecture and pretrained tokenizer, but **randomly initialized weights** (`AutoModelForCausalLM.from_config()` instead of `from_pretrained()`). Extract activations identically to Step 01. This isolates how much of the probe's accuracy comes from pretraining vs. tokenizer + architecture.
+
+### Results
+All 4 configurations extracted successfully (tier0/maximal × mean/last_token). Each produced 29 layer files + metadata.json, saved to `results/activations/qwen2.5-7b-instruct-random/`.
+
+| Config | Wall Time |
+|--------|-----------|
+| tier0, mean | 7.0 min |
+| maximal, mean | 5.8 min |
+| tier0, last_token | 5.7 min |
+| maximal, last_token | 11.7 min |
+
+---
+
+## Step 02b — Validity Tests
+**Job:** 2302 | **Node:** g0381 | **Date:** 2026-03-30 13:41–15:05 UTC
+**Status:** ⚠️ PARTIAL — Random baseline probing + Learning curve succeeded. PCA crashed (bug fixed). MLP + comparison plots never ran.
+
+### Random-Weights Baseline Probing (reuses 02_linear_probe.py)
+
+Ran the standard probe pipeline on random-weights activations. Results are striking:
+
+#### Mean Pooling — Random vs Pretrained
+
+| Cleaning | Random Best Layer | Random Acc | Pretrained Best Layer | Pretrained Acc | Gap | Selectivity |
+|----------|-------------------|-----------|----------------------|---------------|-----|-------------|
+| tier0 | 1 | 98.27% | 4 | 99.10% | +0.83% | Low |
+| maximal | 0 | 93.61% | 3 | 96.25% | +2.64% | Low |
+
+#### Last-Token Pooling — Random vs Pretrained
+
+| Cleaning | Random Best Layer | Random Acc | Pretrained Best Layer | Pretrained Acc | Gap | Selectivity |
+|----------|-------------------|-----------|----------------------|---------------|-----|-------------|
+| tier0 | 1 | 94.33% | 28 | 95.54% | +1.21% | Low |
+| maximal | 1 | 84.48% | 28 | 90.03% | +5.55% | Moderate |
+
+#### Key Finding: Layer Curve Patterns Are Opposite
+
+- **Pretrained:** Accuracy maintained or rising through depth (stable representations)
+- **Random:** Best at layer 0–1, then **monotonically declining** (random transformations destroy signal)
+
+This is the clearest qualitative difference. The pretrained model's transformations are information-preserving; random transformations progressively add noise.
+
+#### Interpretation
+
+The random model's 98.3% (tier0, mean) exactly matches the TF-IDF baseline (98.3%). Mean pooling over random embeddings is mathematically a random projection of the token-frequency distribution (Johnson-Lindenstrauss lemma). Since different Akkadian periods have distinct vocabulary distributions, random projections preserve that separability.
+
+**What pretraining adds:** The gap grows with task difficulty — largest under maximal cleaning + last_token pooling (+5.5%). Pretraining helps most when surface distributional features are stripped and the model must compress contextual information into a single position.
+
+**Selectivity (Hewitt & Liang 2019):** Probe accuracy minus random baseline accuracy. Only the maximal/last_token condition (5.5%) approaches a credible selectivity score. The mean-pooling tier0 result (0.8%) is essentially a TF-IDF finding.
+
+### Experiment A — Learning Curve ✅
+
+Trained probes on varying fractions of training data (10 repeats each), mean pooling only.
+
+| Fraction | # Texts | tier0 (Layer 4) | maximal (Layer 3) |
+|----------|---------|-----------------|-------------------|
+| 1% | 42 | 93.10% ± 4.19% | 78.81% ± 7.86% |
+| 5% | 210 | 96.57% ± 0.97% | 89.00% ± 2.70% |
+| 10% | 421 | 97.39% ± 0.46% | 91.19% ± 1.50% |
+| 25% | 1053 | 97.92% ± 0.61% | 93.74% ± 0.67% |
+| 50% | 2106 | 98.55% ± 0.23% | 94.95% ± 0.33% |
+| 100% | 4213 | 99.06% ± 0.08% | 96.15% ± 0.15% |
+
+**Interpretation:** Even 42 texts (1%) yield 93% for tier0. The decision boundary is very clean — the probe is not doing heavy lifting. This confirms the signal is a strong property of the representation, not an artifact of probe capacity overfitting to many features.
+
+**Plot:** `results/validity/plots/learning_curve.png`
+
+### Experiment B — PCA Dimensionality Reduction ❌
+
+**FAILED:** `ValueError: n_components=3584 must be between 0 and min(n_samples, n_features)=3370`
+
+Bug: In 5-fold CV, each training fold has ~3370 samples. PCA(3584) exceeds this limit. **Fix applied:** cap `max_k` at `(n_folds-1)/n_folds * n_samples`.
+
+### Experiment C — MLP vs Linear ❌
+Never ran (script crashed at Experiment B).
+
+### Experiment D — Random Baseline Comparison Plot ❌
+Never ran (script crashed at Experiment B).
+
+### Re-run Needed
+PCA bug fixed (commit a612e21). Need to re-run `sbatch/02b_validity.sh` to complete Experiments B, C, D + all last_token experiments.
 
 ---
 
