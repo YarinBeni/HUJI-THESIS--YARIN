@@ -86,8 +86,10 @@ def run_learning_curve(X_tv, y_tv, best_C, fractions, n_repeats=10):
 
 def run_pca_dimensionality(X_tv, y_tv, best_C, n_components_list):
     """Probe after PCA to k dimensions. Returns accuracies per k."""
-    skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=SEED)
-    max_k = min(X_tv.shape[0], X_tv.shape[1])
+    n_folds = 5
+    skf = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=SEED)
+    # Cap at CV training-fold size (n-1)/n of samples, since PCA fits on train fold only
+    max_k = min(X_tv.shape[0] * (n_folds - 1) // n_folds, X_tv.shape[1])
     results_acc = []
     results_std = []
 
