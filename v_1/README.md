@@ -80,7 +80,7 @@ Full run log: `src/linear_probing/results/PIPELINE_RUN_LOG.md`
 | `data/raw/chungrong/*.csv` | Normalized source data from Chunrong Ni |
 | `data/evaluation/baselines/baseline_predictions.parquet` | Aggregated LLM predictions |
 | `src/linear_probing/results/probe_results_qwen2.5-7b-instruct.json` | Linear probe results (pretrained) |
-| `src/linear_probing/results/validity/validity_results_*.json` | Validity experiment results |
+| `src/linear_probing/results/validity_results_*.json` | Validity experiment results |
 
 ## Documentation
 
