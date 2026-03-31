@@ -1,0 +1,510 @@
+=== Validity Tests ===
+Job ID: 2392
+Node: g0380
+Start: Tue Mar 31 09:04:45 UTC 2026
+=== Probing random baseline (mean pooling) ===
+Pooling method: mean
+Reading from directories: ['tier0', 'maximal']
+Data: 4957 texts
+  Train: 3469, Val: 744, Test: 744
+  Train+Val: 4213
+Model: qwen2.5-7b-instruct-random, 29 layers, hidden_dim=3584
+
+======================================================================
+PROBING — tier0 cleaning (mean pooling)
+======================================================================
+  Layer  0: acc=0.9820 +/- 0.0027, F1=0.9801, C=0.01
+  Layer  1: acc=0.9827 +/- 0.0024, F1=0.9808, C=0.1
+  Layer  2: acc=0.9793 +/- 0.0032, F1=0.9773, C=0.1
+  Layer  3: acc=0.9786 +/- 0.0025, F1=0.9768, C=10.0
+  Layer  4: acc=0.9772 +/- 0.0025, F1=0.9749, C=0.1
+  Layer  5: acc=0.9756 +/- 0.0027, F1=0.9736, C=1.0
+  Layer  6: acc=0.9737 +/- 0.0039, F1=0.9715, C=0.1
+  Layer  7: acc=0.9722 +/- 0.0044, F1=0.9696, C=0.01
+  Layer  8: acc=0.9706 +/- 0.0035, F1=0.9681, C=0.1
+  Layer  9: acc=0.9696 +/- 0.0041, F1=0.9674, C=0.01
+  Layer 10: acc=0.9694 +/- 0.0032, F1=0.9670, C=0.1
+  Layer 11: acc=0.9682 +/- 0.0047, F1=0.9660, C=0.1
+  Layer 12: acc=0.9687 +/- 0.0068, F1=0.9663, C=0.1
+  Layer 13: acc=0.9682 +/- 0.0041, F1=0.9656, C=0.01
+  Layer 14: acc=0.9668 +/- 0.0050, F1=0.9642, C=0.01
+  Layer 15: acc=0.9670 +/- 0.0039, F1=0.9644, C=0.01
+  Layer 16: acc=0.9658 +/- 0.0029, F1=0.9632, C=0.1
+  Layer 17: acc=0.9658 +/- 0.0041, F1=0.9633, C=0.1
+  Layer 18: acc=0.9649 +/- 0.0038, F1=0.9620, C=0.1
+  Layer 19: acc=0.9653 +/- 0.0039, F1=0.9625, C=0.1
+  Layer 20: acc=0.9663 +/- 0.0044, F1=0.9635, C=0.1
+  Layer 21: acc=0.9649 +/- 0.0050, F1=0.9621, C=0.1
+  Layer 22: acc=0.9642 +/- 0.0067, F1=0.9614, C=0.1
+  Layer 23: acc=0.9639 +/- 0.0064, F1=0.9610, C=0.1
+  Layer 24: acc=0.9632 +/- 0.0060, F1=0.9604, C=0.1
+  Layer 25: acc=0.9625 +/- 0.0058, F1=0.9596, C=0.1
+  Layer 26: acc=0.9630 +/- 0.0051, F1=0.9602, C=0.1
+  Layer 27: acc=0.9620 +/- 0.0071, F1=0.9592, C=0.1
+  Layer 28: acc=0.9625 +/- 0.0070, F1=0.9600, C=0.1
+
+======================================================================
+PROBING — maximal cleaning (mean pooling)
+======================================================================
+  Layer  0: acc=0.9361 +/- 0.0079, F1=0.9295, C=0.01
+  Layer  1: acc=0.9200 +/- 0.0018, F1=0.9117, C=0.01
+  Layer  2: acc=0.9089 +/- 0.0045, F1=0.9001, C=0.01
+  Layer  3: acc=0.9074 +/- 0.0036, F1=0.8986, C=0.01
+  Layer  4: acc=0.9067 +/- 0.0048, F1=0.8974, C=0.1
+  Layer  5: acc=0.9032 +/- 0.0063, F1=0.8934, C=0.01
+  Layer  6: acc=0.9008 +/- 0.0041, F1=0.8913, C=0.001
+  Layer  7: acc=0.9017 +/- 0.0019, F1=0.8923, C=0.01
+  Layer  8: acc=0.8920 +/- 0.0082, F1=0.8813, C=0.1
+  Layer  9: acc=0.8894 +/- 0.0078, F1=0.8784, C=0.01
+  Layer 10: acc=0.8849 +/- 0.0067, F1=0.8733, C=0.01
+  Layer 11: acc=0.8832 +/- 0.0041, F1=0.8705, C=0.001
+  Layer 12: acc=0.8832 +/- 0.0057, F1=0.8705, C=0.001
+  Layer 13: acc=0.8823 +/- 0.0063, F1=0.8698, C=0.001
+  Layer 14: acc=0.8799 +/- 0.0040, F1=0.8665, C=0.001
+  Layer 15: acc=0.8785 +/- 0.0073, F1=0.8651, C=0.01
+  Layer 16: acc=0.8763 +/- 0.0097, F1=0.8617, C=0.001
+  Layer 17: acc=0.8744 +/- 0.0082, F1=0.8597, C=0.001
+  Layer 18: acc=0.8735 +/- 0.0101, F1=0.8587, C=0.001
+  Layer 19: acc=0.8718 +/- 0.0111, F1=0.8563, C=0.001
+  Layer 20: acc=0.8721 +/- 0.0115, F1=0.8572, C=0.001
+  Layer 21: acc=0.8732 +/- 0.0129, F1=0.8594, C=0.01
+  Layer 22: acc=0.8680 +/- 0.0160, F1=0.8542, C=0.01
+  Layer 23: acc=0.8683 +/- 0.0140, F1=0.8536, C=0.001
+  Layer 24: acc=0.8692 +/- 0.0164, F1=0.8546, C=0.001
+  Layer 25: acc=0.8673 +/- 0.0196, F1=0.8536, C=0.01
+  Layer 26: acc=0.8671 +/- 0.0160, F1=0.8538, C=0.01
+  Layer 27: acc=0.8671 +/- 0.0133, F1=0.8528, C=0.001
+  Layer 28: acc=0.8675 +/- 0.0171, F1=0.8539, C=0.01
+
+Best layer (tier0):   1 (acc=0.9827)
+Best layer (maximal): 0 (acc=0.9361)
+Checkpoint saved to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/layer_results_checkpoint_qwen2.5-7b-instruct-random.json
+
+======================================================================
+RANDOM-LABEL BASELINE (1000 permutations at layer 1)
+======================================================================
+  Null distribution: mean=0.3796, std=0.0087, max=0.4040
+  Real accuracy: 0.9827
+  p-value: 0.000999000999000999
+
+======================================================================
+FINAL TEST-SET EVALUATION
+======================================================================
+
+  [tier0] Layer 1, C=0.1
+    Test accuracy:  0.9839
+    Test F1 macro:  0.9825
+    CV accuracy:    0.9827
+    CV-Test gap:    -0.0012
+    Confusion matrix:
+[[149   5   0]
+ [  4 359   2]
+ [  0   1 224]]
+
+  [maximal] Layer 0, C=0.01
+    Test accuracy:  0.9556
+    Test F1 macro:  0.9515
+    CV accuracy:    0.9361
+    CV-Test gap:    -0.0195
+    Confusion matrix:
+[[142  12   0]
+ [ 15 346   4]
+ [  0   2 223]]
+
+Saved results to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/probe_results_qwen2.5-7b-instruct-random.json
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/layer_accuracy_curve.png
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/confound_random_label.png
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/tsne_best_layer.png
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/confusion_matrix_best_layer.png
+
+Total wall time: 28.5 min
+=== Probing random baseline (last_token pooling) ===
+Pooling method: last_token
+Reading from directories: ['tier0_last_token', 'maximal_last_token']
+Data: 4957 texts
+  Train: 3469, Val: 744, Test: 744
+  Train+Val: 4213
+Model: qwen2.5-7b-instruct-random, 29 layers, hidden_dim=3584
+
+======================================================================
+PROBING — tier0 cleaning (last_token pooling)
+======================================================================
+  Layer  0: acc=0.5891 +/- 0.0161, F1=0.4847, C=0.001
+  Layer  1: acc=0.9433 +/- 0.0040, F1=0.9380, C=0.1
+  Layer  2: acc=0.9331 +/- 0.0041, F1=0.9265, C=0.01
+  Layer  3: acc=0.9259 +/- 0.0042, F1=0.9173, C=0.001
+  Layer  4: acc=0.9198 +/- 0.0038, F1=0.9110, C=0.001
+  Layer  5: acc=0.9141 +/- 0.0121, F1=0.9053, C=0.001
+  Layer  6: acc=0.9081 +/- 0.0095, F1=0.8978, C=0.001
+  Layer  7: acc=0.9055 +/- 0.0100, F1=0.8953, C=0.001
+  Layer  8: acc=0.9001 +/- 0.0077, F1=0.8898, C=0.001
+  Layer  9: acc=0.8951 +/- 0.0098, F1=0.8844, C=0.001
+  Layer 10: acc=0.8896 +/- 0.0120, F1=0.8791, C=0.001
+  Layer 11: acc=0.8858 +/- 0.0036, F1=0.8742, C=0.001
+  Layer 12: acc=0.8792 +/- 0.0058, F1=0.8678, C=0.001
+  Layer 13: acc=0.8716 +/- 0.0077, F1=0.8595, C=0.001
+  Layer 14: acc=0.8711 +/- 0.0051, F1=0.8597, C=0.001
+  Layer 15: acc=0.8687 +/- 0.0124, F1=0.8568, C=0.001
+  Layer 16: acc=0.8671 +/- 0.0099, F1=0.8538, C=0.001
+  Layer 17: acc=0.8685 +/- 0.0099, F1=0.8553, C=0.001
+  Layer 18: acc=0.8638 +/- 0.0118, F1=0.8503, C=0.001
+  Layer 19: acc=0.8602 +/- 0.0094, F1=0.8460, C=0.001
+  Layer 20: acc=0.8581 +/- 0.0083, F1=0.8439, C=0.001
+  Layer 21: acc=0.8543 +/- 0.0107, F1=0.8393, C=0.001
+  Layer 22: acc=0.8569 +/- 0.0086, F1=0.8425, C=0.001
+  Layer 23: acc=0.8590 +/- 0.0105, F1=0.8448, C=0.001
+  Layer 24: acc=0.8578 +/- 0.0099, F1=0.8435, C=0.001
+  Layer 25: acc=0.8566 +/- 0.0093, F1=0.8420, C=0.001
+  Layer 26: acc=0.8516 +/- 0.0107, F1=0.8361, C=0.001
+  Layer 27: acc=0.8481 +/- 0.0095, F1=0.8327, C=0.001
+  Layer 28: acc=0.8483 +/- 0.0079, F1=0.8325, C=0.001
+
+======================================================================
+PROBING — maximal cleaning (last_token pooling)
+======================================================================
+  Layer  0: acc=0.5452 +/- 0.0098, F1=0.4175, C=10.0
+  Layer  1: acc=0.8448 +/- 0.0161, F1=0.8248, C=0.001
+  Layer  2: acc=0.8286 +/- 0.0105, F1=0.8060, C=0.001
+  Layer  3: acc=0.8165 +/- 0.0131, F1=0.7907, C=0.001
+  Layer  4: acc=0.8056 +/- 0.0117, F1=0.7774, C=0.001
+  Layer  5: acc=0.7987 +/- 0.0156, F1=0.7699, C=0.001
+  Layer  6: acc=0.7880 +/- 0.0134, F1=0.7566, C=0.001
+  Layer  7: acc=0.7738 +/- 0.0122, F1=0.7389, C=0.001
+  Layer  8: acc=0.7674 +/- 0.0128, F1=0.7311, C=0.001
+  Layer  9: acc=0.7683 +/- 0.0158, F1=0.7321, C=0.001
+  Layer 10: acc=0.7631 +/- 0.0218, F1=0.7285, C=0.001
+  Layer 11: acc=0.7576 +/- 0.0238, F1=0.7207, C=0.001
+  Layer 12: acc=0.7546 +/- 0.0223, F1=0.7167, C=0.001
+  Layer 13: acc=0.7505 +/- 0.0170, F1=0.7131, C=0.001
+  Layer 14: acc=0.7446 +/- 0.0117, F1=0.7099, C=0.001
+  Layer 15: acc=0.7349 +/- 0.0134, F1=0.6963, C=0.001
+  Layer 16: acc=0.7334 +/- 0.0143, F1=0.6961, C=0.001
+  Layer 17: acc=0.7306 +/- 0.0227, F1=0.6921, C=0.001
+  Layer 18: acc=0.7230 +/- 0.0253, F1=0.6812, C=0.001
+  Layer 19: acc=0.7251 +/- 0.0171, F1=0.6822, C=0.001
+  Layer 20: acc=0.7187 +/- 0.0168, F1=0.6733, C=0.001
+  Layer 21: acc=0.7178 +/- 0.0227, F1=0.6741, C=0.001
+  Layer 22: acc=0.7142 +/- 0.0220, F1=0.6708, C=0.001
+  Layer 23: acc=0.7114 +/- 0.0178, F1=0.6667, C=0.001
+  Layer 24: acc=0.7076 +/- 0.0171, F1=0.6636, C=0.001
+  Layer 25: acc=0.7014 +/- 0.0186, F1=0.6564, C=0.001
+  Layer 26: acc=0.7007 +/- 0.0200, F1=0.6534, C=0.001
+  Layer 27: acc=0.6974 +/- 0.0227, F1=0.6495, C=0.001
+  Layer 28: acc=0.7014 +/- 0.0287, F1=0.6536, C=0.001
+
+Best layer (tier0):   1 (acc=0.9433)
+Best layer (maximal): 1 (acc=0.8448)
+Checkpoint saved to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/layer_results_checkpoint_qwen2.5-7b-instruct-random_last_token.json
+
+======================================================================
+RANDOM-LABEL BASELINE (1000 permutations at layer 1)
+======================================================================
+  Null distribution: mean=0.3786, std=0.0084, max=0.4049
+  Real accuracy: 0.9433
+  p-value: 0.000999000999000999
+
+======================================================================
+FINAL TEST-SET EVALUATION
+======================================================================
+
+  [tier0] Layer 1, C=0.1
+    Test accuracy:  0.9503
+    Test F1 macro:  0.9450
+    CV accuracy:    0.9433
+    CV-Test gap:    -0.0070
+    Confusion matrix:
+[[142   9   3]
+ [ 16 343   6]
+ [  1   2 222]]
+
+  [maximal] Layer 1, C=0.001
+    Test accuracy:  0.8522
+    Test F1 macro:  0.8332
+    CV accuracy:    0.8448
+    CV-Test gap:    -0.0074
+    Confusion matrix:
+[[102  45   7]
+ [ 20 327  18]
+ [  3  17 205]]
+
+Saved results to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/probe_results_qwen2.5-7b-instruct-random_last_token.json
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/layer_accuracy_curve_last_token.png
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/confound_random_label_last_token.png
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/tsne_best_layer_last_token.png
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/confusion_matrix_best_layer_last_token.png
+
+Total wall time: 18.7 min
+=== Validity tests (mean pooling) ===
+Model: qwen2.5-7b-instruct, Pooling: mean
+Data: 4957 texts, Train+Val: 4213
+Best layers: {'tier0': 4, 'maximal': 3}
+Best C values: {'tier0': 1.0, 'maximal': 0.1}
+
+======================================================================
+EXPERIMENT A — LEARNING CURVE
+======================================================================
+
+  [tier0] Layer 4, C=1.0
+       1% (  42 texts): acc=0.9310 +/- 0.0419
+       5% ( 210 texts): acc=0.9657 +/- 0.0097
+      10% ( 421 texts): acc=0.9739 +/- 0.0046
+      25% (1053 texts): acc=0.9792 +/- 0.0061
+      50% (2106 texts): acc=0.9855 +/- 0.0023
+     100% (4213 texts): acc=0.9906 +/- 0.0008
+
+  [maximal] Layer 3, C=0.1
+       1% (  42 texts): acc=0.7881 +/- 0.0786
+       5% ( 210 texts): acc=0.8900 +/- 0.0270
+      10% ( 421 texts): acc=0.9119 +/- 0.0150
+      25% (1053 texts): acc=0.9374 +/- 0.0067
+      50% (2106 texts): acc=0.9495 +/- 0.0033
+     100% (4213 texts): acc=0.9615 +/- 0.0015
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/validity/plots/learning_curve.png
+
+======================================================================
+EXPERIMENT B — PCA DIMENSIONALITY REDUCTION
+======================================================================
+
+  [tier0] Layer 4, C=1.0
+    k=    2: acc=0.6140 +/- 0.0135
+    k=    5: acc=0.9013 +/- 0.0055
+    k=   10: acc=0.9250 +/- 0.0072
+    k=   25: acc=0.9646 +/- 0.0014
+    k=   50: acc=0.9722 +/- 0.0016
+    k=  100: acc=0.9801 +/- 0.0027
+    k=  250: acc=0.9820 +/- 0.0058
+    k=  500: acc=0.9855 +/- 0.0051
+    k= 1000: acc=0.9881 +/- 0.0036
+    k= 3584: acc=0.4470 +/- 0.0603
+
+  [maximal] Layer 3, C=0.1
+    k=    2: acc=0.6421 +/- 0.0088
+    k=    5: acc=0.7145 +/- 0.0107
+    k=   10: acc=0.7762 +/- 0.0054
+    k=   25: acc=0.8683 +/- 0.0080
+    k=   50: acc=0.9117 +/- 0.0056
+    k=  100: acc=0.9380 +/- 0.0064
+    k=  250: acc=0.9528 +/- 0.0051
+    k=  500: acc=0.9518 +/- 0.0022
+    k= 1000: acc=0.9547 +/- 0.0072
+    k= 3584: acc=0.3848 +/- 0.0232
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/validity/plots/pca_accuracy_vs_dims.png
+
+======================================================================
+EXPERIMENT C — LINEAR VS MLP PROBE
+======================================================================
+
+  [tier0]
+  Running MLP probes across 29 layers (parallel)...
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+    Layer  0: linear=0.9822, MLP=0.9786, delta=-0.0036
+    Layer  1: linear=0.9874, MLP=0.9798, delta=-0.0076
+    Layer  2: linear=0.9896, MLP=0.9824, delta=-0.0071
+    Layer  3: linear=0.9896, MLP=0.9839, delta=-0.0057
+    Layer  4: linear=0.9910, MLP=0.9803, delta=-0.0107
+    Layer  5: linear=0.9900, MLP=0.9836, delta=-0.0064
+    Layer  6: linear=0.9900, MLP=0.9820, delta=-0.0081
+    Layer  7: linear=0.9903, MLP=0.9824, delta=-0.0078
+    Layer  8: linear=0.9886, MLP=0.9770, delta=-0.0116
+    Layer  9: linear=0.9888, MLP=0.9782, delta=-0.0107
+    Layer 10: linear=0.9886, MLP=0.9801, delta=-0.0085
+    Layer 11: linear=0.9877, MLP=0.9756, delta=-0.0121
+    Layer 12: linear=0.9879, MLP=0.9765, delta=-0.0114
+    Layer 13: linear=0.9867, MLP=0.9772, delta=-0.0095
+    Layer 14: linear=0.9881, MLP=0.9767, delta=-0.0114
+    Layer 15: linear=0.9869, MLP=0.9753, delta=-0.0116
+    Layer 16: linear=0.9848, MLP=0.9767, delta=-0.0081
+    Layer 17: linear=0.9853, MLP=0.9758, delta=-0.0095
+    Layer 18: linear=0.9853, MLP=0.9753, delta=-0.0100
+    Layer 19: linear=0.9860, MLP=0.9734, delta=-0.0126
+    Layer 20: linear=0.9834, MLP=0.9706, delta=-0.0128
+    Layer 21: linear=0.9839, MLP=0.9734, delta=-0.0104
+    Layer 22: linear=0.9836, MLP=0.9729, delta=-0.0107
+    Layer 23: linear=0.9841, MLP=0.9767, delta=-0.0074
+    Layer 24: linear=0.9850, MLP=0.9739, delta=-0.0112
+    Layer 25: linear=0.9855, MLP=0.9748, delta=-0.0107
+    Layer 26: linear=0.9867, MLP=0.9770, delta=-0.0097
+    Layer 27: linear=0.9872, MLP=0.9765, delta=-0.0107
+    Layer 28: linear=0.9862, MLP=0.9774, delta=-0.0088
+
+  [maximal]
+  Running MLP probes across 29 layers (parallel)...
+    Layer  0: linear=0.9378, MLP=0.9357, delta=-0.0021
+    Layer  1: linear=0.9549, MLP=0.9373, delta=-0.0176
+    Layer  2: linear=0.9611, MLP=0.9468, delta=-0.0142
+    Layer  3: linear=0.9625, MLP=0.9487, delta=-0.0138
+    Layer  4: linear=0.9585, MLP=0.9421, delta=-0.0164
+    Layer  5: linear=0.9575, MLP=0.9456, delta=-0.0119
+    Layer  6: linear=0.9592, MLP=0.9478, delta=-0.0114
+    Layer  7: linear=0.9563, MLP=0.9452, delta=-0.0112
+    Layer  8: linear=0.9563, MLP=0.9433, delta=-0.0131
+    Layer  9: linear=0.9570, MLP=0.9416, delta=-0.0154
+    Layer 10: linear=0.9516, MLP=0.9378, delta=-0.0138
+    Layer 11: linear=0.9468, MLP=0.9366, delta=-0.0102
+    Layer 12: linear=0.9456, MLP=0.9323, delta=-0.0133
+    Layer 13: linear=0.9445, MLP=0.9342, delta=-0.0102
+    Layer 14: linear=0.9485, MLP=0.9390, delta=-0.0095
+    Layer 15: linear=0.9461, MLP=0.9345, delta=-0.0116
+    Layer 16: linear=0.9430, MLP=0.9302, delta=-0.0128
+    Layer 17: linear=0.9442, MLP=0.9283, delta=-0.0159
+    Layer 18: linear=0.9404, MLP=0.9259, delta=-0.0145
+    Layer 19: linear=0.9390, MLP=0.9285, delta=-0.0105
+    Layer 20: linear=0.9361, MLP=0.9267, delta=-0.0095
+    Layer 21: linear=0.9402, MLP=0.9302, delta=-0.0100
+    Layer 22: linear=0.9442, MLP=0.9340, delta=-0.0102
+    Layer 23: linear=0.9468, MLP=0.9352, delta=-0.0116
+    Layer 24: linear=0.9497, MLP=0.9319, delta=-0.0178
+    Layer 25: linear=0.9478, MLP=0.9300, delta=-0.0178
+    Layer 26: linear=0.9478, MLP=0.9331, delta=-0.0147
+    Layer 27: linear=0.9521, MLP=0.9314, delta=-0.0206
+    Layer 28: linear=0.9461, MLP=0.9264, delta=-0.0197
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/validity/plots/mlp_vs_linear.png
+
+======================================================================
+EXPERIMENT D — RANDOM BASELINE COMPARISON
+======================================================================
+  [tier0] Layer 4: trained=0.9910, random=0.9772, delta=+0.0138
+  [maximal] Layer 3: trained=0.9625, random=0.9074, delta=+0.0551
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/validity/plots/random_baseline_comparison.png
+
+Saved results to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/validity/validity_results_qwen2.5-7b-instruct.json
+Total wall time: 23.7 min
+=== Validity tests (last_token pooling) ===
+Model: qwen2.5-7b-instruct, Pooling: last_token
+Data: 4957 texts, Train+Val: 4213
+Best layers: {'tier0': 28, 'maximal': 28}
+Best C values: {'tier0': 0.01, 'maximal': 0.01}
+
+======================================================================
+EXPERIMENT A — LEARNING CURVE
+======================================================================
+
+  [tier0] Layer 28, C=0.01
+       1% (  42 texts): acc=0.6810 +/- 0.0873
+       5% ( 210 texts): acc=0.8310 +/- 0.0355
+      10% ( 421 texts): acc=0.8853 +/- 0.0105
+      25% (1053 texts): acc=0.9252 +/- 0.0082
+      50% (2106 texts): acc=0.9423 +/- 0.0040
+     100% (4213 texts): acc=0.9566 +/- 0.0016
+
+  [maximal] Layer 28, C=0.01
+       1% (  42 texts): acc=0.5786 +/- 0.0859
+       5% ( 210 texts): acc=0.7414 +/- 0.0231
+      10% ( 421 texts): acc=0.7865 +/- 0.0190
+      25% (1053 texts): acc=0.8459 +/- 0.0131
+      50% (2106 texts): acc=0.8768 +/- 0.0067
+     100% (4213 texts): acc=0.8996 +/- 0.0029
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/validity/plots/learning_curve_last_token.png
+
+======================================================================
+EXPERIMENT B — PCA DIMENSIONALITY REDUCTION
+======================================================================
+
+  [tier0] Layer 28, C=0.01
+    k=    2: acc=0.5217 +/- 0.0166
+    k=    5: acc=0.5431 +/- 0.0077
+    k=   10: acc=0.5609 +/- 0.0065
+    k=   25: acc=0.7206 +/- 0.0083
+    k=   50: acc=0.8744 +/- 0.0053
+    k=  100: acc=0.9148 +/- 0.0109
+    k=  250: acc=0.9366 +/- 0.0080
+    k=  500: acc=0.9523 +/- 0.0067
+    k= 1000: acc=0.9520 +/- 0.0094
+    k= 3584: acc=0.3330 +/- 0.0660
+
+  [maximal] Layer 28, C=0.01
+    k=    2: acc=0.4899 +/- 0.0022
+    k=    5: acc=0.4892 +/- 0.0026
+    k=   10: acc=0.5628 +/- 0.0114
+    k=   25: acc=0.6952 +/- 0.0107
+    k=   50: acc=0.7781 +/- 0.0173
+    k=  100: acc=0.8384 +/- 0.0112
+    k=  250: acc=0.8735 +/- 0.0156
+    k=  500: acc=0.8830 +/- 0.0148
+    k= 1000: acc=0.8811 +/- 0.0143
+    k= 3584: acc=0.3435 +/- 0.0536
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/validity/plots/pca_accuracy_vs_dims_last_token.png
+
+======================================================================
+EXPERIMENT C — LINEAR VS MLP PROBE
+======================================================================
+
+  [tier0]
+  Running MLP probes across 29 layers (parallel)...
+    Layer  0: linear=0.5896, MLP=0.5711, delta=-0.0185
+    Layer  1: linear=0.8630, MLP=0.8044, delta=-0.0586
+    Layer  2: linear=0.8789, MLP=0.8227, delta=-0.0563
+    Layer  3: linear=0.8460, MLP=0.8063, delta=-0.0396
+    Layer  4: linear=0.8365, MLP=0.7954, delta=-0.0411
+    Layer  5: linear=0.8469, MLP=0.8042, delta=-0.0427
+    Layer  6: linear=0.8464, MLP=0.8125, delta=-0.0339
+    Layer  7: linear=0.8459, MLP=0.8213, delta=-0.0247
+    Layer  8: linear=0.8623, MLP=0.8395, delta=-0.0228
+    Layer  9: linear=0.8607, MLP=0.8426, delta=-0.0180
+    Layer 10: linear=0.8737, MLP=0.8519, delta=-0.0218
+    Layer 11: linear=0.8595, MLP=0.8298, delta=-0.0297
+    Layer 12: linear=0.8633, MLP=0.8369, delta=-0.0263
+    Layer 13: linear=0.8635, MLP=0.8410, delta=-0.0225
+    Layer 14: linear=0.8747, MLP=0.8509, delta=-0.0237
+    Layer 15: linear=0.8723, MLP=0.8488, delta=-0.0235
+    Layer 16: linear=0.8609, MLP=0.8341, delta=-0.0268
+    Layer 17: linear=0.8623, MLP=0.8312, delta=-0.0311
+    Layer 18: linear=0.8550, MLP=0.8334, delta=-0.0216
+    Layer 19: linear=0.8702, MLP=0.8471, delta=-0.0230
+    Layer 20: linear=0.8789, MLP=0.8600, delta=-0.0190
+    Layer 21: linear=0.8894, MLP=0.8635, delta=-0.0259
+    Layer 22: linear=0.9010, MLP=0.8645, delta=-0.0366
+    Layer 23: linear=0.9181, MLP=0.8915, delta=-0.0266
+    Layer 24: linear=0.9210, MLP=0.8960, delta=-0.0249
+    Layer 25: linear=0.9283, MLP=0.9081, delta=-0.0202
+    Layer 26: linear=0.9390, MLP=0.9174, delta=-0.0216
+    Layer 27: linear=0.9475, MLP=0.9276, delta=-0.0199
+    Layer 28: linear=0.9554, MLP=0.9376, delta=-0.0178
+
+  [maximal]
+  Running MLP probes across 29 layers (parallel)...
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/joblib/externals/loky/process_executor.py:782: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  warnings.warn(
+    Layer  0: linear=0.5455, MLP=0.5236, delta=-0.0218
+    Layer  1: linear=0.8457, MLP=0.7859, delta=-0.0598
+    Layer  2: linear=0.8443, MLP=0.7971, delta=-0.0472
+    Layer  3: linear=0.8179, MLP=0.7823, delta=-0.0356
+    Layer  4: linear=0.8051, MLP=0.7823, delta=-0.0228
+    Layer  5: linear=0.8051, MLP=0.7766, delta=-0.0285
+    Layer  6: linear=0.7966, MLP=0.7698, delta=-0.0268
+    Layer  7: linear=0.7698, MLP=0.7531, delta=-0.0166
+    Layer  8: linear=0.8008, MLP=0.7812, delta=-0.0197
+    Layer  9: linear=0.7871, MLP=0.7674, delta=-0.0197
+    Layer 10: linear=0.7947, MLP=0.7759, delta=-0.0187
+    Layer 11: linear=0.7797, MLP=0.7636, delta=-0.0161
+    Layer 12: linear=0.7714, MLP=0.7579, delta=-0.0135
+    Layer 13: linear=0.7714, MLP=0.7584, delta=-0.0131
+    Layer 14: linear=0.7690, MLP=0.7633, delta=-0.0057
+    Layer 15: linear=0.7671, MLP=0.7555, delta=-0.0116
+    Layer 16: linear=0.7586, MLP=0.7401, delta=-0.0185
+    Layer 17: linear=0.7541, MLP=0.7451, delta=-0.0090
+    Layer 18: linear=0.7524, MLP=0.7379, delta=-0.0145
+    Layer 19: linear=0.7662, MLP=0.7515, delta=-0.0147
+    Layer 20: linear=0.7769, MLP=0.7641, delta=-0.0128
+    Layer 21: linear=0.7852, MLP=0.7800, delta=-0.0052
+    Layer 22: linear=0.8011, MLP=0.7885, delta=-0.0126
+    Layer 23: linear=0.8201, MLP=0.8082, delta=-0.0119
+    Layer 24: linear=0.8246, MLP=0.8039, delta=-0.0206
+    Layer 25: linear=0.8497, MLP=0.8324, delta=-0.0173
+    Layer 26: linear=0.8744, MLP=0.8557, delta=-0.0187
+    Layer 27: linear=0.8963, MLP=0.8659, delta=-0.0304
+    Layer 28: linear=0.9003, MLP=0.8818, delta=-0.0185
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/validity/plots/mlp_vs_linear_last_token.png
+
+======================================================================
+EXPERIMENT D — RANDOM BASELINE COMPARISON
+======================================================================
+  [tier0] Layer 28: trained=0.9554, random=0.8483, delta=+0.1070
+  [maximal] Layer 28: trained=0.9003, random=0.7014, delta=+0.1989
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/validity/plots/random_baseline_comparison_last_token.png
+
+Saved results to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/validity/validity_results_qwen2.5-7b-instruct_last_token.json
+Total wall time: 31.1 min
+=== Done ===
+End: Tue Mar 31 10:47:47 UTC 2026
