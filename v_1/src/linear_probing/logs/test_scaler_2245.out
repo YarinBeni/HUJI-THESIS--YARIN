@@ -1,0 +1,31 @@
+=== Scaler Speed Test ===
+Job ID: 2245
+Start: Sat Mar 28 08:49:08 UTC 2026
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+Loading layer 14 activations...
+Train: (3370, 3584), Test: (843, 3584)
+Value range: [-2910.0, 876.8], std=3.59
+
+--- lbfgs NO scaler (solver=lbfgs, max_iter=1000) ---
+  Time: 23.6s | Iterations: 860/1000 | Acc: 0.9858
+  (Scaled range: [-38.1, 37.1], std=1.00)
+--- lbfgs WITH scaler (solver=lbfgs, max_iter=1000) ---
+  Time: 2.2s | Iterations: 77/1000 | Acc: 0.9858
+--- saga NO scaler (solver=saga, max_iter=1000) ---
+  Time: 147.7s | Iterations: 1000/1000 | Acc: 0.8719
+--- saga WITH scaler (solver=saga, max_iter=1000) ---
+  Time: 147.5s | Iterations: 1000/1000 | Acc: 0.9798
+
+============================================================
+SUMMARY
+============================================================
+Config                           Time  Iters     Acc
+------------------------------------------------------------
+lbfgs, no scaler                23.6s   860  0.9858
+lbfgs, with scaler               2.2s    77  0.9858
+saga, no scaler                147.7s  1000  0.8719
+saga, with scaler              147.5s  1000  0.9798
+End: Sat Mar 28 08:55:01 UTC 2026

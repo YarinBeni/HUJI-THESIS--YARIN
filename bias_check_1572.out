@@ -1,0 +1,305 @@
+=== Bias Check Pipeline ===
+Job ID: 1572
+Node: g0380
+NVIDIA H100 80GB HBM3, 81559 MiB
+Start: Thu Mar 19 14:29:36 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+WARNING: Ignoring invalid distribution ~orch (/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages)
+WARNING: Ignoring invalid distribution ~orch (/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages)
+WARNING: Ignoring invalid distribution ~orch (/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages)
+Environment ready.
+--- Step 1/5: Featurize ---
+============================================================
+Step 1: Featurize
+============================================================
+
+Loading /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/data/evaluation/corpora/texts_for_evaluation.parquet...
+  Loaded 4,957 texts
+  Texts for classification: 4,957
+
+Class distribution:
+  Old Babylonian: 1,497 (30.2%)
+  Neo-Assyrian: 2,435 (49.1%)
+  Late Babylonian: 1,025 (20.7%)
+
+Split sizes:  train=3,469  val=744  test=744
+  train: Old Babylonian: 1047 (30.2%) | Neo-Assyrian: 1705 (49.1%) | Late Babylonian: 717 (20.7%)
+  val: Old Babylonian: 225 (30.2%) | Neo-Assyrian: 365 (49.1%) | Late Babylonian: 154 (20.7%)
+  test: Old Babylonian: 225 (30.2%) | Neo-Assyrian: 365 (49.1%) | Late Babylonian: 154 (20.7%)
+
+Fitting TfidfVectorizer on train (3,469 texts)...
+  Feature matrix shape: (3469, 10000) (train)
+  Vocabulary size: 10,000
+  Non-zero entries (train): 2,347,118 (677 avg per text)
+
+Saving features to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/data/evaluation/bias_check/features/...
+  Saved: train.npz, val.npz, test.npz
+  Saved: y_train.npy, y_val.npy, y_test.npy
+  Saved: vectorizer.pkl
+
+============================================================
+Done! Features ready for training.
+============================================================
+--- Step 2/5: Train ---
+============================================================
+Step 2: Train Bias Check Models
+============================================================
+
+Device: cuda
+  GPU: NVIDIA H100 80GB HBM3
+
+Loading features...
+  Train: torch.Size([3469, 10000])  Val: torch.Size([744, 10000])
+
+Training 8 model(s)...
+
+  Building mlp_1layer (attn_blocks=0, mlp_layers=1)...
+    Parameters: 2,561,539
+    Epoch   1/100  train_loss=0.0768  train_acc=0.969  val_loss=0.0581  val_acc=0.997  (1.4s)
+    Epoch   2/100  train_loss=0.0085  train_acc=0.999  val_loss=0.0073  val_acc=1.000  (0.1s)
+    Epoch   3/100  train_loss=0.0043  train_acc=0.999  val_loss=0.0056  val_acc=1.000  (0.1s)
+    Epoch   6/100  train_loss=0.0017  train_acc=1.000  val_loss=0.0053  val_acc=1.000  (0.1s)
+    Epoch   7/100  train_loss=0.0007  train_acc=1.000  val_loss=0.0048  val_acc=1.000  (0.1s)
+    Epoch   8/100  train_loss=0.0004  train_acc=1.000  val_loss=0.0045  val_acc=1.000  (0.1s)
+    Epoch  10/100  train_loss=0.0004  train_acc=1.000  val_loss=0.0047  val_acc=1.000  (0.1s)
+    Epoch  11/100  train_loss=0.0003  train_acc=1.000  val_loss=0.0045  val_acc=1.000  (0.1s)
+    Epoch  12/100  train_loss=0.0002  train_acc=1.000  val_loss=0.0036  val_acc=1.000  (0.1s)
+    Epoch  20/100  train_loss=0.0001  train_acc=1.000  val_loss=0.0058  val_acc=0.999  (0.1s)
+    Early stop at epoch 22 (best epoch=12)
+    Best → val_loss=0.0036  val_acc=1.000  (epoch 12)
+
+  Building mlp_2layer (attn_blocks=0, mlp_layers=2)...
+    Parameters: 2,627,843
+    Epoch   1/100  train_loss=0.0881  train_acc=0.973  val_loss=0.0491  val_acc=1.000  (0.2s)
+    Epoch   2/100  train_loss=0.0068  train_acc=0.999  val_loss=0.0041  val_acc=1.000  (0.1s)
+    Epoch  10/100  train_loss=0.0015  train_acc=1.000  val_loss=0.0038  val_acc=0.997  (0.2s)
+    Epoch  12/100  train_loss=0.0005  train_acc=1.000  val_loss=0.0029  val_acc=0.999  (0.1s)
+    Epoch  14/100  train_loss=0.0003  train_acc=1.000  val_loss=0.0026  val_acc=0.999  (0.1s)
+    Epoch  20/100  train_loss=0.0010  train_acc=1.000  val_loss=0.0061  val_acc=0.999  (0.1s)
+    Early stop at epoch 24 (best epoch=14)
+    Best → val_loss=0.0026  val_acc=0.999  (epoch 14)
+
+  Building mlp_3layer (attn_blocks=0, mlp_layers=3)...
+    Parameters: 2,694,147
+    Epoch   1/100  train_loss=0.1277  train_acc=0.964  val_loss=0.0488  val_acc=1.000  (0.2s)
+    Epoch   2/100  train_loss=0.0118  train_acc=0.997  val_loss=0.0094  val_acc=0.997  (0.2s)
+    Epoch   4/100  train_loss=0.0040  train_acc=0.999  val_loss=0.0025  val_acc=1.000  (0.2s)
+    Epoch  10/100  train_loss=0.0066  train_acc=0.997  val_loss=0.0070  val_acc=0.995  (0.1s)
+    Epoch  11/100  train_loss=0.0023  train_acc=0.999  val_loss=0.0019  val_acc=0.999  (0.2s)
+    Epoch  12/100  train_loss=0.0011  train_acc=1.000  val_loss=0.0011  val_acc=1.000  (0.2s)
+    Epoch  14/100  train_loss=0.0012  train_acc=1.000  val_loss=0.0005  val_acc=1.000  (0.2s)
+    Epoch  15/100  train_loss=0.0004  train_acc=1.000  val_loss=0.0004  val_acc=1.000  (0.2s)
+    Epoch  20/100  train_loss=0.0044  train_acc=0.999  val_loss=0.0019  val_acc=0.999  (0.1s)
+    Early stop at epoch 25 (best epoch=15)
+    Best → val_loss=0.0004  val_acc=1.000  (epoch 15)
+
+  Building mlp_5layer (attn_blocks=0, mlp_layers=5)...
+    Parameters: 2,826,755
+    Epoch   1/100  train_loss=0.2073  train_acc=0.929  val_loss=0.0404  val_acc=0.997  (0.2s)
+    Epoch   2/100  train_loss=0.0230  train_acc=0.993  val_loss=0.0098  val_acc=0.997  (0.2s)
+    Epoch   4/100  train_loss=0.0136  train_acc=0.995  val_loss=0.0072  val_acc=0.999  (0.2s)
+    Epoch   5/100  train_loss=0.0050  train_acc=0.999  val_loss=0.0071  val_acc=0.995  (0.2s)
+    Epoch   6/100  train_loss=0.0135  train_acc=0.997  val_loss=0.0046  val_acc=0.997  (0.2s)
+    Epoch  10/100  train_loss=0.0206  train_acc=0.996  val_loss=0.0205  val_acc=0.995  (0.1s)
+    Early stop at epoch 16 (best epoch=6)
+    Best → val_loss=0.0046  val_acc=0.997  (epoch 6)
+
+  Building attn1_mlp3 (attn_blocks=1, mlp_layers=3)...
+    Parameters: 281,047
+    Epoch   1/100  train_loss=0.4346  train_acc=0.818  val_loss=0.5105  val_acc=0.812  (0.3s)
+    Epoch   2/100  train_loss=0.1872  train_acc=0.925  val_loss=0.3562  val_acc=0.886  (0.2s)
+    Epoch   9/100  train_loss=0.0671  train_acc=0.977  val_loss=0.0991  val_acc=0.956  (0.2s)
+    Epoch  10/100  train_loss=0.0347  train_acc=0.990  val_loss=0.0624  val_acc=0.976  (0.2s)
+    Epoch  19/100  train_loss=0.0084  train_acc=0.998  val_loss=0.0476  val_acc=0.981  (0.2s)
+    Epoch  20/100  train_loss=0.0110  train_acc=0.995  val_loss=0.1575  val_acc=0.968  (0.2s)
+    Epoch  21/100  train_loss=0.0083  train_acc=0.998  val_loss=0.0431  val_acc=0.988  (0.2s)
+    Epoch  26/100  train_loss=0.0079  train_acc=0.998  val_loss=0.0389  val_acc=0.985  (0.2s)
+    Epoch  30/100  train_loss=0.0154  train_acc=0.995  val_loss=0.5678  val_acc=0.901  (0.2s)
+    Early stop at epoch 36 (best epoch=26)
+    Best → val_loss=0.0389  val_acc=0.985  (epoch 26)
+
+  Building attn2_mlp3 (attn_blocks=2, mlp_layers=3)...
+    Parameters: 402,347
+    Epoch   1/100  train_loss=0.4186  train_acc=0.820  val_loss=1.3682  val_acc=0.773  (0.3s)
+    Epoch   3/100  train_loss=0.0988  train_acc=0.967  val_loss=0.7065  val_acc=0.685  (0.3s)
+    Epoch   5/100  train_loss=0.0637  train_acc=0.971  val_loss=0.0927  val_acc=0.969  (0.3s)
+    Epoch  10/100  train_loss=0.0349  train_acc=0.990  val_loss=1.0164  val_acc=0.727  (0.3s)
+    Epoch  11/100  train_loss=0.0503  train_acc=0.979  val_loss=0.0737  val_acc=0.978  (0.3s)
+    Epoch  19/100  train_loss=0.0128  train_acc=0.996  val_loss=0.0235  val_acc=0.991  (0.3s)
+    Epoch  20/100  train_loss=0.0129  train_acc=0.996  val_loss=0.0660  val_acc=0.983  (0.3s)
+    Early stop at epoch 29 (best epoch=19)
+    Best → val_loss=0.0235  val_acc=0.991  (epoch 19)
+
+  Building attn3_mlp3 (attn_blocks=3, mlp_layers=3)...
+    Parameters: 523,647
+    Epoch   1/100  train_loss=0.4070  train_acc=0.829  val_loss=1.1545  val_acc=0.551  (0.3s)
+    Epoch   3/100  train_loss=0.1072  train_acc=0.962  val_loss=0.3677  val_acc=0.819  (0.3s)
+    Epoch   5/100  train_loss=0.0733  train_acc=0.972  val_loss=0.0902  val_acc=0.962  (0.3s)
+    Epoch  10/100  train_loss=0.0482  train_acc=0.983  val_loss=1.0912  val_acc=0.749  (0.3s)
+    Epoch  12/100  train_loss=0.0210  train_acc=0.993  val_loss=0.0715  val_acc=0.966  (0.3s)
+    Epoch  13/100  train_loss=0.0160  train_acc=0.994  val_loss=0.0458  val_acc=0.980  (0.3s)
+    Epoch  16/100  train_loss=0.0091  train_acc=0.997  val_loss=0.0332  val_acc=0.985  (0.3s)
+    Epoch  20/100  train_loss=0.0593  train_acc=0.980  val_loss=0.2314  val_acc=0.954  (0.3s)
+    Early stop at epoch 26 (best epoch=16)
+    Best → val_loss=0.0332  val_acc=0.985  (epoch 16)
+
+  Building attn5_mlp3 (attn_blocks=5, mlp_layers=3)...
+    Parameters: 766,247
+    Epoch   1/100  train_loss=0.3612  train_acc=0.839  val_loss=2.0824  val_acc=0.517  (0.5s)
+    Epoch   2/100  train_loss=0.1312  train_acc=0.951  val_loss=0.9633  val_acc=0.695  (0.5s)
+    Epoch   4/100  train_loss=0.1060  train_acc=0.958  val_loss=0.7917  val_acc=0.703  (0.5s)
+    Epoch   5/100  train_loss=0.0486  train_acc=0.984  val_loss=0.0859  val_acc=0.966  (0.5s)
+    Epoch  10/100  train_loss=0.0345  train_acc=0.988  val_loss=0.0866  val_acc=0.981  (0.5s)
+    Epoch  14/100  train_loss=0.0440  train_acc=0.986  val_loss=0.0684  val_acc=0.978  (0.5s)
+    Epoch  20/100  train_loss=0.0188  train_acc=0.993  val_loss=1.2676  val_acc=0.835  (0.4s)
+    Epoch  22/100  train_loss=0.0138  train_acc=0.995  val_loss=0.0396  val_acc=0.991  (0.5s)
+    Epoch  29/100  train_loss=0.0143  train_acc=0.995  val_loss=0.0362  val_acc=0.987  (0.5s)
+    Epoch  30/100  train_loss=0.0092  train_acc=0.997  val_loss=0.0920  val_acc=0.978  (0.4s)
+    Early stop at epoch 39 (best epoch=29)
+    Best → val_loss=0.0362  val_acc=0.987  (epoch 29)
+
+Saving training history to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/data/evaluation/bias_check/metrics/training_history.json...
+
+============================================================
+Training Summary
+============================================================
+Model                  Params  Best Val Loss  Best Val Acc  Epochs
+-----------------------------------------------------------------
+mlp_1layer          2,561,539         0.0036        1.000      22
+mlp_2layer          2,627,843         0.0026        0.999      24
+mlp_3layer          2,694,147         0.0004        1.000      25
+mlp_5layer          2,826,755         0.0046        0.997      16
+attn1_mlp3            281,047         0.0389        0.985      36
+attn2_mlp3            402,347         0.0235        0.991      29
+attn3_mlp3            523,647         0.0332        0.985      26
+attn5_mlp3            766,247         0.0362        0.987      39
+
+Checkpoints saved to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/data/evaluation/bias_check/models/
+============================================================
+Done! Run 03_evaluate.py next.
+============================================================
+--- Step 3/5: Evaluate ---
+============================================================
+Step 3: Evaluate Bias Check Models
+============================================================
+
+Device: cuda
+
+Loading test split...
+  Test: (744, 10000)
+Loading train split (for permutation test)...
+  Train: (3469, 10000)
+
+Baselines:
+  Chance level:      0.333 (33.3%)
+  Majority class:    0.491 (49.1%)
+  Config majority:   0.491 (49.1%)
+
+Computing permutation null distribution (1000 perms)...
+  Null distribution: mean=0.435, std=0.023
+
+Evaluating 8 model(s)...
+
+  mlp_1layer:
+    acc=0.993  f1_macro=0.992  p-value=0.0000 → FAIL
+
+  mlp_2layer:
+    acc=0.995  f1_macro=0.994  p-value=0.0000 → FAIL
+
+  mlp_3layer:
+    acc=0.992  f1_macro=0.991  p-value=0.0000 → FAIL
+
+  mlp_5layer:
+    acc=0.991  f1_macro=0.989  p-value=0.0000 → FAIL
+
+  attn1_mlp3:
+    acc=0.984  f1_macro=0.983  p-value=0.0000 → FAIL
+
+  attn2_mlp3:
+    acc=0.988  f1_macro=0.986  p-value=0.0000 → FAIL
+
+  attn3_mlp3:
+    acc=0.974  f1_macro=0.975  p-value=0.0000 → FAIL
+
+  attn5_mlp3:
+    acc=0.983  f1_macro=0.981  p-value=0.0000 → FAIL
+
+Overall verdict: FAIL
+
+Saving metrics to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/data/evaluation/bias_check/metrics/all_metrics.json...
+
+============================================================
+Results Summary
+============================================================
+Model               Accuracy  F1 Macro   p-value  Verdict
+----------------------------------------------------------
+mlp_1layer             0.993     0.992    0.0000     FAIL
+mlp_2layer             0.995     0.994    0.0000     FAIL
+mlp_3layer             0.992     0.991    0.0000     FAIL
+mlp_5layer             0.991     0.989    0.0000     FAIL
+attn1_mlp3             0.984     0.983    0.0000     FAIL
+attn2_mlp3             0.988     0.986    0.0000     FAIL
+attn3_mlp3             0.974     0.975    0.0000     FAIL
+attn5_mlp3             0.983     0.981    0.0000     FAIL
+
+Overall: FAIL
+
+Metrics saved to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/data/evaluation/bias_check/metrics/all_metrics.json
+============================================================
+Done! Run 04_plot.py next.
+============================================================
+--- Step 4/5: Plot ---
+============================================================
+Step 4: Generate Plots
+============================================================
+
+Writing plots to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/data/evaluation/bias_check/plots/...
+
+  Saved accuracy_vs_complexity.png
+  Saved f1_per_class.png
+  Saved confusion_mlp_1layer.png
+  Saved confusion_mlp_2layer.png
+  Saved confusion_mlp_3layer.png
+  Saved confusion_mlp_5layer.png
+  Saved confusion_attn1_mlp3.png
+  Saved confusion_attn2_mlp3.png
+  Saved confusion_attn3_mlp3.png
+  Saved confusion_attn5_mlp3.png
+  Saved training_curves.png
+  Saved permutation_test.png
+
+============================================================
+Done! Run 05_report.py next.
+============================================================
+--- Step 5/5: Report ---
+============================================================
+Step 5: Generate Bias Check Report
+============================================================
+
+Report saved to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/data/evaluation/bias_check/bias_check_report.md
+Overall verdict: FAIL
+
+============================================================
+Done! Bias check pipeline complete.
+============================================================
+--- Pushing results to GitHub ---
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: empty ident name (for <yarin.b@g0380.prod.pyl1.voltagepark.net>) not allowed
+Nothing to commit
+fatal: could not read Username for 'https://github.com': No such device or address
+WARNING: git push failed — results saved locally at v_1/data/evaluation/bias_check/
+=== Pipeline Complete ===
+End: Thu Mar 19 14:35:46 UTC 2026

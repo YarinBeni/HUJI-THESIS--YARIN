@@ -1,0 +1,142 @@
+=== Extract Random-Weights Baseline Activations ===
+Job ID: 2301
+Node: g0381
+NVIDIA H100 80GB HBM3, 81559 MiB
+Start: Mon Mar 30 13:03:07 UTC 2026
+=== Extracting random activations (tier0, mean pooling) ===
+Loaded 4957 letters.
+Period distribution:
+period
+NA    2435
+OB    1497
+LB    1025
+
+Cleaning mode: tier0
+Loading RANDOM-WEIGHTS model: Qwen/Qwen2.5-7B-Instruct (short: qwen2.5-7b-instruct-random)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Random model initialized: 7.6B params on cuda:0
+Pooling method: mean
+Processing 4957 texts in 620 batches (batch_size=8, max_length=512)...
+  Detected 29 hidden states (28 transformer layers + embedding), hidden_dim=3584
+  Batch 50/620 done (4.3 min elapsed)
+  Batch 100/620 done (4.4 min elapsed)
+  Batch 150/620 done (4.4 min elapsed)
+  Batch 200/620 done (4.5 min elapsed)
+  Batch 250/620 done (4.6 min elapsed)
+  Batch 300/620 done (4.7 min elapsed)
+  Batch 350/620 done (4.8 min elapsed)
+  Batch 400/620 done (4.9 min elapsed)
+  Batch 450/620 done (5.0 min elapsed)
+  Batch 500/620 done (5.1 min elapsed)
+  Batch 550/620 done (5.2 min elapsed)
+  Batch 600/620 done (5.3 min elapsed)
+  Batch 620/620 done (5.3 min elapsed)
+
+Saving 29 layer files to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct-random/tier0/
+
+Done! 29 layer files saved.
+Total wall time: 7.0 min
+=== Extracting random activations (maximal, mean pooling) ===
+Loaded 4957 letters.
+Period distribution:
+period
+NA    2435
+OB    1497
+LB    1025
+
+Cleaning mode: maximal
+Loading RANDOM-WEIGHTS model: Qwen/Qwen2.5-7B-Instruct (short: qwen2.5-7b-instruct-random)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Random model initialized: 7.6B params on cuda:0
+Pooling method: mean
+Processing 4957 texts in 620 batches (batch_size=8, max_length=512)...
+  Detected 29 hidden states (28 transformer layers + embedding), hidden_dim=3584
+  Batch 50/620 done (4.0 min elapsed)
+  Batch 100/620 done (4.0 min elapsed)
+  Batch 150/620 done (4.1 min elapsed)
+  Batch 200/620 done (4.1 min elapsed)
+  Batch 250/620 done (4.1 min elapsed)
+  Batch 300/620 done (4.2 min elapsed)
+  Batch 350/620 done (4.2 min elapsed)
+  Batch 400/620 done (4.2 min elapsed)
+  Batch 450/620 done (4.3 min elapsed)
+  Batch 500/620 done (4.3 min elapsed)
+  Batch 550/620 done (4.3 min elapsed)
+  Batch 600/620 done (4.4 min elapsed)
+  Batch 620/620 done (4.4 min elapsed)
+
+Saving 29 layer files to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct-random/maximal/
+
+Done! 29 layer files saved.
+Total wall time: 6.6 min
+=== Extracting random activations (tier0, last_token pooling) ===
+Loaded 4957 letters.
+Period distribution:
+period
+NA    2435
+OB    1497
+LB    1025
+
+Cleaning mode: tier0
+Loading RANDOM-WEIGHTS model: Qwen/Qwen2.5-7B-Instruct (short: qwen2.5-7b-instruct-random)
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Random model initialized: 7.6B params on cuda:0
+Pooling method: last_token
+Processing 4957 texts in 620 batches (batch_size=8, max_length=512)...
+  Detected 29 hidden states (28 transformer layers + embedding), hidden_dim=3584
+  Batch 50/620 done (4.1 min elapsed)
+  Batch 100/620 done (4.1 min elapsed)
+  Batch 150/620 done (4.2 min elapsed)
+  Batch 200/620 done (4.3 min elapsed)
+  Batch 250/620 done (4.4 min elapsed)
+  Batch 300/620 done (4.5 min elapsed)
+  Batch 350/620 done (4.6 min elapsed)
+  Batch 400/620 done (4.7 min elapsed)
+  Batch 450/620 done (4.8 min elapsed)
+  Batch 500/620 done (4.9 min elapsed)
+  Batch 550/620 done (4.9 min elapsed)
+  Batch 600/620 done (5.0 min elapsed)
+  Batch 620/620 done (5.1 min elapsed)
+
+Saving 29 layer files to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct-random/tier0_last_token/
+
+Done! 29 layer files saved.
+Total wall time: 12.6 min
+=== Extracting random activations (maximal, last_token pooling) ===
+Loaded 4957 letters.
+Period distribution:
+period
+NA    2435
+OB    1497
+LB    1025
+
+Cleaning mode: maximal
+Loading RANDOM-WEIGHTS model: Qwen/Qwen2.5-7B-Instruct (short: qwen2.5-7b-instruct-random)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Random model initialized: 7.6B params on cuda:0
+Pooling method: last_token
+Processing 4957 texts in 620 batches (batch_size=8, max_length=512)...
+  Detected 29 hidden states (28 transformer layers + embedding), hidden_dim=3584
+  Batch 50/620 done (4.0 min elapsed)
+  Batch 100/620 done (4.0 min elapsed)
+  Batch 150/620 done (4.1 min elapsed)
+  Batch 200/620 done (4.1 min elapsed)
+  Batch 250/620 done (4.1 min elapsed)
+  Batch 300/620 done (4.2 min elapsed)
+  Batch 350/620 done (4.2 min elapsed)
+  Batch 400/620 done (4.2 min elapsed)
+  Batch 450/620 done (4.2 min elapsed)
+  Batch 500/620 done (4.3 min elapsed)
+  Batch 550/620 done (4.3 min elapsed)
+  Batch 600/620 done (4.3 min elapsed)
+  Batch 620/620 done (4.4 min elapsed)
+
+Saving 29 layer files to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct-random/maximal_last_token/
+
+Done! 29 layer files saved.
+Total wall time: 11.7 min
+=== Done ===
+End: Mon Mar 30 13:41:48 UTC 2026

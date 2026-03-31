@@ -1,0 +1,54 @@
+=== Quick EDA (Final Layer) ===
+Job ID: 2052
+Node: g0374
+NVIDIA H100 80GB HBM3, 81559 MiB
+Start: Thu Mar 26 18:21:19 UTC 2026
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loaded 4957 letters.
+Loading model: Qwen/Qwen2.5-7B-Instruct
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:   0%|          | 1/339 [00:00<00:55,  6.14it/s]Loading weights:   1%|          | 2/339 [00:00<01:05,  5.13it/s]Loading weights:   5%|▌         | 17/339 [00:00<00:06, 48.37it/s]Loading weights:   9%|▉         | 30/339 [00:00<00:04, 69.66it/s]Loading weights:  15%|█▌        | 52/339 [00:00<00:02, 106.38it/s]Loading weights:  19%|█▉        | 65/339 [00:00<00:02, 112.18it/s]Loading weights:  23%|██▎       | 78/339 [00:00<00:02, 113.15it/s]Loading weights:  27%|██▋       | 91/339 [00:01<00:02, 106.23it/s]Loading weights:  30%|███       | 103/339 [00:02<00:07, 32.09it/s]Loading weights:  33%|███▎      | 112/339 [00:02<00:06, 37.72it/s]Loading weights:  36%|███▌      | 121/339 [00:03<00:10, 20.20it/s]Loading weights:  37%|███▋      | 127/339 [00:04<00:19, 11.11it/s]Loading weights:  40%|████      | 136/339 [00:05<00:14, 13.74it/s]Loading weights:  41%|████▏     | 140/339 [00:05<00:15, 12.74it/s]Loading weights:  44%|████▎     | 148/339 [00:05<00:13, 13.73it/s]Loading weights:  45%|████▍     | 151/339 [00:06<00:17, 10.68it/s]Loading weights:  47%|████▋     | 159/339 [00:07<00:15, 11.74it/s]Loading weights:  50%|█████     | 170/339 [00:07<00:09, 18.44it/s]Loading weights:  52%|█████▏    | 175/339 [00:09<00:20,  7.87it/s]Loading weights:  53%|█████▎    | 179/339 [00:09<00:17,  8.95it/s]Loading weights:  54%|█████▍    | 184/339 [00:10<00:21,  7.34it/s]Loading weights:  55%|█████▌    | 187/339 [00:10<00:18,  8.12it/s]Loading weights:  58%|█████▊    | 195/339 [00:10<00:11, 12.79it/s]Loading weights:  59%|█████▊    | 199/339 [00:11<00:11, 12.13it/s]Loading weights:  60%|██████    | 205/339 [00:11<00:08, 16.30it/s]Loading weights:  62%|██████▏   | 209/339 [00:11<00:09, 14.38it/s]Loading weights:  63%|██████▎   | 212/339 [00:11<00:08, 14.32it/s]Loading weights:  65%|██████▍   | 220/339 [00:12<00:06, 19.38it/s]Loading weights:  66%|██████▌   | 223/339 [00:12<00:06, 16.93it/s]Loading weights:  71%|███████   | 241/339 [00:12<00:02, 38.45it/s]Loading weights:  76%|███████▌  | 258/339 [00:12<00:01, 58.06it/s]Loading weights:  83%|████████▎ | 280/339 [00:12<00:00, 84.54it/s]Loading weights:  87%|████████▋ | 294/339 [00:12<00:00, 91.36it/s]Loading weights:  93%|█████████▎| 316/339 [00:12<00:00, 116.16it/s]Loading weights:  98%|█████████▊| 331/339 [00:13<00:00, 115.34it/s]Loading weights: 100%|██████████| 339/339 [00:13<00:00, 25.80it/s] 
+Model loaded. Device: cuda:0
+Extracting final-layer embeddings (mean pooling) in 620 batches...
+  Batch 50/620
+  Batch 100/620
+  Batch 150/620
+  Batch 200/620
+  Batch 250/620
+  Batch 300/620
+  Batch 350/620
+  Batch 400/620
+  Batch 450/620
+  Batch 500/620
+  Batch 550/620
+  Batch 600/620
+Embeddings shape: (4957, 3584)
+Saved embeddings to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct/final_layer_only_mean.npz
+Running PCA (2D)...
+Running t-SNE (2D, perplexity=40)...
+umap-learn not installed, skipping UMAP.
+Saved plot to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/quick_eda_final_layer_mean.png
+Extracting final-layer embeddings (last_token pooling) in 620 batches...
+  Batch 50/620
+  Batch 100/620
+  Batch 150/620
+  Batch 200/620
+  Batch 250/620
+  Batch 300/620
+  Batch 350/620
+  Batch 400/620
+  Batch 450/620
+  Batch 500/620
+  Batch 550/620
+  Batch 600/620
+Embeddings shape: (4957, 3584)
+Saved embeddings to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct/final_layer_only_last_token.npz
+Running PCA (2D)...
+Running t-SNE (2D, perplexity=40)...
+umap-learn not installed, skipping UMAP.
+Saved plot to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/quick_eda_final_layer_last_token.png
+
+Total wall time: 3.2 min
+=== Done ===
+End: Thu Mar 26 18:24:41 UTC 2026

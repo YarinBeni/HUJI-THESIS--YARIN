@@ -1,0 +1,197 @@
+=== Tokenization Check ===
+Job ID: 2030
+Node: g0374
+NVIDIA H100 80GB HBM3, 81559 MiB
+Start: Thu Mar 26 10:19:56 UTC 2026
+Loaded 4957 letters.
+Period distribution:
+period
+NA    2435
+OB    1497
+LB    1025
+
+Loading tokenizer: Qwen/Qwen2.5-7B-Instruct
+Tokenizer loaded. Vocab size: 151643
+
+======================================================================
+OVERALL TOKENIZATION STATISTICS
+======================================================================
+  Total texts:           4957
+  Mean tokens/text:      267.6
+  Median tokens/text:    208.0
+  Std tokens/text:       234.5
+  Min tokens:            4
+  Max tokens:            3873
+  Total byte-fallback:   0
+  Total unk tokens:      0
+
+PER-PERIOD TOKEN STATISTICS:
+  OB: n=1497, mean=275.6, median=210.0, std=258.4
+  NA: n=2435, mean=256.1, median=181.0, std=244.9
+  LB: n=1025, mean=283.5, median=252.0, std=158.7
+
+======================================================================
+SAMPLE TOKENIZATIONS (3 OB, 4 NA, 3 LB)
+======================================================================
+
+--- [OB] (idx=1447, 31 tokens) ---
+  Raw text:    a-na a-i-ma
+qi2-bi2-ma
+um-ma ib-ni-ša-du-um
+na-ku
+  Tokens:      ['a', '-na', 'Ġa', '-i', '-m', 'a', 'Ċ', 'qi', '2', '-b', 'i', '2', '-m', 'a', 'Ċ', 'um', '-m', 'a', 'Ġib', '-n', 'i', '-', 'Å¡', 'a', '-du', '-', 'um', 'Ċ', 'na', '-']...
+  Decoded:     a-na a-i-ma
+qi2-bi2-ma
+um-ma ib-ni-ša-du-um
+na-ku
+  Token count: 31
+
+--- [OB] (idx=1212, 210 tokens) ---
+  Raw text:    a-na a-ha-am-ar-ši
+li-ṣu2-u2
+u2-ul ṣu2-u2-ma
+mi-nam ta-ap-pa-la-an-ni
+u3 a-na E2 d-IŠKUR-i-ba-al
+qi2-bi2-ma še-em u3 GAR3-ŠU
+a-na qa-at ba-a-ia-nu
+li-im-du-du
+u3 i-nu-ma ṭup-pa-am
+tu-ša-aš-mu
+LUGAL šu...
+  Tokens:      ['a', '-na', 'Ġa', '-h', 'a', '-am', '-ar', '-', 'Å¡', 'i', 'Ċ', 'li', '-', 'á¹£', 'u', '2', '-u', '2', 'Ċ', 'u', '2', '-ul', 'Ġá', '¹', '£', 'u', '2', '-u', '2', '-m']...
+  Decoded:     a-na a-ha-am-ar-ši
+li-ṣu2-u2
+u2-ul ṣu2-u2-ma
+mi-nam ta-ap-pa-la-an-ni
+u3 a-na E2 d-IŠKUR-i-ba-al
+qi2-bi2-ma še-em u3 GAR3-ŠU
+a-na qa-at ba-a-ia-nu
+li-im-du-du
+u3 i-nu-ma ṭup-pa-am
+tu-ša-aš-mu
+LUGAL šu...
+  Token count: 210
+
+--- [OB] (idx=6, 3873 tokens) ---
+  Raw text:    be-li2-ia qi2-bi2-ma um-ma zi-im-ri-d-IŠKUR IR3-ka-a-ma
+ka-ni-ik ki-ma-a DUB-SAR MAR-TU qi2-pu-ti i-ia-at-tum u2-ul le-qe2-et
+im iš-ši ka-lu-šu i-mu-ur-ma ma-am-ma-an a-na ṣe-ri-ia
+i-ṭe4-he-em i-nu-ma...
+  Tokens:      ['be', '-li', '2', '-', 'ia', 'Ġqi', '2', '-b', 'i', '2', '-m', 'a', 'Ġum', '-m', 'a', 'Ġzi', '-im', '-', 'ri', '-d', '-I', 'Åł', 'K', 'UR', 'ĠIR', '3', '-', 'ka', '-a', '-m']...
+  Decoded:     be-li2-ia qi2-bi2-ma um-ma zi-im-ri-d-IŠKUR IR3-ka-a-ma
+ka-ni-ik ki-ma-a DUB-SAR MAR-TU qi2-pu-ti i-ia-at-tum u2-ul le-qe2-et
+im iš-ši ka-lu-šu i-mu-ur-ma ma-am-ma-an a-na ṣe-ri-ia
+i-ṭe4-he-em i-nu-ma...
+  Token count: 3873
+
+--- [NA] (idx=2838, 4 tokens) ---
+  Raw text:    an-ni-u
+  Tokens:      ['an', '-n', 'i', '-u']
+  Decoded:     an-ni-u
+  Token count: 4
+
+--- [NA] (idx=3216, 124 tokens) ---
+  Raw text:    a-na LUGAL be-li2-ia
+ARAD-ka I-DUG3-GA-IM-d-aš-šur
+lu DI-mu a-na LUGAL be-li2-ia
+ina UGU d-šu-ri-in-ni ša d-30
+ša uru-KASKAL ša LUGAL be-li2 iš-pur-an-ni
+i-ba-aš2-ši SIG5-meš
+ša a-na ma-ṣar-ti ša
+ša L...
+  Tokens:      ['a', '-na', 'ĠL', 'UG', 'AL', 'Ġbe', '-li', '2', '-', 'ia', 'Ċ', 'AR', 'AD', '-', 'ka', 'ĠI', '-D', 'UG', '3', '-G', 'A', '-', 'IM', '-d', '-a', 'Å¡', '-', 'Å¡', 'ur', 'Ċ']...
+  Decoded:     a-na LUGAL be-li2-ia
+ARAD-ka I-DUG3-GA-IM-d-aš-šur
+lu DI-mu a-na LUGAL be-li2-ia
+ina UGU d-šu-ri-in-ni ša d-30
+ša uru-KASKAL ša LUGAL be-li2 iš-pur-an-ni
+i-ba-aš2-ši SIG5-meš
+ša a-na ma-ṣar-ti ša
+ša L...
+  Token count: 124
+
+--- [NA] (idx=1997, 265 tokens) ---
+  Raw text:    a-na LUGAL KUR-KUR be-li2-ia ARAD-ka I-d-EN-u2-še-zib
+u2-šu-uz-zu
+u2-maš-ša2-ram-ma mam-ma
+I-d-30-eri-ba
+ša2 I-SUM-na-ŠEŠ EN-hi-ṭu
+u3 a-na LUGAL ina UGU-hi-šu2
+i-mur-u2-ma mam-ma
+pa-ni-šu2 a-na
+LUGAL ...
+  Tokens:      ['a', '-na', 'ĠL', 'UG', 'AL', 'ĠK', 'UR', '-K', 'UR', 'Ġbe', '-li', '2', '-', 'ia', 'ĠAR', 'AD', '-', 'ka', 'ĠI', '-d', '-', 'EN', '-u', '2', '-', 'Å¡e', '-z', 'ib', 'Ċ', 'u']...
+  Decoded:     a-na LUGAL KUR-KUR be-li2-ia ARAD-ka I-d-EN-u2-še-zib
+u2-šu-uz-zu
+u2-maš-ša2-ram-ma mam-ma
+I-d-30-eri-ba
+ša2 I-SUM-na-ŠEŠ EN-hi-ṭu
+u3 a-na LUGAL ina UGU-hi-šu2
+i-mur-u2-ma mam-ma
+pa-ni-šu2 a-na
+LUGAL ...
+  Token count: 265
+
+--- [NA] (idx=3677, 2936 tokens) ---
+  Raw text:    a-na LUGAL be-li2-ia ARAD-ka I-ARAD-d-gu-la
+lu2-SIPA-ut-ka ki-ma u2-lu u3 I3-GIŠ UGU nap-har kiš-šat UN-meš li-iṭ-ṭib-bu
+iš-di giš-GU-ZA LUGAL-ti-ka ki-ma ši-pik KUR-i li-šar-ši-du a-na UD-me ṣa-a-ti
+...
+  Tokens:      ['a', '-na', 'ĠL', 'UG', 'AL', 'Ġbe', '-li', '2', '-', 'ia', 'ĠAR', 'AD', '-', 'ka', 'ĠI', '-', 'AR', 'AD', '-d', '-g', 'u', '-la', 'Ċ', 'lu', '2', '-S', 'IPA', '-', 'ut', '-']...
+  Decoded:     a-na LUGAL be-li2-ia ARAD-ka I-ARAD-d-gu-la
+lu2-SIPA-ut-ka ki-ma u2-lu u3 I3-GIŠ UGU nap-har kiš-šat UN-meš li-iṭ-ṭib-bu
+iš-di giš-GU-ZA LUGAL-ti-ka ki-ma ši-pik KUR-i li-šar-ši-du a-na UD-me ṣa-a-ti
+...
+  Token count: 2936
+
+--- [LB] (idx=4224, 4 tokens) ---
+  Raw text:    lu-uš-me
+  Tokens:      ['lu', '-u', 'Å¡', '-me']
+  Decoded:     lu-uš-me
+  Token count: 4
+
+--- [LB] (idx=4368, 252 tokens) ---
+  Raw text:    IM I-d-EN-MU a-na
+IGI-ka mah-ri
+at-ta EN
+li-bu-uk-šu2
+u3 ki-i ia-a-nu-u2
+a-di la a-na gi-iz-zu
+al-la-ku šup-ra-aš2
+u3 a-na-ku ki-i a-mu-ru
+ra-bi u3 IGI-ia
+ul ma-hi-ir a-mur
+I-SILA-a-a a-na IGI ŠEŠ-ia
+...
+  Tokens:      ['IM', 'ĠI', '-d', '-', 'EN', '-M', 'U', 'Ġa', '-na', 'Ċ', 'IG', 'I', '-', 'ka', 'Ġmah', '-', 'ri', 'Ċ', 'at', '-t', 'a', 'ĠEN', 'Ċ', 'li', '-b', 'u', '-', 'uk', '-', 'Å¡']...
+  Decoded:     IM I-d-EN-MU a-na
+IGI-ka mah-ri
+at-ta EN
+li-bu-uk-šu2
+u3 ki-i ia-a-nu-u2
+a-di la a-na gi-iz-zu
+al-la-ku šup-ra-aš2
+u3 a-na-ku ki-i a-mu-ru
+ra-bi u3 IGI-ia
+ul ma-hi-ir a-mur
+I-SILA-a-a a-na IGI ŠEŠ-ia
+...
+  Token count: 252
+
+--- [LB] (idx=4767, 1428 tokens) ---
+  Raw text:    IM I-d-AG-ŠEŠ-MU a-na lu2-ŠA3-TAM ŠEŠ-ia
+ša2 E2 da-ba-ba ih-hir-ri u3 ŠE-NUMUN ma-a-du
+ina UGU lu2-u2-ra-šu2 u3 ki-i KU3-BABBAR i-bi-nam-ma
+lu-hi-ri-iš a-qab-ba-aš2-šu2 um-ma re-e-hu
+ša2 ina UGU-ka a-...
+  Tokens:      ['IM', 'ĠI', '-d', '-', 'AG', '-', 'Åł', 'E', 'Åł', '-M', 'U', 'Ġa', '-na', 'Ġlu', '2', '-', 'Åł', 'A', '3', '-T', 'AM', 'ĠÅ', 'ł', 'E', 'Åł', '-', 'ia', 'Ċ', 'Å¡', 'a']...
+  Decoded:     IM I-d-AG-ŠEŠ-MU a-na lu2-ŠA3-TAM ŠEŠ-ia
+ša2 E2 da-ba-ba ih-hir-ri u3 ŠE-NUMUN ma-a-du
+ina UGU lu2-u2-ra-šu2 u3 ki-i KU3-BABBAR i-bi-nam-ma
+lu-hi-ri-iš a-qab-ba-aš2-šu2 um-ma re-e-hu
+ša2 ina UGU-ka a-...
+  Token count: 1428
+
+Saved results to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/tokenization_check.json
+=== Done ===
+End: Thu Mar 26 10:20:10 UTC 2026

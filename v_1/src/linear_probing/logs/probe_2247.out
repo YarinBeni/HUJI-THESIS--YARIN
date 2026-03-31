@@ -1,0 +1,16 @@
+=== Linear Probe ===
+Job ID: 2247
+Node: g0377
+Start: Sat Mar 28 09:05:07 UTC 2026
+=== Probing (mean pooling) ===
+Pooling method: mean
+Reading from directories: ['tier0', 'maximal']
+Data: 4957 texts
+  Train: 3469, Val: 744, Test: 744
+  Train+Val: 4213
+Model: qwen2.5-7b-instruct, 29 layers, hidden_dim=3584
+
+======================================================================
+PROBING — tier0 cleaning (mean pooling)
+======================================================================
+[2026-03-28T09:15:06.986] error: *** JOB 2247 ON g0377 CANCELLED AT 2026-03-28T09:15:06 DUE to SIGNAL Terminated ***
