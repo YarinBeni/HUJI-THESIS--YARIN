@@ -349,9 +349,7 @@ def run(args):
     print(f"Best C values: {best_Cs}")
 
     # ── Setup output ────────────────────────────────────────────────────────
-    validity_dir = RESULTS_DIR / 'validity'
-    validity_dir.mkdir(parents=True, exist_ok=True)
-    plots_dir = validity_dir / 'plots'
+    plots_dir = RESULTS_DIR / 'plots'
     plots_dir.mkdir(parents=True, exist_ok=True)
 
     skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=SEED)
@@ -508,7 +506,7 @@ def run(args):
         'random_baseline': random_comparison,
     }
 
-    out_path = validity_dir / f'validity_results_{model_name}{pooling_suffix}.json'
+    out_path = RESULTS_DIR / f'validity_results_{model_name}{pooling_suffix}.json'
     with open(out_path, 'w') as f:
         json.dump(output, f, indent=2)
     print(f"\nSaved results to {out_path}")

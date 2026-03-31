@@ -587,7 +587,7 @@ The random model's 98.3% (tier0, mean) exactly matches the TF-IDF baseline (98.3
 
 **Interpretation:** Mean pooling is extremely sample-efficient — tier0 hits 93% with just 42 texts. Last_token is data-hungry — needs 10× more data to reach comparable accuracy. This contrast shows that mean pooling encodes period as a compact, immediately accessible feature; last_token requires contextual integration learned across more examples.
 
-**Plots:** `results/validity/plots/learning_curve.png`, `learning_curve_last_token.png`
+**Plots:** `results/plots/learning_curve.png`, `learning_curve_last_token.png`
 
 ---
 
@@ -627,7 +627,7 @@ The random model's 98.3% (tier0, mean) exactly matches the TF-IDF baseline (98.3
 
 **Interpretation:** Mean pooling signal is very compact — **top 5 PCs recover 90%** of tier0 accuracy. Last_token signal is much more distributed — needs k≈50–100 to recover meaningful accuracy. Period information is organized differently depending on pooling: mean pooling concentrates it in top principal components, last_token spreads it across many dimensions.
 
-**Plots:** `results/validity/plots/pca_accuracy_vs_dims.png`, `pca_accuracy_vs_dims_last_token.png`
+**Plots:** `results/plots/pca_accuracy_vs_dims.png`, `pca_accuracy_vs_dims_last_token.png`
 
 ---
 
@@ -652,7 +652,7 @@ The random model's 98.3% (tier0, mean) exactly matches the TF-IDF baseline (98.3
 | 14 | 87.47% | 85.09% | −2.37% | 76.90% | 76.33% | −0.57% |
 | 28 | 95.54% | 93.76% | −1.78% | 90.03% | 88.18% | −1.85% |
 
-**Plots:** `results/validity/plots/mlp_vs_linear.png`, `mlp_vs_linear_last_token.png`
+**Plots:** `results/plots/mlp_vs_linear.png`, `mlp_vs_linear_last_token.png`
 
 ---
 
@@ -669,7 +669,7 @@ At best layers:
 
 The last_token/maximal gap of **+19.9%** is the strongest evidence that pretraining contributes meaningful representation structure beyond what the tokenizer + random architecture provides.
 
-**Plots:** `results/validity/plots/random_baseline_comparison.png`, `random_baseline_comparison_last_token.png`
+**Plots:** `results/plots/random_baseline_comparison.png`, `random_baseline_comparison_last_token.png`
 
 ---
 
