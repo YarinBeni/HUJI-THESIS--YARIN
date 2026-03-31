@@ -1,60 +1,49 @@
 # Project Progress & Handover Snapshot
 
-> **Status Date:** December 2024
-> **Current Phase:** Phase 1 - Data Understanding & Preparation
+> **Status Date:** March 2026
+> **Current Phase:** Track B complete on letters corpus. Awaiting full dataset from advisor to scale up.
 > **Working Directory:** `v_1/`
 
-## 🧠 Project Context
-We are building a PyTorch-based Masked Language Model (MLM) for Akkadian text restoration, followed by Sparse Autoencoder (SAE) analysis. We are building the repository structure organically—creating files/folders only when needed.
+## Project Context
 
-## 📍 Current Status
-- **Repository:** `v_1` folder created, legacy code moved to `v_0`.
-- **Data:** Raw data (28k+ fragments) located in `v_1/data/raw/extracted/full_corpus_dir/`.
-- **Environment:** Conda env `akkadian-v1` (Python 3.10) set up.
-- **Exploration:** `01_data_exploration.ipynb` has been created and initial sample analysis (100 fragments) is complete.
+Three-track thesis on mechanistic interpretability of LLMs applied to Akkadian cuneiform temporal dating:
 
-## 📊 Key Findings (From Initial EDA)
-Based on `notebooks_results/01_data_exploration_result.txt`:
-1.  **Volume:** 28,194 CSV fragments total.
-2.  **Language:** Data is **93% Akkadian** (3,502/3,759 words in sample).
-    - *Decision:* We will likely filter for **Akkadian only** to ensure homogeneity.
-3.  **Vocabulary:** Small sample (100 fragments) -> 1,430 unique tokens.
-    - *Need:* Must scan full corpus to get true vocab size (estimated ~40k-60k).
-4.  **Data Quality:**
-    - `clean_value` is the best target for tokenization.
-    - `lemma` column is ~30-40% empty/missing.
-    - `domain` metadata exists but has some missing values ("see genres.json").
-    - `place_discovery`/`place_composition` are mostly NaN in the sample.
+- **Track A:** LLM baseline evaluation (OpenRouter API) — complete
+- **Track B:** Linear probing of Qwen2.5-7B internal representations — complete on letters corpus
+- **Track C:** Sparse Autoencoder (SAE) analysis — planned, awaiting full dataset
 
-## 📝 Next Immediate Tasks (For Developer)
+## Current Status (March 2026)
 
-**Goal:** Extend the existing EDA notebook to finalize data understanding before dataset creation.
+### Bias Check: Complete
+TF-IDF classification on 4,957 letters: 98.3% (tier0), 91% (maximal cleaning). Signal is genuine diachronic linguistic change, not dataset bias. Full report: `data/evaluation/bias_check/`.
 
-### Action Item 1: Extend `01_data_exploration.ipynb`
-Do **NOT** create a new notebook. Add new cells at the bottom of `01_data_exploration.ipynb` to perform the following:
+### Track B — Linear Probing: Complete (letters corpus)
+Full pipeline on Qwen2.5-7B-Instruct, 4,957 letters, 29 layers, mean + last_token pooling, tier0 + maximal cleaning.
 
-1.  **Full Vocabulary Scan (Efficiently):**
-    - Iterate through ALL 28,194 CSV files.
-    - Filter for `word_language == 'AKKADIAN'`.
-    - Count unique `clean_value` tokens.
-    - *Output:* Total vocabulary size and top 50 tokens.
+**Key results:**
+| Condition | Pretrained | Random | Gap |
+|-----------|-----------|--------|-----|
+| Mean, tier0 (L4) | 99.1% | 98.3% | +0.8% |
+| Mean, maximal (L3) | 96.3% | 90.7% | +5.5% |
+| Last_token, tier0 (L28) | 95.5% | 84.8% | +10.7% |
+| Last_token, maximal (L28) | 90.0% | 70.1% | +19.9% |
 
-2.  **Metadata Investigation (Time/Date):**
-    - We need to know if temporal metadata exists (e.g., period, date of composition).
-    - Check `domain` column: Does it contain period info (e.g., "Old Babylonian", "Neo-Assyrian")?
-    - Check `genres.json` (in `data/raw/extracted/`): Does it link fragment IDs to time periods?
-    - *Goal:* Determine if we can split data chronologically or control for time period.
+**Validity tests (all complete):**
+- Learning curve: mean pooling hits 93% with just 42 texts (1%)
+- PCA: top-5 PCs recover 90% accuracy (mean pooling) — very compact signal
+- MLP vs linear: MLP < linear everywhere — genuinely linear encoding
+- Random baseline: +20% pretraining gap for last_token/maximal (strongest selectivity)
 
-3.  **Sequence Length Analysis:**
-    - Calculate the length (number of Akkadian words) per fragment.
-    - Plot distribution.
-    - *Why:* To decide on model context window size.
+Full log: `src/linear_probing/results/PIPELINE_RUN_LOG.md`
 
-### Action Item 2: Update Documentation
-- After running the analysis, update `README.md` with the new stats (Total Vocab Size, Periodicity findings).
+### Track C — SAE: Planned
+Waiting for full dataset from advisor (~40k fragments across all genres). Will run same linear probe pipeline first, then SAE on best-layer activations.
 
-## 🚫 Constraints & Rules
-1.  **No empty folders:** Do not create `processed/` or `models/` until we write the code that fills them.
-2.  **Notebooks first:** Verify logic in notebooks before writing `.py` scripts.
-3.  **Akkadian Focus:** Assume we are proceeding with a monolingual Akkadian model for now.
+## Blocked On
+Full dataset delivery from advisor (40k+ Akkadian fragments, multi-genre, not just letters).
 
+## Next Steps
+1. Receive full dataset from advisor
+2. Run linear probe on full dataset (reuse existing sbatch scripts)
+3. Implement SAE on best-layer activations
+4. Interpret SAE features in linguistic/historical context
