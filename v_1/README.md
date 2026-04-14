@@ -9,6 +9,7 @@ v_1/
 ├── src/
 │   ├── bias_check/       # Pre-Track-A: TF-IDF bias validation (letters corpus)
 │   ├── linear_probing/   # Track B: Qwen2.5-7B layer probing + validity tests
+│   ├── sae/              # Track C: SAE feature analysis (Arditi 131k SAE)
 │   ├── evaluation/       # Track A: LLM baseline pipeline (OpenRouter API)
 │   ├── corpus/           # Full Akkadian corpus pipeline (download → unified)
 │   ├── cluster/          # Schmidt Sciences HPC cluster setup + README
@@ -77,16 +78,35 @@ Full run log: `src/linear_probing/results/PIPELINE_RUN_LOG.md`
 | File | Description |
 |------|-------------|
 | `data/evaluation/corpora/texts_for_evaluation.jsonl` | 4,957 Akkadian letters for evaluation |
-| `data/raw/chungrong/*.csv` | Normalized source data from Chunrong Ni |
+| `data/raw/chungrong/*.csv` | Normalized letter CSVs from Chunrong Ni |
+| `data/raw/chungrong/seal_round4/{seal,dll,lbpl}.csv` | Round-4 SEAL/DLL/LBPL word-level CSVs (384 frags / 40,484 words) |
+| `data/raw/chungrong/seal_round4/inspection_report.json` | Phase 0 data contract — MD5 hashes + per-task feasibility |
+| `data/evaluation/corpora/seal_corpus.parquet` | 384-fragment SEAL corpus (Phase A) — `text`, `text_tier0`, `text_maximal` + metadata |
+| `data/evaluation/corpora/seal_tasks_verification.md` | Phase B self-test — confirmed per-task N/classes/k |
 | `data/evaluation/baselines/baseline_predictions.parquet` | Aggregated LLM predictions |
 | `src/linear_probing/results/probe_results_qwen2.5-7b-instruct.json` | Linear probe results (pretrained) |
 | `src/linear_probing/results/validity_results_*.json` | Validity experiment results |
+
+## SEAL Pipeline (Phase B complete, Phase C next)
+
+6 multi-task bias-check + linear-probe experiments on SEAL/DLL/LBPL corpora.
+Plan: `justification/seal_round4_pipeline_plan.md` (Sections 16–17 = verified facts).
+
+| Phase | Script | Status |
+|-------|--------|--------|
+| 0 — Inspect | `src/corpus/01_inspect_seal_data.py` | ✅ done |
+| A — Corpus build | `src/corpus/02_build_seal_corpus.py` | ✅ done |
+| B — Task registry | `src/bias_check/seal_tasks.py` | ✅ done |
+| C — Bias check CV | `src/bias_check/06_bias_check_cv.py` | ✅ done (all FAIL p=0.001) |
+| D — Linear probing | `src/linear_probing/01_extract_activations.py` (modified) | ⬜ next |
+| E — Documentation | various | ⬜ |
 
 ## Documentation
 
 - Design decisions: `justification/` (repo root)
 - Full project history: `RESEARCH_LOG.md` (repo root)
 - Progress snapshot: `PROGRESS.md`
+- SEAL pipeline plan + verified facts: `justification/seal_round4_pipeline_plan.md`
 - Evaluation pipeline: `src/evaluation/README.md`
 - Bias check: `src/bias_check/README.md`
 - Linear probing run log: `src/linear_probing/results/PIPELINE_RUN_LOG.md`

@@ -1,0 +1,45 @@
+{
+  "task_name": "genre",
+  "cleaning": "maximal",
+  "n_fragments": 384,
+  "n_classes": 16,
+  "k_used": 2,
+  "best_C": 0.01,
+  "c_grid_scores": {
+    "0.001": 0.176268,
+    "0.01": 0.274704,
+    "0.1": 0.270284,
+    "1.0": 0.271806,
+    "10.0": 0.246354
+  },
+  "cv_accuracy": 0.364583,
+  "cv_macro_f1": 0.268823,
+  "cv_weighted_f1": 0.399536,
+  "per_class_f1": {
+    "catalogues": 0.0,
+    "chronicles": 0.0,
+    "commentary": 0.0,
+    "epics": 0.470588,
+    "epics and myths": 0.4375,
+    "funerary texts": 0.333333,
+    "hymns and prayers": 0.40678,
+    "incantations": 0.415094,
+    "lamentations": 0.111111,
+    "literary letters": 0.4,
+    "love literature": 0.347826,
+    "lyrics": 0.6875,
+    "miscellaneous": 0.0,
+    "prophecies": 0.166667,
+    "rituals": 0.37931,
+    "wisdom literature": 0.145455
+  },
+  "perm_test": {
+    "n_permutations": 1000,
+    "actual_score": 0.274704,
+    "perm_mean": 0.045317,
+    "perm_std": 0.012395,
+    "pvalue": 0.000999,
+    "significance": "FAIL"
+  },
+  "generated_at": "2026-04-14T14:59:29Z"
+}

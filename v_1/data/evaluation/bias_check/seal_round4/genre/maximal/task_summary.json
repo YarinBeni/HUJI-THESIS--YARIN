@@ -1,0 +1,61 @@
+{
+  "task_name": "genre",
+  "label_col": "genre",
+  "corpora_pooled": [
+    "seal",
+    "dll",
+    "lbpl"
+  ],
+  "cleaning": "maximal",
+  "text_col_used": "text_maximal",
+  "fragments_total_input": 384,
+  "fragments_after_null_filter": 384,
+  "n_classes_input": 16,
+  "singletons_dropped": [],
+  "n_classes_after_drop": 16,
+  "fragments_after_drop": 384,
+  "smallest_class_size": 2,
+  "k_used": 2,
+  "top5_classes": [
+    [
+      "incantations",
+      161
+    ],
+    [
+      "epics and myths",
+      48
+    ],
+    [
+      "lyrics",
+      33
+    ],
+    [
+      "hymns and prayers",
+      28
+    ],
+    [
+      "rituals",
+      23
+    ]
+  ],
+  "label_to_idx": {
+    "catalogues": 0,
+    "chronicles": 1,
+    "commentary": 2,
+    "epics": 3,
+    "epics and myths": 4,
+    "funerary texts": 5,
+    "hymns and prayers": 6,
+    "incantations": 7,
+    "lamentations": 8,
+    "literary letters": 9,
+    "love literature": 10,
+    "lyrics": 11,
+    "miscellaneous": 12,
+    "prophecies": 13,
+    "rituals": 14,
+    "wisdom literature": 15
+  },
+  "run_cleaning": "maximal",
+  "generated_at": "2026-04-14T14:59:29Z"
+}

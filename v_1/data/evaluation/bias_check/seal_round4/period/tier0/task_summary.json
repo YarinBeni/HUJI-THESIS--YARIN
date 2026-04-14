@@ -1,0 +1,56 @@
+{
+  "task_name": "period",
+  "label_col": "period",
+  "corpora_pooled": [
+    "seal",
+    "dll",
+    "lbpl"
+  ],
+  "cleaning": "tier0",
+  "text_col_used": "text_tier0",
+  "fragments_total_input": 384,
+  "fragments_after_null_filter": 384,
+  "n_classes_input": 10,
+  "singletons_dropped": [
+    "Later Periods (SB, NA, LB)"
+  ],
+  "n_classes_after_drop": 9,
+  "fragments_after_drop": 383,
+  "smallest_class_size": 2,
+  "k_used": 2,
+  "top5_classes": [
+    [
+      "Old Babylonian",
+      229
+    ],
+    [
+      "Late Babylonian",
+      38
+    ],
+    [
+      "Middle Babylonian/Assyrian",
+      35
+    ],
+    [
+      "Neo or Late Babylonian",
+      26
+    ],
+    [
+      "Middle Babylonian",
+      24
+    ]
+  ],
+  "label_to_idx": {
+    "Archaic/Old Akkadian/Ebla": 0,
+    "Late Babylonian": 1,
+    "Middle Assyrian": 2,
+    "Middle Babylonian": 3,
+    "Middle Babylonian/Assyrian": 4,
+    "Neo or Late Babylonian": 5,
+    "Neo-Assyrian": 6,
+    "Old Assyrian": 7,
+    "Old Babylonian": 8
+  },
+  "run_cleaning": "tier0",
+  "generated_at": "2026-04-14T15:15:19Z"
+}

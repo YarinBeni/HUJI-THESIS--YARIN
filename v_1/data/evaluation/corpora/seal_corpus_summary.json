@@ -1,0 +1,531 @@
+{
+  "generated_at": "2026-04-14T14:14:36.276070+00:00",
+  "total_fragments": 384,
+  "fragments_per_corpus": {
+    "dll": 44,
+    "lbpl": 38,
+    "seal": 302
+  },
+  "label_summary": {
+    "period": {
+      "total_null_count": 0,
+      "total_n_classes": 10,
+      "per_corpus": {
+        "seal": {
+          "null_count": 0,
+          "n_classes": 7,
+          "class_counts": {
+            "Archaic/Old Akkadian/Ebla": 2,
+            "Later Periods (SB, NA, LB)": 1,
+            "Middle Assyrian": 6,
+            "Middle Babylonian": 24,
+            "Middle Babylonian/Assyrian": 35,
+            "Old Assyrian": 5,
+            "Old Babylonian": 229
+          }
+        },
+        "dll": {
+          "null_count": 0,
+          "n_classes": 2,
+          "class_counts": {
+            "Neo or Late Babylonian": 26,
+            "Neo-Assyrian": 18
+          }
+        },
+        "lbpl": {
+          "null_count": 0,
+          "n_classes": 1,
+          "class_counts": {
+            "Late Babylonian": 38
+          }
+        }
+      },
+      "pooled_class_counts": {
+        "Archaic/Old Akkadian/Ebla": 2,
+        "Late Babylonian": 38,
+        "Later Periods (SB, NA, LB)": 1,
+        "Middle Assyrian": 6,
+        "Middle Babylonian": 24,
+        "Middle Babylonian/Assyrian": 35,
+        "Neo or Late Babylonian": 26,
+        "Neo-Assyrian": 18,
+        "Old Assyrian": 5,
+        "Old Babylonian": 229
+      }
+    },
+    "genre": {
+      "total_null_count": 0,
+      "total_n_classes": 16,
+      "per_corpus": {
+        "seal": {
+          "null_count": 0,
+          "n_classes": 10,
+          "class_counts": {
+            "catalogues": 3,
+            "epics and myths": 48,
+            "funerary texts": 5,
+            "hymns and prayers": 28,
+            "incantations": 161,
+            "lamentations": 7,
+            "literary letters": 9,
+            "love literature": 21,
+            "miscellaneous": 3,
+            "wisdom literature": 17
+          }
+        },
+        "dll": {
+          "null_count": 0,
+          "n_classes": 3,
+          "class_counts": {
+            "commentary": 4,
+            "lyrics": 33,
+            "rituals": 7
+          }
+        },
+        "lbpl": {
+          "null_count": 0,
+          "n_classes": 5,
+          "class_counts": {
+            "chronicles": 5,
+            "epics": 9,
+            "literary letters": 6,
+            "prophecies": 2,
+            "rituals": 16
+          }
+        }
+      },
+      "pooled_class_counts": {
+        "catalogues": 3,
+        "chronicles": 5,
+        "commentary": 4,
+        "epics": 9,
+        "epics and myths": 48,
+        "funerary texts": 5,
+        "hymns and prayers": 28,
+        "incantations": 161,
+        "lamentations": 7,
+        "literary letters": 15,
+        "love literature": 21,
+        "lyrics": 33,
+        "miscellaneous": 3,
+        "prophecies": 2,
+        "rituals": 23,
+        "wisdom literature": 17
+      }
+    },
+    "sub_genre": {
+      "total_null_count": 103,
+      "total_n_classes": 78,
+      "per_corpus": {
+        "seal": {
+          "null_count": 21,
+          "n_classes": 78,
+          "class_counts": {
+            "adad": 1,
+            "adapa": 1,
+            "amurru": 1,
+            "anger": 3,
+            "anzu": 2,
+            "atraḫasis": 8,
+            "baby crying": 4,
+            "baby disease": 1,
+            "birth": 13,
+            "collapse": 1,
+            "descent to the netherworld": 1,
+            "dialogues": 9,
+            "diarrhea": 1,
+            "diseases (various) / evil (general)": 8,
+            "diseases/demons (various)": 9,
+            "dogs": 14,
+            "etana": 2,
+            "evil eye": 3,
+            "eye (disease)": 1,
+            "fables": 1,
+            "fever": 2,
+            "flies and wasps": 5,
+            "foodstuff and drink": 3,
+            "gall": 1,
+            "gastrointestinal problems": 16,
+            "gilgameš": 13,
+            "girra": 1,
+            "goat": 1,
+            "gula": 2,
+            "hammurāpi": 2,
+            "ipiq-ištar": 1,
+            "itūrmēr": 1,
+            "ištar": 5,
+            "jaundice": 2,
+            "lamasaga/baba": 1,
+            "lamaštu": 5,
+            "legitimation": 2,
+            "love": 13,
+            "mama": 1,
+            "marduk": 3,
+            "maškadu": 3,
+            "miscellaneous": 12,
+            "miscellaneous mb/ma epics": 3,
+            "miscellaneous mb/ma hymns": 1,
+            "miscellaneous mb/ma incs.": 3,
+            "miscellaneous mb/ma wis. lit.": 1,
+            "miscellaneous ob epics": 2,
+            "miscellaneous ob hymns": 2,
+            "miscellaneous ob love lit.": 12,
+            "miscellaneous ob wis. lit.": 1,
+            "nanāya": 1,
+            "narām-sin": 5,
+            "nergal": 1,
+            "nineanna": 5,
+            "ningišzida": 1,
+            "nunnamnir": 1,
+            "orthopedic problems": 1,
+            "personal complaints": 4,
+            "pests (agriculture)": 1,
+            "pox": 1,
+            "proverbs": 8,
+            "reeds": 1,
+            "riddles": 2,
+            "samsuiluna": 2,
+            "sargon": 4,
+            "scorpions": 19,
+            "snakes and reptiles": 4,
+            "song of bazi": 1,
+            "tašmētu": 1,
+            "temple": 1,
+            "to cities": 1,
+            "to named gods": 2,
+            "toothache": 3,
+            "trial": 1,
+            "witchcraft": 1,
+            "worms and leeches": 3,
+            "zimrī-līm": 1,
+            "šamaš": 1
+          }
+        },
+        "dll": {
+          "null_count": 44,
+          "n_classes": 0,
+          "class_counts": {}
+        },
+        "lbpl": {
+          "null_count": 38,
+          "n_classes": 0,
+          "class_counts": {}
+        }
+      },
+      "pooled_class_counts": {
+        "adad": 1,
+        "adapa": 1,
+        "amurru": 1,
+        "anger": 3,
+        "anzu": 2,
+        "atraḫasis": 8,
+        "baby crying": 4,
+        "baby disease": 1,
+        "birth": 13,
+        "collapse": 1,
+        "descent to the netherworld": 1,
+        "dialogues": 9,
+        "diarrhea": 1,
+        "diseases (various) / evil (general)": 8,
+        "diseases/demons (various)": 9,
+        "dogs": 14,
+        "etana": 2,
+        "evil eye": 3,
+        "eye (disease)": 1,
+        "fables": 1,
+        "fever": 2,
+        "flies and wasps": 5,
+        "foodstuff and drink": 3,
+        "gall": 1,
+        "gastrointestinal problems": 16,
+        "gilgameš": 13,
+        "girra": 1,
+        "goat": 1,
+        "gula": 2,
+        "hammurāpi": 2,
+        "ipiq-ištar": 1,
+        "itūrmēr": 1,
+        "ištar": 5,
+        "jaundice": 2,
+        "lamasaga/baba": 1,
+        "lamaštu": 5,
+        "legitimation": 2,
+        "love": 13,
+        "mama": 1,
+        "marduk": 3,
+        "maškadu": 3,
+        "miscellaneous": 12,
+        "miscellaneous mb/ma epics": 3,
+        "miscellaneous mb/ma hymns": 1,
+        "miscellaneous mb/ma incs.": 3,
+        "miscellaneous mb/ma wis. lit.": 1,
+        "miscellaneous ob epics": 2,
+        "miscellaneous ob hymns": 2,
+        "miscellaneous ob love lit.": 12,
+        "miscellaneous ob wis. lit.": 1,
+        "nanāya": 1,
+        "narām-sin": 5,
+        "nergal": 1,
+        "nineanna": 5,
+        "ningišzida": 1,
+        "nunnamnir": 1,
+        "orthopedic problems": 1,
+        "personal complaints": 4,
+        "pests (agriculture)": 1,
+        "pox": 1,
+        "proverbs": 8,
+        "reeds": 1,
+        "riddles": 2,
+        "samsuiluna": 2,
+        "sargon": 4,
+        "scorpions": 19,
+        "snakes and reptiles": 4,
+        "song of bazi": 1,
+        "tašmētu": 1,
+        "temple": 1,
+        "to cities": 1,
+        "to named gods": 2,
+        "toothache": 3,
+        "trial": 1,
+        "witchcraft": 1,
+        "worms and leeches": 3,
+        "zimrī-līm": 1,
+        "šamaš": 1
+      }
+    },
+    "provenance": {
+      "total_null_count": 0,
+      "total_n_classes": 35,
+      "per_corpus": {
+        "seal": {
+          "null_count": 0,
+          "n_classes": 34,
+          "class_counts": {
+            "Adab": 2,
+            "Akhetaten": 2,
+            "Assur": 5,
+            "Assur;Nineveh": 1,
+            "Babylon": 4,
+            "Babylon;Sippar": 1,
+            "Dūr-Kurigalzu": 2,
+            "Emar": 2,
+            "Emar;Ugarit": 1,
+            "Ešnunna": 1,
+            "Girsu": 2,
+            "Hattuša": 11,
+            "Isin": 6,
+            "Kaniš": 5,
+            "Kiš": 12,
+            "Larsa": 11,
+            "Larsa area": 32,
+            "Larsa;Lagaba": 1,
+            "Malgium": 1,
+            "Mari": 7,
+            "Meturan": 1,
+            "Nerebtum": 2,
+            "Nineveh": 1,
+            "Nippur": 18,
+            "Sippar": 12,
+            "Sippar;Nippur": 1,
+            "Susa": 9,
+            "Tell Duweihes": 3,
+            "Ugarit": 13,
+            "Unknown": 111,
+            "Unknown;Larsa": 1,
+            "Ur": 12,
+            "Uruk": 2,
+            "Šaduppûm": 7
+          }
+        },
+        "dll": {
+          "null_count": 0,
+          "n_classes": 3,
+          "class_counts": {
+            "Babylon": 19,
+            "Nineveh": 18,
+            "Sippar": 7
+          }
+        },
+        "lbpl": {
+          "null_count": 0,
+          "n_classes": 3,
+          "class_counts": {
+            "Babylon": 36,
+            "Babylon;Borsippa": 1,
+            "Unknown": 1
+          }
+        }
+      },
+      "pooled_class_counts": {
+        "Adab": 2,
+        "Akhetaten": 2,
+        "Assur": 5,
+        "Assur;Nineveh": 1,
+        "Babylon": 59,
+        "Babylon;Borsippa": 1,
+        "Babylon;Sippar": 1,
+        "Dūr-Kurigalzu": 2,
+        "Emar": 2,
+        "Emar;Ugarit": 1,
+        "Ešnunna": 1,
+        "Girsu": 2,
+        "Hattuša": 11,
+        "Isin": 6,
+        "Kaniš": 5,
+        "Kiš": 12,
+        "Larsa": 11,
+        "Larsa area": 32,
+        "Larsa;Lagaba": 1,
+        "Malgium": 1,
+        "Mari": 7,
+        "Meturan": 1,
+        "Nerebtum": 2,
+        "Nineveh": 19,
+        "Nippur": 18,
+        "Sippar": 19,
+        "Sippar;Nippur": 1,
+        "Susa": 9,
+        "Tell Duweihes": 3,
+        "Ugarit": 13,
+        "Unknown": 112,
+        "Unknown;Larsa": 1,
+        "Ur": 12,
+        "Uruk": 2,
+        "Šaduppûm": 7
+      }
+    },
+    "sub_provenance": {
+      "total_null_count": 0,
+      "total_n_classes": 35,
+      "per_corpus": {
+        "seal": {
+          "null_count": 0,
+          "n_classes": 34,
+          "class_counts": {
+            "Larsa area": 32,
+            "Unknown": 111,
+            "Unknown;mod. Tell es-Senkereh": 1,
+            "mod. Boghazköy": 11,
+            "mod. Ishan Baḥriyat": 6,
+            "mod. Ishchali": 2,
+            "mod. Kasr, Amran Ibn Ali, Sahn, Ishin Aswad, Merkes": 4,
+            "mod. Kasr, Amran Ibn Ali, Sahn, Ishin Aswad, Merkes;mod. Tell Abu Ḥabbah": 1,
+            "mod. Kouyunjik, Tell Nabi Yunus": 1,
+            "mod. Kültepe": 5,
+            "mod. Nuffar": 18,
+            "mod. Qalʿat Sharqat": 5,
+            "mod. Qalʿat Sharqat;mod. Kouyunjik, Tell Nabi Yunus": 1,
+            "mod. Ras Shamrah": 13,
+            "mod. Shush": 9,
+            "mod. Tell Abu Ḥabbah": 12,
+            "mod. Tell Abu Ḥabbah;mod. Nuffar": 1,
+            "mod. Tell Asmar": 1,
+            "mod. Tell Bismaya": 2,
+            "mod. Tell Haddad": 1,
+            "mod. Tell Meskene": 2,
+            "mod. Tell Meskene;mod. Ras Shamrah": 1,
+            "mod. Tell Yassir": 1,
+            "mod. Tell el-Amarna": 2,
+            "mod. Tell el-Muqayyar": 12,
+            "mod. Tell el-Uhaymir": 12,
+            "mod. Tell es-Senkereh": 11,
+            "mod. Tell es-Senkereh;between Babylon and Kutha": 1,
+            "mod. Tell Ḥariri": 7,
+            "mod. Tell Ḥarmal": 7,
+            "mod. Telloh": 2,
+            "mod. Warka": 2,
+            "mod. ʿAqar Quf": 2,
+            "vicinity of Nippur": 3
+          }
+        },
+        "dll": {
+          "null_count": 0,
+          "n_classes": 3,
+          "class_counts": {
+            "mod. Kasr, Amran Ibn Ali, Sahn, Ishin Aswad, Merkes": 19,
+            "mod. Kouyunjik, Tell Nabi Yunus": 18,
+            "mod. Tell Abu Ḥabbah": 7
+          }
+        },
+        "lbpl": {
+          "null_count": 0,
+          "n_classes": 3,
+          "class_counts": {
+            "Unknown": 1,
+            "mod. Kasr, Amran Ibn Ali, Sahn, Ishin Aswad, Merkes": 36,
+            "mod. Kasr, Amran Ibn Ali, Sahn, Ishin Aswad, Merkes;modern Birs Nimrud": 1
+          }
+        }
+      },
+      "pooled_class_counts": {
+        "Larsa area": 32,
+        "Unknown": 112,
+        "Unknown;mod. Tell es-Senkereh": 1,
+        "mod. Boghazköy": 11,
+        "mod. Ishan Baḥriyat": 6,
+        "mod. Ishchali": 2,
+        "mod. Kasr, Amran Ibn Ali, Sahn, Ishin Aswad, Merkes": 59,
+        "mod. Kasr, Amran Ibn Ali, Sahn, Ishin Aswad, Merkes;mod. Tell Abu Ḥabbah": 1,
+        "mod. Kasr, Amran Ibn Ali, Sahn, Ishin Aswad, Merkes;modern Birs Nimrud": 1,
+        "mod. Kouyunjik, Tell Nabi Yunus": 19,
+        "mod. Kültepe": 5,
+        "mod. Nuffar": 18,
+        "mod. Qalʿat Sharqat": 5,
+        "mod. Qalʿat Sharqat;mod. Kouyunjik, Tell Nabi Yunus": 1,
+        "mod. Ras Shamrah": 13,
+        "mod. Shush": 9,
+        "mod. Tell Abu Ḥabbah": 19,
+        "mod. Tell Abu Ḥabbah;mod. Nuffar": 1,
+        "mod. Tell Asmar": 1,
+        "mod. Tell Bismaya": 2,
+        "mod. Tell Haddad": 1,
+        "mod. Tell Meskene": 2,
+        "mod. Tell Meskene;mod. Ras Shamrah": 1,
+        "mod. Tell Yassir": 1,
+        "mod. Tell el-Amarna": 2,
+        "mod. Tell el-Muqayyar": 12,
+        "mod. Tell el-Uhaymir": 12,
+        "mod. Tell es-Senkereh": 11,
+        "mod. Tell es-Senkereh;between Babylon and Kutha": 1,
+        "mod. Tell Ḥariri": 7,
+        "mod. Tell Ḥarmal": 7,
+        "mod. Telloh": 2,
+        "mod. Warka": 2,
+        "mod. ʿAqar Quf": 2,
+        "vicinity of Nippur": 3
+      }
+    },
+    "domain": {
+      "total_null_count": 0,
+      "total_n_classes": 3,
+      "per_corpus": {
+        "seal": {
+          "null_count": 0,
+          "n_classes": 1,
+          "class_counts": {
+            "SEAL": 302
+          }
+        },
+        "dll": {
+          "null_count": 0,
+          "n_classes": 1,
+          "class_counts": {
+            "DLL": 44
+          }
+        },
+        "lbpl": {
+          "null_count": 0,
+          "n_classes": 1,
+          "class_counts": {
+            "LBPL": 38
+          }
+        }
+      },
+      "pooled_class_counts": {
+        "DLL": 44,
+        "LBPL": 38,
+        "SEAL": 302
+      }
+    }
+  }
+}

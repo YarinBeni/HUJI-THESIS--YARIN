@@ -1,0 +1,81 @@
+{
+  "task_name": "sub_provenance",
+  "label_col": "sub_provenance",
+  "corpora_pooled": [
+    "seal",
+    "dll",
+    "lbpl"
+  ],
+  "cleaning": "maximal",
+  "text_col_used": "text_maximal",
+  "fragments_total_input": 384,
+  "fragments_after_null_filter": 384,
+  "n_classes_input": 35,
+  "singletons_dropped": [
+    "Unknown;mod. Tell es-Senkereh",
+    "mod. Kasr, Amran Ibn Ali, Sahn, Ishin Aswad, Merkes;mod. Tell Abu Ḥabbah",
+    "mod. Kasr, Amran Ibn Ali, Sahn, Ishin Aswad, Merkes;modern Birs Nimrud",
+    "mod. Qalʿat Sharqat;mod. Kouyunjik, Tell Nabi Yunus",
+    "mod. Tell Abu Ḥabbah;mod. Nuffar",
+    "mod. Tell Asmar",
+    "mod. Tell Haddad",
+    "mod. Tell Meskene;mod. Ras Shamrah",
+    "mod. Tell Yassir",
+    "mod. Tell es-Senkereh;between Babylon and Kutha"
+  ],
+  "n_classes_after_drop": 25,
+  "fragments_after_drop": 374,
+  "smallest_class_size": 2,
+  "k_used": 2,
+  "top5_classes": [
+    [
+      "Unknown",
+      112
+    ],
+    [
+      "mod. Kasr, Amran Ibn Ali, Sahn, Ishin Aswad, Merkes",
+      59
+    ],
+    [
+      "Larsa area",
+      32
+    ],
+    [
+      "mod. Tell Abu Ḥabbah",
+      19
+    ],
+    [
+      "mod. Kouyunjik, Tell Nabi Yunus",
+      19
+    ]
+  ],
+  "label_to_idx": {
+    "Larsa area": 0,
+    "Unknown": 1,
+    "mod. Boghazköy": 2,
+    "mod. Ishan Baḥriyat": 3,
+    "mod. Ishchali": 4,
+    "mod. Kasr, Amran Ibn Ali, Sahn, Ishin Aswad, Merkes": 5,
+    "mod. Kouyunjik, Tell Nabi Yunus": 6,
+    "mod. Kültepe": 7,
+    "mod. Nuffar": 8,
+    "mod. Qalʿat Sharqat": 9,
+    "mod. Ras Shamrah": 10,
+    "mod. Shush": 11,
+    "mod. Tell Abu Ḥabbah": 12,
+    "mod. Tell Bismaya": 13,
+    "mod. Tell Meskene": 14,
+    "mod. Tell el-Amarna": 15,
+    "mod. Tell el-Muqayyar": 16,
+    "mod. Tell el-Uhaymir": 17,
+    "mod. Tell es-Senkereh": 18,
+    "mod. Tell Ḥariri": 19,
+    "mod. Tell Ḥarmal": 20,
+    "mod. Telloh": 21,
+    "mod. Warka": 22,
+    "mod. ʿAqar Quf": 23,
+    "vicinity of Nippur": 24
+  },
+  "run_cleaning": "maximal",
+  "generated_at": "2026-04-14T16:08:46Z"
+}

@@ -1,0 +1,81 @@
+{
+  "task_name": "provenance",
+  "label_col": "provenance",
+  "corpora_pooled": [
+    "seal",
+    "dll",
+    "lbpl"
+  ],
+  "cleaning": "tier0",
+  "text_col_used": "text_tier0",
+  "fragments_total_input": 384,
+  "fragments_after_null_filter": 384,
+  "n_classes_input": 35,
+  "singletons_dropped": [
+    "Assur;Nineveh",
+    "Babylon;Borsippa",
+    "Babylon;Sippar",
+    "Emar;Ugarit",
+    "Ešnunna",
+    "Larsa;Lagaba",
+    "Malgium",
+    "Meturan",
+    "Sippar;Nippur",
+    "Unknown;Larsa"
+  ],
+  "n_classes_after_drop": 25,
+  "fragments_after_drop": 374,
+  "smallest_class_size": 2,
+  "k_used": 2,
+  "top5_classes": [
+    [
+      "Unknown",
+      112
+    ],
+    [
+      "Babylon",
+      59
+    ],
+    [
+      "Larsa area",
+      32
+    ],
+    [
+      "Sippar",
+      19
+    ],
+    [
+      "Nineveh",
+      19
+    ]
+  ],
+  "label_to_idx": {
+    "Adab": 0,
+    "Akhetaten": 1,
+    "Assur": 2,
+    "Babylon": 3,
+    "Dūr-Kurigalzu": 4,
+    "Emar": 5,
+    "Girsu": 6,
+    "Hattuša": 7,
+    "Isin": 8,
+    "Kaniš": 9,
+    "Kiš": 10,
+    "Larsa": 11,
+    "Larsa area": 12,
+    "Mari": 13,
+    "Nerebtum": 14,
+    "Nineveh": 15,
+    "Nippur": 16,
+    "Sippar": 17,
+    "Susa": 18,
+    "Tell Duweihes": 19,
+    "Ugarit": 20,
+    "Unknown": 21,
+    "Ur": 22,
+    "Uruk": 23,
+    "Šaduppûm": 24
+  },
+  "run_cleaning": "tier0",
+  "generated_at": "2026-04-14T15:05:05Z"
+}

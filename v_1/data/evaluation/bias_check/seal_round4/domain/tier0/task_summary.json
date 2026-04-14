@@ -1,0 +1,40 @@
+{
+  "task_name": "domain",
+  "label_col": "domain",
+  "corpora_pooled": [
+    "seal",
+    "dll",
+    "lbpl"
+  ],
+  "cleaning": "tier0",
+  "text_col_used": "text_tier0",
+  "fragments_total_input": 384,
+  "fragments_after_null_filter": 384,
+  "n_classes_input": 3,
+  "singletons_dropped": [],
+  "n_classes_after_drop": 3,
+  "fragments_after_drop": 384,
+  "smallest_class_size": 38,
+  "k_used": 5,
+  "top5_classes": [
+    [
+      "SEAL",
+      302
+    ],
+    [
+      "DLL",
+      44
+    ],
+    [
+      "LBPL",
+      38
+    ]
+  ],
+  "label_to_idx": {
+    "DLL": 0,
+    "LBPL": 1,
+    "SEAL": 2
+  },
+  "run_cleaning": "tier0",
+  "generated_at": "2026-04-14T15:46:17Z"
+}

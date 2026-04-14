@@ -1,0 +1,32 @@
+{
+  "task_name": "domain",
+  "cleaning": "tier0",
+  "n_fragments": 384,
+  "n_classes": 3,
+  "k_used": 5,
+  "best_C": 10.0,
+  "c_grid_scores": {
+    "0.001": 0.938821,
+    "0.01": 0.938821,
+    "0.1": 0.931364,
+    "1.0": 0.946198,
+    "10.0": 0.950567
+  },
+  "cv_accuracy": 0.979167,
+  "cv_macro_f1": 0.951776,
+  "cv_weighted_f1": 0.97893,
+  "per_class_f1": {
+    "DLL": 0.930233,
+    "LBPL": 0.933333,
+    "SEAL": 0.991763
+  },
+  "perm_test": {
+    "n_permutations": 1000,
+    "actual_score": 0.950567,
+    "perm_mean": 0.311493,
+    "perm_std": 0.020648,
+    "pvalue": 0.000999,
+    "significance": "FAIL"
+  },
+  "generated_at": "2026-04-14T15:46:17Z"
+}

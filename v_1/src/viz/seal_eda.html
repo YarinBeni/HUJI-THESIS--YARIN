@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEAL Corpus EDA</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    background: #f5f5f5;
+    color: #222;
+  }
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  /* ── Top bar ── */
+  #controls {
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .ctrl-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .ctrl-group label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  select, .toggle-group {
+    height: 32px;
+    font-size: 13px;
+  }
+  select {
+    padding: 0 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+  }
+  select:focus { outline: 2px solid #4a90d9; }
+  .toggle-group {
+    display: flex;
+  }
+  .toggle-group button {
+    padding: 0 14px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.1s, color 0.1s;
+    white-space: nowrap;
+  }
+  .toggle-group button:first-child { border-radius: 4px 0 0 4px; border-right: none; }
+  .toggle-group button:last-child  { border-radius: 0 4px 4px 0; }
+  .toggle-group button.active {
+    background: #4a90d9;
+    color: #fff;
+    border-color: #4a90d9;
+    z-index: 1;
+  }
+  /* ── Layer slider area ── */
+  #layer-group {
+    min-width: 180px;
+  }
+  #layer-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  #layer-slider {
+    width: 120px;
+    cursor: pointer;
+  }
+  #layer-slider:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  #layer-value {
+    font-size: 13px;
+    min-width: 36px;
+    color: #444;
+  }
+  /* ── Title ── */
+  #title-bar {
+    padding: 8px 16px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    flex-shrink: 0;
+  }
+  #subtitle {
+    padding: 2px 16px 6px;
+    font-size: 12px;
+    color: #888;
+    flex-shrink: 0;
+  }
+  /* ── Plot area ── */
+  #plot-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    padding: 0 8px 8px;
+  }
+  #plot {
+    width: 100%;
+    height: 100%;
+  }
+  #unavailable-msg {
+    display: none;
+    position: absolute;
+    inset: 0;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 12px;
+    background: #fafafa;
+    color: #888;
+    font-size: 16px;
+  }
+  #unavailable-msg .icon { font-size: 40px; }
+  #unavailable-msg .key  { font-family: monospace; font-size: 13px; background: #eee;
+                           padding: 2px 8px; border-radius: 3px; color: #555; }
+  #loading-msg {
+    display: none;
+    position: absolute;
+    inset: 0;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.85);
+    font-size: 16px;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="title-bar">SEAL Corpus — Embedding Explorer</div>
+  <div id="subtitle">384 fragments · Akkadian cuneiform · Master's thesis EDA</div>
+
+  <div id="controls">
+    <!-- Method -->
+    <div class="ctrl-group">
+      <label>Method</label>
+      <select id="sel-method">
+        <option value="tfidf">TF-IDF</option>
+        <option value="qwen">Qwen</option>
+        <option value="random">Random Qwen</option>
+        <option value="mlm">Yarin MLM</option>
+      </select>
+    </div>
+
+    <!-- Layer -->
+    <div class="ctrl-group" id="layer-group">
+      <label>Layer</label>
+      <div id="layer-slider-row">
+        <input type="range" id="layer-slider" min="0" max="28" step="1" value="0">
+        <span id="layer-value">L00</span>
+      </div>
+    </div>
+
+    <!-- Cleaning -->
+    <div class="ctrl-group">
+      <label>Cleaning</label>
+      <div class="toggle-group" id="tog-cleaning">
+        <button data-val="tier0" class="active">tier0</button>
+        <button data-val="maximal">maximal</button>
+      </div>
+    </div>
+
+    <!-- Dim reduction -->
+    <div class="ctrl-group">
+      <label>Reduction</label>
+      <div class="toggle-group" id="tog-reduction">
+        <button data-val="tsne" class="active">t-SNE</button>
+        <button data-val="pca">PCA</button>
+      </div>
+    </div>
+
+    <!-- Color by -->
+    <div class="ctrl-group">
+      <label>Color by</label>
+      <select id="sel-colorby">
+        <option value="domain">domain</option>
+        <option value="period">period</option>
+        <option value="genre">genre</option>
+        <option value="sub_genre">sub_genre</option>
+        <option value="provenance">provenance</option>
+      </select>
+    </div>
+  </div><!-- /controls -->
+
+  <div id="plot-wrapper">
+    <div id="plot"></div>
+    <div id="unavailable-msg">
+      <span class="icon">⏳</span>
+      <span>Data not yet available</span>
+      <span class="key" id="unavailable-key"></span>
+      <span style="font-size:13px;color:#aaa">Run cluster jobs (Plans C / D) to populate this slot.</span>
+    </div>
+    <div id="loading-msg">Loading…</div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const state = {
+  method:    "tfidf",
+  layer:     0,
+  cleaning:  "tier0",
+  reduction: "tsne",
+  colorBy:   "domain",
+};
+
+let DATA = null;   // loaded seal_viz_data.json
+
+// ── Qualitative color palette (Plotly-inspired) ────────────────────────────
+const PALETTE = [
+  "#636EFA","#EF553B","#00CC96","#AB63FA","#FFA15A",
+  "#19D3F3","#FF6692","#B6E880","#FF97FF","#FECB52",
+  "#1F77B4","#FF7F0E","#2CA02C","#D62728","#9467BD",
+  "#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF",
+];
+function colorFor(idx) { return PALETTE[idx % PALETTE.length]; }
+
+// ── Layer helpers ──────────────────────────────────────────────────────────
+const MLM_LAYERS = [0, 4, 8, 12, 16];
+
+function layerLabel(val) {
+  return "L" + String(val).padStart(2, "0");
+}
+
+function clampLayerForMethod(method, rawVal) {
+  if (method === "mlm") {
+    // snap to nearest valid MLM layer
+    return MLM_LAYERS.reduce((prev, cur) =>
+      Math.abs(cur - rawVal) < Math.abs(prev - rawVal) ? cur : prev
+    );
+  }
+  return rawVal;
+}
+
+function buildKey() {
+  const { method, layer, cleaning, reduction } = state;
+  const layerStr = (method === "tfidf") ? "na" : layerLabel(layer);
+  return `${method}__${cleaning}__${layerStr}__${reduction}`;
+}
+
+// ── Slider config per method ───────────────────────────────────────────────
+function configureSlider(method) {
+  const slider = document.getElementById("layer-slider");
+  const valEl  = document.getElementById("layer-value");
+
+  if (method === "tfidf") {
+    slider.disabled = true;
+    slider.min = 0; slider.max = 28; slider.step = 1;
+    valEl.textContent = "N/A";
+    valEl.style.opacity = "0.4";
+  } else if (method === "mlm") {
+    slider.disabled = false;
+    slider.min = 0; slider.max = 16; slider.step = 4;
+    // snap current layer
+    const snapped = clampLayerForMethod("mlm", state.layer);
+    state.layer = snapped;
+    slider.value = snapped;
+    valEl.textContent = layerLabel(snapped);
+    valEl.style.opacity = "1";
+  } else {
+    // qwen / random
+    slider.disabled = false;
+    slider.min = 0; slider.max = 28; slider.step = 1;
+    slider.value = state.layer;
+    valEl.textContent = layerLabel(state.layer);
+    valEl.style.opacity = "1";
+  }
+}
+
+// ── Render plot ────────────────────────────────────────────────────────────
+function render() {
+  if (!DATA) return;
+
+  const key = buildKey();
+  const coords = DATA.embeddings[key];
+
+  const plotEl      = document.getElementById("plot");
+  const unavailEl   = document.getElementById("unavailable-msg");
+  const unavailKey  = document.getElementById("unavailable-key");
+
+  if (!coords) {
+    // Show unavailable message, hide plot
+    unavailEl.style.display = "flex";
+    unavailKey.textContent = key;
+    Plotly.purge(plotEl);
+    return;
+  }
+
+  unavailEl.style.display = "none";
+
+  // Group fragments by colorBy value
+  const fragments = DATA.fragments;
+  const colorBy   = state.colorBy;
+
+  // Collect unique classes (preserve insertion order = frequency order for legend)
+  const seen = new Map(); // label -> index
+  fragments.forEach(f => {
+    const v = f[colorBy] ?? "(null)";
+    if (!seen.has(v)) seen.set(v, seen.size);
+  });
+
+  // Build one Plotly trace per class
+  const traces = [];
+  seen.forEach((idx, label) => {
+    const xs = [], ys = [], customdata = [];
+    fragments.forEach((f, i) => {
+      const v = f[colorBy] ?? "(null)";
+      if (v !== label) return;
+      xs.push(coords[i][0]);
+      ys.push(coords[i][1]);
+      customdata.push(f);
+    });
+
+    traces.push({
+      type: "scatter",
+      mode: "markers",
+      name: label,
+      x: xs,
+      y: ys,
+      customdata: customdata,
+      marker: {
+        color: colorFor(idx),
+        size: 7,
+        opacity: 0.82,
+        line: { width: 0.5, color: "rgba(0,0,0,0.2)" },
+      },
+      hovertemplate:
+        "<b>fragment_id:</b> %{customdata.fragment_id}<br>" +
+        "<b>corpus:</b> %{customdata.corpus}<br>" +
+        "<b>period:</b> %{customdata.period}<br>" +
+        "<b>genre:</b> %{customdata.genre}<br>" +
+        "<b>sub_genre:</b> %{customdata.sub_genre}<br>" +
+        "<b>provenance:</b> %{customdata.provenance}<br>" +
+        "<b>words:</b> %{customdata.word_count}<br>" +
+        "<b>snippet:</b> %{customdata.text_snippet}<extra></extra>",
+    });
+  });
+
+  const reductionLabel = state.reduction === "tsne" ? "t-SNE" : "PCA";
+  const layout = {
+    xaxis: { title: `${reductionLabel} dim 1`, showgrid: false, zeroline: false },
+    yaxis: { title: `${reductionLabel} dim 2`, showgrid: false, zeroline: false },
+    legend: { orientation: "v", font: { size: 11 } },
+    margin: { t: 10, l: 60, r: 20, b: 50 },
+    paper_bgcolor: "#fff",
+    plot_bgcolor: "#fafafa",
+    hovermode: "closest",
+  };
+
+  const config = { responsive: true, displayModeBar: true };
+
+  Plotly.react(plotEl, traces, layout, config);
+}
+
+// ── Wire controls ──────────────────────────────────────────────────────────
+function wireToggle(groupId, stateKey) {
+  const group = document.getElementById(groupId);
+  group.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      group.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      state[stateKey] = btn.dataset.val;
+      render();
+    });
+  });
+}
+
+document.getElementById("sel-method").addEventListener("change", e => {
+  state.method = e.target.value;
+  configureSlider(state.method);
+  render();
+});
+
+document.getElementById("layer-slider").addEventListener("input", e => {
+  const rawVal = parseInt(e.target.value, 10);
+  const val    = clampLayerForMethod(state.method, rawVal);
+  state.layer  = val;
+  const valEl  = document.getElementById("layer-value");
+  valEl.textContent = layerLabel(val);
+  render();
+});
+
+document.getElementById("sel-colorby").addEventListener("change", e => {
+  state.colorBy = e.target.value;
+  render();
+});
+
+wireToggle("tog-cleaning",  "cleaning");
+wireToggle("tog-reduction", "reduction");
+
+// ── Load data ──────────────────────────────────────────────────────────────
+(async function init() {
+  const loadingEl = document.getElementById("loading-msg");
+  loadingEl.style.display = "flex";
+
+  try {
+    const resp = await fetch("seal_viz_data.json");
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    DATA = await resp.json();
+  } catch (err) {
+    loadingEl.textContent = `Failed to load seal_viz_data.json: ${err.message}`;
+    console.error(err);
+    return;
+  }
+
+  loadingEl.style.display = "none";
+  configureSlider(state.method);
+  render();
+})();
+</script>
+</body>
+</html>

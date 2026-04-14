@@ -1,0 +1,38 @@
+{
+  "task_name": "period",
+  "cleaning": "tier0",
+  "n_fragments": 383,
+  "n_classes": 9,
+  "k_used": 2,
+  "best_C": 0.1,
+  "c_grid_scores": {
+    "0.001": 0.378639,
+    "0.01": 0.455635,
+    "0.1": 0.472605,
+    "1.0": 0.395408,
+    "10.0": 0.364872
+  },
+  "cv_accuracy": 0.75718,
+  "cv_macro_f1": 0.473194,
+  "cv_weighted_f1": 0.751126,
+  "per_class_f1": {
+    "Archaic/Old Akkadian/Ebla": 0.0,
+    "Late Babylonian": 0.894118,
+    "Middle Assyrian": 0.0,
+    "Middle Babylonian": 0.076923,
+    "Middle Babylonian/Assyrian": 0.656716,
+    "Neo or Late Babylonian": 0.736842,
+    "Neo-Assyrian": 0.482759,
+    "Old Assyrian": 0.545455,
+    "Old Babylonian": 0.865934
+  },
+  "perm_test": {
+    "n_permutations": 1000,
+    "actual_score": 0.472605,
+    "perm_mean": 0.093415,
+    "perm_std": 0.018264,
+    "pvalue": 0.000999,
+    "significance": "FAIL"
+  },
+  "generated_at": "2026-04-14T15:15:19Z"
+}
