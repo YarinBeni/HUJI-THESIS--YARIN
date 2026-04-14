@@ -116,8 +116,8 @@ Full plan: `justification/parallel_plans_final.md`
 | A | Re-run Phases 0→C on round-5 CSVs | ✅ Done | All 12 bias-check runs complete; parquet updated |
 | B | TF-IDF EDA GUI scaffold | ✅ Done | `src/viz/seal_eda.html` + `seal_viz_data.json` (4 TF-IDF keys, 384 frags) |
 | C | Cluster: Qwen + Random Qwen embeddings | 🔄 Running | Jobs 2994–2997 on g0375 (submitted 2026-04-14) |
-| D-training | Cluster: Retrain Akkadian MLM | 🔄 Running | Job 2998 on g0375 (submitted 2026-04-14, ~3–4h) |
-| D-extraction | Cluster: Extract MLM embeddings for SEAL | ⏸ Blocked | Needs A ✅ + D-training ✅ |
+| D-training | Cluster: Retrain Akkadian MLM | ✅ Done | Job 2998 done 2026-04-14; best val_loss=2.9777 (epoch 10, beats 3.020); `baseline_best.pt` 420 MB |
+| D-extraction | Cluster: Extract MLM embeddings for SEAL | 🔓 Unblocked | Both deps met — ready to run |
 | E | Merge all outputs into final GUI | ⏸ Blocked | Needs B ✅ + C + D (optional) |
 
 **Cluster jobs (2026-04-14):**
@@ -127,9 +127,9 @@ Full plan: `justification/parallel_plans_final.md`
 - `2997` — seal_random maximal extraction
 - `2998` — train_mlm (Akkadian MLM retrain, 10 epochs, H100, 12h walltime)
 
-**When D-training finishes:** verify `v_1/models/baseline_retrained/baseline_best.pt` exists and val_loss ≤ 3.020. Then start D-extraction once Plan A parquet is confirmed on cluster.
+**D-training done (2026-04-14):** `baseline_best.pt` 420 MB, best val_loss=2.9777 at epoch 10 (beats 3.020). H100 completed 10 epochs in ~28 min (vs ~8h on original hardware). `seal_corpus.parquet` confirmed on cluster. D-extraction is unblocked.
 
-**When C finishes:** rsync `results/seal_round4/` JSON back locally, then run `04_compute_2d_coords.py` for 2D reduction.
+**When C finishes (jobs 2994–2997):** run `04_compute_2d_coords.py` on the cluster (CPU, ~1–2h, 232 t-SNE+PCA combinations), then rsync `results/seal_round4/seal_qwen_coords.json` back locally. Log files: `v_1/src/linear_probing/logs/seal_{qwen,random}_{tier0,maximal}_<jobid>.out`.
 
 ## Blocked On
 - Chunrong finishing period re-labeling (some tablets still being checked)

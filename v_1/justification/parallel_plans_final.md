@@ -8,15 +8,25 @@
 | A — Re-run Phases 0→C locally | ✅ Done | Round-5 CSVs ingested; all 12 bias-check combinations complete |
 | B — TF-IDF EDA GUI scaffold | ✅ Done | `src/viz/seal_eda.html` built; `seal_viz_data.json` has 384 frags + 4 TF-IDF keys |
 | C — Qwen + Random embeddings (cluster) | 🔄 Running | Jobs 2994–2997 on g0375, submitted 2026-04-14 |
-| D-training — Retrain Akkadian MLM | 🔄 Running | Job 2998 on g0375, submitted 2026-04-14, ~3–4h, checkpoint → `v_1/models/baseline_retrained/` |
-| D-extraction — Extract MLM embeddings | ⏸ Blocked | Waiting for A ✅ parquet on cluster + D-training ✅ |
+| D-training — Retrain Akkadian MLM | ✅ Done | Job 2998 finished 2026-04-14 17:26 UTC; best val_loss=2.9777 (epoch 10, beats 3.020); `baseline_best.pt` 420 MB |
+| D-extraction — Extract MLM embeddings | 🔓 Unblocked | Both deps met — write + run `03_extract_seal_embeddings.py` |
 | E — Merge + final GUI test | ⏸ Blocked | Waiting for C + D-extraction (D optional) |
 
 **Unblock checklist:**
-- [ ] Jobs 2994–2997 complete → rsync activations → run `04_compute_2d_coords.py`
-- [ ] Job 2998 complete → verify `baseline_retrained/baseline_best.pt`, val_loss ≤ 3.020
-- [ ] `seal_corpus.parquet` confirmed on cluster → start D-extraction
+- [ ] Jobs 2994–2997 complete → run `04_compute_2d_coords.py` on cluster → rsync `seal_qwen_coords.json` locally
+- [x] Job 2998 complete → `baseline_best.pt` 420 MB, val_loss=2.9777 (epoch 10, beats 3.020 ✅)
+- [x] `seal_corpus.parquet` on cluster — confirmed via `git pull` 2026-04-14 (cluster received 443K parquet in fast-forward merge)
 - [ ] `seal_qwen_coords.json` rsynced locally → run Plan E
+
+**Monitoring jobs 2994–2997 (cluster):**
+```bash
+squeue -u $USER
+tail -f v_1/src/linear_probing/logs/seal_qwen_tier0_2994.out
+tail -f v_1/src/linear_probing/logs/seal_qwen_maximal_2995.out
+tail -f v_1/src/linear_probing/logs/seal_random_tier0_2996.out
+tail -f v_1/src/linear_probing/logs/seal_random_maximal_2997.out
+```
+Expected outputs when done: `results/seal_round4/activations/{qwen,random}_{tier0,maximal}/layer_00.npz … layer_28.npz` (29 files × 4 dirs = 116 `.npz` files, each 384×3584 float32).
 
 ---
 
