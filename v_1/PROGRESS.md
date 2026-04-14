@@ -1,7 +1,7 @@
 # Project Progress & Handover Snapshot
 
-> **Status Date:** 2026-04-07
-> **Current Phase:** SEAL pipeline Phase C complete. Phase D (linear probing on cluster) is next. Track C (SAE) plan finalized, ready after SEAL.
+> **Status Date:** 2026-04-14
+> **Current Phase:** Parallel execution in progress — cluster jobs running, EDA GUI built. Waiting on C + D-training before extraction and merge.
 > **Working Directory:** `v_1/`
 
 ## Project Context
@@ -107,16 +107,42 @@ window). Period labels are 500-year buckets based on expert judgment, not hard s
 This reframes the thesis contribution — cross-period results are a sanity check; the deeper
 question needs finer sub-period labels from Chunrong (still pending).
 
+## Parallel Execution Status (2026-04-14)
+
+Full plan: `justification/parallel_plans_final.md`
+
+| Plan | What | Status | Notes |
+|------|------|--------|-------|
+| A | Re-run Phases 0→C on round-5 CSVs | ✅ Done | All 12 bias-check runs complete; parquet updated |
+| B | TF-IDF EDA GUI scaffold | ✅ Done | `src/viz/seal_eda.html` + `seal_viz_data.json` (4 TF-IDF keys, 384 frags) |
+| C | Cluster: Qwen + Random Qwen embeddings | 🔄 Running | Jobs 2994–2997 on g0375 (submitted 2026-04-14) |
+| D-training | Cluster: Retrain Akkadian MLM | 🔄 Running | Job 2998 on g0375 (submitted 2026-04-14, ~3–4h) |
+| D-extraction | Cluster: Extract MLM embeddings for SEAL | ⏸ Blocked | Needs A ✅ + D-training ✅ |
+| E | Merge all outputs into final GUI | ⏸ Blocked | Needs B ✅ + C + D (optional) |
+
+**Cluster jobs (2026-04-14):**
+- `2994` — seal_qwen tier0 extraction
+- `2995` — seal_qwen maximal extraction
+- `2996` — seal_random tier0 extraction
+- `2997` — seal_random maximal extraction
+- `2998` — train_mlm (Akkadian MLM retrain, 10 epochs, H100, 12h walltime)
+
+**When D-training finishes:** verify `v_1/models/baseline_retrained/baseline_best.pt` exists and val_loss ≤ 3.020. Then start D-extraction once Plan A parquet is confirmed on cluster.
+
+**When C finishes:** rsync `results/seal_round4/` JSON back locally, then run `04_compute_2d_coords.py` for 2D reduction.
+
 ## Blocked On
 - Chunrong finishing period re-labeling (some tablets still being checked)
 - Fine-grained within-period sub-labels (new requirement from Nathan)
 - Full dataset delivery from advisor (40k+ Akkadian fragments)
 
 ## Next Steps
-1. ~~**Re-run SEAL Phases 0→C** on updated CSVs from Chunrong~~ ✅ Done 2026-04-14 (round 5 re-run complete).
-2. **SEAL Phase D — Linear probing**: modify `01_extract_activations.py` + `02_linear_probe.py`, run on cluster.
-3. **SEAL Phase E — Documentation**: update README, run log, commit each phase.
-4. **Track C — SAE implementation** (can run in parallel):
+1. ~~**Re-run SEAL Phases 0→C** on updated CSVs from Chunrong~~ ✅ Done 2026-04-14.
+2. ~~**EDA GUI scaffold + TF-IDF coords**~~ ✅ Done 2026-04-14.
+3. **Wait for cluster jobs** (C: 2994–2997, D-training: 2998) to complete.
+4. **D-extraction**: once job 2998 done + Plan A parquet confirmed on cluster → write + run `src/archive/baseline_mlm/03_extract_seal_embeddings.py` → 20 MLM coord keys.
+5. **Plan E merge**: once C done → rsync `seal_qwen_coords.json` locally → run `src/viz/02_merge_coords.py` → test GUI end-to-end.
+6. **Track C — SAE implementation** (after GUI work settles):
    - Verify SAE loading on cluster (sae-lens + Arditi weights)
    - Extract SAE features at layers 7/15/23 (last_token, tier0+maximal)
-5. Receive full dataset from advisor; re-run linear probe + SAE on full dataset.
+7. Receive full dataset from advisor; re-run linear probe + SAE on full dataset.

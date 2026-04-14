@@ -1,5 +1,24 @@
 # Parallel Execution Plans — SEAL Round 5 Re-run + EDA GUI
-# Status: FINAL (2026-04-14)
+# Status: IN PROGRESS (last updated 2026-04-14)
+
+## Execution Status
+
+| Plan | Status | Details |
+|------|--------|---------|
+| A — Re-run Phases 0→C locally | ✅ Done | Round-5 CSVs ingested; all 12 bias-check combinations complete |
+| B — TF-IDF EDA GUI scaffold | ✅ Done | `src/viz/seal_eda.html` built; `seal_viz_data.json` has 384 frags + 4 TF-IDF keys |
+| C — Qwen + Random embeddings (cluster) | 🔄 Running | Jobs 2994–2997 on g0375, submitted 2026-04-14 |
+| D-training — Retrain Akkadian MLM | 🔄 Running | Job 2998 on g0375, submitted 2026-04-14, ~3–4h, checkpoint → `v_1/models/baseline_retrained/` |
+| D-extraction — Extract MLM embeddings | ⏸ Blocked | Waiting for A ✅ parquet on cluster + D-training ✅ |
+| E — Merge + final GUI test | ⏸ Blocked | Waiting for C + D-extraction (D optional) |
+
+**Unblock checklist:**
+- [ ] Jobs 2994–2997 complete → rsync activations → run `04_compute_2d_coords.py`
+- [ ] Job 2998 complete → verify `baseline_retrained/baseline_best.pt`, val_loss ≤ 3.020
+- [ ] `seal_corpus.parquet` confirmed on cluster → start D-extraction
+- [ ] `seal_qwen_coords.json` rsynced locally → run Plan E
+
+---
 
 Dependency order:
 
