@@ -118,7 +118,7 @@ Full plan: `justification/parallel_plans_final.md`
 | C | Cluster: Qwen + Random Qwen embeddings | ✅ Done | Jobs 2994–2997 (extraction) + 2999 (coords); `seal_qwen_coords.json` local (232 keys verified) |
 | D-training | Cluster: Retrain Akkadian MLM | ✅ Done | Job 2998 done 2026-04-14; best val_loss=2.9777 (epoch 10, beats 3.020); `baseline_best.pt` 420 MB |
 | D-extraction | Cluster: Extract MLM embeddings for SEAL | ✅ Done | Job 3028, 46s, `seal_mlm_coords.json` 158K, 10 keys |
-| E | Merge all outputs into final GUI | 🔓 Unblocked | B ✅ + C ✅ — ready to run `02_merge_coords.py` locally |
+| E | Merge all outputs into final GUI | ✅ Done | `02_merge_coords.py` ran: 246 keys merged into `seal_viz_data.json` (4MB); GUI test pending |
 
 **Cluster jobs (2026-04-14):**
 - `2994` — seal_qwen tier0 extraction
@@ -143,7 +143,7 @@ Full plan: `justification/parallel_plans_final.md`
 2. ~~**EDA GUI scaffold + TF-IDF coords**~~ ✅ Done 2026-04-14.
 3. ~~**Wait for cluster jobs** (C: 2994–2997, D-training: 2998) to complete~~ ✅ Done 2026-04-14.
 4. **D-extraction**: write + run `src/archive/baseline_mlm/03_extract_seal_embeddings.py` on cluster → 20 MLM coord keys → git push → pull locally.
-5. **Plan E merge**: run `src/viz/02_merge_coords.py` locally → test GUI end-to-end with all methods.
+5. ~~**Plan E merge**: run `src/viz/02_merge_coords.py` locally → test GUI end-to-end with all methods.~~ ✅ Done 2026-04-14. 246 keys merged (TF-IDF:4, Qwen:116, Random:116, MLM:10), `seal_viz_data.json` = 4MB.
 6. **Track C — SAE implementation** (after GUI work settles):
    - Verify SAE loading on cluster (sae-lens + Arditi weights)
    - Extract SAE features at layers 7/15/23 (last_token, tier0+maximal)

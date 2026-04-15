@@ -10,7 +10,7 @@
 | C — Qwen + Random embeddings (cluster) | ✅ Done | Jobs 2994–2997 + 2999 complete; `seal_qwen_coords.json` on local (232 keys, 384 pts each) |
 | D-training — Retrain Akkadian MLM | ✅ Done | Job 2998 finished 2026-04-14 17:26 UTC; best val_loss=2.9777 (epoch 10, beats 3.020); `baseline_best.pt` 420 MB |
 | D-extraction — Extract MLM embeddings | ✅ Done | Job 3028 finished 2026-04-15 07:31 UTC (46s); `seal_mlm_coords.json` 158K, 10 keys |
-| E — Merge + final GUI test | 🔓 Unblocked | C ✅ + B ✅ — ready to run `02_merge_coords.py` locally |
+| E — Merge + final GUI test | 🔄 In progress | `02_merge_coords.py` ran: 246 keys merged into `seal_viz_data.json` (4MB); GUI test pending |
 
 **Unblock checklist:**
 - [x] Jobs 2994–2997 complete → `04_compute_2d_coords.py` ran as job 2999 → `seal_qwen_coords.json` pulled locally (232 keys verified 2026-04-14)
