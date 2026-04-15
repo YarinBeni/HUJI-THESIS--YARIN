@@ -9,7 +9,7 @@
 | B — TF-IDF EDA GUI scaffold | ✅ Done | `src/viz/seal_eda.html` built; `seal_viz_data.json` has 384 frags + 4 TF-IDF keys |
 | C — Qwen + Random embeddings (cluster) | ✅ Done | Jobs 2994–2997 + 2999 complete; `seal_qwen_coords.json` on local (232 keys, 384 pts each) |
 | D-training — Retrain Akkadian MLM | ✅ Done | Job 2998 finished 2026-04-14 17:26 UTC; best val_loss=2.9777 (epoch 10, beats 3.020); `baseline_best.pt` 420 MB |
-| D-extraction — Extract MLM embeddings | 🔓 Unblocked | Both deps met — write + run `03_extract_seal_embeddings.py` |
+| D-extraction — Extract MLM embeddings | ✅ Done | Job 3028 finished 2026-04-15 07:31 UTC (46s); `seal_mlm_coords.json` 158K, 10 keys |
 | E — Merge + final GUI test | 🔓 Unblocked | C ✅ + B ✅ — ready to run `02_merge_coords.py` locally |
 
 **Unblock checklist:**

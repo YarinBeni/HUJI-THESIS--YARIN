@@ -117,7 +117,7 @@ Full plan: `justification/parallel_plans_final.md`
 | B | TF-IDF EDA GUI scaffold | ✅ Done | `src/viz/seal_eda.html` + `seal_viz_data.json` (4 TF-IDF keys, 384 frags) |
 | C | Cluster: Qwen + Random Qwen embeddings | ✅ Done | Jobs 2994–2997 (extraction) + 2999 (coords); `seal_qwen_coords.json` local (232 keys verified) |
 | D-training | Cluster: Retrain Akkadian MLM | ✅ Done | Job 2998 done 2026-04-14; best val_loss=2.9777 (epoch 10, beats 3.020); `baseline_best.pt` 420 MB |
-| D-extraction | Cluster: Extract MLM embeddings for SEAL | 🔓 Unblocked | Both deps met — ready to run |
+| D-extraction | Cluster: Extract MLM embeddings for SEAL | ✅ Done | Job 3028, 46s, `seal_mlm_coords.json` 158K, 10 keys |
 | E | Merge all outputs into final GUI | 🔓 Unblocked | B ✅ + C ✅ — ready to run `02_merge_coords.py` locally |
 
 **Cluster jobs (2026-04-14):**
