@@ -29,5 +29,9 @@ v_1/data/external/
 # Personal planning & sensitive files (salary, career, emails, personal strategy)
 yarin/
 
-# Abandoned model checkpoints (random-weights MLM experiment, not needed)
+# Model checkpoints (large, cluster-only)
 v_1/models/
+
+# Large activation files — cluster-only; only commit the derived JSON coords
+*.npz
+v_1/src/linear_probing/results/seal_round4/activations/
