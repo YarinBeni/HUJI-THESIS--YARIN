@@ -7,26 +7,22 @@
 |------|--------|---------|
 | A — Re-run Phases 0→C locally | ✅ Done | Round-5 CSVs ingested; all 12 bias-check combinations complete |
 | B — TF-IDF EDA GUI scaffold | ✅ Done | `src/viz/seal_eda.html` built; `seal_viz_data.json` has 384 frags + 4 TF-IDF keys |
-| C — Qwen + Random embeddings (cluster) | 🔄 Running | Jobs 2994–2997 on g0375, submitted 2026-04-14 |
+| C — Qwen + Random embeddings (cluster) | ✅ Done | Jobs 2994–2997 + 2999 complete; `seal_qwen_coords.json` on local (232 keys, 384 pts each) |
 | D-training — Retrain Akkadian MLM | ✅ Done | Job 2998 finished 2026-04-14 17:26 UTC; best val_loss=2.9777 (epoch 10, beats 3.020); `baseline_best.pt` 420 MB |
 | D-extraction — Extract MLM embeddings | 🔓 Unblocked | Both deps met — write + run `03_extract_seal_embeddings.py` |
-| E — Merge + final GUI test | ⏸ Blocked | Waiting for C + D-extraction (D optional) |
+| E — Merge + final GUI test | 🔓 Unblocked | C ✅ + B ✅ — ready to run `02_merge_coords.py` locally |
 
 **Unblock checklist:**
-- [ ] Jobs 2994–2997 complete → run `04_compute_2d_coords.py` on cluster → rsync `seal_qwen_coords.json` locally
+- [x] Jobs 2994–2997 complete → `04_compute_2d_coords.py` ran as job 2999 → `seal_qwen_coords.json` pulled locally (232 keys verified 2026-04-14)
 - [x] Job 2998 complete → `baseline_best.pt` 420 MB, val_loss=2.9777 (epoch 10, beats 3.020 ✅)
 - [x] `seal_corpus.parquet` on cluster — confirmed via `git pull` 2026-04-14 (cluster received 443K parquet in fast-forward merge)
-- [ ] `seal_qwen_coords.json` rsynced locally → run Plan E
+- [x] `seal_qwen_coords.json` on local — `v_1/src/viz/seal_qwen_coords.json` (232 keys, 384 `[x,y]` pairs each, 0 bad lengths)
 
-**Monitoring jobs 2994–2997 (cluster):**
-```bash
-squeue -u $USER
-tail -f v_1/src/linear_probing/logs/seal_qwen_tier0_2994.out
-tail -f v_1/src/linear_probing/logs/seal_qwen_maximal_2995.out
-tail -f v_1/src/linear_probing/logs/seal_random_tier0_2996.out
-tail -f v_1/src/linear_probing/logs/seal_random_maximal_2997.out
-```
-Expected outputs when done: `results/seal_round4/activations/{qwen,random}_{tier0,maximal}/layer_00.npz … layer_28.npz` (29 files × 4 dirs = 116 `.npz` files, each 384×3584 float32).
+**Plan C verified facts (2026-04-14):**
+- Extraction jobs: 2994 (qwen/tier0), 2995 (qwen/maximal), 2996 (random/tier0), 2997 (random/maximal) — all on g0375
+- Coords job: 2999 (CPU, `compute_2d_coords.sh`, log: `logs/seal_2d_coords_2999.out`)
+- Output: 232 keys — `{qwen,random}__{tier0,maximal}__L{00..28}__{tsne,pca}`; 2 methods × 2 cleanings × 29 layers × 2 reductions
+- Local path: `v_1/src/viz/seal_qwen_coords.json`
 
 ---
 
@@ -381,15 +377,27 @@ READ FIRST:
 5. Write `v_1/src/archive/baseline_mlm/03_extract_seal_embeddings.py`:
    - Loads best checkpoint from `v_1/models/baseline_retrained/baseline_best.pt`
    - Loads 384 SEAL fragments from `seal_corpus.parquet` (columns: `text_tier0`, `text_maximal`)
+   - **Tokenization note (investigated 2026-04-15):** The 384 SEAL fragment IDs do NOT appear
+     in the unified training corpus — they are a completely separate source. The SEAL text
+     columns store word-level transliterations (e.g. `GAB-RI še20-e-mi3`), whereas the MLM
+     was trained on individual cuneiform signs (`GAB RI še20 e mi3`). To bridge this gap,
+     the extraction script must split each word on hyphens before tokenizing:
+       - `text_tier0` → split-by-hyphen → **87.3% in-vocab** (avg 284 signs/fragment, truncated at 512)
+       - `text_maximal` → split-by-hyphen → **99.9% in-vocab** (avg 57 signs/fragment, no truncation needed)
+     The heavy maximal cleaning (strip digits, strip logograms, normalize vowels) incidentally
+     maps most rare sign variants to common syllabic forms that ARE in the vocabulary. This
+     is scientifically reasonable — maximal embeddings reflect pure syllabic phonology, tier0
+     embeddings retain logograms and subscript variants at 87% coverage.
+   - Preprocessing: for each text column, split each whitespace-separated word on `-`, join
+     all resulting pieces with spaces → feed to `tokenize_text()` from `data_utils.py`
    - Extracts hidden states at `ANALYSIS_LAYERS = [0, 4, 8, 12, 16]` for each text column
-   - Uses mean pooling across sequence dimension (no pad tokens — MLM uses its own tokenizer)
+   - Uses **masked mean pooling** (average over non-[PAD] positions)
    - Runs t-SNE (`perplexity=30`, `max_iter=1000`, `random_state=42`) and PCA (2 components)
      on each (layer, cleaning) combination — 5 × 2 = 10 combinations
    - Saves to `results/seal_round4/seal_mlm_coords.json`
    - Key format: `mlm__tier0__L00__tsne`, `mlm__tier0__L04__pca`, `mlm__maximal__L16__tsne`, etc.
      (exactly 5 layers × 2 cleanings × 2 reductions = 20 keys)
-   - Note: uses the Akkadian tokenizer from `v_1/data/training_ready/vocab.json` (set in `01_prepare_data.py`),
-     NOT the Qwen tokenizer.
+   - Vocab: `v_1/data/training_ready/vocab.json` (14,797 Akkadian signs + 5 special tokens)
 
 6. Run:
    ```

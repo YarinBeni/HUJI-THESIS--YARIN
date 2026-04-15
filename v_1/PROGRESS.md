@@ -115,10 +115,10 @@ Full plan: `justification/parallel_plans_final.md`
 |------|------|--------|-------|
 | A | Re-run Phases 0→C on round-5 CSVs | ✅ Done | All 12 bias-check runs complete; parquet updated |
 | B | TF-IDF EDA GUI scaffold | ✅ Done | `src/viz/seal_eda.html` + `seal_viz_data.json` (4 TF-IDF keys, 384 frags) |
-| C | Cluster: Qwen + Random Qwen embeddings | 🔄 Running | Jobs 2994–2997 on g0375 (submitted 2026-04-14) |
+| C | Cluster: Qwen + Random Qwen embeddings | ✅ Done | Jobs 2994–2997 (extraction) + 2999 (coords); `seal_qwen_coords.json` local (232 keys verified) |
 | D-training | Cluster: Retrain Akkadian MLM | ✅ Done | Job 2998 done 2026-04-14; best val_loss=2.9777 (epoch 10, beats 3.020); `baseline_best.pt` 420 MB |
 | D-extraction | Cluster: Extract MLM embeddings for SEAL | 🔓 Unblocked | Both deps met — ready to run |
-| E | Merge all outputs into final GUI | ⏸ Blocked | Needs B ✅ + C + D (optional) |
+| E | Merge all outputs into final GUI | 🔓 Unblocked | B ✅ + C ✅ — ready to run `02_merge_coords.py` locally |
 
 **Cluster jobs (2026-04-14):**
 - `2994` — seal_qwen tier0 extraction
@@ -129,7 +129,9 @@ Full plan: `justification/parallel_plans_final.md`
 
 **D-training done (2026-04-14):** `baseline_best.pt` 420 MB, best val_loss=2.9777 at epoch 10 (beats 3.020). H100 completed 10 epochs in ~28 min (vs ~8h on original hardware). `seal_corpus.parquet` confirmed on cluster. D-extraction is unblocked.
 
-**When C finishes (jobs 2994–2997):** run `04_compute_2d_coords.py` on the cluster (CPU, ~1–2h, 232 t-SNE+PCA combinations), then rsync `results/seal_round4/seal_qwen_coords.json` back locally. Log files: `v_1/src/linear_probing/logs/seal_{qwen,random}_{tier0,maximal}_<jobid>.out`.
+**D-extraction tokenization (investigated 2026-04-15):** The 384 SEAL fragment IDs do not exist in the unified training corpus (separate source). SEAL `text_tier0`/`text_maximal` store word-level transliterations (`GAB-RI`), while the MLM vocab contains individual signs (`GAB`, `RI`). Solution: split each word on hyphens before tokenizing. Coverage: `text_tier0` → 87.3% in-vocab (avg 284 signs, truncated at 512); `text_maximal` → 99.9% in-vocab (avg 57 signs). The extraction script (`03_extract_seal_embeddings.py`) implements this split. Full details in `justification/parallel_plans_final.md` Plan D step 5.
+
+**Plan C complete (2026-04-14):** Extraction jobs 2994–2997 finished; coords computed by job 2999 (`04_compute_2d_coords.py`, CPU). `seal_qwen_coords.json` pulled to `v_1/src/viz/` — 232 keys verified (2 methods × 2 cleanings × 29 layers × 2 reductions, 384 `[x,y]` pairs each, 0 bad lengths). Plan E is now unblocked.
 
 ## Blocked On
 - Chunrong finishing period re-labeling (some tablets still being checked)
@@ -139,9 +141,9 @@ Full plan: `justification/parallel_plans_final.md`
 ## Next Steps
 1. ~~**Re-run SEAL Phases 0→C** on updated CSVs from Chunrong~~ ✅ Done 2026-04-14.
 2. ~~**EDA GUI scaffold + TF-IDF coords**~~ ✅ Done 2026-04-14.
-3. **Wait for cluster jobs** (C: 2994–2997, D-training: 2998) to complete.
-4. **D-extraction**: once job 2998 done + Plan A parquet confirmed on cluster → write + run `src/archive/baseline_mlm/03_extract_seal_embeddings.py` → 20 MLM coord keys.
-5. **Plan E merge**: once C done → rsync `seal_qwen_coords.json` locally → run `src/viz/02_merge_coords.py` → test GUI end-to-end.
+3. ~~**Wait for cluster jobs** (C: 2994–2997, D-training: 2998) to complete~~ ✅ Done 2026-04-14.
+4. **D-extraction**: write + run `src/archive/baseline_mlm/03_extract_seal_embeddings.py` on cluster → 20 MLM coord keys → git push → pull locally.
+5. **Plan E merge**: run `src/viz/02_merge_coords.py` locally → test GUI end-to-end with all methods.
 6. **Track C — SAE implementation** (after GUI work settles):
    - Verify SAE loading on cluster (sae-lens + Arditi weights)
    - Extract SAE features at layers 7/15/23 (last_token, tier0+maximal)
