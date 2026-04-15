@@ -377,27 +377,18 @@ READ FIRST:
 5. Write `v_1/src/archive/baseline_mlm/03_extract_seal_embeddings.py`:
    - Loads best checkpoint from `v_1/models/baseline_retrained/baseline_best.pt`
    - Loads 384 SEAL fragments from `seal_corpus.parquet` (columns: `text_tier0`, `text_maximal`)
-   - **Tokenization note (investigated 2026-04-15):** The 384 SEAL fragment IDs do NOT appear
-     in the unified training corpus — they are a completely separate source. The SEAL text
-     columns store word-level transliterations (e.g. `GAB-RI še20-e-mi3`), whereas the MLM
-     was trained on individual cuneiform signs (`GAB RI še20 e mi3`). To bridge this gap,
-     the extraction script must split each word on hyphens before tokenizing:
-       - `text_tier0` → split-by-hyphen → **87.3% in-vocab** (avg 284 signs/fragment, truncated at 512)
-       - `text_maximal` → split-by-hyphen → **99.9% in-vocab** (avg 57 signs/fragment, no truncation needed)
-     The heavy maximal cleaning (strip digits, strip logograms, normalize vowels) incidentally
-     maps most rare sign variants to common syllabic forms that ARE in the vocabulary. This
-     is scientifically reasonable — maximal embeddings reflect pure syllabic phonology, tier0
-     embeddings retain logograms and subscript variants at 87% coverage.
-   - Preprocessing: for each text column, split each whitespace-separated word on `-`, join
-     all resulting pieces with spaces → feed to `tokenize_text()` from `data_utils.py`
-   - Extracts hidden states at `ANALYSIS_LAYERS = [0, 4, 8, 12, 16]` for each text column
-   - Uses **masked mean pooling** (average over non-[PAD] positions)
-   - Runs t-SNE (`perplexity=30`, `max_iter=1000`, `random_state=42`) and PCA (2 components)
-     on each (layer, cleaning) combination — 5 × 2 = 10 combinations
-   - Saves to `results/seal_round4/seal_mlm_coords.json`
-   - Key format: `mlm__tier0__L00__tsne`, `mlm__tier0__L04__pca`, `mlm__maximal__L16__tsne`, etc.
-     (exactly 5 layers × 2 cleanings × 2 reductions = 20 keys)
-   - Vocab: `v_1/data/training_ready/vocab.json` (14,797 Akkadian signs + 5 special tokens)
+   - **Tokenization (resolved 2026-04-15):** SEAL fragment IDs have zero overlap with the
+     unified training corpus — completely separate source. SEAL `text` stores word-level
+     transliteration (`GAB-RI`); MLM vocab is sign-level (`GAB`, `RI`). Fix:
+     `df['text'].str.replace('-', ' ')` — hyphen→space converts words back to individual
+     sign tokens. Uses the `text` column (clean_value joined), NOT text_tier0/text_maximal
+     (those apply character-level cleaning that strips signs).
+   - Mean-pooled hidden states at `ANALYSIS_LAYERS = [0, 4, 8, 12, 16]` (one vector/fragment)
+   - t-SNE (`perplexity=30`, `max_iter=1000`, `random_state=42`) + PCA (2 components)
+   - **10 output keys** (5 layers × 2 reductions, single "tier0" cleaning label):
+     `mlm__tier0__L{00,04,08,12,16}__{tsne,pca}`
+     GUI's `mlm__maximal__*` slots will gracefully degrade to "not yet available"
+   - Vocab: `v_1/data/training_ready/vocab.json` (14,797 signs + 5 special tokens)
 
 6. Run:
    ```
