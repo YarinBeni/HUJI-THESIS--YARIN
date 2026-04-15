@@ -73,6 +73,17 @@
     border-color: #4a90d9;
     z-index: 1;
   }
+  .info-icon {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 11px;
+    color: inherit;
+    opacity: 0.65;
+    cursor: help;
+    vertical-align: middle;
+    line-height: 1;
+  }
+  .toggle-group button.active .info-icon { opacity: 0.85; }
   /* ── Layer slider area ── */
   #layer-group {
     min-width: 180px;
@@ -177,8 +188,8 @@
     <div class="ctrl-group">
       <label>Cleaning</label>
       <div class="toggle-group" id="tog-cleaning">
-        <button data-val="tier0" class="active">tier0</button>
-        <button data-val="maximal">maximal</button>
+        <button data-val="tier0" class="active">Raw Text <span class="info-icon" onclick="event.stopPropagation()" title="Minimal cleanup: strips ORACC @v markup, non-breaking spaces, and subscript-x character. Text is otherwise unchanged from the database. Example: &#x27;a-na be-li2-ia qi2-bi-ma&#x27; → &#x27;a-na be-lia qibi-ma&#x27; (only subscript digits removed)">ⓘ</span></button>
+        <button data-val="maximal">Cleaned <span class="info-icon" onclick="event.stopPropagation()" title="11 aggressive filters stacked on Raw Text: (1) strip all digits, (2) truncate to 30 tokens, (3) strip case endings (-am/-im/-um/-šum), (4) remove w and y, (5) remove logograms (ALL-CAPS words like LUGAL, UTU), (6) strip determinatives (d-, giš-, uru-, lu2-), (7) keep only syllabic (lowercase) tokens, (8) normalize long vowels (ā→a, ī→i, ū→u, ē→e), (9) strip subscript digits (ba2→ba), (10) lowercase, (11) strip plural -meš. Example: &#x27;d-UTU LUGAL qa2-bu-um&#x27; → &#x27;qabu&#x27;">ⓘ</span></button>
       </div>
     </div>
 
@@ -188,6 +199,15 @@
       <div class="toggle-group" id="tog-reduction">
         <button data-val="tsne" class="active">t-SNE</button>
         <button data-val="pca">PCA</button>
+      </div>
+    </div>
+
+    <!-- Normalize -->
+    <div class="ctrl-group">
+      <label>Normalize <span class="info-icon" title="Apply signed log transform to both axes: sign(x)·log(1+|x|). Compresses outliers so the central cluster is readable. Does not change point order or groupings — only the scale.">ⓘ</span></label>
+      <div class="toggle-group" id="tog-normalize">
+        <button data-val="off" class="active">Off</button>
+        <button data-val="on">Log scale</button>
       </div>
     </div>
 
@@ -210,7 +230,7 @@
       <span class="icon">⏳</span>
       <span>Data not yet available</span>
       <span class="key" id="unavailable-key"></span>
-      <span style="font-size:13px;color:#aaa">Run cluster jobs (Plans C / D) to populate this slot.</span>
+      <span style="font-size:13px;color:#aaa" id="unavailable-hint">Run cluster jobs (Plans C / D) to populate this slot.</span>
     </div>
     <div id="loading-msg">Loading…</div>
   </div>
@@ -224,7 +244,14 @@ const state = {
   cleaning:  "tier0",
   reduction: "tsne",
   colorBy:   "domain",
+  normalize: false,
 };
+
+function signedLog(v) { return Math.sign(v) * Math.log1p(Math.abs(v)); }
+function maybeNormalize(coords) {
+  if (!state.normalize) return coords;
+  return coords.map(([x, y]) => [signedLog(x), signedLog(y)]);
+}
 
 let DATA = null;   // loaded seal_viz_data.json
 
@@ -294,16 +321,23 @@ function render() {
   if (!DATA) return;
 
   const key = buildKey();
-  const coords = DATA.embeddings[key];
+  const rawCoords = DATA.embeddings[key];
+  const coords = rawCoords ? maybeNormalize(rawCoords) : null;
 
   const plotEl      = document.getElementById("plot");
   const unavailEl   = document.getElementById("unavailable-msg");
   const unavailKey  = document.getElementById("unavailable-key");
 
-  if (!coords) {
+  if (!rawCoords) {
     // Show unavailable message, hide plot
     unavailEl.style.display = "flex";
     unavailKey.textContent = key;
+    const hintEl = document.getElementById("unavailable-hint");
+    if (state.method === "mlm" && state.cleaning === "maximal") {
+      hintEl.textContent = "MLM embeddings were extracted on Raw Text only. Re-run 03_extract_seal_embeddings.py with text_maximal on the cluster to populate this slot.";
+    } else {
+      hintEl.textContent = "Run cluster jobs (Plans C / D) to populate this slot.";
+    }
     Plotly.purge(plotEl);
     return;
   }
@@ -409,6 +443,19 @@ document.getElementById("sel-colorby").addEventListener("change", e => {
 
 wireToggle("tog-cleaning",  "cleaning");
 wireToggle("tog-reduction", "reduction");
+
+// Normalize toggle (maps "on"/"off" to boolean)
+(function() {
+  const group = document.getElementById("tog-normalize");
+  group.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      group.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      state.normalize = btn.dataset.val === "on";
+      render();
+    });
+  });
+})();
 
 // ── Load data ──────────────────────────────────────────────────────────────
 (async function init() {

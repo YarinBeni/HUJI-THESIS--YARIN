@@ -12,8 +12,9 @@ v_1/
 │   ├── sae/              # Track C: SAE feature analysis (Arditi 131k SAE)
 │   ├── evaluation/       # Track A: LLM baseline pipeline (OpenRouter API)
 │   ├── corpus/           # Full Akkadian corpus pipeline (download → unified)
+│   ├── viz/              # SEAL embedding explorer GUI (seal_eda.html + data pipeline)
 │   ├── cluster/          # Schmidt Sciences HPC cluster setup + README
-│   └── archive/          # Superseded MLM training code
+│   └── archive/          # Superseded MLM training code (Akkadian MLM + training scripts)
 ├── data/
 │   ├── raw/
 │   │   ├── chungrong/        # Normalized source CSVs from Chungrong (archibab, oracc, lbl)
@@ -87,19 +88,27 @@ Full run log: `src/linear_probing/results/PIPELINE_RUN_LOG.md`
 | `src/linear_probing/results/probe_results_qwen2.5-7b-instruct.json` | Linear probe results (pretrained) |
 | `src/linear_probing/results/validity_results_*.json` | Validity experiment results |
 
-## SEAL Pipeline (Phase B complete, Phase C next)
+## SEAL Pipeline (all phases complete as of 2026-04-15)
 
-6 multi-task bias-check + linear-probe experiments on SEAL/DLL/LBPL corpora.
-Plan: `justification/seal_round4_pipeline_plan.md` (Sections 16–17 = verified facts).
+384 fragments from SEAL/DLL/LBPL corpora. Full plan: `justification/parallel_plans_final.md`.
 
+### Bias check + corpus build
 | Phase | Script | Status |
 |-------|--------|--------|
-| 0 — Inspect | `src/corpus/01_inspect_seal_data.py` | ✅ done |
+| 0 — Inspect raw CSVs | `src/corpus/01_inspect_seal_data.py` | ✅ done |
 | A — Corpus build | `src/corpus/02_build_seal_corpus.py` | ✅ done |
 | B — Task registry | `src/bias_check/seal_tasks.py` | ✅ done |
-| C — Bias check CV | `src/bias_check/06_bias_check_cv.py` | ✅ done (all FAIL p=0.001) |
-| D — Linear probing | `src/linear_probing/01_extract_activations.py` (modified) | ⬜ next |
-| E — Documentation | various | ⬜ |
+| C — Bias check CV | `src/bias_check/06_bias_check_cv.py` | ✅ done (all 12 runs FAIL p=0.001) |
+
+### Embedding Explorer (EDA GUI)
+| Step | Script / Job | Status |
+|------|-------------|--------|
+| TF-IDF coords (local) | `src/viz/01_compute_tfidf_coords.py` | ✅ done |
+| Qwen + Random extraction (cluster) | jobs 2994–2997, then `compute_2d_coords.sh` (job 3029) | ✅ done |
+| MLM retrain (cluster H100) | `sbatch/seal/train_mlm.sh` (job 2998) | ✅ done — val_loss=2.9777 |
+| MLM extraction (cluster) | `sbatch/seal/extract_mlm_embeddings.sh` (job 3028) | ✅ done |
+| Merge all coords (local) | `src/viz/02_merge_coords.py` | ✅ done — 246 keys, 4MB |
+| GUI | `src/viz/seal_eda.html` | ✅ live — see `src/viz/README.md` |
 
 ## Documentation
 
