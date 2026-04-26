@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-03_extract_seal_embeddings.py — Plan D-extraction: Akkadian MLM embeddings for 384 SEAL fragments.
+03_extract_seal_embeddings.py — Plan D-extraction: Akkadian MLM embeddings.
 
-Preprocessing: df['text'].str.replace('-', ' ') converts word-level transliteration
+Preprocessing: df[text_col].str.replace('-', ' ') converts word-level transliteration
 (e.g. 'GAB-RI še20-e-mi3') to sign-level tokens ('GAB RI še20 e mi3') that match
-the training corpus format.  Uses the `text` column (clean_value joined), NOT
-text_tier0/text_maximal — those apply character-level cleaning that may strip signs.
+the training corpus format.  Uses the `text` column (clean_value joined) by default,
+NOT text_tier0/text_maximal — those apply character-level cleaning that may strip signs.
 
-Outputs 10 keys (5 layers × 2 reductions), saved to seal_mlm_coords.json:
-  mlm__tier0__L{00,04,08,12,16}__{tsne,pca}
+Outputs 10 keys (5 layers × 2 reductions) by default, or 15 with --include-umap:
+  mlm__tier0__L{00,04,08,12,16}__{tsne,pca[,umap]}
 
 Naming convention: labelled 'tier0' since `text` (clean_value) is the minimal
 cleaned form; the GUI's graceful degradation will show 'not yet available' for
@@ -16,10 +16,16 @@ the mlm__maximal__* slots.
 
 Usage (from repo root):
     python v_1/src/archive/baseline_mlm/03_extract_seal_embeddings.py
+    python v_1/src/archive/baseline_mlm/03_extract_seal_embeddings.py --include-umap
+    python v_1/src/archive/baseline_mlm/03_extract_seal_embeddings.py \\
+        --input-parquet v_1/data/evaluation/corpora/orcc_corpus.parquet \\
+        --text-col text_tier0 --include-umap \\
+        --output-path v_1/src/linear_probing/results/orcc_round1/orcc_mlm_coords.json
 """
 
 import sys
 import json
+import argparse
 from pathlib import Path
 
 import numpy as np
@@ -51,6 +57,19 @@ SEED            = 42
 # ----------------------------------------------------------------------------
 
 
+def parse_args():
+    p = argparse.ArgumentParser(description="Extract Akkadian MLM embeddings")
+    p.add_argument("--input-parquet", default=str(PARQUET),
+                   help="Path to input parquet (default: seal_corpus.parquet)")
+    p.add_argument("--text-col", default="text",
+                   help="Column to use as text input (default: 'text')")
+    p.add_argument("--include-umap", action="store_true",
+                   help="Also compute UMAP coords (requires umap-learn)")
+    p.add_argument("--output-path", default=str(OUT_JSON),
+                   help="Output JSON path (default: seal_round4/seal_mlm_coords.json)")
+    return p.parse_args()
+
+
 def load_model(device: str) -> AeneasForMLM:
     ckpt   = torch.load(CHECKPOINT, map_location="cpu")
     config = AeneasConfig.from_dict(ckpt["config"])
@@ -75,15 +94,14 @@ def extract_hidden_states(
     device: str,
 ) -> dict:
     """Return {layer_idx: np.ndarray (N, d_model)} mean-pooled hidden states."""
-    # tokenize_text pads every sequence to MAX_LENGTH, so we can stack directly
     all_ids, all_mask = [], []
     for text in texts:
         ids, mask = tokenize_text(text, sign_to_id, max_length=MAX_LENGTH)
         all_ids.append(ids)
         all_mask.append(mask)
 
-    ids_t  = torch.tensor(all_ids,  dtype=torch.long)   # (N, MAX_LENGTH)
-    mask_t = torch.tensor(all_mask, dtype=torch.long)   # (N, MAX_LENGTH)
+    ids_t  = torch.tensor(all_ids,  dtype=torch.long)
+    mask_t = torch.tensor(all_mask, dtype=torch.long)
 
     accum = {layer: [] for layer in ANALYSIS_LAYERS}
 
@@ -108,21 +126,39 @@ def extract_hidden_states(
     return {layer: np.concatenate(arrs) for layer, arrs in accum.items()}
 
 
-def reduce_2d(emb: np.ndarray, layer: int) -> dict:
-    """t-SNE + PCA on (N, d_model) → two key/coord pairs."""
+def run_umap(X: np.ndarray) -> np.ndarray:
+    from umap import UMAP
+    reducer = UMAP(n_components=2, n_neighbors=15, min_dist=0.1, random_state=42)
+    return reducer.fit_transform(X.astype(float))
+
+
+def reduce_2d(emb: np.ndarray, layer: int, include_umap: bool = False) -> dict:
+    """t-SNE + PCA (+ optionally UMAP) on (N, d_model) → key/coord pairs."""
     tag  = f"L{layer:02d}"
     tsne = TSNE(n_components=2, perplexity=30, max_iter=1000,
                 random_state=SEED).fit_transform(emb)
     pca  = PCA(n_components=2, random_state=SEED).fit_transform(emb)
-    return {
+    result = {
         f"mlm__tier0__{tag}__tsne": tsne.tolist(),
         f"mlm__tier0__{tag}__pca":  pca.tolist(),
     }
+    if include_umap:
+        umap_coords = run_umap(emb)
+        result[f"mlm__tier0__{tag}__umap"] = umap_coords.tolist()
+    return result
 
 
 def main():
+    args = parse_args()
+    out_json   = Path(args.output_path)
+    in_parquet = Path(args.input_parquet)
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Device: {device}")
+    print(f"Input:  {in_parquet}")
+    print(f"Column: {args.text_col}")
+    print(f"UMAP:   {args.include_umap}")
+    print(f"Output: {out_json}")
 
     # 1. Vocab
     print("\n[1/5] Loading vocabulary...")
@@ -133,10 +169,10 @@ def main():
     print("\n[2/5] Loading model checkpoint...")
     model = load_model(device)
 
-    # 3. SEAL corpus
-    print("\n[3/5] Loading SEAL corpus and preprocessing...")
-    df    = pd.read_parquet(PARQUET)
-    texts = df["text"].str.replace("-", " ", regex=False).tolist()
+    # 3. Corpus
+    print("\n[3/5] Loading corpus and preprocessing...")
+    df    = pd.read_parquet(in_parquet)
+    texts = df[args.text_col].str.replace("-", " ", regex=False).tolist()
     avg_signs = sum(len(t.split()) for t in texts) / len(texts)
     print(f"  {len(texts)} fragments, avg {avg_signs:.0f} signs/fragment after hyphen split")
 
@@ -147,11 +183,12 @@ def main():
         print(f"  L{layer:02d}: shape={arr.shape}, mean={arr.mean():.4f}, std={arr.std():.4f}")
 
     # 5. 2-D reduction
-    print("\n[5/5] t-SNE + PCA per layer...")
+    umap_label = " + UMAP" if args.include_umap else ""
+    print(f"\n[5/5] t-SNE + PCA{umap_label} per layer...")
     coords: dict = {}
     for layer, arr in hidden.items():
         print(f"  L{layer:02d}...", end=" ", flush=True)
-        coords.update(reduce_2d(arr, layer))
+        coords.update(reduce_2d(arr, layer, include_umap=args.include_umap))
         print("done")
 
     # Validate
@@ -166,11 +203,11 @@ def main():
     print(f"  keys: {sorted(coords.keys())}")
 
     # Save
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    with open(OUT_JSON, "w") as f:
+    out_json.parent.mkdir(parents=True, exist_ok=True)
+    with open(out_json, "w") as f:
         json.dump(coords, f)
-    size_mb = OUT_JSON.stat().st_size / 1e6
-    print(f"\nSaved {OUT_JSON.relative_to(REPO_ROOT)} ({size_mb:.1f} MB)")
+    size_mb = out_json.stat().st_size / 1e6
+    print(f"\nSaved {out_json} ({size_mb:.1f} MB)")
     print("✅ Done")
 
 

@@ -35,6 +35,8 @@ MLM_JSON   = RESULTS  / "seal_mlm_coords.json"
 SEAL_LAST_JSON  = RESULTS  / "seal_qwen_coords_last.json"
 ORCC_MEAN_JSON  = ORCC_RES / "orcc_qwen_coords_mean.json"
 ORCC_LAST_JSON  = ORCC_RES / "orcc_qwen_coords_last.json"
+ORCC_TFIDF_JSON = ORCC_RES / "orcc_tfidf_coords.json"
+ORCC_MLM_JSON   = ORCC_RES / "orcc_mlm_coords.json"
 ORCC_PARQUET    = REPO_ROOT / "v_1/data/evaluation/corpora/orcc_corpus.parquet"
 
 
@@ -66,7 +68,7 @@ def validate(embeddings: dict, n: int):
         if len(vals) != n:
             errors.append(f"{key}: expected {n} rows, got {len(vals)}")
             continue
-        non_null = [v for v in vals if v is not None]
+        non_null = [v for v in vals if v is not None and v[0] is not None]
         if non_null:
             flat = np.array(non_null, dtype=float)
             if flat.shape[1] != 2:
@@ -110,7 +112,7 @@ def main():
             text_tier0 = str(row.get("text_tier0", "")) if pd.notna(row.get("text_tier0")) else ""
             snippet = " ".join(text_tier0.split()[:15])
             orcc_fragments.append({
-                "fragment_id": int(row["fragment_id"]),
+                "fragment_id": str(row["fragment_id"]),
                 "corpus": "orcc",
                 "word_language": str(row["word_language"]) if pd.notna(row.get("word_language")) else None,
                 "domain": "ORCC",
@@ -195,6 +197,34 @@ def main():
     else:
         print(f"  (orcc_qwen_coords_last.json not found — skipping)")
 
+    # Load ORCC TF-IDF coords: replace the null-padding that was added for SEAL tfidf keys.
+    n_orcc_tfidf_keys = 0
+    if ORCC_TFIDF_JSON.exists():
+        print(f"  Loading {ORCC_TFIDF_JSON.name}...")
+        orcc_tfidf_coords = load_coords(ORCC_TFIDF_JSON, ORCC_TFIDF_JSON.name)
+        for key, vals in orcc_tfidf_coords.items():
+            if key in merged:
+                merged[key] = merged[key][:n_seal] + vals
+            else:
+                merged[key] = pad_coords(vals, n_seal, 0)
+        n_orcc_tfidf_keys = len(orcc_tfidf_coords)
+    else:
+        print(f"  (orcc_tfidf_coords.json not found — skipping)")
+
+    # Load ORCC MLM coords: merge into shared mlm keys (or create ORCC-only with SEAL padding).
+    n_orcc_mlm_keys = 0
+    if ORCC_MLM_JSON.exists():
+        print(f"  Loading {ORCC_MLM_JSON.name}...")
+        orcc_mlm_coords = load_coords(ORCC_MLM_JSON, ORCC_MLM_JSON.name)
+        for key, vals in orcc_mlm_coords.items():
+            if key in merged:
+                merged[key] = merged[key][:n_seal] + vals
+            else:
+                merged[key] = pad_coords(vals, n_seal, 0)
+        n_orcc_mlm_keys = len(orcc_mlm_coords)
+    else:
+        print(f"  (orcc_mlm_coords.json not found — skipping)")
+
     # Validate all keys have n_total rows
     print("\n[6/6] Validating and saving...")
     validate(merged, n_total)
@@ -210,6 +240,8 @@ def main():
     print(f"    SEAL-last           : {n_seal_last_keys}")
     print(f"    ORCC-mean           : {n_orcc_mean_keys}")
     print(f"    ORCC-last           : {n_orcc_last_keys}")
+    print(f"    ORCC-tfidf          : {n_orcc_tfidf_keys}")
+    print(f"    ORCC-mlm            : {n_orcc_mlm_keys}")
     print(f"  Methods: {methods}")
 
     BASE_JSON.write_text(json.dumps(base))
