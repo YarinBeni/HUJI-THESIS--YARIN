@@ -26,5 +26,12 @@ python -u v_1/src/linear_probing/04_compute_2d_coords.py \
     --output-path v_1/src/linear_probing/results/seal_round4/seal_qwen_coords_last.json \
     || { echo "FAILED: seal coords last"; exit 1; }
 
+echo "=== Pushing results to GitHub ==="
+git add v_1/src/linear_probing/results/seal_round4/seal_qwen_coords_last.json
+git commit -m "Add SEAL last-token coord JSON: t-SNE/PCA/UMAP (cluster job $SLURM_JOB_ID)" \
+    || echo "Nothing new to commit"
+git push origin main \
+    || echo "WARNING: git push failed — results saved locally at results/seal_round4/"
+
 echo "=== Done ==="
 echo "End: $(date)"

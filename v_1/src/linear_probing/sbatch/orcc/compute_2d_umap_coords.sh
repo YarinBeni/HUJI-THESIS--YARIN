@@ -35,5 +35,14 @@ python -u v_1/src/linear_probing/04_compute_2d_coords.py \
     --output-path v_1/src/linear_probing/results/orcc_round1/orcc_qwen_coords_last.json \
     || { echo "FAILED: orcc last coords"; exit 1; }
 
+echo "=== Pushing results to GitHub ==="
+git add \
+    v_1/src/linear_probing/results/orcc_round1/orcc_qwen_coords_mean.json \
+    v_1/src/linear_probing/results/orcc_round1/orcc_qwen_coords_last.json
+git commit -m "Add ORCC coord JSONs: mean+last t-SNE/PCA/UMAP (cluster job $SLURM_JOB_ID)" \
+    || echo "Nothing new to commit"
+git push origin main \
+    || echo "WARNING: git push failed — results saved locally at results/orcc_round1/"
+
 echo "=== Done ==="
 echo "End: $(date)"
