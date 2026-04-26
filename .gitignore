@@ -35,3 +35,7 @@ v_1/models/
 # Large activation files — cluster-only; only commit the derived JSON coords
 *.npz
 v_1/src/linear_probing/results/seal_round4/activations/
+v_1/src/linear_probing/results/orcc_round1/activations/
+
+# Generated standalone HTML (built from seal_eda.html + seal_viz_data.json)
+v_1/src/viz/seal_eda_standalone.html
