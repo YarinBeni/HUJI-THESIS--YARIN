@@ -19,7 +19,7 @@ import pandas as pd
 from pathlib import Path
 from datetime import datetime
 
-from utils import mean_pool, RESULTS_DIR
+from utils import mean_pool, last_token_pool, RESULTS_DIR
 
 SEAL_ACTS_DIR = RESULTS_DIR / 'seal_round4' / 'activations'
 DEFAULT_MODEL = 'Qwen/Qwen2.5-7B-Instruct'
@@ -32,7 +32,7 @@ def run(args):
     parquet_path = Path(args.input_parquet)
     df = pd.read_parquet(parquet_path)
     print(f"Loaded {len(df)} fragments from {parquet_path}")
-    assert len(df) == 384, f"Expected 384 fragments, got {len(df)}"
+    print(f"Loaded {len(df)} fragments (no length assertion)")
     assert args.text_col in df.columns, (
         f"Column '{args.text_col}' not in parquet. Available: {df.columns.tolist()}"
     )
@@ -96,7 +96,10 @@ def run(args):
                       f"hidden_dim={hidden_dim}")
 
             for layer_idx in range(n_layers):
-                pooled = mean_pool(hidden_states[layer_idx], attention_mask)
+                if args.pooling == "mean":
+                    pooled = mean_pool(hidden_states[layer_idx], attention_mask)
+                else:
+                    pooled = last_token_pool(hidden_states[layer_idx], attention_mask)
                 per_layer_acts[layer_idx].append(pooled.cpu().float().numpy())
 
             del outputs, hidden_states
@@ -108,9 +111,12 @@ def run(args):
                       f"({elapsed / 60:.1f} min elapsed)")
 
     # ── Save layer files ────────────────────────────────────────────────────
-    # suffix: text_tier0 -> tier0, text_maximal -> maximal
-    suffix = args.text_col.replace('text_', '')
-    out_dir = SEAL_ACTS_DIR / f'qwen_{suffix}'
+    if args.output_dir:
+        out_dir = Path(args.output_dir)
+    else:
+        # suffix: text_tier0 -> tier0, text_maximal -> maximal
+        suffix = args.text_col.replace('text_', '')
+        out_dir = SEAL_ACTS_DIR / f'qwen_{suffix}'
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"\nSaving {n_layers} layer files to {out_dir}/")
@@ -168,6 +174,14 @@ def parse_args():
     parser.add_argument(
         '--max-length', type=int, default=512,
         help='Max token length for truncation (default: 512)',
+    )
+    parser.add_argument(
+        '--pooling', choices=['mean', 'last'], default='mean',
+        help='Pooling strategy: mean (default) or last token',
+    )
+    parser.add_argument(
+        '--output-dir', type=str, default=None,
+        help='Override default output directory path',
     )
     return parser.parse_args()
 
