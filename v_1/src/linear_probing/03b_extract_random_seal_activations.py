@@ -139,7 +139,7 @@ def run(args):
         'hidden_dim': int(hidden_dim),
         'max_length': args.max_length,
         'batch_size': batch_size,
-        'fragment_ids': [int(fid) for fid in fragment_ids],
+        'fragment_ids': [str(fid) for fid in fragment_ids],
         'timestamp': datetime.now().isoformat(),
     }
     with open(out_dir / 'metadata.json', 'w') as f:
