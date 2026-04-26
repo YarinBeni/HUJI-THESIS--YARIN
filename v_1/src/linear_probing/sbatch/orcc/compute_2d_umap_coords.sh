@@ -17,6 +17,8 @@ cd ~/projects/HUJI-THESIS--YARIN
 
 mkdir -p v_1/src/linear_probing/logs
 
+pip install umap-learn --quiet
+
 # Mean-pooled coords
 python -u v_1/src/linear_probing/04_compute_2d_coords.py \
     --pooling mean --include-umap \
