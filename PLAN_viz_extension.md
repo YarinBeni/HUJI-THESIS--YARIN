@@ -1,6 +1,6 @@
 # Viz Extension Plan — 5 New Features
 **Date:** 2026-04-21  
-**Status:** ✅ All blocking questions resolved — ready to execute
+**Status:** ✅ COMPLETE (2026-04-28) — all 5 features + 3 data gaps closed, 715 keys, 1586 fragments, ~45MB data
 
 ---
 

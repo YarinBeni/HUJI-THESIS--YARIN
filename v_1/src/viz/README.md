@@ -1,79 +1,86 @@
 # SEAL Corpus Embedding Explorer — Documentation
 
-> **Status:** Complete (2026-04-15). All embedding methods live. Data: 384 fragments × 246 embedding keys.
-> **GUI file:** `seal_eda.html` (open via local server — see below)
-> **Data file:** `seal_viz_data.json` (4 MB, committed to repo)
+> **Status:** v3 complete (2026-04-28). Data: 1,586 fragments × 715 embedding keys, ~45 MB.
+> **GUI file:** `seal_eda.html` — open via local server (below) or use the self-contained `seal_eda_standalone.html`
+> **Data file:** `seal_viz_data.json` (~45 MB, committed to repo)
 
 ---
 
 ## What Is This?
 
-An interactive scatter-plot tool for visually exploring how different embedding methods represent 384 cuneiform tablet fragments from the SEAL/DLL/LBPL corpora. Each point is one fragment; you choose how to embed it, which layer to look at, and how to color the points.
+An interactive scatter-plot tool for visually exploring how different embedding methods represent cuneiform tablet fragments from the SEAL/DLL/LBPL corpora (Akkadian letters, 384 fragments) and the ORCC corpus (Royal Inscriptions, 1,202 fragments). Each point is one fragment; you choose how to embed it, which layer to look at, and how to color the points.
 
 The main research question it helps answer: **do fragments cluster by period, genre, or provenance — and does that clustering depend on the embedding method?**
 
 ---
 
-## How to Run Locally
+## How to Run
 
-From the repo root:
+### Option A — Standalone (no server needed)
+```bash
+open v_1/src/viz/seal_eda_standalone.html
+```
+All data is inlined. Double-click works. Rebuilt via `python3 v_1/src/viz/03_build_standalone_html.py`.
 
+### Option B — Local server (uses `seal_viz_data.json` from disk)
 ```bash
 cd v_1/src/viz
 python3 -m http.server 8000
 # then open: http://localhost:8000/seal_eda.html
 ```
 
-A local server is required because the browser blocks loading `.json` from the filesystem directly (CORS). You cannot just double-click `seal_eda.html`.
-
 ---
 
 ## GUI Controls
 
 ### Method
-Which embedding model produced the coordinates:
-
 | Option | Description |
 |--------|-------------|
-| **TF-IDF** | Bag-of-words TF-IDF on character n-grams (2,5). No neural network. Baseline. |
-| **Qwen** | Hidden-state embeddings from Qwen2.5-7B-Instruct (pretrained LLM, 7B params, 29 layers). Mean-pooled over tokens. |
-| **Random Qwen** | Same architecture as Qwen but with random weights. Isolates what structure comes from the model's pre-training vs. the architecture alone. |
-| **Yarin MLM** | Embeddings from a custom 36.7M-parameter Akkadian MLM trained from scratch on 40k+ cuneiform fragments. 16 layers, sign-level tokenizer (14,797 signs). Mean-pooled. |
+| **TF-IDF** | Bag-of-words TF-IDF on character n-grams (2,5). Baseline; no neural network. SEAL only. |
+| **Qwen** | Hidden-state embeddings from Qwen2.5-7B-Instruct (pretrained LLM, 7B params, 29 layers). |
+| **Random Qwen** | Same architecture as Qwen but with random weights. Isolates architecture-only structure. |
+| **Yarin MLM** | Embeddings from a custom 36.7M-parameter Akkadian MLM trained from scratch. 16 layers, sign-level tokenizer. SEAL + ORCC, mean pooling only. |
 
-### Layer (slider)
-Which transformer layer's hidden states to use:
-- **TF-IDF**: no layer concept — slider is disabled
-- **Qwen / Random**: layers 0–28 (0 = after embedding, 28 = last layer before head)
-- **Yarin MLM**: layers 0, 4, 8, 12, 16 (slider snaps to nearest valid step)
-
-### Cleaning
-Which text preprocessing was applied before embedding:
-
-| Button | Internal name | What it does |
-|--------|--------------|--------------|
-| **Raw Text ⓘ** | `tier0` | Strips ORACC `@v` markup, non-breaking spaces, and subscript-x (U+2093). Otherwise the text is as found in the database — transliterated cuneiform with logograms, determinatives, and case endings intact. Example: `a-na dUTU LUGAL qi2-bi-ma` → `a-na dUTU LUGAL qi-bi-ma` |
-| **Cleaned ⓘ** | `maximal` | Applies Raw Text + 11 aggressive linguistic filters: strips all digits, truncates to 30 tokens, removes case endings (`-am/-im/-um/-šum`), removes `w`/`y`, removes logograms (ALL-CAPS words like `LUGAL`, `UTU`), strips determinatives (`d-`, `giš-`, `uru-`, `lu2-`), keeps only syllabic (lowercase Akkadian) tokens, normalizes long vowels (`ā→a`, `ī→i`, `ū→u`, `ē→e`), strips subscript digits (`ba2→ba`), lowercases, strips plural `-meš`. Example: `d-UTU LUGAL qa2-bu-um` → `qabu` |
-
-> **Note:** Yarin MLM only has Raw Text embeddings. Cleaned embeddings for MLM would require a cluster re-run.
-
-### Reduction
-Which 2D projection algorithm was used:
-
+### Pooling
 | Button | Description |
 |--------|-------------|
-| **t-SNE** | Non-linear; preserves local neighborhood structure. Good for seeing clusters. Axes have no absolute meaning. |
-| **PCA** | Linear; preserves global variance. Axes represent principal components. |
+| **Mean** | Average all token hidden states (weighted by attention mask). |
+| **Last token** | Hidden state of the last non-padding token. Available for Qwen and Random only. |
 
-Parameters: t-SNE uses perplexity=30, max_iter=1000, random_state=42. PCA uses 2 components, random_state=42.
+TF-IDF and Yarin MLM are always mean-pooled (Last token button is disabled for them).
+
+### Layer (slider)
+- **TF-IDF**: disabled
+- **Qwen / Random**: layers 0–28
+- **Yarin MLM**: layers 0, 4, 8, 12, 16
+
+### Cleaning
+| Button | Internal name | What it does |
+|--------|--------------|--------------|
+| **Raw Text** | `tier0` | Strips ORACC `@v` markup, non-breaking spaces, subscript-x (U+2093). |
+| **Cleaned** | `maximal` | Raw Text + 11 aggressive filters: strips digits, truncates to 30 tokens, removes case endings, logograms, determinatives; keeps only syllabic tokens; normalizes long vowels; lowercases. |
+
+Yarin MLM only has Raw Text. Cleaned embeddings for MLM would require a cluster re-run.
+
+### Reduction
+| Button | Description |
+|--------|-------------|
+| **t-SNE** | Non-linear; preserves local neighborhoods. Good for clusters. Axes have no meaning. perplexity=30, max_iter=1000, random_state=42. |
+| **PCA** | Linear; preserves global variance. |
+| **UMAP** | Non-linear; preserves both local and global structure. Available for Qwen, Random (mean and last-token), and Yarin MLM. n_neighbors=15, min_dist=0.1, random_state=42. |
+
+UMAP is not available for TF-IDF (sparse vectors; tsne+pca only).
+
+### Show Datasets (corpus filter)
+Toggle checkboxes for SEAL, DLL, LBPL, ORCC. All start active. Hiding a corpus removes those points from the plot without reloading data.
 
 ### Normalize
-Applies a signed log transform to both axes: `sign(x) × log(1 + |x|)`. Useful when one outlier fragment is very far from the rest and compresses the main cluster into a tiny dot. Does not change point ordering or group membership — only the visual scale.
+Signed log transform on both axes: `sign(x) × log(1 + |x|)`. Useful when one outlier compresses the main cluster.
 
 ### Color by
-Which metadata column is used to color the points. Options: `domain`, `period`, `genre`, `sub_genre`, `provenance`.
+Options: `domain`, `period`, `genre`, `sub_genre`, `provenance`, `ruler (ORCC)`, `year (ORCC)`.
 
-### Hover tooltip
-Hovering over any point shows: fragment_id, corpus (SEAL/DLL/LBPL), period, genre, sub_genre, provenance, word count, and a text snippet.
+Year coloring uses a continuous Viridis colorscale (reversed: older = darker). Fragments without a year are shown in grey.
 
 ---
 
@@ -84,7 +91,7 @@ Schema:
 {
   "fragments": [
     {
-      "fragment_id": 12345,
+      "fragment_id": "12345",
       "corpus": "seal",
       "period": "Old Babylonian",
       "genre": "letter",
@@ -93,90 +100,120 @@ Schema:
       "sub_provenance": "...",
       "domain": "administrative",
       "word_count": 47,
-      "text_snippet": "a-na be-li-ia..."
+      "text_snippet": "a-na be-li-ia...",
+      "year": null,
+      "ruler": null
     },
-    ...   // 384 entries, one per fragment
+    {
+      "fragment_id": "Q003333",
+      "corpus": "orcc",
+      "period": "Neo-Assyrian",
+      "genre": "Royal Inscription",
+      "domain": "ORCC",
+      "ruler": "Esarhaddon",
+      "year": 673,
+      ...
+    }
   ],
   "embeddings": {
-    "tfidf__tier0__na__tsne":  [[x,y], [x,y], ...],  // 384 pairs
-    "qwen__tier0__L00__tsne":  [[x,y], ...],
-    "qwen__tier0__L00__pca":   [[x,y], ...],
+    "tfidf__tier0__na__tsne":         [[x,y], ...],   // 1586 pairs, both SEAL and ORCC
+    "qwen__tier0__L15__tsne":         [[x,y], ...],   // mean pooling
+    "qwen__tier0__L15__last__tsne":   [[x,y], ...],   // last-token pooling
+    "qwen__tier0__L15__umap":         [[x,y], ...],   // mean + UMAP
+    "qwen__tier0__L15__last__umap":   [[x,y], ...],   // last-token + UMAP
     ...
-    "mlm__tier0__L00__tsne":   [[x,y], ...],
-    ...
-    // 246 keys total
   }
 }
 ```
 
-Key naming convention: `{method}__{cleaning}__{layer}__{reduction}`
-- layer is `na` for TF-IDF, `L00`–`L28` for Qwen/Random, `L00/L04/L08/L12/L16` for MLM
+Key naming: `{method}__{cleaning}__{layer}__{reduction}` (mean pooling)
+            `{method}__{cleaning}__{layer}__last__{reduction}` (last-token pooling)
 
-**Total keys by method:**
+Null-padding: SEAL-only methods (TF-IDF, MLM) have `[null, null]` at ORCC positions. The HTML skips null entries when rendering.
 
-| Method | Keys | Layers | Cleanings | Reductions |
-|--------|-----:|-------:|----------:|-----------:|
-| tfidf  | 4    | 1 (na) | 2         | 2          |
-| qwen   | 116  | 29     | 2         | 2          |
-| random | 116  | 29     | 2         | 2          |
-| mlm    | 10   | 5      | 1 (tier0) | 2          |
-| **Total** | **246** | | | |
+**Key counts by method:**
+
+| Method | Keys | Layers | Cleanings | Reductions | Poolings | SEAL | ORCC |
+|--------|-----:|-------:|----------:|-----------:|---------:|------|------|
+| tfidf  | 4    | 1 (na) | 2         | tsne, pca  | mean     | ✓    | —    |
+| mlm    | 10   | 5      | 1 (tier0) | tsne, pca  | mean     | ✓    | —    |
+| qwen   | 348  | 29     | 2         | tsne, pca, umap | mean + last | ✓ | ✓ |
+| random | 348  | 29     | 2         | tsne, pca, umap | mean + last | ✓ | ✓ |
+| **Total** | **710** | | | | | | |
+
+**Known gaps (not yet computed):**
+- MLM UMAP: activations exist on cluster; coord re-run needed with `--include-umap`
+- TF-IDF for ORCC: sklearn job, no GPU needed
+- MLM for ORCC: needs GPU job (Akkadian MLM on 1,202 ORCC fragments)
 
 ---
 
 ## Pipeline: How the Data Was Built
 
-All scripts run from repo root. Full execution log: `PROGRESS.md`.
+All scripts run from repo root.
 
 ### Step 0 — Inspect raw data
 ```
 src/corpus/01_inspect_seal_data.py
 ```
-Profiles the three source CSVs (`seal.csv`, `dll.csv`, `lbpl.csv`), checks columns and fragment counts, writes `data/raw/chungrong/seal_round4/inspection_report.json` (MD5 hashes + data contract).
 
-### Step A — Build corpus parquet
+### Step A — Build corpus parquets
+```bash
+python v_1/src/corpus/02_build_seal_corpus.py          # → seal_corpus.parquet (384 frags)
+python v_1/src/corpus/03_build_orcc_corpus.py          # → orcc_corpus.parquet (1202 frags)
 ```
-src/corpus/02_build_seal_corpus.py
+
+### Step B — TF-IDF coords (local, SEAL only)
+```bash
+python v_1/src/viz/01_compute_tfidf_coords.py
 ```
-Aggregates 40,484 word-level rows into 384 fragment-level rows. Computes `text_tier0` and `text_maximal` columns. Outputs `data/evaluation/corpora/seal_corpus.parquet` (384 rows × 15 columns).
+> **IMPORTANT:** Do not re-run after Step F — it overwrites `seal_viz_data.json`.
 
-### Step B — TF-IDF coords (local)
+### Step C — Qwen + Random mean-pooled (cluster, SEAL)
 ```
-src/viz/01_compute_tfidf_coords.py
+sbatch v_1/src/linear_probing/sbatch/seal/extract_qwen_tier0.sh      # jobs 2994–2997
+sbatch v_1/src/linear_probing/sbatch/seal/compute_2d_coords.sh       # job 3029
 ```
-Fits TF-IDF (char_wb, ngram 2–5) on the 384 fragments, runs t-SNE + PCA, writes `seal_viz_data.json` with 4 TF-IDF keys + fragment metadata.
+Outputs `seal_round4/seal_qwen_coords.json` (232 keys: tsne+pca, mean pooling).
 
-> **IMPORTANT:** Do not re-run this after Step E — it would overwrite `seal_viz_data.json` and erase all other embedding keys.
-
-### Step C — Qwen + Random embeddings (cluster)
+### Step D — Yarin MLM (cluster, SEAL)
 ```
-# Extract activations for 4 combinations (tier0/maximal × pretrained/random):
-sbatch v_1/src/linear_probing/sbatch/seal/extract_qwen_embeddings.sh   # jobs 2994–2997
-
-# Compute 2D coords (CPU):
-sbatch v_1/src/linear_probing/sbatch/seal/compute_2d_coords.sh         # job 2999/3029
+sbatch v_1/src/linear_probing/sbatch/seal/train_mlm.sh               # job 2998
+sbatch v_1/src/linear_probing/sbatch/seal/extract_mlm_embeddings.sh  # job 3028
 ```
-Outputs `results/seal_round4/seal_qwen_coords.json` (232 keys, 3.6 MB), nested under `{"embeddings": {...}}`.
+Outputs `seal_round4/seal_mlm_coords.json` (10 keys: tsne+pca, tier0 only).
 
-### Step D — Yarin MLM training + embeddings (cluster)
+### Step E — Last-token + UMAP for SEAL (cluster)
 ```
-# Train Akkadian MLM from scratch (H100, ~28 min):
-sbatch v_1/src/linear_probing/sbatch/seal/train_mlm.sh                 # job 2998
-
-# Extract MLM embeddings for 384 SEAL fragments (CPU, ~46s):
-sbatch v_1/src/linear_probing/sbatch/seal/extract_mlm_embeddings.sh    # job 3028
+sbatch v_1/src/linear_probing/sbatch/seal/extract_qwen_tier0_last.sh     # job 4887
+sbatch v_1/src/linear_probing/sbatch/seal/extract_qwen_maximal_last.sh   # job 4888
+sbatch v_1/src/linear_probing/sbatch/seal/extract_random_tier0_last.sh   # job 4889
+sbatch v_1/src/linear_probing/sbatch/seal/extract_random_maximal_last.sh # job 4890
+sbatch v_1/src/linear_probing/sbatch/seal/compute_umap_coords_last.sh    # job 4906
 ```
-The MLM (`v_1/src/archive/baseline_mlm/`) is a 16-layer transformer (d_model=384, d_ff=1536, 8 heads, 36.7M params) trained on Akkadian cuneiform at sign level. Checkpoint: `v_1/models/baseline_retrained/baseline_best.pt` (420 MB, val_loss=2.9777).
+Outputs `seal_round4/seal_qwen_coords_last.json` (348 keys: tsne+pca+umap, last-token).
 
-**Tokenization note:** SEAL corpus stores word-level transliterations (`GAB-RI`); the MLM tokenizer expects sign-level (`GAB RI`). Fix: `text.replace('-', ' ')` before tokenizing. This is implemented in `03_extract_seal_embeddings.py`.
-
-The extraction script (`src/archive/baseline_mlm/03_extract_seal_embeddings.py`) outputs `results/seal_round4/seal_mlm_coords.json` (10 keys, 158 KB), flat structure.
-
-### Step E — Merge all coords (local)
+### Step F — ORCC extraction (cluster)
 ```
+sbatch v_1/src/linear_probing/sbatch/orcc/extract_qwen_tier0.sh      # job 4900
+sbatch v_1/src/linear_probing/sbatch/orcc/extract_qwen_maximal.sh    # job 4901
+sbatch v_1/src/linear_probing/sbatch/orcc/extract_random_tier0.sh    # job 4902
+sbatch v_1/src/linear_probing/sbatch/orcc/extract_random_maximal.sh  # job 4903
+sbatch v_1/src/linear_probing/sbatch/orcc/compute_2d_umap_coords.sh  # job 4908
+```
+Outputs `orcc_round1/orcc_qwen_coords_mean.json` + `orcc_qwen_coords_last.json` (348 keys each).
+
+### Step G — Merge all coords (local)
+```bash
 python v_1/src/viz/02_merge_coords.py
 ```
-Merges TF-IDF base + Qwen/Random (unwrapping the nested `"embeddings"` key) + MLM (flat) into the final `seal_viz_data.json` (246 keys, 4 MB).
+Merges all 6 coord JSONs + ORCC parquet metadata into `seal_viz_data.json` (710 keys, 44 MB, 1,586 fragments).
+
+### Step H — Build standalone HTML (local)
+```bash
+python v_1/src/viz/03_build_standalone_html.py
+```
+Inlines `seal_viz_data.json` into `seal_eda_standalone.html` (46 MB). This file is gitignored (too large).
 
 ---
 
@@ -184,21 +221,28 @@ Merges TF-IDF base + Qwen/Random (unwrapping the nested `"embeddings"` key) + ML
 
 | File | Description |
 |------|-------------|
-| `seal_eda.html` | The GUI — open via `python3 -m http.server 8000` |
-| `seal_viz_data.json` | All embedding coords + fragment metadata (4 MB, 246 keys) |
+| `seal_eda.html` | The GUI — open via server or use standalone |
+| `seal_eda_standalone.html` | Self-contained HTML — gitignored, rebuild locally |
+| `seal_viz_data.json` | All coords + metadata (44 MB, 710 keys, 1,586 fragments) |
 | `01_compute_tfidf_coords.py` | Builds TF-IDF embeddings + initializes seal_viz_data.json |
-| `02_merge_coords.py` | Merges Qwen/Random/MLM coords from cluster into seal_viz_data.json |
+| `02_merge_coords.py` | Merges all cluster coord JSONs + ORCC metadata |
+| `03_build_standalone_html.py` | Inlines seal_viz_data.json into standalone HTML |
 
 ---
 
-## Related Files (outside this directory)
+## Related Files
 
 | File | Description |
 |------|-------------|
-| `data/evaluation/corpora/seal_corpus.parquet` | Source data: 384 fragments × 15 columns |
-| `src/linear_probing/results/seal_round4/seal_qwen_coords.json` | Qwen+Random 2D coords (232 keys) |
-| `src/linear_probing/results/seal_round4/seal_mlm_coords.json` | MLM 2D coords (10 keys) |
-| `src/archive/baseline_mlm/03_extract_seal_embeddings.py` | MLM extraction script |
-| `src/linear_probing/sbatch/seal/` | All sbatch scripts for SEAL cluster jobs |
-| `PROGRESS.md` | Full execution history with job IDs and results |
-| `justification/parallel_plans_final.md` | Detailed parallel execution plan (Plans A–E) |
+| `data/evaluation/corpora/seal_corpus.parquet` | 384 SEAL/DLL/LBPL fragments |
+| `data/evaluation/corpora/orcc_corpus.parquet` | 1,202 ORCC Royal Inscription fragments |
+| `data/raw/chungrong/orcc_round1/royal_inscriptions.csv` | Raw ORCC source (1,202 frags) |
+| `src/linear_probing/results/seal_round4/seal_qwen_coords.json` | Qwen+Random SEAL mean (232 keys) |
+| `src/linear_probing/results/seal_round4/seal_mlm_coords.json` | MLM SEAL (10 keys) |
+| `src/linear_probing/results/seal_round4/seal_qwen_coords_last.json` | Qwen+Random SEAL last-token (348 keys) |
+| `src/linear_probing/results/orcc_round1/orcc_qwen_coords_mean.json` | ORCC mean-pooled (348 keys) |
+| `src/linear_probing/results/orcc_round1/orcc_qwen_coords_last.json` | ORCC last-token (348 keys) |
+| `src/linear_probing/sbatch/seal/` | All SEAL sbatch scripts |
+| `src/linear_probing/sbatch/orcc/` | All ORCC sbatch scripts |
+| `src/corpus/02_build_seal_corpus.py` | SEAL corpus builder |
+| `src/corpus/03_build_orcc_corpus.py` | ORCC corpus builder |
