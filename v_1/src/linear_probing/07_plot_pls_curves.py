@@ -21,12 +21,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 _HERE = Path(__file__).resolve().parent
-if str(_HERE) not in sys.path:
-    sys.path.insert(0, str(_HERE))
-
-from utils import RESULTS_DIR
-
-PLS_DIR = RESULTS_DIR / 'orcc_round1' / 'pls'
+PLS_DIR = _HERE / 'results' / 'orcc_round1' / 'pls'
 FIGURES_DIR = PLS_DIR / 'figures'
 
 K_COLORS = {1: '#1f77b4', 2: '#ff7f0e', 3: '#2ca02c', 5: '#d62728'}
@@ -81,11 +76,14 @@ def plot_group(gk: str, rows: list[dict]) -> None:
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
     fig.suptitle(f'{method} | {cleaning} | pooling={pooling} | y={year_transform}', fontsize=12)
 
+    R2_CLIP = -10.0  # clip extreme negative R² for readability; label notes clipping
+
     for k in ks:
         k_rows = sorted([r for r in rows if r['k'] == k], key=lambda r: r['layer'])
         ls = [r['layer'] for r in k_rows]
         sp = [r['spearman_mean'] for r in k_rows]
-        r2 = [r['r2_mean'] for r in k_rows]
+        r2_raw = [r['r2_mean'] for r in k_rows]
+        r2 = [max(v, R2_CLIP) if v is not None else None for v in r2_raw]
         color = K_COLORS.get(k)
         ax1.plot(ls, sp, marker='o', markersize=3, label=f'k={k}', color=color)
         ax2.plot(ls, r2, marker='o', markersize=3, label=f'k={k}', color=color)
@@ -96,7 +94,7 @@ def plot_group(gk: str, rows: list[dict]) -> None:
 
     for ax, ylabel, title in [
         (ax1, 'Spearman ρ', 'Spearman vs Layer'),
-        (ax2, 'R²',         'R² vs Layer'),
+        (ax2, f'R² (clipped ≥ {R2_CLIP})', 'R² vs Layer'),
     ]:
         ax.set_xlabel('Layer')
         ax.set_ylabel(ylabel)

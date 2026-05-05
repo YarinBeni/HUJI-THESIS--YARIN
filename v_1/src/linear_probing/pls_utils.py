@@ -116,14 +116,26 @@ def fit_pls_groupkfold(
         shuf_r2.append(float(r2_score(y_s[val_idx], y_pred_s)))
         shuf_sp.append(_spearman(y_s[val_idx], y_pred_s))
 
-    result = {}
+    # A fold is degenerate when y_test is constant → Spearman = NaN.
+    # Use Spearman NaN status to identify degenerate folds; apply same mask to
+    # all metrics so means are over the same set of folds.
+    sp_vals = folds['spearman']
+    valid_mask = [i for i, v in enumerate(sp_vals) if not np.isnan(v)]
+    n_valid = len(valid_mask)
+    n_total = len(sp_vals)
+
+    result = {'n_valid_folds': n_valid, 'n_total_folds': n_total}
     for k in keys:
         vals = folds[k]
-        result[f'{k}_mean']  = float(np.mean(vals))
-        result[f'{k}_std']   = float(np.std(vals))
+        valid_vals = [vals[i] for i in valid_mask]
+        result[f'{k}_mean']  = float(np.nanmean(valid_vals)) if valid_vals else float('nan')
+        result[f'{k}_std']   = float(np.nanstd(valid_vals)) if valid_vals else float('nan')
         result[f'{k}_folds'] = [float(v) for v in vals]
-    result['shuffled_r2_mean']       = float(np.mean(shuf_r2))
-    result['shuffled_spearman_mean'] = float(np.mean(shuf_sp))
+
+    valid_shuf_r2 = [shuf_r2[i] for i in valid_mask]
+    valid_shuf_sp = [shuf_sp[i] for i in valid_mask]
+    result['shuffled_r2_mean']       = float(np.nanmean(valid_shuf_r2)) if valid_shuf_r2 else float('nan')
+    result['shuffled_spearman_mean'] = float(np.nanmean(valid_shuf_sp)) if valid_shuf_sp else float('nan')
     return result
 
 
