@@ -96,11 +96,14 @@ def main():
             config_key = f"tfidf__{cleaning}__na__L00__year-{year_transform}"
             print(f"  {config_key}...", flush=True)
 
-            metrics_per_k = fit_pls_groupkfold(
-                X_labeled, y, groups,
-                k_values=K_VALUES,
-                n_splits=N_SPLITS,
-            )
+            metrics_per_k = {}
+            for k in K_VALUES:
+                print(f"    k={k}...", flush=True)
+                metrics_per_k[str(k)] = fit_pls_groupkfold(
+                    X_labeled, y, groups,
+                    n_components=k,
+                    n_splits=N_SPLITS,
+                )
 
             best_k_by_spearman = max(
                 K_VALUES, key=lambda k: metrics_per_k[str(k)]["spearman_mean"]

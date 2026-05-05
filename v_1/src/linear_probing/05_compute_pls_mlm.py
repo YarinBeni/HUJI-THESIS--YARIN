@@ -32,9 +32,12 @@ from pathlib import Path
 
 from utils import RESULTS_DIR
 
-# pls_utils is written by Agent A — provides run_pls_sweep, refit_and_project,
-# and l2_normalize. These are the only symbols we rely on.
-from pls_utils import run_pls_sweep, refit_and_project, l2_normalize  # noqa: E402
+from pls_utils import (  # noqa: E402
+    l2_normalize,
+    fit_pls_groupkfold,  # CV for a single n_components value
+    fit_pls_full,        # refit on full labeled set → PLSRegression
+    project,             # project(model, X) → (N, n_components)
+)
 
 # ---------------------------------------------------------------------------
 ORCC_PARQUET = Path("v_1/data/evaluation/corpora/orcc_corpus.parquet")
@@ -200,41 +203,43 @@ def main():
             config_key = f"{method}__{cleaning}__{pooling}__{layer_tag}__year-{year_transform}"
             print(f"\n  Config: {config_key}")
 
-            # CV sweep over all k values
-            sweep_result = run_pls_sweep(
-                X_labeled=X_labeled,
-                y=y,
-                groups=groups,
-                n_components_list=n_components_list,
+            # CV sweep: one call to fit_pls_groupkfold per k value
+            metrics_per_k = {}
+            for k in n_components_list:
+                metrics_per_k[str(k)] = fit_pls_groupkfold(
+                    X_labeled, y, groups, n_components=k
+                )
+
+            # Pick best k by spearman and r2 (using mean across folds)
+            best_k_by_spearman = max(
+                n_components_list,
+                key=lambda k: metrics_per_k[str(k)]["spearman_mean"],
+            )
+            best_k_by_r2 = max(
+                n_components_list,
+                key=lambda k: metrics_per_k[str(k)]["r2_mean"],
             )
 
             pls_results[config_key] = {
-                "method":          method,
-                "cleaning":        cleaning,
-                "pooling":         pooling,
-                "layer":           layer,
-                "year_transform":  year_transform,
-                "n_labeled":       n_labeled,
-                "n_groups":        n_groups,
-                "metrics_per_k":   sweep_result["metrics_per_k"],
-                "best_k_by_spearman": sweep_result["best_k_by_spearman"],
-                "best_k_by_r2":       sweep_result["best_k_by_r2"],
+                "method":             method,
+                "cleaning":           cleaning,
+                "pooling":            pooling,
+                "layer":              layer,
+                "year_transform":     year_transform,
+                "n_labeled":          n_labeled,
+                "n_groups":           n_groups,
+                "metrics_per_k":      metrics_per_k,
+                "best_k_by_spearman": best_k_by_spearman,
+                "best_k_by_r2":       best_k_by_r2,
             }
 
-            best_spearman = sweep_result["metrics_per_k"][
-                str(sweep_result["best_k_by_spearman"])
-            ]["spearman_mean"]
-            print(f"  best_k_spearman={sweep_result['best_k_by_spearman']} "
-                  f"(rho={best_spearman:.3f})  "
-                  f"best_k_r2={sweep_result['best_k_by_r2']}")
+            best_sp = metrics_per_k[str(best_k_by_spearman)]["spearman_mean"]
+            print(f"  best_k_spearman={best_k_by_spearman} (rho={best_sp:.3f})  "
+                  f"best_k_r2={best_k_by_r2}")
 
-            # Refit on full labeled set with REFIT_K components; project all rows
-            proj = refit_and_project(
-                X_labeled=X_labeled,
-                y=y,
-                X_all=X_all,
-                n_components=REFIT_K,
-            )   # (N_all, REFIT_K=5)
+            # Refit on full labeled set with REFIT_K=5 components; project all rows
+            pls_model = fit_pls_full(X_labeled, y, n_components=REFIT_K)
+            proj = project(pls_model, X_all)   # (N_all, REFIT_K=5)
 
             embed_prefix = f"{method}__{cleaning}__{layer_tag}"
             pls_embeddings[f"{embed_prefix}__pls12-{year_transform}"] = (
