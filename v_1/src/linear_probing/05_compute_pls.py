@@ -97,17 +97,23 @@ def merge_projections(existing: dict, fragment_ids: list,
 def print_summary(results: dict) -> None:
     if not results:
         return
-    cols = f"{'Config key':<58} {'sp_k':>4} {'r2_k':>4} {'spearman':>8} {'r2':>7}"
-    sep  = '-' * 85
-    print(f'\n{"="*85}\nSUMMARY\n{cols}\n{sep}')
+    cols = f"{'Config key':<58} {'bk':>4} {'metric':>10} {'metric2':>10}"
+    sep  = '-' * 88
+    print(f'\n{"="*88}\nSUMMARY\n{cols}\n{sep}')
     for key in sorted(results):
-        rec    = results[key]
-        bk_sp  = rec['best_k_by_spearman']
-        bk_r2  = rec['best_k_by_r2']
-        sp_val = rec['metrics_per_k'][str(bk_sp)]['spearman_mean']
-        r2_val = rec['metrics_per_k'][str(bk_r2)]['r2_mean']
-        print(f"{key:<58} {bk_sp:>4} {bk_r2:>4} {sp_val:>8.3f} {r2_val:>7.3f}")
-    print('=' * 85)
+        rec = results[key]
+        if rec.get('target') == 'ruler' or 'best_k_by_macro_f1' in rec:
+            bk     = rec['best_k_by_macro_f1']
+            m1     = rec['metrics_per_k'][str(bk)]['macro_f1_mean']
+            m2     = rec['metrics_per_k'][str(bk)]['accuracy_mean']
+            print(f"{key:<58} {bk:>4} {'f1='+f'{m1:.3f}':>10} {'acc='+f'{m2:.3f}':>10}")
+        else:
+            bk_sp  = rec['best_k_by_spearman']
+            bk_r2  = rec['best_k_by_r2']
+            sp_val = rec['metrics_per_k'][str(bk_sp)]['spearman_mean']
+            r2_val = rec['metrics_per_k'][str(bk_r2)]['r2_mean']
+            print(f"{key:<58} {bk_sp:>4} {'sp='+f'{sp_val:.3f}':>10} {'r2='+f'{r2_val:.3f}':>10}")
+    print('=' * 88)
 
 
 # ---------------------------------------------------------------------------
@@ -207,11 +213,14 @@ def main():
 
     if args.overwrite:
         prefix = f'{args.method}__{args.cleaning}__{args.pooling}__'
-        cleared = [k for k in list(results) if k.startswith(prefix)]
+        if args.target == 'year':
+            cleared = [k for k in list(results) if k.startswith(prefix) and '__year-' in k]
+        else:  # ruler
+            cleared = [k for k in list(results) if k.startswith(prefix) and k.endswith('__ruler')]
         for k in cleared:
             del results[k]
         if cleared:
-            print(f'  [overwrite] Cleared {len(cleared)} existing keys')
+            print(f'  [overwrite] Cleared {len(cleared)} existing keys ({args.target})')
     new_projections: dict = {}
 
     pooling_infix = '__last' if args.pooling == 'last' else ''
