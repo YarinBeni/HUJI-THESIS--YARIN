@@ -34,9 +34,11 @@ from utils import RESULTS_DIR
 
 from pls_utils import (  # noqa: E402
     l2_normalize,
-    fit_pls_groupkfold,  # CV for a single n_components value
-    fit_pls_full,        # refit on full labeled set → PLSRegression
-    project,             # project(model, X) → (N, n_components)
+    fit_pls_groupkfold,
+    fit_pls_full,
+    fit_plsda_stratified_kfold,
+    fit_plsda_full,
+    project,
 )
 
 # ---------------------------------------------------------------------------
@@ -72,6 +74,10 @@ def parse_args():
                    help="Comma-separated PLS component counts (default: 1,2,3,5)")
     p.add_argument("--output-dir", default=str(OUT_DIR),
                    help="Output directory for pls_results_mlm.json + pls_projections_mlm.json")
+    p.add_argument("--target", default="both", choices=["year", "ruler", "both"],
+                   help="Prediction target (default: both)")
+    p.add_argument("--overwrite", action="store_true",
+                   help="Clear existing mlm keys before writing (re-runs fresh)")
     return p.parse_args()
 
 
@@ -123,6 +129,7 @@ def main():
     year_transforms   = [t.strip() for t in args.year_transforms.split(",")]
     n_components_list = [int(x) for x in args.n_components.split(",")]
     out_dir           = Path(args.output_dir)
+    targets = ["year", "ruler"] if args.target == "both" else [args.target]
 
     print(f"Layers:          L{layers[0]:02d}–L{layers[-1]:02d} ({len(layers)} total)")
     print(f"Year transforms: {year_transforms}")
@@ -166,110 +173,135 @@ def main():
     print(f"Labeled: {n_labeled} ORCC fragments with non-null year")
     print(f"Groups (rulers): {n_groups} unique")
 
+    y_ruler = ruler_series.values[labeled_orcc_idx].astype(str)
+
     # ── Output structures ────────────────────────────────────────────────────
     out_dir.mkdir(parents=True, exist_ok=True)
-    pls_results: dict = {}
-    pls_embeddings: dict = {}
+
+    # Load existing results for merge (so year and ruler runs accumulate)
+    results_path     = out_dir / "pls_results_mlm.json"
+    projections_path = out_dir / "pls_projections_mlm.json"
+
+    if results_path.exists():
+        with open(results_path) as f:
+            pls_results = json.load(f)
+    else:
+        pls_results = {}
+
+    if projections_path.exists():
+        with open(projections_path) as f:
+            existing_proj = json.load(f)
+        pls_embeddings = dict(existing_proj.get("embeddings", {}))
+    else:
+        pls_embeddings = {}
+
+    if args.overwrite:
+        prefix = "mlm__tier0__mean__"
+        cleared = [k for k in list(pls_results) if k.startswith(prefix)]
+        for k in cleared:
+            del pls_results[k]
+        if cleared:
+            print(f"  [overwrite] Cleared {len(cleared)} existing keys")
 
     method   = "mlm"
     cleaning = "tier0"
     pooling  = "mean"
 
-    n_configs = len(layers) * len(year_transforms)
-    done = 0
-
     for layer in layers:
         layer_tag = f"L{layer:02d}"
-        print(f"\n{'='*60}")
-        print(f"Layer {layer_tag}  [{done+1}–{done+len(year_transforms)}/{n_configs}]")
-        print(f"{'='*60}")
+        print(f"\n{'='*60}\nLayer {layer_tag}\n{'='*60}")
 
-        # Load activations for this layer (SEAL + ORCC concatenated)
         X_seal = load_activations(SEAL_ACTS_DIR, layer)
         X_orcc = load_activations(ORCC_ACTS_DIR, layer)
-        X_all  = np.concatenate([X_seal, X_orcc], axis=0)   # (1586, 384)
+        X_all  = np.concatenate([X_seal, X_orcc], axis=0)
+        assert X_all.shape[0] == N_all, f"Expected {N_all} rows, got {X_all.shape[0]}"
+        X_all     = l2_normalize(X_all)
+        X_labeled = X_all[labeled_all_idx]
 
-        assert X_all.shape[0] == N_all, (
-            f"Expected {N_all} rows, got {X_all.shape[0]}"
-        )
+        embed_prefix = f"{method}__{cleaning}__{layer_tag}"
 
-        # L2-normalize all rows
-        X_all = l2_normalize(X_all)
+        if "year" in targets:
+            for year_transform in year_transforms:
+                y = y_raw if year_transform == "raw" else y_log
+                config_key = f"{method}__{cleaning}__{pooling}__{layer_tag}__year-{year_transform}"
+                print(f"\n  Config: {config_key}")
 
-        X_labeled = X_all[labeled_all_idx]    # (893, 384)
+                metrics_per_k = {}
+                for k in n_components_list:
+                    metrics_per_k[str(k)] = fit_pls_groupkfold(X_labeled, y, groups, n_components=k)
 
-        for year_transform in year_transforms:
-            y = y_raw if year_transform == "raw" else y_log
-            config_key = f"{method}__{cleaning}__{pooling}__{layer_tag}__year-{year_transform}"
-            print(f"\n  Config: {config_key}")
-
-            # CV sweep: one call to fit_pls_groupkfold per k value
-            metrics_per_k = {}
-            for k in n_components_list:
-                metrics_per_k[str(k)] = fit_pls_groupkfold(
-                    X_labeled, y, groups, n_components=k
+                best_k_by_spearman = max(
+                    n_components_list,
+                    key=lambda k: metrics_per_k[str(k)]["spearman_mean"],
+                )
+                best_k_by_r2 = max(
+                    n_components_list,
+                    key=lambda k: metrics_per_k[str(k)]["r2_mean"],
                 )
 
-            # Pick best k by spearman and r2 (using mean across folds)
-            best_k_by_spearman = max(
-                n_components_list,
-                key=lambda k: metrics_per_k[str(k)]["spearman_mean"],
-            )
-            best_k_by_r2 = max(
-                n_components_list,
-                key=lambda k: metrics_per_k[str(k)]["r2_mean"],
-            )
+                pls_results[config_key] = {
+                    "method":             method,
+                    "cleaning":           cleaning,
+                    "pooling":            pooling,
+                    "layer":              layer,
+                    "year_transform":     year_transform,
+                    "n_labeled":          n_labeled,
+                    "n_groups":           n_groups,
+                    "metrics_per_k":      metrics_per_k,
+                    "best_k_by_spearman": best_k_by_spearman,
+                    "best_k_by_r2":       best_k_by_r2,
+                }
+
+                best_sp = metrics_per_k[str(best_k_by_spearman)]["spearman_mean"]
+                print(f"  best_k_spearman={best_k_by_spearman} (rho={best_sp:.3f})  "
+                      f"best_k_r2={best_k_by_r2}")
+
+                pls_model = fit_pls_full(X_labeled, y, n_components=REFIT_K)
+                proj = project(pls_model, X_all)
+                pls_embeddings[f"{embed_prefix}__pls12-{year_transform}"] = proj[:, [0, 1]].tolist()
+                pls_embeddings[f"{embed_prefix}__pls23-{year_transform}"] = proj[:, [1, 2]].tolist()
+                pls_embeddings[f"{embed_prefix}__pls34-{year_transform}"] = proj[:, [2, 3]].tolist()
+
+        if "ruler" in targets:
+            config_key = f"{method}__{cleaning}__{pooling}__{layer_tag}__ruler"
+            print(f"\n  Config: {config_key}")
+
+            metrics_per_k = {}
+            for k in n_components_list:
+                metrics_per_k[str(k)] = fit_plsda_stratified_kfold(X_labeled, y_ruler, k)
+
+            best_k = max(n_components_list,
+                         key=lambda k: metrics_per_k[str(k)]["macro_f1_mean"])
 
             pls_results[config_key] = {
                 "method":             method,
                 "cleaning":           cleaning,
                 "pooling":            pooling,
                 "layer":              layer,
-                "year_transform":     year_transform,
+                "target":             "ruler",
                 "n_labeled":          n_labeled,
-                "n_groups":           n_groups,
                 "metrics_per_k":      metrics_per_k,
-                "best_k_by_spearman": best_k_by_spearman,
-                "best_k_by_r2":       best_k_by_r2,
+                "best_k_by_macro_f1": best_k,
             }
 
-            best_sp = metrics_per_k[str(best_k_by_spearman)]["spearman_mean"]
-            print(f"  best_k_spearman={best_k_by_spearman} (rho={best_sp:.3f})  "
-                  f"best_k_r2={best_k_by_r2}")
+            model_da = fit_plsda_full(X_labeled, y_ruler, n_components=REFIT_K)
+            proj_da  = project(model_da, X_all)
+            pls_embeddings[f"{embed_prefix}__plsda12"] = proj_da[:, [0, 1]].tolist()
 
-            # Refit on full labeled set with REFIT_K=5 components; project all rows
-            pls_model = fit_pls_full(X_labeled, y, n_components=REFIT_K)
-            proj = project(pls_model, X_all)   # (N_all, REFIT_K=5)
-
-            embed_prefix = f"{method}__{cleaning}__{layer_tag}"
-            pls_embeddings[f"{embed_prefix}__pls12-{year_transform}"] = (
-                proj[:, [0, 1]].tolist()
-            )
-            pls_embeddings[f"{embed_prefix}__pls23-{year_transform}"] = (
-                proj[:, [1, 2]].tolist()
-            )
-            pls_embeddings[f"{embed_prefix}__pls34-{year_transform}"] = (
-                proj[:, [2, 3]].tolist()
-            )
-
-            done += 1
+            best_acc = metrics_per_k[str(best_k)]["accuracy_mean"]
+            best_f1  = metrics_per_k[str(best_k)]["macro_f1_mean"]
+            print(f"  ruler  best_k={best_k} acc={best_acc:.3f} macro_f1={best_f1:.3f}")
 
     # ── Save outputs ─────────────────────────────────────────────────────────
-    results_path     = out_dir / "pls_results_mlm.json"
-    projections_path = out_dir / "pls_projections_mlm.json"
-
     with open(results_path, "w") as f:
         json.dump(pls_results, f, indent=2)
     print(f"\nResults saved → {results_path}  ({len(pls_results)} configs)")
 
-    projections_out = {
-        "fragment_ids": fragment_ids_all,
-        "embeddings":   pls_embeddings,
-    }
+    projections_out = {"fragment_ids": fragment_ids_all, "embeddings": pls_embeddings}
     with open(projections_path, "w") as f:
         json.dump(projections_out, f, indent=2)
     print(f"Projections saved → {projections_path}  ({len(pls_embeddings)} embedding keys)")
-    print("✅ Done")
+    print("Done")
 
 
 if __name__ == "__main__":

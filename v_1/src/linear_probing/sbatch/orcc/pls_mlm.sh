@@ -27,13 +27,15 @@ python -u v_1/src/linear_probing/05_compute_pls_mlm.py \
     --layers all \
     --year-transforms raw,log \
     --n-components 1,2,3,5 \
+    --target both \
+    --overwrite \
     || { echo "FAILED: PLS MLM sweep"; exit 1; }
 
 echo ""
 echo "=== Pushing results to GitHub ==="
 git add v_1/src/linear_probing/results/orcc_round1/pls/pls_results_mlm.json \
         v_1/src/linear_probing/results/orcc_round1/pls/pls_projections_mlm.json
-git commit -m "Add MLM PLS results + projections (cluster job $SLURM_JOB_ID)" \
+git commit -m "Add MLM PLS results+projections: year(global-shuffle)+ruler PLS-DA (cluster job $SLURM_JOB_ID)" \
     || echo "Nothing new to commit"
 git push origin main \
     || echo "WARNING: git push failed — results saved locally"

@@ -8,6 +8,9 @@ compute_metrics(y_true, y_pred, y_train_for_mase)            -> dict (r2,spearma
 fit_pls_groupkfold(X, y, groups, n_components, n_splits=5,
                    random_state=42)                          -> dict (mean/std/folds + shuffled baseline)
 fit_pls_full(X, y, n_components=5)                           -> PLSRegression
+fit_plsda_stratified_kfold(X, y, n_components, n_splits=5,
+                            random_state=42)                 -> dict (accuracy/f1 + baselines)
+fit_plsda_full(X, y, n_components=5)                         -> PLSRegression (fitted on one-hot y)
 project(model, X)                                            -> (N, n_components) np.ndarray
 """
 
@@ -62,14 +65,9 @@ def compute_metrics(y_true, y_pred, y_train_for_mase) -> dict:
 # Shuffled baseline helper
 # ---------------------------------------------------------------------------
 
-def _shuffle_within_groups(y: np.ndarray, groups: np.ndarray,
-                            rng: np.random.Generator) -> np.ndarray:
-    """Permute y values independently within each unique group."""
-    y_s = y.copy()
-    for g in np.unique(groups):
-        mask = groups == g
-        y_s[mask] = rng.permutation(y_s[mask])
-    return y_s
+def _global_shuffle(y: np.ndarray, rng: np.random.Generator) -> np.ndarray:
+    """Globally permute all y labels (true null distribution for regression)."""
+    return rng.permutation(y)
 
 
 # ---------------------------------------------------------------------------
@@ -105,11 +103,11 @@ def fit_pls_groupkfold(
         for k in keys:
             folds[k].append(m[k])
 
-    # Shuffled-y baseline: permute y within ruler groups, same CV splits
+    # Shuffled-y baseline: globally permute y (true null), same CV splits
     rng = np.random.default_rng(random_state)
     shuf_r2, shuf_sp = [], []
     for tr_idx, val_idx in splits:
-        y_s = _shuffle_within_groups(y, groups, rng)
+        y_s = _global_shuffle(y, rng)
         pls = PLSRegression(n_components=n_components)
         pls.fit(X[tr_idx], y_s[tr_idx])
         y_pred_s = pls.predict(X[val_idx]).ravel()
@@ -136,7 +134,96 @@ def fit_pls_groupkfold(
     valid_shuf_sp = [shuf_sp[i] for i in valid_mask]
     result['shuffled_r2_mean']       = float(np.nanmean(valid_shuf_r2)) if valid_shuf_r2 else float('nan')
     result['shuffled_spearman_mean'] = float(np.nanmean(valid_shuf_sp)) if valid_shuf_sp else float('nan')
+    result['shuffled_r2_folds']       = [float(v) for v in shuf_r2]
+    result['shuffled_spearman_folds'] = [float(v) for v in shuf_sp]
     return result
+
+
+def fit_plsda_stratified_kfold(
+    X: np.ndarray,
+    y,
+    n_components: int,
+    n_splits: int = 5,
+    random_state: int = 42,
+) -> dict:
+    """
+    StratifiedKFold PLS-DA for categorical targets (e.g. ruler, 38 classes).
+
+    Encodes y as a one-hot matrix (N x n_classes), fits PLSRegression,
+    predicts by argmax. Returns accuracy/macro_f1/weighted_f1 mean+std+folds
+    and chance baselines plus global-shuffle baseline.
+    """
+    from sklearn.model_selection import StratifiedKFold
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.metrics import accuracy_score, f1_score
+    from collections import Counter
+
+    le = LabelEncoder()
+    y_enc = le.fit_transform(np.asarray(y))
+    n_classes = len(le.classes_)
+
+    Y_oh = np.zeros((len(y_enc), n_classes), dtype=float)
+    Y_oh[np.arange(len(y_enc)), y_enc] = 1.0
+
+    skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
+    splits = list(skf.split(X, y_enc))
+
+    accs, mac_f1s, wt_f1s = [], [], []
+    for tr_idx, val_idx in splits:
+        pls = PLSRegression(n_components=n_components)
+        pls.fit(X[tr_idx], Y_oh[tr_idx])
+        pred_oh = pls.predict(X[val_idx])
+        yp = np.argmax(pred_oh, axis=1)
+        accs.append(float(accuracy_score(y_enc[val_idx], yp)))
+        mac_f1s.append(float(f1_score(y_enc[val_idx], yp, average='macro', zero_division=0)))
+        wt_f1s.append(float(f1_score(y_enc[val_idx], yp, average='weighted', zero_division=0)))
+
+    rng = np.random.default_rng(random_state)
+    shuf_accs, shuf_mac_f1s = [], []
+    for tr_idx, val_idx in splits:
+        y_s = rng.permutation(y_enc)
+        Y_s_oh = np.zeros_like(Y_oh)
+        Y_s_oh[np.arange(len(y_s)), y_s] = 1.0
+        pls = PLSRegression(n_components=n_components)
+        pls.fit(X[tr_idx], Y_s_oh[tr_idx])
+        pred_oh = pls.predict(X[val_idx])
+        yp = np.argmax(pred_oh, axis=1)
+        shuf_accs.append(float(accuracy_score(y_s[val_idx], yp)))
+        shuf_mac_f1s.append(float(f1_score(y_s[val_idx], yp, average='macro', zero_division=0)))
+
+    counts = Counter(y_enc.tolist())
+    majority_frac = max(counts.values()) / len(y_enc)
+
+    return {
+        'n_classes':               n_classes,
+        'n_splits':                n_splits,
+        'chance_accuracy':         float(majority_frac),
+        'chance_macro_f1':         float(1.0 / n_classes),
+        'accuracy_mean':           float(np.mean(accs)),
+        'accuracy_std':            float(np.std(accs)),
+        'accuracy_folds':          accs,
+        'macro_f1_mean':           float(np.mean(mac_f1s)),
+        'macro_f1_std':            float(np.std(mac_f1s)),
+        'macro_f1_folds':          mac_f1s,
+        'weighted_f1_mean':        float(np.mean(wt_f1s)),
+        'weighted_f1_std':         float(np.std(wt_f1s)),
+        'weighted_f1_folds':       wt_f1s,
+        'shuffled_accuracy_mean':  float(np.mean(shuf_accs)),
+        'shuffled_macro_f1_mean':  float(np.mean(shuf_mac_f1s)),
+    }
+
+
+def fit_plsda_full(X: np.ndarray, y, n_components: int = 5) -> PLSRegression:
+    """Fit PLS-DA on full labeled set. y = categorical labels (strings or ints)."""
+    from sklearn.preprocessing import LabelEncoder
+    le = LabelEncoder()
+    y_enc = le.fit_transform(np.asarray(y))
+    n_classes = len(le.classes_)
+    Y_oh = np.zeros((len(y_enc), n_classes), dtype=float)
+    Y_oh[np.arange(len(y_enc)), y_enc] = 1.0
+    pls = PLSRegression(n_components=n_components)
+    pls.fit(X, Y_oh)
+    return pls
 
 
 def fit_pls_full(

@@ -129,6 +129,10 @@ def parse_args():
                    help='Comma-separated n_components values (default: 1,2,3,5)')
     p.add_argument('--layers', type=str, default='all',
                    help='"all" for L00-L28, or comma-separated indices (default: all)')
+    p.add_argument('--target', default='year', choices=['year', 'ruler'],
+                   help='Prediction target: year (regression) or ruler (PLS-DA classification)')
+    p.add_argument('--overwrite', action='store_true',
+                   help='Clear existing keys for this method/cleaning/pooling before writing')
     return p.parse_args()
 
 
@@ -193,11 +197,21 @@ def main():
 
     print(f"  n_labeled={n_labeled}  n_groups={n_groups}")
 
+    y_ruler = orcc_df['ruler'].values[labeled_orcc_idx].astype(str)
+
     # ── Load existing outputs for merge ────────────────────────────────────────
     results_path  = out_dir / f'pls_results_{args.method}.json'
     proj_path     = out_dir / f'pls_projections_{args.method}.json'
-    results       = load_json(results_path)          # merged in-place below
+    results       = load_json(results_path)
     proj_existing = load_json(proj_path)
+
+    if args.overwrite:
+        prefix = f'{args.method}__{args.cleaning}__{args.pooling}__'
+        cleared = [k for k in list(results) if k.startswith(prefix)]
+        for k in cleared:
+            del results[k]
+        if cleared:
+            print(f'  [overwrite] Cleared {len(cleared)} existing keys')
     new_projections: dict = {}
 
     pooling_infix = '__last' if args.pooling == 'last' else ''
@@ -231,48 +245,77 @@ def main():
 
         print(f"\n  Layer {layer:02d}  hidden_dim={X_all.shape[1]}")
 
-        for yt in year_transforms:
-            y = y_raw if yt == 'raw' else y_log
+        pk = f'{args.method}__{args.cleaning}__L{layer:02d}{pooling_infix}'
 
-            # GroupKFold CV for each k
-            metrics_per_k: dict = {}
+        if args.target == 'year':
+            for yt in year_transforms:
+                y = y_raw if yt == 'raw' else y_log
+
+                metrics_per_k: dict = {}
+                for k in n_components:
+                    metrics_per_k[str(k)] = fit_pls_groupkfold(X_lab, y, groups, k)
+
+                best_sp = max(n_components,
+                              key=lambda k: metrics_per_k[str(k)]['spearman_mean'])
+                best_r2 = max(n_components,
+                              key=lambda k: metrics_per_k[str(k)]['r2_mean'])
+
+                config_key = (f'{args.method}__{args.cleaning}__{args.pooling}'
+                              f'__L{layer:02d}__year-{yt}')
+                results[config_key] = {
+                    'method':             args.method,
+                    'cleaning':           args.cleaning,
+                    'pooling':            args.pooling,
+                    'layer':              layer,
+                    'year_transform':     yt,
+                    'n_labeled':          n_labeled,
+                    'n_groups':           n_groups,
+                    'metrics_per_k':      metrics_per_k,
+                    'best_k_by_spearman': best_sp,
+                    'best_k_by_r2':       best_r2,
+                }
+
+                model5 = fit_pls_full(X_lab, y, n_components=5)
+                comps  = project(model5, X_norm)
+                new_projections[f'{pk}__pls12-{yt}'] = comps[:, 0:2].tolist()
+                new_projections[f'{pk}__pls23-{yt}'] = comps[:, 1:3].tolist()
+                new_projections[f'{pk}__pls34-{yt}'] = comps[:, 2:4].tolist()
+
+                sp_val = metrics_per_k[str(best_sp)]['spearman_mean']
+                r2_val = metrics_per_k[str(best_r2)]['r2_mean']
+                print(f"    year={yt}  best_k_sp={best_sp} sp={sp_val:.3f}  "
+                      f"best_k_r2={best_r2} r2={r2_val:.3f}")
+
+        else:  # target == 'ruler'
+            from pls_utils import fit_plsda_stratified_kfold, fit_plsda_full
+
+            metrics_per_k = {}
             for k in n_components:
-                mk = fit_pls_groupkfold(X_lab, y, groups, k)
-                metrics_per_k[str(k)] = mk
+                metrics_per_k[str(k)] = fit_plsda_stratified_kfold(X_lab, y_ruler, k)
 
-            best_sp = max(n_components,
-                          key=lambda k: metrics_per_k[str(k)]['spearman_mean'])
-            best_r2 = max(n_components,
-                          key=lambda k: metrics_per_k[str(k)]['r2_mean'])
+            best_k = max(n_components,
+                         key=lambda k: metrics_per_k[str(k)]['macro_f1_mean'])
 
             config_key = (f'{args.method}__{args.cleaning}__{args.pooling}'
-                          f'__L{layer:02d}__year-{yt}')
+                          f'__L{layer:02d}__ruler')
             results[config_key] = {
-                'method':            args.method,
-                'cleaning':          args.cleaning,
-                'pooling':           args.pooling,
-                'layer':             layer,
-                'year_transform':    yt,
-                'n_labeled':         n_labeled,
-                'n_groups':          n_groups,
-                'metrics_per_k':     metrics_per_k,
-                'best_k_by_spearman': best_sp,
-                'best_k_by_r2':       best_r2,
+                'method':             args.method,
+                'cleaning':           args.cleaning,
+                'pooling':            args.pooling,
+                'layer':              layer,
+                'target':             'ruler',
+                'n_labeled':          n_labeled,
+                'metrics_per_k':      metrics_per_k,
+                'best_k_by_macro_f1': best_k,
             }
 
-            # Full refit with n_components=5, project all fragments
-            model5 = fit_pls_full(X_lab, y, n_components=5)
-            comps  = project(model5, X_norm)   # (n_seal+n_orcc, 5)
+            model_da = fit_plsda_full(X_lab, y_ruler, n_components=5)
+            comps_da = project(model_da, X_norm)
+            new_projections[f'{pk}__plsda12'] = comps_da[:, 0:2].tolist()
 
-            pk = f'{args.method}__{args.cleaning}__L{layer:02d}{pooling_infix}'
-            new_projections[f'{pk}__pls12-{yt}'] = comps[:, 0:2].tolist()
-            new_projections[f'{pk}__pls23-{yt}'] = comps[:, 1:3].tolist()
-            new_projections[f'{pk}__pls34-{yt}'] = comps[:, 2:4].tolist()
-
-            sp_val = metrics_per_k[str(best_sp)]['spearman_mean']
-            r2_val = metrics_per_k[str(best_r2)]['r2_mean']
-            print(f"    year={yt}  best_k_sp={best_sp} sp={sp_val:.3f}  "
-                  f"best_k_r2={best_r2} r2={r2_val:.3f}")
+            best_acc = metrics_per_k[str(best_k)]['accuracy_mean']
+            best_f1  = metrics_per_k[str(best_k)]['macro_f1_mean']
+            print(f"    ruler  best_k={best_k} acc={best_acc:.3f} macro_f1={best_f1:.3f}")
 
         print(f"  Layer {layer:02d} done in {time.time() - t_layer:.1f}s")
         any_processed = True
