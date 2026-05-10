@@ -200,9 +200,14 @@ def main():
 
     print(f"\nDone. {len(all_results)} configs written.", flush=True)
     for key, res in all_results.items():
-        bk = res["best_k_by_spearman"]
-        sp = res["metrics_per_k"][str(bk)]["spearman_mean"]
-        print(f"  {key}: best_k={bk}, spearman={sp:.4f}", flush=True)
+        if res.get("target") == "ruler" or "best_k_by_macro_f1" in res:
+            bk = res["best_k_by_macro_f1"]
+            f1 = res["metrics_per_k"][str(bk)]["macro_f1_mean"]
+            print(f"  {key}: best_k={bk}, macro_f1={f1:.4f}", flush=True)
+        else:
+            bk = res["best_k_by_spearman"]
+            sp = res["metrics_per_k"][str(bk)]["spearman_mean"]
+            print(f"  {key}: best_k={bk}, spearman={sp:.4f}", flush=True)
 
 
 if __name__ == "__main__":
