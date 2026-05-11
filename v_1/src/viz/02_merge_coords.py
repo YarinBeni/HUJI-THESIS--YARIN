@@ -9,6 +9,7 @@ Sources:
   seal_round4/seal_qwen_coords_last.json  (Qwen + Random SEAL last-token, if exists)
   orcc_round1/orcc_qwen_coords_mean.json  (ORCC mean-pooled, if exists)
   orcc_round1/orcc_qwen_coords_last.json  (ORCC last-token, if exists)
+  orcc_round1/pls/pls_projections_*.json  (PLS year + ruler projections, all methods)
 
 Also appends ORCC fragments from orcc_corpus.parquet if the file exists.
 
@@ -38,6 +39,14 @@ ORCC_LAST_JSON  = ORCC_RES / "orcc_qwen_coords_last.json"
 ORCC_TFIDF_JSON = ORCC_RES / "orcc_tfidf_coords.json"
 ORCC_MLM_JSON   = ORCC_RES / "orcc_mlm_coords.json"
 ORCC_PARQUET    = REPO_ROOT / "v_1/data/evaluation/corpora/orcc_corpus.parquet"
+
+PLS_DIR = ORCC_RES / "pls"
+PLS_PROJ_FILES = [
+    PLS_DIR / "pls_projections_qwen.json",
+    PLS_DIR / "pls_projections_random.json",
+    PLS_DIR / "pls_projections_mlm.json",
+    PLS_DIR / "pls_projections_tfidf.json",
+]
 
 
 def load_coords(path: Path, label: str) -> dict:
@@ -225,8 +234,35 @@ def main():
     else:
         print(f"  (orcc_mlm_coords.json not found — skipping)")
 
+    # Load PLS projections (already cover all n_total fragments — no padding needed).
+    # Keys: {method}__{cleaning}__L{nn}__pls12-{raw|log}  (mean)
+    #        {method}__{cleaning}__L{nn}__last__pls12-{raw|log}  (last)
+    #        {method}__{cleaning}__L{nn}__plsda12  (ruler PLS-DA)
+    print("\n[6/6] Loading PLS projections...")
+    n_pls_keys = 0
+    for pls_path in PLS_PROJ_FILES:
+        if not pls_path.exists():
+            print(f"  ({pls_path.name} not found — skipping)")
+            continue
+        pls_data = json.loads(pls_path.read_text())
+        pls_embs = pls_data.get("embeddings", pls_data)
+        pls_fids = pls_data.get("fragment_ids", [])
+        if pls_fids:
+            viz_fids = [str(f["fragment_id"]) for f in all_fragments]
+            pls_fids_str = [str(x) for x in pls_fids]
+            if pls_fids_str != viz_fids:
+                print(f"  WARNING: {pls_path.name} fragment_id order mismatch — skipping!")
+                continue
+        # Only include the reductions exposed in the GUI (skip pls23, pls34)
+        included = {k: v for k, v in pls_embs.items()
+                    if any(k.endswith(s) for s in ("pls12-raw", "pls12-log", "plsda12"))}
+        for key, vals in included.items():
+            merged[key] = vals
+            n_pls_keys += 1
+        print(f"  {pls_path.name}: {len(included)}/{len(pls_embs)} keys loaded (pls12-raw/log + plsda12 only)")
+
     # Validate all keys have n_total rows
-    print("\n[6/6] Validating and saving...")
+    print("\n[7/7] Validating and saving...")
     validate(merged, n_total)
 
     base["embeddings"] = merged
@@ -242,6 +278,7 @@ def main():
     print(f"    ORCC-last           : {n_orcc_last_keys}")
     print(f"    ORCC-tfidf          : {n_orcc_tfidf_keys}")
     print(f"    ORCC-mlm            : {n_orcc_mlm_keys}")
+    print(f"    PLS projections     : {n_pls_keys}")
     print(f"  Methods: {methods}")
 
     BASE_JSON.write_text(json.dumps(base))

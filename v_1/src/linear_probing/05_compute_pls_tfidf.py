@@ -183,7 +183,7 @@ def main():
             }
 
             model_da = fit_plsda_full(X_labeled, y_ruler, n_components=N_COMPONENTS_FULL)
-            X_proj_da = project(model_da, X_labeled)   # project labeled only for TF-IDF
+            X_proj_da = project(model_da, X)   # project all 1586 fragments
             all_projections["embeddings"][f"{proj_base}__plsda12"] = X_proj_da[:, [0, 1]].tolist()
 
             best_acc = metrics_per_k[str(best_k)]["accuracy_mean"]

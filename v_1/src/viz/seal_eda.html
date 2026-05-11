@@ -414,6 +414,41 @@
             </span>
           </span>
         </button>
+        <button data-val="pls12-raw">
+          PLS-Year
+          <span class="tip">
+            <span class="ico" tabindex="0">i</span>
+            <span class="body">
+              <strong>PLS-Year (raw)</strong> — PLS regression components 1&amp;2 trained to
+              predict composition <strong>year</strong> (raw scale) from L2-normalized hidden
+              states using GroupKFold by ruler. Axes are supervised: proximity
+              along PLS-1 reflects similarity in predicted date.
+              <br><br>Only ORCC labeled fragments (893) informed the fit; all 1586 are projected.
+            </span>
+          </span>
+        </button>
+        <button data-val="pls12-log">
+          PLS-Year(log)
+          <span class="tip">
+            <span class="ico" tabindex="0">i</span>
+            <span class="body">
+              <strong>PLS-Year (log)</strong> — Same as PLS-Year but the target is
+              <code>log(year)</code>, compressing the dynamic range of the 7–1132 BCE span.
+            </span>
+          </span>
+        </button>
+        <button data-val="plsda12">
+          PLS-Ruler
+          <span class="tip">
+            <span class="ico" tabindex="0">i</span>
+            <span class="body">
+              <strong>PLS-DA Ruler</strong> — PLS Discriminant Analysis components 1&amp;2
+              trained to classify fragments by <strong>ruler</strong> (38 classes) via
+              one-hot encoding + StratifiedKFold. Axes are supervised: nearby points
+              share a predicted ruler.
+            </span>
+          </span>
+        </button>
       </div>
     </div>
 
@@ -577,7 +612,13 @@ function clampLayerForMethod(method, rawVal) {
 
 function buildKey() {
   const { method, layer, cleaning, reduction, pooling } = state;
-  const layerStr = (method === "tfidf") ? "na" : layerLabel(layer);
+  const isPLS = reduction.startsWith("pls");
+  let layerStr;
+  if (method === "tfidf") {
+    layerStr = isPLS ? "L00" : "na";
+  } else {
+    layerStr = layerLabel(layer);
+  }
   if (method === "tfidf" || pooling === "mean") {
     return `${method}__${cleaning}__${layerStr}__${reduction}`;
   }
@@ -746,7 +787,10 @@ function render() {
     });
   }
 
-  const reductionLabel = {tsne: "t-SNE", pca: "PCA", umap: "UMAP"}[state.reduction];
+  const reductionLabel = {
+    tsne: "t-SNE", pca: "PCA", umap: "UMAP",
+    "pls12-raw": "PLS-Year(raw)", "pls12-log": "PLS-Year(log)", plsda12: "PLS-Ruler",
+  }[state.reduction] || state.reduction;
   const layout = {
     xaxis: { title: `${reductionLabel} dim 1`, showgrid: false, zeroline: false },
     yaxis: { title: `${reductionLabel} dim 2`, showgrid: false, zeroline: false },
