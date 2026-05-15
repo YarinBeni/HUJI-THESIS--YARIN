@@ -1,8 +1,10 @@
 # SEAL Corpus Embedding Explorer — Documentation
 
-> **Status:** v3 complete (2026-04-28). Data: 1,586 fragments × 715 embedding keys, ~45 MB.
+> **Status:** v4 complete (2026-05-11). Data: 1,586 fragments × **1,468 embedding keys**, ~92 MB.
 > **GUI file:** `seal_eda.html` — open via local server (below) or use the self-contained `seal_eda_standalone.html`
-> **Data file:** `seal_viz_data.json` (~45 MB, committed to repo)
+> **Data file:** `seal_viz_data.json` (~92 MB, committed to repo with GitHub size warning)
+>
+> **v4 additions (2026-05-11):** PLS-Year(raw), PLS-Year(log), PLS-Ruler reductions added — supervised projections from the ORCC PLS pipeline (see `v_1/src/linear_probing/results/PIPELINE_RUN_LOG.md` Step 08).
 
 ---
 
@@ -68,8 +70,12 @@ Yarin MLM only has Raw Text. Cleaned embeddings for MLM would require a cluster 
 | **t-SNE** | Non-linear; preserves local neighborhoods. Good for clusters. Axes have no meaning. perplexity=30, max_iter=1000, random_state=42. |
 | **PCA** | Linear; preserves global variance. |
 | **UMAP** | Non-linear; preserves both local and global structure. Available for Qwen, Random (mean and last-token), and Yarin MLM. n_neighbors=15, min_dist=0.1, random_state=42. |
+| **PLS-Year** | **Supervised.** PLS regression components 1&2 trained to predict `year` (raw scale) from L2-normalized activations, GroupKFold by ruler. Axes encode predicted-date direction. Fitted on 893 labeled ORCC rows; all 1,586 fragments projected. |
+| **PLS-Year(log)** | Same as PLS-Year with target = `log(year)`. |
+| **PLS-Ruler** | **Supervised.** PLS-DA components 1&2 trained to classify 38 rulers via one-hot regression + argmax, StratifiedKFold. |
 
 UMAP is not available for TF-IDF (sparse vectors; tsne+pca only).
+PLS reductions are available for all methods but TF-IDF has only one "layer" (L00).
 
 ### Show Datasets (corpus filter)
 Toggle checkboxes for SEAL, DLL, LBPL, ORCC. All start active. Hiding a corpus removes those points from the plot without reloading data.
@@ -129,17 +135,19 @@ Schema:
 Key naming: `{method}__{cleaning}__{layer}__{reduction}` (mean pooling)
             `{method}__{cleaning}__{layer}__last__{reduction}` (last-token pooling)
 
+For PLS reductions on TF-IDF, the layer slot is `L00` (not `na`) — `buildKey()` in `seal_eda.html` handles this special case.
+
 Null-padding: SEAL-only methods (TF-IDF, MLM) have `[null, null]` at ORCC positions. The HTML skips null entries when rendering.
 
-**Key counts by method:**
+**Key counts by method (v4):**
 
-| Method | Keys | Layers | Cleanings | Reductions | Poolings | SEAL | ORCC |
-|--------|-----:|-------:|----------:|-----------:|---------:|------|------|
-| tfidf  | 4    | 1 (na) | 2         | tsne, pca  | mean     | ✓    | —    |
-| mlm    | 10   | 5      | 1 (tier0) | tsne, pca  | mean     | ✓    | —    |
-| qwen   | 348  | 29     | 2         | tsne, pca, umap | mean + last | ✓ | ✓ |
-| random | 348  | 29     | 2         | tsne, pca, umap | mean + last | ✓ | ✓ |
-| **Total** | **710** | | | | | | |
+| Method | Unsupervised (tsne/pca/umap) | PLS (pls12-raw/log + plsda12) | Total |
+|--------|---:|---:|---:|
+| tfidf  | 4    | 6   | 10 |
+| mlm    | 15   | 51  | 66 |
+| qwen   | 348+348  | 348 | 1,044 |
+| random | 348+348  | 348 | 1,044 |
+| **Total** | | | **~1,468** |
 
 **Known gaps (not yet computed):**
 - MLM UMAP: activations exist on cluster; coord re-run needed with `--include-umap`
@@ -207,7 +215,9 @@ Outputs `orcc_round1/orcc_qwen_coords_mean.json` + `orcc_qwen_coords_last.json` 
 ```bash
 python v_1/src/viz/02_merge_coords.py
 ```
-Merges all 6 coord JSONs + ORCC parquet metadata into `seal_viz_data.json` (710 keys, 44 MB, 1,586 fragments).
+Merges all coord JSONs + ORCC parquet metadata + the 4 `pls_projections_*.json` files into `seal_viz_data.json` (1,468 keys, 92 MB, 1,586 fragments).
+
+The PLS step filters to `pls12-raw`, `pls12-log`, `plsda12` keys only (skips `pls23`/`pls34` for size). Fragment-ID validation normalizes both sides to strings since the viz stores SEAL IDs as ints.
 
 ### Step H — Build standalone HTML (local)
 ```bash

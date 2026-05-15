@@ -691,3 +691,246 @@ The last_token/maximal gap of **+19.9%** is the strongest evidence that pretrain
 
 ### What this will do
 Classify the outcome as A, B, or C based on the probe results, comparing against the TF-IDF baselines from the bias check.
+
+---
+
+## Step 05 — ORCC PLS Year Regression + Ruler PLS-DA
+**Dataset:** ORCC Royal Inscriptions, 1,202 fragments; 893 have non-null `year` labels (range 7–1132 BCE) and a `ruler` label (38 unique kings). PLS is fitted on the 893 labeled rows; projections cover all 1,586 SEAL+ORCC fragments so SEAL points can be placed in the same supervised latent space.
+
+**Cluster jobs (final, after bug fixes):**
+- `6522` — Qwen, all 4 cleaning×pooling combos, year + ruler
+- `6523` — Random baseline, same
+- `6433` — Akkadian MLM, tier0/mean only (only available config)
+- TF-IDF — local (`05_compute_pls_tfidf.py`), no GPU
+
+**Status:** ✅ SUCCESS — results pushed via cluster (commits `b0f4c25`, `79164d5`, `0336887`)
+
+### What this step does
+
+For each `(method, cleaning, pooling, layer)` combination we fit a **PLS regression** to predict year and a **PLS-DA** (one-hot regression → argmax) to classify ruler, evaluated by cross-validation. We L2-normalize activations row-wise before fitting (per `pls_utils.l2_normalize`) so that PLS sees unit-sphere vectors and scale variation doesn't dominate the latent directions.
+
+**Year regression (GroupKFold by ruler, 5 folds):**
+- Two target transforms: `raw` (year as float) and `log` (natural log of year)
+- Sweep `n_components` k ∈ {1, 2, 3, 5}
+- Folds where `y_test` is constant are flagged via Spearman NaN and excluded from mean metrics (`n_valid_folds` reported)
+- Metrics: `r2`, `spearman`, `mae`, `mase`, `mdape`
+- **Shuffled null:** `np.random.default_rng(42).permutation(y)` — global permutation, same CV splits
+
+> **Bug fix (2026-05-09):** The original shuffled baseline permuted within-ruler groups. Because year ≈ ruler (median 1 year per ruler), within-group shuffling was a near-no-op and produced NaN baselines. Replaced with a global permutation that gives a true null. See `pls_utils._global_shuffle`.
+
+**Ruler PLS-DA (StratifiedKFold, 5 folds):**
+- One-hot encode 38 rulers, fit `PLSRegression` on the one-hot matrix, predict by argmax
+- Sweep k ∈ {1, 2, 3, 5}
+- Metrics: `accuracy`, `macro_f1`, `weighted_f1`; chance baselines: majority-class fraction and 1/n_classes; plus a global-shuffle baseline
+- Note: rulers with only 1 fragment trigger a sklearn warning but don't break StratifiedKFold
+
+**Projections (for viz):**
+- Fit a full-data PLS with 5 components; project all 1,586 fragments
+- For year: save `pls12-{raw|log}`, `pls23-{raw|log}`, `pls34-{raw|log}` (component pairs)
+- For ruler: save `plsda12`
+- TF-IDF projections fit on labeled subset (893 rows) but **project all 1,586** so SEAL fragments get coordinates too (fixed in 2026-05-10)
+
+### Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `pls_utils.py` | Shared API: `l2_normalize`, `fit_pls_groupkfold`, `fit_pls_full`, `fit_plsda_stratified_kfold`, `fit_plsda_full`, `project`, `compute_metrics` |
+| `05_compute_pls.py` | Qwen + Random driver — CLI: `--method`, `--cleaning`, `--pooling`, `--layers`, `--target {year,ruler}`, `--overwrite` |
+| `05_compute_pls_mlm.py` | Akkadian MLM driver — `--target {year,ruler,both}` |
+| `05_compute_pls_tfidf.py` | TF-IDF driver — runs locally, no GPU |
+| `sbatch/orcc/pls_qwen.sh`, `pls_random.sh`, `pls_mlm.sh` | Slurm scripts; each runs all 4 cleaning×pooling × both targets and pushes results to GitHub on completion |
+
+**Important `--overwrite` semantics:** Target-aware. Only clears `__year-*` keys when `--target year`, only `__ruler` keys when `--target ruler`. Earlier versions wiped everything for the prefix and caused data loss across target types.
+
+**Important `print_summary()`:** Branches on `rec.get('target') == 'ruler'` to use `best_k_by_macro_f1` vs `best_k_by_spearman`. Earlier versions crashed with KeyError after ruler runs and prevented git push.
+
+### Outputs (per method)
+
+```
+results/orcc_round1/pls/
+├── pls_results_{method}.json          # Per-config metrics (k sweep, baselines, best-k)
+└── pls_projections_{method}.json      # {fragment_ids, embeddings: {key → [[x,y]×1586]}}
+```
+
+**Config-key schema:**
+- Year: `{method}__{cleaning}__{pooling}__L{nn}__year-{raw|log}`
+- Ruler: `{method}__{cleaning}__{pooling}__L{nn}__ruler`
+
+**Projection-key schema:**
+- Year (mean): `{method}__{cleaning}__L{nn}__{pls12|pls23|pls34}-{raw|log}`
+- Year (last): `{method}__{cleaning}__L{nn}__last__{pls12|pls23|pls34}-{raw|log}`
+- Ruler (mean): `{method}__{cleaning}__L{nn}__plsda12`
+- Ruler (last): `{method}__{cleaning}__L{nn}__last__plsda12`
+
+### Total config counts
+
+| Method | Layers | Cleanings | Poolings | Year configs | Ruler configs |
+|--------|--------|-----------|----------|--------------|---------------|
+| qwen   | 29     | 2         | 2        | 232 (×2 transforms) | 116 |
+| random | 29     | 2         | 2        | 232 | 116 |
+| mlm    | 5 (L00,04,08,12,16) | 1 (tier0) | 1 (mean) | 10  | 5   |
+| tfidf  | 1 (L00) | 2        | 1 (na)   | 4   | 2   |
+
+---
+
+## Step 05b — Linear Classification Probes (CLS)
+**Pre-existing code** (`05_compute_cls.py`) was already producing `cls_results_*.json` for ruler and year-as-category tasks via `LogisticRegression` + `StratifiedKFold(5)`. This work added aggregation and plotting (Step 06–07).
+
+**Tasks:**
+- `ruler` — 38-class classification
+- `year` — year-as-category, classes are calendar years that appear in the labeled set
+
+**Pipeline:** L2-normalize activations → fit `LogisticRegression(C=1.0, max_iter=1000)` per layer → 5-fold StratifiedCV → record accuracy/macro_f1/weighted_f1 + chance baselines.
+
+**Outputs (already on cluster, pre-existing):**
+```
+results/orcc_round1/cls/
+├── cls_results_qwen.json
+├── cls_results_random.json
+├── cls_results_mlm.json
+└── cls_results_tfidf.json
+```
+
+---
+
+## Step 06 — Aggregation
+**Local scripts, run once after all Step 05 results land.**
+
+| Script | Inputs | Outputs |
+|--------|--------|---------|
+| `06_aggregate_pls.py` | `pls_results_*.json` (×4) | `pls_best_layers.json`, `pls_layer_curves.json` |
+| `06_aggregate_cls.py` | `cls_results_*.json` (×4) | `cls_best_layers.json`, `cls_layer_curves.json` |
+
+**`pls_best_layers.json`** — one entry per `{method, cleaning, pooling, target}` group, picking the best layer by Spearman (regression) or macro_f1 (classification). 33 entries total.
+
+**`pls_layer_curves.json`** — full curve data: list of `{layer, k, spearman_mean, r2_mean, mae_mean, mase_mean, mdape_mean, shuffled_*, ...}` rows per group, used by the plotter.
+
+**`cls_best_layers.json`** — one entry per `{method, cleaning, pooling, task}`. 22 entries total.
+
+**`cls_layer_curves.json`** — full curve data per group.
+
+Both `06_aggregate_*.py` print summary markdown tables to stdout when run.
+
+---
+
+## Step 07 — Plotting
+**Local scripts, idempotent — re-run anytime after Step 06.**
+
+### `07_plot_pls_curves.py`
+
+Reads `pls_layer_curves.json`, produces in `results/orcc_round1/pls/figures/`:
+
+- **Per-group regression PNG** (`{method}_{cleaning}_{pooling}_{raw|log}.png`) — 2×3 grid:
+  - Row 0: Spearman ρ | R² (clipped at −10) | MAE
+  - Row 1: MASE | MDAPE | (hidden)
+  - One line per k ∈ {1,2,3,5}, plus dashed shuffled baseline on Spearman and R²
+- **Per-group ruler PNG** (`{method}_{cleaning}_{pooling}_ruler.png`) — 1×2: Accuracy | Macro-F1 vs layer with chance + shuffled dashed lines
+- **Combined best-of**:
+  - `best_of_year-{raw,log}.png` — all methods × cleaning × pooling on one Spearman plot (best-k per layer)
+  - `best_of_mae_year-{raw,log}.png` — same for MAE
+
+### `07_plot_cls_curves.py`
+
+Reads `cls_layer_curves.json`, produces in `results/orcc_round1/cls/figures/`:
+
+- **Per-group** (`{method}_{cleaning}_{pooling}_{ruler|year}.png`) — 1×2: Accuracy | Macro-F1 vs layer with chance baseline
+- **Combined best-of** (`best_of_{ruler|year}.png`) — best macro-F1 per layer per method, all methods overlaid
+
+---
+
+## Step 08 — Viz Extension: PLS as a Reduction in the Embedding Explorer
+**Date: 2026-05-11.** Adds 3 supervised reductions (PLS-Year raw/log, PLS-Ruler) to `seal_eda.html` alongside t-SNE / PCA / UMAP.
+
+**Implementation:**
+1. `02_merge_coords.py` extended to load `pls_projections_{qwen,random,mlm,tfidf}.json` and merge into `seal_viz_data.json`. Filters to `pls12-raw`, `pls12-log`, `plsda12` only (skips `pls23`, `pls34` for file-size reasons). Fragment IDs are compared as strings (viz stores SEAL IDs as ints, PLS uses strings).
+2. `seal_eda.html` — three new buttons in the reduction toggle group with info tooltips. `buildKey()` extended: for TF-IDF the layer slot is `"L00"` when PLS is selected and `"na"` for t-SNE/PCA/UMAP. `reductionLabel` map updated with the three PLS labels.
+3. **Standalone HTML is gitignored** — rebuild locally with `python3 v_1/src/viz/03_build_standalone_html.py`.
+
+**Data size:** `seal_viz_data.json` grew from 45 MB / 715 keys → **92 MB / 1,468 keys**. GitHub warns at 50 MB but accepts up to 100 MB hard limit. The standalone HTML weighs ~97 MB.
+
+**TF-IDF PLS-DA projection fix:** Original `05_compute_pls_tfidf.py` projected only the 893 labeled rows into the ruler PLS-DA space. Changed to project all 1,586 (`X` instead of `X_labeled`) so SEAL points appear in the viz. Year regression projections were already projecting all 1,586.
+
+---
+
+## Headline Findings (Step 05 + 05b)
+
+> **For Akkadian royal inscriptions, the ranking is consistent: TF-IDF >> MLM ≈ Random > Qwen.**
+
+| Probe | Task | Best method | Best score | Random baseline | Qwen score |
+|-------|------|-------------|-----------|-----------------|------------|
+| PLS regression | Year (Spearman) | TF-IDF tier0 | 0.181 | ~0.18 (similar) | 0.121 |
+| PLS regression | Year (R²) | — | All catastrophically negative | — | — |
+| PLS-DA | Ruler (Macro-F1) | Random tier0/mean | 0.115 | (itself) | 0.111 |
+| LogReg (CLS) | Ruler (Macro-F1) | **TF-IDF tier0** | **0.326** | 0.235 | 0.117 |
+| LogReg (CLS) | Ruler (Accuracy) | **TF-IDF tier0** | **0.78** | 0.66 | 0.52 |
+| LogReg (CLS) | Year-cat (Macro-F1) | **TF-IDF tier0** | **0.270** | 0.194 | 0.095 |
+
+**Interpretation:**
+- Year regression failed for all methods (R² floored at −10 across the board, Spearman near zero). Even TF-IDF's 0.18 Spearman barely clears the shuffled null.
+- For ruler classification, **random projections of Qwen's architecture beat the real Qwen** by a wide margin (0.235 vs 0.117 Macro-F1). This suggests Qwen's learned geometry is not aligned with Akkadian ruler/lexical structure.
+- The MLM has a clear **U-shape** in its layer curves (high at L00, dip in middle, recovery at L15–16) — characteristic of "embedding+output layers retain lexical signal, middle layers compress."
+- TF-IDF tier0 dominating CLS shows the dominant signal is **lexical overlap** (rulers have distinctive vocabulary), not geometric structure in pretrained representations.
+
+---
+
+## File Map (Step 05 onwards)
+
+```
+v_1/src/linear_probing/
+├── pls_utils.py                       # Shared PLS/PLS-DA API
+├── 05_compute_pls.py                  # Qwen + Random driver
+├── 05_compute_pls_mlm.py              # MLM driver
+├── 05_compute_pls_tfidf.py            # TF-IDF driver (local, no GPU)
+├── 05_compute_cls.py                  # Linear probe driver (pre-existing)
+├── 06_aggregate_pls.py                # Aggregate PLS into best_layers + curves
+├── 06_aggregate_cls.py                # Aggregate CLS into best_layers + curves
+├── 07_plot_pls_curves.py              # PLS layer plots (2×3 regression, 1×2 ruler, best-of)
+├── 07_plot_cls_curves.py              # CLS layer plots (1×2, best-of)
+├── sbatch/orcc/
+│   ├── pls_qwen.sh                    # Job 6522 (and prior)
+│   ├── pls_random.sh                  # Job 6523
+│   └── pls_mlm.sh                     # Job 6433
+└── results/orcc_round1/
+    ├── pls/
+    │   ├── pls_results_{qwen,random,mlm,tfidf}.json
+    │   ├── pls_projections_{qwen,random,mlm,tfidf}.json
+    │   ├── pls_best_layers.json
+    │   ├── pls_layer_curves.json
+    │   └── figures/                   # 37 PNGs
+    └── cls/
+        ├── cls_results_{qwen,random,mlm,tfidf}.json   # pre-existing
+        ├── cls_best_layers.json
+        ├── cls_layer_curves.json
+        └── figures/                   # 24 PNGs
+
+v_1/src/viz/
+├── 02_merge_coords.py                 # Now loads PLS projections too
+├── seal_eda.html                      # Now has PLS-Year(raw/log), PLS-Ruler reductions
+├── seal_viz_data.json                 # 92 MB, 1,468 keys
+└── seal_eda_standalone.html           # 97 MB, gitignored
+```
+
+---
+
+## How to Reproduce From Scratch
+
+```bash
+# 1. On cluster (assumes activations from Step 01 already exist):
+sbatch v_1/src/linear_probing/sbatch/orcc/pls_qwen.sh    # ~30 min
+sbatch v_1/src/linear_probing/sbatch/orcc/pls_random.sh  # ~30 min
+sbatch v_1/src/linear_probing/sbatch/orcc/pls_mlm.sh     # ~10 min
+# (each pushes to GitHub on completion)
+
+# 2. Locally:
+git pull origin main
+python3 v_1/src/linear_probing/05_compute_pls_tfidf.py --target both --overwrite
+python3 v_1/src/linear_probing/06_aggregate_pls.py
+python3 v_1/src/linear_probing/06_aggregate_cls.py
+python3 v_1/src/linear_probing/07_plot_pls_curves.py
+python3 v_1/src/linear_probing/07_plot_cls_curves.py
+
+# 3. Update viz:
+python3 v_1/src/viz/02_merge_coords.py
+python3 v_1/src/viz/03_build_standalone_html.py
+open v_1/src/viz/seal_eda_standalone.html
+```
