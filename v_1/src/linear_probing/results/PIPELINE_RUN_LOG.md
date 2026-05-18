@@ -1,8 +1,52 @@
 # Linear Probing Pipeline — Run Log
 
+> **See also:** [../../../../v_1/PROGRESS.md](../../../PROGRESS.md) (project status) · [../../../../PLAN_round2_qwen_diagnosis.md](../../../../PLAN_round2_qwen_diagnosis.md) (Round 2 follow-up plan based on these results)
+
 **Model:** Qwen/Qwen2.5-7B-Instruct (28 transformer layers, hidden dim 3584, ~7B params)
 **Cluster:** Schmidt Sciences HPC, H100 80GB
 **Data:** 4,957 Akkadian letters — OB=1,497 | NA=2,435 | LB=1,025
+
+---
+
+## Directory rename — cluster sync (2026-05-17)
+
+Result directories were renamed in commit `<TBD>` to follow the `{dataset}__{task}` convention:
+
+| Old path | New path |
+|----------|----------|
+| `results/orcc_round1/cls/` | `results/orcc__probe_cls/` |
+| `results/orcc_round1/pls/` | `results/orcc__probe_pls/` |
+| `results/orcc_round1/{coord JSONs}` | `results/orcc__embed/` |
+| `results/seal_round4/` | `results/seal__embed/` |
+| `results/plots/` + root letters JSONs | `results/letters__probe_cls__period/{figures/,*.json}` |
+
+**Cluster operator: run the following commands BEFORE `git pull` on the cluster.** Activations (`.npz`) are gitignored, so `git` will never touch them — but the new sbatch scripts point to the new paths, so you must move the gitignored files first.
+
+```bash
+cd ~/projects/HUJI-THESIS--YARIN
+
+# 1. Move gitignored activations to new paths (before git pull)
+mkdir -p v_1/src/linear_probing/results/orcc__embed
+mv v_1/src/linear_probing/results/orcc_round1/activations \
+   v_1/src/linear_probing/results/orcc__embed/activations 2>/dev/null || echo "(orcc activations already moved or missing)"
+
+mkdir -p v_1/src/linear_probing/results/seal__embed
+mv v_1/src/linear_probing/results/seal_round4/activations \
+   v_1/src/linear_probing/results/seal__embed/activations 2>/dev/null || echo "(seal activations already moved or missing)"
+
+# 2. Pull (tracked JSON/PNG files relocate; gitignored .npz already at new paths)
+git pull origin main
+
+# 3. Verify .npz files are reachable from the new paths
+ls v_1/src/linear_probing/results/orcc__embed/activations/ | head -3
+ls v_1/src/linear_probing/results/seal__embed/activations/ | head -3
+
+# 4. Remove the now-empty old parent dirs (git pull deleted tracked children)
+rmdir v_1/src/linear_probing/results/orcc_round1 2>/dev/null || echo "(orcc_round1 not empty — inspect before deleting)"
+rmdir v_1/src/linear_probing/results/seal_round4 2>/dev/null || echo "(seal_round4 not empty — inspect before deleting)"
+```
+
+After this, all `sbatch v_1/src/linear_probing/sbatch/{orcc,seal}/*.sh` jobs will write to the new paths.
 
 ---
 
@@ -75,8 +119,8 @@ These vectors are then projected to 2D using PCA and t-SNE for visualization, co
 | UMAP | Skipped (not installed in cluster env) |
 
 **Plots saved:**
-- `results/plots/quick_eda_final_layer_mean.png`
-- `results/plots/quick_eda_final_layer_last_token.png`
+- `results/letters__probe_cls__period/figures/quick_eda_final_layer_mean.png`
+- `results/letters__probe_cls__period/figures/quick_eda_final_layer_last_token.png`
 
 ### Interpretation
 
@@ -302,7 +346,7 @@ PROBING — maximal cleaning (mean pooling)
 
 Best layer (tier0):   4 (acc=0.9910)
 Best layer (maximal): 3 (acc=0.9625)
-Checkpoint saved to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/layer_results_checkpoint_qwen2.5-7b-instruct.json
+Checkpoint saved to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/letters__probe_cls__period/layer_results_checkpoint_qwen2.5-7b-instruct.json
 
 ======================================================================
 RANDOM-LABEL BASELINE (1000 permutations at layer 4)
@@ -335,11 +379,11 @@ FINAL TEST-SET EVALUATION
  [  6 359   0]
  [  0   1 224]]
 
-Saved results to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/probe_results_qwen2.5-7b-instruct.json
-Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/layer_accuracy_curve.png
-Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/confound_random_label.png
-Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/tsne_best_layer.png
-Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/confusion_matrix_best_layer.png
+Saved results to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/letters__probe_cls__period/probe_results_qwen2.5-7b-instruct.json
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/letters__probe_cls__period/figures/layer_accuracy_curve.png
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/letters__probe_cls__period/figures/confound_random_label.png
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/letters__probe_cls__period/figures/tsne_best_layer.png
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/letters__probe_cls__period/figures/confusion_matrix_best_layer.png
 
 Total wall time: 58.3 min
 === Probing (last_token pooling) ===
@@ -418,7 +462,7 @@ PROBING — maximal cleaning (last_token pooling)
 
 Best layer (tier0):   28 (acc=0.9554)
 Best layer (maximal): 28 (acc=0.9003)
-Checkpoint saved to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/layer_results_checkpoint_qwen2.5-7b-instruct_last_token.json
+Checkpoint saved to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/letters__probe_cls__period/layer_results_checkpoint_qwen2.5-7b-instruct_last_token.json
 
 ======================================================================
 RANDOM-LABEL BASELINE (1000 permutations at layer 28)
@@ -453,11 +497,11 @@ FINAL TEST-SET EVALUATION
  [ 21 334  10]
  [  0   9 216]]
 
-Saved results to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/probe_results_qwen2.5-7b-instruct_last_token.json
-Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/layer_accuracy_curve_last_token.png
-Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/confound_random_label_last_token.png
-Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/tsne_best_layer_last_token.png
-Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/plots/confusion_matrix_best_layer_last_token.png
+Saved results to /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/letters__probe_cls__period/probe_results_qwen2.5-7b-instruct_last_token.json
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/letters__probe_cls__period/figures/layer_accuracy_curve_last_token.png
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/letters__probe_cls__period/figures/confound_random_label_last_token.png
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/letters__probe_cls__period/figures/tsne_best_layer_last_token.png
+Saved /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/letters__probe_cls__period/figures/confusion_matrix_best_layer_last_token.png
 
 Total wall time: 26.1 min
 === Done ===
@@ -488,14 +532,14 @@ Removing logograms, determinatives and all surface temporal markers drops accura
 Zero of 1000 permutations exceeded real accuracy in both pooling conditions. The result is not a statistical artifact.
 
 ### Plots Saved
-- `results/plots/layer_accuracy_curve.png` — layer curve for mean pooling (both cleanings + TF-IDF baselines)
-- `results/plots/layer_accuracy_curve_last_token.png` — same for last-token
-- `results/plots/confound_random_label.png` — permutation test null distribution (mean)
-- `results/plots/confound_random_label_last_token.png` — same for last-token
-- `results/plots/tsne_best_layer.png` — t-SNE at best layer (all 4957 texts, mean pooling)
-- `results/plots/tsne_best_layer_last_token.png` — same for last-token
-- `results/plots/confusion_matrix_best_layer.png` — confusion matrices (mean)
-- `results/plots/confusion_matrix_best_layer_last_token.png` — same for last-token
+- `results/letters__probe_cls__period/figures/layer_accuracy_curve.png` — layer curve for mean pooling (both cleanings + TF-IDF baselines)
+- `results/letters__probe_cls__period/figures/layer_accuracy_curve_last_token.png` — same for last-token
+- `results/letters__probe_cls__period/figures/confound_random_label.png` — permutation test null distribution (mean)
+- `results/letters__probe_cls__period/figures/confound_random_label_last_token.png` — same for last-token
+- `results/letters__probe_cls__period/figures/tsne_best_layer.png` — t-SNE at best layer (all 4957 texts, mean pooling)
+- `results/letters__probe_cls__period/figures/tsne_best_layer_last_token.png` — same for last-token
+- `results/letters__probe_cls__period/figures/confusion_matrix_best_layer.png` — confusion matrices (mean)
+- `results/letters__probe_cls__period/figures/confusion_matrix_best_layer_last_token.png` — same for last-token
 
 ---
 
@@ -587,7 +631,7 @@ The random model's 98.3% (tier0, mean) exactly matches the TF-IDF baseline (98.3
 
 **Interpretation:** Mean pooling is extremely sample-efficient — tier0 hits 93% with just 42 texts. Last_token is data-hungry — needs 10× more data to reach comparable accuracy. This contrast shows that mean pooling encodes period as a compact, immediately accessible feature; last_token requires contextual integration learned across more examples.
 
-**Plots:** `results/plots/learning_curve.png`, `learning_curve_last_token.png`
+**Plots:** `results/letters__probe_cls__period/figures/learning_curve.png`, `learning_curve_last_token.png`
 
 ---
 
@@ -627,7 +671,7 @@ The random model's 98.3% (tier0, mean) exactly matches the TF-IDF baseline (98.3
 
 **Interpretation:** Mean pooling signal is very compact — **top 5 PCs recover 90%** of tier0 accuracy. Last_token signal is much more distributed — needs k≈50–100 to recover meaningful accuracy. Period information is organized differently depending on pooling: mean pooling concentrates it in top principal components, last_token spreads it across many dimensions.
 
-**Plots:** `results/plots/pca_accuracy_vs_dims.png`, `pca_accuracy_vs_dims_last_token.png`
+**Plots:** `results/letters__probe_cls__period/figures/pca_accuracy_vs_dims.png`, `pca_accuracy_vs_dims_last_token.png`
 
 ---
 
@@ -652,7 +696,7 @@ The random model's 98.3% (tier0, mean) exactly matches the TF-IDF baseline (98.3
 | 14 | 87.47% | 85.09% | −2.37% | 76.90% | 76.33% | −0.57% |
 | 28 | 95.54% | 93.76% | −1.78% | 90.03% | 88.18% | −1.85% |
 
-**Plots:** `results/plots/mlp_vs_linear.png`, `mlp_vs_linear_last_token.png`
+**Plots:** `results/letters__probe_cls__period/figures/mlp_vs_linear.png`, `mlp_vs_linear_last_token.png`
 
 ---
 
@@ -669,7 +713,7 @@ At best layers:
 
 The last_token/maximal gap of **+19.9%** is the strongest evidence that pretraining contributes meaningful representation structure beyond what the tokenizer + random architecture provides.
 
-**Plots:** `results/plots/random_baseline_comparison.png`, `random_baseline_comparison_last_token.png`
+**Plots:** `results/letters__probe_cls__period/figures/random_baseline_comparison.png`, `random_baseline_comparison_last_token.png`
 
 ---
 
@@ -747,7 +791,7 @@ For each `(method, cleaning, pooling, layer)` combination we fit a **PLS regress
 ### Outputs (per method)
 
 ```
-results/orcc_round1/pls/
+results/orcc__probe_pls/
 ├── pls_results_{method}.json          # Per-config metrics (k sweep, baselines, best-k)
 └── pls_projections_{method}.json      # {fragment_ids, embeddings: {key → [[x,y]×1586]}}
 ```
@@ -784,7 +828,7 @@ results/orcc_round1/pls/
 
 **Outputs (already on cluster, pre-existing):**
 ```
-results/orcc_round1/cls/
+results/orcc__probe_cls/
 ├── cls_results_qwen.json
 ├── cls_results_random.json
 ├── cls_results_mlm.json
@@ -818,7 +862,7 @@ Both `06_aggregate_*.py` print summary markdown tables to stdout when run.
 
 ### `07_plot_pls_curves.py`
 
-Reads `pls_layer_curves.json`, produces in `results/orcc_round1/pls/figures/`:
+Reads `pls_layer_curves.json`, produces in `results/orcc__probe_pls/figures/`:
 
 - **Per-group regression PNG** (`{method}_{cleaning}_{pooling}_{raw|log}.png`) — 2×3 grid:
   - Row 0: Spearman ρ | R² (clipped at −10) | MAE
@@ -831,7 +875,7 @@ Reads `pls_layer_curves.json`, produces in `results/orcc_round1/pls/figures/`:
 
 ### `07_plot_cls_curves.py`
 
-Reads `cls_layer_curves.json`, produces in `results/orcc_round1/cls/figures/`:
+Reads `cls_layer_curves.json`, produces in `results/orcc__probe_cls/figures/`:
 
 - **Per-group** (`{method}_{cleaning}_{pooling}_{ruler|year}.png`) — 1×2: Accuracy | Macro-F1 vs layer with chance baseline
 - **Combined best-of** (`best_of_{ruler|year}.png`) — best macro-F1 per layer per method, all methods overlaid
@@ -890,7 +934,7 @@ v_1/src/linear_probing/
 │   ├── pls_qwen.sh                    # Job 6522 (and prior)
 │   ├── pls_random.sh                  # Job 6523
 │   └── pls_mlm.sh                     # Job 6433
-└── results/orcc_round1/
+└── results/orcc__embed/
     ├── pls/
     │   ├── pls_results_{qwen,random,mlm,tfidf}.json
     │   ├── pls_projections_{qwen,random,mlm,tfidf}.json

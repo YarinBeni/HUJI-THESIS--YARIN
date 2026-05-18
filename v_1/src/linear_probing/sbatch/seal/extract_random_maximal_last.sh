@@ -22,7 +22,7 @@ mkdir -p v_1/src/linear_probing/logs
 python -u v_1/src/linear_probing/03b_extract_random_seal_activations.py \
     --text-col text_maximal \
     --pooling last \
-    --output-dir v_1/src/linear_probing/results/seal_round4/activations/random_maximal_last \
+    --output-dir v_1/src/linear_probing/results/seal__embed/activations/random_maximal_last \
     || { echo "FAILED: random maximal last extraction"; exit 1; }
 
 echo "=== Done ==="

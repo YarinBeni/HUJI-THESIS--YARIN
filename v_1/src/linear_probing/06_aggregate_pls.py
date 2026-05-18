@@ -23,7 +23,7 @@ import numpy as np
 _HERE = Path(__file__).resolve().parent
 RESULTS_DIR = _HERE / 'results'
 
-PLS_DIR = RESULTS_DIR / 'orcc_round1' / 'pls'
+PLS_DIR = RESULTS_DIR / 'orcc__probe_pls'
 METHODS = ['qwen', 'random', 'mlm', 'tfidf']
 
 

@@ -135,7 +135,7 @@ SEAL/DLL/LBPL fragments keep `year: null` and `ruler: null`.
 | C2 | `orcc/compute_2d_umap_coords.sh` | ORCC mean+last activation dirs (×8) | `orcc_round1/orcc_qwen_coords_mean.json` + `orcc_round1/orcc_qwen_coords_last.json` |
 | C3 *(conditional)* | `seal/compute_umap_existing_mean.sh` | Existing SEAL mean .npz dirs | `seal_round4/seal_qwen_coords_umap.json` (adds `__umap` keys to existing mean) |
 
-> C3 only if existing .npz activation files still exist on cluster. Check with `ls ~/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/seal_round4/activations/qwen_tier0/layer_00.npz`.
+> C3 only if existing .npz activation files still exist on cluster. Check with `ls ~/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/seal__embed/activations/qwen_tier0/layer_00.npz`.
 
 ---
 
@@ -373,7 +373,7 @@ TASK D — Create sbatch scripts
      v_1/src/linear_probing/sbatch/seal/extract_qwen_tier0_last.sh
        Same as extract_qwen_tier0.sh but:
        - job-name: seal_qwen_tier0_last
-       - python call adds: --pooling last --output-dir v_1/src/linear_probing/results/seal_round4/activations/qwen_tier0_last
+       - python call adds: --pooling last --output-dir v_1/src/linear_probing/results/seal__embed/activations/qwen_tier0_last
        - log file: seal_qwen_tier0_last_%j.out
 
      v_1/src/linear_probing/sbatch/seal/extract_qwen_maximal_last.sh   (similar)
@@ -390,9 +390,9 @@ TASK D — Create sbatch scripts
        Calls: python 04_compute_2d_coords.py \
          --include-umap \
          --input-dirs qwen_tier0_last qwen_maximal_last random_tier0_last random_maximal_last \
-         --input-base v_1/src/linear_probing/results/seal_round4/activations \
+         --input-base v_1/src/linear_probing/results/seal__embed/activations \
          --method-tags qwen__tier0 qwen__maximal random__tier0 random__maximal \
-         --output-path v_1/src/linear_probing/results/seal_round4/seal_qwen_coords_last.json
+         --output-path v_1/src/linear_probing/results/seal__embed/seal_qwen_coords_last.json
        The method-tags here signal that these are LAST-TOKEN — hmm, but the key format
        needs __last in it. So actually pass method-tags as:
          qwen__tier0__last qwen__maximal__last random__tier0__last random__maximal__last
@@ -419,10 +419,10 @@ TASK D — Create sbatch scripts
        Calls 03_extract_seal_activations.py TWICE in sequence:
          python ... --input-parquet v_1/data/evaluation/corpora/orcc_corpus.parquet \
                     --text-col text_tier0 --pooling mean \
-                    --output-dir v_1/src/linear_probing/results/orcc_round1/activations/qwen_tier0_mean
+                    --output-dir v_1/src/linear_probing/results/orcc__embed/activations/qwen_tier0_mean
          python ... --input-parquet v_1/data/evaluation/corpora/orcc_corpus.parquet \
                     --text-col text_tier0 --pooling last \
-                    --output-dir v_1/src/linear_probing/results/orcc_round1/activations/qwen_tier0_last
+                    --output-dir v_1/src/linear_probing/results/orcc__embed/activations/qwen_tier0_last
 
      v_1/src/linear_probing/sbatch/orcc/extract_qwen_maximal.sh   (similar, text_maximal)
      v_1/src/linear_probing/sbatch/orcc/extract_random_tier0.sh   (similar, random model)
@@ -434,16 +434,16 @@ TASK D — Create sbatch scripts
          python 04_compute_2d_coords.py \
            --include-umap --pooling mean \
            --input-dirs qwen_tier0_mean qwen_maximal_mean random_tier0_mean random_maximal_mean \
-           --input-base v_1/src/linear_probing/results/orcc_round1/activations \
+           --input-base v_1/src/linear_probing/results/orcc__embed/activations \
            --method-tags qwen__tier0 qwen__maximal random__tier0 random__maximal \
-           --output-path v_1/src/linear_probing/results/orcc_round1/orcc_qwen_coords_mean.json
+           --output-path v_1/src/linear_probing/results/orcc__embed/orcc_qwen_coords_mean.json
 
          python 04_compute_2d_coords.py \
            --include-umap --pooling last \
            --input-dirs qwen_tier0_last qwen_maximal_last random_tier0_last random_maximal_last \
-           --input-base v_1/src/linear_probing/results/orcc_round1/activations \
+           --input-base v_1/src/linear_probing/results/orcc__embed/activations \
            --method-tags qwen__tier0 qwen__maximal random__tier0 random__maximal \
-           --output-path v_1/src/linear_probing/results/orcc_round1/orcc_qwen_coords_last.json
+           --output-path v_1/src/linear_probing/results/orcc__embed/orcc_qwen_coords_last.json
 
 ────────────────────────────────────────────────────────────
 TASK E — Update merge script
@@ -502,12 +502,12 @@ STEP 3 — Push code and sync to cluster
   conda activate thesis
   # Check umap-learn is installed:
   python -c "import umap; print('umap ok')" || conda install -c conda-forge umap-learn -y
-  mkdir -p v_1/src/linear_probing/results/orcc_round1/activations
+  mkdir -p v_1/src/linear_probing/results/orcc__embed/activations
   mkdir -p v_1/src/linear_probing/logs
 
 ────────────────────────────────────────────────────────────
 STEP 4 — Check if existing SEAL mean .npz files still exist
-  ls v_1/src/linear_probing/results/seal_round4/activations/qwen_tier0/ 2>/dev/null | head -3
+  ls v_1/src/linear_probing/results/seal__embed/activations/qwen_tier0/ 2>/dev/null | head -3
   # If layer_00.npz present: we can compute UMAP for old SEAL mean data (submit C3 later)
   # If absent: skip C3
 

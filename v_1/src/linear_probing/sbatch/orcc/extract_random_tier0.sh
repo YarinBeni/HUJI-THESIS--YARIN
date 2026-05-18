@@ -18,14 +18,14 @@ conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
 
 mkdir -p v_1/src/linear_probing/logs
-mkdir -p v_1/src/linear_probing/results/orcc_round1/activations
+mkdir -p v_1/src/linear_probing/results/orcc__embed/activations
 
 # Mean pooling pass
 python -u v_1/src/linear_probing/03b_extract_random_seal_activations.py \
     --input-parquet v_1/data/evaluation/corpora/orcc_corpus.parquet \
     --text-col text_tier0 \
     --pooling mean \
-    --output-dir v_1/src/linear_probing/results/orcc_round1/activations/random_tier0_mean \
+    --output-dir v_1/src/linear_probing/results/orcc__embed/activations/random_tier0_mean \
     || { echo "FAILED: orcc random tier0 mean"; exit 1; }
 
 # Last-token pooling pass
@@ -33,7 +33,7 @@ python -u v_1/src/linear_probing/03b_extract_random_seal_activations.py \
     --input-parquet v_1/data/evaluation/corpora/orcc_corpus.parquet \
     --text-col text_tier0 \
     --pooling last \
-    --output-dir v_1/src/linear_probing/results/orcc_round1/activations/random_tier0_last \
+    --output-dir v_1/src/linear_probing/results/orcc__embed/activations/random_tier0_last \
     || { echo "FAILED: orcc random tier0 last"; exit 1; }
 
 echo "=== Done ==="

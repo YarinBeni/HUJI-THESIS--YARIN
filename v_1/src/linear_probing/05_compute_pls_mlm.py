@@ -8,10 +8,10 @@ Mirrors 05_compute_pls.py (Qwen/Random) but targets the Akkadian MLM baseline:
   - 17 layers: L00 (embedding) through L16 (final transformer block)
 
 Reads pre-extracted activations from:
-  results/seal_round4/activations/mlm_tier0/layer_NN.npz
-  results/orcc_round1/activations/mlm_tier0/layer_NN.npz
+  results/seal__embed/activations/mlm_tier0/layer_NN.npz
+  results/orcc__embed/activations/mlm_tier0/layer_NN.npz
 
-Outputs (in results/orcc_round1/pls/):
+Outputs (in results/orcc__probe_pls/):
   pls_results_mlm.json      — CV metrics per config
   pls_projections_mlm.json  — 5-component projections for all 1586 fragments
 
@@ -45,9 +45,9 @@ from pls_utils import (  # noqa: E402
 ORCC_PARQUET = Path("v_1/data/evaluation/corpora/orcc_corpus.parquet")
 SEAL_PARQUET = Path("v_1/data/evaluation/corpora/seal_corpus.parquet")
 
-SEAL_ACTS_DIR = RESULTS_DIR / "seal_round4" / "activations" / "mlm_tier0"
-ORCC_ACTS_DIR = RESULTS_DIR / "orcc_round1" / "activations" / "mlm_tier0"
-OUT_DIR       = RESULTS_DIR / "orcc_round1" / "pls"
+SEAL_ACTS_DIR = RESULTS_DIR / "seal__embed" / "activations" / "mlm_tier0"
+ORCC_ACTS_DIR = RESULTS_DIR / "orcc__embed" / "activations" / "mlm_tier0"
+OUT_DIR       = RESULTS_DIR / "orcc__probe_pls"
 
 N_SEAL = 384
 N_ORCC = 1202      # total ORCC rows; 893 have non-null year

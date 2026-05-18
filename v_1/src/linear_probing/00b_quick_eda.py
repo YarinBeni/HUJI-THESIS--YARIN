@@ -149,7 +149,7 @@ def run(args):
 
     act_dir = RESULTS_DIR / 'activations' / short_name
     act_dir.mkdir(parents=True, exist_ok=True)
-    plots_dir = RESULTS_DIR / 'plots'
+    plots_dir = RESULTS_DIR / 'letters__probe_cls__period' / 'figures'
     plots_dir.mkdir(parents=True, exist_ok=True)
 
     # ── Extract + plot for each pooling method ────────────────────────────

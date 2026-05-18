@@ -134,7 +134,7 @@ def run(args):
         })
 
     # ── Save results ────────────────────────────────────────────────────────
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    (RESULTS_DIR / 'letters__probe_cls__period').mkdir(parents=True, exist_ok=True)
     output = {
         'model_id': args.model,
         'model_short_name': short_name,
@@ -154,7 +154,7 @@ def run(args):
         'sample_tokenizations': sample_tokenizations,
     }
 
-    out_path = RESULTS_DIR / 'tokenization_check.json'
+    out_path = RESULTS_DIR / 'letters__probe_cls__period' / 'tokenization_check.json'
     with open(out_path, 'w') as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
     print(f"\nSaved results to {out_path}")

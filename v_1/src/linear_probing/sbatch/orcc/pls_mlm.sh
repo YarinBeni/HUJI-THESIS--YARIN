@@ -19,7 +19,7 @@ conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
 
 mkdir -p v_1/src/linear_probing/logs
-mkdir -p v_1/src/linear_probing/results/orcc_round1/pls
+mkdir -p v_1/src/linear_probing/results/orcc__probe_pls
 
 python -u v_1/src/linear_probing/05_compute_pls_mlm.py \
     --cleaning tier0 \
@@ -33,8 +33,8 @@ python -u v_1/src/linear_probing/05_compute_pls_mlm.py \
 
 echo ""
 echo "=== Pushing results to GitHub ==="
-git add v_1/src/linear_probing/results/orcc_round1/pls/pls_results_mlm.json \
-        v_1/src/linear_probing/results/orcc_round1/pls/pls_projections_mlm.json
+git add v_1/src/linear_probing/results/orcc__probe_pls/pls_results_mlm.json \
+        v_1/src/linear_probing/results/orcc__probe_pls/pls_projections_mlm.json
 git commit -m "Add MLM PLS results+projections: year(global-shuffle)+ruler PLS-DA (cluster job $SLURM_JOB_ID)" \
     || echo "Nothing new to commit"
 git push origin main \

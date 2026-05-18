@@ -13,7 +13,7 @@ Key format: {method}__{cleaning}__L{NN:02d}[__last]__{reduction}
   cleaning:  tier0 | maximal
   reduction: tsne | pca | umap
 
-Output: results/seal_round4/seal_qwen_coords.json  (or --output-path)
+Output: results/seal__embed/seal_qwen_coords.json  (or --output-path)
 """
 
 import argparse
@@ -25,8 +25,8 @@ from pathlib import Path
 
 from utils import RESULTS_DIR
 
-SEAL_ACTS_DIR = RESULTS_DIR / 'seal_round4' / 'activations'
-OUTPUT_PATH = RESULTS_DIR / 'seal_round4' / 'seal_qwen_coords.json'
+SEAL_ACTS_DIR = RESULTS_DIR / 'seal__embed' / 'activations'
+OUTPUT_PATH = RESULTS_DIR / 'seal__embed' / 'seal_qwen_coords.json'
 
 # 4 activation directories and their (method, cleaning) tags
 ACTIVATION_CONFIGS = [

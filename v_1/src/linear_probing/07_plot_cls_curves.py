@@ -1,8 +1,8 @@
 """
 Step 7 (CLS) — Plot linear classification layer curves.
 
-Reads cls_layer_curves.json from results/orcc_round1/cls/.
-Output: results/orcc_round1/cls/figures/
+Reads cls_layer_curves.json from results/orcc__probe_cls/.
+Output: results/orcc__probe_cls/figures/
 
 For each group: one PNG, 1×2 layout (figsize=(12, 5)):
   Left:  Accuracy vs. Layer  — single line, dashed chance_accuracy
@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 _HERE = Path(__file__).resolve().parent
-CLS_DIR = _HERE / 'results' / 'orcc_round1' / 'cls'
+CLS_DIR = _HERE / 'results' / 'orcc__probe_cls'
 FIGURES_DIR = CLS_DIR / 'figures'
 
 METHOD_COLORS = {

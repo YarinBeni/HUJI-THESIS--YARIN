@@ -1,8 +1,17 @@
 # Project Progress & Handover Snapshot
 
-> **Status Date:** 2026-04-14
-> **Current Phase:** Parallel execution in progress — cluster jobs running, EDA GUI built. Waiting on C + D-training before extraction and merge.
+> **See also:** [../README.md](../README.md) (repo orientation) · [src/linear_probing/results/PIPELINE_RUN_LOG.md](src/linear_probing/results/PIPELINE_RUN_LOG.md) (all probe results) · [../PLAN_round2_qwen_diagnosis.md](../PLAN_round2_qwen_diagnosis.md) (next-phase plan)
+
+> **Status Date:** 2026-05-17
+> **Current Phase:** Track B Round 1 complete on letters AND ORCC (Steps 01–08, PIPELINE_RUN_LOG.md). Round 2 (Qwen-failure diagnosis: elicitation → scale+SAE → tokenization) planned, awaiting execution — see `../PLAN_round2_qwen_diagnosis.md`. SAE pipeline (Track C) in early implementation under `src/sae/`.
 > **Working Directory:** `v_1/`
+
+## Update 2026-05-17 — Track B Round 1 complete (ORCC + viz extension)
+
+- **Steps 05–08** (PLS, CLS, viz integration) all complete on the ORCC royal-inscriptions corpus (893 labeled fragments, 38 rulers). Full per-config numbers in `src/linear_probing/results/PIPELINE_RUN_LOG.md`.
+- **Headline finding (ORCC):** TF-IDF >> MLM ≈ Random > Qwen for ruler / year recovery. Qwen 2.5-7B-Instruct fed raw text scored *below random-projection baseline* — motivating Round 2.
+- **Round 2 plan:** `../PLAN_round2_qwen_diagnosis.md` (dated 2026-05-15) lays out 3 phases — elicitation, scale+SAE, tokenization — with pre-committed success criteria + decision gates.
+- **Note:** "Next Steps" item 4 below ("D-extraction") was completed 2026-04-15 as part of Step 03 in the run log; legacy item retained for historical context.
 
 ## Project Context
 

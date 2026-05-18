@@ -2,7 +2,7 @@
 05_compute_cls_tfidf.py — Classification probe for TF-IDF baseline.
 Runs locally (no GPU / no large activations needed).
 
-Output: results/orcc_round1/cls/cls_results_tfidf.json
+Output: results/orcc__probe_cls/cls_results_tfidf.json
 """
 
 import json
@@ -24,7 +24,7 @@ from cls_utils import fit_cls_cv
 
 ORCC_PARQUET = _THIS_DIR / '../../data/evaluation/corpora/orcc_corpus.parquet'
 SEAL_PARQUET = _THIS_DIR / '../../data/evaluation/corpora/seal_corpus.parquet'
-OUT_DIR      = _THIS_DIR / 'results' / 'orcc_round1' / 'cls'
+OUT_DIR      = _THIS_DIR / 'results' / 'orcc__probe_cls'
 
 MIN_COUNT = 5
 CLEANINGS = ['tier0', 'maximal']

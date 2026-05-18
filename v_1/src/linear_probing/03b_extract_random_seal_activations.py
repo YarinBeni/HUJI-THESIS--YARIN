@@ -3,7 +3,7 @@ Step 3b — Extract Random-Weights Qwen Activations for SEAL Fragments.
 Same architecture and tokenizer as Qwen2.5-7B-Instruct, but with randomly
 initialized weights. Mirrors the 01 / 01b pattern for the letters pipeline.
 
-Output dir: results/seal_round4/activations/random_{tier0|maximal}/
+Output dir: results/seal__embed/activations/random_{tier0|maximal}/
 """
 
 import argparse
@@ -17,7 +17,7 @@ from datetime import datetime
 
 from utils import mean_pool, last_token_pool, RESULTS_DIR, SEED
 
-SEAL_ACTS_DIR = RESULTS_DIR / 'seal_round4' / 'activations'
+SEAL_ACTS_DIR = RESULTS_DIR / 'seal__embed' / 'activations'
 DEFAULT_MODEL = 'Qwen/Qwen2.5-7B-Instruct'
 
 

@@ -1,5 +1,7 @@
 # SEAL Corpus Embedding Explorer — Documentation
 
+> **See also:** [../linear_probing/results/PIPELINE_RUN_LOG.md](../linear_probing/results/PIPELINE_RUN_LOG.md) Step 08 (PLS reductions exposed in the GUI) · [../../PROGRESS.md](../../PROGRESS.md) (project status)
+
 > **Status:** v4 complete (2026-05-11). Data: 1,586 fragments × **1,468 embedding keys**, ~92 MB.
 > **GUI file:** `seal_eda.html` — open via local server (below) or use the self-contained `seal_eda_standalone.html`
 > **Data file:** `seal_viz_data.json` (~92 MB, committed to repo with GitHub size warning)
@@ -247,11 +249,11 @@ Inlines `seal_viz_data.json` into `seal_eda_standalone.html` (46 MB). This file 
 | `data/evaluation/corpora/seal_corpus.parquet` | 384 SEAL/DLL/LBPL fragments |
 | `data/evaluation/corpora/orcc_corpus.parquet` | 1,202 ORCC Royal Inscription fragments |
 | `data/raw/chungrong/orcc_round1/royal_inscriptions.csv` | Raw ORCC source (1,202 frags) |
-| `src/linear_probing/results/seal_round4/seal_qwen_coords.json` | Qwen+Random SEAL mean (232 keys) |
-| `src/linear_probing/results/seal_round4/seal_mlm_coords.json` | MLM SEAL (10 keys) |
-| `src/linear_probing/results/seal_round4/seal_qwen_coords_last.json` | Qwen+Random SEAL last-token (348 keys) |
-| `src/linear_probing/results/orcc_round1/orcc_qwen_coords_mean.json` | ORCC mean-pooled (348 keys) |
-| `src/linear_probing/results/orcc_round1/orcc_qwen_coords_last.json` | ORCC last-token (348 keys) |
+| `src/linear_probing/results/seal__embed/seal_qwen_coords.json` | Qwen+Random SEAL mean (232 keys) |
+| `src/linear_probing/results/seal__embed/seal_mlm_coords.json` | MLM SEAL (10 keys) |
+| `src/linear_probing/results/seal__embed/seal_qwen_coords_last.json` | Qwen+Random SEAL last-token (348 keys) |
+| `src/linear_probing/results/orcc__embed/orcc_qwen_coords_mean.json` | ORCC mean-pooled (348 keys) |
+| `src/linear_probing/results/orcc__embed/orcc_qwen_coords_last.json` | ORCC last-token (348 keys) |
 | `src/linear_probing/sbatch/seal/` | All SEAL sbatch scripts |
 | `src/linear_probing/sbatch/orcc/` | All ORCC sbatch scripts |
 | `src/corpus/02_build_seal_corpus.py` | SEAL corpus builder |

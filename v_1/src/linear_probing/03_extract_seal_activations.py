@@ -6,7 +6,7 @@ transformer layer (including embedding layer 0). Saves one .npz per layer.
 Key differences from 01_extract_activations.py:
 - Loads seal_corpus.parquet directly (pre-cleaned columns, no extra cleaning)
 - Accepts --input-parquet and --text-col instead of --model + --cleaning
-- Output dir: results/seal_round4/activations/qwen_{tier0|maximal}/
+- Output dir: results/seal__embed/activations/qwen_{tier0|maximal}/
 - Shape: (384, 3584) float32 per layer
 """
 
@@ -21,7 +21,7 @@ from datetime import datetime
 
 from utils import mean_pool, last_token_pool, RESULTS_DIR
 
-SEAL_ACTS_DIR = RESULTS_DIR / 'seal_round4' / 'activations'
+SEAL_ACTS_DIR = RESULTS_DIR / 'seal__embed' / 'activations'
 DEFAULT_MODEL = 'Qwen/Qwen2.5-7B-Instruct'
 
 

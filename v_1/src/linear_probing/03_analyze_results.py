@@ -26,7 +26,7 @@ def run(args):
     model_name = args.model
 
     # ── Load probe results ──────────────────────────────────────────────────
-    results_path = RESULTS_DIR / f'probe_results_{model_name}.json'
+    results_path = RESULTS_DIR / 'letters__probe_cls__period' / f'probe_results_{model_name}.json'
     with open(results_path) as f:
         probe = json.load(f)
 
@@ -172,7 +172,7 @@ def run(args):
         scores = X @ direction  # (4957,)
 
         # Plot: projected scores by period
-        plots_dir = RESULTS_DIR / 'plots'
+        plots_dir = RESULTS_DIR / 'letters__probe_cls__period' / 'figures'
         fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
         # Panel 1: score histograms by period
@@ -207,7 +207,7 @@ def run(args):
         print(f"  Saved plot to {path}")
 
     # ── Cleaning ablation comparison plot ────────────────────────────────────
-    plots_dir = RESULTS_DIR / 'plots'
+    plots_dir = RESULTS_DIR / 'letters__probe_cls__period' / 'figures'
     plots_dir.mkdir(parents=True, exist_ok=True)
 
     fig, ax = plt.subplots(figsize=(12, 6))

@@ -13,7 +13,7 @@ For ruler (classification) configs: one PNG per group with a 1×2 layout:
 Also produces combined 'best-of' figures (one per year_transform):
   best Spearman + best MAE per layer per method (regression only).
 
-Output: results/orcc_round1/pls/figures/
+Output: results/orcc__probe_pls/figures/
 """
 
 import json
@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 _HERE = Path(__file__).resolve().parent
-PLS_DIR = _HERE / 'results' / 'orcc_round1' / 'pls'
+PLS_DIR = _HERE / 'results' / 'orcc__probe_pls'
 FIGURES_DIR = PLS_DIR / 'figures'
 
 K_COLORS = {1: '#1f77b4', 2: '#ff7f0e', 3: '#2ca02c', 5: '#d62728'}

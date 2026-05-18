@@ -1,7 +1,7 @@
 """
 Step 6 (CLS) — Aggregate linear classification results across all methods and layers.
 
-Reads cls_results_{qwen,random,mlm,tfidf}.json from results/orcc_round1/cls/.
+Reads cls_results_{qwen,random,mlm,tfidf}.json from results/orcc__probe_cls/.
 Produces:
   cls_best_layers.json   — best layer per (method, cleaning, pooling, task)
   cls_layer_curves.json  — all layers × metrics per group
@@ -24,7 +24,7 @@ import numpy as np
 _HERE = Path(__file__).resolve().parent
 RESULTS_DIR = _HERE / 'results'
 
-CLS_DIR = RESULTS_DIR / 'orcc_round1' / 'cls'
+CLS_DIR = RESULTS_DIR / 'orcc__probe_cls'
 METHODS = ['qwen', 'random', 'mlm', 'tfidf']
 
 

@@ -1,7 +1,7 @@
 # PLS Year-Regression: CV Strategy Note
 
 **Date:** 2026-05-05  
-**Pipeline version:** orcc_round1 PLS jobs 5561–5563 + TF-IDF local
+**Pipeline version:** `orcc__probe_pls/` (dir renamed from `orcc_round1/pls/` on 2026-05-17). Final PLS jobs: 6522 (Qwen), 6523 (Random), 6433 (MLM) + TF-IDF local. Earlier jobs 5561–5563 had the within-ruler shuffled-baseline bug since fixed in `pls_utils._global_shuffle`.
 
 ---
 

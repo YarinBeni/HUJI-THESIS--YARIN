@@ -11,7 +11,7 @@ CLI
   --cleaning {tier0,maximal}
   --pooling {mean,last}
   --activations-base   path to results/ root (default: auto from script location)
-  --output-dir         (default: results/orcc_round1/pls)
+  --output-dir         (default: results/orcc__probe_pls)
   --year-transforms    raw,log   (comma-separated; default: both)
   --n-components       1,2,3,5  (comma-separated)
   --layers             all | 0,5,10,15,...
@@ -44,7 +44,7 @@ N_LAYERS = 29   # L00..L28
 
 def get_seal_dir(base: Path, method: str, cleaning: str, pooling: str) -> Path:
     """SEAL activation dir: mean has no suffix, last has _last."""
-    root = base / 'seal_round4' / 'activations'
+    root = base / 'seal__embed' / 'activations'
     if pooling == 'mean':
         return root / f'{method}_{cleaning}'
     return root / f'{method}_{cleaning}_last'
@@ -52,7 +52,7 @@ def get_seal_dir(base: Path, method: str, cleaning: str, pooling: str) -> Path:
 
 def get_orcc_dir(base: Path, method: str, cleaning: str, pooling: str) -> Path:
     """ORCC activation dir: always carries _{pooling} suffix."""
-    root = base / 'orcc_round1' / 'activations'
+    root = base / 'orcc__embed' / 'activations'
     return root / f'{method}_{cleaning}_{pooling}'
 
 
@@ -128,7 +128,7 @@ def parse_args():
     p.add_argument('--activations-base', type=str, default=None,
                    help='Path to results/ root (default: auto-detected from script location)')
     p.add_argument('--output-dir', type=str, default=None,
-                   help='Output dir (default: results/orcc_round1/pls)')
+                   help='Output dir (default: results/orcc__probe_pls)')
     p.add_argument('--year-transforms', type=str, default='raw,log',
                    help='Comma-separated year transforms (default: raw,log)')
     p.add_argument('--n-components', type=str, default='1,2,3,5',
@@ -152,7 +152,7 @@ def main():
     args = parse_args()
 
     base    = Path(args.activations_base) if args.activations_base else _RESULTS_DIR
-    out_dir = Path(args.output_dir) if args.output_dir else _RESULTS_DIR / 'orcc_round1' / 'pls'
+    out_dir = Path(args.output_dir) if args.output_dir else _RESULTS_DIR / 'orcc__probe_pls'
 
     year_transforms = [yt.strip() for yt in args.year_transforms.split(',')]
     n_components    = [int(k.strip()) for k in args.n_components.split(',')]

@@ -57,7 +57,7 @@ Phases 0→C on the new data.
 **Run all commands from the repo root** (`/Users/yarin.b/git/lititure-review`).
 
 READ FIRST (in order):
-1. `v_1/justification/seal_round4_pipeline_plan.md` — Sections 11, 17, 18, 19 (phase steps + verified facts + new data)
+1. `justification/seal_round4_pipeline_plan.md` — Sections 11, 17, 18, 19 (phase steps + verified facts + new data)
 2. `v_1/PROGRESS.md` — current state
 3. `v_1/data/raw/chungrong/seal_round4/README.md` — known issues + what changed in re-delivery
 
@@ -112,7 +112,7 @@ READ FIRST (in order):
 7. Update `v_1/data/evaluation/bias_check/seal_round4/README.md`:
    Replace the summary table with the new numbers.
 
-8. Update `v_1/PROGRESS.md` and `v_1/justification/seal_round4_pipeline_plan.md`:
+8. Update `v_1/PROGRESS.md` and `justification/seal_round4_pipeline_plan.md`:
    - In Section 19.4 checklist, mark all items done.
    - Add Section 20 with new Phase C verified facts (same format as Section 18).
 
@@ -252,7 +252,7 @@ READ FIRST on cluster:
 2. `v_1/src/linear_probing/01b_extract_random_baseline.py` — existing random-weights script (letters)
 3. `v_1/src/linear_probing/utils.py` — `clean_tier0`, `clean_maximal`, `mean_pool`, `last_token_pool`
 4. `v_1/src/linear_probing/sbatch/` — existing sbatch scripts for reference
-5. `v_1/justification/seal_round4_pipeline_plan.md` Section 8 (Phase D architecture)
+5. `justification/seal_round4_pipeline_plan.md` Section 8 (Phase D architecture)
 6. `v_1/src/bias_check/seal_tasks.py` — `load_task_data()` for how SEAL data is loaded
 
 **STEPS:**
@@ -271,7 +271,7 @@ READ FIRST on cluster:
      (text_tier0 or text_maximal)
    - Loads the parquet, uses the specified text column (already cleaned), no extra cleaning needed
    - Reuses `mean_pool`, `last_token_pool` from `utils.py`
-   - Output dir: `results/seal_round4/activations/qwen_{tier0|maximal}/`
+   - Output dir: `results/seal__embed/activations/qwen_{tier0|maximal}/`
    - Layer files named `layer_00.npz` ... `layer_28.npz` (shape: 384 × 3584 float32)
    - Saves `metadata.json` alongside (n_texts=384, model_id, text_col, fragment_ids)
 
@@ -279,7 +279,7 @@ READ FIRST on cluster:
    **New script** — mirror the `01` / `01b` pattern.
    Same as `03_extract_seal_activations.py` but initializes model with random weights
    (same pattern as `01b`: `AutoConfig.from_pretrained` + `AutoModelForCausalLM.from_config`,
-   `torch.manual_seed(SEED)`). Output dir: `results/seal_round4/activations/random_{tier0|maximal}/`.
+   `torch.manual_seed(SEED)`). Output dir: `results/seal__embed/activations/random_{tier0|maximal}/`.
 
 4. Write 4 sbatch scripts in `v_1/src/linear_probing/sbatch/seal/`:
    - `extract_qwen_tier0.sh`     → runs `03_extract_seal_activations.py --text-col text_tier0`
@@ -299,7 +299,7 @@ READ FIRST on cluster:
      `qwen__tier0__L00__tsne`, `qwen__tier0__L00__pca`, ..., `qwen__tier0__L28__pca`
      `qwen__maximal__L00__tsne`, ..., `random__tier0__L00__tsne`, etc.
    - Collect all 232 keys (2 methods × 2 cleanings × 29 layers × 2 reductions).
-   - Save to `results/seal_round4/seal_qwen_coords.json`
+   - Save to `results/seal__embed/seal_qwen_coords.json`
    - Validate: every key has exactly 384 `[x,y]` pairs, no NaN/Inf.
 
 7. Run:
@@ -310,7 +310,7 @@ READ FIRST on cluster:
 
 8. Rsync JSON back to local:
    ```
-   rsync -av <cluster>:~/projects/lititure-review/v_1/src/linear_probing/results/seal_round4/seal_qwen_coords.json \
+   rsync -av <cluster>:~/projects/lititure-review/v_1/src/linear_probing/results/seal__embed/seal_qwen_coords.json \
      v_1/src/viz/seal_qwen_coords.json
    ```
 
@@ -319,8 +319,8 @@ READ FIRST on cluster:
 - `v_1/src/linear_probing/03b_extract_random_seal_activations.py`
 - `v_1/src/linear_probing/04_compute_2d_coords.py`
 - `v_1/src/linear_probing/sbatch/seal/*.sh`
-- `results/seal_round4/activations/{qwen,random}_{tier0,maximal}/layer_XX.npz` (×4×29)
-- `results/seal_round4/seal_qwen_coords.json`
+- `results/seal__embed/activations/{qwen,random}_{tier0,maximal}/layer_XX.npz` (×4×29)
+- `results/seal__embed/seal_qwen_coords.json`
 
 **OUTPUT FILE (local, after rsync):**
 - `v_1/src/viz/seal_qwen_coords.json`
@@ -346,7 +346,7 @@ READ FIRST:
 2. `v_1/src/archive/baseline_mlm/02_train.py` — training script, `ANALYSIS_LAYERS`, checkpoint logic
 3. `v_1/src/archive/baseline_mlm/01_prepare_data.py` — data prep
 4. `v_1/models/baseline/training_stats.json` — previous training run (val loss 3.020)
-5. `v_1/justification/seal_round4_pipeline_plan.md` Section 8 (embedding context)
+5. `justification/seal_round4_pipeline_plan.md` Section 8 (embedding context)
 
 **STEPS:**
 
@@ -397,7 +397,7 @@ READ FIRST:
 
 7. Rsync JSON back to local:
    ```
-   rsync -av <cluster>:.../results/seal_round4/seal_mlm_coords.json \
+   rsync -av <cluster>:.../results/seal__embed/seal_mlm_coords.json \
      v_1/src/viz/seal_mlm_coords.json
    ```
 

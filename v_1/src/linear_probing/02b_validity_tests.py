@@ -332,7 +332,7 @@ def run(args):
     print(f"Data: {len(df)} texts, Train+Val: {len(train_val_idx)}")
 
     # ── Load existing probe results to get best layers and C values ─────────
-    probe_results_path = RESULTS_DIR / f'probe_results_{model_name}{pooling_suffix}.json'
+    probe_results_path = RESULTS_DIR / 'letters__probe_cls__period' / f'probe_results_{model_name}{pooling_suffix}.json'
     with open(probe_results_path) as f:
         probe_results = json.load(f)
 
@@ -349,7 +349,7 @@ def run(args):
     print(f"Best C values: {best_Cs}")
 
     # ── Setup output ────────────────────────────────────────────────────────
-    plots_dir = RESULTS_DIR / 'plots'
+    plots_dir = RESULTS_DIR / 'letters__probe_cls__period' / 'figures'
     plots_dir.mkdir(parents=True, exist_ok=True)
 
     skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=SEED)
@@ -468,7 +468,7 @@ def run(args):
     print(f"{'='*70}")
 
     random_model_name = f'{model_name}-random'
-    random_results_path = RESULTS_DIR / f'probe_results_{random_model_name}{pooling_suffix}.json'
+    random_results_path = RESULTS_DIR / 'letters__probe_cls__period' / f'probe_results_{random_model_name}{pooling_suffix}.json'
 
     random_comparison = {
         'trained_results_path': str(probe_results_path),
@@ -506,7 +506,7 @@ def run(args):
         'random_baseline': random_comparison,
     }
 
-    out_path = RESULTS_DIR / f'validity_results_{model_name}{pooling_suffix}.json'
+    out_path = RESULTS_DIR / 'letters__probe_cls__period' / f'validity_results_{model_name}{pooling_suffix}.json'
     with open(out_path, 'w') as f:
         json.dump(output, f, indent=2)
     print(f"\nSaved results to {out_path}")

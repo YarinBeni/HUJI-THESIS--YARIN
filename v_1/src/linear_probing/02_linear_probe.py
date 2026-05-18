@@ -136,9 +136,9 @@ def run(args):
           f"(acc={results['maximal'][best_layer_maximal]['accuracy']:.4f})")
 
     # ── Checkpoint: save layer results immediately so they survive a timeout ──
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    (RESULTS_DIR / 'letters__probe_cls__period').mkdir(parents=True, exist_ok=True)
     pooling_tag = f'_{pooling}' if pooling != 'mean' else ''
-    checkpoint_path = RESULTS_DIR / f'layer_results_checkpoint_{model_name}{pooling_tag}.json'
+    checkpoint_path = RESULTS_DIR / 'letters__probe_cls__period' / f'layer_results_checkpoint_{model_name}{pooling_tag}.json'
     with open(checkpoint_path, 'w') as f:
         json.dump({
             'model': model_name, 'pooling': pooling,
@@ -220,7 +220,7 @@ def run(args):
         print(f"    Confusion matrix:\n{cm}")
 
     # ── Save all results to JSON ────────────────────────────────────────────
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    (RESULTS_DIR / 'letters__probe_cls__period').mkdir(parents=True, exist_ok=True)
     output = {
         'model': model_name,
         'pooling': pooling,
@@ -257,13 +257,13 @@ def run(args):
     }
 
     pooling_tag = f'_{pooling}' if pooling != 'mean' else ''
-    results_path = RESULTS_DIR / f'probe_results_{model_name}{pooling_tag}.json'
+    results_path = RESULTS_DIR / 'letters__probe_cls__period' / f'probe_results_{model_name}{pooling_tag}.json'
     with open(results_path, 'w') as f:
         json.dump(output, f, indent=2)
     print(f"\nSaved results to {results_path}")
 
     # ── 2d. Plots ───────────────────────────────────────────────────────────
-    plots_dir = RESULTS_DIR / 'plots'
+    plots_dir = RESULTS_DIR / 'letters__probe_cls__period' / 'figures'
     plots_dir.mkdir(parents=True, exist_ok=True)
 
     # --- Plot 1: Layer-accuracy curve ---

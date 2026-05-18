@@ -1,6 +1,10 @@
-# Akkadian Thesis — Research Log
+# Akkadian Thesis — Research Log (Phases 0 → Track A)
 
-Condensed record of milestones, key decisions, and results. Useful for writing the paper/thesis.
+> **Frozen snapshot.** This file covers Phase 0 (design) → Phase 1 (baseline MLM, superseded) → Phase 1.5 (eval corpus) → Track A (LLM baseline pipeline, Jan–Mar 2026). It is intentionally not updated past Track A.
+>
+> **Current state** lives in [`/v_1/PROGRESS.md`](../v_1/PROGRESS.md). **Track B / ORCC / Round 2 results** live in [`/v_1/src/linear_probing/results/PIPELINE_RUN_LOG.md`](../v_1/src/linear_probing/results/PIPELINE_RUN_LOG.md). **Active research plan** is [`/PLAN_round2_qwen_diagnosis.md`](../PLAN_round2_qwen_diagnosis.md).
+
+Condensed record of milestones, key decisions, and results. Useful for writing the paper/thesis methods chapter.
 
 ---
 
@@ -109,7 +113,7 @@ Received 3 normalized CSVs for temporal classification:
 
 ### Final Corpus
 - **Total texts after filtering**: 4,957
-- **File**: `v_1/data/evaluation_corpora/unified_3groups_akkadian_letters.parquet`
+- **File**: `v_1/data/evaluation/corpora/unified_3groups_akkadian_letters.parquet`
 - Details: `justification/evaluation_corpus_size_5005_texts.md`, `justification/chunrong_data_cleaning_decisions.md`
 
 ---

@@ -29,7 +29,7 @@ from pls_utils import (  # noqa: E402
 
 SEAL_PARQUET = REPO_ROOT / "v_1/data/evaluation/corpora/seal_corpus.parquet"
 ORCC_PARQUET = REPO_ROOT / "v_1/data/evaluation/corpora/orcc_corpus.parquet"
-OUT_DIR      = REPO_ROOT / "v_1/src/linear_probing/results/orcc_round1/pls"
+OUT_DIR      = REPO_ROOT / "v_1/src/linear_probing/results/orcc__probe_pls"
 
 TFIDF_PARAMS       = dict(analyzer="char_wb", ngram_range=(2, 5))
 K_VALUES           = [1, 2, 3, 5]

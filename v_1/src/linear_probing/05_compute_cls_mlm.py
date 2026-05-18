@@ -5,7 +5,7 @@ Mirrors 05_compute_cls.py but for MLM:
   - tier0 cleaning only, mean pooling only
   - 17 layers: L00–L16, hidden_dim=384
 
-Output: results/orcc_round1/cls/cls_results_mlm.json
+Output: results/orcc__probe_cls/cls_results_mlm.json
 """
 
 import json
@@ -20,9 +20,9 @@ _RESULTS_DIR = _THIS_DIR / 'results'
 
 SEAL_PARQUET  = Path('v_1/data/evaluation/corpora/seal_corpus.parquet')
 ORCC_PARQUET  = Path('v_1/data/evaluation/corpora/orcc_corpus.parquet')
-SEAL_ACTS_DIR = _RESULTS_DIR / 'seal_round4' / 'activations' / 'mlm_tier0'
-ORCC_ACTS_DIR = _RESULTS_DIR / 'orcc_round1' / 'activations' / 'mlm_tier0'
-OUT_DIR       = _RESULTS_DIR / 'orcc_round1' / 'cls'
+SEAL_ACTS_DIR = _RESULTS_DIR / 'seal__embed' / 'activations' / 'mlm_tier0'
+ORCC_ACTS_DIR = _RESULTS_DIR / 'orcc__embed' / 'activations' / 'mlm_tier0'
+OUT_DIR       = _RESULTS_DIR / 'orcc__probe_cls'
 
 ALL_LAYERS = list(range(17))
 MIN_COUNT  = 5   # min fragments per class

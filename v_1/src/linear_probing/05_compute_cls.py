@@ -18,7 +18,7 @@ CLI
   --layers    all | 0,5,10,...
   --min-count minimum fragments per class to include (default: 5)
   --C         LogisticRegression regularisation (default: 1.0)
-  --output-dir  (default: results/orcc_round1/cls)
+  --output-dir  (default: results/orcc__probe_cls)
 
 Output (merged with existing file):
   cls_results_{method}.json
@@ -46,13 +46,13 @@ N_LAYERS = 29  # L00–L28
 # ---------------------------------------------------------------------------
 
 def get_seal_dir(base, method, cleaning, pooling):
-    root = base / 'seal_round4' / 'activations'
+    root = base / 'seal__embed' / 'activations'
     return root / (f'{method}_{cleaning}' if pooling == 'mean'
                    else f'{method}_{cleaning}_last')
 
 
 def get_orcc_dir(base, method, cleaning, pooling):
-    return base / 'orcc_round1' / 'activations' / f'{method}_{cleaning}_{pooling}'
+    return base / 'orcc__embed' / 'activations' / f'{method}_{cleaning}_{pooling}'
 
 
 def load_npz(path):
@@ -98,7 +98,7 @@ def main():
 
     args    = parse_args()
     base    = Path(args.activations_base) if args.activations_base else _RESULTS_DIR
-    out_dir = Path(args.output_dir) if args.output_dir else _RESULTS_DIR / 'orcc_round1' / 'cls'
+    out_dir = Path(args.output_dir) if args.output_dir else _RESULTS_DIR / 'orcc__probe_cls'
     tasks   = [t.strip() for t in args.tasks.split(',')]
     layers  = list(range(N_LAYERS)) if args.layers == 'all' \
               else [int(l.strip()) for l in args.layers.split(',')]

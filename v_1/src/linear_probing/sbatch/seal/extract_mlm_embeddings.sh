@@ -18,7 +18,7 @@ conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
 
 mkdir -p v_1/src/linear_probing/logs
-mkdir -p v_1/src/linear_probing/results/seal_round4
+mkdir -p v_1/src/linear_probing/results/seal__embed
 
 python v_1/src/archive/baseline_mlm/03_extract_seal_embeddings.py \
     || { echo "FAILED"; exit 1; }
