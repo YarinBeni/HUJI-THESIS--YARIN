@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=r2_p1a_kp
 #SBATCH --partition=voltagepark
-#SBATCH --gres=gpu:H100:1
+#SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
 #SBATCH --time=00:45:00
