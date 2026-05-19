@@ -1,11 +1,18 @@
-"""run_mc_probes.py — Round 2 Phase 0: Monte-Carlo balanced re-run of the 6 Round-1 probes.
+"""run_mc_probes.py — Round 2 Phase 0: Monte-Carlo balanced re-run of the 8 Round-1 probes.
 
-Loops the 6 Round-1 probes over N (default 200) balanced sub-draws produced by
+Loops the 8 Round-1 probes over N (default 200) balanced sub-draws produced by
 `build_balanced_subset.py`:
 
-    tfidf_pls, tfidf_cls   (no activations needed — pure text)
-    mlm_pls,   mlm_cls     (mean-pooled Akkadian MLM, 17 layers, hidden=384)
-    qwen_pls,  qwen_cls    (Qwen 2.5-7B mean-pooled, 29 layers, hidden=3584)
+    tfidf_pls,  tfidf_cls    (no activations needed — pure text)
+    mlm_pls,    mlm_cls      (mean-pooled Akkadian MLM, 17 layers, hidden=384)
+    qwen_pls,   qwen_cls     (Qwen 2.5-7B mean-pooled, 29 layers, hidden=3584)
+    random_pls, random_cls   (random-init Qwen activations, 29 layers, hidden=3584)
+
+The `random` method is the same architecture+tokenizer as Qwen but with
+randomly-initialized weights (see `01b_extract_random_baseline.py`). Activations
+are precomputed and live alongside the pretrained Qwen ones in `orcc__embed`.
+This is the same "random" baseline used in Round-1 (`05_compute_pls.py:125`,
+`05_compute_cls.py:78` accept `--method {qwen,random}`).
 
 ------------------------------------------------------------------------------
 Design choice (subprocess vs. import)
@@ -89,7 +96,12 @@ from cls_utils import fit_cls_cv                   # noqa: E402
 # Defaults
 # ---------------------------------------------------------------------------
 
-DEFAULT_PROBES = ["tfidf_pls", "tfidf_cls", "mlm_pls", "mlm_cls", "qwen_pls", "qwen_cls"]
+DEFAULT_PROBES = [
+    "tfidf_pls", "tfidf_cls",
+    "mlm_pls",   "mlm_cls",
+    "qwen_pls",  "qwen_cls",
+    "random_pls", "random_cls",
+]
 
 ORCC_PARQUET = _REPO_ROOT / "v_1/data/evaluation/corpora/orcc_corpus.parquet"
 SEAL_PARQUET = _REPO_ROOT / "v_1/data/evaluation/corpora/seal_corpus.parquet"
@@ -98,9 +110,12 @@ SEAL_PARQUET = _REPO_ROOT / "v_1/data/evaluation/corpora/seal_corpus.parquet"
 ACTS_BASE_DEFAULT = _PROBES_DIR / "results"
 QWEN_ORCC_DIR     = "qwen_tier0_mean"      # matches Round-1 layout
 MLM_ORCC_DIR      = "mlm_tier0"
+# Random-init Qwen activations (extract_random_tier0.sh writes to this dir).
+RANDOM_ORCC_DIR   = "random_tier0_mean"
 
-QWEN_N_LAYERS = 29       # L00..L28
-MLM_N_LAYERS  = 17       # L00..L16
+QWEN_N_LAYERS   = 29       # L00..L28
+MLM_N_LAYERS    = 17       # L00..L16
+RANDOM_N_LAYERS = 29       # same arch as Qwen → same layer count
 
 # PLS hyper-params: mirror Round 1 sweep (1,2,3,5). With N=168 a 5-split CV is
 # easy. Year transforms: raw,log to match Round 1.
@@ -173,6 +188,8 @@ def _load_orcc_activations(method: str, layer: int, acts_base: Path) -> np.ndarr
         npz = acts_base / "orcc__embed" / "activations" / QWEN_ORCC_DIR / f"layer_{layer:02d}.npz"
     elif method == "mlm":
         npz = acts_base / "orcc__embed" / "activations" / MLM_ORCC_DIR / f"layer_{layer:02d}.npz"
+    elif method == "random":
+        npz = acts_base / "orcc__embed" / "activations" / RANDOM_ORCC_DIR / f"layer_{layer:02d}.npz"
     else:
         raise ValueError(f"Unknown method {method}")
     if not npz.exists():
@@ -375,12 +392,14 @@ def _run_acts_cls(method: str, n_layers: int,
 # ---- Dispatch table -------------------------------------------------------
 
 PROBE_DISPATCH: dict[str, Any] = {
-    "tfidf_pls": ("pls", run_tfidf_pls),
-    "tfidf_cls": ("cls", run_tfidf_cls),
-    "mlm_pls":   ("pls", lambda *a, **kw: _run_acts_pls("mlm", MLM_N_LAYERS, *a, **kw)),
-    "mlm_cls":   ("cls", lambda *a, **kw: _run_acts_cls("mlm", MLM_N_LAYERS, *a, **kw)),
-    "qwen_pls":  ("pls", lambda *a, **kw: _run_acts_pls("qwen", QWEN_N_LAYERS, *a, **kw)),
-    "qwen_cls":  ("cls", lambda *a, **kw: _run_acts_cls("qwen", QWEN_N_LAYERS, *a, **kw)),
+    "tfidf_pls":  ("pls", run_tfidf_pls),
+    "tfidf_cls":  ("cls", run_tfidf_cls),
+    "mlm_pls":    ("pls", lambda *a, **kw: _run_acts_pls("mlm",    MLM_N_LAYERS,    *a, **kw)),
+    "mlm_cls":    ("cls", lambda *a, **kw: _run_acts_cls("mlm",    MLM_N_LAYERS,    *a, **kw)),
+    "qwen_pls":   ("pls", lambda *a, **kw: _run_acts_pls("qwen",   QWEN_N_LAYERS,   *a, **kw)),
+    "qwen_cls":   ("cls", lambda *a, **kw: _run_acts_cls("qwen",   QWEN_N_LAYERS,   *a, **kw)),
+    "random_pls": ("pls", lambda *a, **kw: _run_acts_pls("random", RANDOM_N_LAYERS, *a, **kw)),
+    "random_cls": ("cls", lambda *a, **kw: _run_acts_cls("random", RANDOM_N_LAYERS, *a, **kw)),
 }
 
 

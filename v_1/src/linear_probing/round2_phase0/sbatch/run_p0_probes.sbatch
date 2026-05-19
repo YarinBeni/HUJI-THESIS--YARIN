@@ -8,9 +8,10 @@
 #SBATCH --output=v_1/src/linear_probing/logs/r2_p0_probes_%j.out
 
 # ===========================================================================
-# Round 2 Phase 0 — Balanced subset + MC re-run of all 6 probes
+# Round 2 Phase 0 — Balanced subset + MC re-run of all 8 probes
 #   1. build_balanced_subset.py     (200 draws × 8 rulers × 21 frags)
-#   2. run_mc_probes.py             (6 probes × 200 draws = 1200 runs)
+#   2. run_mc_probes.py             (8 probes × 200 draws = 1600 runs)
+#      (4 methods × {pls,cls}: tfidf, mlm, qwen, random)
 #
 # Output:  v_1/src/linear_probing/results/orcc_round2_phase0/
 #            balanced_subset/{manifest.json, draws_matrix.npy, draws/, ...}
@@ -53,13 +54,13 @@ echo "Balanced subset artifacts OK."
 
 # ── Step 2: MC re-run of all 6 probes ────────────────────────────────────────
 echo ""
-echo "--- Step 2: run_mc_probes.py (6 probes × 200 draws) ---"
+echo "--- Step 2: run_mc_probes.py (8 probes × 200 draws) ---"
 python -u v_1/src/linear_probing/round2_phase0/run_mc_probes.py \
     --draws-matrix "$SUBSET_DIR/draws_matrix.npy" \
     --fragment-order "$SUBSET_DIR/corpus_fragment_order.json" \
     --method-tag mc_balanced \
     --output-dir v_1/src/linear_probing/results/orcc_round2_phase0/probes \
-    --probes tfidf_pls,tfidf_cls,mlm_pls,mlm_cls,qwen_pls,qwen_cls \
+    --probes tfidf_pls,tfidf_cls,mlm_pls,mlm_cls,qwen_pls,qwen_cls,random_pls,random_cls \
     || { echo "FAILED: run_mc_probes.py"; exit 1; }
 
 # ── Step 3: push results to GitHub ───────────────────────────────────────────
