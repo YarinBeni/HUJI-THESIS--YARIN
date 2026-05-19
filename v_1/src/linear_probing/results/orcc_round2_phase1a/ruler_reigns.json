@@ -1,0 +1,83 @@
+{
+  "Ashurbanipal": {
+    "reign_start_bce": 668,
+    "reign_end_bce": 631,
+    "reign_end_bce_alt": 627,
+    "orcc_year_value_bce": 631,
+    "orcc_fragment_count": 268,
+    "period": "NA",
+    "source": "encyclopedic + ORCC-derived",
+    "notes": "End date disputed: 631 BCE (conventional) vs 627 BCE (some sources). ORCC uses 631. Scoring tolerance ±5 yr."
+  },
+  "Sennacherib": {
+    "reign_start_bce": 705,
+    "reign_end_bce": 681,
+    "orcc_year_value_bce": 681,
+    "orcc_fragment_count": 237,
+    "period": "NA",
+    "source": "encyclopedic + ORCC-derived",
+    "notes": "Assassinated 681 BCE. ORCC encodes his death year."
+  },
+  "Esarhaddon": {
+    "reign_start_bce": 681,
+    "reign_end_bce": 669,
+    "orcc_min_year_bce": 669,
+    "orcc_max_year_bce": 681,
+    "orcc_fragment_count": 176,
+    "period": "NA",
+    "source": "encyclopedic + ORCC-derived",
+    "notes": "Only ruler in ORCC with year range across his fragments (669–681 = full 12-yr reign). All other NA rulers have single-year labels."
+  },
+  "Sargon II": {
+    "reign_start_bce": 722,
+    "reign_end_bce": 705,
+    "orcc_year_value_bce": 705,
+    "orcc_fragment_count": 144,
+    "period": "NA",
+    "source": "encyclopedic + ORCC-derived",
+    "notes": "Died 705 BCE in battle. ORCC encodes death year."
+  },
+  "Nebuchadnezzar II": {
+    "reign_start_bce": 605,
+    "reign_end_bce": 562,
+    "orcc_year_value_bce": null,
+    "orcc_fragment_count": 87,
+    "period": "NB",
+    "source": "encyclopedic only (ORCC year=NaN for NB rulers)",
+    "notes": "NB ruler — ORCC corpus has no year labels for Neo-Babylonian fragments. Cannot use for year regression."
+  },
+  "Tiglath-pileser III": {
+    "reign_start_bce": 745,
+    "reign_end_bce": 727,
+    "orcc_year_value_bce": 727,
+    "orcc_fragment_count": 75,
+    "period": "NA",
+    "source": "encyclopedic + ORCC-derived",
+    "notes": "ORCC spelling: 'Tiglath-pileser III' (lowercase p). ORCC encodes death year."
+  },
+  "Nabonidus": {
+    "reign_start_bce": 556,
+    "reign_end_bce": 539,
+    "orcc_year_value_bce": null,
+    "orcc_fragment_count": 68,
+    "period": "NB",
+    "source": "encyclopedic only (ORCC year=NaN for NB rulers)",
+    "notes": "Last Neo-Babylonian king. Cyrus II conquered Babylon 539 BCE. ORCC has no year labels for NB fragments."
+  },
+  "Sîn-šarru-iškun": {
+    "reign_start_bce": 627,
+    "reign_end_bce": 612,
+    "orcc_year_value_bce": 612,
+    "orcc_fragment_count": 21,
+    "period": "NA",
+    "source": "encyclopedic + ORCC-derived",
+    "notes": "Last major Assyrian king before fall of Nineveh 612 BCE. Min class (21 frags) — sets MC draw size k=21. End date 612 is well-attested."
+  },
+  "_meta": {
+    "produced_by": "orchestrator (W1.B fallback)",
+    "date": "2026-05-19",
+    "orcc_year_encoding": "positive integer = year BCE (e.g. 668 = 668 BCE). NB rulers have year=NaN — excluded from year regression.",
+    "important_note": "ORCC encodes a single representative year per NA ruler (typically death year). Within-ruler year variance = 0 for 5 of 6 NA rulers. Year regression on balanced subset is therefore not meaningful — collapse to ruler classification only.",
+    "scoring_tolerance_years": 5
+  }
+}

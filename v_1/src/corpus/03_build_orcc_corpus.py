@@ -63,6 +63,28 @@ def apply_maximal(text: str) -> str:
 # Helpers
 # ---------------------------------------------------------------------------
 
+# Reign end-year fallback for rulers whose sub_period is absent from ORACC.
+# Convention: use the end (most recent) year of the reign, matching the min(digits)
+# convention applied to sub_period strings (e.g. "ca. 668-631" → 631).
+#
+# NB rulers (Nebuchadnezzar II, Nabonidus): ORACC/RINBE does not include sub_period
+# for these texts, and per-inscription dates are unavailable. Confirmed by Chung-rong
+# Ni (email "Adding the corpora of Royal Inscriptions", 2026-05-19): "Oracc did not
+# include these information … Oracc does not have more granular per-inscription dates."
+# We fill with the well-attested reign end-year rather than leaving NaN, so year
+# regression can treat NB rulers on the same footing as NA rulers.
+#
+# NA rulers (Sargon II, Tiglath-pileser III): a minority of fragments lack sub_period
+# in ORACC (same root cause). Fallback is consistent with the non-NaN values those
+# rulers already have in the corpus.
+_RULER_YEAR_FALLBACK: dict[str, int] = {
+    "Nebuchadnezzar II": 562,    # reign 605–562 BCE
+    "Nabonidus":         539,    # reign 556–539 BCE
+    "Sargon II":         705,    # reign 722–705 BCE (matches existing sub_period values)
+    "Tiglath-pileser III": 727,  # reign 745–727 BCE (matches existing sub_period values)
+}
+
+
 def extract_year(sub_period) -> int | None:
     if pd.isna(sub_period):
         return None
@@ -70,6 +92,13 @@ def extract_year(sub_period) -> int | None:
     if not digits:
         return None
     return min(int(d) for d in digits)
+
+
+def extract_year_with_fallback(sub_period, ruler: str | None) -> int | None:
+    year = extract_year(sub_period)
+    if year is None and ruler in _RULER_YEAR_FALLBACK:
+        return _RULER_YEAR_FALLBACK[ruler]
+    return year
 
 
 def extract_ruler(domain) -> str | None:
@@ -132,9 +161,14 @@ def main() -> int:
     # Compute ruler before overwriting domain
     frag_df["ruler"] = frag_df["domain"].apply(extract_ruler)
 
-    # Compute year from sub_period
+    # Compute year from sub_period, with per-ruler fallback for rulers whose
+    # sub_period is absent from ORACC (see _RULER_YEAR_FALLBACK — this IS the
+    # permanent fix; no upstream data update expected).
     if "sub_period" in frag_df.columns:
-        years = frag_df["sub_period"].apply(extract_year)
+        years = frag_df.apply(
+            lambda r: extract_year_with_fallback(r["sub_period"], r.get("ruler")),
+            axis=1,
+        )
         frag_df["year"] = years.astype("Int64")
     else:
         frag_df["year"] = pd.array([None] * len(frag_df), dtype=pd.Int64Dtype())
