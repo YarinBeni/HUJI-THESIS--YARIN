@@ -89,6 +89,21 @@ FEWSHOT_PREFERRED = [
     "Tiglath-pileser III",
 ]
 
+# Non-eval rulers used as the few-shot pool. By construction these are never
+# in any MC draw (the draws only sample from RULERS_8), so using their fragments
+# as in-context examples introduces zero leakage. Same NA/NB royal-inscription
+# genre as the eval set, so the genre/format signal transfers cleanly.
+# Selected from corpus inspection 2026-05-20: top non-eval rulers with year metadata.
+FEWSHOT_POOL_RULERS = [
+    "Nabopolassar",        # 15 frags, Neo-Babylonian
+    "Shalmaneser V",       # 12 frags, Neo-Assyrian
+    "Nebuchadnezzar I",    # 10 frags, Second Dynasty of Isin
+    "Adad-apla-iddina",    # 7 frags, Second Dynasty of Isin
+    "Neriglissar",         # 7 frags, Neo-Babylonian
+    "Amel-Marduk",         # 6 frags, Neo-Babylonian
+    "Šamaš-šuma-ukin",     # 6 frags, Neo-Babylonian
+]
+
 
 # ---------------------------------------------------------------------------
 # Few-shot pool selection (pv2 only)
@@ -109,38 +124,33 @@ def select_fewshot_examples(
 
     Raises FileNotFoundError if draws_matrix.npy is missing (Phase 0 prerequisite).
     """
+    # Non-eval-ruler few-shot strategy (revised 2026-05-20). The original
+    # draws_matrix-based holdout is impossible: the smallest eval ruler has 21
+    # fragments and k=21 per draw → every fragment is in every draw. Instead,
+    # we draw from non-eval rulers (FEWSHOT_POOL_RULERS), which by construction
+    # are never in any MC draw, so zero leakage. Same NA/NB royal-inscription
+    # genre. The draws_matrix path remains a soft prerequisite (we still record
+    # which fragments were chosen for auditability).
     if not draws_matrix_path.exists():
         raise FileNotFoundError(
             f"draws_matrix.npy missing at {draws_matrix_path}. "
             "Run Phase 0 build_balanced_subset.py first."
         )
-    if not fragment_order_path.exists():
-        raise FileNotFoundError(
-            f"corpus_fragment_order.json missing at {fragment_order_path}."
-        )
-    draws_matrix = np.load(draws_matrix_path)  # (n_draws, n_frags)
-    with open(fragment_order_path, "r", encoding="utf-8") as f:
-        order: list[str] = json.load(f)
-
-    # Fragment is "holdout" if NEVER appears in any draw row.
-    ever_used = draws_matrix.any(axis=0)  # (n_frags,) bool
-    holdout_ids = {fid for fid, used in zip(order, ever_used) if not used}
 
     rng = random.Random(seed)
     selected: list[dict] = []
     used_rulers: set[str] = set()
 
-    # Greedy: walk preferred ruler order first, fall back to remaining 8.
-    ruler_order = FEWSHOT_PREFERRED + [r for r in RULERS_8 if r not in FEWSHOT_PREFERRED]
+    ruler_order = list(FEWSHOT_POOL_RULERS)
 
     for ruler in ruler_order:
         if len(selected) >= n_examples:
             break
         if ruler in used_rulers:
             continue
-        candidates = df[(df["ruler"] == ruler) & (df["fragment_id"].isin(holdout_ids))]
+        candidates = df[(df["ruler"] == ruler) & df["year"].notna()]
         if len(candidates) == 0:
-            print(f"  [pv2 fewshot] WARN: no holdout fragments for ruler {ruler!r}", flush=True)
+            print(f"  [pv2 fewshot] WARN: no fragments for ruler {ruler!r}", flush=True)
             continue
         # prefer longer fragments (more formulaic signal) — sort by word_count desc, pick top-5, then random
         cand_sorted = candidates.sort_values("word_count", ascending=False).head(max(5, len(candidates) // 2))
