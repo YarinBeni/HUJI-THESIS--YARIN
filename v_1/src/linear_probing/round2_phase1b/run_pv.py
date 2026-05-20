@@ -365,7 +365,7 @@ def run(args: argparse.Namespace) -> None:
             "fragment_id": fragment_id,
             "variant": args.variant,
             "ruler_gt": str(row.ruler),
-            "year_gt": int(row.year) if row.year is not None else None,
+            "year_gt": int(row.year) if pd.notna(row.year) else None,
             "raw_output": raw_output,
             "parsed_ruler": parsed["parsed_ruler"],
             "parsed_year": parsed["parsed_year"],

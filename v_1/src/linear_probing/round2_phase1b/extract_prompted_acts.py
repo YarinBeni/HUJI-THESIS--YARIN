@@ -159,7 +159,7 @@ def run(args: argparse.Namespace) -> None:
         acts_list.append(vec)
         fragment_ids.append(str(row.fragment_id))
         rulers.append(str(row.ruler))
-        years.append(int(row.year))
+        years.append(int(row.year) if pd.notna(row.year) else -1)
         span_end_tokens.append(int(span_end))
 
         del out, hs
