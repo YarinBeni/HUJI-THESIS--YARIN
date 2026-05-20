@@ -1,0 +1,73 @@
+{
+  "probe": "tfidf_pls",
+  "method_tag": "mc_balanced",
+  "n_draws": 200,
+  "per_config": {
+    "tfidf__tier0__na__L00__year-raw": {
+      "n_draws": 200,
+      "spearman_mean": 0.4069432059196305,
+      "spearman_std": 0.06436343667259688,
+      "spearman_median": 0.4019425946750882,
+      "spearman_n": 200,
+      "r2_mean": -0.10097468043784813,
+      "r2_std": 0.09782531598361359,
+      "r2_median": -0.09464398032185575,
+      "r2_n": 200
+    },
+    "tfidf__tier0__na__L00__year-log": {
+      "n_draws": 200,
+      "spearman_mean": 0.4064440121888536,
+      "spearman_std": 0.06396115502702265,
+      "spearman_median": 0.40420850473706693,
+      "spearman_n": 200,
+      "r2_mean": -0.11893212210781103,
+      "r2_std": 0.10123591300422354,
+      "r2_median": -0.11585909648596777,
+      "r2_n": 200
+    },
+    "tfidf__tier0__na__L00__ruler": {
+      "n_draws": 200,
+      "macro_f1_mean": 0.4795703110829659,
+      "macro_f1_std": 0.03677023591614527,
+      "macro_f1_median": 0.4801891511266511,
+      "macro_f1_n": 200,
+      "accuracy_mean": 0.5486470588235294,
+      "accuracy_std": 0.0362616408431332,
+      "accuracy_median": 0.548217468805704,
+      "accuracy_n": 200
+    },
+    "tfidf__maximal__na__L00__year-raw": {
+      "n_draws": 200,
+      "spearman_mean": 0.2917658222456686,
+      "spearman_std": 0.07831034010624369,
+      "spearman_median": 0.2933720143420892,
+      "spearman_n": 200,
+      "r2_mean": -0.23971067622400136,
+      "r2_std": 0.09269228969607188,
+      "r2_median": -0.23870064443037248,
+      "r2_n": 200
+    },
+    "tfidf__maximal__na__L00__year-log": {
+      "n_draws": 200,
+      "spearman_mean": 0.2959212272718116,
+      "spearman_std": 0.07758926898399796,
+      "spearman_median": 0.29917176729870054,
+      "spearman_n": 200,
+      "r2_mean": -0.2571470249375418,
+      "r2_std": 0.09781123739685055,
+      "r2_median": -0.24671923578479538,
+      "r2_n": 200
+    },
+    "tfidf__maximal__na__L00__ruler": {
+      "n_draws": 200,
+      "macro_f1_mean": 0.3944734621598302,
+      "macro_f1_std": 0.03290085894620321,
+      "macro_f1_median": 0.39602073214882816,
+      "macro_f1_n": 200,
+      "accuracy_mean": 0.45267023172905524,
+      "accuracy_std": 0.03408567391909564,
+      "accuracy_median": 0.45311942959001783,
+      "accuracy_n": 200
+    }
+  }
+}

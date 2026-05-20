@@ -1,0 +1,51 @@
+{
+  "probe": "tfidf_cls",
+  "method_tag": "mc_balanced",
+  "n_draws": 200,
+  "per_config": {
+    "tfidf__tier0__na__L00__ruler": {
+      "n_draws": 200,
+      "macro_f1_mean": 0.6496411099317347,
+      "macro_f1_std": 0.03684237840752215,
+      "macro_f1_median": 0.6472258297258298,
+      "macro_f1_n": 200,
+      "accuracy_mean": 0.667843137254902,
+      "accuracy_std": 0.03395827658933727,
+      "accuracy_median": 0.666488413547237,
+      "accuracy_n": 200
+    },
+    "tfidf__tier0__na__L00__year": {
+      "n_draws": 200,
+      "macro_f1_mean": 0.5745727015037432,
+      "macro_f1_std": 0.047310161025266605,
+      "macro_f1_median": 0.569508747425414,
+      "macro_f1_n": 200,
+      "accuracy_mean": 0.6627852049910874,
+      "accuracy_std": 0.030909052038270178,
+      "accuracy_median": 0.6612299465240642,
+      "accuracy_n": 200
+    },
+    "tfidf__maximal__na__L00__ruler": {
+      "n_draws": 200,
+      "macro_f1_mean": 0.49799929150441913,
+      "macro_f1_std": 0.04027946508936684,
+      "macro_f1_median": 0.4998137973137973,
+      "macro_f1_n": 200,
+      "accuracy_mean": 0.5148057040998217,
+      "accuracy_std": 0.03809177673970187,
+      "accuracy_median": 0.517825311942959,
+      "accuracy_n": 200
+    },
+    "tfidf__maximal__na__L00__year": {
+      "n_draws": 200,
+      "macro_f1_mean": 0.45434681075830613,
+      "macro_f1_std": 0.043359875228674793,
+      "macro_f1_median": 0.4489060915935915,
+      "macro_f1_n": 200,
+      "accuracy_mean": 0.527861853832442,
+      "accuracy_std": 0.03744766800194897,
+      "accuracy_median": 0.5297682709447415,
+      "accuracy_n": 200
+    }
+  }
+}
