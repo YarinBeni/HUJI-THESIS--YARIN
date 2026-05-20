@@ -185,11 +185,11 @@ def _load_orcc_activations(method: str, layer: int, acts_base: Path) -> np.ndarr
     if key in _ACT_CACHE:
         return _ACT_CACHE[key]
     if method == "qwen":
-        npz = acts_base / "orcc__embed" / "activations" / QWEN_ORCC_DIR / f"layer_{layer:02d}.npz"
+        npz = acts_base / "orcc_round1" / "activations" / QWEN_ORCC_DIR / f"layer_{layer:02d}.npz"
     elif method == "mlm":
-        npz = acts_base / "orcc__embed" / "activations" / MLM_ORCC_DIR / f"layer_{layer:02d}.npz"
+        npz = acts_base / "orcc_round1" / "activations" / MLM_ORCC_DIR / f"layer_{layer:02d}.npz"
     elif method == "random":
-        npz = acts_base / "orcc__embed" / "activations" / RANDOM_ORCC_DIR / f"layer_{layer:02d}.npz"
+        npz = acts_base / "orcc_round1" / "activations" / RANDOM_ORCC_DIR / f"layer_{layer:02d}.npz"
     else:
         raise ValueError(f"Unknown method {method}")
     if not npz.exists():
