@@ -1,0 +1,45 @@
+{
+  "verdict": {
+    "knows_rulers": false,
+    "kp0_pass": true,
+    "kp1_pass": true,
+    "kp2_pass": false,
+    "failed_checks": [
+      "kp2 hallucination_rate 0.500 >= 0.30"
+    ],
+    "thresholds": {
+      "kp0_accuracy_min": 0.625,
+      "kp1_recall_min": 0.5,
+      "kp2_hallucination_max": 0.3
+    }
+  },
+  "kp0": {
+    "tolerance_years": 50,
+    "total": 8,
+    "correct": 8,
+    "parse_errors": 0,
+    "accuracy": 1.0,
+    "accuracy_scoreable": 1.0
+  },
+  "kp1": {
+    "total_periods": 2,
+    "parse_errors": 0,
+    "total_targets": 8,
+    "total_hits": 6,
+    "aggregate_recall": 0.75,
+    "per_period_recall": {
+      "Neo-Assyrian": 0.6666666666666666,
+      "Neo-Babylonian": 1.0
+    }
+  },
+  "kp2": {
+    "total": 8,
+    "scoreable": 8,
+    "parse_errors": 0,
+    "declined_correctly": 4,
+    "hallucinations": 4,
+    "hallucination_rate": 0.5,
+    "gate_threshold": 0.3,
+    "gate_pass": false
+  }
+}
