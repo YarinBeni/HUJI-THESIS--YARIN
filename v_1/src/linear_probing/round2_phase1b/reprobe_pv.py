@@ -325,7 +325,25 @@ def reprobe_one(
           flush=True)
 
     X_aligned, sub_df = align_to_corpus(acts, fids, orcc_df)
+    # Sanity: surface NaN/Inf in loaded activations (would crash SVD downstream).
+    n_nan_rows = int(np.isnan(X_aligned).any(axis=1).sum())
+    n_inf_rows = int(np.isinf(X_aligned).any(axis=1).sum())
+    if n_nan_rows or n_inf_rows:
+        print(f"  [warn] {n_nan_rows} NaN rows + {n_inf_rows} Inf rows in X_aligned; "
+              "dropping before normalize", flush=True)
+        bad = np.isnan(X_aligned).any(axis=1) | np.isinf(X_aligned).any(axis=1)
+        X_aligned = X_aligned[~bad]
+        sub_df = sub_df.loc[~bad].reset_index(drop=True)
     X_norm = l2_normalize(X_aligned)
+    # Replace any residual non-finite values from divide-by-zero norms with 0.
+    if not np.isfinite(X_norm).all():
+        bad_after = (~np.isfinite(X_norm)).any(axis=1)
+        print(f"  [warn] {int(bad_after.sum())} rows became non-finite after l2_normalize; "
+              "zeroing those entries", flush=True)
+        X_norm = np.nan_to_num(X_norm, nan=0.0, posinf=0.0, neginf=0.0)
+    # Ensure contiguous float32 — scipy LAPACK wrappers can reject non-contiguous arrays
+    # with "illegal value in Nth argument" errors otherwise.
+    X_norm = np.ascontiguousarray(X_norm, dtype=np.float32)
     print(f"  aligned X.shape={X_norm.shape}  sub_df.rows={len(sub_df)}", flush=True)
 
     # Round-1 evaluates only on the labeled subset (year not null); match.
