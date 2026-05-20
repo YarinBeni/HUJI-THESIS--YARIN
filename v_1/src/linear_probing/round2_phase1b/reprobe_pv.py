@@ -285,15 +285,30 @@ def run_pls_year(
     for yt, y in (("raw", y_raw), ("log", y_log)):
         metrics_per_k = {}
         for k in n_components_list:
-            metrics_per_k[str(k)] = fit_pls_groupkfold(X_lab, y, groups, k)
-        best_sp = max(
-            n_components_list,
-            key=lambda k: metrics_per_k[str(k)]["spearman_mean"],
-        )
-        best_r2 = max(
-            n_components_list,
-            key=lambda k: metrics_per_k[str(k)]["r2_mean"],
-        )
+            try:
+                metrics_per_k[str(k)] = fit_pls_groupkfold(X_lab, y, groups, k)
+            except Exception as e:
+                # PLS NIPALS can divide by zero when X is rank-deficient (e.g.,
+                # L0 embeddings where the pooled token is identical across rows).
+                # Skip with NaN metrics so downstream summary still renders.
+                print(f"    [pls-skip] k={k} year-{yt}: {type(e).__name__}: {e}", flush=True)
+                metrics_per_k[str(k)] = {
+                    "spearman_mean": float("nan"), "spearman_std": float("nan"),
+                    "mae_mean": float("nan"), "mae_std": float("nan"),
+                    "r2_mean": float("nan"), "r2_std": float("nan"),
+                    "skipped": True, "error": f"{type(e).__name__}: {e}",
+                }
+
+        def _best_by(metric: str):
+            valid = [k for k in n_components_list
+                     if not (isinstance(metrics_per_k[str(k)].get(metric), float)
+                             and np.isnan(metrics_per_k[str(k)][metric]))]
+            if not valid:
+                return n_components_list[0]
+            return max(valid, key=lambda k: metrics_per_k[str(k)][metric])
+
+        best_sp = _best_by("spearman_mean")
+        best_r2 = _best_by("r2_mean")
         result[f"year_{yt}"] = {
             "metrics_per_k": metrics_per_k,
             "best_k_by_spearman": int(best_sp),
