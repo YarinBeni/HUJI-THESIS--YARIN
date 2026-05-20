@@ -156,8 +156,9 @@ def load_prompted_acts(
 ) -> tuple[np.ndarray, np.ndarray | None]:
     """Load activations for (variant_dir, layer_idx).
 
-    Tries Round-1-compatible `layer_{NN}.npz` (key=`activations`) first; falls
-    back to rich `L{NN}.npz` (key=`acts` + `fragment_ids`).
+    `variant_dir` here is the leaf pooling dir (e.g. `.../pv0/last/`) when the
+    new layout is used. For backwards compatibility, falls back to the flat
+    `.../pv0/` layout when the pooling subdir isn't separate.
 
     Returns (acts, fragment_ids_or_None). fragment_ids is None when only the
     Round-1-compatible npz exists — the caller must then trust corpus order.
@@ -332,8 +333,9 @@ def reprobe_one(
     out_dir: Path,
     min_count: int,
     n_components_list: tuple[int, ...],
+    pooling: str = "last",
 ) -> dict[str, Any]:
-    print(f"\n=== variant={variant}  layer={layer_idx} ===", flush=True)
+    print(f"\n=== variant={variant}  pooling={pooling}  layer={layer_idx} ===", flush=True)
     t0 = time.time()
     acts, fids = load_prompted_acts(variant_dir, layer_idx)
     print(f"  loaded acts.shape={acts.shape}  fragment_ids={'yes' if fids is not None else 'no'}",
@@ -384,18 +386,21 @@ def reprobe_one(
           f"mae={yr_log['mae_at_best_k']:.4f}", flush=True)
 
     LL = f"{layer_idx:02d}"
-    cls_path = out_dir / f"{variant}__L{LL}__cls.json"
-    pls_path = out_dir / f"{variant}__L{LL}__pls.json"
+    cls_path = out_dir / f"{variant}__{pooling}__L{LL}__cls.json"
+    pls_path = out_dir / f"{variant}__{pooling}__L{LL}__pls.json"
     cls_path.parent.mkdir(parents=True, exist_ok=True)
     with open(cls_path, "w") as f:
-        json.dump({"variant": variant, "layer": layer_idx, **cls_res}, f, indent=2)
+        json.dump({"variant": variant, "pooling": pooling, "layer": layer_idx, **cls_res},
+                  f, indent=2)
     with open(pls_path, "w") as f:
-        json.dump({"variant": variant, "layer": layer_idx, **pls_res}, f, indent=2)
+        json.dump({"variant": variant, "pooling": pooling, "layer": layer_idx, **pls_res},
+                  f, indent=2)
     print(f"  saved -> {cls_path.name}, {pls_path.name}  "
           f"({time.time() - t0:.1f}s)", flush=True)
 
     return {
         "variant": variant,
+        "pooling": pooling,
         "layer": layer_idx,
         "ruler_macro_f1": float(cls_res["macro_f1_mean"]),
         "ruler_accuracy": float(cls_res["accuracy_mean"]),
@@ -493,6 +498,7 @@ def build_summary(
         layers = info["layers"]
         best = max(layers, key=lambda x: x["ruler_macro_f1"])
         info["best_layer_for_ruler"] = best["layer"]
+        info["best_pooling_for_ruler"] = best.get("pooling", "last")
         info["best_layer_ruler_macro_f1"] = best["ruler_macro_f1"]
         info["beats_r1_last"] = bool(best.get("beats_r1_last"))
         info["beats_r1_mean"] = bool(best.get("beats_r1_mean"))
@@ -579,14 +585,14 @@ def build_report_md(summary: dict[str, Any], out_dir: Path) -> None:
         "",
         "## Phase 1b ruler results (vs both Round-1 baselines)",
         "",
-        "| variant | layer | macro_f1 | R1 last (Δ) | R1 mean (Δ) | verdict |",
-        "|---|---|---|---|---|---|",
+        "| variant | pooling | layer | macro_f1 | R1 last (Δ) | R1 mean (Δ) | verdict |",
+        "|---|---|---|---|---|---|---|",
     ]
     for r in summary["rows"]:
         last_str = f"{_fmt(r.get('r1_qwen_last_macro_f1'))} ({_fmt_delta(r.get('delta_vs_r1_last'))})"
         mean_str = f"{_fmt(r.get('r1_qwen_mean_macro_f1'))} ({_fmt_delta(r.get('delta_vs_r1_mean'))})"
         lines.append(
-            f"| {r['variant']} | {r['layer']} | "
+            f"| {r['variant']} | {r.get('pooling', 'last')} | {r['layer']} | "
             f"{_fmt(r['ruler_macro_f1'])} | {last_str} | {mean_str} | "
             f"{r.get('verdict', 'FAILS BOTH')} |"
         )
@@ -594,12 +600,12 @@ def build_report_md(summary: dict[str, Any], out_dir: Path) -> None:
     lines.append("## Phase 1b PLS year results (full numbers)")
     lines.append("")
     lines.append(
-        "| variant | layer | ruler acc | year-raw MAE | year-raw sp | year-log MAE | year-log sp |"
+        "| variant | pooling | layer | ruler acc | year-raw MAE | year-raw sp | year-log MAE | year-log sp |"
     )
-    lines.append("|---|---|---|---|---|---|---|")
+    lines.append("|---|---|---|---|---|---|---|---|")
     for r in summary["rows"]:
         lines.append(
-            f"| {r['variant']} | {r['layer']} | "
+            f"| {r['variant']} | {r.get('pooling', 'last')} | {r['layer']} | "
             f"{_fmt(r['ruler_accuracy'])} | "
             f"{_fmt(r['year_raw_mae'], '.2f')} | {_fmt(r['year_raw_spearman'])} | "
             f"{_fmt(r['year_log_mae'], '.4f')} | {_fmt(r['year_log_spearman'])} |"
@@ -609,7 +615,8 @@ def build_report_md(summary: dict[str, Any], out_dir: Path) -> None:
     lines.append("")
     for v, info in summary["per_variant"].items():
         lines.append(
-            f"- **{v}**: best layer L{info['best_layer_for_ruler']} "
+            f"- **{v}**: best pooling=`{info.get('best_pooling_for_ruler', 'last')}` "
+            f"layer L{info['best_layer_for_ruler']} "
             f"Macro-F1={_fmt(info['best_layer_ruler_macro_f1'])} "
             f"-> {info.get('verdict', 'FAILS BOTH')}"
         )
@@ -675,8 +682,14 @@ def parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "--layers",
-        default="0,15,-1",
+        default="0,4,10,15,22,28",
         help="Comma-separated layer indices. -1 means 'highest layer present'.",
+    )
+    p.add_argument(
+        "--poolings",
+        default="last,mean",
+        help="Comma-separated pooling strategies. Each must exist as a subdir "
+        "under {acts_root}/{variant}/.",
     )
     p.add_argument("--min_count", type=int, default=5)
     p.add_argument(
@@ -695,6 +708,7 @@ def main() -> None:
 
     variants = [v.strip() for v in args.variants.split(",") if v.strip()]
     layer_tokens = [t.strip() for t in args.layers.split(",") if t.strip()]
+    poolings = [p.strip() for p in args.poolings.split(",") if p.strip()]
     n_components_list = tuple(
         int(x.strip()) for x in args.n_components.split(",") if x.strip()
     )
@@ -707,31 +721,46 @@ def main() -> None:
 
     rows: list[dict[str, Any]] = []
     for variant in variants:
-        variant_dir = acts_root / variant
-        if not variant_dir.exists():
-            print(f"  [skip] variant dir missing: {variant_dir}", flush=True)
+        variant_root = acts_root / variant
+        if not variant_root.exists():
+            print(f"  [skip] variant dir missing: {variant_root}", flush=True)
             continue
-        for token in layer_tokens:
-            layer_idx = _resolve_layer_token(token, variant_dir)
-            if layer_idx is None:
-                print(f"  [skip] cannot resolve layer={token} for {variant}", flush=True)
-                continue
-            try:
-                row = reprobe_one(
-                    variant=variant,
-                    layer_idx=layer_idx,
-                    variant_dir=variant_dir,
-                    orcc_df=orcc_df,
-                    out_dir=out_dir,
-                    min_count=args.min_count,
-                    n_components_list=n_components_list,
-                )
-                rows.append(row)
-            except FileNotFoundError as e:
-                print(f"  [skip] {variant} L{layer_idx}: {e}", flush=True)
-            except Exception as e:
-                print(f"  [error] {variant} L{layer_idx}: {e}", flush=True)
-                raise
+        for pooling in poolings:
+            # New layout: {variant_root}/{pooling}/L{NN}.npz
+            # Fallback (legacy): if pooling subdir missing, use variant_root itself
+            # — interpreted as the old "last" pooling files.
+            pool_dir = variant_root / pooling
+            if not pool_dir.exists():
+                if pooling == "last" and any(variant_root.glob("L*.npz")):
+                    print(f"  [legacy] {variant}/{pooling}: using flat layout at "
+                          f"{variant_root}", flush=True)
+                    pool_dir = variant_root
+                else:
+                    print(f"  [skip] pool dir missing: {pool_dir}", flush=True)
+                    continue
+            for token in layer_tokens:
+                layer_idx = _resolve_layer_token(token, pool_dir)
+                if layer_idx is None:
+                    print(f"  [skip] cannot resolve layer={token} for "
+                          f"{variant}/{pooling}", flush=True)
+                    continue
+                try:
+                    row = reprobe_one(
+                        variant=variant,
+                        layer_idx=layer_idx,
+                        variant_dir=pool_dir,
+                        orcc_df=orcc_df,
+                        out_dir=out_dir,
+                        min_count=args.min_count,
+                        n_components_list=n_components_list,
+                        pooling=pooling,
+                    )
+                    rows.append(row)
+                except FileNotFoundError as e:
+                    print(f"  [skip] {variant}/{pooling} L{layer_idx}: {e}", flush=True)
+                except Exception as e:
+                    print(f"  [error] {variant}/{pooling} L{layer_idx}: {e}", flush=True)
+                    raise
 
     if not rows:
         print("\nNo (variant, layer) pairs were probed. Nothing to summarize.")

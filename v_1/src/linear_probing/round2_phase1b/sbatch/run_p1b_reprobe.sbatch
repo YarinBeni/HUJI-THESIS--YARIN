@@ -55,14 +55,15 @@ python -u v_1/src/linear_probing/round2_phase1b/reprobe_pv.py \
     --corpus    v_1/data/evaluation/corpora/orcc_corpus.parquet \
     --out_dir   v_1/src/linear_probing/results/orcc_round2_phase1b/reprobing \
     --variants pv0,pv1,pv2,pv3 \
-    --layers 0,15,-1 \
+    --poolings last,mean \
+    --layers 0,4,10,15,22,28 \
     || { echo "FAILED: reprobe_pv.py"; exit 1; }
 
 # ── Step 3: push results to GitHub ───────────────────────────────────────────
 echo ""
 echo "=== Pushing Phase 1b reprobing results to GitHub ==="
 git add v_1/src/linear_probing/results/orcc_round2_phase1b/reprobing/
-git commit -m "Phase 1b reprobing: CLS+PLS on prompted activations (4 variants x 3 layers)" || true
+git commit -m "Phase 1b reprobing v2: CLS+PLS x 4 variants x 2 poolings x 6 layers" || true
 git push origin main || true
 
 echo ""

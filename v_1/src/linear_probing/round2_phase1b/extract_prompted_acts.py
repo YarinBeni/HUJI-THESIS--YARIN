@@ -112,21 +112,28 @@ def run(args: argparse.Namespace) -> None:
             seed=SEED,
         )
 
-    # ---- Determine layer index ----
-    n_layers_total: int | None = None  # set after first forward
-    layer_arg = args.layer
+    # ---- Resolve layer indices (set after first forward) ----
+    n_layers_total: int | None = None
+    layers_requested: list[int] = [int(x) for x in str(args.layers).split(",") if x.strip() != ""]
+    resolved_layers: list[int] | None = None
 
     # ---- Forward-pass loop ----
+    # One forward pass yields all hidden_states; we pool BOTH last and mean
+    # at every requested layer for free. Per-pooling buffers indexed by layer.
     n = len(df)
-    acts_list: list[np.ndarray] = []
     fragment_ids: list[str] = []
     rulers: list[str] = []
     years: list[int] = []
+    span_start_tokens: list[int] = []
     span_end_tokens: list[int] = []
+    # acts_by_pool_by_layer[pool][layer_idx] -> list of vectors
+    acts_by_pool_by_layer: dict[str, dict[int, list[np.ndarray]]] = {
+        "last": {},
+        "mean": {},
+    }
     hidden_dim: int | None = None
-    resolved_layer: int | None = None
 
-    print(f"[fwd] starting; n={n}  layer_arg={layer_arg}", flush=True)
+    print(f"[fwd] starting; n={n}  layers_requested={layers_requested}", flush=True)
     for i, row in enumerate(df.itertuples(index=False)):
         fragment_text = str(row.text_tier0)
         user_prompt = render_user_prompt(prompt["user_template"], fragment_text, fewshot_examples)
@@ -134,7 +141,7 @@ def run(args: argparse.Namespace) -> None:
             tokenizer, prompt["system_prompt"], user_prompt, args.variant,
         )
         try:
-            _span_start, span_end = compute_span_token_indices(tokenizer, prompt_str, input_ids)
+            span_start, span_end = compute_span_token_indices(tokenizer, prompt_str, input_ids)
         except Exception as e:
             print(f"  [span-err] {row.fragment_id}: {e}", flush=True)
             continue
@@ -146,20 +153,30 @@ def run(args: argparse.Namespace) -> None:
         if n_layers_total is None:
             n_layers_total = len(hs)
             hidden_dim = hs[0].shape[-1]
-            resolved_layer = layer_arg if layer_arg >= 0 else n_layers_total + layer_arg
-            assert 0 <= resolved_layer < n_layers_total, (
-                f"layer_arg={layer_arg} resolves to {resolved_layer}, "
-                f"out of range [0,{n_layers_total - 1}]"
-            )
+            resolved_layers = []
+            for la in layers_requested:
+                r = la if la >= 0 else n_layers_total + la
+                assert 0 <= r < n_layers_total, (
+                    f"layer={la} resolves to {r}, out of range [0,{n_layers_total - 1}]"
+                )
+                resolved_layers.append(r)
+            for pool in ("last", "mean"):
+                for r in resolved_layers:
+                    acts_by_pool_by_layer[pool][r] = []
             print(f"[shape] n_hidden_states={n_layers_total}  hidden_dim={hidden_dim}  "
-                  f"resolved layer={resolved_layer}", flush=True)
+                  f"resolved_layers={resolved_layers}", flush=True)
 
-        layer_hs = hs[resolved_layer]   # (1, T, D)
-        vec = layer_hs[0, span_end, :].cpu().float().numpy()
-        acts_list.append(vec)
+        for r in resolved_layers:
+            layer_hs = hs[r]  # (1, T, D)
+            v_last = layer_hs[0, span_end, :].cpu().float().numpy()
+            v_mean = layer_hs[0, span_start:span_end + 1, :].mean(dim=0).cpu().float().numpy()
+            acts_by_pool_by_layer["last"][r].append(v_last)
+            acts_by_pool_by_layer["mean"][r].append(v_mean)
+
         fragment_ids.append(str(row.fragment_id))
         rulers.append(str(row.ruler))
         years.append(int(row.year) if pd.notna(row.year) else -1)
+        span_start_tokens.append(int(span_start))
         span_end_tokens.append(int(span_end))
 
         del out, hs
@@ -170,70 +187,68 @@ def run(args: argparse.Namespace) -> None:
             elapsed = (time.time() - t0) / 60
             print(f"  [fwd] {i + 1}/{n}  ({elapsed:.1f} min)", flush=True)
 
-    if not acts_list:
+    if not fragment_ids:
         raise RuntimeError("No activations collected — span detection failed for ALL fragments?")
 
-    acts = np.stack(acts_list, axis=0).astype(np.float32)
     fragment_ids_arr = np.asarray(fragment_ids)
     rulers_arr = np.asarray(rulers)
     years_arr = np.asarray(years, dtype=np.int32)
+    span_start_arr = np.asarray(span_start_tokens, dtype=np.int32)
     span_end_arr = np.asarray(span_end_tokens, dtype=np.int32)
-    print(f"[stack] acts.shape={acts.shape}", flush=True)
 
-    # ---- Save rich NPZ (Phase 1b schema) ----
-    LL = f"{resolved_layer:02d}"
-    rich_path = out_dir / f"L{LL}.npz"
-    np.savez_compressed(
-        rich_path,
-        acts=acts,
-        fragment_ids=fragment_ids_arr,
-        rulers=rulers_arr,
-        years=years_arr,
-        span_end_token=span_end_arr,
-    )
-    print(f"[save] rich npz -> {rich_path}", flush=True)
+    # ---- Save per-pooling, per-layer NPZs ----
+    for pool in ("last", "mean"):
+        pool_dir = out_dir / pool
+        pool_dir.mkdir(parents=True, exist_ok=True)
+        for r in resolved_layers:
+            acts = np.stack(acts_by_pool_by_layer[pool][r], axis=0).astype(np.float32)
+            LL = f"{r:02d}"
+            rich_path = pool_dir / f"L{LL}.npz"
+            np.savez_compressed(
+                rich_path,
+                acts=acts,
+                fragment_ids=fragment_ids_arr,
+                rulers=rulers_arr,
+                years=years_arr,
+                span_start_token=span_start_arr,
+                span_end_token=span_end_arr,
+            )
+            # Round-1-compatible sibling for drop-in to 05_compute_*
+            r1_path = pool_dir / f"layer_{LL}.npz"
+            np.savez_compressed(r1_path, activations=acts)
+        print(f"[save] pool={pool}  layers={resolved_layers}  -> {pool_dir}", flush=True)
 
-    # ---- Save Round-1-compatible NPZ + metadata.json ----
-    # Round 1 used key 'activations' (see 01_extract_activations.py:137); we
-    # write a sibling file under the same dir so existing aggregation scripts
-    # (06_aggregate_*) can load it as drop-in.
-    r1_path = out_dir / f"layer_{LL}.npz"
-    np.savez_compressed(r1_path, activations=acts)
-    print(f"[save] r1-compat npz -> {r1_path}", flush=True)
-
-    # metadata.json (only update — don't clobber other layers' entries)
+    # metadata.json — keep one per variant, document both poolings + layers
+    meta = {
+        "model_id": args.model_path,
+        "model_short_name": "qwen2.5-7b-instruct",
+        "variant": args.variant,
+        "n_texts": int(len(fragment_ids)),
+        "hidden_dim": int(hidden_dim),
+        "n_layers_total": int(n_layers_total),
+        "layers_extracted": sorted(resolved_layers),
+        "poolings": ["last", "mean"],
+        "fragment_ids": fragment_ids,
+        "rulers": rulers,
+        "years": years,
+        "timestamp": datetime.now().isoformat(),
+    }
     meta_path = out_dir / "metadata.json"
-    if meta_path.exists():
-        with open(meta_path, "r", encoding="utf-8") as f:
-            meta = json.load(f)
-    else:
-        meta = {}
-    meta.setdefault("model_id", args.model_path)
-    meta.setdefault("model_short_name", "qwen2.5-7b-instruct")
-    meta.setdefault("variant", args.variant)
-    meta.setdefault("n_texts", int(acts.shape[0]))
-    meta.setdefault("hidden_dim", int(acts.shape[1]))
-    meta.setdefault("n_layers", int(n_layers_total))
-    meta.setdefault("pooling", "span_end_token")
-    meta.setdefault("fragment_ids", fragment_ids)
-    meta.setdefault("rulers", rulers)
-    meta.setdefault("years", years)
-    meta["timestamp"] = datetime.now().isoformat()
-    layers_done = set(meta.get("layers_done", []))
-    layers_done.add(int(resolved_layer))
-    meta["layers_done"] = sorted(layers_done)
     with open(meta_path, "w", encoding="utf-8") as f:
         json.dump(meta, f, indent=2, ensure_ascii=False)
     print(f"[save] metadata -> {meta_path}", flush=True)
     elapsed = (time.time() - t0) / 60
-    print(f"[done] variant={args.variant}  layer={resolved_layer}  {elapsed:.1f} min", flush=True)
+    print(f"[done] variant={args.variant}  layers={resolved_layers}  poolings=[last,mean]  "
+          f"{elapsed:.1f} min", flush=True)
 
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Phase 1b prompted-activation extractor")
     p.add_argument("--variant", required=True, choices=["pv0", "pv1", "pv2", "pv3"])
-    p.add_argument("--layer", type=int, required=True,
-                   help="Layer index into hidden_states tuple. 0=embedding, -1=last.")
+    p.add_argument("--layers", required=True,
+                   help="Comma-separated layer indices into hidden_states tuple "
+                        "(e.g. '0,4,10,15,22,28'). 0=embedding, -1=last; "
+                        "all 6 captured in a single forward pass per fragment.")
     p.add_argument("--model_path", default=DEFAULT_MODEL,
                    help=f"HF model path (default env QWEN_MODEL_PATH or {DEFAULT_MODEL})")
     p.add_argument("--out_dir", default=str(DEFAULT_OUT_ROOT))
