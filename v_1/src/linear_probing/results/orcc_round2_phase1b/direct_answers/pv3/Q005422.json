@@ -1,0 +1,17 @@
+{
+  "fragment_id": "Q005422",
+  "variant": "pv3",
+  "ruler_gt": "Nabonidus",
+  "year_gt": 539,
+  "raw_output": "The text contains several key elements that allow us to identify the ruler and date the inscription:\n\n1. **Ruler Name**: The text includes the phrase \"d-AG-na-'i-id LUGAL\" which refers to the ruler Agna'id. This name is associated with the Neo-Assyrian Empire, particularly with Ashurbanipal, who ruled during the late 7th century BCE.\n\n2. **Geographic References**: The text mentions places like \"d-UTU\" (Nineveh), \"d-IŠKUR EN-MEŠ\" (Assyria), and \"d-AG-na-'i-id\" (Agna'id, likely a region or city). These references point to the Neo-Assyrian Empire, which was centered in Nineveh and covered much of Mesopotamia.\n\n3. **Lexical and Orthographic Features**: The use of specific logograms and phonetic complements, such as \"d-UTU\" for Nineveh, \"d-IŠKUR EN-MEŠ\" for Assyria, and the consistent use of Akkadian vocabulary typical of the Neo-Assyrian period, indicate this text is from the late first millennium BCE, specifically the Neo-Assyrian period.\n\n4. **Genre Formulae**: The text appears to be a building inscription or possibly a dedication text, which is common for Neo-Assyrian rulers. The detailed description of construction activities and dedications aligns with the style of royal inscriptions from this period.\n\nBased on these observations, we can confidently identify the ruler and date the inscription.\n\n```json\n{\"ruler\": \"Ashurbanipal\", \"year_bce\": 668, \"confidence\": 0.95}\n```\n\nThe confidence level is set at 0.95 due to the strong evidence from the text and the clear association with Ashurbanipal's reign.",
+  "parsed_ruler": "Ashurbanipal",
+  "parsed_year": 668,
+  "parsed_confidence": 0.95,
+  "parse_error": null,
+  "reasoning_text": "The text contains several key elements that allow us to identify the ruler and date the inscription:\n\n1. **Ruler Name**: The text includes the phrase \"d-AG-na-'i-id LUGAL\" which refers to the ruler Agna'id. This name is associated with the Neo-Assyrian Empire, particularly with Ashurbanipal, who ruled during the late 7th century BCE.\n\n2. **Geographic References**: The text mentions places like \"d-UTU\" (Nineveh), \"d-IŠKUR EN-MEŠ\" (Assyria), and \"d-AG-na-'i-id\" (Agna'id, likely a region or city). These references point to the Neo-Assyrian Empire, which was centered in Nineveh and covered much of Mesopotamia.\n\n3. **Lexical and Orthographic Features**: The use of specific logograms and phonetic complements, such as \"d-UTU\" for Nineveh, \"d-IŠKUR EN-MEŠ\" for Assyria, and the consistent use of Akkadian vocabulary typical of the Neo-Assyrian period, indicate this text is from the late first millennium BCE, specifically the Neo-Assyrian period.\n\n4. **Genre Formulae**: The text appears to be a building inscription or possibly a dedication text, which is common for Neo-Assyrian rulers. The detailed description of construction activities and dedications aligns with the style of royal inscriptions from this period.\n\nBased on these observations, we can confidently identify the ruler and date the inscription.\n\n```json",
+  "span_token_indices": {
+    "span_start_token": 114,
+    "span_end_token": 3007,
+    "prompt_n_tokens": 3249
+  }
+}
