@@ -1,0 +1,205 @@
+{
+  "variant": "kp0",
+  "tolerance_years": 50,
+  "total": 8,
+  "correct": 8,
+  "parse_errors": 0,
+  "error_rate": 0.0,
+  "accuracy": 1.0,
+  "accuracy_scoreable": 1.0,
+  "per_ruler": [
+    {
+      "ruler": "Ashurbanipal",
+      "raw_output": "{\"start_year\": 668, \"end_year\": 627, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 668,
+        "end_year": 627,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        577,
+        718
+      ],
+      "gt_start": 668,
+      "gt_end": 631,
+      "gt_end_alt": 627,
+      "hits": [
+        668,
+        631,
+        627
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Sennacherib",
+      "raw_output": "{\"start_year\": 705, \"end_year\": 681, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 705,
+        "end_year": 681,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        631,
+        755
+      ],
+      "gt_start": 705,
+      "gt_end": 681,
+      "gt_end_alt": null,
+      "hits": [
+        705,
+        681
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Esarhaddon",
+      "raw_output": "{\n  \"start_year\": 681,\n  \"end_year\": 669,\n  \"confidence\": \"high\",\n  \"declined\": false\n}",
+      "parsed": {
+        "start_year": 681,
+        "end_year": 669,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        619,
+        731
+      ],
+      "gt_start": 681,
+      "gt_end": 669,
+      "gt_end_alt": null,
+      "hits": [
+        681,
+        669
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Sargon II",
+      "raw_output": "{\"start_year\": 722, \"end_year\": 705, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 722,
+        "end_year": 705,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        655,
+        772
+      ],
+      "gt_start": 722,
+      "gt_end": 705,
+      "gt_end_alt": null,
+      "hits": [
+        722,
+        705
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Nebuchadnezzar II",
+      "raw_output": "{\"start_year\": 605, \"end_year\": 562, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 605,
+        "end_year": 562,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        512,
+        655
+      ],
+      "gt_start": 605,
+      "gt_end": 562,
+      "gt_end_alt": null,
+      "hits": [
+        605,
+        562
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Tiglath-pileser III",
+      "raw_output": "{\n  \"start_year\": 745,\n  \"end_year\": 727,\n  \"confidence\": \"high\",\n  \"declined\": false\n}",
+      "parsed": {
+        "start_year": 745,
+        "end_year": 727,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        677,
+        795
+      ],
+      "gt_start": 745,
+      "gt_end": 727,
+      "gt_end_alt": null,
+      "hits": [
+        745,
+        727
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Nabonidus",
+      "raw_output": "{\"start_year\": 556, \"end_year\": 539, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 556,
+        "end_year": 539,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        489,
+        606
+      ],
+      "gt_start": 556,
+      "gt_end": 539,
+      "gt_end_alt": null,
+      "hits": [
+        556,
+        539
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Sîn-šarru-iškun",
+      "raw_output": "{\"start_year\": 626, \"end_year\": 609, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 626,
+        "end_year": 609,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        559,
+        676
+      ],
+      "gt_start": 627,
+      "gt_end": 612,
+      "gt_end_alt": null,
+      "hits": [
+        627,
+        612
+      ],
+      "reason": "within_tolerance"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "variant": "kp1",
+  "total_periods": 2,
+  "parse_errors": 0,
+  "aggregate_recall": 0.75,
+  "total_targets": 8,
+  "total_hits": 6,
+  "per_period": [
+    {
+      "period": "Neo-Assyrian",
+      "raw_output": "{\n  \"period\": \"Neo-Assyrian\",\n  \"rulers\": [\n    \"Ashurnasirpal II\",\n    \"Shalmaneser III\",\n    \"Assurdayan III\",\n    \"Tiglath-Pileser III\",\n    \"Shalmaneser IV\",\n    \"Adad-nirari III\",\n    \"Sargon II\",\n    \"Sennacherib\",\n    \"Esarhaddon\",\n    \"Assurbanipal\"\n  ],\n  \"confidence\": \"high\"\n}",
+      "parsed": {
+        "period": "Neo-Assyrian",
+        "rulers": [
+          "Ashurnasirpal II",
+          "Shalmaneser III",
+          "Assurdayan III",
+          "Tiglath-Pileser III",
+          "Shalmaneser IV",
+          "Adad-nirari III",
+          "Sargon II",
+          "Sennacherib",
+          "Esarhaddon",
+          "Assurbanipal"
+        ],
+        "confidence": "high"
+      },
+      "parse_error": false,
+      "recall": 0.6666666666666666,
+      "found_targets": [
+        "Sennacherib",
+        "Esarhaddon",
+        "Sargon II",
+        "Tiglath-pileser III"
+      ],
+      "missed_targets": [
+        "Ashurbanipal",
+        "Sîn-šarru-iškun"
+      ],
+      "extras": [
+        "Ashurnasirpal II",
+        "Shalmaneser III",
+        "Assurdayan III",
+        "Shalmaneser IV",
+        "Adad-nirari III",
+        "Assurbanipal"
+      ]
+    },
+    {
+      "period": "Neo-Babylonian",
+      "raw_output": "{\n  \"period\": \"Neo-Babylonian\",\n  \"rulers\": [\n    \"Nabopolassar\",\n    \"Nebuchadnezzar II\",\n    \"Evil-Merodach\",\n    \"Nergal-sharezer\",\n    \"Nabonidus\"\n  ],\n  \"confidence\": \"high\"\n}",
+      "parsed": {
+        "period": "Neo-Babylonian",
+        "rulers": [
+          "Nabopolassar",
+          "Nebuchadnezzar II",
+          "Evil-Merodach",
+          "Nergal-sharezer",
+          "Nabonidus"
+        ],
+        "confidence": "high"
+      },
+      "parse_error": false,
+      "recall": 1.0,
+      "found_targets": [
+        "Nebuchadnezzar II",
+        "Nabonidus"
+      ],
+      "missed_targets": [],
+      "extras": [
+        "Nabopolassar",
+        "Evil-Merodach",
+        "Nergal-sharezer"
+      ]
+    }
+  ]
+}

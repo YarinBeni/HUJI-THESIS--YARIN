@@ -1,0 +1,14 @@
+{
+  "variant": "kp1",
+  "input_idx": 0,
+  "input_value": "Neo-Assyrian",
+  "fill": {
+    "period": "Neo-Assyrian"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked which rulers\nreigned during a given Mesopotamian period, return a JSON object and nothing\nelse. Do not include markdown fences, prose, or explanation outside the JSON.",
+  "user_message": "Which rulers reigned during the Neo-Assyrian period in Mesopotamia?\nList only rulers who held the title of king (not regents or officials).\nReturn ONLY a JSON object with these fields:\n  \"period\": \"Neo-Assyrian\"\n  \"rulers\": an array of ruler names (romanized, chronological order)\n  \"confidence\": \"high\" if you are certain of the list, \"low\" if approximate",
+  "raw_output": "{\n  \"period\": \"Neo-Assyrian\",\n  \"rulers\": [\n    \"Ashurnasirpal II\",\n    \"Shalmaneser III\",\n    \"Assurdayan III\",\n    \"Tiglath-Pileser III\",\n    \"Shalmaneser IV\",\n    \"Adad-nirari III\",\n    \"Sargon II\",\n    \"Sennacherib\",\n    \"Esarhaddon\",\n    \"Assurbanipal\"\n  ],\n  \"confidence\": \"high\"\n}",
+  "model_path": "Qwen/Qwen2.5-7B-Instruct",
+  "max_new_tokens": 512,
+  "timestamp": "2026-05-20T00:03:20.083691"
+}

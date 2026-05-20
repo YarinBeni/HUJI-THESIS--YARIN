@@ -1,0 +1,141 @@
+{
+  "variant": "kp2",
+  "total": 8,
+  "parse_errors": 0,
+  "scoreable": 8,
+  "declined_correctly": 4,
+  "hallucinations": 4,
+  "hallucination_rate": 0.5,
+  "gate_threshold": 0.3,
+  "gate_pass": false,
+  "per_name": [
+    {
+      "name": "Nabu-šarru-iddina the Lesser",
+      "raw_output": "{\"start_year\": 626, \"end_year\": 605, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 626,
+        "end_year": 605,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "declined": false,
+      "start_year": 626,
+      "end_year": 605,
+      "hallucination": true,
+      "status": "hallucination"
+    },
+    {
+      "name": "Esarhaddon III",
+      "raw_output": "{\"start_year\": 681, \"end_year\": 669, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 681,
+        "end_year": 669,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "declined": false,
+      "start_year": 681,
+      "end_year": 669,
+      "hallucination": true,
+      "status": "hallucination"
+    },
+    {
+      "name": "Nergal-nasir-apli",
+      "raw_output": "{\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+      "parsed": {
+        "start_year": null,
+        "end_year": null,
+        "confidence": "low",
+        "declined": true
+      },
+      "parse_error": false,
+      "declined": true,
+      "start_year": null,
+      "end_year": null,
+      "hallucination": false,
+      "status": "declined_correctly"
+    },
+    {
+      "name": "Marduk-mukin-šarru",
+      "raw_output": "{\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+      "parsed": {
+        "start_year": null,
+        "end_year": null,
+        "confidence": "low",
+        "declined": true
+      },
+      "parse_error": false,
+      "declined": true,
+      "start_year": null,
+      "end_year": null,
+      "hallucination": false,
+      "status": "declined_correctly"
+    },
+    {
+      "name": "Sîn-eriba-bel",
+      "raw_output": "{\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+      "parsed": {
+        "start_year": null,
+        "end_year": null,
+        "confidence": "low",
+        "declined": true
+      },
+      "parse_error": false,
+      "declined": true,
+      "start_year": null,
+      "end_year": null,
+      "hallucination": false,
+      "status": "declined_correctly"
+    },
+    {
+      "name": "Assur-bel-mukin the Younger",
+      "raw_output": "{\"start_year\": 648, \"end_year\": 645, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 648,
+        "end_year": 645,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "declined": false,
+      "start_year": 648,
+      "end_year": 645,
+      "hallucination": true,
+      "status": "hallucination"
+    },
+    {
+      "name": "Tukulti-apil-iddina II",
+      "raw_output": "{\"start_year\": 801, \"end_year\": 793, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 801,
+        "end_year": 793,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "declined": false,
+      "start_year": 801,
+      "end_year": 793,
+      "hallucination": true,
+      "status": "hallucination"
+    },
+    {
+      "name": "Nabû-šumu-eriba the Elder",
+      "raw_output": "{\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+      "parsed": {
+        "start_year": null,
+        "end_year": null,
+        "confidence": "low",
+        "declined": true
+      },
+      "parse_error": false,
+      "declined": true,
+      "start_year": null,
+      "end_year": null,
+      "hallucination": false,
+      "status": "declined_correctly"
+    }
+  ]
+}

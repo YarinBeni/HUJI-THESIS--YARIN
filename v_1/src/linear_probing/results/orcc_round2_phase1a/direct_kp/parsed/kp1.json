@@ -1,0 +1,54 @@
+{
+  "variant": "kp1",
+  "n_inputs": 2,
+  "n_parse_errors": 0,
+  "results": [
+    {
+      "input_idx": 0,
+      "input_value": "Neo-Assyrian",
+      "fill": {
+        "period": "Neo-Assyrian"
+      },
+      "raw_output": "{\n  \"period\": \"Neo-Assyrian\",\n  \"rulers\": [\n    \"Ashurnasirpal II\",\n    \"Shalmaneser III\",\n    \"Assurdayan III\",\n    \"Tiglath-Pileser III\",\n    \"Shalmaneser IV\",\n    \"Adad-nirari III\",\n    \"Sargon II\",\n    \"Sennacherib\",\n    \"Esarhaddon\",\n    \"Assurbanipal\"\n  ],\n  \"confidence\": \"high\"\n}",
+      "parsed": {
+        "period": "Neo-Assyrian",
+        "rulers": [
+          "Ashurnasirpal II",
+          "Shalmaneser III",
+          "Assurdayan III",
+          "Tiglath-Pileser III",
+          "Shalmaneser IV",
+          "Adad-nirari III",
+          "Sargon II",
+          "Sennacherib",
+          "Esarhaddon",
+          "Assurbanipal"
+        ],
+        "confidence": "high"
+      },
+      "parse_error": false,
+      "parse_error_reason": ""
+    },
+    {
+      "input_idx": 1,
+      "input_value": "Neo-Babylonian",
+      "fill": {
+        "period": "Neo-Babylonian"
+      },
+      "raw_output": "{\n  \"period\": \"Neo-Babylonian\",\n  \"rulers\": [\n    \"Nabopolassar\",\n    \"Nebuchadnezzar II\",\n    \"Evil-Merodach\",\n    \"Nergal-sharezer\",\n    \"Nabonidus\"\n  ],\n  \"confidence\": \"high\"\n}",
+      "parsed": {
+        "period": "Neo-Babylonian",
+        "rulers": [
+          "Nabopolassar",
+          "Nebuchadnezzar II",
+          "Evil-Merodach",
+          "Nergal-sharezer",
+          "Nabonidus"
+        ],
+        "confidence": "high"
+      },
+      "parse_error": false,
+      "parse_error_reason": ""
+    }
+  ]
+}
