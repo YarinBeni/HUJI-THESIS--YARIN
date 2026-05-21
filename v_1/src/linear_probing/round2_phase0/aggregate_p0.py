@@ -190,11 +190,18 @@ def load_mc_summary(probes_dir: Path, probe: str, method_tag: str) -> dict | Non
     if summary_path.exists():
         with open(summary_path) as f:
             summary = json.load(f)
-        # Cross-check: if the on-disk draw count exceeds summary's n_draws,
+        # Cross-check 1: if the on-disk draw count exceeds summary's n_draws,
         # rebuild from per-draw (stale summary case).
         if per_draw_glob and summary.get("n_draws", 0) < len(per_draw_glob):
             print(f"  [{probe}] summary n_draws={summary.get('n_draws')} < "
                   f"disk draws={len(per_draw_glob)}; rebuilding from per-draw files")
+            return _aggregate_from_per_draw(probes_dir, probe, method_tag)
+        # Cross-check 2: if per_config is empty but per-draw files exist with
+        # content, the summary was written before the per-draws were finalized
+        # (job 8198 exit-1 finalization race). Rebuild.
+        if per_draw_glob and not summary.get("per_config"):
+            print(f"  [{probe}] summary has empty per_config but "
+                  f"{len(per_draw_glob)} per-draw files exist; rebuilding")
             return _aggregate_from_per_draw(probes_dir, probe, method_tag)
         return summary
 
@@ -286,6 +293,108 @@ def lookup_mc_entry(mc_summary: dict | None, method: str, cleaning: str,
     per_cfg = mc_summary.get("per_config", {})
     key = _mc_key(method, cleaning, pooling, layer, task)
     return per_cfg.get(key)
+
+
+def _best_mc_for_regime(mc_summary: dict | None,
+                        method: str, cleaning: str, pooling: str,
+                        task: str = "ruler") -> dict | None:
+    """Find the best MC layer for a (method, cleaning, pooling, task) regime.
+
+    Unlike `lookup_mc_entry`, this scans ALL layers in the MC sweep (not just
+    the R1-best layer) and picks the one with highest macro_f1_mean. Used by
+    the unified leaderboard so each method gets its apples-to-apples best in
+    the MC sweep's layer subset.
+    """
+    if mc_summary is None:
+        return None
+    per_cfg = mc_summary.get("per_config", {})
+    best = None
+    prefix = f"{method}__{cleaning}__{pooling}__"
+    for key, agg in per_cfg.items():
+        if not key.startswith(prefix) or not key.endswith(f"__{task}"):
+            continue
+        # Extract layer L## from key:  {prefix}L{NN}__{task}
+        layer_token = key[len(prefix):-(len(task) + 2)]
+        if not layer_token.startswith("L"):
+            continue
+        try:
+            layer = int(layer_token[1:])
+        except ValueError:
+            continue
+        f1 = agg.get("macro_f1_mean")
+        if f1 is None:
+            continue
+        if best is None or f1 > best["macro_f1_mean"]:
+            best = {
+                "layer": layer,
+                "macro_f1_mean":   float(f1),
+                "macro_f1_std":    float(agg.get("macro_f1_std", float("nan"))),
+                "macro_f1_median": float(agg.get("macro_f1_median", float("nan"))),
+                "n_draws":         int(agg.get("n_draws", agg.get("macro_f1_n", 0))),
+                "config_key":      key,
+            }
+    return best
+
+
+def build_leaderboard(round1: dict, mc_summaries: dict[str, dict | None],
+                      kind: str) -> list[dict]:
+    """Build a unified leaderboard for one regime (`cls` or `pls`).
+
+    For every Round-1 best-layer entry in `round1`, attach the best MC layer
+    score for the matching (method, cleaning, pooling, task) regime. Returns a
+    list of dict rows sorted by R1 macro_f1 descending.
+
+    `round1` is `cls_best_layers.json` (kind='cls') or `pls_best_layers.json`
+    (kind='pls'). For PLS we only consider the ruler-task rows (year-ruler).
+    """
+    if kind not in ("cls", "pls"):
+        raise ValueError(f"kind must be 'cls' or 'pls', got {kind!r}")
+    target_task = "ruler" if kind == "cls" else "year-ruler"
+    # MC summary lookup: cls regime uses *_cls summaries, pls uses *_pls.
+    mc_probe_suffix = "cls" if kind == "cls" else "pls"
+
+    rows: list[dict] = []
+    for key, v in round1.items():
+        parts = key.split("__")
+        if len(parts) != 4:
+            continue
+        method, cleaning, pooling, task = parts
+        if task != target_task:
+            continue
+        if kind == "cls":
+            r1_f1 = v.get("best_layer_macro_f1")
+            r1_layer = v.get("best_layer")
+            r1_acc = v.get("best_layer_accuracy")
+        else:  # pls
+            r1_f1 = v.get("macro_f1_mean")
+            r1_layer = v.get("best_layer", v.get("layer"))
+            r1_acc = v.get("accuracy_mean")
+        if r1_f1 is None:
+            continue
+
+        mc_probe = f"{method}__{mc_probe_suffix}".replace("__cls", "_cls").replace("__pls", "_pls")
+        # mc_probe is e.g. "qwen_cls" / "mlm_pls"; if absent, mc remains None.
+        # Look up by the literal probe name used in PROBES_PER_METHOD.
+        probe_lookup = f"{method}_{mc_probe_suffix}"
+        mc_entry = _best_mc_for_regime(mc_summaries.get(probe_lookup),
+                                       method, cleaning, pooling,
+                                       task="ruler")
+        # Note: MC always probes the "ruler" task at activation level.
+        rows.append({
+            "method":   method,
+            "display":  METHOD_DISPLAY.get(method, method),
+            "cleaning": cleaning,
+            "pooling":  pooling,
+            "r1": {
+                "best_layer":  int(r1_layer) if r1_layer is not None else None,
+                "macro_f1":    float(r1_f1),
+                "accuracy":    float(r1_acc) if r1_acc is not None else None,
+            },
+            "mc": mc_entry,
+        })
+
+    rows.sort(key=lambda r: r["r1"]["macro_f1"], reverse=True)
+    return rows
 
 
 def evaluate_method(method: str,
@@ -457,6 +566,43 @@ def write_markdown_report(out_path: Path, payload: dict) -> None:
     else:
         lines.append(f"Secondary gate: not evaluated — {sec.get('reason')}")
     lines.append("")
+
+    # --- Full leaderboards (R1 imbalanced vs Balanced MC, all methods) ---
+    for kind, label, key in (
+        ("cls", "Full Leaderboard — CLS regime (ruler classification)", "leaderboard_cls"),
+        ("pls", "Full Leaderboard — PLS regime (ruler via year-PLS-DA)", "leaderboard_pls"),
+    ):
+        board = payload.get(key, [])
+        if not board:
+            continue
+        lines.append(f"## {label}")
+        lines.append("")
+        lines.append("Sorted by Round-1 (imbalanced) Macro-F1 descending. "
+                     "Balanced MC column shows the best layer found in the "
+                     "Phase-0 layer subset for the same (method, cleaning, "
+                     "pooling). 'n/a' = MC sweep didn't cover that regime.")
+        lines.append("")
+        lines.append("| Method | Cleaning | Pooling | R1 layer | R1 Macro-F1 | "
+                     "MC layer | MC Macro-F1 (mean ± std) | Δ (MC − R1) |")
+        lines.append("|---|---|---|---|---|---|---|---|")
+        for row in board:
+            r1 = row["r1"]
+            mc = row["mc"]
+            if mc is not None:
+                mc_cell = f"{mc['macro_f1_mean']:.4f} ± {mc['macro_f1_std']:.4f}"
+                delta = mc["macro_f1_mean"] - r1["macro_f1"]
+                delta_cell = f"{delta:+.4f}"
+                mc_layer = str(mc["layer"])
+            else:
+                mc_cell = "n/a"
+                delta_cell = "n/a"
+                mc_layer = "n/a"
+            lines.append(
+                f"| {row['display']} | {row['cleaning']} | {row['pooling']} | "
+                f"{r1['best_layer']} | {r1['macro_f1']:.4f} | "
+                f"{mc_layer} | {mc_cell} | {delta_cell} |"
+            )
+        lines.append("")
 
     # Per-method tables
     for m_entry in payload["per_method"]:
@@ -651,6 +797,12 @@ def main() -> None:
         for probe, s in summaries.items()
     }
 
+    # Full leaderboards (handoff-mandated extension): unified table of all
+    # methods × (cleaning, pooling), sorted by R1 Macro-F1 descending, with the
+    # best balanced MC value attached per regime where MC sweep covered it.
+    cls_leaderboard = build_leaderboard(round1_cls, summaries, kind="cls")
+    pls_leaderboard = build_leaderboard(round1_pls, summaries, kind="pls")
+
     payload = {
         "probes_dir": str(args.probes_dir),
         "round1_cls_path": str(args.round1_cls),
@@ -663,6 +815,8 @@ def main() -> None:
         },
         "secondary": secondary,
         "n_draws_per_probe": draws_by_probe,
+        "leaderboard_cls": cls_leaderboard,
+        "leaderboard_pls": pls_leaderboard,
         "per_method": per_method,
     }
 
