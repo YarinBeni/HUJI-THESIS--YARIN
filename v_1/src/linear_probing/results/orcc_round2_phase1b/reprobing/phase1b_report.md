@@ -6,16 +6,30 @@ Phase 1b pools at the last token of the fragment span, so the apples-to-
 apples Round-1 reference is `last`. We also show `mean` (the headline
 Round-1 number, ~0.117 Macro-F1) for context.
 
-## Round-1 baselines (Qwen, raw fragments, tier0)
+## Round-1 baselines — ALL methods, raw fragments, imbalanced
 
-- ruler Macro-F1 **last** (best layer L5): **0.130**
-- ruler Macro-F1 **mean** (best layer L0): **0.117**
+Phase 1b's apples-to-apples comparison is the **same pooling** column.
+Best Phase 1b score (~0.139) only beats Qwen-pretrained — it loses badly
+to MLM and Random. The headline Round-1 ranking still stands:
+**TF-IDF >> Random ≈ MLM > Qwen-pretrained**.
+
+| Method (cleaning, pooling) | best layer | Macro-F1 |
+|---|---|---|
+
+_Best Phase 1b prompted ruler Macro-F1 = 0.139 (mean L0, all 4 variants)._
+
+## Round-1 Qwen Y-baselines (year regression)
+
 - year-raw (last) MAE: 131.13  Spearman: 0.084
 - year-raw (mean) MAE: 128.34  Spearman: 0.121
 - year-log (last) MAE: 0.4514  Spearman: 0.059
 - year-log (mean) MAE: 0.4002  Spearman: 0.095
 
-## Phase 1b ruler results (vs both Round-1 baselines)
+## Phase 1b ruler results (vs Qwen-pretrained baselines only)
+
+_Note: 'BEATS BOTH' here only means beats Qwen-pretrained. See the_
+_Round-1 leaderboard above for the full picture — Phase 1b still loses_
+_to MLM (0.220), Random (0.235), and TF-IDF (0.326)._
 
 | variant | pooling | layer | macro_f1 | R1 last (Δ) | R1 mean (Δ) | verdict |
 |---|---|---|---|---|---|---|
@@ -130,4 +144,9 @@ Round-1 number, ~0.117 Macro-F1) for context.
 
 ## Interpretation
 
-4/4 variants beat Round-1 `last`, 4/4 beat Round-1 `mean`, 4/4 beat BOTH. Inspect which variants moved the needle (pv0/pv1/pv2/pv3) and which layer they peak at to decide next experiments.
+4/4 variants beat Qwen-pretrained `last`, 4/4 beat Qwen-pretrained `mean`, 4/4 beat BOTH Qwen baselines. BUT — the full Round-1 leaderboard shows Qwen-pretrained is the WEAKEST method. Apples-to-apples for the diagnostic question 'does prompted Qwen compete with the actually-good methods?' is below.
+
+**Best Phase 1b Macro-F1 = 0.139** (across all variants/poolings/layers).
+
+
+Bottom line: prompt-wrapping makes Qwen slightly less bad than its raw form, but the representation is still far behind MLM / Random / TF-IDF. Phase 0 (balanced subsampling) will tell us whether the gap closes under balanced evaluation.
