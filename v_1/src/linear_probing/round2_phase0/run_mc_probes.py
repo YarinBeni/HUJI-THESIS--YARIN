@@ -160,6 +160,13 @@ def parse_args() -> argparse.Namespace:
               help=f"Path to ORCC parquet (default: {ORCC_PARQUET})")
     _add_dual(p, "activations-base", type=Path, default=ACTS_BASE_DEFAULT,
               help=f"Activations root (default: {ACTS_BASE_DEFAULT})")
+    # Layer subset for activation-based probes (mlm/qwen/random). TF-IDF ignores this.
+    # Default matches Phase 1b's 6-layer subset {0,4,10,15,22,28} so the two phases
+    # produce apples-to-apples comparable per-layer numbers. Use "all" to scan every
+    # layer (full Round-1 grid, much slower for qwen/random).
+    _add_dual(p, "layers", type=str, default="0,4,10,15,22,28",
+              help="Comma-separated layer indices for mlm/qwen/random probes "
+                   "(default: '0,4,10,15,22,28'). Pass 'all' to scan every layer.")
     return p.parse_args()
 
 
@@ -177,6 +184,10 @@ def _parse_range(s: str | None, n: int) -> list[int]:
 # ---------------------------------------------------------------------------
 
 _ACT_CACHE: dict[tuple[str, int], np.ndarray] = {}
+
+# Optional layer subset for activation-based probes (mlm/qwen/random). Set by
+# main() from --layers. None means "all layers".
+_LAYER_SUBSET: list[int] | None = None
 
 
 def _load_orcc_activations(method: str, layer: int, acts_base: Path) -> np.ndarray | None:
@@ -326,7 +337,10 @@ def _run_acts_pls(method: str, n_layers: int,
     results: dict[str, Any] = {}
     pooling   = "mean"
     cleaning  = "tier0"
-    for layer in range(n_layers):
+    layer_iter = _LAYER_SUBSET if _LAYER_SUBSET is not None else range(n_layers)
+    for layer in layer_iter:
+        if layer >= n_layers:
+            continue
         X_full = _load_orcc_activations(method, layer, acts_base)
         if X_full is None:
             print(f"    [{method}] L{layer:02d} — no activations, skip")
@@ -373,7 +387,10 @@ def _run_acts_cls(method: str, n_layers: int,
     pooling   = "mean"
     cleaning  = "tier0"
     y_year_str = np.array([str(int(y)) for y in y_raw])
-    for layer in range(n_layers):
+    layer_iter = _LAYER_SUBSET if _LAYER_SUBSET is not None else range(n_layers)
+    for layer in layer_iter:
+        if layer >= n_layers:
+            continue
         X_full = _load_orcc_activations(method, layer, acts_base)
         if X_full is None:
             print(f"    [{method}] L{layer:02d} — no activations, skip")
@@ -467,8 +484,18 @@ def _aggregate_summary(out_dir: Path, probe: str, method_tag: str) -> dict:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
+    global _LAYER_SUBSET
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Resolve layer subset (used by mlm/qwen/random probes only)
+    lay_arg = getattr(args, "layers", "all")
+    if lay_arg and str(lay_arg).strip().lower() != "all":
+        _LAYER_SUBSET = sorted({int(x.strip()) for x in str(lay_arg).split(",") if x.strip()})
+        print(f"[layers] activation probes restricted to layers: {_LAYER_SUBSET}")
+    else:
+        _LAYER_SUBSET = None
+        print("[layers] activation probes will scan ALL layers (slow for qwen/random)")
 
     probes = [p.strip() for p in args.probes.split(",") if p.strip()]
     for p in probes:

@@ -80,37 +80,51 @@ ROUND1_BASELINE_FILES = {
 
 
 def load_round1_baseline() -> dict[str, Any]:
-    """Surface qwen tier0 best-layer metrics for BOTH `last` (apples-to-apples
-    for Phase 1b's last-token pooling) AND `mean` (the headline Round-1
-    pooling) for direct comparison.
+    """Surface Round-1 best-layer Macro-F1 for ALL methods/poolings.
+
+    Was previously Qwen-only — but Round 1 found random-init Qwen and MLM
+    mean-pooled embeddings score WAY higher (0.220-0.235) than pretrained
+    Qwen (0.117-0.130). Hiding those from the Phase 1b verdict was
+    misleading. Now every method/pooling appears under a typed key.
     """
     out: dict[str, Any] = {"source_files": ROUND1_BASELINE_FILES}
+    # All (method, cleaning, pooling) combos worth surfacing.
+    # Each row is read from the best_layers JSON if present, skipped otherwise.
+    METHODS_CLS = [
+        ("qwen",   "tier0",   "mean"),
+        ("qwen",   "tier0",   "last"),
+        ("qwen",   "maximal", "mean"),
+        ("qwen",   "maximal", "last"),
+        ("random", "tier0",   "mean"),
+        ("random", "tier0",   "last"),
+        ("random", "maximal", "mean"),
+        ("random", "maximal", "last"),
+        ("mlm",    "tier0",   "mean"),
+        ("tfidf",  "tier0",   "na"),
+        ("tfidf",  "maximal", "na"),
+    ]
     try:
         with open(ROUND1_BASELINE_FILES["cls"]) as f:
             cls_best = json.load(f)
-        out["qwen_tier0_last_ruler_best"] = cls_best.get(
-            "qwen__tier0__last__ruler", {}
-        )
-        out["qwen_tier0_mean_ruler_best"] = cls_best.get(
-            "qwen__tier0__mean__ruler", {}
-        )
+        ruler_best: dict[str, Any] = {}
+        for method, cleaning, pooling in METHODS_CLS:
+            k = f"{method}__{cleaning}__{pooling}__ruler"
+            entry = cls_best.get(k)
+            if entry is not None:
+                ruler_best[k] = entry
+        out["round1_ruler_best"] = ruler_best
+        # Back-compat aliases used by the existing per-row summary code.
+        out["qwen_tier0_last_ruler_best"] = cls_best.get("qwen__tier0__last__ruler", {})
+        out["qwen_tier0_mean_ruler_best"] = cls_best.get("qwen__tier0__mean__ruler", {})
     except Exception as e:
         out["cls_load_error"] = str(e)
     try:
         with open(ROUND1_BASELINE_FILES["pls"]) as f:
             pls_best = json.load(f)
-        out["qwen_tier0_last_year_raw_best"] = pls_best.get(
-            "qwen__tier0__last__year-raw", {}
-        )
-        out["qwen_tier0_last_year_log_best"] = pls_best.get(
-            "qwen__tier0__last__year-log", {}
-        )
-        out["qwen_tier0_mean_year_raw_best"] = pls_best.get(
-            "qwen__tier0__mean__year-raw", {}
-        )
-        out["qwen_tier0_mean_year_log_best"] = pls_best.get(
-            "qwen__tier0__mean__year-log", {}
-        )
+        out["qwen_tier0_last_year_raw_best"] = pls_best.get("qwen__tier0__last__year-raw", {})
+        out["qwen_tier0_last_year_log_best"] = pls_best.get("qwen__tier0__last__year-log", {})
+        out["qwen_tier0_mean_year_raw_best"] = pls_best.get("qwen__tier0__mean__year-raw", {})
+        out["qwen_tier0_mean_year_log_best"] = pls_best.get("qwen__tier0__mean__year-log", {})
     except Exception as e:
         out["pls_load_error"] = str(e)
     return out
@@ -568,12 +582,32 @@ def build_report_md(summary: dict[str, Any], out_dir: Path) -> None:
         "apples Round-1 reference is `last`. We also show `mean` (the headline",
         "Round-1 number, ~0.117 Macro-F1) for context.",
         "",
-        "## Round-1 baselines (Qwen, raw fragments, tier0)",
+        "## Round-1 baselines — ALL methods, raw fragments, imbalanced",
         "",
-        f"- ruler Macro-F1 **last** (best layer L{r1.get('qwen_tier0_last_ruler_best_layer')}): "
-        f"**{_fmt(r1_last_f1)}**",
-        f"- ruler Macro-F1 **mean** (best layer L{r1.get('qwen_tier0_mean_ruler_best_layer')}): "
-        f"**{_fmt(r1_mean_f1)}**",
+        "Phase 1b's apples-to-apples comparison is the **same pooling** column.",
+        "Best Phase 1b score (~0.139) only beats Qwen-pretrained — it loses badly",
+        "to MLM and Random. The headline Round-1 ranking still stands:",
+        "**TF-IDF >> Random ≈ MLM > Qwen-pretrained**.",
+        "",
+        "| Method (cleaning, pooling) | best layer | Macro-F1 |",
+        "|---|---|---|",
+    ]
+    ruler_best = r1.get("round1_ruler_best", {}) or {}
+    # Sort by Macro-F1 desc so the leaderboard is obvious.
+    sorted_methods = sorted(
+        ruler_best.items(),
+        key=lambda kv: -(kv[1].get("best_layer_macro_f1") or 0.0),
+    )
+    for k, v in sorted_methods:
+        bl = v.get("best_layer")
+        f1 = v.get("best_layer_macro_f1")
+        lines.append(f"| `{k}` | {bl if bl is not None else '—'} | {_fmt(f1)} |")
+    lines += [
+        "",
+        f"_Best Phase 1b prompted ruler Macro-F1 = 0.139 (mean L0, all 4 variants)._",
+        "",
+        "## Round-1 Qwen Y-baselines (year regression)",
+        "",
         f"- year-raw (last) MAE: {_fmt(r1.get('qwen_tier0_last_year_raw_mae'), '.2f')}  "
         f"Spearman: {_fmt(r1.get('qwen_tier0_last_year_raw_spearman'))}",
         f"- year-raw (mean) MAE: {_fmt(r1.get('qwen_tier0_mean_year_raw_mae'), '.2f')}  "
@@ -583,7 +617,11 @@ def build_report_md(summary: dict[str, Any], out_dir: Path) -> None:
         f"- year-log (mean) MAE: {_fmt(r1.get('qwen_tier0_mean_year_log_mae'), '.4f')}  "
         f"Spearman: {_fmt(r1.get('qwen_tier0_mean_year_log_spearman'))}",
         "",
-        "## Phase 1b ruler results (vs both Round-1 baselines)",
+        "## Phase 1b ruler results (vs Qwen-pretrained baselines only)",
+        "",
+        "_Note: 'BEATS BOTH' here only means beats Qwen-pretrained. See the_",
+        "_Round-1 leaderboard above for the full picture — Phase 1b still loses_",
+        "_to MLM (0.220), Random (0.235), and TF-IDF (0.326)._",
         "",
         "| variant | pooling | layer | macro_f1 | R1 last (Δ) | R1 mean (Δ) | verdict |",
         "|---|---|---|---|---|---|---|",
@@ -635,22 +673,59 @@ def build_report_md(summary: dict[str, Any], out_dir: Path) -> None:
         for v in summary["per_variant"].values()
         if v.get("beats_r1_last") and v.get("beats_r1_mean")
     )
+    # Compare best Phase 1b to the FULL Round-1 leaderboard (not just Qwen).
+    ruler_best = r1.get("round1_ruler_best", {}) or {}
+    best_phase1b = max(
+        (info.get("best_layer_ruler_macro_f1") or 0.0)
+        for info in summary["per_variant"].values()
+    )
+    methods_beaten = []
+    methods_lost_to = []
+    for k, v in ruler_best.items():
+        score = v.get("best_layer_macro_f1")
+        if score is None:
+            continue
+        if best_phase1b > score:
+            methods_beaten.append((k, score))
+        else:
+            methods_lost_to.append((k, score))
+    methods_beaten.sort(key=lambda kv: -kv[1])
+    methods_lost_to.sort(key=lambda kv: -kv[1])
+
     if n_beat_both == 0 and n_beat_last == 0 and n_beat_mean == 0:
         lines.append(
-            f"None of {n_total} prompted variants beat EITHER Round-1 baseline on ruler "
-            "Macro-F1 (neither apples-to-apples `last` nor headline `mean`). "
-            "Prompt framing alone does NOT rescue Qwen's representations for ruler "
-            "classification — the diagnostic for Phase 1b is negative and we should "
-            "move on to scale (Phase 2) or tokenization (Phase 3)."
+            f"None of {n_total} prompted variants beat EITHER Qwen-pretrained Round-1 "
+            "baseline on ruler Macro-F1. Prompt framing does NOT rescue Qwen's "
+            "representations — move on to balancing (Phase 0) or scale (Phase 2)."
         )
     else:
         lines.append(
-            f"{n_beat_last}/{n_total} variants beat Round-1 `last`, "
-            f"{n_beat_mean}/{n_total} beat Round-1 `mean`, "
-            f"{n_beat_both}/{n_total} beat BOTH. "
-            "Inspect which variants moved the needle (pv0/pv1/pv2/pv3) and which "
-            "layer they peak at to decide next experiments."
+            f"{n_beat_last}/{n_total} variants beat Qwen-pretrained `last`, "
+            f"{n_beat_mean}/{n_total} beat Qwen-pretrained `mean`, "
+            f"{n_beat_both}/{n_total} beat BOTH Qwen baselines. "
+            "BUT — the full Round-1 leaderboard shows Qwen-pretrained is the WEAKEST "
+            "method. Apples-to-apples for the diagnostic question 'does prompted Qwen "
+            "compete with the actually-good methods?' is below."
         )
+    lines.append("")
+    lines.append(f"**Best Phase 1b Macro-F1 = {best_phase1b:.3f}** (across all variants/poolings/layers).")
+    lines.append("")
+    if methods_beaten:
+        lines.append("Phase 1b BEATS:")
+        for k, s in methods_beaten:
+            lines.append(f"- `{k}` ({s:.3f})")
+    if methods_lost_to:
+        lines.append("")
+        lines.append("Phase 1b LOSES to:")
+        for k, s in methods_lost_to:
+            lines.append(f"- `{k}` ({s:.3f})")
+    lines.append("")
+    lines.append(
+        "Bottom line: prompt-wrapping makes Qwen slightly less bad than its raw form, "
+        "but the representation is still far behind MLM / Random / TF-IDF. "
+        "Phase 0 (balanced subsampling) will tell us whether the gap closes under "
+        "balanced evaluation."
+    )
 
     report_path = out_dir / "phase1b_report.md"
     with open(report_path, "w") as f:
