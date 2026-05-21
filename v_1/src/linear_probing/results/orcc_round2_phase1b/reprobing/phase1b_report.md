@@ -15,6 +15,17 @@ to MLM and Random. The headline Round-1 ranking still stands:
 
 | Method (cleaning, pooling) | best layer | Macro-F1 |
 |---|---|---|
+| `tfidf__tier0__na__ruler` | 0 | 0.326 |
+| `random__tier0__mean__ruler` | 1 | 0.235 |
+| `tfidf__maximal__na__ruler` | 0 | 0.228 |
+| `mlm__tier0__mean__ruler` | 0 | 0.220 |
+| `random__maximal__mean__ruler` | 3 | 0.216 |
+| `random__maximal__last__ruler` | 1 | 0.175 |
+| `qwen__maximal__last__ruler` | 7 | 0.155 |
+| `random__tier0__last__ruler` | 1 | 0.149 |
+| `qwen__tier0__last__ruler` | 5 | 0.130 |
+| `qwen__maximal__mean__ruler` | 0 | 0.118 |
+| `qwen__tier0__mean__ruler` | 0 | 0.117 |
 
 _Best Phase 1b prompted ruler Macro-F1 = 0.139 (mean L0, all 4 variants)._
 
@@ -148,5 +159,19 @@ _to MLM (0.220), Random (0.235), and TF-IDF (0.326)._
 
 **Best Phase 1b Macro-F1 = 0.139** (across all variants/poolings/layers).
 
+Phase 1b BEATS:
+- `qwen__tier0__last__ruler` (0.130)
+- `qwen__maximal__mean__ruler` (0.118)
+- `qwen__tier0__mean__ruler` (0.117)
+
+Phase 1b LOSES to:
+- `tfidf__tier0__na__ruler` (0.326)
+- `random__tier0__mean__ruler` (0.235)
+- `tfidf__maximal__na__ruler` (0.228)
+- `mlm__tier0__mean__ruler` (0.220)
+- `random__maximal__mean__ruler` (0.216)
+- `random__maximal__last__ruler` (0.175)
+- `qwen__maximal__last__ruler` (0.155)
+- `random__tier0__last__ruler` (0.149)
 
 Bottom line: prompt-wrapping makes Qwen slightly less bad than its raw form, but the representation is still far behind MLM / Random / TF-IDF. Phase 0 (balanced subsampling) will tell us whether the gap closes under balanced evaluation.
