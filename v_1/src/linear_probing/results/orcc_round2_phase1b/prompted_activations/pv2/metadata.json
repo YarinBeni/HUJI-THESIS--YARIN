@@ -4,8 +4,19 @@
   "variant": "pv2",
   "n_texts": 1202,
   "hidden_dim": 3584,
-  "n_layers": 29,
-  "pooling": "span_end_token",
+  "n_layers_total": 29,
+  "layers_extracted": [
+    0,
+    4,
+    10,
+    15,
+    22,
+    28
+  ],
+  "poolings": [
+    "last",
+    "mean"
+  ],
   "fragment_ids": [
     "Q003230",
     "Q003231",
@@ -3618,10 +3629,5 @@
     539,
     -1
   ],
-  "timestamp": "2026-05-20T10:36:11.796823",
-  "layers_done": [
-    0,
-    15,
-    28
-  ]
+  "timestamp": "2026-05-20T12:50:45.272073"
 }
