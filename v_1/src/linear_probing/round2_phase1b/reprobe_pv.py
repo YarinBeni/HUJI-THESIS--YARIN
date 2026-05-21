@@ -73,9 +73,29 @@ from pls_utils import (                         # noqa: E402
 # Round-1 baseline (last-token, tier0). Hard-coded snapshot for the summary;
 # source files referenced for traceability.
 # ---------------------------------------------------------------------------
+def _pick_baseline_path(candidates: list[str]) -> str:
+    """Return the first existing candidate path, else the first (for error reporting)."""
+    import os as _os
+    for c in candidates:
+        if _os.path.exists(c):
+            return c
+    return candidates[0]
+
+
+# Round 1 results were renamed by commit 01491de6 ("Standardize results dir naming"):
+#   OLD: results/orcc__probe_cls/cls_best_layers.json
+#   NEW: results/orcc_round1/cls/cls_best_layers.json
+# Different copies of the repo (cluster vs local) may have one path or both. Try
+# both and use whichever exists.
 ROUND1_BASELINE_FILES = {
-    "cls": str(_LP_DIR / "results" / "orcc__probe_cls" / "cls_best_layers.json"),
-    "pls": str(_LP_DIR / "results" / "orcc__probe_pls" / "pls_best_layers.json"),
+    "cls": _pick_baseline_path([
+        str(_LP_DIR / "results" / "orcc_round1" / "cls" / "cls_best_layers.json"),
+        str(_LP_DIR / "results" / "orcc__probe_cls" / "cls_best_layers.json"),
+    ]),
+    "pls": _pick_baseline_path([
+        str(_LP_DIR / "results" / "orcc_round1" / "pls" / "pls_best_layers.json"),
+        str(_LP_DIR / "results" / "orcc__probe_pls" / "pls_best_layers.json"),
+    ]),
 }
 
 
