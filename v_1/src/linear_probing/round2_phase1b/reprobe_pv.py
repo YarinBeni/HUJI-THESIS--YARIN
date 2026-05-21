@@ -566,6 +566,9 @@ def build_summary(
     summary = {
         "round1_baseline": {
             "source_files": baseline.get("source_files"),
+            # Full leaderboard (all methods × cleanings × poolings) — used by the
+            # report's "ALL methods" table. Was missing → table came out empty.
+            "round1_ruler_best": baseline.get("round1_ruler_best", {}),
             # Last-pooling (apples-to-apples).
             "qwen_tier0_last_ruler_macro_f1": r1_last_macro_f1,
             "qwen_tier0_last_ruler_best_layer": r1_last_layer,
