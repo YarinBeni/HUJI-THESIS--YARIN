@@ -349,6 +349,34 @@ def reprobe_one(
     n_components_list: tuple[int, ...],
     pooling: str = "last",
 ) -> dict[str, Any]:
+    # Resumability: if BOTH per-combo JSONs already exist on disk, reuse them and skip
+    # the heavy probe fit. Lets a Slurm job array run one variant per task in parallel,
+    # then have a single aggregator pass build the consolidated summary from disk.
+    LL = f"{layer_idx:02d}"
+    cls_path = out_dir / f"{variant}__{pooling}__L{LL}__cls.json"
+    pls_path = out_dir / f"{variant}__{pooling}__L{LL}__pls.json"
+    if cls_path.exists() and pls_path.exists():
+        with open(cls_path) as f:
+            cls_cached = json.load(f)
+        with open(pls_path) as f:
+            pls_cached = json.load(f)
+        yr_raw_c = pls_cached.get("year_raw", {})
+        yr_log_c = pls_cached.get("year_log", {})
+        print(f"=== variant={variant}  pooling={pooling}  layer={layer_idx} (cached) ===",
+              flush=True)
+        return {
+            "variant": variant,
+            "pooling": pooling,
+            "layer": layer_idx,
+            "ruler_macro_f1": float(cls_cached.get("macro_f1_mean", float("nan"))),
+            "ruler_accuracy": float(cls_cached.get("accuracy_mean", float("nan"))),
+            "ruler_n_classes": int(cls_cached.get("n_classes", 0)),
+            "year_raw_mae": float(yr_raw_c.get("mae_at_best_k", float("nan"))),
+            "year_raw_spearman": float(yr_raw_c.get("spearman_at_best_k", float("nan"))),
+            "year_log_mae": float(yr_log_c.get("mae_at_best_k", float("nan"))),
+            "year_log_spearman": float(yr_log_c.get("spearman_at_best_k", float("nan"))),
+        }
+
     print(f"\n=== variant={variant}  pooling={pooling}  layer={layer_idx} ===", flush=True)
     t0 = time.time()
     acts, fids = load_prompted_acts(variant_dir, layer_idx)
@@ -399,9 +427,6 @@ def reprobe_one(
     print(f"  [pls year-log] sp={yr_log['spearman_at_best_k']:.3f}  "
           f"mae={yr_log['mae_at_best_k']:.4f}", flush=True)
 
-    LL = f"{layer_idx:02d}"
-    cls_path = out_dir / f"{variant}__{pooling}__L{LL}__cls.json"
-    pls_path = out_dir / f"{variant}__{pooling}__L{LL}__pls.json"
     cls_path.parent.mkdir(parents=True, exist_ok=True)
     with open(cls_path, "w") as f:
         json.dump({"variant": variant, "pooling": pooling, "layer": layer_idx, **cls_res},
