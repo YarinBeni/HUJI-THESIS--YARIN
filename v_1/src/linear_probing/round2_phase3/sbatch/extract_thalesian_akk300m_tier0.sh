@@ -4,7 +4,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
-#SBATCH --time=04:00:00
+#SBATCH --time=24:00:00
 #SBATCH --output=v_1/src/linear_probing/logs/orcc_akk300m_tier0_%j.out
 
 echo "=== ORCC Thalesian/AKK_300m Activations — tier0 (mean + last) ==="
