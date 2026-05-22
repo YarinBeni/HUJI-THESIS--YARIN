@@ -75,24 +75,31 @@ import matplotlib.pyplot as plt
 # The 4 methods we evaluate against the pre-committed gate.
 # 'random' is Random-Qwen (random-init Qwen activations). It is gated on
 # whether random_{pls,cls} summaries actually exist; if missing, reported.
-METHODS = ["tfidf", "mlm", "random", "qwen"]
+METHODS = ["tfidf", "mlm", "random", "qwen",
+           "thalesian_akk300m", "thalesian_cunei400m"]
 PROBES_PER_METHOD = {  # MC summary file stems
     "tfidf":  ("tfidf_pls",  "tfidf_cls"),
     "mlm":    ("mlm_pls",    "mlm_cls"),
     "qwen":   ("qwen_pls",   "qwen_cls"),
     "random": ("random_pls", "random_cls"),  # may be absent
+    "thalesian_akk300m":   ("thalesian_akk300m_pls",   "thalesian_akk300m_cls"),
+    "thalesian_cunei400m": ("thalesian_cunei400m_pls", "thalesian_cunei400m_cls"),
 }
 METHOD_DISPLAY = {
     "tfidf":  "TF-IDF",
-    "mlm":    "MLM",
+    "mlm":    "MLM (Aeneas)",
     "random": "Random-Qwen",
     "qwen":   "Qwen-7B (pretrained)",
+    "thalesian_akk300m":   "Thalesian AKK_300m",
+    "thalesian_cunei400m": "Thalesian cuneiBase-400m",
 }
 METHOD_COLORS = {
     "qwen":   "#1976D2",
     "random": "#7B1FA2",
     "mlm":    "#E53935",
     "tfidf":  "#388E3C",
+    "thalesian_akk300m":   "#F57C00",
+    "thalesian_cunei400m": "#FBC02D",
 }
 
 METHOD_TAG = "mc_balanced"

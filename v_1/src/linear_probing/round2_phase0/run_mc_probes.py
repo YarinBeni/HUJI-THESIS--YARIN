@@ -117,6 +117,22 @@ QWEN_N_LAYERS   = 29       # L00..L28
 MLM_N_LAYERS    = 17       # L00..L16
 RANDOM_N_LAYERS = 29       # same arch as Qwen → same layer count
 
+# Thalesian (Phase 3 — Akkadian-finetuned UMT5 encoders). Activations were
+# extracted to a different subdir (orcc__embed/activations/) than the renamed
+# orcc_round1/activations/ Round-1 path. Path resolution per-method below.
+THALESIAN_AKK300M_N_LAYERS  = 9        # 8 encoder layers + embedding (L00..L08)
+THALESIAN_CUNEI400M_N_LAYERS = 13      # 12 encoder layers + embedding (L00..L12)
+
+# Per-method (subdir under acts_base, activation-dir name).
+# Used by _load_orcc_activations to dispatch per method.
+ACT_PATH_MAP: dict[str, tuple[str, str]] = {
+    "qwen":                ("orcc_round1/activations", QWEN_ORCC_DIR),
+    "mlm":                 ("orcc_round1/activations", MLM_ORCC_DIR),
+    "random":              ("orcc_round1/activations", RANDOM_ORCC_DIR),
+    "thalesian_akk300m":   ("orcc__embed/activations", "thalesian_akk300m_tier0_mean"),
+    "thalesian_cunei400m": ("orcc__embed/activations", "thalesian_cunei400m_tier0_mean"),
+}
+
 # PLS hyper-params: mirror Round 1 sweep (1,2,3,5). With N=168 a 5-split CV is
 # easy. Year transforms: raw,log to match Round 1.
 PLS_K_VALUES   = [1, 2, 3, 5]
@@ -195,19 +211,21 @@ def _load_orcc_activations(method: str, layer: int, acts_base: Path) -> np.ndarr
     key = (method, layer)
     if key in _ACT_CACHE:
         return _ACT_CACHE[key]
-    if method == "qwen":
-        npz = acts_base / "orcc_round1" / "activations" / QWEN_ORCC_DIR / f"layer_{layer:02d}.npz"
-    elif method == "mlm":
-        npz = acts_base / "orcc_round1" / "activations" / MLM_ORCC_DIR / f"layer_{layer:02d}.npz"
-    elif method == "random":
-        npz = acts_base / "orcc_round1" / "activations" / RANDOM_ORCC_DIR / f"layer_{layer:02d}.npz"
-    else:
-        raise ValueError(f"Unknown method {method}")
-    if not npz.exists():
-        return None
-    arr = np.load(npz)["activations"].astype(np.float32)
-    _ACT_CACHE[key] = arr
-    return arr
+    if method not in ACT_PATH_MAP:
+        raise ValueError(f"Unknown method {method}; known: {list(ACT_PATH_MAP)}")
+    subpath, dirname = ACT_PATH_MAP[method]
+    # Try the canonical path first. For Round-1 methods (qwen/mlm/random) some
+    # clusters keep them at the legacy orcc__embed/ path instead of the renamed
+    # orcc_round1/ — try that as a fallback.
+    candidates = [acts_base / subpath / dirname / f"layer_{layer:02d}.npz"]
+    if subpath.startswith("orcc_round1"):
+        candidates.append(acts_base / "orcc__embed" / "activations" / dirname / f"layer_{layer:02d}.npz")
+    for npz in candidates:
+        if npz.exists():
+            arr = np.load(npz)["activations"].astype(np.float32)
+            _ACT_CACHE[key] = arr
+            return arr
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -347,15 +365,31 @@ def _run_acts_pls(method: str, n_layers: int,
             continue
         X = l2_normalize(X_full[orcc_positions])
 
-        # ── year ──
+        # ── year ── (defensive try/except — L0 can be rank-deficient)
+        nan_year = {"spearman_mean": float("nan"), "spearman_std": float("nan"),
+                    "mae_mean": float("nan"), "mae_std": float("nan"),
+                    "r2_mean": float("nan"), "r2_std": float("nan"),
+                    "skipped": True}
         for yt in YEAR_TRANSFORMS:
             y = y_raw if yt == "raw" else y_log
             metrics_per_k = {}
             for k in PLS_K_VALUES:
-                metrics_per_k[str(k)] = fit_pls_groupkfold(
-                    X, y, y_ruler, n_components=k, n_splits=N_SPLITS)
-            best_sp = max(PLS_K_VALUES, key=lambda k: metrics_per_k[str(k)]["spearman_mean"])
-            best_r2 = max(PLS_K_VALUES, key=lambda k: metrics_per_k[str(k)]["r2_mean"])
+                try:
+                    metrics_per_k[str(k)] = fit_pls_groupkfold(
+                        X, y, y_ruler, n_components=k, n_splits=N_SPLITS)
+                except Exception as e:
+                    print(f"    [pls-skip] {method} L{layer:02d} k={k} year-{yt}: {type(e).__name__}: {e}", flush=True)
+                    metrics_per_k[str(k)] = {**nan_year, "error": f"{type(e).__name__}: {e}"}
+            valid_sp = [k for k in PLS_K_VALUES
+                        if not (isinstance(metrics_per_k[str(k)].get("spearman_mean"), float)
+                                and np.isnan(metrics_per_k[str(k)]["spearman_mean"]))]
+            valid_r2 = [k for k in PLS_K_VALUES
+                        if not (isinstance(metrics_per_k[str(k)].get("r2_mean"), float)
+                                and np.isnan(metrics_per_k[str(k)]["r2_mean"]))]
+            best_sp = (max(valid_sp, key=lambda k: metrics_per_k[str(k)]["spearman_mean"])
+                       if valid_sp else PLS_K_VALUES[0])
+            best_r2 = (max(valid_r2, key=lambda k: metrics_per_k[str(k)]["r2_mean"])
+                       if valid_r2 else PLS_K_VALUES[0])
             results[f"{method}__{cleaning}__{pooling}__L{layer:02d}__year-{yt}"] = {
                 "method": method, "cleaning": cleaning, "pooling": pooling,
                 "layer": layer, "year_transform": yt,
@@ -364,12 +398,23 @@ def _run_acts_pls(method: str, n_layers: int,
                 "best_k_by_spearman": best_sp, "best_k_by_r2": best_r2,
             }
 
-        # ── ruler ──
+        # ── ruler ── (defensive try/except — same rank-deficient L0 case)
+        nan_ruler = {"accuracy_mean": float("nan"), "accuracy_std": float("nan"),
+                     "macro_f1_mean": float("nan"), "macro_f1_std": float("nan"),
+                     "skipped": True}
         metrics_per_k = {}
         for k in PLS_K_VALUES:
-            metrics_per_k[str(k)] = fit_plsda_stratified_kfold(
-                X, y_ruler, n_components=k, n_splits=N_SPLITS)
-        best_k = max(PLS_K_VALUES, key=lambda k: metrics_per_k[str(k)]["macro_f1_mean"])
+            try:
+                metrics_per_k[str(k)] = fit_plsda_stratified_kfold(
+                    X, y_ruler, n_components=k, n_splits=N_SPLITS)
+            except Exception as e:
+                print(f"    [plsda-skip] {method} L{layer:02d} k={k} ruler: {type(e).__name__}: {e}", flush=True)
+                metrics_per_k[str(k)] = {**nan_ruler, "error": f"{type(e).__name__}: {e}"}
+        valid_k = [k for k in PLS_K_VALUES
+                   if not (isinstance(metrics_per_k[str(k)].get("macro_f1_mean"), float)
+                           and np.isnan(metrics_per_k[str(k)]["macro_f1_mean"]))]
+        best_k = (max(valid_k, key=lambda k: metrics_per_k[str(k)]["macro_f1_mean"])
+                  if valid_k else PLS_K_VALUES[0])
         results[f"{method}__{cleaning}__{pooling}__L{layer:02d}__ruler"] = {
             "method": method, "cleaning": cleaning, "pooling": pooling,
             "layer": layer, "target": "ruler",
@@ -417,6 +462,12 @@ PROBE_DISPATCH: dict[str, Any] = {
     "qwen_cls":   ("cls", lambda *a, **kw: _run_acts_cls("qwen",   QWEN_N_LAYERS,   *a, **kw)),
     "random_pls": ("pls", lambda *a, **kw: _run_acts_pls("random", RANDOM_N_LAYERS, *a, **kw)),
     "random_cls": ("cls", lambda *a, **kw: _run_acts_cls("random", RANDOM_N_LAYERS, *a, **kw)),
+    # Phase 3: Thalesian (Akkadian-finetuned UMT5) encoder activations.
+    # Note these probes use tier0/mean only (matches ACT_PATH_MAP entries).
+    "thalesian_akk300m_pls":   ("pls", lambda *a, **kw: _run_acts_pls("thalesian_akk300m",   THALESIAN_AKK300M_N_LAYERS,   *a, **kw)),
+    "thalesian_akk300m_cls":   ("cls", lambda *a, **kw: _run_acts_cls("thalesian_akk300m",   THALESIAN_AKK300M_N_LAYERS,   *a, **kw)),
+    "thalesian_cunei400m_pls": ("pls", lambda *a, **kw: _run_acts_pls("thalesian_cunei400m", THALESIAN_CUNEI400M_N_LAYERS, *a, **kw)),
+    "thalesian_cunei400m_cls": ("cls", lambda *a, **kw: _run_acts_cls("thalesian_cunei400m", THALESIAN_CUNEI400M_N_LAYERS, *a, **kw)),
 }
 
 
