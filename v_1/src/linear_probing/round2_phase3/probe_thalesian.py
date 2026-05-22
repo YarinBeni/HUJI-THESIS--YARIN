@@ -250,16 +250,37 @@ def main() -> None:
 
         # -------- PLS --------
         if run_pls:
-            # Year regression (raw + log)
+            # Year regression (raw + log) — defensive try/except around each k:
+            # PLS NIPALS can divide by zero / produce non-finite SVD inputs when
+            # X is rank-deficient (e.g. L0 with last-token pooling on padded
+            # sequences). Mirror reprobe_pv.py:323-335 — skip with NaN metrics.
+            nan_year_metrics = {
+                'spearman_mean': float('nan'), 'spearman_std': float('nan'),
+                'mae_mean': float('nan'), 'mae_std': float('nan'),
+                'r2_mean': float('nan'), 'r2_std': float('nan'),
+                'skipped': True,
+            }
             for yt in YEAR_TRANSFORMS:
                 y = pls_info['y_raw'] if yt == 'raw' else pls_info['y_log']
                 metrics_per_k = {}
                 for k in PLS_N_COMPONENTS:
-                    metrics_per_k[str(k)] = fit_pls_groupkfold(X_labeled, y, pls_info['groups'], k)
-                best_sp = max(PLS_N_COMPONENTS,
-                              key=lambda k: metrics_per_k[str(k)]['spearman_mean'])
-                best_r2 = max(PLS_N_COMPONENTS,
-                              key=lambda k: metrics_per_k[str(k)]['r2_mean'])
+                    try:
+                        metrics_per_k[str(k)] = fit_pls_groupkfold(X_labeled, y, pls_info['groups'], k)
+                    except Exception as e:
+                        print(f"    [pls-skip] k={k} year-{yt}: {type(e).__name__}: {e}", flush=True)
+                        metrics_per_k[str(k)] = {**nan_year_metrics,
+                                                  'error': f"{type(e).__name__}: {e}"}
+                # Pick best k among non-NaN entries, fall back to first if all NaN.
+                valid_sp = [k for k in PLS_N_COMPONENTS
+                            if not (isinstance(metrics_per_k[str(k)].get('spearman_mean'), float)
+                                    and np.isnan(metrics_per_k[str(k)]['spearman_mean']))]
+                valid_r2 = [k for k in PLS_N_COMPONENTS
+                            if not (isinstance(metrics_per_k[str(k)].get('r2_mean'), float)
+                                    and np.isnan(metrics_per_k[str(k)]['r2_mean']))]
+                best_sp = (max(valid_sp, key=lambda k: metrics_per_k[str(k)]['spearman_mean'])
+                           if valid_sp else PLS_N_COMPONENTS[0])
+                best_r2 = (max(valid_r2, key=lambda k: metrics_per_k[str(k)]['r2_mean'])
+                           if valid_r2 else PLS_N_COMPONENTS[0])
                 cfg_key = (f'{args.method}__{args.cleaning}__{args.pooling}'
                            f'__L{layer:02d}__year-{yt}')
                 pls_results[cfg_key] = {
@@ -279,12 +300,25 @@ def main() -> None:
                 print(f"    PLS year={yt}  best_k_sp={best_sp} sp={sp_val:.3f}  "
                       f"best_k_r2={best_r2} r2={r2_val:.3f}")
 
-            # Ruler PLS-DA
+            # Ruler PLS-DA (same defensive try/except as year regression)
+            nan_ruler_metrics = {
+                'accuracy_mean': float('nan'), 'accuracy_std': float('nan'),
+                'macro_f1_mean': float('nan'), 'macro_f1_std': float('nan'),
+                'skipped': True,
+            }
             metrics_per_k = {}
             for k in PLS_N_COMPONENTS:
-                metrics_per_k[str(k)] = fit_plsda_stratified_kfold(X_labeled, pls_info['y_ruler'], k)
-            best_k = max(PLS_N_COMPONENTS,
-                         key=lambda k: metrics_per_k[str(k)]['macro_f1_mean'])
+                try:
+                    metrics_per_k[str(k)] = fit_plsda_stratified_kfold(X_labeled, pls_info['y_ruler'], k)
+                except Exception as e:
+                    print(f"    [plsda-skip] k={k} ruler: {type(e).__name__}: {e}", flush=True)
+                    metrics_per_k[str(k)] = {**nan_ruler_metrics,
+                                              'error': f"{type(e).__name__}: {e}"}
+            valid_k = [k for k in PLS_N_COMPONENTS
+                       if not (isinstance(metrics_per_k[str(k)].get('macro_f1_mean'), float)
+                               and np.isnan(metrics_per_k[str(k)]['macro_f1_mean']))]
+            best_k = (max(valid_k, key=lambda k: metrics_per_k[str(k)]['macro_f1_mean'])
+                      if valid_k else PLS_N_COMPONENTS[0])
             cfg_key = (f'{args.method}__{args.cleaning}__{args.pooling}'
                        f'__L{layer:02d}__ruler')
             pls_results[cfg_key] = {
