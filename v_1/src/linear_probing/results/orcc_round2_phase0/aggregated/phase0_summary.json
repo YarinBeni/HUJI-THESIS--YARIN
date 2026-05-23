@@ -7,7 +7,9 @@
     "overall": "INDETERMINATE",
     "failing_methods": [],
     "missing_methods": [
-      "random"
+      "random",
+      "thalesian_akk300m",
+      "thalesian_cunei400m"
     ]
   },
   "secondary": {
@@ -27,7 +29,11 @@
     "random_pls": 200,
     "random_cls": 200,
     "qwen_pls": 200,
-    "qwen_cls": 200
+    "qwen_cls": 200,
+    "thalesian_akk300m_pls": 0,
+    "thalesian_akk300m_cls": 0,
+    "thalesian_cunei400m_pls": 0,
+    "thalesian_cunei400m_cls": 0
   },
   "leaderboard_cls": [
     {
@@ -48,6 +54,18 @@
         "n_draws": 200,
         "config_key": "tfidf__tier0__na__L00__ruler"
       }
+    },
+    {
+      "method": "thalesian_cunei400m",
+      "display": "Thalesian cuneiBase-400m",
+      "cleaning": "maximal",
+      "pooling": "mean",
+      "r1": {
+        "best_layer": 12,
+        "macro_f1": 0.2625204623024494,
+        "accuracy": 0.5704347826086956
+      },
+      "mc": null
     },
     {
       "method": "random",
@@ -82,7 +100,7 @@
     },
     {
       "method": "mlm",
-      "display": "MLM",
+      "display": "MLM (Aeneas)",
       "cleaning": "tier0",
       "pooling": "mean",
       "r1": {
@@ -112,6 +130,18 @@
       "mc": null
     },
     {
+      "method": "thalesian_cunei400m",
+      "display": "Thalesian cuneiBase-400m",
+      "cleaning": "tier0",
+      "pooling": "mean",
+      "r1": {
+        "best_layer": 12,
+        "macro_f1": 0.21033015365167484,
+        "accuracy": 0.5669565217391305
+      },
+      "mc": null
+    },
+    {
       "method": "random",
       "display": "Random-Qwen",
       "cleaning": "maximal",
@@ -120,6 +150,18 @@
         "best_layer": 1,
         "macro_f1": 0.17548104425872818,
         "accuracy": 0.50771319178559
+      },
+      "mc": null
+    },
+    {
+      "method": "thalesian_akk300m",
+      "display": "Thalesian AKK_300m",
+      "cleaning": "tier0",
+      "pooling": "mean",
+      "r1": {
+        "best_layer": 8,
+        "macro_f1": 0.15996949623203882,
+        "accuracy": 0.4721739130434782
       },
       "mc": null
     },
@@ -144,6 +186,18 @@
         "best_layer": 1,
         "macro_f1": 0.14912276711665556,
         "accuracy": 0.5076853463278802
+      },
+      "mc": null
+    },
+    {
+      "method": "thalesian_akk300m",
+      "display": "Thalesian AKK_300m",
+      "cleaning": "maximal",
+      "pooling": "mean",
+      "r1": {
+        "best_layer": 8,
+        "macro_f1": 0.1412064045389328,
+        "accuracy": 0.4304347826086956
       },
       "mc": null
     },
@@ -189,6 +243,54 @@
         "n_draws": 200,
         "config_key": "qwen__tier0__mean__L00__ruler"
       }
+    },
+    {
+      "method": "thalesian_cunei400m",
+      "display": "Thalesian cuneiBase-400m",
+      "cleaning": "maximal",
+      "pooling": "last",
+      "r1": {
+        "best_layer": 12,
+        "macro_f1": 0.08678260560414255,
+        "accuracy": 0.35913043478260864
+      },
+      "mc": null
+    },
+    {
+      "method": "thalesian_cunei400m",
+      "display": "Thalesian cuneiBase-400m",
+      "cleaning": "tier0",
+      "pooling": "last",
+      "r1": {
+        "best_layer": 12,
+        "macro_f1": 0.07866443393794283,
+        "accuracy": 0.3365217391304348
+      },
+      "mc": null
+    },
+    {
+      "method": "thalesian_akk300m",
+      "display": "Thalesian AKK_300m",
+      "cleaning": "tier0",
+      "pooling": "last",
+      "r1": {
+        "best_layer": 0,
+        "macro_f1": 0.022234843272898663,
+        "accuracy": 0.23304347826086955
+      },
+      "mc": null
+    },
+    {
+      "method": "thalesian_akk300m",
+      "display": "Thalesian AKK_300m",
+      "cleaning": "maximal",
+      "pooling": "last",
+      "r1": {
+        "best_layer": 0,
+        "macro_f1": 0.022234843272898663,
+        "accuracy": 0.23304347826086955
+      },
+      "mc": null
     }
   ],
   "leaderboard_pls": [
@@ -201,6 +303,18 @@
         "best_layer": 0,
         "macro_f1": 0.11468511311139265,
         "accuracy": 0.5195530726256983
+      },
+      "mc": null
+    },
+    {
+      "method": "thalesian_cunei400m",
+      "display": "Thalesian cuneiBase-400m",
+      "cleaning": "tier0",
+      "pooling": "mean",
+      "r1": {
+        "best_layer": 12,
+        "macro_f1": 0.1143086553651947,
+        "accuracy": 0.49704651735171057
       },
       "mc": null
     },
@@ -243,8 +357,20 @@
       }
     },
     {
+      "method": "thalesian_akk300m",
+      "display": "Thalesian AKK_300m",
+      "cleaning": "tier0",
+      "pooling": "mean",
+      "r1": {
+        "best_layer": 4,
+        "macro_f1": 0.1080556908592549,
+        "accuracy": 0.4609788685348617
+      },
+      "mc": null
+    },
+    {
       "method": "mlm",
-      "display": "MLM",
+      "display": "MLM (Aeneas)",
       "cleaning": "tier0",
       "pooling": "mean",
       "r1": {
@@ -305,6 +431,18 @@
       "mc": null
     },
     {
+      "method": "thalesian_cunei400m",
+      "display": "Thalesian cuneiBase-400m",
+      "cleaning": "maximal",
+      "pooling": "mean",
+      "r1": {
+        "best_layer": 12,
+        "macro_f1": 0.09432561491861252,
+        "accuracy": 0.4299778488801378
+      },
+      "mc": null
+    },
+    {
       "method": "random",
       "display": "Random-Qwen",
       "cleaning": "maximal",
@@ -341,6 +479,30 @@
       "mc": null
     },
     {
+      "method": "thalesian_akk300m",
+      "display": "Thalesian AKK_300m",
+      "cleaning": "tier0",
+      "pooling": "last",
+      "r1": {
+        "best_layer": 8,
+        "macro_f1": 0.0820946761293738,
+        "accuracy": 0.34449913856756087
+      },
+      "mc": null
+    },
+    {
+      "method": "thalesian_akk300m",
+      "display": "Thalesian AKK_300m",
+      "cleaning": "maximal",
+      "pooling": "mean",
+      "r1": {
+        "best_layer": 6,
+        "macro_f1": 0.07793527492530432,
+        "accuracy": 0.39397348897718076
+      },
+      "mc": null
+    },
+    {
       "method": "qwen",
       "display": "Qwen-7B (pretrained)",
       "cleaning": "tier0",
@@ -349,6 +511,42 @@
         "best_layer": 17,
         "macro_f1": 0.07787081129877127,
         "accuracy": 0.40871257297093716
+      },
+      "mc": null
+    },
+    {
+      "method": "thalesian_cunei400m",
+      "display": "Thalesian cuneiBase-400m",
+      "cleaning": "tier0",
+      "pooling": "last",
+      "r1": {
+        "best_layer": 10,
+        "macro_f1": 0.07172160804699577,
+        "accuracy": 0.35288491965823987
+      },
+      "mc": null
+    },
+    {
+      "method": "thalesian_akk300m",
+      "display": "Thalesian AKK_300m",
+      "cleaning": "maximal",
+      "pooling": "last",
+      "r1": {
+        "best_layer": 1,
+        "macro_f1": 0.05618394105851793,
+        "accuracy": 0.28836890404697446
+      },
+      "mc": null
+    },
+    {
+      "method": "thalesian_cunei400m",
+      "display": "Thalesian cuneiBase-400m",
+      "cleaning": "maximal",
+      "pooling": "last",
+      "r1": {
+        "best_layer": 10,
+        "macro_f1": 0.0500709788710485,
+        "accuracy": 0.30426496958616084
       },
       "mc": null
     }
@@ -417,7 +615,7 @@
     },
     {
       "method": "mlm",
-      "display_name": "MLM",
+      "display_name": "MLM (Aeneas)",
       "cls": {
         "available": true,
         "round1": {
@@ -564,6 +762,80 @@
       "method_gap_minus_2sigma": 0.17108917747553942,
       "method_gate": true,
       "notes": []
+    },
+    {
+      "method": "thalesian_akk300m",
+      "display_name": "Thalesian AKK_300m",
+      "cls": {
+        "available": false,
+        "reason": "no MC entry for thalesian_akk300m__tier0__mean__L08__ruler",
+        "round1": {
+          "method": "thalesian_akk300m",
+          "cleaning": "tier0",
+          "pooling": "mean",
+          "best_layer": 8,
+          "macro_f1": 0.15996949623203882,
+          "accuracy": 0.4721739130434782,
+          "source": "cls",
+          "round1_key": "thalesian_akk300m__tier0__mean__ruler"
+        }
+      },
+      "pls": {
+        "available": false,
+        "reason": "no MC entry for thalesian_akk300m__tier0__mean__L04__ruler",
+        "round1": {
+          "method": "thalesian_akk300m",
+          "cleaning": "tier0",
+          "pooling": "mean",
+          "best_layer": 4,
+          "best_k": 5,
+          "macro_f1": 0.1080556908592549,
+          "accuracy": 0.4609788685348617,
+          "source": "pls",
+          "round1_key": "thalesian_akk300m__tier0__mean__year-ruler"
+        }
+      },
+      "method_gate": null,
+      "notes": [
+        "no available pairings"
+      ]
+    },
+    {
+      "method": "thalesian_cunei400m",
+      "display_name": "Thalesian cuneiBase-400m",
+      "cls": {
+        "available": false,
+        "reason": "no MC entry for thalesian_cunei400m__maximal__mean__L12__ruler",
+        "round1": {
+          "method": "thalesian_cunei400m",
+          "cleaning": "maximal",
+          "pooling": "mean",
+          "best_layer": 12,
+          "macro_f1": 0.2625204623024494,
+          "accuracy": 0.5704347826086956,
+          "source": "cls",
+          "round1_key": "thalesian_cunei400m__maximal__mean__ruler"
+        }
+      },
+      "pls": {
+        "available": false,
+        "reason": "no MC entry for thalesian_cunei400m__tier0__mean__L12__ruler",
+        "round1": {
+          "method": "thalesian_cunei400m",
+          "cleaning": "tier0",
+          "pooling": "mean",
+          "best_layer": 12,
+          "best_k": 5,
+          "macro_f1": 0.1143086553651947,
+          "accuracy": 0.49704651735171057,
+          "source": "pls",
+          "round1_key": "thalesian_cunei400m__tier0__mean__year-ruler"
+        }
+      },
+      "method_gate": null,
+      "notes": [
+        "no available pairings"
+      ]
     }
   ]
 }
