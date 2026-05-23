@@ -1,0 +1,477 @@
+{
+  "parquet": {
+    "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/data/evaluation/corpora/orcc_corpus.parquet",
+    "exists": true,
+    "total_rows": 1202,
+    "year_labeled": 1193,
+    "columns": [
+      "fragment_id",
+      "corpus",
+      "word_language",
+      "domain",
+      "ruler",
+      "period",
+      "genre",
+      "sub_genre",
+      "provenance",
+      "sub_provenance",
+      "word_count",
+      "text",
+      "text_tier0",
+      "text_maximal",
+      "year"
+    ]
+  },
+  "activations": [
+    {
+      "method": "qwen",
+      "cleaning": "tier0",
+      "pool": "mean",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/qwen_tier0_mean",
+      "n_layers": 29,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/qwen_tier0_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/qwen_tier0_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct/tier0"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          3584
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "qwen",
+      "cleaning": "tier0",
+      "pool": "last",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/qwen_tier0_last",
+      "n_layers": 29,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/qwen_tier0_last",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/qwen_tier0_last",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct/tier0"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          3584
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "qwen",
+      "cleaning": "maximal",
+      "pool": "mean",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/qwen_maximal_mean",
+      "n_layers": 29,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/qwen_maximal_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/qwen_maximal_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct/maximal"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          3584
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "qwen",
+      "cleaning": "maximal",
+      "pool": "last",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/qwen_maximal_last",
+      "n_layers": 29,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/qwen_maximal_last",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/qwen_maximal_last",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct/maximal"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          3584
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "mlm",
+      "cleaning": "tier0",
+      "pool": "mean",
+      "found": false,
+      "path": null,
+      "n_layers": 0,
+      "layers": [],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/mlm_tier0_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/mlm_tier0_mean"
+      ]
+    },
+    {
+      "method": "thalesian_akk300m",
+      "cleaning": "tier0",
+      "pool": "mean",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_akk300m_tier0_mean",
+      "n_layers": 9,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_akk300m_tier0_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/thalesian_akk300m_tier0_mean"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          512
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "thalesian_akk300m",
+      "cleaning": "tier0",
+      "pool": "last",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_akk300m_tier0_last",
+      "n_layers": 9,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_akk300m_tier0_last",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/thalesian_akk300m_tier0_last"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          512
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "thalesian_akk300m",
+      "cleaning": "maximal",
+      "pool": "mean",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_akk300m_maximal_mean",
+      "n_layers": 9,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_akk300m_maximal_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/thalesian_akk300m_maximal_mean"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          512
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "thalesian_akk300m",
+      "cleaning": "maximal",
+      "pool": "last",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_akk300m_maximal_last",
+      "n_layers": 9,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_akk300m_maximal_last",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/thalesian_akk300m_maximal_last"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          512
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "thalesian_cunei400m",
+      "cleaning": "tier0",
+      "pool": "mean",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_cunei400m_tier0_mean",
+      "n_layers": 13,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_cunei400m_tier0_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/thalesian_cunei400m_tier0_mean"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          768
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "thalesian_cunei400m",
+      "cleaning": "tier0",
+      "pool": "last",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_cunei400m_tier0_last",
+      "n_layers": 13,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_cunei400m_tier0_last",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/thalesian_cunei400m_tier0_last"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          768
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "thalesian_cunei400m",
+      "cleaning": "maximal",
+      "pool": "mean",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_cunei400m_maximal_mean",
+      "n_layers": 13,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_cunei400m_maximal_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/thalesian_cunei400m_maximal_mean"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          768
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "thalesian_cunei400m",
+      "cleaning": "maximal",
+      "pool": "last",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_cunei400m_maximal_last",
+      "n_layers": 13,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/thalesian_cunei400m_maximal_last",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/thalesian_cunei400m_maximal_last"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          768
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    }
+  ],
+  "random_qwen": [
+    {
+      "method": "random",
+      "cleaning": "tier0",
+      "pool": "mean",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/random_tier0_mean",
+      "n_layers": 29,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/random_tier0_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/random_tier0_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct-random/tier0"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          3584
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "random",
+      "cleaning": "tier0",
+      "pool": "last",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/random_tier0_last",
+      "n_layers": 29,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/random_tier0_last",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/random_tier0_last",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct-random/tier0"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          3584
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "random",
+      "cleaning": "maximal",
+      "pool": "mean",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/random_maximal_mean",
+      "n_layers": 29,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/random_maximal_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/random_maximal_mean",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct-random/maximal"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          3584
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    },
+    {
+      "method": "random",
+      "cleaning": "maximal",
+      "pool": "last",
+      "found": true,
+      "path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/random_maximal_last",
+      "n_layers": 29,
+      "layers": [
+        "layer_00.npz",
+        "layer_01.npz",
+        "layer_02.npz",
+        "..."
+      ],
+      "candidates_checked": [
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc__embed/activations/random_maximal_last",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/orcc_round1/activations/random_maximal_last",
+        "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/results/activations/qwen2.5-7b-instruct-random/maximal"
+      ],
+      "spot_check": {
+        "shape": [
+          1202,
+          3584
+        ],
+        "dtype": "float32",
+        "key": "activations"
+      }
+    }
+  ],
+  "summary": {
+    "n_combos_total": 17,
+    "n_found": 16,
+    "n_missing": 1,
+    "missing_combos": [
+      "mlm_tier0_mean"
+    ],
+    "parquet_ok": true,
+    "thalesian_cunei400m_tier0_mean_ok": true,
+    "random_qwen_any_found": true
+  }
+}
