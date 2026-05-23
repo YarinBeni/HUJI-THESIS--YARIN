@@ -1,0 +1,43 @@
+{
+  "config": {
+    "method": "thalesian_cunei400m",
+    "cleaning": "tier0",
+    "pool": "mean",
+    "layer": 12,
+    "n_pca": 64,
+    "margin": 100,
+    "k_used": 3,
+    "n_fragments": 1193
+  },
+  "pls_reference": {
+    "spearman_from_pls_best_layers": 0.467,
+    "r2_from_pls_best_layers": 0.1055,
+    "mae_from_pls_best_layers": 75.1,
+    "spearman_refit": 0.6331,
+    "pairwise_order_acc_refit": 0.8587
+  },
+  "isomap": {
+    "spearman": 0.0352,
+    "pairwise_order_acc": 0.5467,
+    "neighbor_purity": 0.7959,
+    "null_purity_mean": 0.7451,
+    "null_purity_std": 0.0038,
+    "sigma_above_null": 13.39
+  },
+  "earliest_bin_geodesic": {
+    "spearman": 0.0015,
+    "pairwise_order_acc": 0.4399,
+    "neighbor_purity": 0.7777,
+    "null_purity_mean": 0.7454,
+    "null_purity_std": 0.0048,
+    "sigma_above_null": 6.77
+  },
+  "gate": {
+    "best_spearman": 0.0352,
+    "delta_vs_pls": -0.4318,
+    "best_pairwise_acc": 0.5467,
+    "pass": false,
+    "null": true,
+    "verdict": "NULL \u2192 round 3 negative result; proceed to Phase 2 (scale)"
+  }
+}
