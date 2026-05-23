@@ -7,9 +7,7 @@
     "overall": "INDETERMINATE",
     "failing_methods": [],
     "missing_methods": [
-      "random",
-      "thalesian_akk300m",
-      "thalesian_cunei400m"
+      "random"
     ]
   },
   "secondary": {
@@ -30,10 +28,10 @@
     "random_cls": 200,
     "qwen_pls": 200,
     "qwen_cls": 200,
-    "thalesian_akk300m_pls": 0,
-    "thalesian_akk300m_cls": 0,
-    "thalesian_cunei400m_pls": 0,
-    "thalesian_cunei400m_cls": 0
+    "thalesian_akk300m_pls": 200,
+    "thalesian_akk300m_cls": 200,
+    "thalesian_cunei400m_pls": 200,
+    "thalesian_cunei400m_cls": 200
   },
   "leaderboard_cls": [
     {
@@ -139,7 +137,14 @@
         "macro_f1": 0.21033015365167484,
         "accuracy": 0.5669565217391305
       },
-      "mc": null
+      "mc": {
+        "layer": 12,
+        "macro_f1_mean": 0.4479254351406247,
+        "macro_f1_std": 0.04315367094627736,
+        "macro_f1_median": 0.44838457294339645,
+        "n_draws": 200,
+        "config_key": "thalesian_cunei400m__tier0__mean__L12__ruler"
+      }
     },
     {
       "method": "random",
@@ -163,7 +168,14 @@
         "macro_f1": 0.15996949623203882,
         "accuracy": 0.4721739130434782
       },
-      "mc": null
+      "mc": {
+        "layer": 8,
+        "macro_f1_mean": 0.32329950059507917,
+        "macro_f1_std": 0.038801840232077195,
+        "macro_f1_median": 0.3227681693306694,
+        "n_draws": 200,
+        "config_key": "thalesian_akk300m__tier0__mean__L08__ruler"
+      }
     },
     {
       "method": "qwen",
@@ -316,7 +328,14 @@
         "macro_f1": 0.1143086553651947,
         "accuracy": 0.49704651735171057
       },
-      "mc": null
+      "mc": {
+        "layer": 11,
+        "macro_f1_mean": 0.39268676490992666,
+        "macro_f1_std": 0.040514311481569754,
+        "macro_f1_median": 0.3886587024087024,
+        "n_draws": 200,
+        "config_key": "thalesian_cunei400m__tier0__mean__L11__ruler"
+      }
     },
     {
       "method": "tfidf",
@@ -366,7 +385,14 @@
         "macro_f1": 0.1080556908592549,
         "accuracy": 0.4609788685348617
       },
-      "mc": null
+      "mc": {
+        "layer": 3,
+        "macro_f1_mean": 0.34571919955044955,
+        "macro_f1_std": 0.03906903764650691,
+        "macro_f1_median": 0.3447245115995116,
+        "n_draws": 200,
+        "config_key": "thalesian_akk300m__tier0__mean__L03__ruler"
+      }
     },
     {
       "method": "mlm",
@@ -767,8 +793,7 @@
       "method": "thalesian_akk300m",
       "display_name": "Thalesian AKK_300m",
       "cls": {
-        "available": false,
-        "reason": "no MC entry for thalesian_akk300m__tier0__mean__L08__ruler",
+        "available": true,
         "round1": {
           "method": "thalesian_akk300m",
           "cleaning": "tier0",
@@ -778,11 +803,20 @@
           "accuracy": 0.4721739130434782,
           "source": "cls",
           "round1_key": "thalesian_akk300m__tier0__mean__ruler"
-        }
+        },
+        "mc": {
+          "macro_f1_mean": 0.32329950059507917,
+          "macro_f1_std": 0.038801840232077195,
+          "macro_f1_median": 0.3227681693306694,
+          "n_draws": 200,
+          "key": "thalesian_akk300m__tier0__mean__L08__ruler"
+        },
+        "gap": 0.16333000436304035,
+        "gap_minus_2sigma": 0.08572632389888596,
+        "gate": true
       },
       "pls": {
-        "available": false,
-        "reason": "no MC entry for thalesian_akk300m__tier0__mean__L04__ruler",
+        "available": true,
         "round1": {
           "method": "thalesian_akk300m",
           "cleaning": "tier0",
@@ -793,12 +827,28 @@
           "accuracy": 0.4609788685348617,
           "source": "pls",
           "round1_key": "thalesian_akk300m__tier0__mean__year-ruler"
-        }
+        },
+        "mc": {
+          "macro_f1_mean": 0.3425816667540835,
+          "macro_f1_std": 0.035657182129575436,
+          "macro_f1_median": 0.34350212287712284,
+          "n_draws": 200,
+          "key": "thalesian_akk300m__tier0__mean__L04__ruler"
+        },
+        "gap": 0.23452597589482863,
+        "gap_minus_2sigma": 0.16321161163567774,
+        "gate": true
       },
-      "method_gate": null,
-      "notes": [
-        "no available pairings"
-      ]
+      "chosen_regime": "cls",
+      "method_round1_f1": 0.15996949623203882,
+      "method_mc_mean": 0.32329950059507917,
+      "method_mc_std": 0.038801840232077195,
+      "method_mc_median": 0.3227681693306694,
+      "method_n_draws": 200,
+      "method_gap": 0.16333000436304035,
+      "method_gap_minus_2sigma": 0.08572632389888596,
+      "method_gate": true,
+      "notes": []
     },
     {
       "method": "thalesian_cunei400m",
@@ -818,8 +868,7 @@
         }
       },
       "pls": {
-        "available": false,
-        "reason": "no MC entry for thalesian_cunei400m__tier0__mean__L12__ruler",
+        "available": true,
         "round1": {
           "method": "thalesian_cunei400m",
           "cleaning": "tier0",
@@ -830,12 +879,28 @@
           "accuracy": 0.49704651735171057,
           "source": "pls",
           "round1_key": "thalesian_cunei400m__tier0__mean__year-ruler"
-        }
+        },
+        "mc": {
+          "macro_f1_mean": 0.38917106331168827,
+          "macro_f1_std": 0.04392361434235129,
+          "macro_f1_median": 0.3907739135864136,
+          "n_draws": 200,
+          "key": "thalesian_cunei400m__tier0__mean__L12__ruler"
+        },
+        "gap": 0.2748624079464936,
+        "gap_minus_2sigma": 0.187015179261791,
+        "gate": true
       },
-      "method_gate": null,
-      "notes": [
-        "no available pairings"
-      ]
+      "chosen_regime": "pls",
+      "method_round1_f1": 0.1143086553651947,
+      "method_mc_mean": 0.38917106331168827,
+      "method_mc_std": 0.04392361434235129,
+      "method_mc_median": 0.3907739135864136,
+      "method_n_draws": 200,
+      "method_gap": 0.2748624079464936,
+      "method_gap_minus_2sigma": 0.187015179261791,
+      "method_gate": true,
+      "notes": []
     }
   ]
 }

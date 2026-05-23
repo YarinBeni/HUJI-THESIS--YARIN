@@ -8,7 +8,7 @@
 ## Verdict
 
 **Overall: INDETERMINATE**
-Missing methods (no MC data): random, thalesian_akk300m, thalesian_cunei400m
+Missing methods (no MC data): random
 
 Secondary gate (TF-IDF accuracy ≥ 0.70): **FAIL** — value=0.6678 (`tfidf__tier0__na__L00__ruler`)
 _run_mc_probes.py uses fit_cls_cv (logistic regression), not k-NN. Treat as proxy only._
@@ -25,9 +25,9 @@ Sorted by Round-1 (imbalanced) Macro-F1 descending. Balanced MC column shows the
 | TF-IDF | maximal | na | 0 | 0.2277 | 0 | 0.4980 ± 0.0403 | +0.2703 |
 | MLM (Aeneas) | tier0 | mean | 0 | 0.2195 | 15 | 0.4604 ± 0.0435 | +0.2408 |
 | Random-Qwen | maximal | mean | 3 | 0.2158 | n/a | n/a | n/a |
-| Thalesian cuneiBase-400m | tier0 | mean | 12 | 0.2103 | n/a | n/a | n/a |
+| Thalesian cuneiBase-400m | tier0 | mean | 12 | 0.2103 | 12 | 0.4479 ± 0.0432 | +0.2376 |
 | Random-Qwen | maximal | last | 1 | 0.1755 | n/a | n/a | n/a |
-| Thalesian AKK_300m | tier0 | mean | 8 | 0.1600 | n/a | n/a | n/a |
+| Thalesian AKK_300m | tier0 | mean | 8 | 0.1600 | 8 | 0.3233 ± 0.0388 | +0.1633 |
 | Qwen-7B (pretrained) | maximal | last | 7 | 0.1550 | n/a | n/a | n/a |
 | Random-Qwen | tier0 | last | 1 | 0.1491 | n/a | n/a | n/a |
 | Thalesian AKK_300m | maximal | mean | 8 | 0.1412 | n/a | n/a | n/a |
@@ -46,10 +46,10 @@ Sorted by Round-1 (imbalanced) Macro-F1 descending. Balanced MC column shows the
 | Method | Cleaning | Pooling | R1 layer | R1 Macro-F1 | MC layer | MC Macro-F1 (mean ± std) | Δ (MC − R1) |
 |---|---|---|---|---|---|---|---|
 | Random-Qwen | tier0 | mean | 0 | 0.1147 | n/a | n/a | n/a |
-| Thalesian cuneiBase-400m | tier0 | mean | 12 | 0.1143 | n/a | n/a | n/a |
+| Thalesian cuneiBase-400m | tier0 | mean | 12 | 0.1143 | 11 | 0.3927 ± 0.0405 | +0.2784 |
 | TF-IDF | tier0 | na | 0 | 0.1128 | 0 | 0.4796 ± 0.0368 | +0.3668 |
 | Qwen-7B (pretrained) | tier0 | mean | 0 | 0.1113 | 3 | 0.3632 ± 0.0417 | +0.2520 |
-| Thalesian AKK_300m | tier0 | mean | 4 | 0.1081 | n/a | n/a | n/a |
+| Thalesian AKK_300m | tier0 | mean | 4 | 0.1081 | 3 | 0.3457 ± 0.0391 | +0.2377 |
 | MLM (Aeneas) | tier0 | mean | 16 | 0.1064 | 14 | 0.3946 ± 0.0423 | +0.2882 |
 | TF-IDF | maximal | na | 0 | 0.1013 | 0 | 0.3945 ± 0.0329 | +0.2932 |
 | Random-Qwen | tier0 | last | 3 | 0.0989 | n/a | n/a | n/a |
@@ -95,14 +95,20 @@ Status: **PASS** (chosen regime: pls, n_draws=200)
 | pls | tier0 | mean | 0 | 0.1113 | 0.3532 | 0.0354 | 0.3515 | +0.1711 | PASS |
 
 ## Thalesian AKK_300m (thalesian_akk300m)
-Status: **NO DATA** — both CLS and PLS pairings unavailable.
-- cls: no MC entry for thalesian_akk300m__tier0__mean__L08__ruler
-- pls: no MC entry for thalesian_akk300m__tier0__mean__L04__ruler
+Status: **PASS** (chosen regime: cls, n_draws=200)
+
+| Regime | Cleaning | Pooling | Layer | R1 Macro-F1 | MC mean | MC std | MC median | (mean - 2σ) - R1 | Gate |
+|---|---|---|---|---|---|---|---|---|---|
+| cls | tier0 | mean | 8 | 0.1600 | 0.3233 | 0.0388 | 0.3228 | +0.0857 | PASS |
+| pls | tier0 | mean | 4 | 0.1081 | 0.3426 | 0.0357 | 0.3435 | +0.1632 | PASS |
 
 ## Thalesian cuneiBase-400m (thalesian_cunei400m)
-Status: **NO DATA** — both CLS and PLS pairings unavailable.
-- cls: no MC entry for thalesian_cunei400m__maximal__mean__L12__ruler
-- pls: no MC entry for thalesian_cunei400m__tier0__mean__L12__ruler
+Status: **PASS** (chosen regime: pls, n_draws=200)
+
+| Regime | Cleaning | Pooling | Layer | R1 Macro-F1 | MC mean | MC std | MC median | (mean - 2σ) - R1 | Gate |
+|---|---|---|---|---|---|---|---|---|---|
+| cls | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | _no MC entry for thalesian_cunei400m__maximal__mean__L12__ruler_ |
+| pls | tier0 | mean | 12 | 0.1143 | 0.3892 | 0.0439 | 0.3908 | +0.1870 | PASS |
 
 ## Interpretation
 

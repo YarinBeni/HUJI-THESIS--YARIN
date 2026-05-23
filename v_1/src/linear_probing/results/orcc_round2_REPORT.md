@@ -1,7 +1,7 @@
 # Round 2 — Qwen-on-Akkadian Diagnosis: Final Report
 
-- **Date:** 2026-05-23 (Phase 3 imbalanced final; Phase 3 balanced-MC in flight, job 8477)
-- **Scope:** Synthesis of Round 2 Phase 0 (class imbalance), Phase 1a (factual knowledge), Phase 1b (prompt framing), Phase 3 imbalanced (Thalesian Akkadian-finetuned encoders). Phase 3 balanced-MC is running and will fill the "n/a" cells in the leaderboard when it lands.
+- **Date:** 2026-05-23 (Round 2 complete except Random-Qwen P0 data gap)
+- **Scope:** Final synthesis of Round 2 Phase 0 (class imbalance), Phase 1a (factual knowledge), Phase 1b (prompt framing), Phase 3 imbalanced + balanced MC (Thalesian Akkadian-finetuned encoders).
 - **Inputs consumed:**
   - `PLAN_round2_qwen_diagnosis.md`
   - `v_1/src/linear_probing/results/orcc_round2_phase0/aggregated/phase0_report.md`
@@ -101,9 +101,37 @@ Activation extraction (jobs 8223–8226) wrote to `v_1/src/linear_probing/result
 
 **Caveat for the thesis.** Chance F1 is 0.059 for Thalesian (17 classes retained at min_count=5) vs 0.071 for Round-1 methods (~14 classes). The ORCC parquet was rebuilt between Round 1 (893 labeled rows) and Round 2 (1193 labeled rows); class-count differences mean raw Macro-F1 comparisons across method-groups are slightly biased. The ×chance column in the leaderboard above is the apples-to-apples view.
 
-**Balanced MC (job 8477) is in flight** — will fill the 8 Thalesian "n/a" rows in the `phase0_report.md` unified leaderboard (4 configs × 2 regimes) and let us state whether class imbalance is also a driver of the residual Qwen↔Thalesian gap, or whether Thalesian's advantage holds on the balanced surface too.
+### Phase 3 balanced MC (job 8477, 200 draws × 21 frags × 8 rulers, tier0/mean only)
 
-## Verdict: PASS — Akkadian pretraining is a major lever; Thalesian cuneiBase-400m doubles Qwen-pretrained's Macro-F1 (0.263 vs 0.117) and is the only representation that produces a positive year-regression R². The Qwen-vs-TF-IDF residual gap is roughly half-closed by Akkadian pretraining alone.
+| Method | Cleaning | Pool | MC layer | MC Macro-F1 (CLS) | MC Macro-F1 (PLS via year-PLS-DA) |
+|---|---|---|---:|---:|---:|
+| TF-IDF | tier0 | — | 0 | **0.650 ± 0.037** | 0.480 ± 0.037 |
+| TF-IDF | maximal | — | 0 | 0.498 ± 0.040 | 0.395 ± 0.033 |
+| MLM Aeneas | tier0 | mean | 15 (CLS) / 14 (PLS) | 0.460 ± 0.044 | 0.395 ± 0.042 |
+| **Thalesian cuneiBase-400m** | tier0 | mean | 12 (CLS) / 11 (PLS) | **0.448 ± 0.043** | **0.393 ± 0.040** |
+| Qwen pretrained | tier0 | mean | 0 (CLS) / 3 (PLS) | 0.352 ± 0.042 | 0.363 ± 0.042 |
+| Thalesian AKK_300m | tier0 | mean | 8 (CLS) / 3 (PLS) | 0.323 ± 0.039 | 0.346 ± 0.039 |
+| Random-Qwen | — | — | — | data gap | data gap |
+
+### Phase 3 balanced-vs-imbalanced delta (the new finding)
+
+| Method | R1 imbalanced | Balanced MC | Δ (balance lift) |
+|---|---:|---:|---:|
+| TF-IDF (tier0) CLS | 0.326 | 0.650 | **+0.323** |
+| **Thalesian cuneiBase-400m** (tier0 mean) CLS | 0.210 | **0.448** | **+0.238** |
+| Qwen pretrained (tier0 mean) CLS | 0.117 | 0.352 | +0.235 |
+| MLM Aeneas (tier0 mean) CLS | 0.220 | 0.460 | +0.241 |
+| Thalesian AKK_300m (tier0 mean) CLS | 0.160 | 0.323 | +0.163 |
+
+**Nuanced final picture (after balanced MC):**
+
+1. On the **balanced** surface, the leaderboard is: TF-IDF (0.650) >> MLM (0.460) ≈ **Thalesian cuneiBase-400m (0.448)** > Qwen pretrained (0.352) > Thalesian AKK_300m (0.323). Thalesian cuneiBase ties MLM under balanced eval; AKK_300m drops *below* Qwen pretrained.
+2. On the **imbalanced** surface, Thalesian cuneiBase (best at 0.263 maximal/mean) clearly beats both MLM (0.220) and Qwen (0.117).
+3. **The Macro-F1 ranking is metric-surface-dependent**: which method "wins" depends on whether you control for class imbalance. Under balanced eval, sign-level MLM Aeneas (~25M params) ties UMT5-base finetuned on Akkadian (~400M).
+4. **Thalesian cuneiBase still has the strongest year-regression signal by a wide margin** — Spearman 0.467, R² +0.105, MAE 75yr — and is the *only* representation with positive year R² in the entire study. This is the most robust Phase 3 finding: Akkadian-finetuned representations encode chronology in a linearly-extractable way that no other model does.
+5. **Thalesian AKK_300m's smaller balance-lift (+0.163 vs +0.235 for Qwen)** suggests its imbalanced advantage was less of a "class-balance artifact" than Qwen's — its representations were already doing better on majority classes — but it has lower overall ceiling than cuneiBase.
+
+## Verdict: PASS — Akkadian pretraining matters for year regression unambiguously (only Thalesian gets positive R²; Spearman 0.47 vs Qwen 0.12). For ruler-CLS, Thalesian cuneiBase-400m matches MLM Aeneas on the balanced eval surface (0.45 vs 0.46) but neither approaches TF-IDF (0.65). The Qwen↔Thalesian-cuneiBase gap on imbalanced (0.117 → 0.263) is mostly Akkadian-pretraining; the residual TF-IDF↔Thalesian gap on balanced (0.65 vs 0.45) is the unsolved core puzzle.
 
 ---
 
@@ -123,8 +151,8 @@ For the thesis section, the cleanest narrative arc is: Round 1 found a counterin
 
 ## Next steps
 
-- **Wait for Phase 3 balanced MC (job 8477)**. Will produce thalesian_*_pls/cls __mc_balanced__summary.json files in `v_1/src/linear_probing/results/orcc_round2_phase0/probes/`. Re-run `aggregate_p0.py` after to fill the leaderboard. Expected ~1–3h wall.
 - **Close the Random-Qwen data gap.** Resubmit Phase 0 random probes with corrected activation path (post-`orcc__embed` → `orcc_round1` rename) so the Random tier0/mean (CLS L1) and tier0/mean (PLS L0) cells fill in. Converts Phase 0's verdict on the Random axis from INDETERMINATE to PASS/FAIL.
+- **Run Thalesian maximal/mean balanced MC.** The imbalanced Thalesian cuneiBase-400m best (0.263) was on maximal/mean cleaning, but the current balanced MC only ran tier0/mean. Adding maximal/mean MC for both Thalesian models would settle whether maximal cleaning preserves Thalesian's advantage under balanced eval.
 - **Consider Phase 2 (scale + SAE).** Phase 3 confirmed Akkadian pretraining is a major lever but TF-IDF still leads (0.326 vs Thalesian 0.263). Qwen 3 dense at 4B/14B with the same probing pipeline would either find a positive scaling slope (emergent-with-scale story) or confirm the data-composition ceiling.
 - **Tokenization spot-check.** A cheap diagnostic worth doing in passing: per-fragment token counts for Qwen vs Thalesian's UMT5 tokenizer. Large fragmentation differences would suggest the Round-1 Qwen weakness has a tokenizer-geometry component.
 - **Document the balanced eval surface as canonical going forward.** All subsequent probes (Phase 2, follow-up Phase 3 ablations) should report on both the Round-1 imbalanced grid (historical comparability) and the Phase-0 MC-balanced grid (apples-to-apples).
