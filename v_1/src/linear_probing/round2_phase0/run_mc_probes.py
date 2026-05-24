@@ -123,6 +123,12 @@ RANDOM_N_LAYERS = 29       # same arch as Qwen → same layer count
 THALESIAN_AKK300M_N_LAYERS  = 9        # 8 encoder layers + embedding (L00..L08)
 THALESIAN_CUNEI400M_N_LAYERS = 13      # 12 encoder layers + embedding (L00..L12)
 
+# Phase E1 (Round 3) — Qwen3 scale sweep.
+# Counts = transformer layers + 1 embedding layer (L00 = embedding).
+QWEN3_1B7_N_LAYERS  = 29   # Qwen3-1.7B:  28 transformer + embedding (L00..L28)
+QWEN3_8B_N_LAYERS   = 37   # Qwen3-8B:    36 transformer + embedding (L00..L36)
+QWEN35_27B_N_LAYERS = 65   # Qwen3.5-27B: 64 transformer + embedding (L00..L64)
+
 # Per-method (subdir under acts_base, activation-dir name).
 # Used by _load_orcc_activations to dispatch per method.
 ACT_PATH_MAP: dict[str, tuple[str, str]] = {
@@ -131,6 +137,10 @@ ACT_PATH_MAP: dict[str, tuple[str, str]] = {
     "random":              ("orcc_round1/activations", RANDOM_ORCC_DIR),
     "thalesian_akk300m":   ("orcc__embed/activations", "thalesian_akk300m_tier0_mean"),
     "thalesian_cunei400m": ("orcc__embed/activations", "thalesian_cunei400m_tier0_mean"),
+    # Phase E1: Qwen3 scale sweep — tier0/mean only (MC standard)
+    "qwen3_1b7":           ("orcc__embed/activations", "qwen3_1b7_tier0_mean"),
+    "qwen3_8b":            ("orcc__embed/activations", "qwen3_8b_tier0_mean"),
+    "qwen35_27b":          ("orcc__embed/activations", "qwen35_27b_tier0_mean"),
 }
 
 # PLS hyper-params: mirror Round 1 sweep (1,2,3,5). With N=168 a 5-split CV is
@@ -468,6 +478,13 @@ PROBE_DISPATCH: dict[str, Any] = {
     "thalesian_akk300m_cls":   ("cls", lambda *a, **kw: _run_acts_cls("thalesian_akk300m",   THALESIAN_AKK300M_N_LAYERS,   *a, **kw)),
     "thalesian_cunei400m_pls": ("pls", lambda *a, **kw: _run_acts_pls("thalesian_cunei400m", THALESIAN_CUNEI400M_N_LAYERS, *a, **kw)),
     "thalesian_cunei400m_cls": ("cls", lambda *a, **kw: _run_acts_cls("thalesian_cunei400m", THALESIAN_CUNEI400M_N_LAYERS, *a, **kw)),
+    # Phase E1: Qwen3 scale sweep balanced MC (tier0/mean, same draws as Phase 0).
+    "qwen3_1b7_pls":   ("pls", lambda *a, **kw: _run_acts_pls("qwen3_1b7",  QWEN3_1B7_N_LAYERS,  *a, **kw)),
+    "qwen3_1b7_cls":   ("cls", lambda *a, **kw: _run_acts_cls("qwen3_1b7",  QWEN3_1B7_N_LAYERS,  *a, **kw)),
+    "qwen3_8b_pls":    ("pls", lambda *a, **kw: _run_acts_pls("qwen3_8b",   QWEN3_8B_N_LAYERS,   *a, **kw)),
+    "qwen3_8b_cls":    ("cls", lambda *a, **kw: _run_acts_cls("qwen3_8b",   QWEN3_8B_N_LAYERS,   *a, **kw)),
+    "qwen35_27b_pls":  ("pls", lambda *a, **kw: _run_acts_pls("qwen35_27b", QWEN35_27B_N_LAYERS, *a, **kw)),
+    "qwen35_27b_cls":  ("cls", lambda *a, **kw: _run_acts_cls("qwen35_27b", QWEN35_27B_N_LAYERS, *a, **kw)),
 }
 
 
