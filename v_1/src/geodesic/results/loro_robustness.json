@@ -1,0 +1,269 @@
+[
+  {
+    "method": "qwen",
+    "cleaning": "maximal",
+    "pool": "mean",
+    "layer": 1,
+    "pacc_full": 0.7306652095200247,
+    "pacc_loro_mean": 0.7227698230148886,
+    "drop": 0.007895386505136104,
+    "n_rulers": 11,
+    "per_ruler": [
+      {
+        "ruler": "Ashurbanipal",
+        "n": 268,
+        "pacc_loro": 0.7012959773921491,
+        "pacc_cross": 0.5779369282619162,
+        "drop": 0.029369232127875566
+      },
+      {
+        "ruler": "Esarhaddon",
+        "n": 176,
+        "pacc_loro": 0.7232690864132114,
+        "pacc_cross": 0.7551311573888666,
+        "drop": 0.007396123106813257
+      },
+      {
+        "ruler": "Nabonidus",
+        "n": 68,
+        "pacc_loro": 0.7186713471983044,
+        "pacc_cross": 0.7801955284217473,
+        "drop": 0.011993862321720283
+      },
+      {
+        "ruler": "Nabopolassar",
+        "n": 15,
+        "pacc_loro": 0.7283194242062967,
+        "pacc_cross": 0.8366890380313199,
+        "drop": 0.002345785313727977
+      },
+      {
+        "ruler": "Nebuchadnezzar I",
+        "n": 10,
+        "pacc_loro": 0.7371616549653376,
+        "pacc_cross": 0.35249569707401035,
+        "drop": -0.006496445445312915
+      },
+      {
+        "ruler": "Nebuchadnezzar II",
+        "n": 87,
+        "pacc_loro": 0.7078200203117411,
+        "pacc_cross": 0.8220910761026842,
+        "drop": 0.0228451892082836
+      },
+      {
+        "ruler": "Sargon II",
+        "n": 144,
+        "pacc_loro": 0.7355334039828675,
+        "pacc_cross": 0.7682329906999511,
+        "drop": -0.004868194462842812
+      },
+      {
+        "ruler": "Sennacherib",
+        "n": 237,
+        "pacc_loro": 0.7220382390603612,
+        "pacc_cross": 0.7147344746184874,
+        "drop": 0.00862697045966343
+      },
+      {
+        "ruler": "Shalmaneser V",
+        "n": 12,
+        "pacc_loro": 0.7287278668256281,
+        "pacc_cross": 0.85297845373891,
+        "drop": 0.0019373426943966043
+      },
+      {
+        "ruler": "S\u00een-\u0161arru-i\u0161kun",
+        "n": 21,
+        "pacc_loro": 0.7325859937298539,
+        "pacc_cross": 0.5743639921722113,
+        "drop": -0.0019207842098292183
+      },
+      {
+        "ruler": "Tiglath-pileser III",
+        "n": 75,
+        "pacc_loro": 0.7150450390780235,
+        "pacc_cross": 0.6790874524714829,
+        "drop": 0.015620170442001147
+      }
+    ]
+  },
+  {
+    "method": "thalesian_cunei400m",
+    "cleaning": "maximal",
+    "pool": "mean",
+    "layer": 7,
+    "pacc_full": 0.6805757937033603,
+    "pacc_loro_mean": 0.6255419140403906,
+    "drop": 0.05503387966296969,
+    "n_rulers": 11,
+    "per_ruler": [
+      {
+        "ruler": "Ashurbanipal",
+        "n": 268,
+        "pacc_loro": 0.6876849030776704,
+        "pacc_cross": 0.5091478093403948,
+        "drop": -0.007109109374310085
+      },
+      {
+        "ruler": "Esarhaddon",
+        "n": 176,
+        "pacc_loro": 0.611041197509604,
+        "pacc_cross": 0.6334100921105327,
+        "drop": 0.06953459619375635
+      },
+      {
+        "ruler": "Nabonidus",
+        "n": 68,
+        "pacc_loro": 0.5646001677926437,
+        "pacc_cross": 0.6567321178120618,
+        "drop": 0.11597562591071664
+      },
+      {
+        "ruler": "Nabopolassar",
+        "n": 15,
+        "pacc_loro": 0.6731299951428446,
+        "pacc_cross": 0.8134228187919463,
+        "drop": 0.007445798560515748
+      },
+      {
+        "ruler": "Nebuchadnezzar I",
+        "n": 10,
+        "pacc_loro": 0.6175266039652051,
+        "pacc_cross": 0.20550774526678142,
+        "drop": 0.06304918973815521
+      },
+      {
+        "ruler": "Nebuchadnezzar II",
+        "n": 87,
+        "pacc_loro": 0.6247185057623527,
+        "pacc_cross": 0.680957258287405,
+        "drop": 0.05585728794100764
+      },
+      {
+        "ruler": "Sargon II",
+        "n": 144,
+        "pacc_loro": 0.632925994612973,
+        "pacc_cross": 0.6571830641213902,
+        "drop": 0.047649799090387246
+      },
+      {
+        "ruler": "Sennacherib",
+        "n": 237,
+        "pacc_loro": 0.615147701682342,
+        "pacc_cross": 0.6000111526236547,
+        "drop": 0.06542809202101829
+      },
+      {
+        "ruler": "Shalmaneser V",
+        "n": 12,
+        "pacc_loro": 0.636386717887579,
+        "pacc_cross": 0.8466413181242078,
+        "drop": 0.04418907581578135
+      },
+      {
+        "ruler": "S\u00een-\u0161arru-i\u0161kun",
+        "n": 21,
+        "pacc_loro": 0.6143363359385349,
+        "pacc_cross": 0.5893672537508154,
+        "drop": 0.06623945776482543
+      },
+      {
+        "ruler": "Tiglath-pileser III",
+        "n": 75,
+        "pacc_loro": 0.6034629310725482,
+        "pacc_cross": 0.6087705956907478,
+        "drop": 0.07711286263081207
+      }
+    ]
+  },
+  {
+    "method": "thalesian_cunei400m",
+    "cleaning": "tier0",
+    "pool": "mean",
+    "layer": 6,
+    "pacc_full": 0.6453282995540248,
+    "pacc_loro_mean": 0.6165536675537999,
+    "drop": 0.028774632000224898,
+    "n_rulers": 11,
+    "per_ruler": [
+      {
+        "ruler": "Ashurbanipal",
+        "n": 268,
+        "pacc_loro": 0.595575572923566,
+        "pacc_cross": 0.5499518536350505,
+        "drop": 0.04975272663045882
+      },
+      {
+        "ruler": "Esarhaddon",
+        "n": 176,
+        "pacc_loro": 0.6155561443016735,
+        "pacc_cross": 0.6785142170604725,
+        "drop": 0.02977215525235133
+      },
+      {
+        "ruler": "Nabonidus",
+        "n": 68,
+        "pacc_loro": 0.6357795734534375,
+        "pacc_cross": 0.7212069961224321,
+        "drop": 0.009548726100587324
+      },
+      {
+        "ruler": "Nabopolassar",
+        "n": 15,
+        "pacc_loro": 0.42908553009228595,
+        "pacc_cross": 0.5525727069351231,
+        "drop": 0.21624276946173887
+      },
+      {
+        "ruler": "Nebuchadnezzar I",
+        "n": 10,
+        "pacc_loro": 0.6649390647767917,
+        "pacc_cross": 0.23820998278829605,
+        "drop": -0.019610765222766835
+      },
+      {
+        "ruler": "Nebuchadnezzar II",
+        "n": 87,
+        "pacc_loro": 0.6180454364816532,
+        "pacc_cross": 0.31250711278024357,
+        "drop": 0.0272828630723716
+      },
+      {
+        "ruler": "Sargon II",
+        "n": 144,
+        "pacc_loro": 0.6675001103898971,
+        "pacc_cross": 0.6339329417523251,
+        "drop": -0.022171810835872274
+      },
+      {
+        "ruler": "Sennacherib",
+        "n": 237,
+        "pacc_loro": 0.6174272530578001,
+        "pacc_cross": 0.6669826576702169,
+        "drop": 0.027901046496224713
+      },
+      {
+        "ruler": "Shalmaneser V",
+        "n": 12,
+        "pacc_loro": 0.6492195434273855,
+        "pacc_cross": 0.8393536121673004,
+        "drop": -0.0038912438733607058
+      },
+      {
+        "ruler": "S\u00een-\u0161arru-i\u0161kun",
+        "n": 21,
+        "pacc_loro": 0.6272519539011789,
+        "pacc_cross": 0.46510110893672535,
+        "drop": 0.018076345652845882
+      },
+      {
+        "ruler": "Tiglath-pileser III",
+        "n": 75,
+        "pacc_loro": 0.6617101602861306,
+        "pacc_cross": 0.5768314321926489,
+        "drop": -0.01638186073210579
+      }
+    ]
+  }
+]
