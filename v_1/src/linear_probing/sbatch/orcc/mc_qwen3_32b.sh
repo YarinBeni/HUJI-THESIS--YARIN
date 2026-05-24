@@ -24,7 +24,7 @@ python -u v_1/src/linear_probing/round2_phase0/run_mc_probes.py \
     --draws-matrix   v_1/src/linear_probing/results/orcc_round2_phase0/balanced_subset/draws_matrix.npy \
     --fragment-order v_1/src/linear_probing/results/orcc_round2_phase0/balanced_subset/corpus_fragment_order.json \
     --output-dir     v_1/src/linear_probing/results/orcc_round2_phase0/probes \
-    --probes         qwen3_32b_pls,qwen3_32b_cls \
+    --probes         qwen3_32b_pls,qwen3_32b_cls,qwen3_32b_cls_numeric \
     --layers         all \
     || { echo "FAILED: qwen3_32b MC"; exit 1; }
 
