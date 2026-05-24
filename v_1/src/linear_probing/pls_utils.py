@@ -283,12 +283,19 @@ def fit_ridge_year_groupkfold(
             ss_res = float(np.sum((true_y - pred_y) ** 2))
             ss_tot = float(np.sum((true_y - np.mean(true_y)) ** 2))
             r2s.append(1.0 - ss_res / ss_tot if ss_tot > 0 else 0.0)
+        # Mirror fit_pls_groupkfold: exclude folds where y_test is constant
+        # (one unique year in fold → Spearman = NaN). Use same mask for all metrics.
+        valid = [i for i, v in enumerate(spearmans) if not np.isnan(v)]
+        def _vmean(lst): return float(np.nanmean([lst[i] for i in valid])) if valid else float("nan")
+        def _vstd(lst):  return float(np.nanstd( [lst[i] for i in valid])) if valid else float("nan")
         results[yt] = {
-            "spearman_mean": float(np.mean(spearmans)),
-            "spearman_std":  float(np.std(spearmans)),
-            "mae_mean":      float(np.mean(maes)),
-            "mae_std":       float(np.std(maes)),
-            "r2_mean":       float(np.mean(r2s)),
-            "r2_std":        float(np.std(r2s)),
+            "spearman_mean":   _vmean(spearmans),
+            "spearman_std":    _vstd(spearmans),
+            "mae_mean":        _vmean(maes),
+            "mae_std":         _vstd(maes),
+            "r2_mean":         _vmean(r2s),
+            "r2_std":          _vstd(r2s),
+            "n_valid_folds":   len(valid),
+            "n_total_folds":   len(spearmans),
         }
     return results
