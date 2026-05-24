@@ -89,6 +89,7 @@ from pls_utils import (                            # noqa: E402
     l2_normalize,
     fit_plsda_stratified_kfold,
     fit_pls_groupkfold,
+    fit_ridge_year_groupkfold,
 )
 from cls_utils import fit_cls_cv                   # noqa: E402
 
@@ -327,6 +328,33 @@ def run_tfidf_pls(orcc_df, orcc_positions, y_raw, y_log, y_ruler, fragment_ids) 
     return results
 
 
+def run_tfidf_cls_numeric(orcc_df, orcc_positions, y_raw, y_log, y_ruler, fragment_ids) -> dict:
+    """Ridge year regression on TF-IDF features (cls_numeric probe)."""
+    results: dict[str, Any] = {}
+    sub = orcc_df.iloc[orcc_positions]
+    for cleaning in ("tier0", "maximal"):
+        col = f"text_{cleaning}"
+        texts = sub[col].fillna("").astype(str).tolist()
+        X = _build_tfidf_matrix(texts)
+        try:
+            ridge_res = fit_ridge_year_groupkfold(
+                X, y_raw, y_log, y_ruler, n_splits=N_SPLITS)
+        except Exception as e:
+            print(f"    [ridge-tfidf-skip] {cleaning}: {type(e).__name__}: {e}", flush=True)
+            ridge_res = {yt: {"spearman_mean": float("nan"), "mae_mean": float("nan"),
+                               "r2_mean": float("nan"), "skipped": True}
+                         for yt in YEAR_TRANSFORMS}
+        for yt in YEAR_TRANSFORMS:
+            r = ridge_res[yt]
+            results[f"tfidf__{cleaning}__na__L00__year-{yt}"] = {
+                "method": "tfidf", "cleaning": cleaning, "pooling": "na",
+                "layer": 0, "probe": "ridge", "year_transform": yt,
+                "n_labeled": int(X.shape[0]), "n_groups": int(len(np.unique(y_ruler))),
+                **r,
+            }
+    return results
+
+
 def run_tfidf_cls(orcc_df, orcc_positions, y_raw, y_log, y_ruler, fragment_ids) -> dict:
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.preprocessing import normalize
@@ -461,30 +489,74 @@ def _run_acts_cls(method: str, n_layers: int,
     return results
 
 
+def _run_acts_ridge_year(method: str, n_layers: int,
+                         orcc_positions, y_raw, y_log, y_ruler,
+                         acts_base: Path) -> dict:
+    """Ridge regression for year (cls_numeric probe). GroupKFold by ruler."""
+    results: dict[str, Any] = {}
+    pooling  = "mean"
+    cleaning = "tier0"
+    layer_iter = _LAYER_SUBSET if _LAYER_SUBSET is not None else range(n_layers)
+    for layer in layer_iter:
+        if layer >= n_layers:
+            continue
+        X_full = _load_orcc_activations(method, layer, acts_base)
+        if X_full is None:
+            print(f"    [{method}] L{layer:02d} — no activations, skip")
+            continue
+        X = l2_normalize(X_full[orcc_positions])
+        try:
+            ridge_res = fit_ridge_year_groupkfold(
+                X, y_raw, y_log, y_ruler, n_splits=N_SPLITS)
+        except Exception as e:
+            print(f"    [ridge-skip] {method} L{layer:02d}: {type(e).__name__}: {e}", flush=True)
+            ridge_res = {yt: {"spearman_mean": float("nan"), "mae_mean": float("nan"),
+                               "r2_mean": float("nan"), "skipped": True}
+                         for yt in YEAR_TRANSFORMS}
+        for yt in YEAR_TRANSFORMS:
+            r = ridge_res[yt]
+            results[f"{method}__{cleaning}__{pooling}__L{layer:02d}__year-{yt}"] = {
+                "method": method, "cleaning": cleaning, "pooling": pooling,
+                "layer": layer, "probe": "ridge", "year_transform": yt,
+                "n_labeled": int(len(orcc_positions)),
+                "n_groups": int(len(np.unique(y_ruler))),
+                **r,
+            }
+    return results
+
+
 # ---- Dispatch table -------------------------------------------------------
 
 PROBE_DISPATCH: dict[str, Any] = {
-    "tfidf_pls":  ("pls", run_tfidf_pls),
-    "tfidf_cls":  ("cls", run_tfidf_cls),
-    "mlm_pls":    ("pls", lambda *a, **kw: _run_acts_pls("mlm",    MLM_N_LAYERS,    *a, **kw)),
-    "mlm_cls":    ("cls", lambda *a, **kw: _run_acts_cls("mlm",    MLM_N_LAYERS,    *a, **kw)),
-    "qwen_pls":   ("pls", lambda *a, **kw: _run_acts_pls("qwen",   QWEN_N_LAYERS,   *a, **kw)),
-    "qwen_cls":   ("cls", lambda *a, **kw: _run_acts_cls("qwen",   QWEN_N_LAYERS,   *a, **kw)),
-    "random_pls": ("pls", lambda *a, **kw: _run_acts_pls("random", RANDOM_N_LAYERS, *a, **kw)),
-    "random_cls": ("cls", lambda *a, **kw: _run_acts_cls("random", RANDOM_N_LAYERS, *a, **kw)),
+    "tfidf_pls":         ("pls",         run_tfidf_pls),
+    "tfidf_cls":         ("cls",         run_tfidf_cls),
+    "tfidf_cls_numeric": ("cls_numeric", run_tfidf_cls_numeric),
+    "mlm_pls":           ("pls",         lambda *a, **kw: _run_acts_pls("mlm",    MLM_N_LAYERS,    *a, **kw)),
+    "mlm_cls":           ("cls",         lambda *a, **kw: _run_acts_cls("mlm",    MLM_N_LAYERS,    *a, **kw)),
+    "mlm_cls_numeric":   ("cls_numeric", lambda *a, **kw: _run_acts_ridge_year("mlm",    MLM_N_LAYERS,    *a, **kw)),
+    "qwen_pls":          ("pls",         lambda *a, **kw: _run_acts_pls("qwen",   QWEN_N_LAYERS,   *a, **kw)),
+    "qwen_cls":          ("cls",         lambda *a, **kw: _run_acts_cls("qwen",   QWEN_N_LAYERS,   *a, **kw)),
+    "qwen_cls_numeric":  ("cls_numeric", lambda *a, **kw: _run_acts_ridge_year("qwen",   QWEN_N_LAYERS,   *a, **kw)),
+    "random_pls":        ("pls",         lambda *a, **kw: _run_acts_pls("random", RANDOM_N_LAYERS, *a, **kw)),
+    "random_cls":        ("cls",         lambda *a, **kw: _run_acts_cls("random", RANDOM_N_LAYERS, *a, **kw)),
+    "random_cls_numeric":("cls_numeric", lambda *a, **kw: _run_acts_ridge_year("random", RANDOM_N_LAYERS, *a, **kw)),
     # Phase 3: Thalesian (Akkadian-finetuned UMT5) encoder activations.
-    # Note these probes use tier0/mean only (matches ACT_PATH_MAP entries).
-    "thalesian_akk300m_pls":   ("pls", lambda *a, **kw: _run_acts_pls("thalesian_akk300m",   THALESIAN_AKK300M_N_LAYERS,   *a, **kw)),
-    "thalesian_akk300m_cls":   ("cls", lambda *a, **kw: _run_acts_cls("thalesian_akk300m",   THALESIAN_AKK300M_N_LAYERS,   *a, **kw)),
-    "thalesian_cunei400m_pls": ("pls", lambda *a, **kw: _run_acts_pls("thalesian_cunei400m", THALESIAN_CUNEI400M_N_LAYERS, *a, **kw)),
-    "thalesian_cunei400m_cls": ("cls", lambda *a, **kw: _run_acts_cls("thalesian_cunei400m", THALESIAN_CUNEI400M_N_LAYERS, *a, **kw)),
-    # Phase E1: Qwen3 scale sweep balanced MC (tier0/mean, same draws as Phase 0).
-    "qwen3_1b7_pls":   ("pls", lambda *a, **kw: _run_acts_pls("qwen3_1b7",  QWEN3_1B7_N_LAYERS,  *a, **kw)),
-    "qwen3_1b7_cls":   ("cls", lambda *a, **kw: _run_acts_cls("qwen3_1b7",  QWEN3_1B7_N_LAYERS,  *a, **kw)),
-    "qwen3_8b_pls":    ("pls", lambda *a, **kw: _run_acts_pls("qwen3_8b",   QWEN3_8B_N_LAYERS,   *a, **kw)),
-    "qwen3_8b_cls":    ("cls", lambda *a, **kw: _run_acts_cls("qwen3_8b",   QWEN3_8B_N_LAYERS,   *a, **kw)),
-    "qwen35_27b_pls":  ("pls", lambda *a, **kw: _run_acts_pls("qwen35_27b", QWEN35_27B_N_LAYERS, *a, **kw)),
-    "qwen35_27b_cls":  ("cls", lambda *a, **kw: _run_acts_cls("qwen35_27b", QWEN35_27B_N_LAYERS, *a, **kw)),
+    "thalesian_akk300m_pls":          ("pls",         lambda *a, **kw: _run_acts_pls("thalesian_akk300m",   THALESIAN_AKK300M_N_LAYERS,   *a, **kw)),
+    "thalesian_akk300m_cls":          ("cls",         lambda *a, **kw: _run_acts_cls("thalesian_akk300m",   THALESIAN_AKK300M_N_LAYERS,   *a, **kw)),
+    "thalesian_akk300m_cls_numeric":  ("cls_numeric", lambda *a, **kw: _run_acts_ridge_year("thalesian_akk300m",   THALESIAN_AKK300M_N_LAYERS,   *a, **kw)),
+    "thalesian_cunei400m_pls":        ("pls",         lambda *a, **kw: _run_acts_pls("thalesian_cunei400m", THALESIAN_CUNEI400M_N_LAYERS, *a, **kw)),
+    "thalesian_cunei400m_cls":        ("cls",         lambda *a, **kw: _run_acts_cls("thalesian_cunei400m", THALESIAN_CUNEI400M_N_LAYERS, *a, **kw)),
+    "thalesian_cunei400m_cls_numeric":("cls_numeric", lambda *a, **kw: _run_acts_ridge_year("thalesian_cunei400m", THALESIAN_CUNEI400M_N_LAYERS, *a, **kw)),
+    # Phase E1: Qwen3 scale sweep (tier0/mean, same draws as Phase 0).
+    "qwen3_1b7_pls":         ("pls",         lambda *a, **kw: _run_acts_pls("qwen3_1b7",  QWEN3_1B7_N_LAYERS,  *a, **kw)),
+    "qwen3_1b7_cls":         ("cls",         lambda *a, **kw: _run_acts_cls("qwen3_1b7",  QWEN3_1B7_N_LAYERS,  *a, **kw)),
+    "qwen3_1b7_cls_numeric": ("cls_numeric", lambda *a, **kw: _run_acts_ridge_year("qwen3_1b7",  QWEN3_1B7_N_LAYERS,  *a, **kw)),
+    "qwen3_8b_pls":          ("pls",         lambda *a, **kw: _run_acts_pls("qwen3_8b",   QWEN3_8B_N_LAYERS,   *a, **kw)),
+    "qwen3_8b_cls":          ("cls",         lambda *a, **kw: _run_acts_cls("qwen3_8b",   QWEN3_8B_N_LAYERS,   *a, **kw)),
+    "qwen3_8b_cls_numeric":  ("cls_numeric", lambda *a, **kw: _run_acts_ridge_year("qwen3_8b",   QWEN3_8B_N_LAYERS,   *a, **kw)),
+    "qwen35_27b_pls":        ("pls",         lambda *a, **kw: _run_acts_pls("qwen35_27b", QWEN35_27B_N_LAYERS, *a, **kw)),
+    "qwen35_27b_cls":        ("cls",         lambda *a, **kw: _run_acts_cls("qwen35_27b", QWEN35_27B_N_LAYERS, *a, **kw)),
+    "qwen35_27b_cls_numeric":("cls_numeric", lambda *a, **kw: _run_acts_ridge_year("qwen35_27b", QWEN35_27B_N_LAYERS, *a, **kw)),
 }
 
 
@@ -519,6 +591,14 @@ def _aggregate_summary(out_dir: Path, probe: str, method_tag: str) -> dict:
                 mpk = rec["metrics_per_k"][bk]
                 slot["macro_f1"].append(mpk["macro_f1_mean"])
                 slot["accuracy"].append(mpk.get("accuracy_mean", float("nan")))
+            # cls_numeric (Ridge) schema — spearman_mean directly at top level
+            if "spearman_mean" in rec and "metrics_per_k" not in rec:
+                sp = rec.get("spearman_mean")
+                r2 = rec.get("r2_mean")
+                if sp is not None and not (isinstance(sp, float) and np.isnan(sp)):
+                    slot["spearman"].append(sp)
+                if r2 is not None and not (isinstance(r2, float) and np.isnan(r2)):
+                    slot["r2"].append(r2)
             # pls year schema
             if "best_k_by_spearman" in rec:
                 bk_sp = str(rec["best_k_by_spearman"])

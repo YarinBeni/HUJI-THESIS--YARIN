@@ -32,13 +32,14 @@ for cleaning in "${CLEANINGS[@]}"; do
             --method   qwen3_8b \
             --cleaning "$cleaning" \
             --pooling  "$pooling" \
-            --target   both \
+            --target   all \
             || { echo "FAILED: qwen3_8b / $cleaning / $pooling"; exit 1; }
     done
 done
 
 git add v_1/src/linear_probing/results/orcc__probe_cls/cls_results_qwen3_8b.json \
-        v_1/src/linear_probing/results/orcc__probe_pls/pls_results_qwen3_8b.json
+        v_1/src/linear_probing/results/orcc__probe_pls/pls_results_qwen3_8b.json \
+        v_1/src/linear_probing/results/orcc__probe_cls_numeric/cls_numeric_results_qwen3_8b.json
 git commit -m "Phase E1: Qwen3-8B CLS+PLS probe results (job $SLURM_JOB_ID)" || true
 git push origin main || echo "WARNING: git push failed"
 

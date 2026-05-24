@@ -18,10 +18,13 @@ CLI
   --method      free-form, e.g. thalesian_akk300m
   --cleaning    {tier0, maximal}
   --pooling     {mean, last}
-  --target      {cls, pls, both}   (default: both)
+  --target      {cls, pls, cls_numeric, both, all}   (default: both)
+                both = cls + pls (unchanged)
+                all  = cls + pls + cls_numeric
   --activations-base   path to results/ (default: auto)
-  --output-cls-dir  default: results/orcc__probe_cls
-  --output-pls-dir  default: results/orcc__probe_pls
+  --output-cls-dir          default: results/orcc__probe_cls
+  --output-pls-dir          default: results/orcc__probe_pls
+  --output-cls-numeric-dir  default: results/orcc__probe_cls_numeric
   --layers      "all" (default) or comma-separated layer indices
 
 Outputs
@@ -94,14 +97,19 @@ def parse_args() -> argparse.Namespace:
                    help='Method tag (free-form), e.g. thalesian_akk300m')
     p.add_argument('--cleaning', required=True, choices=['tier0', 'maximal'])
     p.add_argument('--pooling',  required=True, choices=['mean', 'last'])
-    p.add_argument('--target',   default='both', choices=['cls', 'pls', 'both'],
-                   help='Which probe to run (default: both)')
+    p.add_argument('--target',   default='both',
+                   choices=['cls', 'pls', 'cls_numeric', 'both', 'all'],
+                   help='Which probe to run: both=cls+pls, all=cls+pls+cls_numeric (default: both)')
     p.add_argument('--activations-base', type=Path, default=None,
                    help='Activations root (default: results/ next to this script)')
     p.add_argument('--output-cls-dir', type=Path, default=None,
                    help='CLS results dir (default: results/orcc__probe_cls)')
     p.add_argument('--output-pls-dir', type=Path, default=None,
                    help='PLS results dir (default: results/orcc__probe_pls)')
+    p.add_argument('--output-cls-numeric-dir', type=Path, default=None,
+                   help='cls_numeric results dir (default: results/orcc__probe_cls_numeric)')
+    p.add_argument('--ridge-alpha', type=float, default=1.0,
+                   help='Ridge regularisation alpha for cls_numeric (default: 1.0)')
     p.add_argument('--layers', default='all',
                    help='"all" (default) or comma-separated layer indices')
     p.add_argument('--min-count', type=int, default=MIN_COUNT,
@@ -162,12 +170,14 @@ def main() -> None:
     args = parse_args()
     sys.path.insert(0, str(_PROBES_DIR))  # so pls_utils / cls_utils are importable
 
-    from pls_utils import l2_normalize, fit_pls_groupkfold, fit_plsda_stratified_kfold
+    from pls_utils import l2_normalize, fit_pls_groupkfold, fit_plsda_stratified_kfold, fit_ridge_year_groupkfold
     from cls_utils import fit_cls_cv
 
-    base    = args.activations_base if args.activations_base else _RESULTS_DIR
-    cls_dir = args.output_cls_dir if args.output_cls_dir else _RESULTS_DIR / 'orcc__probe_cls'
-    pls_dir = args.output_pls_dir if args.output_pls_dir else _RESULTS_DIR / 'orcc__probe_pls'
+    base             = args.activations_base if args.activations_base else _RESULTS_DIR
+    cls_dir          = args.output_cls_dir if args.output_cls_dir else _RESULTS_DIR / 'orcc__probe_cls'
+    pls_dir          = args.output_pls_dir if args.output_pls_dir else _RESULTS_DIR / 'orcc__probe_pls'
+    cls_numeric_dir  = (args.output_cls_numeric_dir if args.output_cls_numeric_dir
+                        else _RESULTS_DIR / 'orcc__probe_cls_numeric')
 
     acts_dir = orcc_acts_dir(base, args.method, args.cleaning, args.pooling)
     if not acts_dir.is_dir():
@@ -201,13 +211,16 @@ def main() -> None:
               f"(dropped {info['n_dropped']} <{args.min_count})")
 
     # Load existing result files (merge, do not clobber)
-    cls_results_path = cls_dir / f'cls_results_{args.method}.json'
-    pls_results_path = pls_dir / f'pls_results_{args.method}.json'
-    cls_results = load_json(cls_results_path)
-    pls_results = load_json(pls_results_path)
+    cls_results_path         = cls_dir         / f'cls_results_{args.method}.json'
+    pls_results_path         = pls_dir         / f'pls_results_{args.method}.json'
+    cls_numeric_results_path = cls_numeric_dir / f'cls_numeric_results_{args.method}.json'
+    cls_results         = load_json(cls_results_path)
+    pls_results         = load_json(pls_results_path)
+    cls_numeric_results = load_json(cls_numeric_results_path)
 
-    run_cls = args.target in ('cls', 'both')
-    run_pls = args.target in ('pls', 'both')
+    run_cls         = args.target in ('cls', 'both', 'all')
+    run_pls         = args.target in ('pls', 'both', 'all')
+    run_cls_numeric = args.target in ('cls_numeric', 'all')
 
     t_start = time.time()
     for layer in layers:
@@ -335,12 +348,47 @@ def main() -> None:
             best_f1  = metrics_per_k[str(best_k)]['macro_f1_mean']
             print(f"    PLS-DA ruler  best_k={best_k} acc={best_acc:.3f} macro_f1={best_f1:.3f}")
 
+        # -------- cls_numeric (Ridge year regression) --------
+        if run_cls_numeric:
+            try:
+                ridge_results = fit_ridge_year_groupkfold(
+                    X_labeled,
+                    pls_info['y_raw'], pls_info['y_log'], pls_info['groups'],
+                    n_splits=N_SPLITS, alpha=args.ridge_alpha,
+                )
+            except Exception as e:
+                print(f"    [ridge-skip] {type(e).__name__}: {e}", flush=True)
+                ridge_results = {yt: {"spearman_mean": float("nan"), "mae_mean": float("nan"),
+                                      "r2_mean": float("nan"), "skipped": True}
+                                 for yt in YEAR_TRANSFORMS}
+            for yt in YEAR_TRANSFORMS:
+                r = ridge_results[yt]
+                cfg_key = (f'{args.method}__{args.cleaning}__{args.pooling}'
+                           f'__L{layer:02d}__year-{yt}')
+                cls_numeric_results[cfg_key] = {
+                    'method':    args.method,
+                    'cleaning':  args.cleaning,
+                    'pooling':   args.pooling,
+                    'layer':     layer,
+                    'probe':     'ridge',
+                    'year_transform': yt,
+                    'n_labeled': pls_info['n_labeled'],
+                    'n_groups':  pls_info['n_groups'],
+                    'alpha':     args.ridge_alpha,
+                    **r,
+                }
+                print(f"    Ridge year={yt}  sp={r['spearman_mean']:.3f}  "
+                      f"mae={r['mae_mean']:.0f}  r2={r['r2_mean']:.3f}")
+
     if run_cls:
         save_json(cls_results, cls_results_path)
         print(f"\nCLS results → {cls_results_path}  ({len(cls_results)} keys)")
     if run_pls:
         save_json(pls_results, pls_results_path)
         print(f"PLS results → {pls_results_path}  ({len(pls_results)} keys)")
+    if run_cls_numeric:
+        save_json(cls_numeric_results, cls_numeric_results_path)
+        print(f"cls_numeric results → {cls_numeric_results_path}  ({len(cls_numeric_results)} keys)")
 
     print(f"Wall time: {(time.time() - t_start) / 60:.1f} min")
 

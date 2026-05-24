@@ -240,3 +240,55 @@ def fit_pls_full(
 def project(model: PLSRegression, X: np.ndarray) -> np.ndarray:
     """Project X onto PLS latent space. Returns (N, n_components) array."""
     return model.transform(X)
+
+
+def fit_ridge_year_groupkfold(
+    X: np.ndarray,
+    y_raw: np.ndarray,
+    y_log: np.ndarray,
+    groups,
+    n_splits: int = 5,
+    alpha: float = 1.0,
+) -> dict:
+    """Ridge regression for year (cls_numeric probe).
+
+    GroupKFold CV with ruler as group — same split strategy as PLS so results
+    are directly comparable. Evaluates in raw-year space for both transforms
+    (log-predicted values are back-transformed via exp before scoring).
+
+    Returns a dict with keys 'raw' and 'log', each containing:
+      spearman_mean/std, mae_mean/std, r2_mean/std
+    """
+    from sklearn.linear_model import Ridge
+
+    gkf = GroupKFold(n_splits=n_splits)
+    groups = np.asarray(groups)
+
+    results: dict = {}
+    for yt, y in [("raw", np.asarray(y_raw, dtype=float)),
+                  ("log", np.asarray(y_log, dtype=float))]:
+        spearmans, maes, r2s = [], [], []
+        for train_idx, test_idx in gkf.split(X, groups=groups):
+            model = Ridge(alpha=alpha)
+            model.fit(X[train_idx], y[train_idx])
+            pred = model.predict(X[test_idx])
+            if yt == "log":
+                pred_y  = np.exp(np.clip(pred, -30, 30))
+                true_y  = np.exp(y[test_idx])
+            else:
+                pred_y  = pred
+                true_y  = y[test_idx]
+            spearmans.append(_spearman(true_y, pred_y))
+            maes.append(float(np.mean(np.abs(true_y - pred_y))))
+            ss_res = float(np.sum((true_y - pred_y) ** 2))
+            ss_tot = float(np.sum((true_y - np.mean(true_y)) ** 2))
+            r2s.append(1.0 - ss_res / ss_tot if ss_tot > 0 else 0.0)
+        results[yt] = {
+            "spearman_mean": float(np.mean(spearmans)),
+            "spearman_std":  float(np.std(spearmans)),
+            "mae_mean":      float(np.mean(maes)),
+            "mae_std":       float(np.std(maes)),
+            "r2_mean":       float(np.mean(r2s)),
+            "r2_std":        float(np.std(r2s)),
+        }
+    return results
