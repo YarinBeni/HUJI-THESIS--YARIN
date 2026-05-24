@@ -26,7 +26,7 @@ from sklearn.cross_decomposition import PLSRegression
 from sklearn.decomposition import PCA
 from sklearn.manifold import Isomap
 from sklearn.neighbors import kneighbors_graph
-from sklearn.preprocessing import normalize
+from sklearn.preprocessing import normalize, StandardScaler
 from scipy.stats import spearmanr
 
 # ---------------------------------------------------------------------------
@@ -83,11 +83,16 @@ def load_year_labels(parquet_path: Path) -> tuple[np.ndarray, np.ndarray]:
 # ---------------------------------------------------------------------------
 
 def pca_l2(X: np.ndarray, n_components: int = 64) -> np.ndarray:
-    """Center → PCA → L2-normalize. Returns (n, n_components)."""
+    """Z-score per feature → PCA → L2-normalize. Returns (n, n_components).
+
+    StandardScaler (zero-mean, unit-variance per dimension) is applied before
+    PCA so all hidden-state dimensions contribute equally — matching standard
+    practice in geometry-of-representations papers.
+    """
     n_comp = min(n_components, X.shape[0] - 1, X.shape[1])
-    X_c = X - X.mean(axis=0)
+    X_z = StandardScaler().fit_transform(X)
     pca = PCA(n_components=n_comp, random_state=42)
-    X_pca = pca.fit_transform(X_c)
+    X_pca = pca.fit_transform(X_z)
     return normalize(X_pca, norm="l2")
 
 
