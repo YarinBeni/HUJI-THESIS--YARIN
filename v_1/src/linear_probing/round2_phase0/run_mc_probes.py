@@ -128,7 +128,7 @@ THALESIAN_CUNEI400M_N_LAYERS = 13      # 12 encoder layers + embedding (L00..L12
 # Counts = transformer layers + 1 embedding layer (L00 = embedding).
 QWEN3_1B7_N_LAYERS  = 29   # Qwen3-1.7B:  28 transformer + embedding (L00..L28)
 QWEN3_8B_N_LAYERS   = 37   # Qwen3-8B:    36 transformer + embedding (L00..L36)
-QWEN35_27B_N_LAYERS = 65   # Qwen3.5-27B: 64 transformer + embedding (L00..L64)
+QWEN3_32B_N_LAYERS  = 65   # Qwen3-32B:   64 transformer + embedding (L00..L64)
 
 # Per-method (subdir under acts_base, activation-dir name).
 # Used by _load_orcc_activations to dispatch per method.
@@ -141,7 +141,7 @@ ACT_PATH_MAP: dict[str, tuple[str, str]] = {
     # Phase E1: Qwen3 scale sweep — tier0/mean only (MC standard)
     "qwen3_1b7":           ("orcc__embed/activations", "qwen3_1b7_tier0_mean"),
     "qwen3_8b":            ("orcc__embed/activations", "qwen3_8b_tier0_mean"),
-    "qwen35_27b":          ("orcc__embed/activations", "qwen35_27b_tier0_mean"),
+    "qwen3_32b":          ("orcc__embed/activations", "qwen3_32b_tier0_mean"),
 }
 
 # PLS hyper-params: mirror Round 1 sweep (1,2,3,5). With N=168 a 5-split CV is
@@ -554,9 +554,9 @@ PROBE_DISPATCH: dict[str, Any] = {
     "qwen3_8b_pls":          ("pls",         lambda *a, **kw: _run_acts_pls("qwen3_8b",   QWEN3_8B_N_LAYERS,   *a, **kw)),
     "qwen3_8b_cls":          ("cls",         lambda *a, **kw: _run_acts_cls("qwen3_8b",   QWEN3_8B_N_LAYERS,   *a, **kw)),
     "qwen3_8b_cls_numeric":  ("cls_numeric", lambda *a, **kw: _run_acts_ridge_year("qwen3_8b",   QWEN3_8B_N_LAYERS,   *a, **kw)),
-    "qwen35_27b_pls":        ("pls",         lambda *a, **kw: _run_acts_pls("qwen35_27b", QWEN35_27B_N_LAYERS, *a, **kw)),
-    "qwen35_27b_cls":        ("cls",         lambda *a, **kw: _run_acts_cls("qwen35_27b", QWEN35_27B_N_LAYERS, *a, **kw)),
-    "qwen35_27b_cls_numeric":("cls_numeric", lambda *a, **kw: _run_acts_ridge_year("qwen35_27b", QWEN35_27B_N_LAYERS, *a, **kw)),
+    "qwen3_32b_pls":        ("pls",         lambda *a, **kw: _run_acts_pls("qwen3_32b", QWEN3_32B_N_LAYERS, *a, **kw)),
+    "qwen3_32b_cls":        ("cls",         lambda *a, **kw: _run_acts_cls("qwen3_32b", QWEN3_32B_N_LAYERS, *a, **kw)),
+    "qwen3_32b_cls_numeric":("cls_numeric", lambda *a, **kw: _run_acts_ridge_year("qwen3_32b", QWEN3_32B_N_LAYERS, *a, **kw)),
 }
 
 
