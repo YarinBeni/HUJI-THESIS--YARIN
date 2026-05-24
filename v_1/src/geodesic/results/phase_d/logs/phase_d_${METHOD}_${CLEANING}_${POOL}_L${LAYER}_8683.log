@@ -1,0 +1,23 @@
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+=== Phase D: thalesian_cunei400m tier0 mean L6 ===
+Job: 8683  Node: g0380  Start: Sun May 24 05:09:48 PM UTC 2026
+Loading L6 for thalesian_cunei400m/tier0/mean...
+PCA + kNN + Isomap...
+Geodesic: Spearman=0.1082  pairwise-acc=0.6453
+Bins: 7 bins with ≥5 fragments
+/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/geodesic/phase_d/centroid_spline.py:63: UserWarning: 
+The maximal number of iterations maxit (set to 20 by the program)
+allowed for finding a smoothing spline with fp=s has been reached: s
+too small.
+There is an approximation returned but the corresponding weighted sum
+of squared residuals does not satisfy the condition abs(fp-s)/s < tol.
+  sp = UnivariateSpline(bin_years, bin_coords_3d[:, dim], w=weights, s=s, k=3)
+Arc-length Spearman vs bin year: 1.0000
+  Saved → /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/geodesic/results/phase_d/phase_d_thalesian_cunei400m_tier0_mean_L06_year.png
+  Saved → /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/geodesic/results/phase_d/phase_d_thalesian_cunei400m_tier0_mean_L06_ruler.png
+  Saved → /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/geodesic/results/phase_d/phase_d_thalesian_cunei400m_tier0_mean_L06_archive.png
+  Saved → /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/geodesic/results/phase_d/phase_d_thalesian_cunei400m_tier0_mean_L06_geodesic.png
+Metrics → phase_d_thalesian_cunei400m_tier0_mean_L06_metrics.json
+Done.
