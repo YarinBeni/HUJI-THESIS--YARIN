@@ -174,9 +174,22 @@ layer per model:**
 | qwen3_8b | L01 | 0.365 ± 0.068 | 0.482 |
 | thalesian_akk300m | L06 | 0.344 ± 0.062 | 0.435 |
 
-Ridge (cls_numeric) balanced, at the full-set reported layer: 1b7 @L02 = 0.287 ± 0.070,
-8b @L02 = 0.320 ± 0.074, 32b @L62 = **0.245 ± 0.077** (worst — confirms Ridge does
-not scale).
+**Ridge (cls_numeric) balanced leaderboard, best layer per model:**
+
+| Model | Layer | Balanced Ridge Sp ± std |
+|---|---|---|
+| **mlm** (small Akkadian MLM) | L01 | **0.408 ± 0.061** |
+| tfidf (char n-grams) | L00 | 0.355 ± 0.069 |
+| qwen3_1b7 | L00 | 0.352 ± 0.068 |
+| qwen3_8b | L01 | 0.332 ± 0.072 |
+| qwen (Qwen2.5-7B) | L03 | 0.327 ± 0.069 |
+| **qwen3_32b** | L06 | **0.326 ± 0.069** |
+
+The inversion is the story: on balanced Ridge dating the **small Akkadian MLM (0.408) is best
+and the 32B model (0.326) is last**. TF-IDF char n-grams (0.355) beat every Qwen3. Scale
+actively hurts a single-direction Ridge readout — bigger models spread the signal across
+correlated dimensions. (Cross-check: TF-IDF tier0 Ridge from the local name-masking experiment
+below = 0.355 ± 0.069, identical to the cluster MC.)
 
 ### Phase E1 key findings
 
@@ -194,10 +207,11 @@ not scale).
    Full-set PLS: 1b7 (0.484) ≈ 8b (0.482) < 32b (0.511). Balanced PLS: 1b7 (0.371) ≈
    8b (0.365) ≈ 32b (0.399) — all within one std. Scale buys little once imbalance is removed.
 
-3. **Ridge does not scale, in either regime.** Full-set Ridge: 1b7 (0.444) ≈ 8b (0.439) >
-   32b (0.429). Balanced Ridge at the reported layer is worst for 32b (0.245). The temporal
-   signal in the larger model is spread across correlated dimensions that PLS's multi-component
-   projection captures but single-component Ridge cannot.
+3. **Ridge does not scale — and the baselines win it.** On balanced Ridge the ordering inverts:
+   small Akkadian **mlm (0.408) > tfidf (0.355) > qwen3_1b7 (0.352) > 8b (0.332) > qwen2.5 (0.327)
+   > qwen3_32b (0.326, last)**. The temporal signal in the larger models is spread across
+   correlated dimensions that a single-direction Ridge cannot capture, while a small domain MLM
+   and even char n-grams read it directly. Reinforces the "dating is shallow" conclusion.
 
 4. **Qwen2.5-7B (the "qwen" model) fails PLS entirely** (full-set sp=0.121). Qwen3 models
    (0.48–0.51 full-set) vastly outperform their Qwen2.5 predecessor — an architectural /
@@ -290,7 +304,7 @@ Phase A would have concluded "geodesic fails" for Thalesian if we had stopped at
 
 - [x] MC balanced CIs for qwen3_1b7/8b/32b — DONE (parallel fan-out jobs 8743–8752, 8734–8738; 200 draws each)
 - [x] TF-IDF name-masking confound control — DONE (local, 200 draws; dating survives masking, ties neural models)
-- [ ] Backfill cls_numeric Ridge for qwen/mlm/tfidf baselines (cluster jobs 8758–8765; thalesian PLS balanced done)
+- [x] Backfill cls_numeric Ridge for qwen/mlm/tfidf baselines — DONE (cluster 8758–8765; mlm 0.408 best, 32b 0.326 last)
 - [x] Phase D PNGs review — DONE (arc-len Sp=1.0; flagged dense-blob readability)
 - [ ] Confound controls C1 (metadata-only year baseline) + C2 leave-one-provenance-out (genre unusable — 1 value)
 - [ ] NN-audit by same-ruler (C3, ruler-only per scope decision)
