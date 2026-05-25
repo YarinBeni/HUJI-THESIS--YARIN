@@ -71,6 +71,7 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+from joblib import Parallel, delayed
 
 # ---------------------------------------------------------------------------
 # Bootstrap: make sibling modules (pls_utils, cls_utils) importable
@@ -194,6 +195,10 @@ def parse_args() -> argparse.Namespace:
     _add_dual(p, "layers", type=str, default="0,4,10,15,22,28",
               help="Comma-separated layer indices for mlm/qwen/random probes "
                    "(default: '0,4,10,15,22,28'). Pass 'all' to scan every layer.")
+    _add_dual(p, "n-jobs", type=int, default=1,
+              help="Worker threads for the per-layer parallel sweep (default 1 = "
+                   "sequential). Set to $SLURM_CPUS_PER_TASK and run with "
+                   "OMP_NUM_THREADS=1 to use all allocated cores.")
     return p.parse_args()
 
 
@@ -215,6 +220,34 @@ _ACT_CACHE: dict[tuple[str, int], np.ndarray] = {}
 # Optional layer subset for activation-based probes (mlm/qwen/random). Set by
 # main() from --layers. None means "all layers".
 _LAYER_SUBSET: list[int] | None = None
+
+# Number of worker threads for the per-layer parallel sweep. Set by main() from
+# --n-jobs. 1 = sequential (original behavior). The threading backend keeps the
+# module-level _ACT_CACHE shared (each layer loaded once, reused across draws),
+# and BLAS-heavy PLS/Ridge fits release the GIL so they run concurrently.
+# IMPORTANT: run with OMP_NUM_THREADS=1 (and MKL/OPENBLAS) so N threads × 1
+# BLAS-thread = N cores, not N² oversubscription.
+_N_JOBS: int = 1
+
+
+def _parallel_layers(layer_iter, worker) -> dict:
+    """Run worker(layer) -> dict over all layers and merge the result dicts.
+
+    Uses the joblib threading backend when _N_JOBS > 1 so the shared activation
+    cache is reused; falls back to a plain loop for _N_JOBS == 1.
+    """
+    layers = [l for l in layer_iter]
+    if _N_JOBS == 1 or len(layers) <= 1:
+        merged: dict = {}
+        for l in layers:
+            merged.update(worker(l))
+        return merged
+    parts = Parallel(n_jobs=_N_JOBS, backend="threading")(
+        delayed(worker)(l) for l in layers)
+    merged = {}
+    for part in parts:
+        merged.update(part)
+    return merged
 
 
 def _load_orcc_activations(method: str, layer: int, acts_base: Path) -> np.ndarray | None:
@@ -389,18 +422,21 @@ def run_tfidf_cls(orcc_df, orcc_positions, y_raw, y_log, y_ruler, fragment_ids) 
 def _run_acts_pls(method: str, n_layers: int,
                   orcc_positions, y_raw, y_log, y_ruler,
                   acts_base: Path) -> dict:
-    """Generic PLS sweep over layers for an activation-based method."""
-    results: dict[str, Any] = {}
+    """Generic PLS sweep over layers for an activation-based method.
+
+    The per-layer body is parallelized across threads via _parallel_layers.
+    """
     pooling   = "mean"
     cleaning  = "tier0"
     layer_iter = _LAYER_SUBSET if _LAYER_SUBSET is not None else range(n_layers)
-    for layer in layer_iter:
-        if layer >= n_layers:
-            continue
+    layer_iter = [layer for layer in layer_iter if layer < n_layers]
+
+    def worker(layer: int) -> dict:
+        res: dict[str, Any] = {}
         X_full = _load_orcc_activations(method, layer, acts_base)
         if X_full is None:
             print(f"    [{method}] L{layer:02d} — no activations, skip")
-            continue
+            return res
         X = l2_normalize(X_full[orcc_positions])
 
         # ── year ── (defensive try/except — L0 can be rank-deficient)
@@ -428,7 +464,7 @@ def _run_acts_pls(method: str, n_layers: int,
                        if valid_sp else PLS_K_VALUES[0])
             best_r2 = (max(valid_r2, key=lambda k: metrics_per_k[str(k)]["r2_mean"])
                        if valid_r2 else PLS_K_VALUES[0])
-            results[f"{method}__{cleaning}__{pooling}__L{layer:02d}__year-{yt}"] = {
+            res[f"{method}__{cleaning}__{pooling}__L{layer:02d}__year-{yt}"] = {
                 "method": method, "cleaning": cleaning, "pooling": pooling,
                 "layer": layer, "year_transform": yt,
                 "n_labeled": int(X.shape[0]), "n_groups": int(len(np.unique(y_ruler))),
@@ -453,57 +489,61 @@ def _run_acts_pls(method: str, n_layers: int,
                            and np.isnan(metrics_per_k[str(k)]["macro_f1_mean"]))]
         best_k = (max(valid_k, key=lambda k: metrics_per_k[str(k)]["macro_f1_mean"])
                   if valid_k else PLS_K_VALUES[0])
-        results[f"{method}__{cleaning}__{pooling}__L{layer:02d}__ruler"] = {
+        res[f"{method}__{cleaning}__{pooling}__L{layer:02d}__ruler"] = {
             "method": method, "cleaning": cleaning, "pooling": pooling,
             "layer": layer, "target": "ruler",
             "n_labeled": int(X.shape[0]),
             "metrics_per_k": metrics_per_k,
             "best_k_by_macro_f1": best_k,
         }
-    return results
+        return res
+
+    return _parallel_layers(layer_iter, worker)
 
 
 def _run_acts_cls(method: str, n_layers: int,
                   orcc_positions, y_raw, y_log, y_ruler,
                   acts_base: Path) -> dict:
-    results: dict[str, Any] = {}
     pooling   = "mean"
     cleaning  = "tier0"
     y_year_str = np.array([str(int(y)) for y in y_raw])
     layer_iter = _LAYER_SUBSET if _LAYER_SUBSET is not None else range(n_layers)
-    for layer in layer_iter:
-        if layer >= n_layers:
-            continue
+    layer_iter = [layer for layer in layer_iter if layer < n_layers]
+
+    def worker(layer: int) -> dict:
+        res: dict[str, Any] = {}
         X_full = _load_orcc_activations(method, layer, acts_base)
         if X_full is None:
             print(f"    [{method}] L{layer:02d} — no activations, skip")
-            continue
+            return res
         X = l2_normalize(X_full[orcc_positions])
 
         for task, y in (("ruler", y_ruler), ("year", y_year_str)):
             m = fit_cls_cv(X, y, cv_strategy="stratified", n_splits=N_SPLITS)
-            results[f"{method}__{cleaning}__{pooling}__L{layer:02d}__{task}"] = {
+            res[f"{method}__{cleaning}__{pooling}__L{layer:02d}__{task}"] = {
                 "method": method, "cleaning": cleaning, "pooling": pooling,
                 "layer": layer, "task": task, "n_dropped": 0, **m,
             }
-    return results
+        return res
+
+    return _parallel_layers(layer_iter, worker)
 
 
 def _run_acts_ridge_year(method: str, n_layers: int,
                          orcc_positions, y_raw, y_log, y_ruler,
                          acts_base: Path) -> dict:
     """Ridge regression for year (cls_numeric probe). GroupKFold by ruler."""
-    results: dict[str, Any] = {}
     pooling  = "mean"
     cleaning = "tier0"
     layer_iter = _LAYER_SUBSET if _LAYER_SUBSET is not None else range(n_layers)
-    for layer in layer_iter:
-        if layer >= n_layers:
-            continue
+    layer_iter = [layer for layer in layer_iter if layer < n_layers]
+
+    def worker(layer: int) -> dict:
+        res: dict[str, Any] = {}
         X_full = _load_orcc_activations(method, layer, acts_base)
         if X_full is None:
             print(f"    [{method}] L{layer:02d} — no activations, skip")
-            continue
+            return res
         X = l2_normalize(X_full[orcc_positions])
         try:
             ridge_res = fit_ridge_year_groupkfold(
@@ -515,14 +555,16 @@ def _run_acts_ridge_year(method: str, n_layers: int,
                          for yt in YEAR_TRANSFORMS}
         for yt in YEAR_TRANSFORMS:
             r = ridge_res[yt]
-            results[f"{method}__{cleaning}__{pooling}__L{layer:02d}__year-{yt}"] = {
+            res[f"{method}__{cleaning}__{pooling}__L{layer:02d}__year-{yt}"] = {
                 "method": method, "cleaning": cleaning, "pooling": pooling,
                 "layer": layer, "probe": "ridge", "year_transform": yt,
                 "n_labeled": int(len(orcc_positions)),
                 "n_groups": int(len(np.unique(y_ruler))),
                 **r,
             }
-    return results
+        return res
+
+    return _parallel_layers(layer_iter, worker)
 
 
 # ---- Dispatch table -------------------------------------------------------
@@ -632,9 +674,12 @@ def _aggregate_summary(out_dir: Path, probe: str, method_tag: str) -> dict:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    global _LAYER_SUBSET
+    global _LAYER_SUBSET, _N_JOBS
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
+
+    _N_JOBS = max(1, int(getattr(args, "n_jobs", 1)))
+    print(f"[n-jobs] per-layer parallel sweep using {_N_JOBS} thread(s)")
 
     # Resolve layer subset (used by mlm/qwen/random probes only)
     lay_arg = getattr(args, "layers", "all")
