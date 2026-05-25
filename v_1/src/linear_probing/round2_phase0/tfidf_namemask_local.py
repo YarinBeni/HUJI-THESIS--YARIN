@@ -28,15 +28,11 @@ ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(ROOT / "v_1/src/linear_probing"))
 from pls_utils import fit_ridge_year_groupkfold          # noqa: E402
 from cls_utils import fit_cls_cv                          # noqa: E402
+from name_masking import mask_personal_names as mask_names  # noqa: E402
 
 BASE   = ROOT / "v_1/src/linear_probing/results/orcc_round2_phase0/balanced_subset"
 PARQUET = ROOT / "v_1/data/evaluation/corpora/orcc_corpus.parquet"
 TFIDF_PARAMS = dict(analyzer="char_wb", ngram_range=(2, 5))
-PN = re.compile(r'(?<!\S)m-[^\s]+')
-
-
-def mask_names(t: str) -> str:
-    return PN.sub("[PN]", str(t))
 
 
 def tfidf(texts):

@@ -232,36 +232,53 @@ runner is now self-healing against partial JSONs left by walltime-killed jobs.
 ## Confound control — TF-IDF name-masking (the "is it just the king's name?" test)
 
 A bag of **character n-grams (TF-IDF, char_wb 2–5)** has no semantics — it can only see
-spelling. We use it as a transparent confound probe. We mask the Akkadian **personal-name
-determinative** (`m-…` whitespace tokens → `[PN]`; e.g. `m-eri-ba`→Sennacherib,
-`m-tukul-ti`→Tiglath-pileser, `m-tar-qu-u`→Taharqa) and re-run balanced MC (200 draws,
-same draws as above). Year via Ridge(GroupKFold-ruler)→Spearman; ruler via logistic→Macro-F1.
+spelling. We use it as a transparent confound probe. We mask **all personal names** and re-run
+balanced MC (200 draws, same draws as above). Year via Ridge(GroupKFold-ruler)→Spearman; ruler
+via logistic→Macro-F1. Masking is the canonical module `v_1/src/linear_probing/name_masking.py`
+(also added as a first-class cleaning variant: `text_{tier0,maximal}_masked` in the corpus).
+
+**What gets masked (2.76% of tokens, data-audited).** Two determinative classes:
+- **`m-…` / `f-…`** male/female personal-name determinative → whole token → `[PN]`. Catches
+  the Assyrian kings: `m-d-30-PAP-MEŠ-SU`=Sennacherib, `m-AN-ŠAR2-DU3-A`=Ashurbanipal,
+  `m-LUGAL-GI-NA`=Sargon, `m-aš-šur-PAP-AŠ`=Esarhaddon.
+- **`d-<god-head>-<predicate>`** theophoric *sentence-names* (god + predicate = a person) → `[PN]`.
+  This was the leak in the first pass: the Neo-Babylonian kings carry the *divine* determinative,
+  not `m-`, so the `m-`-only mask left them readable. Now caught:
+  `d-AG-NIG2-DU-URU3`=Nabû-kudurri-uṣur=**Nebuchadnezzar**, `d-AG-na-'i-id`=**Nabonidus**,
+  `d-AG-IBILA-URU3`=**Nabopolassar**. Bare gods (`d-AG`, `d-da-gan`, `d-15`=Ištar, `d-maš`=Ninurta)
+  are **kept** — a god alone is period vocabulary, not a person.
+
+**Verification (the iterative TF-IDF check).** Re-ranking the top dating features *after* masking
+confirms **zero king names remain**: the leaders are now `ki-in-gi` (Sumer), `e2-sag-il2` (Esagil
+temple), `tin-tir-ki` (Babylon), `lu2-sag`/`lu2-gar-nu` (titles), `eš-šu2` ("new"), spelling
+variants of "king" (`šar2`/`šar-ri`/`lugal`). Previously Nebuchadnezzar (+148) and Nabonidus
+(−115) sat in the top-25; they are gone.
 
 | Cleaning | Condition | Year Spearman | Year MAE | Ruler Macro-F1 |
 |---|---|---|---|---|
 | tier0 | unmasked | 0.355 ± 0.069 | 43.9 | 0.650 ± 0.037 |
-| tier0 | **masked** | **0.391 ± 0.062** | 43.7 | **0.551 ± 0.040** |
+| tier0 | **masked** | **0.400 ± 0.062** | 42.9 | **0.527 ± 0.041** |
 | maximal | unmasked | 0.266 ± 0.078 | 47.5 | 0.498 ± 0.040 |
 | maximal | **masked** | 0.268 ± 0.086 | 47.3 | **0.463 ± 0.039** |
 
 **Findings:**
 
-1. **Masking names costs ruler-ID but not dating.** Ruler Macro-F1 drops 0.099 (tier0) /
-   0.035 (maximal); year Spearman is unchanged (tier0 even nudges up 0.355→0.391, within CI).
-   The dating signal does **not** live in the explicit king's name — it survives name removal.
+1. **Masking names costs ruler-ID but not dating.** Removing *all* personal names (incl. the
+   theophoric kings that leaked the first time) drops ruler Macro-F1 by 0.122 (tier0) / 0.035
+   (maximal) — yet year Spearman is *unchanged*, in fact nudges **up** (tier0 0.355→0.400, within
+   CI). The dating signal does **not** live in any king's name; it survives clean name removal.
 
-2. **TF-IDF dates as well as the neural models.** Masked TF-IDF year Spearman (0.391, tier0)
-   is a statistical tie with balanced Thalesian (0.411) and qwen3_32b (0.399). **A name-masked
-   bag of character n-grams matches a 32B LLM and a domain-finetuned encoder on dating.** The
-   bulk of the chronological signal is **shallow orthographic / spelling drift** (sign forms
-   and spelling conventions changed over centuries), not deep semantic understanding.
+2. **TF-IDF dates as well as the neural models.** Masked TF-IDF year Spearman (0.400, tier0) is a
+   statistical tie with balanced Thalesian (0.411) and qwen3_32b (0.399). **A name-masked bag of
+   character n-grams matches a 32B LLM and a domain-finetuned encoder on dating.** The bulk of the
+   chronological signal is **shallow orthographic / spelling drift** (sign forms and spelling
+   conventions changed over centuries), not deep semantic understanding.
 
-3. **Caveat — what `m-` masking does and doesn't remove.** It removes *explicitly determined*
-   personal names. It does **not** remove theophoric / logographic name elements that double as
-   ordinary period vocabulary (e.g. Neo-Babylonian `na-bi`=Nabû, `uṣur`, `sag-il`=Esagil are
-   unchanged by masking — they are entangled with religious/dialect vocabulary). So "name" here
-   means *explicitly marked* names; deeper dynasty/period vocabulary is not masked and may still
-   carry chronological information legitimately.
+3. **What is and isn't masked (now clean).** Both male/female *and* theophoric personal names are
+   removed; the post-mask feature audit confirms no name leaks. We deliberately **keep** bare god
+   names — which deities a text invokes is a legitimate period signal, not a "who is this about"
+   signal. So the surviving dating signal is genuinely orthography + period vocabulary (places,
+   titles, spelling conventions), not name lookup of any kind.
 
 **Thesis takeaway:** dating Akkadian texts is, to first order, an **orthographic-drift** task
 solvable without semantics or names. Neural models (domain-finetuned or frontier-scale) do not
