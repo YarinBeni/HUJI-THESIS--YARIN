@@ -1,0 +1,51 @@
+{
+  "probe": "tfidf_cls_numeric",
+  "method_tag": "mc_balanced",
+  "n_draws": 200,
+  "per_config": {
+    "tfidf__tier0__na__L00__year-raw": {
+      "n_draws": 200,
+      "spearman_mean": 0.3545122603800439,
+      "spearman_std": 0.06863434462772067,
+      "spearman_median": 0.36083406411930363,
+      "spearman_n": 200,
+      "r2_mean": -0.21271245930571436,
+      "r2_std": 0.10686066430309259,
+      "r2_median": -0.20612285332477187,
+      "r2_n": 200
+    },
+    "tfidf__tier0__na__L00__year-log": {
+      "n_draws": 200,
+      "spearman_mean": 0.3545630927392805,
+      "spearman_std": 0.06942382543113611,
+      "spearman_median": 0.36049515107838626,
+      "spearman_n": 200,
+      "r2_mean": -0.22450909778123285,
+      "r2_std": 0.11207859227961836,
+      "r2_median": -0.2141552298056131,
+      "r2_n": 200
+    },
+    "tfidf__maximal__na__L00__year-raw": {
+      "n_draws": 200,
+      "spearman_mean": 0.2660406210459062,
+      "spearman_std": 0.07832614988129581,
+      "spearman_median": 0.2712961557485421,
+      "spearman_n": 200,
+      "r2_mean": -0.39742861977482574,
+      "r2_std": 0.11684863099717559,
+      "r2_median": -0.38519863391460873,
+      "r2_n": 200
+    },
+    "tfidf__maximal__na__L00__year-log": {
+      "n_draws": 200,
+      "spearman_mean": 0.27055148601027507,
+      "spearman_std": 0.07819854031497521,
+      "spearman_median": 0.2711409862884263,
+      "spearman_n": 200,
+      "r2_mean": -0.4395882830040621,
+      "r2_std": 0.12693121282259195,
+      "r2_median": -0.42809871812772904,
+      "r2_n": 200
+    }
+  }
+}
