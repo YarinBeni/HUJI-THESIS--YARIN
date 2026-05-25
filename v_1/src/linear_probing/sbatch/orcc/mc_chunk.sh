@@ -33,7 +33,9 @@ git pull origin main || echo "WARN: git pull failed"
 mkdir -p v_1/src/linear_probing/logs
 mkdir -p v_1/src/linear_probing/results/orcc_round2_phase0/probes
 
-PROBES="${MODEL}_pls,${MODEL}_cls,${MODEL}_cls_numeric"
+# PROBES defaults to all three for MODEL, but can be overridden via --export
+# (e.g. PROBES=qwen_cls_numeric for a targeted Ridge backfill).
+PROBES="${PROBES:-${MODEL}_pls,${MODEL}_cls,${MODEL}_cls_numeric}"
 NJOBS="${SLURM_CPUS_PER_TASK:-8}"
 
 echo "=== MC chunk: ${MODEL} draws ${DRAW_START}-${DRAW_END} ==="

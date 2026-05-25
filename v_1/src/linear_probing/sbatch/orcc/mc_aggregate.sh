@@ -17,7 +17,7 @@ conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
 git pull origin main || echo "WARN: git pull failed"
 
-PROBES="${MODEL}_pls,${MODEL}_cls,${MODEL}_cls_numeric"
+PROBES="${PROBES:-${MODEL}_pls,${MODEL}_cls,${MODEL}_cls_numeric}"
 echo "=== MC aggregate: ${MODEL} (${PROBES}) ==="
 
 # All draw files already exist -> every draw is SKIPPED, only summaries rebuilt
