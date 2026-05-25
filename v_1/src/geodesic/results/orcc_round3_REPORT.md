@@ -159,17 +159,59 @@ Parquet: 1,193 / 1,202 year-labeled. MLM (Aeneas) activations not found; exclude
 | qwen3_8b | 2 | 0.439 | 81.7 |
 | qwen3_32b | 62 | 0.429 | 84.5 |
 
+### Balanced Monte-Carlo results (200 draws × 168 fragments, 8 rulers × 21)
+
+The full-set numbers above are computed on the imbalanced 1,193-fragment corpus.
+The balanced MC re-runs each probe on 200 class-balanced sub-draws (matching the
+Round 2 Phase 0 protocol) to control for ruler imbalance. **PLS year-raw, best
+layer per model:**
+
+| Model | Layer | **Balanced PLS Sp ± std** | Full-set Sp (for reference) |
+|---|---|---|---|
+| **thalesian_cunei400m** | L12 | **0.411 ± 0.064** | 0.467 |
+| qwen3_32b | L09 | 0.399 ± 0.063 | 0.511 |
+| qwen3_1b7 | L09 | 0.371 ± 0.081 | 0.484 |
+| qwen3_8b | L01 | 0.365 ± 0.068 | 0.482 |
+| thalesian_akk300m | L06 | 0.344 ± 0.062 | 0.435 |
+
+Ridge (cls_numeric) balanced, at the full-set reported layer: 1b7 @L02 = 0.287 ± 0.070,
+8b @L02 = 0.320 ± 0.074, 32b @L62 = **0.245 ± 0.077** (worst — confirms Ridge does
+not scale).
+
 ### Phase E1 key findings
 
-1. **qwen3_32b is the first pretrained model to beat Thalesian on PLS** (0.511 vs 0.467). This is the headline finding: a large multilingual model without any Akkadian fine-tuning can surpass a domain-specific model on year regression. This raises the question of what mechanism Qwen3-32B uses — presumably distributed linguistic structure that correlates with temporal drift in cuneiform orthography and vocabulary.
+1. **The qwen3_32b "win" does NOT survive balancing — this is the headline correction.**
+   On the full imbalanced set, qwen3_32b (0.511) beat Thalesian cunei400m (0.467). Under
+   balanced MC, **Thalesian cunei400m is nominally best (0.411 ± 0.064) and qwen3_32b
+   (0.399 ± 0.063) is a statistical tie** — every model's CI overlaps the others (±0.06–0.08).
+   The full-set scale advantage was partly an *imbalance artifact*: the larger model exploited
+   the extra (imbalanced, Neo-Assyrian-dominated) data. Honest claim for the thesis:
+   *"domain fine-tuning (Thalesian) and frontier-scale multilingual pretraining (Qwen3-32B)
+   reach statistically indistinguishable year-regression performance under class balancing;
+   neither dominates."*
 
-2. **PLS scales with model size; Ridge does not.** PLS: 1b7 (0.484) ≈ 8b (0.482) < 32b (0.511). Ridge: 1b7 (0.444) ≈ 8b (0.439) > 32b (0.429). The Ridge degradation at 32b suggests the temporal signal is spread across more correlated dimensions in the larger model, requiring multi-component projection (PLS) rather than single-component regression (Ridge) to extract it.
+2. **PLS scales with model size on the full set; the trend flattens under balancing.**
+   Full-set PLS: 1b7 (0.484) ≈ 8b (0.482) < 32b (0.511). Balanced PLS: 1b7 (0.371) ≈
+   8b (0.365) ≈ 32b (0.399) — all within one std. Scale buys little once imbalance is removed.
 
-3. **Qwen2.5-7B (the "qwen" model) fails PLS entirely** (sp=0.121). Qwen3 models (0.48–0.51) vastly outperform their Qwen2.5 predecessor. This is likely an architectural / training-data change between Qwen generations, not just scale.
+3. **Ridge does not scale, in either regime.** Full-set Ridge: 1b7 (0.444) ≈ 8b (0.439) >
+   32b (0.429). Balanced Ridge at the reported layer is worst for 32b (0.245). The temporal
+   signal in the larger model is spread across correlated dimensions that PLS's multi-component
+   projection captures but single-component Ridge cannot.
 
-4. **Geodesic vs PLS gap for qwen pretrained:** qwen geodesic pacc=0.731 (best overall) but PLS sp=0.121 (worst). The L1 token-embedding manifold has a clean temporal geometry that Isomap can read, but a supervised linear probe on L5 representations finds almost no signal. This is because the PLS probe tests a different layer (L5) than the geodesic uses (L1). The L1 mean-pool embeddings index lexical drift well geometrically but are not a "good" representation for a 1D supervised regressor due to high dimensionality and low semantic abstraction.
+4. **Qwen2.5-7B (the "qwen" model) fails PLS entirely** (full-set sp=0.121). Qwen3 models
+   (0.48–0.51 full-set) vastly outperform their Qwen2.5 predecessor — an architectural /
+   training-data change between Qwen generations, not just scale.
 
-5. **Balanced MC CIs pending** — jobs 8585/8586/8612/8613/8614 still running (24–48hr walltimes). Numbers above are from the point-estimate non-MC run; balanced CIs will be added when they land.
+5. **Geodesic vs PLS gap for qwen pretrained:** qwen geodesic pacc=0.731 (best overall) but
+   PLS sp=0.121 (worst). The L1 token-embedding manifold has clean temporal geometry that
+   Isomap reads, but a supervised linear probe on L5 finds almost no signal — different layers,
+   different mechanisms (lexical-drift geometry at L1 vs distributed semantic signal deeper).
+
+**Speedup note (methods):** the balanced MC sweep was projected at ~6+ days sequential
+(32b alone ≈115hr). Parallelizing the per-layer loop with joblib threads (BLAS pinned to 1)
+plus fanning draws across 4 chunks/model cut the whole sweep to **~40 min wall-clock**. The
+runner is now self-healing against partial JSONs left by walltime-killed jobs.
 
 ---
 
@@ -179,10 +221,13 @@ Parquet: 1,193 / 1,202 year-labeled. MLM (Aeneas) activations not found; exclude
 
 | Probe type | Best model | Best Sp / pacc |
 |---|---|---|
-| PLS (supervised) | qwen3_32b | Sp = 0.511 |
+| PLS (supervised, full set) | qwen3_32b | Sp = 0.511 |
+| PLS (supervised, balanced MC) | thalesian_cunei400m | Sp = 0.411 ± 0.064 |
 | Geodesic (unsupervised) | qwen/maximal/mean/L1 | pacc = 0.731 |
 
 These are different models and different layers. The best unsupervised manifold belongs to the model with the *worst* supervised probing (qwen Qwen2.5-7B). This is not a contradiction: qwen's L1 mean-pool is essentially a bag-of-token-types, which captures lexical drift across centuries. Deeper layers integrate context, ruler identity, genre, and other information that dilutes the temporal axis while enabling richer supervised extraction.
+
+**Imbalance caveat on the supervised leaderboard.** The full-set PLS winner (qwen3_32b, 0.511) is overtaken by Thalesian (0.411) once draws are class-balanced; the two are a statistical tie. Any supervised-probing claim in this round must cite the balanced MC numbers, not the imbalanced full-set point estimates.
 
 ### Temporal manifold is real (Phase C verdict)
 
@@ -196,13 +241,13 @@ Phase A would have concluded "geodesic fails" for Thalesian if we had stopped at
 
 ## Suggested thesis framing
 
-> *"Akkadian cuneiform texts are temporally organized in the representation spaces of multiple language models, but the nature of that organization differs by model and probe type. For Thalesian (domain-finetuned), temporal structure is multi-dimensional: PLS extracts it with Spearman 0.467 (MAE 75 years) but unsupervised Isomap peaks at pacc 0.681. For Qwen2.5-7B (no domain training), the L1 token-embedding layer encodes lexical drift as a near-globally-monotone 1D manifold (pacc 0.731, LORO drop 0.008 — STRONG), while deeper layers show no supervised linear signal. For Qwen3-32B, the temporal signal emerges across multiple dimensions at deeper layers, enabling PLS Spearman 0.511 — the first pretrained model to surpass domain fine-tuning on this task. Together, these results suggest that temporal information in cuneiform is encoded both as lexical drift (accessible at L1, without domain training) and as distributed semantic-structural signal (accessible with PLS at deeper layers, enhanced by domain training or scale)."*
+> *"Akkadian cuneiform texts are temporally organized in the representation spaces of multiple language models, but the nature of that organization differs by model and probe type. For Thalesian (domain-finetuned), temporal structure is multi-dimensional: PLS extracts it with balanced-MC Spearman 0.411 ± 0.064 but unsupervised Isomap peaks at pacc 0.681. For Qwen2.5-7B (no domain training), the L1 token-embedding layer encodes lexical drift as a near-globally-monotone 1D manifold (pacc 0.731, LORO drop 0.008 — STRONG), while deeper layers show no supervised linear signal. Frontier-scale multilingual pretraining (Qwen3-32B) reaches balanced-MC Spearman 0.399 ± 0.063 — statistically indistinguishable from domain fine-tuning, despite zero Akkadian training. The apparent scale advantage of Qwen3-32B over Thalesian on the full imbalanced set (0.511 vs 0.467) does not survive class balancing. Together, these results suggest that temporal information in cuneiform is encoded both as lexical drift (accessible at L1, without domain training) and as distributed semantic-structural signal (accessible with PLS at deeper layers), and that domain fine-tuning and frontier-scale pretraining are two routes to comparable — not dominant — supervised year-regression performance."*
 
 ---
 
 ## Pending
 
-- [ ] MC balanced CIs for qwen3_1b7/8b/32b (jobs 8585/8586/8612/8613/8614; 24–48hr walltimes)
-- [ ] Backfill cls_numeric Ridge for thalesian/qwen/mlm/tfidf baselines (for complete leaderboard)
+- [x] MC balanced CIs for qwen3_1b7/8b/32b — DONE (parallel fan-out jobs 8743–8752, 8734–8738; 200 draws each)
+- [ ] Backfill cls_numeric Ridge for qwen/mlm/tfidf baselines (thalesian PLS balanced done)
 - [ ] Phase D PNGs review (12 files in `v_1/src/geodesic/results/phase_d/`)
 - [ ] SAE attribution on qwen3_32b L26 (if time/scope permits — Track C)
