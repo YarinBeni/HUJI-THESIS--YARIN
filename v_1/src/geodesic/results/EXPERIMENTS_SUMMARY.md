@@ -206,6 +206,26 @@ footer reads "Geodesic Spearman / pacc / arc-len Sp=1.000".
 all scatters a dense blob; the arc-length=1.0 result rests on only 7 century centroids, several
 of which (50, 950, 1050, 1150 BCE) have 10–18 fragments each.
 
+**Plot gallery (embedded — render when this `.md` is opened in a markdown viewer).**
+
+*qwen L1 (maximal/mean) — pacc 0.731, the best manifold:*
+
+| year | geodesic | ruler | archive |
+|---|---|---|---|
+| ![](phase_d/phase_d_qwen_maximal_mean_L01_year.png) | ![](phase_d/phase_d_qwen_maximal_mean_L01_geodesic.png) | ![](phase_d/phase_d_qwen_maximal_mean_L01_ruler.png) | ![](phase_d/phase_d_qwen_maximal_mean_L01_archive.png) |
+
+*thalesian_cunei400m L7 (maximal/mean):*
+
+| year | geodesic | ruler | archive |
+|---|---|---|---|
+| ![](phase_d/phase_d_thalesian_cunei400m_maximal_mean_L07_year.png) | ![](phase_d/phase_d_thalesian_cunei400m_maximal_mean_L07_geodesic.png) | ![](phase_d/phase_d_thalesian_cunei400m_maximal_mean_L07_ruler.png) | ![](phase_d/phase_d_thalesian_cunei400m_maximal_mean_L07_archive.png) |
+
+*thalesian_cunei400m L6 (tier0/mean):*
+
+| year | geodesic | ruler | archive |
+|---|---|---|---|
+| ![](phase_d/phase_d_thalesian_cunei400m_tier0_mean_L06_year.png) | ![](phase_d/phase_d_thalesian_cunei400m_tier0_mean_L06_geodesic.png) | ![](phase_d/phase_d_thalesian_cunei400m_tier0_mean_L06_ruler.png) | ![](phase_d/phase_d_thalesian_cunei400m_tier0_mean_L06_archive.png) |
+
 **Takeaway:** the strongest possible visualization outcome — century centroids are perfectly
 chronologically ordered along a smooth 3D curve for all three configs.
 
