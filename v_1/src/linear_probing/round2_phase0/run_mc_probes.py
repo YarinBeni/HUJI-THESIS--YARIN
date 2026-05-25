@@ -616,8 +616,12 @@ def _aggregate_summary(out_dir: Path, probe: str, method_tag: str) -> dict:
     # Collect: per config_key, list of (macro_f1_mean, accuracy_mean, spearman_mean, r2_mean)
     per_key: dict[str, dict[str, list[float]]] = {}
     for fp in files:
-        with open(fp) as f:
-            doc = json.load(f)
+        try:
+            with open(fp) as f:
+                doc = json.load(f)
+        except (json.JSONDecodeError, OSError, ValueError):
+            print(f"  [agg] skipping unreadable/partial file: {fp.name}", flush=True)
+            continue
         results = doc.get("results", {})
         for cfg_key, rec in results.items():
             slot = per_key.setdefault(cfg_key, {
@@ -732,10 +736,17 @@ def main() -> None:
         for di in draw_indices:
             out_path = args.output_dir / f"{probe}__{args.method_tag}__draw{di:03d}.json"
             if out_path.exists():
-                n_skipped += 1
-                if n_skipped <= 3 or n_skipped % 50 == 0:
-                    print(f"  draw {di:3d}: SKIP (already exists)")
-                continue
+                # Validate: a job killed mid-write leaves a truncated JSON. Only
+                # skip files that parse cleanly; recompute (overwrite) partials.
+                try:
+                    with open(out_path) as _f:
+                        json.load(_f)
+                    n_skipped += 1
+                    if n_skipped <= 3 or n_skipped % 50 == 0:
+                        print(f"  draw {di:3d}: SKIP (already exists)")
+                    continue
+                except (json.JSONDecodeError, OSError, ValueError):
+                    print(f"  draw {di:3d}: corrupt/partial JSON — recomputing", flush=True)
 
             orcc_positions, y_raw, y_log, y_ruler, fragment_ids = _draw_subset(
                 orcc_df, fragment_order, draws_matrix, di)
