@@ -215,6 +215,47 @@ runner is now self-healing against partial JSONs left by walltime-killed jobs.
 
 ---
 
+## Confound control — TF-IDF name-masking (the "is it just the king's name?" test)
+
+A bag of **character n-grams (TF-IDF, char_wb 2–5)** has no semantics — it can only see
+spelling. We use it as a transparent confound probe. We mask the Akkadian **personal-name
+determinative** (`m-…` whitespace tokens → `[PN]`; e.g. `m-eri-ba`→Sennacherib,
+`m-tukul-ti`→Tiglath-pileser, `m-tar-qu-u`→Taharqa) and re-run balanced MC (200 draws,
+same draws as above). Year via Ridge(GroupKFold-ruler)→Spearman; ruler via logistic→Macro-F1.
+
+| Cleaning | Condition | Year Spearman | Year MAE | Ruler Macro-F1 |
+|---|---|---|---|---|
+| tier0 | unmasked | 0.355 ± 0.069 | 43.9 | 0.650 ± 0.037 |
+| tier0 | **masked** | **0.391 ± 0.062** | 43.7 | **0.551 ± 0.040** |
+| maximal | unmasked | 0.266 ± 0.078 | 47.5 | 0.498 ± 0.040 |
+| maximal | **masked** | 0.268 ± 0.086 | 47.3 | **0.463 ± 0.039** |
+
+**Findings:**
+
+1. **Masking names costs ruler-ID but not dating.** Ruler Macro-F1 drops 0.099 (tier0) /
+   0.035 (maximal); year Spearman is unchanged (tier0 even nudges up 0.355→0.391, within CI).
+   The dating signal does **not** live in the explicit king's name — it survives name removal.
+
+2. **TF-IDF dates as well as the neural models.** Masked TF-IDF year Spearman (0.391, tier0)
+   is a statistical tie with balanced Thalesian (0.411) and qwen3_32b (0.399). **A name-masked
+   bag of character n-grams matches a 32B LLM and a domain-finetuned encoder on dating.** The
+   bulk of the chronological signal is **shallow orthographic / spelling drift** (sign forms
+   and spelling conventions changed over centuries), not deep semantic understanding.
+
+3. **Caveat — what `m-` masking does and doesn't remove.** It removes *explicitly determined*
+   personal names. It does **not** remove theophoric / logographic name elements that double as
+   ordinary period vocabulary (e.g. Neo-Babylonian `na-bi`=Nabû, `uṣur`, `sag-il`=Esagil are
+   unchanged by masking — they are entangled with religious/dialect vocabulary). So "name" here
+   means *explicitly marked* names; deeper dynasty/period vocabulary is not masked and may still
+   carry chronological information legitimately.
+
+**Thesis takeaway:** dating Akkadian texts is, to first order, an **orthographic-drift** task
+solvable without semantics or names. Neural models (domain-finetuned or frontier-scale) do not
+beat this shallow baseline under class balancing. The interesting neural result is therefore
+*geometric* (the manifold story, Phases A–D), not raw predictive accuracy.
+
+---
+
 ## Cross-phase synthesis
 
 ### The two-regime finding
@@ -248,6 +289,9 @@ Phase A would have concluded "geodesic fails" for Thalesian if we had stopped at
 ## Pending
 
 - [x] MC balanced CIs for qwen3_1b7/8b/32b — DONE (parallel fan-out jobs 8743–8752, 8734–8738; 200 draws each)
-- [ ] Backfill cls_numeric Ridge for qwen/mlm/tfidf baselines (thalesian PLS balanced done)
-- [ ] Phase D PNGs review (12 files in `v_1/src/geodesic/results/phase_d/`)
-- [ ] SAE attribution on qwen3_32b L26 (if time/scope permits — Track C)
+- [x] TF-IDF name-masking confound control — DONE (local, 200 draws; dating survives masking, ties neural models)
+- [ ] Backfill cls_numeric Ridge for qwen/mlm/tfidf baselines (cluster jobs 8758–8765; thalesian PLS balanced done)
+- [x] Phase D PNGs review — DONE (arc-len Sp=1.0; flagged dense-blob readability)
+- [ ] Confound controls C1 (metadata-only year baseline) + C2 leave-one-provenance-out (genre unusable — 1 value)
+- [ ] NN-audit by same-ruler (C3, ruler-only per scope decision)
+- [ ] SAE attribution on qwen3_32b (if time/scope permits — Track C)
