@@ -1,0 +1,19 @@
+model,readout,fullset_sp_or_f1,fullset_detail,balanced_mean,balanced_std,balanced_detail
+thalesian_cunei400m,year_pls,0.4670254104250972,"(12, 'tier0', 'mean', 'k=2')",0.4111424440656039,0.06401486249775726,"('L12', 'tier0', 'mean')"
+thalesian_akk300m,year_pls,0.43462672784512885,"(7, 'tier0', 'mean', 'k=3')",0.3444617997167807,0.061683422621417565,"('L06', 'tier0', 'mean')"
+mlm,year_pls,-0.11543424232238798,"(2, 'tier0', 'mean', 'k=2')",0.4235565353326363,0.059444373862113035,"('L01', 'tier0', 'mean')"
+tfidf,year_pls,,,0.4069432059196305,0.06436343667259688,"('L00', 'tier0', 'na')"
+qwen,year_pls,0.12075099705060227,"(5, 'tier0', 'mean', 'k=5')",0.3975203943393854,0.07854373602446096,"('L06', 'tier0', 'mean')"
+qwen3_1b7,year_pls,0.48428206512244,"(6, 'tier0', 'mean', 'k=3')",0.37149085551908795,0.08139308448215977,"('L09', 'tier0', 'mean')"
+qwen3_8b,year_pls,0.4819717760556263,"(26, 'tier0', 'mean', 'k=3')",0.36545550966179297,0.06820524476124847,"('L01', 'tier0', 'mean')"
+qwen3_32b,year_pls,0.5104678804608147,"(26, 'tier0', 'mean', 'k=3')",0.39876242482292995,0.06291361225368379,"('L09', 'tier0', 'mean')"
+random,year_pls,0.1843457965312867,"(12, 'tier0', 'mean', 'k=2')",,,
+thalesian_cunei400m,year_ridge,,,,,
+thalesian_akk300m,year_ridge,,,,,
+mlm,year_ridge,,,0.4078930721767133,0.06086395591149873,"('L01', 'tier0', 'mean')"
+tfidf,year_ridge,,,0.3545122603800439,0.06863434462772067,"('L00', 'tier0', 'na')"
+qwen,year_ridge,,,0.32661864273990354,0.06872807840151782,"('L03', 'tier0', 'mean')"
+qwen3_1b7,year_ridge,0.4436986421307096,"(2, 'tier0', 'mean', 'ridge')",0.35234902486366126,0.06769690914341951,"('L00', 'tier0', 'mean')"
+qwen3_8b,year_ridge,0.4392725763921376,"(2, 'tier0', 'mean', 'ridge')",0.3318982837906262,0.07243793216956582,"('L01', 'tier0', 'mean')"
+qwen3_32b,year_ridge,0.4293578667352194,"(62, 'tier0', 'mean', 'ridge')",0.3264177181182755,0.06894553999583371,"('L06', 'tier0', 'mean')"
+random,year_ridge,,,,,
