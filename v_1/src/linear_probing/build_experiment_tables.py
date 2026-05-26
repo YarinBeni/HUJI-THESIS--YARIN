@@ -87,7 +87,10 @@ def test1_year_pls():
             rows.append(["balanced", m, cl, pl, lyr, tgt.replace("year-", ""), "",
                          num(rec.get("spearman_mean")), num(rec.get("spearman_std")),
                          num(rec.get("r2_mean")), num(rec.get("r2_std")),
-                         "", "", "", "", "", "",
+                         num(rec.get("mae_mean")), num(rec.get("mae_std")),
+                         num(rec.get("mase_mean")), num(rec.get("mdape_mean")),
+                         num(rec.get("shuffled_spearman_mean")),
+                         num(rec.get("shuffled_r2_mean")),
                          rec.get("n_draws"), ""])
     write_csv("T1_year_pls.csv", hdr, rows)
     write_md("T1_year_pls.md", """# Test 1 — Year regression, PLS
@@ -112,7 +115,9 @@ which is why some imbalanced numbers are degenerate. Filter `year_transform=raw`
 def test2_year_ridge():
     hdr = ["regime", "model", "cleaning", "pool", "layer", "year_transform",
            "spearman_mean", "spearman_std", "r2_mean", "r2_std",
-           "mae_mean", "mae_std", "n_valid_folds_or_draws"]
+           "mae_mean", "mae_std", "mase_mean", "mdape_mean",
+           "shuffled_spearman_mean", "shuffled_r2_mean",
+           "n_valid_folds_or_draws"]
     rows = []
     for m in MODELS:
         p = RIDGE_DIR / f"cls_numeric_results_{m}.json"
@@ -126,6 +131,9 @@ def test2_year_ridge():
                          num(rec.get("spearman_mean")), num(rec.get("spearman_std")),
                          num(rec.get("r2_mean")), num(rec.get("r2_std")),
                          num(rec.get("mae_mean")), num(rec.get("mae_std")),
+                         num(rec.get("mase_mean")), num(rec.get("mdape_mean")),
+                         num(rec.get("shuffled_spearman_mean")),
+                         num(rec.get("shuffled_r2_mean")),
                          rec.get("n_valid_folds")])
     for m in MODELS:
         p = MC_DIR / f"{m}_cls_numeric__mc_balanced__summary.json"
@@ -138,7 +146,11 @@ def test2_year_ridge():
             rows.append(["balanced", m, cl, pl, lyr, tgt.replace("year-", ""),
                          num(rec.get("spearman_mean")), num(rec.get("spearman_std")),
                          num(rec.get("r2_mean")), num(rec.get("r2_std")),
-                         "", "", rec.get("n_draws")])
+                         num(rec.get("mae_mean")), num(rec.get("mae_std")),
+                         num(rec.get("mase_mean")), num(rec.get("mdape_mean")),
+                         num(rec.get("shuffled_spearman_mean")),
+                         num(rec.get("shuffled_r2_mean")),
+                         rec.get("n_draws")])
     write_csv("T2_year_ridge.csv", hdr, rows)
     write_md("T2_year_ridge.md", """# Test 2 — Year regression, Ridge
 
@@ -150,27 +162,63 @@ activation vector — a single-direction readout, simpler than PLS.
 has a `*_cls_numeric` MC summary (mlm, tfidf, qwen3_*).
 
 **CSV `T2_year_ridge.csv`** — one row per (regime, model, cleaning, pool, layer, year_transform).
-Metrics: Spearman, R2, MAE. Headline = `regime=balanced, year_transform=raw`.
+Metrics: Spearman, R2, MAE, MASE, MdAPE, shuffled-Spearman, shuffled-R2. Headline =
+`regime=balanced, year_transform=raw`. **N/A note:** MASE/MdAPE/shuffled-* are blank for older
+Ridge runs (imbalanced qwen3_* and the existing balanced draws) — those columns only populate from
+new draws produced by the widened `fit_ridge_year_groupkfold` (cluster jobs C4/C5).
 """)
 
 
 # ====================== TEST 3 — Ruler classification ======================
+def _best_balanced_ruler_cfg(model):
+    """Best balanced ruler config (max macro_f1_mean over __ruler keys).
+
+    Prefer the CLS-logistic MC summary; fall back to the PLS-DA MC summary's
+    ruler configs. Returns (cfg_key, rec, source) or (None, {}, None).
+    """
+    for src, fname in (("cls", f"{model}_cls__mc_balanced__summary.json"),
+                       ("pls", f"{model}_pls__mc_balanced__summary.json")):
+        p = MC_DIR / fname
+        if not p.exists():
+            continue
+        pc = json.load(open(p)).get("per_config", {})
+        ruler = {k: v for k, v in pc.items()
+                 if k.endswith("__ruler") and "macro_f1_mean" in v}
+        if not ruler:
+            continue
+        bk = max(ruler, key=lambda k: ruler[k]["macro_f1_mean"])
+        return bk, ruler[bk], src
+    return None, {}, None
+
+
 def test3_ruler():
     p = RES / "orcc_round2_phase0/aggregated/phase0_summary.json"
     lb = json.load(open(p)).get("leaderboard_cls", [])
+    lb_by_model = {e.get("method"): e for e in lb
+                   if e.get("method") not in DROP_MODELS}
     hdr = ["model", "display", "cleaning", "pool",
            "r1_imbalanced_macro_f1", "r1_accuracy", "r1_best_layer",
            "balanced_mc_macro_f1_mean", "balanced_mc_macro_f1_std",
-           "balanced_mc_macro_f1_median", "balanced_mc_layer", "n_draws"]
+           "balanced_mc_macro_f1_median", "balanced_mc_layer", "n_draws",
+           "balanced_accuracy_mean", "balanced_weighted_f1_mean",
+           "balanced_chance_accuracy", "balanced_chance_macro_f1",
+           "balanced_shuffled_accuracy_mean", "balanced_shuffled_macro_f1_mean",
+           "balanced_source"]
     rows = []
-    for e in lb:
-        if e.get("method") in DROP_MODELS:
-            continue
+    for m in MODELS:
+        e = lb_by_model.get(m, {})
         r1, mc = e.get("r1") or {}, e.get("mc") or {}
-        rows.append([e.get("method"), e.get("display"), e.get("cleaning"), e.get("pooling"),
+        bk, brec, src = _best_balanced_ruler_cfg(m)
+        rows.append([m, e.get("display"), e.get("cleaning"), e.get("pooling"),
                      num(r1.get("macro_f1")), num(r1.get("accuracy")), r1.get("best_layer"),
                      num(mc.get("macro_f1_mean")), num(mc.get("macro_f1_std")),
-                     num(mc.get("macro_f1_median")), mc.get("layer"), mc.get("n_draws")])
+                     num(mc.get("macro_f1_median")), mc.get("layer"), mc.get("n_draws"),
+                     num(brec.get("accuracy_mean")), num(brec.get("weighted_f1_mean")),
+                     num(brec.get("chance_accuracy_mean")),
+                     num(brec.get("chance_macro_f1_mean")),
+                     num(brec.get("shuffled_accuracy_mean")),
+                     num(brec.get("shuffled_macro_f1_mean")),
+                     src or ""])
     write_csv("T3_ruler_classification.csv", hdr, rows)
     write_md("T3_ruler_classification.md", """# Test 3 — Ruler classification
 
@@ -183,7 +231,77 @@ king" task — explicit names live here.
 **Not apples-to-apples:** `r1_imbalanced` uses 11–41 rulers (chance tiny); `balanced_mc` uses
 8 rulers (chance 0.125), so balanced Macro-F1 is mechanically higher. Use the columns to rank
 *methods*, not to claim balancing "helped". CSV `T3_ruler_classification.csv` — one row per
-(model, cleaning, pool) with both regimes side by side.
+**model** (iterating the full model set, not just the leaderboard) with both regimes side by side.
+
+**Balanced full-ruler-set columns** (`balanced_*`) come from the best (max Macro-F1) `__ruler`
+config in the model's balanced-MC summary — `balanced_source=cls` for the logistic readout,
+`pls` if only PLS-DA exists. **N/A note:** `balanced_shuffled_accuracy_mean` /
+`balanced_shuffled_macro_f1_mean` are blank when sourced from CLS-logistic — `fit_cls_cv` does not
+compute a shuffled-label null (a principled N/A, not a gap); they populate only when the best ruler
+config comes from PLS-DA, which does compute it.
+""")
+
+
+# ===================== TEST 3b — Ruler PLS-DA ==============================
+def test3b_ruler_plsda():
+    hdr = ["regime", "model", "cleaning", "pool", "layer", "k",
+           "accuracy", "accuracy_std", "macro_f1", "macro_f1_std",
+           "weighted_f1", "weighted_f1_std", "chance_accuracy", "chance_macro_f1",
+           "shuffled_accuracy", "shuffled_macro_f1", "n_draws"]
+    rows = []
+    # Imbalanced: __ruler keys in pls_results_{m}.json (best_k_by_macro_f1).
+    for m in MODELS:
+        p = PLS_DIR / f"pls_results_{m}.json"
+        if not p.exists():
+            continue
+        for key, rec in json.load(open(p)).items():
+            if not key.endswith("__ruler") or "best_k_by_macro_f1" not in rec:
+                continue
+            bk = str(rec["best_k_by_macro_f1"])
+            mm = rec.get("metrics_per_k", {}).get(bk, {})
+            rows.append(["imbalanced", m, rec.get("cleaning"), rec.get("pooling"),
+                         rec.get("layer"), bk,
+                         num(mm.get("accuracy_mean")), num(mm.get("accuracy_std")),
+                         num(mm.get("macro_f1_mean")), num(mm.get("macro_f1_std")),
+                         num(mm.get("weighted_f1_mean")), num(mm.get("weighted_f1_std")),
+                         num(mm.get("chance_accuracy")), num(mm.get("chance_macro_f1")),
+                         num(mm.get("shuffled_accuracy_mean")),
+                         num(mm.get("shuffled_macro_f1_mean")), ""])
+    # Balanced: __ruler configs in {m}_pls__mc_balanced__summary.json.
+    for m in MODELS:
+        p = MC_DIR / f"{m}_pls__mc_balanced__summary.json"
+        if not p.exists():
+            continue
+        for key, rec in json.load(open(p)).get("per_config", {}).items():
+            if not key.endswith("__ruler") or "macro_f1_mean" not in rec:
+                continue
+            _, cl, pl, lyr, _ = key.split("__")
+            rows.append(["balanced", m, cl, pl, lyr, "",
+                         num(rec.get("accuracy_mean")), num(rec.get("accuracy_std")),
+                         num(rec.get("macro_f1_mean")), num(rec.get("macro_f1_std")),
+                         num(rec.get("weighted_f1_mean")), num(rec.get("weighted_f1_std")),
+                         num(rec.get("chance_accuracy_mean")),
+                         num(rec.get("chance_macro_f1_mean")),
+                         num(rec.get("shuffled_accuracy_mean")),
+                         num(rec.get("shuffled_macro_f1_mean")), rec.get("n_draws")])
+    write_csv("T3b_ruler_plsda.csv", hdr, rows)
+    write_md("T3b_ruler_plsda.md", """# Test 3b — Ruler classification, PLS-DA
+
+**What it is:** the same "which ruler?" multi-class task as Test 3, but read out with **PLS-DA**
+(PLS discriminant analysis — PLS regression onto one-hot ruler targets, argmax for the predicted
+class) instead of logistic regression. A linear, low-rank discriminant readout; `k` = number of
+PLS components.
+
+**Data & split:** identical protocol to Test 3 — 5-fold **StratifiedKFold** (same rulers in train &
+test). `imbalanced` = all labeled fragments (11-41 rulers; per-config best `k` chosen by Macro-F1);
+`balanced` = 200 MC draws of 8 rulers x 21 frags, mean/std over draws.
+
+**CSV `T3b_ruler_plsda.csv`** — one row per (regime, model, cleaning, pool, layer[, k]). Full ruler
+metric set: accuracy, Macro-F1, weighted-F1, chance-accuracy, chance-Macro-F1, and shuffled-label
+baselines (shuffled-acc, shuffled-Macro-F1). Imbalanced rows come straight from the `__ruler` keys
+in `pls_results_{model}.json`; balanced rows from the `__ruler` configs in the
+`{model}_pls__mc_balanced` summary. Same chance-rate caveat as Test 3 (8 vs 11-41 classes), so use
+columns to rank methods, not to claim balancing helped.
 """)
 
 
@@ -309,6 +427,14 @@ Spearman; ruler via logistic StratifiedKFold -> Macro-F1.
 **CSV `T7_name_masking.csv`** — rows = {tier0,maximal} x {unmasked,masked}. Compare masked vs
 unmasked within a cleaning: year Spearman is unchanged (dating != name lookup) while ruler
 Macro-F1 drops (names did carry ruler identity).
+
+**Metric harmonization (T7h):** the masking job (`tfidf_namemask_results.json`) only persisted the
+headline triple per condition — year **Spearman**, year **MAE**, ruler **Macro-F1** (each with std
+and n_draws). The rest of the unified year/ruler metric sets (R2, MASE, MdAPE, shuffled-* for year;
+accuracy, weighted-F1, chance-*, shuffled-* for ruler) were **not computed by the masking job** and
+are a principled **N/A** here, not a gap — re-running masking with the full metric set is out of
+scope (the plan says "do not re-run any masking job"). The CSV therefore carries only the three
+metrics the source actually provides.
 """)
 
 
@@ -317,6 +443,7 @@ def main():
     test1_year_pls()
     test2_year_ridge()
     test3_ruler()
+    test3b_ruler_plsda()
     test4_geodesic()
     test5_loro()
     test6_phase_d()
@@ -332,7 +459,8 @@ every metric, straight from the result JSONs). Regenerate with
 |---|---|---|
 | 1 Year regression — PLS | T1_year_pls.md | T1_year_pls.csv |
 | 2 Year regression — Ridge | T2_year_ridge.md | T2_year_ridge.csv |
-| 3 Ruler classification | T3_ruler_classification.md | T3_ruler_classification.csv |
+| 3 Ruler classification — CLS (logistic) | T3_ruler_classification.md | T3_ruler_classification.csv |
+| 3b Ruler classification — PLS-DA | T3b_ruler_plsda.md | T3b_ruler_plsda.csv |
 | 4 Geodesic / Isomap manifold | T4_geodesic.md | T4_geodesic.csv |
 | 5 LORO leave-one-ruler-out | T5_loro.md | T5_loro.csv, T5_loro_per_ruler.csv |
 | 6 Phase D visualization | T6_phase_d.md | T6_phase_d.csv |

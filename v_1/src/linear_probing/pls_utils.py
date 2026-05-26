@@ -257,7 +257,8 @@ def fit_ridge_year_groupkfold(
     (log-predicted values are back-transformed via exp before scoring).
 
     Returns a dict with keys 'raw' and 'log', each containing:
-      spearman_mean/std, mae_mean/std, r2_mean/std
+      spearman_mean/std, mae_mean/std, r2_mean/std, mase_mean/std,
+      mdape_mean/std, shuffled_spearman_mean, shuffled_r2_mean
     """
     from sklearn.linear_model import Ridge
 
@@ -267,35 +268,69 @@ def fit_ridge_year_groupkfold(
     results: dict = {}
     for yt, y in [("raw", np.asarray(y_raw, dtype=float)),
                   ("log", np.asarray(y_log, dtype=float))]:
-        spearmans, maes, r2s = [], [], []
+        spearmans, maes, r2s, mases, mdapes = [], [], [], [], []
+        shuf_sp, shuf_r2 = [], []
+        # Shuffled-y baseline: globally permute y once per fit (true null),
+        # mirroring fit_pls_groupkfold. Seeded for determinism.
+        rng = np.random.default_rng(42)
         for train_idx, test_idx in gkf.split(X, groups=groups):
             model = Ridge(alpha=alpha)
             model.fit(X[train_idx], y[train_idx])
             pred = model.predict(X[test_idx])
             if yt == "log":
-                pred_y  = np.exp(np.clip(pred, -30, 30))
-                true_y  = np.exp(y[test_idx])
+                pred_y     = np.exp(np.clip(pred, -30, 30))
+                true_y     = np.exp(y[test_idx])
+                train_eval = np.exp(y[train_idx])
             else:
-                pred_y  = pred
-                true_y  = y[test_idx]
+                pred_y     = pred
+                true_y     = y[test_idx]
+                train_eval = y[train_idx]
             spearmans.append(_spearman(true_y, pred_y))
-            maes.append(float(np.mean(np.abs(true_y - pred_y))))
+            mae_fold = float(np.mean(np.abs(true_y - pred_y)))
+            maes.append(mae_fold)
             ss_res = float(np.sum((true_y - pred_y) ** 2))
             ss_tot = float(np.sum((true_y - np.mean(true_y)) ** 2))
             r2s.append(1.0 - ss_res / ss_tot if ss_tot > 0 else 0.0)
+            # MASE: MAE relative to the naive in-sample mean predictor.
+            denom = max(float(np.mean(np.abs(train_eval - np.mean(train_eval)))), 1e-10)
+            mases.append(mae_fold / denom)
+            # MdAPE: median absolute percentage error (%).
+            mdapes.append(float(np.median(
+                np.abs(pred_y - true_y) / np.maximum(np.abs(true_y), 1.0))) * 100.0)
+            # Shuffled baseline: permute y globally, refit, back-transform if log.
+            y_s = rng.permutation(y)
+            sm = Ridge(alpha=alpha)
+            sm.fit(X[train_idx], y_s[train_idx])
+            spred = sm.predict(X[test_idx])
+            if yt == "log":
+                spred_y = np.exp(np.clip(spred, -30, 30))
+                strue_y = np.exp(y_s[test_idx])
+            else:
+                spred_y = spred
+                strue_y = y_s[test_idx]
+            shuf_sp.append(_spearman(strue_y, spred_y))
+            s_ss_res = float(np.sum((strue_y - spred_y) ** 2))
+            s_ss_tot = float(np.sum((strue_y - np.mean(strue_y)) ** 2))
+            shuf_r2.append(1.0 - s_ss_res / s_ss_tot if s_ss_tot > 0 else 0.0)
         # Mirror fit_pls_groupkfold: exclude folds where y_test is constant
         # (one unique year in fold → Spearman = NaN). Use same mask for all metrics.
         valid = [i for i, v in enumerate(spearmans) if not np.isnan(v)]
         def _vmean(lst): return float(np.nanmean([lst[i] for i in valid])) if valid else float("nan")
         def _vstd(lst):  return float(np.nanstd( [lst[i] for i in valid])) if valid else float("nan")
         results[yt] = {
-            "spearman_mean":   _vmean(spearmans),
-            "spearman_std":    _vstd(spearmans),
-            "mae_mean":        _vmean(maes),
-            "mae_std":         _vstd(maes),
-            "r2_mean":         _vmean(r2s),
-            "r2_std":          _vstd(r2s),
-            "n_valid_folds":   len(valid),
-            "n_total_folds":   len(spearmans),
+            "spearman_mean":          _vmean(spearmans),
+            "spearman_std":           _vstd(spearmans),
+            "mae_mean":               _vmean(maes),
+            "mae_std":                _vstd(maes),
+            "r2_mean":                _vmean(r2s),
+            "r2_std":                 _vstd(r2s),
+            "mase_mean":              _vmean(mases),
+            "mase_std":               _vstd(mases),
+            "mdape_mean":             _vmean(mdapes),
+            "mdape_std":              _vstd(mdapes),
+            "shuffled_spearman_mean": _vmean(shuf_sp),
+            "shuffled_r2_mean":       _vmean(shuf_r2),
+            "n_valid_folds":          len(valid),
+            "n_total_folds":          len(spearmans),
         }
     return results

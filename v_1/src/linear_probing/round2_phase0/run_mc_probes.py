@@ -613,7 +613,27 @@ def _aggregate_summary(out_dir: Path, probe: str, method_tag: str) -> dict:
     if not files:
         return {"probe": probe, "method_tag": method_tag, "n_draws": 0}
 
-    # Collect: per config_key, list of (macro_f1_mean, accuracy_mean, spearman_mean, r2_mean)
+    # Full metric sets (every probe, every regime — see MASTER_BACKFILL_PLAN §2).
+    YEAR_METRICS  = ["spearman", "r2", "mae", "mase", "mdape",
+                     "shuffled_spearman", "shuffled_r2"]
+    RULER_METRICS = ["accuracy", "macro_f1", "weighted_f1",
+                     "chance_accuracy", "chance_macro_f1",
+                     "shuffled_accuracy", "shuffled_macro_f1"]
+    ALL_METRICS = YEAR_METRICS + RULER_METRICS
+
+    def _push(slot: dict, metric: str, value) -> None:
+        """Append a metric value, dropping None/NaN."""
+        if value is None:
+            return
+        try:
+            fv = float(value)
+        except (TypeError, ValueError):
+            return
+        if np.isnan(fv):
+            return
+        slot[metric].append(fv)
+
+    # Collect: per config_key, list of values per metric (full year+ruler set)
     per_key: dict[str, dict[str, list[float]]] = {}
     for fp in files:
         try:
@@ -624,33 +644,45 @@ def _aggregate_summary(out_dir: Path, probe: str, method_tag: str) -> dict:
             continue
         results = doc.get("results", {})
         for cfg_key, rec in results.items():
-            slot = per_key.setdefault(cfg_key, {
-                "macro_f1": [], "accuracy": [], "spearman": [], "r2": [],
-            })
-            # cls-style schema
-            if "macro_f1_mean" in rec:
-                slot["macro_f1"].append(rec["macro_f1_mean"])
-                slot["accuracy"].append(rec.get("accuracy_mean", float("nan")))
-            # pls-style ruler schema (has best_k_by_macro_f1 + metrics_per_k)
-            if "best_k_by_macro_f1" in rec:
-                bk = str(rec["best_k_by_macro_f1"])
-                mpk = rec["metrics_per_k"][bk]
-                slot["macro_f1"].append(mpk["macro_f1_mean"])
-                slot["accuracy"].append(mpk.get("accuracy_mean", float("nan")))
-            # cls_numeric (Ridge) schema — spearman_mean directly at top level
-            if "spearman_mean" in rec and "metrics_per_k" not in rec:
-                sp = rec.get("spearman_mean")
-                r2 = rec.get("r2_mean")
-                if sp is not None and not (isinstance(sp, float) and np.isnan(sp)):
-                    slot["spearman"].append(sp)
-                if r2 is not None and not (isinstance(r2, float) and np.isnan(r2)):
-                    slot["r2"].append(r2)
-            # pls year schema
+            slot = per_key.setdefault(cfg_key, {m: [] for m in ALL_METRICS})
+            # The four record schemas are mutually exclusive per cfg_key.
             if "best_k_by_spearman" in rec:
-                bk_sp = str(rec["best_k_by_spearman"])
-                bk_r2 = str(rec["best_k_by_r2"])
-                slot["spearman"].append(rec["metrics_per_k"][bk_sp]["spearman_mean"])
-                slot["r2"].append(rec["metrics_per_k"][bk_r2]["r2_mean"])
+                # (1) PLS year — all year metrics from the single best-spearman config.
+                mpk = rec["metrics_per_k"][str(rec["best_k_by_spearman"])]
+                _push(slot, "spearman",          mpk.get("spearman_mean"))
+                _push(slot, "r2",                mpk.get("r2_mean"))
+                _push(slot, "mae",               mpk.get("mae_mean"))
+                _push(slot, "mase",              mpk.get("mase_mean"))
+                _push(slot, "mdape",             mpk.get("mdape_mean"))
+                _push(slot, "shuffled_spearman", mpk.get("shuffled_spearman_mean"))
+                _push(slot, "shuffled_r2",       mpk.get("shuffled_r2_mean"))
+            elif "best_k_by_macro_f1" in rec:
+                # (2) PLS-DA ruler — full ruler set from best-macro_f1 config.
+                mpk = rec["metrics_per_k"][str(rec["best_k_by_macro_f1"])]
+                _push(slot, "accuracy",          mpk.get("accuracy_mean"))
+                _push(slot, "macro_f1",          mpk.get("macro_f1_mean"))
+                _push(slot, "weighted_f1",       mpk.get("weighted_f1_mean"))
+                _push(slot, "chance_accuracy",   mpk.get("chance_accuracy"))
+                _push(slot, "chance_macro_f1",   mpk.get("chance_macro_f1"))
+                _push(slot, "shuffled_accuracy", mpk.get("shuffled_accuracy_mean"))
+                _push(slot, "shuffled_macro_f1", mpk.get("shuffled_macro_f1_mean"))
+            elif "spearman_mean" in rec and "metrics_per_k" not in rec:
+                # (3) Ridge cls_numeric — top-level year metrics (older draws lack
+                #     mase/mdape/shuffled → .get skips them).
+                _push(slot, "spearman",          rec.get("spearman_mean"))
+                _push(slot, "r2",                rec.get("r2_mean"))
+                _push(slot, "mae",               rec.get("mae_mean"))
+                _push(slot, "mase",              rec.get("mase_mean"))
+                _push(slot, "mdape",             rec.get("mdape_mean"))
+                _push(slot, "shuffled_spearman", rec.get("shuffled_spearman_mean"))
+                _push(slot, "shuffled_r2",       rec.get("shuffled_r2_mean"))
+            elif "macro_f1_mean" in rec:
+                # (4) CLS logistic — ruler set (fit_cls_cv has no shuffled → N/A).
+                _push(slot, "accuracy",          rec.get("accuracy_mean"))
+                _push(slot, "macro_f1",          rec.get("macro_f1_mean"))
+                _push(slot, "weighted_f1",       rec.get("weighted_f1_mean"))
+                _push(slot, "chance_accuracy",   rec.get("chance_accuracy"))
+                _push(slot, "chance_macro_f1",   rec.get("chance_macro_f1"))
 
     summary_per_key: dict[str, Any] = {}
     for cfg_key, slot in per_key.items():
