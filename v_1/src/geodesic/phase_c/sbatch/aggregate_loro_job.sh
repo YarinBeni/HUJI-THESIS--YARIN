@@ -9,7 +9,7 @@
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
-git pull origin main || echo "WARNING"
+git pull --rebase origin main || echo "WARNING"
 
 mkdir -p v_1/src/geodesic/results/phase_c/logs
 python -u v_1/src/geodesic/phase_c/aggregate_loro.py

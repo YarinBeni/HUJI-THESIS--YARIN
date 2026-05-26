@@ -99,6 +99,142 @@ def run_layer(X_raw: np.ndarray, frag_idx: np.ndarray, years: np.ndarray,
     return result
 
 
+# ---------------------------------------------------------------------------
+# Balanced-Monte-Carlo helpers (C10)
+# ---------------------------------------------------------------------------
+
+def _parse_draw_range(s, n):
+    """Inclusive 'A-B' range -> list[int]. None => all n rows."""
+    if s is None:
+        return list(range(n))
+    a, b = s.split("-", 1)
+    return list(range(int(a), int(b) + 1))
+
+
+def _draw_positions(draws_matrix, draw_idx):
+    """Return integer positions (into parquet/activation row order) for one draw.
+
+    Mirrors `_draw_subset` in run_mc_probes.py: a draw row is either a boolean
+    mask over all corpus rows, or an int index array.
+    """
+    row = draws_matrix[draw_idx]
+    if row.dtype == bool:
+        return np.where(row)[0]
+    return row.astype(int)
+
+
+def _aggregate_draw_records(draw_records, n_draws):
+    """Aggregate per-draw isomap metrics into mean/std across draws.
+
+    `draw_records` = list of dicts each with the run_layer() isomap subdict
+    (only successful draws). Returns the balanced scoreboard fields.
+    """
+    def _collect(field):
+        vals = [r.get(field) for r in draw_records]
+        vals = [float(v) for v in vals
+                if v is not None and not (isinstance(v, float) and np.isnan(v))]
+        return vals
+
+    agg = {"n_draws": int(n_draws), "regime": "balanced"}
+    field_map = {
+        "isomap_spearman":        "spearman",
+        "isomap_pairwise_acc":    "pairwise_order_acc",
+        "isomap_neighbor_purity": "neighbor_purity",
+        "isomap_neighbor_sigma":  "neighbor_purity_sigma",
+    }
+    for out_name, src_field in field_map.items():
+        vals = _collect(src_field)
+        agg[f"{out_name}_mean"] = float(np.mean(vals)) if vals else None
+        agg[f"{out_name}_std"]  = float(np.std(vals))  if vals else None
+        agg[f"{out_name}_n"]    = len(vals)
+    return agg
+
+
+def run_balanced(acts_dir, parquet, args):
+    """C10 balanced mode: run the isomap readout per draw on ~168 fragments,
+    aggregate per (method,cleaning,pool,layer) across draws.
+
+    Writes geodesic_layer_scoreboard_balanced.json (SEPARATE from the
+    imbalanced scoreboard). Per-draw fits are deterministic (pca_l2 /
+    neighbor_purity reuse fixed random_state seeds), so a draw is reproducible.
+    """
+    import pandas as pd
+
+    draws_matrix = np.load(args.draws_matrix)
+    if draws_matrix.ndim != 2:
+        print(f"ERROR: draws_matrix must be 2D, got {draws_matrix.shape}")
+        sys.exit(1)
+    n_total = draws_matrix.shape[0]
+
+    fragment_order = json.loads(Path(args.fragment_order).read_text())
+    df = pd.read_parquet(parquet)
+    if len(df) != len(fragment_order):
+        print(f"ERROR: corpus length {len(df)} != fragment_order length "
+              f"{len(fragment_order)}")
+        sys.exit(1)
+    if len(df) != draws_matrix.shape[1]:
+        print(f"ERROR: draws_matrix width {draws_matrix.shape[1]} != corpus "
+              f"length {len(df)}")
+        sys.exit(1)
+
+    years_all = df["year"].values.astype(float)
+    draw_idxs = _parse_draw_range(args.draw_range, n_total)
+    print(f"Balanced mode: {len(draw_idxs)} draws "
+          f"(range {draw_idxs[0]}..{draw_idxs[-1]} of {n_total})")
+
+    layers = available_layers(acts_dir)
+    print(f"Layers   : {layers}")
+
+    out_dir = ROOT / args.output_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_file = out_dir / "geodesic_layer_scoreboard_balanced.json"
+
+    records = []
+    for layer in layers:
+        try:
+            X_raw = load_layer(acts_dir, layer)
+        except Exception as e:
+            print(f"  L{layer:02d}: load failed: {e}")
+            records.append({
+                "method": args.method, "cleaning": args.cleaning,
+                "pool": args.pool, "layer": int(layer),
+                "regime": "balanced", "error": str(e),
+            })
+            # keep going so other layers / arg-plumbing still work
+            continue
+
+        per_draw = []
+        k_used_vals = []
+        for di in draw_idxs:
+            pos = _draw_positions(draws_matrix, di)
+            y_draw = years_all[pos]
+            res = run_layer(X_raw, pos, y_draw, n_perm=args.n_perm)
+            iso = res.get("isomap", {})
+            if "error" in iso or not iso:
+                continue
+            per_draw.append(iso)
+            if res.get("k_used") is not None:
+                k_used_vals.append(int(res["k_used"]))
+
+        agg = _aggregate_draw_records(per_draw, len(per_draw))
+        agg.update({
+            "method":   args.method,
+            "cleaning": args.cleaning,
+            "pool":     args.pool,
+            "layer":    int(layer),
+            "k_used":   int(np.round(np.median(k_used_vals))) if k_used_vals else None,
+        })
+        records.append(agg)
+        print(f"  L{layer:02d}: balanced isomap pacc_mean="
+              f"{agg.get('isomap_pairwise_acc_mean')}  n_draws={agg['n_draws']}",
+              flush=True)
+        # incremental write (resumable-friendly: re-running overwrites cleanly)
+        out_file.write_text(json.dumps(records, indent=2))
+
+    out_file.write_text(json.dumps(records, indent=2))
+    print(f"\nDone (balanced) → {out_file}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--method",      required=True)
@@ -108,9 +244,29 @@ def main():
     ap.add_argument("--parquet",     default="v_1/data/evaluation/corpora/orcc_corpus.parquet")
     ap.add_argument("--n-perm",      type=int, default=50,
                     help="Permutations for neighbor-purity null (50 for speed in B; 500 for final)")
+    # ---- C10 balanced-Monte-Carlo flags (all optional; absent => imbalanced) ----
+    ap.add_argument("--draws-matrix", default=None,
+                    help="Path to draws_matrix.npy (N_draws, N_corpus). "
+                         "If set, run in BALANCED mode.")
+    ap.add_argument("--fragment-order", default=None,
+                    help="Path to corpus_fragment_order.json (parquet row order).")
+    ap.add_argument("--draw-range", default=None,
+                    help="Inclusive draw index range 'A-B' (default: all draws).")
     args = ap.parse_args()
 
     acts_dir = find_acts_dir(args.method, args.cleaning, args.pool)
+
+    # ---- Balanced mode branch (reached BEFORE missing-acts error) ----
+    if args.draws_matrix is not None:
+        print(f"=== BALANCED mode (C10) for {args.method}/{args.cleaning}/{args.pool} ===")
+        if acts_dir is None:
+            print(f"SKIP: activations not found for {args.method}/{args.cleaning}/{args.pool}")
+            sys.exit(0)
+        print(f"Acts dir : {acts_dir}")
+        run_balanced(acts_dir, ROOT / args.parquet, args)
+        return
+
+    # ---- Imbalanced mode (unchanged) ----
     if acts_dir is None:
         print(f"SKIP: activations not found for {args.method}/{args.cleaning}/{args.pool}")
         sys.exit(0)

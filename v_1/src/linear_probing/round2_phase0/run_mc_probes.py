@@ -110,10 +110,9 @@ SEAL_PARQUET = _REPO_ROOT / "v_1/data/evaluation/corpora/seal_corpus.parquet"
 
 # Activation roots (gitignored, present on cluster). Override via --activations-base.
 ACTS_BASE_DEFAULT = _PROBES_DIR / "results"
-QWEN_ORCC_DIR     = "qwen_tier0_mean"      # matches Round-1 layout
-MLM_ORCC_DIR      = "mlm_tier0"
-# Random-init Qwen activations (extract_random_tier0.sh writes to this dir).
-RANDOM_ORCC_DIR   = "random_tier0_mean"
+# Activation-dir leaf names are now built at runtime from <model>_<cleaning>_<pooling>
+# by _act_dir_suffix(). For the default (tier0, mean) this reproduces the historical
+# hardcoded layout: qwen_tier0_mean, random_tier0_mean (and mlm_tier0 — mean-only).
 
 QWEN_N_LAYERS   = 29       # L00..L28
 MLM_N_LAYERS    = 17       # L00..L16
@@ -131,19 +130,49 @@ QWEN3_1B7_N_LAYERS  = 29   # Qwen3-1.7B:  28 transformer + embedding (L00..L28)
 QWEN3_8B_N_LAYERS   = 37   # Qwen3-8B:    36 transformer + embedding (L00..L36)
 QWEN3_32B_N_LAYERS  = 65   # Qwen3-32B:   64 transformer + embedding (L00..L64)
 
-# Per-method (subdir under acts_base, activation-dir name).
-# Used by _load_orcc_activations to dispatch per method.
-ACT_PATH_MAP: dict[str, tuple[str, str]] = {
-    "qwen":                ("orcc_round1/activations", QWEN_ORCC_DIR),
-    "mlm":                 ("orcc_round1/activations", MLM_ORCC_DIR),
-    "random":              ("orcc_round1/activations", RANDOM_ORCC_DIR),
-    "thalesian_akk300m":   ("orcc__embed/activations", "thalesian_akk300m_tier0_mean"),
-    "thalesian_cunei400m": ("orcc__embed/activations", "thalesian_cunei400m_tier0_mean"),
-    # Phase E1: Qwen3 scale sweep — tier0/mean only (MC standard)
-    "qwen3_1b7":           ("orcc__embed/activations", "qwen3_1b7_tier0_mean"),
-    "qwen3_8b":            ("orcc__embed/activations", "qwen3_8b_tier0_mean"),
-    "qwen3_32b":          ("orcc__embed/activations", "qwen3_32b_tier0_mean"),
+# Per-method base-path dispatch (subdir under acts_base). The activation-dir
+# leaf name is built at runtime from <model>_<cleaning>_<pooling> by
+# _act_dir_suffix(); see _load_orcc_activations. mlm uses a different model
+# stem ("mlm") that historically also lacks the pooling suffix for its tier0
+# dir, but C3 only sweeps qwen3_*/random for last-token, so the parameterized
+# leaf <method>_<cleaning>_<pooling> is correct for every swept method and
+# byte-identical to the old map for the default (tier0, mean) case.
+#
+# NOTE on mlm: mlm is mean-only / tier0-only (masked-LM encoder, no last-token).
+# A `--pooling last` mlm request resolves to a non-existent dir →
+# _load_orcc_activations returns None → "no activations, skip" path. No special
+# casing needed.
+ACT_BASE_MAP: dict[str, str] = {
+    "qwen":                "orcc_round1/activations",
+    "mlm":                 "orcc_round1/activations",
+    "random":              "orcc__embed/activations",
+    "thalesian_akk300m":   "orcc__embed/activations",
+    "thalesian_cunei400m": "orcc__embed/activations",
+    # Phase E1: Qwen3 scale sweep
+    "qwen3_1b7":           "orcc__embed/activations",
+    "qwen3_8b":            "orcc__embed/activations",
+    "qwen3_32b":           "orcc__embed/activations",
 }
+
+# Runtime pooling/cleaning for activation-based probes. Set by main() from the
+# --cleaning / --pooling CLI flags. Defaults reproduce Round-1 layout exactly.
+_CLEANING: str = "tier0"
+_POOLING: str = "mean"
+
+
+def _act_dir_suffix(method: str) -> str:
+    """Build the activation-dir leaf name `<model>_<cleaning>_<pooling>`.
+
+    For the default (tier0, mean) this reproduces the historical hardcoded
+    names: qwen_tier0_mean, random_tier0_mean, qwen3_8b_tier0_mean, etc.
+    The `mlm` tier0 dir was historically `mlm_tier0` (no pooling suffix); mlm
+    is mean/tier0-only and not part of the C3 last-token sweep, so we special
+    case it to preserve byte-identical backward compatibility.
+    """
+    if method == "mlm":
+        # mlm dir is `mlm_<cleaning>` (no pooling token) — mean-only encoder.
+        return f"mlm_{_CLEANING}"
+    return f"{method}_{_CLEANING}_{_POOLING}"
 
 # PLS hyper-params: mirror Round 1 sweep (1,2,3,5). With N=168 a 5-split CV is
 # easy. Year transforms: raw,log to match Round 1.
@@ -195,6 +224,14 @@ def parse_args() -> argparse.Namespace:
     _add_dual(p, "layers", type=str, default="0,4,10,15,22,28",
               help="Comma-separated layer indices for mlm/qwen/random probes "
                    "(default: '0,4,10,15,22,28'). Pass 'all' to scan every layer.")
+    _add_dual(p, "pooling", type=str, default="mean", choices=["mean", "last"],
+              help="Activation pooling for mlm/qwen/random/qwen3_*/thalesian_* "
+                   "probes: 'mean' (default) or 'last' (last-token). TF-IDF "
+                   "probes ignore this flag.")
+    _add_dual(p, "cleaning", type=str, default="tier0", choices=["tier0", "maximal"],
+              help="Cleaning tier for activation-based probes: 'tier0' (default) "
+                   "or 'maximal'. TF-IDF probes loop both internally and ignore "
+                   "this flag.")
     _add_dual(p, "n-jobs", type=int, default=1,
               help="Worker threads for the per-layer parallel sweep (default 1 = "
                    "sequential). Set to $SLURM_CPUS_PER_TASK and run with "
@@ -215,7 +252,7 @@ def _parse_range(s: str | None, n: int) -> list[int]:
 # Activation loading (cached across draws)
 # ---------------------------------------------------------------------------
 
-_ACT_CACHE: dict[tuple[str, int], np.ndarray] = {}
+_ACT_CACHE: dict[tuple[str, int, str, str], np.ndarray] = {}
 
 # Optional layer subset for activation-based probes (mlm/qwen/random). Set by
 # main() from --layers. None means "all layers".
@@ -252,15 +289,19 @@ def _parallel_layers(layer_iter, worker) -> dict:
 
 def _load_orcc_activations(method: str, layer: int, acts_base: Path) -> np.ndarray | None:
     """Load full-ORCC activations for a method+layer. Returns None if missing."""
-    key = (method, layer)
+    # Cache key includes runtime cleaning/pooling so mean and last activations
+    # for the same (method, layer) never collide in the cache.
+    key = (method, layer, _CLEANING, _POOLING)
     if key in _ACT_CACHE:
         return _ACT_CACHE[key]
-    if method not in ACT_PATH_MAP:
-        raise ValueError(f"Unknown method {method}; known: {list(ACT_PATH_MAP)}")
-    subpath, dirname = ACT_PATH_MAP[method]
-    # Try the canonical path first. For Round-1 methods (qwen/mlm/random) some
-    # clusters keep them at the legacy orcc__embed/ path instead of the renamed
-    # orcc_round1/ — try that as a fallback.
+    if method not in ACT_BASE_MAP:
+        raise ValueError(f"Unknown method {method}; known: {list(ACT_BASE_MAP)}")
+    subpath = ACT_BASE_MAP[method]
+    dirname = _act_dir_suffix(method)
+    # Try the canonical path first. For Round-1 methods (qwen/mlm) some clusters
+    # keep them at the legacy orcc__embed/ path instead of the renamed
+    # orcc_round1/ — try that as a fallback. (random already lives under
+    # orcc__embed; C1 writes random_<cleaning>_<pooling> there.)
     candidates = [acts_base / subpath / dirname / f"layer_{layer:02d}.npz"]
     if subpath.startswith("orcc_round1"):
         candidates.append(acts_base / "orcc__embed" / "activations" / dirname / f"layer_{layer:02d}.npz")
@@ -426,8 +467,8 @@ def _run_acts_pls(method: str, n_layers: int,
 
     The per-layer body is parallelized across threads via _parallel_layers.
     """
-    pooling   = "mean"
-    cleaning  = "tier0"
+    pooling   = _POOLING
+    cleaning  = _CLEANING
     layer_iter = _LAYER_SUBSET if _LAYER_SUBSET is not None else range(n_layers)
     layer_iter = [layer for layer in layer_iter if layer < n_layers]
 
@@ -504,8 +545,8 @@ def _run_acts_pls(method: str, n_layers: int,
 def _run_acts_cls(method: str, n_layers: int,
                   orcc_positions, y_raw, y_log, y_ruler,
                   acts_base: Path) -> dict:
-    pooling   = "mean"
-    cleaning  = "tier0"
+    pooling   = _POOLING
+    cleaning  = _CLEANING
     y_year_str = np.array([str(int(y)) for y in y_raw])
     layer_iter = _LAYER_SUBSET if _LAYER_SUBSET is not None else range(n_layers)
     layer_iter = [layer for layer in layer_iter if layer < n_layers]
@@ -533,8 +574,8 @@ def _run_acts_ridge_year(method: str, n_layers: int,
                          orcc_positions, y_raw, y_log, y_ruler,
                          acts_base: Path) -> dict:
     """Ridge regression for year (cls_numeric probe). GroupKFold by ruler."""
-    pooling  = "mean"
-    cleaning = "tier0"
+    pooling  = _POOLING
+    cleaning = _CLEANING
     layer_iter = _LAYER_SUBSET if _LAYER_SUBSET is not None else range(n_layers)
     layer_iter = [layer for layer in layer_iter if layer < n_layers]
 
@@ -710,9 +751,18 @@ def _aggregate_summary(out_dir: Path, probe: str, method_tag: str) -> dict:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    global _LAYER_SUBSET, _N_JOBS
+    global _LAYER_SUBSET, _N_JOBS, _CLEANING, _POOLING
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Runtime pooling/cleaning for activation-based probes (mlm/qwen/random/
+    # qwen3_*/thalesian_*). Feeds the activation-dir leaf name, the recorded
+    # cleaning/pooling fields, and the config_key. Defaults (tier0/mean) keep
+    # paths + keys byte-identical to Round 1.
+    _CLEANING = str(getattr(args, "cleaning", "tier0"))
+    _POOLING = str(getattr(args, "pooling", "mean"))
+    print(f"[acts] cleaning={_CLEANING} pooling={_POOLING} "
+          f"(activation-dir leaf = <model>_{_CLEANING}_{_POOLING})")
 
     _N_JOBS = max(1, int(getattr(args, "n_jobs", 1)))
     print(f"[n-jobs] per-layer parallel sweep using {_N_JOBS} thread(s)")

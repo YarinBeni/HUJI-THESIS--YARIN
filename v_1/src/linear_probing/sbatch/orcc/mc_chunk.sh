@@ -28,7 +28,7 @@ export NUMEXPR_NUM_THREADS=1
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
-git pull origin main || echo "WARN: git pull failed"
+git pull --rebase origin main || echo "WARN: git pull failed"
 
 mkdir -p v_1/src/linear_probing/logs
 mkdir -p v_1/src/linear_probing/results/orcc_round2_phase0/probes
@@ -38,7 +38,22 @@ mkdir -p v_1/src/linear_probing/results/orcc_round2_phase0/probes
 PROBES="${PROBES:-${MODEL}_pls,${MODEL}_cls,${MODEL}_cls_numeric}"
 NJOBS="${SLURM_CPUS_PER_TASK:-8}"
 
-echo "=== MC chunk: ${MODEL} draws ${DRAW_START}-${DRAW_END} ==="
+# Pooling / cleaning selectors (C3 last-token sweep). Default mean/tier0 keeps
+# all existing fan-out behaviour byte-for-byte identical. run_mc_probes.py reads
+# the matching <model>_<cleaning>_<pooling> activation dirs and tags its output
+# JSON filenames so mean and last draws never collide.
+POOLING="${POOLING:-mean}"
+CLEANING="${CLEANING:-tier0}"
+
+# Distinct output-filename tag for non-default (cleaning,pooling) so last-token /
+# maximal draws never overwrite the existing mean/tier0 draws (which use the
+# bare `mc_balanced` tag). Default mean/tier0 keeps the historical tag exactly.
+TAG="mc_balanced"
+[ "$CLEANING" != "tier0" ] && TAG="${TAG}_${CLEANING}"
+[ "$POOLING"  != "mean"  ] && TAG="${TAG}_${POOLING}"
+METHOD_TAG="${METHOD_TAG:-$TAG}"
+
+echo "=== MC chunk: ${MODEL} draws ${DRAW_START}-${DRAW_END} pool=${POOLING} clean=${CLEANING} tag=${METHOD_TAG} ==="
 echo "Job: ${SLURM_JOB_ID}  Node: $(hostname)  CPUs: ${NJOBS}  Start: $(date)"
 echo "Probes: ${PROBES}"
 
@@ -49,7 +64,10 @@ python -u v_1/src/linear_probing/round2_phase0/run_mc_probes.py \
     --probes         "$PROBES" \
     --layers         all \
     --draws-range    "${DRAW_START}-${DRAW_END}" \
+    --pooling        "$POOLING" \
+    --cleaning       "$CLEANING" \
+    --method-tag     "$METHOD_TAG" \
     --n-jobs         "$NJOBS" \
-    || { echo "FAILED: ${MODEL} chunk ${DRAW_START}-${DRAW_END}"; exit 1; }
+    || { echo "FAILED: ${MODEL} chunk ${DRAW_START}-${DRAW_END} (${POOLING}/${CLEANING})"; exit 1; }
 
-echo "=== Chunk done: ${MODEL} ${DRAW_START}-${DRAW_END}  End: $(date) ==="
+echo "=== Chunk done: ${MODEL} ${DRAW_START}-${DRAW_END} ${POOLING}/${CLEANING}  End: $(date) ==="

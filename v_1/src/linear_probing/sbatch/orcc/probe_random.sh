@@ -16,12 +16,13 @@ echo "Job ID: $SLURM_JOB_ID"; echo "Node: $(hostname)"; echo "Start: $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
-git pull origin main || echo "WARNING: git pull failed"
+git pull --rebase origin main || echo "WARNING: git pull failed"
 
 mkdir -p v_1/src/linear_probing/logs \
          v_1/src/linear_probing/results/orcc__probe_cls \
          v_1/src/linear_probing/results/orcc__probe_pls \
-         v_1/src/linear_probing/results/orcc__probe_cls_numeric
+         v_1/src/linear_probing/results/orcc__probe_cls_numeric \
+         v_1/src/geodesic/results/phase_b/logs
 
 export OMP_NUM_THREADS=1
 for cleaning in tier0 maximal; do
@@ -36,10 +37,29 @@ for cleaning in tier0 maximal; do
     done
 done
 
+# --- Imbalanced geodesic scan for random (matches the qwen3 4-combo sweep) ---
+# scan.py writes phase_b_random_<cleaning>_<pool>.json; random is a full
+# qwen3-8b-init, so it gets the same tier0+maximal x mean+last sweep the other
+# neural models got in phase_b/sbatch/submit_all.sh.
+echo ""; echo "=== C2 geodesic scan: random (imbalanced) ==="
+for cleaning in tier0 maximal; do
+    for pool in mean last; do
+        echo ""; echo "--- geodesic scan random / $cleaning / $pool ---"
+        python -u v_1/src/geodesic/phase_b/scan.py \
+            --method   random \
+            --cleaning "$cleaning" \
+            --pool     "$pool" \
+            --output-dir v_1/src/geodesic/results/phase_b \
+            || { echo "FAILED: geodesic scan random / $cleaning / $pool"; exit 1; }
+    done
+done
+
 git add v_1/src/linear_probing/results/orcc__probe_cls/cls_results_random.json \
         v_1/src/linear_probing/results/orcc__probe_pls/pls_results_random.json \
-        v_1/src/linear_probing/results/orcc__probe_cls_numeric/cls_numeric_results_random.json
-git commit -m "Round-3 C2: random (qwen3-8b-init) imbalanced CLS+PLS+Ridge (job $SLURM_JOB_ID)" || true
+        v_1/src/linear_probing/results/orcc__probe_cls_numeric/cls_numeric_results_random.json \
+        v_1/src/geodesic/results/phase_b/phase_b_random_*.json
+git commit -m "Round-3 C2: random (qwen3-8b-init) imbalanced CLS+PLS+Ridge + geodesic scan (job $SLURM_JOB_ID)" || true
+git pull --rebase origin main || true
 git push origin main || echo "WARNING: git push failed"
 
 echo "=== Done ==="; echo "End: $(date)"
