@@ -1,6 +1,6 @@
 {
   "thalesian_cunei400m": {
-    "fullset_pls": [
+    "imbalanced_pls": [
       0.4670254104250972,
       75.09736410568955,
       12,
@@ -8,7 +8,7 @@
       "mean",
       "k=2"
     ],
-    "fullset_ridge": null,
+    "imbalanced_ridge": null,
     "mc_pls": [
       0.4111424440656039,
       0.06401486249775726,
@@ -26,7 +26,7 @@
     ]
   },
   "thalesian_akk300m": {
-    "fullset_pls": [
+    "imbalanced_pls": [
       0.43462672784512885,
       76.53883748559885,
       7,
@@ -34,7 +34,7 @@
       "mean",
       "k=3"
     ],
-    "fullset_ridge": null,
+    "imbalanced_ridge": null,
     "mc_pls": [
       0.3444617997167807,
       0.061683422621417565,
@@ -52,7 +52,7 @@
     ]
   },
   "mlm": {
-    "fullset_pls": [
+    "imbalanced_pls": [
       -0.11543424232238798,
       139.51063108544346,
       2,
@@ -60,7 +60,7 @@
       "mean",
       "k=2"
     ],
-    "fullset_ridge": null,
+    "imbalanced_ridge": null,
     "mc_pls": [
       0.4235565353326363,
       0.059444373862113035,
@@ -84,8 +84,22 @@
     ]
   },
   "tfidf": {
-    "fullset_pls": null,
-    "fullset_ridge": null,
+    "imbalanced_pls": [
+      0.5013040567764927,
+      74.19865826986988,
+      0,
+      "tier0",
+      "na",
+      "k=5"
+    ],
+    "imbalanced_ridge": [
+      0.46612316322261443,
+      74.51508181453482,
+      0,
+      "tier0",
+      "na",
+      "ridge"
+    ],
     "mc_pls": [
       0.4069432059196305,
       0.06436343667259688,
@@ -108,40 +122,8 @@
       "na"
     ]
   },
-  "qwen": {
-    "fullset_pls": [
-      0.12075099705060227,
-      128.33875221882568,
-      5,
-      "tier0",
-      "mean",
-      "k=5"
-    ],
-    "fullset_ridge": null,
-    "mc_pls": [
-      0.3975203943393854,
-      0.07854373602446096,
-      "L06",
-      "tier0",
-      "mean"
-    ],
-    "mc_ridge": [
-      0.32661864273990354,
-      0.06872807840151782,
-      "L03",
-      "tier0",
-      "mean"
-    ],
-    "mc_ruler": [
-      0.3632391451245263,
-      0.0416921561024908,
-      "L03",
-      "tier0",
-      "mean"
-    ]
-  },
   "qwen3_1b7": {
-    "fullset_pls": [
+    "imbalanced_pls": [
       0.48428206512244,
       75.12511407434027,
       6,
@@ -149,7 +131,7 @@
       "mean",
       "k=3"
     ],
-    "fullset_ridge": [
+    "imbalanced_ridge": [
       0.4436986421307096,
       80.64961114838398,
       2,
@@ -180,7 +162,7 @@
     ]
   },
   "qwen3_8b": {
-    "fullset_pls": [
+    "imbalanced_pls": [
       0.4819717760556263,
       77.79350577811691,
       26,
@@ -188,7 +170,7 @@
       "mean",
       "k=3"
     ],
-    "fullset_ridge": [
+    "imbalanced_ridge": [
       0.4392725763921376,
       81.65358418361514,
       2,
@@ -219,7 +201,7 @@
     ]
   },
   "qwen3_32b": {
-    "fullset_pls": [
+    "imbalanced_pls": [
       0.5104678804608147,
       74.69539099928856,
       26,
@@ -227,7 +209,7 @@
       "mean",
       "k=3"
     ],
-    "fullset_ridge": [
+    "imbalanced_ridge": [
       0.4293578667352194,
       84.46385955549812,
       62,
@@ -258,7 +240,7 @@
     ]
   },
   "random": {
-    "fullset_pls": [
+    "imbalanced_pls": [
       0.1843457965312867,
       127.86602687065243,
       12,
@@ -266,7 +248,7 @@
       "mean",
       "k=2"
     ],
-    "fullset_ridge": null,
+    "imbalanced_ridge": null,
     "mc_pls": null,
     "mc_ridge": null,
     "mc_ruler": null

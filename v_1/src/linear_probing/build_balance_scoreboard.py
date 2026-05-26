@@ -10,7 +10,7 @@ Readouts:
   - ruler_cls   : ruler classification (Macro-F1)
 
 Sources:
-  full set   : orcc__probe_pls/pls_results_<m>.json            (PLS, metrics_per_k)
+  imbalanced : orcc__probe_pls/pls_results_<m>.json            (PLS, metrics_per_k)
                orcc__probe_cls_numeric/cls_numeric_results_<m>.json (Ridge)
                orcc_round2_phase0/aggregated/phase0_summary.json (R1 ruler Macro-F1)
   balanced MC: orcc_round2_phase0/probes/<m>_<probe>__mc_balanced__summary.json
@@ -27,16 +27,17 @@ PLS_DIR = RES / "orcc__probe_pls"
 RIDGE_DIR = RES / "orcc__probe_cls_numeric"
 MC_DIR = RES / "orcc_round2_phase0/probes"
 
+# qwen2.5 ("qwen") dropped from the Round-3 write-up (2026-05-26): qwen3-only set.
 MODELS = ["thalesian_cunei400m", "thalesian_akk300m", "mlm", "tfidf",
-          "qwen", "qwen3_1b7", "qwen3_8b", "qwen3_32b", "random"]
+          "qwen3_1b7", "qwen3_8b", "qwen3_32b", "random"]
 
 
 def _finite(x):
     return x is not None and isinstance(x, (int, float)) and math.isfinite(x)
 
 
-# ---- full-set PLS: best year-raw Spearman over (cleaning,pool,layer,k) -------
-def fullset_pls(model):
+# ---- imbalanced PLS: best year-raw Spearman over (cleaning,pool,layer,k) -------
+def imbalanced_pls(model):
     p = PLS_DIR / f"pls_results_{model}.json"
     if not p.exists():
         return None
@@ -53,8 +54,8 @@ def fullset_pls(model):
     return best  # (sp, mae, layer, cleaning, pool, k)
 
 
-# ---- full-set Ridge: best year-raw Spearman over (cleaning,pool,layer) -------
-def fullset_ridge(model):
+# ---- imbalanced Ridge: best year-raw Spearman over (cleaning,pool,layer) -------
+def imbalanced_ridge(model):
     p = RIDGE_DIR / f"cls_numeric_results_{model}.json"
     if not p.exists():
         return None
@@ -125,12 +126,12 @@ def main():
     out = {}
     rows_year, rows_ridge, rows_ruler = [], [], []
     for m in MODELS:
-        fp, fr = fullset_pls(m), fullset_ridge(m)
+        fp, fr = imbalanced_pls(m), imbalanced_ridge(m)
         bp = mc_best(m, "pls", "year")
         br = mc_best(m, "cls_numeric", "year")
         # balanced ruler: prefer cls probe, fall back to pls's ruler config
         bru = mc_best(m, "cls", "ruler") or mc_best(m, "pls", "ruler")
-        out[m] = dict(fullset_pls=fp, fullset_ridge=fr, mc_pls=bp,
+        out[m] = dict(imbalanced_pls=fp, imbalanced_ridge=fr, mc_pls=bp,
                       mc_ridge=br, mc_ruler=bru)
         rows_year.append((m, fp, bp))
         rows_ridge.append((m, fr, br))
@@ -140,7 +141,7 @@ def main():
     (RES / "balanced_mc_scoreboard.json").write_text(json.dumps(out, indent=2))
     with open(RES / "balanced_mc_scoreboard.csv", "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["model", "readout", "fullset_sp_or_f1", "fullset_detail",
+        w.writerow(["model", "readout", "imbalanced_sp_or_f1", "imbalanced_detail",
                     "balanced_mean", "balanced_std", "balanced_detail"])
         for m, fp, bp in rows_year:
             w.writerow([m, "year_pls", fp[0] if fp else "", fp[2:] if fp else "",
@@ -152,7 +153,7 @@ def main():
     def ptable(title, rows, kind):
         print(f"\n### {title}")
         if kind == "year":
-            print("| Model | Full-set Sp | best layer/cfg | Balanced Sp ± std | Δ (bal−full) |")
+            print("| Model | Imbalanced Sp | best layer/cfg | Balanced Sp ± std | Δ (bal−imb) |")
             print("|---|---|---|---|---|")
             srt = sorted(rows, key=lambda r: -(r[2][0] if r[2] else -9))
             for m, fs, bal in srt:

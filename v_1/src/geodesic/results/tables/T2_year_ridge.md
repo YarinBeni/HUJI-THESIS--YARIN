@@ -4,8 +4,8 @@
 activation vector — a single-direction readout, simpler than PLS.
 
 **Data & split:** same as Test 1 (mean-pooled activations, 5-fold GroupKFold by ruler).
-`fullset` Ridge was only run for the qwen3_* models; `balanced` exists for every model that
-has a `*_cls_numeric` MC summary (mlm, tfidf, qwen, qwen3_*).
+`imbalanced` Ridge was only run for the qwen3_* models; `balanced` exists for every model that
+has a `*_cls_numeric` MC summary (mlm, tfidf, qwen3_*).
 
 **CSV `T2_year_ridge.csv`** — one row per (regime, model, cleaning, pool, layer, year_transform).
 Metrics: Spearman, R2, MAE. Headline = `regime=balanced, year_transform=raw`.

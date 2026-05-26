@@ -22,8 +22,13 @@ OUT.mkdir(exist_ok=True)
 PLS_DIR = RES / "orcc__probe_pls"
 RIDGE_DIR = RES / "orcc__probe_cls_numeric"
 MC_DIR = RES / "orcc_round2_phase0/probes"
+# qwen2.5 ("qwen") was dropped from the Round-3 write-up (2026-05-26): the model
+# set is qwen3-only, with random = a random-init qwen3_8b. Excluded everywhere
+# below, including the geodesic/LORO/Phase-D scoreboards where it was the former
+# flagship (the headline manifold is now qwen3_1b7).
+DROP_MODELS = {"qwen"}
 MODELS = ["thalesian_cunei400m", "thalesian_akk300m", "mlm", "tfidf",
-          "qwen", "qwen3_1b7", "qwen3_8b", "qwen3_32b", "random"]
+          "qwen3_1b7", "qwen3_8b", "qwen3_32b", "random"]
 
 
 def num(x):
@@ -61,7 +66,7 @@ def test1_year_pls():
                 continue
             yt = rec.get("year_transform")
             for k, mm in rec.get("metrics_per_k", {}).items():
-                rows.append(["fullset", m, rec.get("cleaning"), rec.get("pooling"),
+                rows.append(["imbalanced", m, rec.get("cleaning"), rec.get("pooling"),
                              rec.get("layer"), yt, k,
                              num(mm.get("spearman_mean")), num(mm.get("spearman_std")),
                              num(mm.get("r2_mean")), num(mm.get("r2_std")),
@@ -92,14 +97,14 @@ activation vectors that best predict the year, then linearly regresses year on t
 Supervised. "best layer" = the model layer whose activations predict year best.
 
 **Data & split:** mean-pooled fragment activations. 5-fold **GroupKFold grouped by ruler**
-(every fold tests on rulers it never trained on). `fullset` = all 1,193 year-labeled
+(every fold tests on rulers it never trained on). `imbalanced` = all 1,193 year-labeled
 fragments; `balanced` = 200 MC draws of 168 frags (8 rulers x 21), reported mean/std over draws.
 
 **CSV `T1_year_pls.csv`** — one row per (regime, model, cleaning, pool, layer, year_transform, k).
-Metrics: Spearman, R2, MAE (yr), MASE, MdAPE, and shuffled-label baselines (fullset only).
-`k` = number of PLS components (fullset only). `n_valid_folds` < `n_total_folds` flags folds where
+Metrics: Spearman, R2, MAE (yr), MASE, MdAPE, and shuffled-label baselines (imbalanced only).
+`k` = number of PLS components (imbalanced only). `n_valid_folds` < `n_total_folds` flags folds where
 a held-out ruler spanned a single date (Spearman undefined) — common on the imbalanced full set,
-which is why some fullset numbers are degenerate. Filter `year_transform=raw` for the headline.
+which is why some imbalanced numbers are degenerate. Filter `year_transform=raw` for the headline.
 """)
 
 
@@ -116,7 +121,7 @@ def test2_year_ridge():
         for key, rec in json.load(open(p)).items():
             if not (key.endswith("year-raw") or key.endswith("year-log")):
                 continue
-            rows.append(["fullset", m, rec.get("cleaning"), rec.get("pooling"),
+            rows.append(["imbalanced", m, rec.get("cleaning"), rec.get("pooling"),
                          rec.get("layer"), rec.get("year_transform"),
                          num(rec.get("spearman_mean")), num(rec.get("spearman_std")),
                          num(rec.get("r2_mean")), num(rec.get("r2_std")),
@@ -141,8 +146,8 @@ def test2_year_ridge():
 activation vector — a single-direction readout, simpler than PLS.
 
 **Data & split:** same as Test 1 (mean-pooled activations, 5-fold GroupKFold by ruler).
-`fullset` Ridge was only run for the qwen3_* models; `balanced` exists for every model that
-has a `*_cls_numeric` MC summary (mlm, tfidf, qwen, qwen3_*).
+`imbalanced` Ridge was only run for the qwen3_* models; `balanced` exists for every model that
+has a `*_cls_numeric` MC summary (mlm, tfidf, qwen3_*).
 
 **CSV `T2_year_ridge.csv`** — one row per (regime, model, cleaning, pool, layer, year_transform).
 Metrics: Spearman, R2, MAE. Headline = `regime=balanced, year_transform=raw`.
@@ -159,6 +164,8 @@ def test3_ruler():
            "balanced_mc_macro_f1_median", "balanced_mc_layer", "n_draws"]
     rows = []
     for e in lb:
+        if e.get("method") in DROP_MODELS:
+            continue
         r1, mc = e.get("r1") or {}, e.get("mc") or {}
         rows.append([e.get("method"), e.get("display"), e.get("cleaning"), e.get("pooling"),
                      num(r1.get("macro_f1")), num(r1.get("accuracy")), r1.get("best_layer"),
@@ -191,7 +198,8 @@ def test4_geodesic():
              r.get("k_used"),
              num(r.get("isomap_spearman")), num(r.get("isomap_pairwise_acc")),
              num(r.get("isomap_neighbor_purity")), num(r.get("isomap_neighbor_sigma")),
-             num(r.get("ebin_spearman")), num(r.get("ebin_pairwise_acc"))] for r in d]
+             num(r.get("ebin_spearman")), num(r.get("ebin_pairwise_acc"))]
+            for r in d if r.get("method") not in DROP_MODELS]
     write_csv("T4_geodesic.csv", hdr, rows)
     write_md("T4_geodesic.md", """# Test 4 — Geodesic / Isomap manifold (unsupervised)
 
@@ -216,6 +224,7 @@ def test5_loro():
     d = json.load(open(GEO / "loro_robustness.json"))
     hdr = ["method", "cleaning", "pool", "layer", "pacc_full",
            "pacc_loro_mean", "drop", "n_rulers"]
+    d = [r for r in d if r["method"] not in DROP_MODELS]
     rows = [[r["method"], r["cleaning"], r["pool"], r["layer"],
              num(r["pacc_full"]), num(r["pacc_loro_mean"]), num(r["drop"]),
              r["n_rulers"]] for r in d]
@@ -252,6 +261,8 @@ def test6_phase_d():
     rows = []
     for f in sorted(glob.glob(str(GEO / "phase_d/*_metrics.json"))):
         r = json.load(open(f))
+        if r.get("method") in DROP_MODELS:
+            continue
         rows.append([r.get("method"), r.get("cleaning"), r.get("pool"), r.get("layer"),
                      num(r.get("geodesic_spearman")), num(r.get("pairwise_order_acc")),
                      num(r.get("arc_length_spearman")), r.get("n_bins"),
