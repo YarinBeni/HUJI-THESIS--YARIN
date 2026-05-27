@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 1,
+  "input_value": "Esarhaddon III",
+  "fill": {
+    "ruler": "Esarhaddon III"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Esarhaddon III reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's see. The user is asking about Esarhaddon III's reign dates. First, I need to check if there's a ruler by that name in the Akkadian, Assyrian, or Babylonian periods.\n\nWait, Esarhaddon is a known Assyrian king. But the user added \"III\" after his name. Typically, Assyrian kings don't have regnal numbers like that. The main Esarhaddon ruled from 681 to 668 BCE. He was the son of Sennacherib. There's no record of an Esarhaddon III in Assyrian history. Maybe the user confused the numbering with another dynasty or a different culture. \n\nAlso, Babylonian and Akkadian rulers don't have that name. So, the \"III\" might be a mistake. Since there's no evidence of a third Esarhaddon, the answer should indicate that the ruler isn't known. The correct response would be the JSON with null years and declined set to true. Confidence is low because the name isn't recognized in historical records.\n</think>\n\n{\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "model_path": "Qwen/Qwen3-32B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-05-27T05:58:10.600752"
+}

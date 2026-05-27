@@ -1,0 +1,14 @@
+{
+  "variant": "kp1",
+  "input_idx": 0,
+  "input_value": "Neo-Assyrian",
+  "fill": {
+    "period": "Neo-Assyrian"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked which rulers\nreigned during a given Mesopotamian period, return a JSON object and nothing\nelse. Do not include markdown fences, prose, or explanation outside the JSON.",
+  "user_message": "Which rulers reigned during the Neo-Assyrian period in Mesopotamia?\nList only rulers who held the title of king (not regents or officials).\nReturn ONLY a JSON object with these fields:\n  \"period\": \"Neo-Assyrian\"\n  \"rulers\": an array of ruler names (romanized, chronological order)\n  \"confidence\": \"high\" if you are certain of the list, \"low\" if approximate",
+  "raw_output": "<think>\nOkay, I need to list the Neo-Assyrian kings. Let me start by recalling the time frame. The Neo-Assyrian Empire is generally considered to span from around 911 BCE to 609 BCE. The key rulers would be from the rise of the empire under Tiglath-Pileser I, but wait, actually, the Neo-Assyrian period is often marked by the reign of Ashurnasirpal II, who started the expansion. Let me check the sequence.\n\nStarting with Adad-nirari II (911–891 BCE), he's often the first king of the Neo-Assyrian period. Then Shalmaneser III (859–824 BCE), followed by Tiglath-Pileser III (745–727 BCE), who was a key reformer. Then Esarhaddon (681–669 BCE), and his son Ashurbanipal (668–627 BCE). But wait, there are others in between. After Shalmaneser III, there was Shamshi-Adad V (824–811 BCE), then Adad-nirari III (810–783 BCE), and then a few more like Shalmaneser IV (783–745 BCE), then Tiglath-Pileser III took over. Then Esarhaddon's predecessors: Sargon II (722–705 BCE), then Sennacherib (705–681 BCE), then Esarhaddon, then Ashurbanipal. Also, after Ashurbanipal, there were kings like Sin-shar-ishkun (627–612 BCE) and Ashur-uballit II (612–609 BCE), who was the last king. \n\nWait, I need to make sure I'm not missing any. Let me list them in order:\n\n1. Adad-nirari II (911–891)\n2. Shalmaneser III (859–824)\n3. Shamshi-Adad V (824–811)\n4. Adad-nirari III (810–783)\n5. Shalmaneser IV (783–745)\n6. Tiglath-Pileser III",
+  "model_path": "Qwen/Qwen3-32B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-05-27T05:57:08.430921"
+}

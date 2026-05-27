@@ -1,0 +1,14 @@
+{
+  "variant": "kp0",
+  "input_idx": 0,
+  "input_value": "Ashurbanipal",
+  "fill": {
+    "ruler": "Ashurbanipal"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Ashurbanipal reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's see. The user is asking about the reign dates of Ashurbanipal. First, I need to confirm which kingdom he belonged to. The question mentions Akkadian, Assyrian, and Babylonian, but Ashurbanipal was an Assyrian king. The Akkadian Empire was earlier, around the 23rd century BCE, so that's probably not relevant here.\n\nAshurbanipal is a well-known Assyrian king. I remember he was one of the last great kings of Assyria. His reign is usually dated to the 7th century BCE. Let me recall the exact years. I think he started around 668 BCE and ended in 627 BCE. Wait, but I should double-check that. Some sources might have slight variations, but the commonly accepted dates are 668–627 BCE. \n\nConfidence level: Since these dates are widely accepted by historians and there's substantial evidence from Assyrian records, the confidence should be high. The user also specified to set \"declined\" to false unless the ruler is unknown. Since Ashurbanipal is a known ruler, \"declined\" should be false. \n\nSo the JSON should have start_year 668, end_year 627, confidence high, and declined false. I don't see any conflicting information here. Let me make sure there's no confusion with other rulers. No, Ashurbanipal is distinct. Okay, that should be correct.\n</think>\n\n{\"start_year\": 668, \"end_year\": 627, \"confidence\": \"high\", \"declined\": false}",
+  "model_path": "Qwen/Qwen3-32B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-05-27T05:54:40.350037"
+}

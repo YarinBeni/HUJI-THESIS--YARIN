@@ -1,0 +1,14 @@
+{
+  "variant": "kp0",
+  "input_idx": 5,
+  "input_value": "Tiglath-pileser III",
+  "fill": {
+    "ruler": "Tiglath-pileser III"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Tiglath-pileser III reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's see. The user is asking about the reign dates of Tiglath-pileser III. First, I need to confirm which of the three kingdoms he belonged to—Akkadian, Assyrian, or Babylonian. From what I remember, Tiglath-pileser III was an Assyrian king. The Akkadian Empire was much earlier, around the 24th to 22nd centuries BCE, so that's probably not it. Babylonian rulers are a different line, so Assyrian it is.\n\nNow, I need to recall his reign dates. I think he was a significant Assyrian king who expanded the empire. His reign is often associated with the 8th century BCE. Let me think... I believe he started his reign around 745 BCE. Wait, but I should check if that's accurate. Some sources might say 745 BCE as the start. As for the end, he was succeeded by Shalmaneser V, and his death might be around 727 BCE. So the reign would be from 745 to 727 BCE. \n\nConfidence level: I'm pretty sure about these dates because they are commonly cited in historical records. However, sometimes there can be slight variations depending on the source, but the general consensus is around those years. So the confidence should be \"high\". Also, the user mentioned if the ruler is unknown, but Tiglath-pileser III is a well-known Assyrian king, so \"declined\" is false. \n\nPutting it all together, the JSON should have start_year 745, end_year 727, confidence high, and declined false. Let me double-check to make sure I didn't mix up the dates with another ruler. Yes, that's correct. He was a key figure in Assyrian history, known for his military campaigns and administrative reforms. The dates 745–727 BCE are standard in most historical references. Alright, that should be accurate.\n</think>\n\n{\"start_year\": 745, \"end_year\": 727, \"confidence\": \"high\", \"declined\": false}",
+  "model_path": "Qwen/Qwen3-32B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-05-27T05:55:54.110899"
+}

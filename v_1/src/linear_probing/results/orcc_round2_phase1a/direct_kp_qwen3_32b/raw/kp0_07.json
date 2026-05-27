@@ -1,0 +1,14 @@
+{
+  "variant": "kp0",
+  "input_idx": 7,
+  "input_value": "Sîn-šarru-iškun",
+  "fill": {
+    "ruler": "Sîn-šarru-iškun"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Sîn-šarru-iškun reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's see. The user is asking about the reign dates of Sîn-šarru-iškun. First, I need to determine which of the three kingdoms—Akkadian, Assyrian, or Babylonian—he belonged to. The name Sîn-šarru-iškun sounds familiar. I think he was an Assyrian king. Let me recall.\n\nAssyrian kings often have names with \"Šarru\" which means king. Sîn-šarru-iškun might be from the late Assyrian period. I remember that the fall of Assyria was around 612 BCE, with the city of Nineveh being destroyed. Sennacherib was a major king before that, but he was killed in 681 BCE. After Sennacherib came Esarhaddon, then Ashurbanipal. Wait, but Sîn-šarru-iškun... I think he was a co-regent with Ashurbanipal. Let me check my memory.\n\nAshurbanipal reigned from around 668 to 627 BCE. Sîn-šarru-iškun might have been a crown prince who ruled in the west while Ashurbanipal was in the east. Their co-regency was during the later years of the Assyrian Empire. So Sîn-šarru-iškun's reign would start when he became co-regent, maybe around 668 BCE, and end when the Assyrian Empire fell in 612 BCE. But I'm not entirely sure about the exact years. Some sources might say his reign started later, perhaps after Ashurbanipal's main reign. Wait, co-regency dates can be tricky. If Ashurbanipal started in 668, and Sîn-šarru-iškun was co-regent from, say, 668 to 627, but the empire fell in 612. Maybe the end year is when he died or when the empire fell. I need to be precise.\n\nLooking up in my mind, the standard dates for Sîn-šarru-iškun are co-regent with Ashurbanipal from 668 to 627 BCE. However, some scholars might argue that his active reign was later, but the co-regency is usually cited as starting with Ashurban",
+  "model_path": "Qwen/Qwen3-32B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-05-27T05:56:26.106227"
+}

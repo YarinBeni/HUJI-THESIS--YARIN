@@ -1,0 +1,57 @@
+{
+  "variant": "kp1",
+  "total_periods": 2,
+  "parse_errors": 1,
+  "aggregate_recall": 0.25,
+  "total_targets": 8,
+  "total_hits": 2,
+  "per_period": [
+    {
+      "period": "Neo-Assyrian",
+      "raw_output": "<think>\nOkay, I need to list the Neo-Assyrian kings. Let me start by recalling the time frame. The Neo-Assyrian Empire is generally considered to span from around 911 BCE to 609 BCE. The key rulers would be from the rise of the empire under Tiglath-Pileser I, but wait, actually, the Neo-Assyrian period is often marked by the reign of Ashurnasirpal II, who started the expansion. Let me check the sequence.\n\nStarting with Adad-nirari II (911–891 BCE), he's often the first king of the Neo-Assyrian period. Then Shalmaneser III (859–824 BCE), followed by Tiglath-Pileser III (745–727 BCE), who was a key reformer. Then Esarhaddon (681–669 BCE), and his son Ashurbanipal (668–627 BCE). But wait, there are others in between. After Shalmaneser III, there was Shamshi-Adad V (824–811 BCE), then Adad-nirari III (810–783 BCE), and then a few more like Shalmaneser IV (783–745 BCE), then Tiglath-Pileser III took over. Then Esarhaddon's predecessors: Sargon II (722–705 BCE), then Sennacherib (705–681 BCE), then Esarhaddon, then Ashurbanipal. Also, after Ashurbanipal, there were kings like Sin-shar-ishkun (627–612 BCE) and Ashur-uballit II (612–609 BCE), who was the last king. \n\nWait, I need to make sure I'm not missing any. Let me list them in order:\n\n1. Adad-nirari II (911–891)\n2. Shalmaneser III (859–824)\n3. Shamshi-Adad V (824–811)\n4. Adad-nirari III (810–783)\n5. Shalmaneser IV (783–745)\n6. Tiglath-Pileser III",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "recall": 0.0,
+      "found_targets": [],
+      "missed_targets": [
+        "Ashurbanipal",
+        "Sennacherib",
+        "Esarhaddon",
+        "Sargon II",
+        "Tiglath-pileser III",
+        "Sîn-šarru-iškun"
+      ],
+      "extras": []
+    },
+    {
+      "period": "Neo-Babylonian",
+      "raw_output": "<think>\nOkay, I need to list the Neo-Babylonian kings. Let me start by recalling the time frame. The Neo-Babylonian period is generally from around 626 BCE to 539 BCE. The first king would be Nabopolassar, right? He founded the dynasty after overthrowing the Assyrians. Then his son, Nebuchadnezzar II, is a major figure, known for the Babylonian Captivity and the Hanging Gardens. After him, there's Evil-Merodach, who released Jehoiachin from captivity. Then Amel-Marduk, but wait, I think Evil-Merodach is the same as Amel-Marduk. Maybe I'm mixing up the names. Let me check that. Oh, right, Evil-Merodach is the same as Amel-Marduk. So after Nebuchadnezzar II, it's Evil-Merodach, then Neriglissar, then Labashi-Marduk, and finally Nabonidus. Wait, some sources might list Nabonidus as the last king before the Persian conquest. Let me confirm the order. Nabopolassar, Nebuchadnezzar II, then Evil-Merodach (Amel-Marduk), then Neriglissar, Labashi-Marduk, and Nabonidus. That seems right. Are there any others? I don't think so. The confidence is high because these are well-documented in historical records like the Babylonian King List and other primary sources. So the list should be in that order.\n</think>\n\n{\n  \"period\": \"Neo-Babylonian\",\n  \"rulers\": [\n    \"Nabopolassar\",\n    \"Nebuchadnezzar II\",\n    \"Evil-Merodach\",\n    \"Neriglissar\",\n    \"Labashi-Marduk\",\n    \"Nabonidus\"\n  ],\n  \"confidence\": \"high\"\n}",
+      "parsed": {
+        "period": "Neo-Babylonian",
+        "rulers": [
+          "Nabopolassar",
+          "Nebuchadnezzar II",
+          "Evil-Merodach",
+          "Neriglissar",
+          "Labashi-Marduk",
+          "Nabonidus"
+        ],
+        "confidence": "high"
+      },
+      "parse_error": false,
+      "recall": 1.0,
+      "found_targets": [
+        "Nebuchadnezzar II",
+        "Nabonidus"
+      ],
+      "missed_targets": [],
+      "extras": [
+        "Nabopolassar",
+        "Evil-Merodach",
+        "Neriglissar",
+        "Labashi-Marduk"
+      ]
+    }
+  ]
+}
