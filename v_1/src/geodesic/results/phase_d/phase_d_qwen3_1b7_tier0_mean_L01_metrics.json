@@ -1,0 +1,28 @@
+{
+  "method": "qwen3_1b7",
+  "cleaning": "tier0",
+  "pool": "mean",
+  "layer": 1,
+  "geodesic_spearman": 0.24959959137192364,
+  "pairwise_order_acc": 0.7232966838874906,
+  "arc_length_spearman": 1.0,
+  "n_bins": 7,
+  "bin_centers": [
+    50.0,
+    550.0,
+    650.0,
+    750.0,
+    950.0,
+    1050.0,
+    1150.0
+  ],
+  "bin_counts": [
+    14,
+    171,
+    728,
+    238,
+    10,
+    18,
+    13
+  ]
+}

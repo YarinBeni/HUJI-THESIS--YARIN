@@ -1,0 +1,24 @@
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch            main       -> FETCH_HEAD
+fatal: Cannot rebase onto multiple branches.
+WARNING
+=== Phase D: qwen3_1b7 tier0 mean L1 ===
+Job: 8841  Node: g0378  Start: Wed May 27 05:48:42 AM UTC 2026
+Loading L1 for qwen3_1b7/tier0/mean...
+PCA + kNN + Isomap...
+Geodesic: Spearman=0.2496  pairwise-acc=0.7233
+Bins: 7 bins with ≥5 fragments
+/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/geodesic/phase_d/centroid_spline.py:63: UserWarning: 
+The maximal number of iterations maxit (set to 20 by the program)
+allowed for finding a smoothing spline with fp=s has been reached: s
+too small.
+There is an approximation returned but the corresponding weighted sum
+of squared residuals does not satisfy the condition abs(fp-s)/s < tol.
+  sp = UnivariateSpline(bin_years, bin_coords_3d[:, dim], w=weights, s=s, k=3)
+Arc-length Spearman vs bin year: 1.0000
+  Saved → /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/geodesic/results/phase_d/phase_d_qwen3_1b7_tier0_mean_L01_year.png
+  Saved → /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/geodesic/results/phase_d/phase_d_qwen3_1b7_tier0_mean_L01_ruler.png
+  Saved → /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/geodesic/results/phase_d/phase_d_qwen3_1b7_tier0_mean_L01_archive.png
+  Saved → /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/geodesic/results/phase_d/phase_d_qwen3_1b7_tier0_mean_L01_geodesic.png
+Metrics → phase_d_qwen3_1b7_tier0_mean_L01_metrics.json
+Done.
