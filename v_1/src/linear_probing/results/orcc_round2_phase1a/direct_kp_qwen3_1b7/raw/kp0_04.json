@@ -1,0 +1,14 @@
+{
+  "variant": "kp0",
+  "input_idx": 4,
+  "input_value": "Nebuchadnezzar II",
+  "fill": {
+    "ruler": "Nebuchadnezzar II"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Nebuchadnezzar II reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's see. The user is asking about Nebuchadnezzar II's reign. I remember that Nebuchadnezzar II was a significant ruler of the Babylonian Empire. He's known from the Book of Daniel and the Old Testament. \n\nFirst, I need to recall his reign dates. From what I know, he reigned during the 6th century BCE. The Babylonian Empire was established by Hammurabi, and Nebuchadnezzar II was one of the most powerful kings. \n\nI think his reign started around 605 BCE and ended around 562 BCE. Wait, but I should double-check. The Babylonian Empire was in decline by the time of his death. He was the king of Babylon, and his reign is often cited as the peak of Babylonian power. \n\nThe start year is 605 BCE, and the end year is 562 BCE. The confidence should be high because these dates are well-documented in historical records, especially in the Bible and other ancient sources. The decline field is set to false because he was still a dominant ruler during his reign. \n\nI don't think there's any uncertainty here. So the JSON should have start_year 605, end_year 562, confidence high, and declined false.\n</think>\n\n{\"start_year\": 605, \"end_year\": 562, \"confidence\": \"high\", \"declined\": false}",
+  "model_path": "Qwen/Qwen3-1.7B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-05-27T05:49:38.557724"
+}

@@ -1,0 +1,81 @@
+{
+  "variant": "kp1",
+  "total_periods": 2,
+  "parse_errors": 0,
+  "aggregate_recall": 0.5,
+  "total_targets": 8,
+  "total_hits": 4,
+  "per_period": [
+    {
+      "period": "Neo-Assyrian",
+      "raw_output": "<think>\n</think>\n\n{\n  \"period\": \"Neo-Assyrian\",\n  \"rulers\": [\"Ashurbanipal\", \"Shalmaneser III\", \"Sargon II\", \"Sennacherib\", \"Esarhaddon\", \"Assurbanipal\"],\n  \"confidence\": \"high\"\n}",
+      "parsed": {
+        "period": "Neo-Assyrian",
+        "rulers": [
+          "Ashurbanipal",
+          "Shalmaneser III",
+          "Sargon II",
+          "Sennacherib",
+          "Esarhaddon",
+          "Assurbanipal"
+        ],
+        "confidence": "high"
+      },
+      "parse_error": false,
+      "recall": 0.6666666666666666,
+      "found_targets": [
+        "Ashurbanipal",
+        "Sennacherib",
+        "Esarhaddon",
+        "Sargon II"
+      ],
+      "missed_targets": [
+        "Tiglath-pileser III",
+        "Sîn-šarru-iškun"
+      ],
+      "extras": [
+        "Shalmaneser III",
+        "Assurbanipal"
+      ]
+    },
+    {
+      "period": "Neo-Babylonian",
+      "raw_output": "<think>\n</think>\n\n{\n  \"period\": \"Neo-Babylonian\",\n  \"rulers\": [\"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\"],\n  \"confidence\": \"low\"\n}",
+      "parsed": {
+        "period": "Neo-Babylonian",
+        "rulers": [
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla"
+        ],
+        "confidence": "low"
+      },
+      "parse_error": false,
+      "recall": 0.0,
+      "found_targets": [],
+      "missed_targets": [
+        "Nebuchadnezzar II",
+        "Nabonidus"
+      ],
+      "extras": [
+        "Nabu-apalilla",
+        "Nabu-apalilla",
+        "Nabu-apalilla",
+        "Nabu-apalilla",
+        "Nabu-apalilla",
+        "Nabu-apalilla",
+        "Nabu-apalilla",
+        "Nabu-apalilla",
+        "Nabu-apalilla",
+        "Nabu-apalilla"
+      ]
+    }
+  ]
+}

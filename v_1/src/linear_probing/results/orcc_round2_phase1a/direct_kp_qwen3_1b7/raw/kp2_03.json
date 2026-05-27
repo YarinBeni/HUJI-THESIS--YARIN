@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 3,
+  "input_value": "Marduk-mukin-šarru",
+  "fill": {
+    "ruler": "Marduk-mukin-šarru"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Marduk-mukin-šarru reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's see. The user is asking about the reign of Marduk-mukin-šarru. First, I need to recall if I know anything about this ruler. Marduk-mukin-šarru is a name that might be a variant of Marduk or another deity, but I'm not sure. The Akkadian, Assyrian, and Babylonian empires are well-documented, but I need to check if Marduk-mukin-šarru is a known ruler.\n\nI remember that Marduk was a significant deity in Babylonian religion, but there's also a king named Marduk-šarru, who was the king of Babylon. However, the name Marduk-mukin-šarru sounds a bit different. Maybe it's a variant spelling. Let me think. The name \"Marduk-mukin-šarru\" could be a form of Marduk-šarru, where \"mukin\" might be a variant of \"mukin\" (meaning \"king\" in Akkadian). \n\nIf I recall correctly, Marduk-šarru reigned during the late Babylonian period, around the 8th century BCE. The Babylonian Empire was established by Hammurabi, and later kings like Nebuchadnezzar II ruled. However, Marduk-šarru might have been a minor ruler or a king in a specific region. \n\nWait, I need to confirm the exact dates. If Marduk-šarru was a king, his reign would be around the 8th century BCE. The Babylonian Empire was in decline by the 6th century BCE, so if he reigned in the 8th century, that would be around 668 BCE to 627 BCE. But I'm not entirely sure about the exact years. \n\nSince the user is asking for a precise answer, and if I'm not certain, I should return the JSON with \"declined\": true. However, if I can't find the exact dates, maybe the confidence is low. But if I'm certain that Marduk-mukin-šarru reigned around 668-627 BCE, then the JSON would have those years. \n\nWait, I think I might be mixing up the names. Let me check. Marduk-šarru is a king of Babylon,",
+  "model_path": "Qwen/Qwen3-1.7B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-05-27T05:50:53.427292"
+}

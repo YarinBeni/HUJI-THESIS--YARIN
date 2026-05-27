@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 1,
+  "input_value": "Esarhaddon III",
+  "fill": {
+    "ruler": "Esarhaddon III"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Esarhaddon III reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's see. The user is asking about Esarhaddon III's reign. I need to recall his dates. Esarhaddon was a king of Assyria, right? He was the son of Sargon II. I remember that he ruled around the 7th century BCE. Let me think... His reign started in 680 BCE and ended in 627 BCE. I think that's correct. The confidence should be high because these dates are well-documented. The declined field should be false since he was a ruling king during that time. I don't see any ambiguity here. So the JSON should have start_year 680, end_year 627, confidence high, and declined false.\n</think>\n\n{\"start_year\": 680, \"end_year\": 627, \"confidence\": \"high\", \"declined\": false}",
+  "model_path": "Qwen/Qwen3-1.7B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-05-27T05:50:37.300178"
+}

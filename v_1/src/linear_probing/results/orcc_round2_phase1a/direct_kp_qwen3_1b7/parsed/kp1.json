@@ -1,0 +1,55 @@
+{
+  "variant": "kp1",
+  "n_inputs": 2,
+  "n_parse_errors": 0,
+  "results": [
+    {
+      "input_idx": 0,
+      "input_value": "Neo-Assyrian",
+      "fill": {
+        "period": "Neo-Assyrian"
+      },
+      "raw_output": "<think>\n</think>\n\n{\n  \"period\": \"Neo-Assyrian\",\n  \"rulers\": [\"Ashurbanipal\", \"Shalmaneser III\", \"Sargon II\", \"Sennacherib\", \"Esarhaddon\", \"Assurbanipal\"],\n  \"confidence\": \"high\"\n}",
+      "parsed": {
+        "period": "Neo-Assyrian",
+        "rulers": [
+          "Ashurbanipal",
+          "Shalmaneser III",
+          "Sargon II",
+          "Sennacherib",
+          "Esarhaddon",
+          "Assurbanipal"
+        ],
+        "confidence": "high"
+      },
+      "parse_error": false,
+      "parse_error_reason": ""
+    },
+    {
+      "input_idx": 1,
+      "input_value": "Neo-Babylonian",
+      "fill": {
+        "period": "Neo-Babylonian"
+      },
+      "raw_output": "<think>\n</think>\n\n{\n  \"period\": \"Neo-Babylonian\",\n  \"rulers\": [\"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\", \"Nabu-apalilla\"],\n  \"confidence\": \"low\"\n}",
+      "parsed": {
+        "period": "Neo-Babylonian",
+        "rulers": [
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla",
+          "Nabu-apalilla"
+        ],
+        "confidence": "low"
+      },
+      "parse_error": false,
+      "parse_error_reason": ""
+    }
+  ]
+}
