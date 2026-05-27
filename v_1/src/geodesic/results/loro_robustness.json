@@ -1,5 +1,94 @@
 [
   {
+    "method": "qwen3_1b7",
+    "cleaning": "tier0",
+    "pool": "mean",
+    "layer": 1,
+    "pacc_full": 0.7232966838874906,
+    "pacc_loro_mean": 0.6961598365426687,
+    "drop": 0.027136847344821913,
+    "n_rulers": 11,
+    "per_ruler": [
+      {
+        "ruler": "Ashurbanipal",
+        "n": 268,
+        "pacc_loro": 0.7298924802402084,
+        "pacc_cross": 0.5777563793933558,
+        "drop": -0.0065957963527177865
+      },
+      {
+        "ruler": "Esarhaddon",
+        "n": 176,
+        "pacc_loro": 0.6723075904093258,
+        "pacc_cross": 0.7322537044453344,
+        "drop": 0.050989093478164826
+      },
+      {
+        "ruler": "Nabonidus",
+        "n": 68,
+        "pacc_loro": 0.7047677396564667,
+        "pacc_cross": 0.7793911393449385,
+        "drop": 0.018528944231023914
+      },
+      {
+        "ruler": "Nabopolassar",
+        "n": 15,
+        "pacc_loro": 0.7164249127919813,
+        "pacc_cross": 0.7888143176733781,
+        "drop": 0.006871771095509294
+      },
+      {
+        "ruler": "Nebuchadnezzar I",
+        "n": 10,
+        "pacc_loro": 0.716728485009052,
+        "pacc_cross": 0.2623063683304647,
+        "drop": 0.006568198878438625
+      },
+      {
+        "ruler": "Nebuchadnezzar II",
+        "n": 87,
+        "pacc_loro": 0.6445500507793527,
+        "pacc_cross": 0.7366401664797022,
+        "drop": 0.0787466331081379
+      },
+      {
+        "ruler": "Sargon II",
+        "n": 144,
+        "pacc_loro": 0.6958482359694441,
+        "pacc_cross": 0.6782611355849242,
+        "drop": 0.02744844791804646
+      },
+      {
+        "ruler": "Sennacherib",
+        "n": 237,
+        "pacc_loro": 0.6868017839007374,
+        "pacc_cross": 0.7209799438651276,
+        "drop": 0.03649489998675315
+      },
+      {
+        "ruler": "Shalmaneser V",
+        "n": 12,
+        "pacc_loro": 0.7175895262065616,
+        "pacc_cross": 0.8307984790874525,
+        "drop": 0.005707157680928998
+      },
+      {
+        "ruler": "S\u00een-\u0161arru-i\u0161kun",
+        "n": 21,
+        "pacc_loro": 0.6841800238442177,
+        "pacc_cross": 0.4425962165688193,
+        "drop": 0.039116660043272855
+      },
+      {
+        "ruler": "Tiglath-pileser III",
+        "n": 75,
+        "pacc_loro": 0.6886673731620082,
+        "pacc_cross": 0.5907731305449937,
+        "drop": 0.034629310725482365
+      }
+    ]
+  },
+  {
     "method": "qwen",
     "cleaning": "maximal",
     "pool": "mean",
