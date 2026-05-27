@@ -148,7 +148,13 @@ def run(args: argparse.Namespace) -> None:
 
         input_ids = input_ids.to(model.device)
         with torch.no_grad():
-            out = model(input_ids=input_ids, output_hidden_states=True, use_cache=False)
+            # We only read hidden_states. Calling the full *ForCausalLM forward
+            # also computes the LM-head logits, a (seq, vocab) projection that
+            # allocates several GiB for large-vocab models — enough to OOM an
+            # 80GB H100 already ~74GB-full with Qwen3-32B's weights. Running the
+            # base transformer (model.model) skips the head entirely.
+            core = getattr(model, "model", model)
+            out = core(input_ids=input_ids, output_hidden_states=True, use_cache=False)
         hs = out.hidden_states  # tuple length (n_transformer_layers + 1)
         if n_layers_total is None:
             n_layers_total = len(hs)
