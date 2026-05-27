@@ -1,0 +1,18 @@
+{
+  "method": "qwen3_1b7",
+  "cleaning": "tier0",
+  "pool": "mean",
+  "layer": 1,
+  "ruler": "Sennacherib",
+  "n_held_out": 237,
+  "n_held_in": 956,
+  "k_full": 3,
+  "k_loro": 3,
+  "pacc_full": 0.7232966838874906,
+  "sp_full": 0.24959959137192364,
+  "pacc_loro": 0.6868017839007374,
+  "sp_loro": 0.22290288359206456,
+  "pacc_loro_cross": 0.7209799438651276,
+  "drop_pacc": 0.03649489998675315,
+  "drop_cross": 0.0023167400223629286
+}
