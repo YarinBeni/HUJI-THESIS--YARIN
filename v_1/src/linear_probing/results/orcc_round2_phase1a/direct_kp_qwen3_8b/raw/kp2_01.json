@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 1,
+  "input_value": "Esarhaddon III",
+  "fill": {
+    "ruler": "Esarhaddon III"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Esarhaddon III reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, the user is asking about the reign dates of Esarhaddon III for the Akkadian, Assyrian, or Babylonian empires. Let me start by recalling what I know about Esarhaddon.\n\nFirst, Esarhaddon is a well-known Assyrian king. I remember that he was a significant ruler in the 7th century BCE. His father was Sennacherib, and he succeeded him. The Assyrian Empire was at its height during his reign. \n\nNow, the user mentioned \"Esarhaddon III,\" but I need to check if that's correct. Wait, Esarhaddon is usually referred to as Esarhaddon, not with a III. The numbering for Assyrian kings can be tricky. Let me think: the Assyrian kings after Sennacherib include Esarhaddon, then his son Ashurbanipal. So Esarhaddon is the first one, followed by Ashurbanipal. There's no Esarhaddon III in the standard chronology. \n\nSo the user might be confused or there's a mix-up with the numbering. Alternatively, maybe they're referring to a different ruler with a similar name. But in the context of Akkadian, Assyrian, or Babylonian rulers, Esarhaddon is primarily an Assyrian king. \n\nLet me verify the dates. Esarhaddon's reign started around 681 BCE. He ruled until his death in 669 BCE. Wait, no, I think he died in 673 BCE. Wait, conflicting information here. Let me get this straight. \n\nWait, Sennacherib's reign was from 705 to 681 BCE. Esarhaddon succeeded him, so his reign would start in 681 BCE. He ruled until 669 BCE, when he died. Then his son Ashurbanipal took over. So the start year is 681 BCE, end year 669 BCE. \n\nBut the user wrote \"Esarhaddon III.\" Since there's no III, maybe they meant Esarhaddon, and the III is a mistake. Alternatively, could there be another ruler with that name? I don't recall any other Esarhaddon in the Assyrian or Babylonian lists. \n\nSo, the correct answer would be that Esarhaddon (not III) reigned from 681 to 669 BCE. However",
+  "model_path": "Qwen/Qwen3-8B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-05-27T05:52:22.757555"
+}

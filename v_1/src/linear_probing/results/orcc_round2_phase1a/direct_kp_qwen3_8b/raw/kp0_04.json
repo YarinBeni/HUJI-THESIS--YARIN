@@ -1,0 +1,14 @@
+{
+  "variant": "kp0",
+  "input_idx": 4,
+  "input_value": "Nebuchadnezzar II",
+  "fill": {
+    "ruler": "Nebuchadnezzar II"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Nebuchadnezzar II reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, the user is asking about the reign dates of Nebuchadnezzar II, specifically for the Akkadian, Assyrian, or Babylonian periods. First, I need to confirm which civilization he belonged to. Nebuchadnezzar II is most famously associated with Babylon, not Akkadian or Assyrian. The Akkadian Empire was earlier, around 2334–2154 BCE, and Assyria was a later empire, though overlapping with Babylonian periods.\n\nNebuchadnezzar II was the king of Babylon, not Assyria. He's known for building the Ishtar Gate and the Hanging Gardens, though the latter's existence is debated. His reign is well-documented in historical records. The standard dates for his reign are 634 BCE to 562 BCE. However, I should check if there's any uncertainty. Some sources might vary slightly, but the consensus is pretty solid. The confidence level here should be high because there's ample archaeological and textual evidence, like the Babylonian chronicles and Assyrian records. So the answer should include start_year 634, end_year 562, confidence high, and declined false.\n</think>\n\n{\"start_year\": 634, \"end_year\": 562, \"confidence\": \"high\", \"declined\": false}",
+  "model_path": "Qwen/Qwen3-8B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-05-27T06:02:56.611150"
+}

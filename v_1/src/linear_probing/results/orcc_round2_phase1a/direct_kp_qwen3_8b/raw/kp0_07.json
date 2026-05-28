@@ -1,0 +1,14 @@
+{
+  "variant": "kp0",
+  "input_idx": 7,
+  "input_value": "Sîn-šarru-iškun",
+  "fill": {
+    "ruler": "Sîn-šarru-iškun"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Sîn-šarru-iškun reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's tackle this query about Sîn-šarru-iškun. First, I need to confirm which civilization this ruler belongs to. The user mentioned Akkadian, Assyrian, or Babylonian. Sîn-šarru-iškun is a name that sounds Babylonian. Let me recall Babylonian kings.\n\nWait, I think Sîn-šarru-iškun was a Babylonian king. Let me check the timeline. The Babylonian Empire under Nebuchadnezzar II is well-known, but that's later. Sîn-šarru-iškun might be from the earlier period. Wait, there's a king named Sin-shar-ishkun, which is the same as Sîn-šarru-iškun. He was the last king of the Neo-Babylonian Empire. \n\nNow, the Neo-Babylonian Empire's reign was during the 7th century BCE. Nebuchadnezzar II was his father, ruling from around 605 to 562 BCE. So Sin-shar-ishkun would have succeeded him. Let me verify the dates. Nebuchadnezzar II died in 562 BCE, and Sin-shar-ishkun took the throne. His reign ended with the fall of Babylon to the Persians in 539 BCE under Cyrus the Great. \n\nSo the start year would be 562 BCE, and the end year 539 BCE. But wait, I need to be careful here. Some sources might have slightly different dates. For example, the exact year of Nebuchadnezzar's death is sometimes cited as 562 BCE, and Sin-shar-ishkun's reign started then. His death in 539 BCE is well-documented. \n\nConfidence level: I'm pretty sure about these dates because they are standard in historical references. So confidence should be high. The user didn't mention any uncertainty, so I can state the years as 562 and 539. \n\nWait, but the user might have a typo in the name. Let me double-check the spelling. Sîn-šarru-iškun is the same as Sin-shar-ishkun. Yes, that's correct. \n\nSo the JSON should have start_year 562, end_year 539, confidence high",
+  "model_path": "Qwen/Qwen3-8B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-05-27T06:03:23.931918"
+}
