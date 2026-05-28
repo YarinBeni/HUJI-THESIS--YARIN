@@ -199,7 +199,19 @@ def main() -> None:
         sys.exit(1)
 
     meta = load_metadata(acts_dir)
-    n_layers = int(meta['n_layers'])
+    # Different extraction scripts wrote different metadata schemas — try the
+    # common keys and fall back to counting layer_*.npz files on disk.
+    n_layers = None
+    for _k in ("n_layers", "num_layers", "num_hidden_layers", "n_hidden_states"):
+        if _k in meta:
+            n_layers = int(meta[_k]); break
+    if n_layers is None:
+        _files = sorted(acts_dir.glob("layer_*.npz"))
+        if _files:
+            n_layers = len(_files)
+    if n_layers is None:
+        raise KeyError(f"Could not resolve n_layers from metadata keys nor "
+                       f"from layer_*.npz files in {acts_dir}")
     hidden_dim = int(meta['hidden_dim'])
 
     if args.layers == 'all':
