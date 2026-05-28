@@ -338,7 +338,7 @@ Closes Round 3 against `MASTER_BACKFILL_PLAN.md` §6 Definition of Done: every T
 | Table | imbalanced | balanced (mean) | balanced_last | Notes |
 |---|---|---|---|---|
 | T1 Year PLS | 8/8 (tfidf filled locally 2026-05-28) | 7/8 (random N/A — empty source) | 6/6 | mlm/tfidf last = principled N/A (mean-only) |
-| T2 Year Ridge | 5/8 (qwen3×3 + random + tfidf; ⬜ mlm + thalesian×2 = C4 re-run pending) | 8/8 | 6/6 | imbalanced gap is the *only* open data cell |
+| T2 Year Ridge | 8/8 (C4 re-run completed 2026-05-28, job 8953) | 8/8 | 6/6 | |
 | T3 Ruler CLS | 8/8 | 8/8 | 6/6 | |
 | T3b Ruler PLS-DA | 8/8 | 7/8 (random N/A) | 6/6 | |
 | T4 Geodesic | 5/7 (mlm/random N/A) | 6/7 (mlm N/A; tfidf N/A by design) | — | balanced now on 6 models × ~127 layers each |
@@ -348,7 +348,7 @@ Closes Round 3 against `MASTER_BACKFILL_PLAN.md` §6 Definition of Done: every T
 | T9 Elicitation (NEW) | — | — | — | 9/9 cells (qwen3_1b7/8b/32b × kp0/kp1/kp2) |
 | T10 Prompt-reprobe (NEW) | — | — | — | pv0 complete across all 3 qwen3 models; pv1–pv3 = qwen3_32b only (the 1b7/8b reprobe array walltimed before pv2/pv3) |
 
-The single open data cell is **T2 imbalanced Ridge for mlm + thalesian_akk300m + thalesian_cunei400m**. The original C4 job (8823) ran but did not produce/commit its 3 result files; a re-run is queued. The gap is on the *imbalanced* leg only; the *balanced* leg (where every headline claim lives) is complete for those models and is unaffected.
+All cells populated or principled-N/A. The original C4 job (8823) failed to commit; a follow-up (8951 → 8952 → 8953) ran on 2026-05-28 with two small driver fixes (path resolution in `probe_thalesian.py` to find `mlm_tier0` under `orcc_round1/activations`, and a tolerant metadata reader that falls back to globbing `layer_*.npz` when `n_layers` is absent), producing `cls_numeric_results_{mlm,thalesian_akk300m,thalesian_cunei400m}.json`. Imbalanced Ridge year-Spearman best-per-model (year-raw): `tfidf 0.466 > thalesian_cunei 0.460 > qwen3_1b7 0.444 > qwen3_8b 0.439 > qwen3_32b 0.429 > thalesian_akk 0.414 > mlm 0.375 > random 0.369` — note tfidf wins the *imbalanced* leg (the imbalance shortcut works) but loses to mlm on the *balanced* leg, consistent with the rest of the dating-is-shallow picture.
 
 ### New findings from this backfill
 
@@ -379,6 +379,6 @@ The single open data cell is **T2 imbalanced Ridge for mlm + thalesian_akk300m +
 
 - **Phase A** (Spearman ≥ PLS+0.05 OR pairwise-acc ≥ 0.70 on Thalesian L12): NULL at L12 (pacc 0.547) — already reported. Phase B selected geodesic-optimal layers and met the gate on multiple configs.
 - **Phase C LORO** (drop < 0.10 = STRONG): PASS for all three imbalanced configs (0.008–0.055) and all three balanced configs (−0.022 to 0.027).
-- **Round-3 Definition of Done** (MASTER_BACKFILL_PLAN §6): satisfied except for the one open T2-imbalanced cell flagged above; that cell does not affect any headline claim.
+- **Round-3 Definition of Done** (MASTER_BACKFILL_PLAN §6): fully satisfied — every T1–T10 cell populated or principled-N/A, unified metric sets carried through every regime, builders rerun clean, narrative docs cite the complete tables.
 
 ## Verdict: PASS
