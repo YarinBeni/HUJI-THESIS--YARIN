@@ -62,8 +62,22 @@ N_SPLITS        = 5
 # ---------------------------------------------------------------------------
 
 def orcc_acts_dir(base: Path, method: str, cleaning: str, pooling: str) -> Path:
-    """Mirrors Round 1's ORCC layout: {method}_{cleaning}_{pooling}/."""
-    return base / 'orcc__embed' / 'activations' / f'{method}_{cleaning}_{pooling}'
+    """Resolve activation dir. Tries the canonical orcc__embed layout first, then
+    the Round-1 orcc_round1/activations layout, then the mlm-style pooling-less
+    layout — returns the first that exists. Falls back to the canonical path if
+    none exist (so callers still get a sensible "not found" error).
+    """
+    candidates = [
+        base / 'orcc__embed' / 'activations' / f'{method}_{cleaning}_{pooling}',
+        base / 'orcc_round1' / 'activations' / f'{method}_{cleaning}_{pooling}',
+        # mlm is mean/tier0-only — dir name has no pooling suffix
+        base / 'orcc_round1' / 'activations' / f'{method}_{cleaning}',
+        base / 'orcc__embed' / 'activations' / f'{method}_{cleaning}',
+    ]
+    for c in candidates:
+        if c.is_dir():
+            return c
+    return candidates[0]
 
 
 def load_metadata(acts_dir: Path) -> dict:
