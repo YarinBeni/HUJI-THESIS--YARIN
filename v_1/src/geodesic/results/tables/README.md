@@ -14,6 +14,8 @@ every metric, straight from the result JSONs). Regenerate with
 | 5 LORO leave-one-ruler-out | T5_loro.md | T5_loro.csv, T5_loro_per_ruler.csv |
 | 6 Phase D visualization | T6_phase_d.md | T6_phase_d.csv |
 | 7 TF-IDF name-masking control | T7_name_masking.md | T7_name_masking.csv |
+| 9 Direct elicitation (kp0/kp1/kp2) | T9_elicitation.md | T9_elicitation.csv |
+| 10 Prompted reprobe (pv0-pv3) | T10_prompt_reprobe.md | T10_prompt_reprobe.csv |
 
 See also `../RESULTS_BY_TEST.md` (narrative, best-config tables) and
 `../EXPERIMENTS_SUMMARY.md` (advisor-facing, embedded plots).

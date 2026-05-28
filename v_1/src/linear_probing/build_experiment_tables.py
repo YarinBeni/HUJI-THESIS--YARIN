@@ -92,6 +92,24 @@ def test1_year_pls():
                          num(rec.get("shuffled_spearman_mean")),
                          num(rec.get("shuffled_r2_mean")),
                          rec.get("n_draws"), ""])
+    # balanced_last MC (C3 sweep): same schema, configs key on '__last__'.
+    # Source files only exist for the qwen3 family, thalesian x2, random.
+    for m in MODELS:
+        p = MC_DIR / f"{m}_pls__mc_balanced_last__summary.json"
+        if not p.exists():
+            continue
+        for key, rec in json.load(open(p)).get("per_config", {}).items():
+            if not (key.endswith("year-raw") or key.endswith("year-log")):
+                continue
+            _, cl, pl, lyr, tgt = key.split("__")
+            rows.append(["balanced_last", m, cl, pl, lyr, tgt.replace("year-", ""), "",
+                         num(rec.get("spearman_mean")), num(rec.get("spearman_std")),
+                         num(rec.get("r2_mean")), num(rec.get("r2_std")),
+                         num(rec.get("mae_mean")), num(rec.get("mae_std")),
+                         num(rec.get("mase_mean")), num(rec.get("mdape_mean")),
+                         num(rec.get("shuffled_spearman_mean")),
+                         num(rec.get("shuffled_r2_mean")),
+                         rec.get("n_draws"), ""])
     write_csv("T1_year_pls.csv", hdr, rows)
     write_md("T1_year_pls.md", """# Test 1 — Year regression, PLS
 
@@ -151,6 +169,23 @@ def test2_year_ridge():
                          num(rec.get("shuffled_spearman_mean")),
                          num(rec.get("shuffled_r2_mean")),
                          rec.get("n_draws")])
+    # balanced_last (C3 sweep, last-token only)
+    for m in MODELS:
+        p = MC_DIR / f"{m}_cls_numeric__mc_balanced_last__summary.json"
+        if not p.exists():
+            continue
+        for key, rec in json.load(open(p)).get("per_config", {}).items():
+            if not (key.endswith("year-raw") or key.endswith("year-log")):
+                continue
+            _, cl, pl, lyr, tgt = key.split("__")
+            rows.append(["balanced_last", m, cl, pl, lyr, tgt.replace("year-", ""),
+                         num(rec.get("spearman_mean")), num(rec.get("spearman_std")),
+                         num(rec.get("r2_mean")), num(rec.get("r2_std")),
+                         num(rec.get("mae_mean")), num(rec.get("mae_std")),
+                         num(rec.get("mase_mean")), num(rec.get("mdape_mean")),
+                         num(rec.get("shuffled_spearman_mean")),
+                         num(rec.get("shuffled_r2_mean")),
+                         rec.get("n_draws")])
     write_csv("T2_year_ridge.csv", hdr, rows)
     write_md("T2_year_ridge.md", """# Test 2 — Year regression, Ridge
 
@@ -170,14 +205,15 @@ new draws produced by the widened `fit_ridge_year_groupkfold` (cluster jobs C4/C
 
 
 # ====================== TEST 3 — Ruler classification ======================
-def _best_balanced_ruler_cfg(model):
+def _best_balanced_ruler_cfg(model, suffix="mc_balanced"):
     """Best balanced ruler config (max macro_f1_mean over __ruler keys).
 
     Prefer the CLS-logistic MC summary; fall back to the PLS-DA MC summary's
-    ruler configs. Returns (cfg_key, rec, source) or (None, {}, None).
+    ruler configs. `suffix` switches between `mc_balanced` and `mc_balanced_last`.
+    Returns (cfg_key, rec, source) or (None, {}, None).
     """
-    for src, fname in (("cls", f"{model}_cls__mc_balanced__summary.json"),
-                       ("pls", f"{model}_pls__mc_balanced__summary.json")):
+    for src, fname in (("cls", f"{model}_cls__{suffix}__summary.json"),
+                       ("pls", f"{model}_pls__{suffix}__summary.json")):
         p = MC_DIR / fname
         if not p.exists():
             continue
@@ -203,12 +239,28 @@ def test3_ruler():
            "balanced_accuracy_mean", "balanced_weighted_f1_mean",
            "balanced_chance_accuracy", "balanced_chance_macro_f1",
            "balanced_shuffled_accuracy_mean", "balanced_shuffled_macro_f1_mean",
-           "balanced_source"]
+           "balanced_source",
+           "balanced_last_macro_f1_mean", "balanced_last_macro_f1_std",
+           "balanced_last_accuracy_mean", "balanced_last_accuracy_std",
+           "balanced_last_weighted_f1_mean",
+           "balanced_last_chance_accuracy", "balanced_last_chance_macro_f1",
+           "balanced_last_shuffled_accuracy_mean",
+           "balanced_last_shuffled_macro_f1_mean",
+           "balanced_last_layer", "balanced_last_n_draws",
+           "balanced_last_source"]
     rows = []
     for m in MODELS:
         e = lb_by_model.get(m, {})
         r1, mc = e.get("r1") or {}, e.get("mc") or {}
         bk, brec, src = _best_balanced_ruler_cfg(m)
+        # balanced_last: same logic, separate suffix.
+        blk, blrec, blsrc = _best_balanced_ruler_cfg(m, suffix="mc_balanced_last")
+        bl_layer = ""
+        if blk:
+            try:
+                bl_layer = blk.split("__")[3]
+            except Exception:
+                bl_layer = ""
         rows.append([m, e.get("display"), e.get("cleaning"), e.get("pooling"),
                      num(r1.get("macro_f1")), num(r1.get("accuracy")), r1.get("best_layer"),
                      num(mc.get("macro_f1_mean")), num(mc.get("macro_f1_std")),
@@ -218,7 +270,16 @@ def test3_ruler():
                      num(brec.get("chance_macro_f1_mean")),
                      num(brec.get("shuffled_accuracy_mean")),
                      num(brec.get("shuffled_macro_f1_mean")),
-                     src or ""])
+                     src or "",
+                     num(blrec.get("macro_f1_mean")), num(blrec.get("macro_f1_std")),
+                     num(blrec.get("accuracy_mean")), num(blrec.get("accuracy_std")),
+                     num(blrec.get("weighted_f1_mean")),
+                     num(blrec.get("chance_accuracy_mean")),
+                     num(blrec.get("chance_macro_f1_mean")),
+                     num(blrec.get("shuffled_accuracy_mean")),
+                     num(blrec.get("shuffled_macro_f1_mean")),
+                     bl_layer, blrec.get("n_draws") if blrec else "",
+                     blsrc or ""])
     write_csv("T3_ruler_classification.csv", hdr, rows)
     write_md("T3_ruler_classification.md", """# Test 3 — Ruler classification
 
@@ -284,6 +345,23 @@ def test3b_ruler_plsda():
                          num(rec.get("chance_macro_f1_mean")),
                          num(rec.get("shuffled_accuracy_mean")),
                          num(rec.get("shuffled_macro_f1_mean")), rec.get("n_draws")])
+    # balanced_last (C3 sweep): __ruler keys in *_pls__mc_balanced_last__summary.
+    for m in MODELS:
+        p = MC_DIR / f"{m}_pls__mc_balanced_last__summary.json"
+        if not p.exists():
+            continue
+        for key, rec in json.load(open(p)).get("per_config", {}).items():
+            if not key.endswith("__ruler") or "macro_f1_mean" not in rec:
+                continue
+            _, cl, pl, lyr, _ = key.split("__")
+            rows.append(["balanced_last", m, cl, pl, lyr, "",
+                         num(rec.get("accuracy_mean")), num(rec.get("accuracy_std")),
+                         num(rec.get("macro_f1_mean")), num(rec.get("macro_f1_std")),
+                         num(rec.get("weighted_f1_mean")), num(rec.get("weighted_f1_std")),
+                         num(rec.get("chance_accuracy_mean")),
+                         num(rec.get("chance_macro_f1_mean")),
+                         num(rec.get("shuffled_accuracy_mean")),
+                         num(rec.get("shuffled_macro_f1_mean")), rec.get("n_draws")])
     write_csv("T3b_ruler_plsda.csv", hdr, rows)
     write_md("T3b_ruler_plsda.md", """# Test 3b — Ruler classification, PLS-DA
 
@@ -307,17 +385,44 @@ columns to rank methods, not to claim balancing helped.
 
 # ========================= TEST 4 — Geodesic ===============================
 def test4_geodesic():
-    d = json.load(open(GEO / "geodesic_layer_scoreboard.json"))
-    hdr = ["method", "cleaning", "pool", "layer", "k_used",
+    hdr = ["regime", "method", "cleaning", "pool", "layer", "k_used",
            "isomap_spearman", "isomap_pairwise_acc",
            "isomap_neighbor_purity", "isomap_neighbor_sigma",
-           "ebin_spearman", "ebin_pairwise_acc"]
-    rows = [[r.get("method"), r.get("cleaning"), r.get("pool"), r.get("layer"),
-             r.get("k_used"),
-             num(r.get("isomap_spearman")), num(r.get("isomap_pairwise_acc")),
-             num(r.get("isomap_neighbor_purity")), num(r.get("isomap_neighbor_sigma")),
-             num(r.get("ebin_spearman")), num(r.get("ebin_pairwise_acc"))]
-            for r in d if r.get("method") not in DROP_MODELS]
+           "ebin_spearman", "ebin_pairwise_acc",
+           "isomap_spearman_std", "isomap_pairwise_acc_std",
+           "isomap_neighbor_purity_std", "isomap_neighbor_sigma_std",
+           "n_draws"]
+    rows = []
+    # Imbalanced (existing scoreboard) — std/n_draws blank.
+    d_imb = json.load(open(GEO / "geodesic_layer_scoreboard.json"))
+    for r in d_imb:
+        if r.get("method") in DROP_MODELS:
+            continue
+        rows.append(["imbalanced", r.get("method"), r.get("cleaning"),
+                     r.get("pool"), r.get("layer"), r.get("k_used"),
+                     num(r.get("isomap_spearman")), num(r.get("isomap_pairwise_acc")),
+                     num(r.get("isomap_neighbor_purity")),
+                     num(r.get("isomap_neighbor_sigma")),
+                     num(r.get("ebin_spearman")), num(r.get("ebin_pairwise_acc")),
+                     "", "", "", "", ""])
+    # Balanced (new scoreboard) — ebin_* blank, std/n_draws populated.
+    bp = GEO / "geodesic_layer_scoreboard_balanced.json"
+    if bp.exists():
+        for r in json.load(open(bp)):
+            if r.get("method") in DROP_MODELS:
+                continue
+            rows.append(["balanced", r.get("method"), r.get("cleaning"),
+                         r.get("pool"), r.get("layer"), r.get("k_used"),
+                         num(r.get("isomap_spearman_mean")),
+                         num(r.get("isomap_pairwise_acc_mean")),
+                         num(r.get("isomap_neighbor_purity_mean")),
+                         num(r.get("isomap_neighbor_sigma_mean")),
+                         "", "",
+                         num(r.get("isomap_spearman_std")),
+                         num(r.get("isomap_pairwise_acc_std")),
+                         num(r.get("isomap_neighbor_purity_std")),
+                         num(r.get("isomap_neighbor_sigma_std")),
+                         r.get("n_draws")])
     write_csv("T4_geodesic.csv", hdr, rows)
     write_md("T4_geodesic.md", """# Test 4 — Geodesic / Isomap manifold (unsupervised)
 
@@ -340,14 +445,31 @@ Filter to max `isomap_pairwise_acc` per method for the best-layer leaderboard.
 # ========================= TEST 5 — LORO ===================================
 def test5_loro():
     d = json.load(open(GEO / "loro_robustness.json"))
-    hdr = ["method", "cleaning", "pool", "layer", "pacc_full",
-           "pacc_loro_mean", "drop", "n_rulers"]
+    hdr = ["regime", "method", "cleaning", "pool", "layer", "pacc_full",
+           "pacc_loro_mean", "drop", "n_rulers",
+           "pacc_full_std", "pacc_loro_mean_std", "drop_std", "n_draws"]
     d = [r for r in d if r["method"] not in DROP_MODELS]
-    rows = [[r["method"], r["cleaning"], r["pool"], r["layer"],
+    rows = [["imbalanced", r["method"], r["cleaning"], r["pool"], r["layer"],
              num(r["pacc_full"]), num(r["pacc_loro_mean"]), num(r["drop"]),
-             r["n_rulers"]] for r in d]
+             r["n_rulers"], "", "", "", ""] for r in d]
+    # Balanced LORO (C11) — drop "qwen" (qwen2.5) via DROP_MODELS, no per-ruler.
+    bp = GEO / "loro_robustness_balanced.json"
+    if bp.exists():
+        for r in json.load(open(bp)):
+            if r.get("method") in DROP_MODELS:
+                continue
+            rows.append(["balanced", r["method"], r["cleaning"], r["pool"],
+                         r["layer"],
+                         num(r.get("pacc_full_mean")),
+                         num(r.get("pacc_loro_mean_mean")),
+                         num(r.get("drop_mean")),
+                         "",
+                         num(r.get("pacc_full_std")),
+                         num(r.get("pacc_loro_mean_std")),
+                         num(r.get("drop_std")),
+                         r.get("n_draws")])
     write_csv("T5_loro.csv", hdr, rows)
-    # per-ruler detail
+    # per-ruler detail (imbalanced only — balanced has no per-ruler).
     hdr2 = ["method", "cleaning", "pool", "layer", "ruler", "n",
             "pacc_loro", "pacc_cross", "drop"]
     rows2 = []
@@ -438,6 +560,141 @@ metrics the source actually provides.
 """)
 
 
+# ===================== TEST 9 — Direct elicitation =========================
+def test9_elicitation():
+    hdr = ["model", "variant", "headline_metric", "headline_value",
+           "parse_errors", "n_total", "n_scoreable", "extra"]
+    rows = []
+    models = ["qwen3_1b7", "qwen3_8b", "qwen3_32b"]
+    base = RES / "orcc_round2_phase1a"
+    for m in models:
+        for v in ("kp0", "kp1", "kp2"):
+            p = base / f"direct_kp_{m}" / "scores" / f"{v}_metrics.json"
+            if not p.exists():
+                rows.append([m, v, "", "", "", "", "", "MISSING"])
+                continue
+            d = json.load(open(p))
+            if v == "kp0":
+                total = d.get("total")
+                pe = d.get("parse_errors") or 0
+                scoreable = (total - pe) if isinstance(total, int) else ""
+                extra = (f"correct={d.get('correct')} "
+                         f"error_rate={d.get('error_rate')}")
+                rows.append([m, v, "accuracy_tol50yr",
+                             num(d.get("accuracy")), pe, total, scoreable, extra])
+            elif v == "kp1":
+                extra = f"periods={d.get('total_periods')}"
+                rows.append([m, v, "aggregate_recall",
+                             num(d.get("aggregate_recall")),
+                             d.get("parse_errors"), d.get("total_targets"),
+                             d.get("total_hits"), extra])
+            elif v == "kp2":
+                extra = (f"declined_correctly={d.get('declined_correctly')} "
+                         f"gate_pass={d.get('gate_pass')} "
+                         f"threshold={d.get('gate_threshold')}")
+                rows.append([m, v, "hallucination_rate",
+                             num(d.get("hallucination_rate")),
+                             d.get("parse_errors"), d.get("total"),
+                             d.get("scoreable"), extra])
+    write_csv("T9_elicitation.csv", hdr, rows)
+    write_md("T9_elicitation.md", """# Test 9 — Direct elicitation (kp0 / kp1 / kp2)
+
+**What it is:** *prompted* knowledge probes — does the LLM, asked plainly in
+English, produce the correct king/date answer? Three variants:
+
+- **kp0 — knows-reign-dates.** "When did <king> rule?" Scored as accuracy
+  within a 50-year tolerance window.
+- **kp1 — king -> date recall.** Given a historical period, can the model
+  recall the kings that fit? Aggregate-recall = total_hits / total_targets.
+- **kp2 — hallucination gate.** Given fabricated/uncertain names, does the
+  model decline rather than confabulate? Headline = hallucination rate;
+  gate passes if the rate falls below `gate_threshold`.
+
+**Evaluation sizes are SMALL by design:** 8 questions per variant — these are
+targeted king/period probes, not corpus-wide labels. Read the numbers as
+sanity-check signal, not full benchmarks. The **PASS gate** is on kp2 only
+(if the model can't suppress hallucinated dates it's a deal-breaker even when
+kp0/kp1 look fine).
+
+**CSV `T9_elicitation.csv`** — one row per (model, variant). Headline metric
+varies per variant; `extra` carries auxiliary counters. Three models present:
+qwen3_1b7, qwen3_8b, qwen3_32b.
+""")
+
+
+# ===================== TEST 10 — Prompted reprobe ==========================
+def test10_prompt_reprobe():
+    import re
+    hdr = ["model", "variant", "pool", "layer", "task",
+           "headline_metric", "headline_value", "std", "n_labeled", "extra"]
+    rows = []
+    pat = re.compile(r"pv(\d+)__(last|mean)__L(\d+)__(cls|pls)\.json$")
+    for m in ("qwen3_1b7", "qwen3_8b", "qwen3_32b"):
+        rdir = RES / f"orcc_round2_phase1b_{m}" / "reprobing"
+        if not rdir.exists():
+            continue
+        for f in sorted(rdir.glob("pv*__*__L*__*.json")):
+            mt = pat.search(f.name)
+            if not mt:
+                continue
+            pv, pool, lyr, task_tag = mt.groups()
+            d = json.load(open(f))
+            if task_tag == "pls":
+                yr = d.get("year_raw") or {}
+                mpk = yr.get("metrics_per_k", {})
+                bk = yr.get("best_k_by_spearman")
+                bkr = mpk.get(str(bk), {}) if bk is not None else {}
+                extra = (f"k={bk} r2={bkr.get('r2_mean')} "
+                         f"mae={bkr.get('mae_mean')}")
+                rows.append([m, f"pv{pv}", pool, f"L{lyr}", "year",
+                             "spearman_mean_year_raw",
+                             num(bkr.get("spearman_mean")),
+                             num(bkr.get("spearman_std")),
+                             d.get("n_groups") or d.get("n_labeled"),
+                             extra])
+            else:  # cls
+                extra = (f"accuracy={d.get('accuracy_mean')} "
+                         f"chance={d.get('chance_macro_f1')} "
+                         f"weighted_f1={d.get('weighted_f1_mean')}")
+                rows.append([m, f"pv{pv}", pool, f"L{lyr}", "ruler",
+                             "macro_f1_mean",
+                             num(d.get("macro_f1_mean")),
+                             num(d.get("macro_f1_std")),
+                             d.get("n_fragments"),
+                             extra])
+    write_csv("T10_prompt_reprobe.csv", hdr, rows)
+    write_md("T10_prompt_reprobe.md", """# Test 10 — Prompted reprobe (pv0/pv1/pv2/pv3)
+
+**What it is:** does *prompting* the model first (context, framing, few-shot)
+shift the linear probes' headline? For each prompt variant we re-extract
+activations under that prompt and re-run the standard year-PLS / ruler-CLS
+probes. Variants:
+
+- **pv0** — headline "context-only" probe (the Round-3 default; no system
+  prompt; last-token-inside-fragment pooling).
+- **pv1 / pv2 / pv3** — control variants (system prompt swaps, few-shot
+  injection, format perturbations). See
+  `v_1/src/linear_probing/results/orcc_round2_phase1b/prompts/APPROVED.md` for
+  the locked text and hashes.
+
+**Coverage gaps (read carefully):**
+
+- **qwen3_1b7** — pv0 complete (5 layers x 2 pools x {cls,pls} = 20 files);
+  pv1 only L00/last/{cls,pls} = 2 files; pv2 / pv3 absent.
+- **qwen3_8b** — pv0 only; even within pv0, `mean` pooling only at L00.
+  Total 12 files. No pv1-3.
+- **qwen3_32b** — pv0-pv3 fully complete (5 layers x 2 pools x {cls,pls} x 4
+  variants = 80 files) plus a `phase1b_summary.json` side file.
+
+The **cross-model comparison should focus on pv0** (the only variant present
+for all three). Treat pv1-3 as **32B-only sensitivity** runs.
+
+**CSV `T10_prompt_reprobe.csv`** — one row per (model, variant, pool, layer,
+task). For PLS year: best-k Spearman from `metrics_per_k`. For CLS ruler:
+Macro-F1 from the file's top level.
+""")
+
+
 def main():
     print("Writing per-experiment tables to", OUT)
     test1_year_pls()
@@ -448,6 +705,8 @@ def main():
     test5_loro()
     test6_phase_d()
     test7_name_masking()
+    test9_elicitation()
+    test10_prompt_reprobe()
     # index
     write_md("README.md", """# Round 3 — per-experiment tables
 
@@ -465,6 +724,8 @@ every metric, straight from the result JSONs). Regenerate with
 | 5 LORO leave-one-ruler-out | T5_loro.md | T5_loro.csv, T5_loro_per_ruler.csv |
 | 6 Phase D visualization | T6_phase_d.md | T6_phase_d.csv |
 | 7 TF-IDF name-masking control | T7_name_masking.md | T7_name_masking.csv |
+| 9 Direct elicitation (kp0/kp1/kp2) | T9_elicitation.md | T9_elicitation.csv |
+| 10 Prompted reprobe (pv0-pv3) | T10_prompt_reprobe.md | T10_prompt_reprobe.csv |
 
 See also `../RESULTS_BY_TEST.md` (narrative, best-config tables) and
 `../EXPERIMENTS_SUMMARY.md` (advisor-facing, embedded plots).

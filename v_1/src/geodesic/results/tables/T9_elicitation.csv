@@ -1,0 +1,10 @@
+model,variant,headline_metric,headline_value,parse_errors,n_total,n_scoreable,extra
+qwen3_1b7,kp0,accuracy_tol50yr,0.875,0,8,8,correct=7 error_rate=0.0
+qwen3_1b7,kp1,aggregate_recall,0.5,0,8,4,periods=2
+qwen3_1b7,kp2,hallucination_rate,0.75,4,8,4,declined_correctly=1 gate_pass=False threshold=0.3
+qwen3_8b,kp0,accuracy_tol50yr,0.875,1,8,7,correct=7 error_rate=0.125
+qwen3_8b,kp1,aggregate_recall,0.625,1,8,5,periods=2
+qwen3_8b,kp2,hallucination_rate,0.0,6,8,2,declined_correctly=2 gate_pass=True threshold=0.3
+qwen3_32b,kp0,accuracy_tol50yr,0.75,2,8,6,correct=6 error_rate=0.25
+qwen3_32b,kp1,aggregate_recall,0.25,1,8,2,periods=2
+qwen3_32b,kp2,hallucination_rate,0.0,5,8,3,declined_correctly=3 gate_pass=True threshold=0.3
