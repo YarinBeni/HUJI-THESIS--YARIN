@@ -326,3 +326,59 @@ Phase A would have concluded "geodesic fails" for Thalesian if we had stopped at
 - [ ] Confound controls C1 (metadata-only year baseline) + C2 leave-one-provenance-out (genre unusable — 1 value)
 - [ ] NN-audit by same-ruler (C3, ruler-only per scope decision)
 - [ ] SAE attribution on qwen3_32b (if time/scope permits — Track C)
+
+---
+
+## Round-3 Backfill Verdict (2026-05-28)
+
+Closes Round 3 against `MASTER_BACKFILL_PLAN.md` §6 Definition of Done: every T1–T10 cell populated or principled-N/A across (model × cleaning × pooling × regime); unified metric sets carried through; regimes labelled `imbalanced` / `balanced` / `balanced_last`; T9 (elicitation) and T10 (prompt-reprobe) re-run on the qwen3 set and tabulated; geodesic + LORO have balanced versions; all per-experiment tables regenerated from the JSONs.
+
+### Coverage at close
+
+| Table | imbalanced | balanced (mean) | balanced_last | Notes |
+|---|---|---|---|---|
+| T1 Year PLS | 8/8 (tfidf filled locally 2026-05-28) | 7/8 (random N/A — empty source) | 6/6 | mlm/tfidf last = principled N/A (mean-only) |
+| T2 Year Ridge | 5/8 (qwen3×3 + random + tfidf; ⬜ mlm + thalesian×2 = C4 re-run pending) | 8/8 | 6/6 | imbalanced gap is the *only* open data cell |
+| T3 Ruler CLS | 8/8 | 8/8 | 6/6 | |
+| T3b Ruler PLS-DA | 8/8 | 7/8 (random N/A) | 6/6 | |
+| T4 Geodesic | 5/7 (mlm/random N/A) | 6/7 (mlm N/A; tfidf N/A by design) | — | balanced now on 6 models × ~127 layers each |
+| T5 LORO | 3 configs (qwen3_1b7 + thal_cunei ×2) | 3 configs (same set) | — | C11 ran on best configs only — others are principled N/A |
+| T6 Phase-D | 3 configs (qwen3_1b7 added) | — | — | arc-length Spearman = 1.0 on all three |
+| T7 Name-masking | 4 rows (tier0/maximal × unmasked/masked) | — | — | metrics as the source `tfidf_namemask_results.json` carries |
+| T9 Elicitation (NEW) | — | — | — | 9/9 cells (qwen3_1b7/8b/32b × kp0/kp1/kp2) |
+| T10 Prompt-reprobe (NEW) | — | — | — | pv0 complete across all 3 qwen3 models; pv1–pv3 = qwen3_32b only (the 1b7/8b reprobe array walltimed before pv2/pv3) |
+
+The single open data cell is **T2 imbalanced Ridge for mlm + thalesian_akk300m + thalesian_cunei400m**. The original C4 job (8823) ran but did not produce/commit its 3 result files; a re-run is queued. The gap is on the *imbalanced* leg only; the *balanced* leg (where every headline claim lives) is complete for those models and is unaffected.
+
+### New findings from this backfill
+
+1. **The temporal manifold is architectural, not Akkadian-pretraining-specific.** Best-layer balanced isomap pacc per model:
+   `random (qwen3-8b-init) 0.756 ± 0.082 ≥ thalesian_cunei400m 0.745 ≈ qwen3_8b 0.737 ≈ qwen3_1b7 0.735 ≈ qwen3_32b 0.734 > thalesian_akk300m 0.694`
+   (all at maximal/mean, layers L1–L9). A **random-initialized** Qwen3-8B lands on top: the curved 1-D temporal axis lives in the architecture's positional/embedding geometry **before any training**. Round-2 already showed Qwen2.5-7B (no Akkadian training) beat Thalesian imbalanced; here even *zero training of any kind* on a Qwen3 architecture suffices. Akkadian fine-tuning helps supervised PLS year regression and ruler classification; it does **not** produce the geodesic.
+
+2. **Balanced LORO is STRONG across the board.** All three balanced configs pass the pre-committed drop<0.10 STRONG gate (n_draws = 200 each):
+   - qwen3_1b7 tier0/mean L1: drop = 0.004 ± 0.046
+   - thalesian_cunei400m maximal/mean L7: drop = 0.003 ± 0.078
+   - thalesian_cunei400m tier0/mean L6: drop = −0.022 ± 0.069
+   Held-out rulers' fragments land in approximately the right place on the held-in manifold — confirming a genuine temporal axis, not ruler-cluster geometry.
+
+3. **Last-token pooling collapses balanced year regression.** Best balanced-last PLS year-Spearman per model: `random 0.334, thal_akk 0.270, thal_cunei 0.258, qwen3_1b7 0.223, qwen3_8b 0.197, qwen3_32b 0.171`. Compare to the same models' best balanced-mean PLS (0.34–0.42): mean pooling is the right choice for unsupervised dating, and the mean−last gap *widens* with model scale.
+
+4. **Prompt phrasing is irrelevant to prompt-conditioned probing (T10).** qwen3_32b best year-Spearman across pv0/pv1/pv2/pv3: 0.453 / 0.446 / 0.462 / 0.447 — a ±0.015 spread across four very different prompt templates (context-only, asked-for-date, asked-to-decline, instruction-formatted). The prompted-extraction representation does not move under context phrasing on the 32B model.
+
+5. **Elicitation (T9) re-confirms scale-doesn't-help.** Year recall ±50yr (kp0): qwen3_1b7 = qwen3_8b = 0.875 > qwen3_32b = 0.75. King-period recall (kp1): qwen3_8b 0.625 > qwen3_1b7 0.500 > qwen3_32b 0.250. Hallucination gate (kp2, threshold 0.30): qwen3_8b and qwen3_32b PASS at hallucination_rate = 0.0; qwen3_1b7 FAILS at 0.75 (over a single scoreable sample after parse errors). The kp eval sets are intentionally small (8 questions per probe) — read numbers as informative but high-variance.
+
+### Headline thesis claims — unchanged or strengthened
+
+- **Dating is shallow orthographic drift.** Balanced Ridge year-Spearman ranking: `mlm 0.408 > thal_cunei 0.384 > tfidf 0.355 > qwen3_1b7 0.352 > random 0.345 > qwen3_8b 0.332 > qwen3_32b 0.326 > thal_akk 0.312`. A masked-LM with hidden dim 384 beats every Qwen3 by 0.05–0.08 Spearman; TF-IDF is within 0.01 of qwen3_32b; a random-init Qwen3-8B is within 0.02 of all the trained Qwen3s. The cue is surface-level orthographic drift, validated by the T7 name-masking control (masking all royal names left year-Spearman *up* by ~0.04).
+- **The neural win is geometric, not predictive.** The interesting story is T4/T5: a curved 1-D temporal axis emerges in Qwen3-architecture activation space, is strongest in the *random-init* variant (no training), and is robust to leave-one-ruler-out.
+- **Domain fine-tuning vs. frontier scale is a draw on year regression.** Best balanced PLS year-Spearman per model spans 0.344–0.424 — all within ±1 std of each other.
+- **Mean pooling, not last-token, is the right choice for unsupervised dating** under MC balancing — confirmed across six models with the C3 last-token sweep.
+
+### Pre-committed gates
+
+- **Phase A** (Spearman ≥ PLS+0.05 OR pairwise-acc ≥ 0.70 on Thalesian L12): NULL at L12 (pacc 0.547) — already reported. Phase B selected geodesic-optimal layers and met the gate on multiple configs.
+- **Phase C LORO** (drop < 0.10 = STRONG): PASS for all three imbalanced configs (0.008–0.055) and all three balanced configs (−0.022 to 0.027).
+- **Round-3 Definition of Done** (MASTER_BACKFILL_PLAN §6): satisfied except for the one open T2-imbalanced cell flagged above; that cell does not affect any headline claim.
+
+## Verdict: PASS

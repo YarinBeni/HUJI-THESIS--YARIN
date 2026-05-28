@@ -201,3 +201,92 @@ correction*: it removes the Neo-Assyrian shortcut so the numbers reflect real da
 baseline ties a 32B LLM and a domain-finetuned encoder. Dating Akkadian is *shallow orthographic
 drift* (Tests 2, 3, 7). The only genuine neural win is *geometric* — the unsupervised temporal
 manifold (Tests 4, 5), strongest in a model with **no** Akkadian training.
+
+---
+
+## Round-3 backfill addendum (2026-05-28)
+
+Three additions from the backfill that change the picture in concrete ways. Full numbers in
+`tables/T1–T10.csv`. Verdict appended to `orcc_round3_REPORT.md` (= PASS).
+
+### TEST 4 balanced — random-init beats trained on the geodesic
+Balanced MC (200 draws) Isomap pacc, best layer per model:
+
+| Model | best layer / cfg | balanced pacc ± std |
+|---|---|---|
+| **random (qwen3-8b-init)** | L2 maximal/mean | **0.756 ± 0.082** |
+| thalesian_cunei400m | L9 maximal/mean | 0.745 ± 0.120 |
+| qwen3_8b | L2 maximal/mean | 0.737 ± 0.075 |
+| qwen3_1b7 | L1 maximal/mean | 0.735 ± 0.053 |
+| qwen3_32b | L2 maximal/mean | 0.734 ± 0.067 |
+| thalesian_akk300m | L4 maximal/mean | 0.694 ± 0.087 |
+
+The **random** is a Qwen3-8B with randomly-initialized weights (same architecture, no training).
+It lands on top — meaning the curved 1-D temporal axis exists in the architecture's
+positional/embedding geometry **before any training**. This generalizes the Round-2 observation
+that Qwen2.5-7B (no Akkadian training) had the best imbalanced geodesic: not only is Akkadian
+fine-tuning unnecessary, *no training of any kind* is.
+
+### TEST 5 balanced — LORO STRONG across the board
+Three configs were re-measured under balanced MC (n_draws=200 each):
+
+| Config | pacc_full (mean ± std) | pacc_loro (mean ± std) | drop ± std | verdict |
+|---|---|---|---|---|
+| qwen3_1b7 tier0/mean L1 | 0.699 ± 0.096 | 0.695 ± 0.072 | **+0.004 ± 0.046** | STRONG |
+| thalesian_cunei400m maximal/mean L7 | 0.738 ± 0.121 | 0.735 ± 0.082 | **+0.003 ± 0.078** | STRONG |
+| thalesian_cunei400m tier0/mean L6 | 0.617 ± 0.106 | 0.639 ± 0.074 | **−0.022 ± 0.069** | STRONG |
+
+All three balanced drops are at-or-near zero — confirming the temporal axis under the same
+class-balanced regime used for the supervised probes. The qwen2.5 entry in the balanced LORO file
+was filtered out per `DROP_MODELS`.
+
+### TEST 8 — balanced-last is structurally worse, the gap widens with scale
+C3 ran balanced MC with **last-token** pooling for the six neural models. Best year-Spearman per
+model under PLS, balanced-last vs balanced-mean (year-raw):
+
+| Model | balanced-mean best Sp | balanced-last best Sp |
+|---|---|---|
+| qwen3_1b7 | 0.371 | 0.223 |
+| qwen3_8b  | 0.365 | 0.197 |
+| qwen3_32b | 0.399 | **0.171** |
+| thalesian_akk300m | 0.344 | 0.270 |
+| thalesian_cunei400m | 0.411 | 0.258 |
+| random | (no balanced-mean source) | 0.334 |
+
+Mean-pool is uniformly better. The mean-minus-last gap **grows with model scale** (≈0.15 on 1b7,
+≈0.17 on 8b, ≈0.23 on 32b) — bigger models concentrate more *task-specific* meaning at deeper
+positions, but their last-token representation is *less* of a uniform document summary.
+
+### TEST 9 — Elicitation (kp0/kp1/kp2) on qwen3
+3 models × 3 probes = 9 cells, **all populated**:
+
+| Variant (headline) | qwen3_1b7 | qwen3_8b | qwen3_32b |
+|---|---|---|---|
+| kp0 accuracy_tol50yr (8 questions) | 0.875 | 0.875 | 0.750 |
+| kp1 aggregate_recall (2 periods, 8 targets) | 0.500 | 0.625 | 0.250 |
+| kp2 hallucination_rate (gate threshold 0.30) | **0.75 → FAIL** | 0.0 → PASS | 0.0 → PASS |
+
+Scale doesn't help elicitation either — kp1 actually *decreases* with scale. **kp2** is the
+pre-committed hallucination gate: qwen3_8b and qwen3_32b pass; qwen3_1b7 fails (over a single
+scoreable response after parse errors — the gate is at hallucination_rate < 0.30).
+Parse-error rates are high across the board (4–6 of 8 on kp2), which limits effective N; treat
+T9 as informative but high-variance.
+
+### TEST 10 — Prompt-version reprobing (pv0–pv3) on qwen3
+**Coverage:** qwen3_32b has pv0–pv3 complete (5 layers × 2 pools × {PLS,CLS} each, 80 files).
+qwen3_1b7 has pv0 complete + only the L00/last cell of pv1 (cluster array walltimed).
+qwen3_8b has only pv0 (and even pv0 mean only at L00). Cross-model comparison must use **pv0**.
+
+**pv0 best year-Spearman, ruler Macro-F1 (per model):**
+
+| Model | pv0 year-Sp (pool/L) | pv0 ruler Macro-F1 (pool/L) |
+|---|---|---|
+| qwen3_1b7 | 0.451 (mean/L14) | 0.147 (mean/L00) |
+| qwen3_8b  | 0.369 (last/L36) | 0.145 (mean/L00) |
+| qwen3_32b | 0.453 (mean/L48) | 0.133 (mean/L00) |
+
+**Prompt phrasing is irrelevant on the 32B:** best year-Spearman across pv0/pv1/pv2/pv3 on
+qwen3_32b is 0.453 / 0.446 / 0.462 / 0.447 — a ±0.015 spread. The representation does not move
+under four very different prompt templates (context-only, asked-for-date, asked-to-decline,
+instruction-formatted). Whatever dating signal exists in qwen3_32b is robust to how you ask, and
+remains in the **scale-doesn't-help** band (matching T1/T2 balanced).
