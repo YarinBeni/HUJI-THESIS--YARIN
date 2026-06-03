@@ -232,6 +232,13 @@ def parse_args() -> argparse.Namespace:
               help="Cleaning tier for activation-based probes: 'tier0' (default) "
                    "or 'maximal'. TF-IDF probes loop both internally and ignore "
                    "this flag.")
+    _add_dual(p, "pls-k", type=str, default=None,
+              help="Comma-separated PLS n_components grid to sweep (default: "
+                   "'1,2,3,5', the Round-1 grid). Pass e.g. '1,2,3,5,8,16,32,64,128' "
+                   "for the components-tradeoff plot (Fig-1 follow-up Task 4). Each "
+                   "k is capped at the per-fold training size by PLSRegression, so "
+                   "values above ~n_train are silently no-ops. Affects PLS/PLS-DA "
+                   "probes only; Ridge/CLS ignore it.")
     _add_dual(p, "n-jobs", type=int, default=1,
               help="Worker threads for the per-layer parallel sweep (default 1 = "
                    "sequential). Set to $SLURM_CPUS_PER_TASK and run with "
@@ -751,9 +758,19 @@ def _aggregate_summary(out_dir: Path, probe: str, method_tag: str) -> dict:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    global _LAYER_SUBSET, _N_JOBS, _CLEANING, _POOLING
+    global _LAYER_SUBSET, _N_JOBS, _CLEANING, _POOLING, PLS_K_VALUES
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Optional wider PLS-component grid (Fig-1 follow-up Task 4). Reassign the
+    # module global so every PLS/PLS-DA worker + the best-k selection + the
+    # per-draw metrics_per_k dict all use the same grid. Default keeps Round-1.
+    pls_k_arg = getattr(args, "pls_k", None)
+    if pls_k_arg:
+        PLS_K_VALUES = sorted({int(x.strip()) for x in str(pls_k_arg).split(",") if x.strip()})
+        print(f"[pls-k] sweeping PLS n_components grid: {PLS_K_VALUES}")
+    else:
+        print(f"[pls-k] using default PLS n_components grid: {PLS_K_VALUES}")
 
     # Runtime pooling/cleaning for activation-based probes (mlm/qwen/random/
     # qwen3_*/thalesian_*). Feeds the activation-dir leaf name, the recorded
