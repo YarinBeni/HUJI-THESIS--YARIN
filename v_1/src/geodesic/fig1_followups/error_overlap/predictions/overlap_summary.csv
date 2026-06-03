@@ -1,0 +1,16 @@
+metric,mlm,thalesian_cunei400m,qwen3_32b,tfidf
+err_corr_vs[mlm],1.000,0.299,0.316,0.323
+err_corr_vs[thalesian_cunei400m],0.299,1.000,0.327,0.235
+err_corr_vs[qwen3_32b],0.316,0.327,1.000,0.378
+err_corr_vs[tfidf],0.323,0.235,0.378,1.000
+jaccard_vs[mlm],1.000,0.785,0.820,0.813
+jaccard_vs[thalesian_cunei400m],0.785,1.000,0.788,0.799
+jaccard_vs[qwen3_32b],0.820,0.788,1.000,0.824
+jaccard_vs[tfidf],0.813,0.799,0.824,1.000
+
+n_models_correct,0,1,2,3,4
+n_fragments,60,31,100,265,737
+frac_correct[mlm],0.826
+frac_correct[thalesian_cunei400m],0.807
+frac_correct[qwen3_32b],0.838
+frac_correct[tfidf],0.859
