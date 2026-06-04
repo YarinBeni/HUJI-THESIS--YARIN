@@ -158,39 +158,82 @@ def grouped_bars(rows, models, labels, out, tol, plt, min_n=10, top_k=14):
              f"Dating error by {nice}", f"bars_mae_{label}.png")
 
 
-def year_line(rows, models, out, tol, plt, bin_yr=50):
-    """Fine-grained dating accuracy vs year: one smooth line per model over
-    `bin_yr`-year bins (far finer + cleaner than the chunky century bars)."""
+def year_line(rows, models, out, tol, plt, window=90):
+    """Dating accuracy through time, honestly: x = fragments ordered oldest->
+    newest (rank), so every x is a real fragment and there are no fake flat
+    bridges across the corpus's big empty year-stretches. Year labels mark a few
+    rank positions; clustered labels reveal where the corpus actually sits."""
     import numpy as np
     _setup(plt)
     cm = _cmap(models)
-    yrs = np.array([float(r["year_true"]) for r in rows])
-    lo, hi = (np.floor(yrs.min() / bin_yr) * bin_yr, np.ceil(yrs.max() / bin_yr) * bin_yr)
-    edges = np.arange(lo, hi + bin_yr, bin_yr)
-    centers = (edges[:-1] + edges[1:]) / 2
-    idx = np.digitize(yrs, edges) - 1
+    order = np.argsort([-float(r["year_true"]) for r in rows])   # oldest first
+    yrs = np.array([float(rows[i]["year_true"]) for i in order])
+    half = window // 2
+    x = np.arange(len(order))
 
     fig, ax = plt.subplots(figsize=(11, 5))
-    counts = np.array([(idx == b).sum() for b in range(len(centers))])
-    # shade bin counts as a light context band
-    ax2 = ax.twinx()
-    ax2.fill_between(centers, counts, color="#eeeeee", step="mid", zorder=0)
-    ax2.set_ylabel("# fragments per bin", color="#999999")
-    ax2.set_ylim(0, counts.max() * 3); ax2.tick_params(colors="#999999")
-    ax2.grid(False); ax2.spines["top"].set_visible(False)
-
     for m in models:
-        ok = np.array([r[f"_ok_{m}"] for r in rows], dtype=float)
-        frac = np.array([ok[idx == b].mean() if (idx == b).sum() >= 5 else np.nan
-                         for b in range(len(centers))])
-        ax.plot(centers, frac, "-o", ms=4, lw=2, color=cm[m], label=m, zorder=3)
-    ax.set_xlabel("year (BCE)"); ax.set_ylabel(f"fraction correct (±{tol:.0f} yr)")
-    ax.set_ylim(0, 1.02); ax.invert_xaxis()   # older on the right -> time flows left
-    ax.set_title(f"Dating accuracy across time ({bin_yr}-year bins)")
-    ax.set_zorder(ax2.get_zorder() + 1); ax.patch.set_visible(False)
-    ax.legend(ncol=len(models), loc="upper left")
+        ok = np.array([rows[i][f"_ok_{m}"] for i in order], dtype=float)
+        roll = np.array([ok[max(0, p - half):p + half].mean() for p in range(len(ok))])
+        ax.plot(x, roll, lw=2.2, color=cm[m], label=m)
+    ticks = np.linspace(0, len(order) - 1, 8).astype(int)
+    ax.set_xticks(ticks)
+    ax.set_xticklabels([f"{int(yrs[t])}" for t in ticks])
+    ax.set_xlabel("fragments ordered oldest → newest   (tick = year BCE at that point)")
+    ax.set_ylabel(f"fraction correct (±{tol:.0f} yr)")
+    ax.set_ylim(0, 1.02)
+    ax.set_title(f"Dating accuracy through the corpus (rolling {window}-fragment window)")
+    ax.legend(ncol=len(models), loc="lower center")
     fig.tight_layout(); fig.savefig(out / "year_accuracy_line.png"); plt.close(fig)
     print("[ok] year_accuracy_line.png")
+
+
+def error_densities(rows, models, out, tol, plt):
+    """Overlaid smooth densities (KDE) of each model's error — the 'are the
+    distributions different like two gaussians' view, which the JS/Wasserstein
+    numbers quantify. Left: signed error (bias); right: absolute error."""
+    import numpy as np
+    from scipy.stats import gaussian_kde
+    _setup(plt)
+    cm = _cmap(models)
+
+    serr = {m: np.array([r[f"_serr_{m}"] for r in rows if not np.isnan(r[f"_serr_{m}"])])
+            for m in models}
+    aerr = {m: np.array([r[f"_err_{m}"] for r in rows if not np.isnan(r[f"_err_{m}"])])
+            for m in models}
+    # readable window (trim long tails): symmetric for signed, [0,hi] for abs
+    shi = np.percentile(np.concatenate(list(serr.values())), 96)
+    slo = np.percentile(np.concatenate(list(serr.values())), 4)
+    s_lim = max(abs(slo), abs(shi))
+    a_hi = np.percentile(np.concatenate(list(aerr.values())), 97)
+
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+    xs = np.linspace(-s_lim, s_lim, 500)
+    for m in models:
+        d = gaussian_kde(serr[m])(xs)
+        axes[0].plot(xs, d, color=cm[m], lw=2.2, label=m)
+        axes[0].fill_between(xs, d, color=cm[m], alpha=0.10)
+    axes[0].axvline(0, color="#888888", ls="--", lw=1)
+    axes[0].set_xlabel("signed error: predicted − true (years)")
+    axes[0].set_ylabel("density")
+    axes[0].set_title("Bias — under- vs over-dating")
+    axes[0].legend()
+
+    xa = np.linspace(0, a_hi, 500)
+    for m in models:
+        d = gaussian_kde(aerr[m])(xa)
+        axes[1].plot(xa, d, color=cm[m], lw=2.2, label=m)
+        axes[1].fill_between(xa, d, color=cm[m], alpha=0.10)
+    axes[1].axvline(tol, color="#888888", ls=":", lw=1.2)
+    axes[1].text(tol, axes[1].get_ylim()[1] * 0.92, f" ±{tol:.0f}yr", fontsize=8, color="#666")
+    axes[1].set_xlabel("absolute error (years)")
+    axes[1].set_title("Error magnitude")
+    axes[1].legend()
+    fig.suptitle("Per-model error distributions (overlaid) — the picture behind "
+                 "the JS / Wasserstein distances", y=1.02, fontsize=12)
+    fig.tight_layout(); fig.savefig(out / "error_densities.png", bbox_inches="tight")
+    plt.close(fig)
+    print("[ok] error_densities.png")
 
 
 def distance_and_map(rows, models, out, tol, plt):
@@ -310,7 +353,9 @@ def main() -> None:
         yt = float(r["year_true"])
         for m in models:
             v = r[f"pred_{m}"]
-            e = abs(float(v) - yt) if v not in ("", "nan") else np.nan
+            se = (float(v) - yt) if v not in ("", "nan") else np.nan   # signed
+            e = abs(se)
+            r[f"_serr_{m}"] = se
             r[f"_err_{m}"] = e
             r[f"_ok_{m}"] = (not np.isnan(e)) and e <= args.tol
         r["_nc"] = sum(r[f"_ok_{m}"] for m in models)
@@ -412,8 +457,9 @@ def main() -> None:
     grouped_bars(rows, models, meta_cols, out, args.tol, plt,
                  min_n=args.min_n, top_k=args.top_k)
 
-    print("\n--- fine-grained accuracy-vs-year line ---")
-    year_line(rows, models, out, args.tol, plt, bin_yr=args.year_bin)
+    print("\n--- accuracy-vs-year (rolling) + error-distribution densities ---")
+    year_line(rows, models, out, args.tol, plt)
+    error_densities(rows, models, out, args.tol, plt)
 
     print("\n--- model error-distribution distances + MDS map ---")
     distance_and_map(rows, models, out, args.tol, plt)
