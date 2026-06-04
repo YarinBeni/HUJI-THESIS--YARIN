@@ -87,6 +87,128 @@ def group_analysis(rows, models, meta_cols, out, tol, plt, min_n=10, top_k=14):
              f"permodel_mae_{label}.png", "RdYlGn_r", 0, float(np.nanmax(errM)), "{:.0f}")
 
 
+def grouped_bars(rows, models, labels, out, tol, plt, min_n=10, top_k=14):
+    """Grouped bar charts: x = metadata value, one colored bar per model.
+    Two per label: fraction-correct and mean-abs-error. Reads the error
+    distribution differences across models at a glance (softer than unique sets)."""
+    import numpy as np
+    colors = plt.cm.tab10(np.linspace(0, 1, 10))
+    for label in labels:
+        vals = np.array([r.get(label, "") for r in rows])
+        groups, counts = np.unique(vals, return_counts=True)
+        keep = [g for g, c in sorted(zip(groups, counts), key=lambda x: -x[1])
+                if c >= min_n and g != ""][:top_k]
+        if label == "century":
+            keep = sorted(keep, key=lambda g: int(g))   # chronological, not by count
+        if not keep:
+            continue
+        nfrac = np.full((len(keep), len(models)), np.nan)
+        nmae = np.full((len(keep), len(models)), np.nan)
+        for gi, g in enumerate(keep):
+            grp = [r for r in rows if r.get(label, "") == g]
+            for mi, m in enumerate(models):
+                oks = [r[f"_ok_{m}"] for r in grp]
+                errs = [r[f"_err_{m}"] for r in grp if not np.isnan(r[f"_err_{m}"])]
+                nfrac[gi, mi] = np.mean(oks) if oks else np.nan
+                nmae[gi, mi] = np.mean(errs) if errs else np.nan
+
+        def bars(M, ylab, title, fname, ylim=None):
+            x = np.arange(len(keep)); w = 0.8 / len(models)
+            fig, ax = plt.subplots(figsize=(max(7, 0.95 * len(keep)) + 1, 4.6))
+            for mi, m in enumerate(models):
+                ax.bar(x + (mi - (len(models) - 1) / 2) * w, M[:, mi], w,
+                       color=colors[mi], label=m)
+            ax.set_xticks(x)
+            ax.set_xticklabels([f"{str(g)[:18]}\n(n={int((vals == g).sum())})" for g in keep],
+                               rotation=45, ha="right", fontsize=7)
+            ax.set_ylabel(ylab); ax.set_title(title)
+            if ylim:
+                ax.set_ylim(*ylim)
+            ax.legend(fontsize=7, ncol=len(models)); ax.grid(True, axis="y", alpha=0.3)
+            fig.tight_layout(); fig.savefig(out / fname, dpi=150); plt.close(fig)
+            print(f"[ok] {fname}")
+
+        bars(nfrac, f"fraction correct (±{tol:.0f} yr)",
+             f"bars frac correct by {label}".replace(" ", "_"),
+             f"bars_frac_{label}.png", ylim=(0, 1))
+        bars(nmae, "mean abs error (yr)", f"bars MAE by {label}",
+             f"bars_mae_{label}.png")
+
+
+def distance_and_map(rows, models, out, tol, plt):
+    """Quantify how different the models' error distributions are, and draw a
+    map of the models from those distances.
+
+    - JS divergence  (symmetric, bounded version of KL; raw KL is asymmetric and
+      blows up on empty bins) between abs-error histograms, pairwise.
+    - Wasserstein-1  (earth-mover, in YEARS — interpretable) pairwise.
+    - MDS embeds the models in 2D from the JS distances: close points = similar
+      error distributions. (With 4 models the map is simple; it gets genuinely
+      useful as we add qwen3_1b7/8b/random/etc.)
+    """
+    import numpy as np
+    from scipy.spatial.distance import jensenshannon
+    from scipy.stats import wasserstein_distance
+
+    errs = {m: np.array([r[f"_err_{m}"] for r in rows if not np.isnan(r[f"_err_{m}"])])
+            for m in models}
+    hi = max(e.max() for e in errs.values())
+    bins = np.linspace(0, hi, 31)
+    hist = {m: np.histogram(errs[m], bins=bins)[0].astype(float) + 1e-9 for m in models}
+
+    n = len(models)
+    JS = np.zeros((n, n)); W = np.zeros((n, n))
+    for i in range(n):
+        for j in range(n):
+            JS[i, j] = jensenshannon(hist[models[i]], hist[models[j]])     # in [0,1]
+            W[i, j] = wasserstein_distance(errs[models[i]], errs[models[j]])
+
+    # heatmaps + CSV
+    def heat(M, title, fname, fmt):
+        fig, ax = plt.subplots(figsize=(5.2, 4.6))
+        im = ax.imshow(M, cmap="magma")
+        ax.set_xticks(range(n)); ax.set_xticklabels(models, rotation=45, ha="right", fontsize=8)
+        ax.set_yticks(range(n)); ax.set_yticklabels(models, fontsize=8)
+        for i in range(n):
+            for j in range(n):
+                ax.text(j, i, fmt.format(M[i, j]), ha="center", va="center",
+                        color="w" if M[i, j] < M.max() * 0.6 else "k", fontsize=8)
+        ax.set_title(title); fig.colorbar(im); fig.tight_layout()
+        fig.savefig(out / fname, dpi=150); plt.close(fig)
+        print(f"[ok] {fname}")
+
+    heat(JS, "JS divergence of |error| dists", "dist_js.png", "{:.3f}")
+    heat(W, "Wasserstein dist of |error| (yr)", "dist_wasserstein.png", "{:.0f}")
+
+    with open(out / "distribution_distances.csv", "w", newline="") as f:
+        wr = csv.writer(f)
+        wr.writerow(["pair", "js_divergence", "wasserstein_yr"])
+        for i in range(n):
+            for j in range(i + 1, n):
+                wr.writerow([f"{models[i]}__vs__{models[j]}",
+                             f"{JS[i, j]:.4f}", f"{W[i, j]:.1f}"])
+    print("[ok] distribution_distances.csv")
+
+    # MDS map from the JS distances
+    try:
+        from sklearn.manifold import MDS
+        mds = MDS(n_components=2, dissimilarity="precomputed", random_state=0,
+                  n_init=8, normalized_stress="auto")
+        xy = mds.fit_transform(JS)
+        fig, ax = plt.subplots(figsize=(6, 5))
+        ax.scatter(xy[:, 0], xy[:, 1], s=180, c=range(n), cmap="tab10", zorder=3)
+        for i, m in enumerate(models):
+            ax.annotate(m, (xy[i, 0], xy[i, 1]), textcoords="offset points",
+                        xytext=(8, 4), fontsize=9)
+        ax.set_title("Model map (MDS on JS distance of error distributions)\n"
+                     "close = similar error behavior")
+        ax.set_xticks([]); ax.set_yticks([]); ax.grid(True, alpha=0.2)
+        fig.tight_layout(); fig.savefig(out / "model_map_mds.png", dpi=150); plt.close(fig)
+        print(f"[ok] model_map_mds.png  (MDS stress={mds.stress_:.4f})")
+    except Exception as e:
+        print(f"[warn] MDS skipped: {type(e).__name__}: {e}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--pred-csv", type=Path, required=True)
@@ -202,6 +324,17 @@ def main() -> None:
     print("\n--- per-metadata-group scoreboards ---")
     group_analysis(rows, models, meta_cols, out, args.tol, plt,
                    min_n=args.min_n, top_k=args.top_k)
+
+    # year binned to century, so it can be a grouped-bar x-axis too
+    for r in rows:
+        r["century"] = f"{int(float(r['year_true']) // 100) * 100}"
+
+    print("\n--- grouped bars (one color per model) per metadata value ---")
+    grouped_bars(rows, models, meta_cols + ["century"], out, args.tol, plt,
+                 min_n=args.min_n, top_k=args.top_k)
+
+    print("\n--- model error-distribution distances + MDS map ---")
+    distance_and_map(rows, models, out, args.tol, plt)
 
 
 if __name__ == "__main__":
