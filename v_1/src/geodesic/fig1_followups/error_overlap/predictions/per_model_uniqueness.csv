@@ -1,0 +1,5 @@
+model,frac_correct,unique_win,unique_loss,win_top_period,win_top_subgenre,loss_top_period,loss_top_subgenre
+mlm,0.826,1,70,Neo-Assyrian:1,slab (sculptured):1,Neo-Babylonian:40; Neo-Assyrian:30,cylinder:25; brick:10; wall slab (with reliefs):6
+thalesian_cunei400m,0.807,10,87,Neo-Babylonian:5; Middle Babylonian:4; Neo-Assyrian:1,cylinder:2; arrow head:2; dagger:2,Neo-Assyrian:76; Neo-Babylonian:10; Achaemenid:1,brick:13; bead:10; wall slab (with reliefs):8
+qwen3_32b,0.838,4,60,Neo-Assyrian:3; Neo-Babylonian:1,lion colossus:1; seal:1; cylinder seal:1,Neo-Assyrian:54; Neo-Babylonian:5; Achaemenid:1,None:27; brick:10; cylinder:4
+tfidf,0.859,16,48,Neo-Babylonian:8; Neo-Assyrian:5; Middle Babylonian:3,cylinder:6; dagger:3; brick:2,Neo-Assyrian:37; Neo-Babylonian:11,None:10; cylinder:8; wall slab (with reliefs):7

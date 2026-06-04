@@ -377,14 +377,31 @@ def run_tfidf_pls(orcc_df, orcc_positions, y_raw, y_log, y_ruler, fragment_ids) 
         X = _build_tfidf_matrix(texts)
 
         # ── year ───────────────────────────────────────────────────────────
+        # Per-k guard (mirrors _run_acts_pls): a too-large k raises (PLS caps
+        # n_components at the per-fold train size) — skip that k, keep the rest,
+        # instead of failing the whole TF-IDF draw.
+        nan_year = {"spearman_mean": float("nan"), "r2_mean": float("nan"),
+                    "mae_mean": float("nan"), "skipped": True}
         for yt in YEAR_TRANSFORMS:
             y = y_raw if yt == "raw" else y_log
             metrics_per_k = {}
             for k in PLS_K_VALUES:
-                metrics_per_k[str(k)] = fit_pls_groupkfold(
-                    X, y, y_ruler, n_components=k, n_splits=N_SPLITS)
-            best_sp = max(PLS_K_VALUES, key=lambda k: metrics_per_k[str(k)]["spearman_mean"])
-            best_r2 = max(PLS_K_VALUES, key=lambda k: metrics_per_k[str(k)]["r2_mean"])
+                try:
+                    metrics_per_k[str(k)] = fit_pls_groupkfold(
+                        X, y, y_ruler, n_components=k, n_splits=N_SPLITS)
+                except Exception as e:
+                    print(f"    [pls-skip] tfidf {cleaning} k={k} year-{yt}: {type(e).__name__}: {e}", flush=True)
+                    metrics_per_k[str(k)] = {**nan_year, "error": f"{type(e).__name__}: {e}"}
+            valid_sp = [k for k in PLS_K_VALUES
+                        if not (isinstance(metrics_per_k[str(k)].get("spearman_mean"), float)
+                                and np.isnan(metrics_per_k[str(k)]["spearman_mean"]))]
+            valid_r2 = [k for k in PLS_K_VALUES
+                        if not (isinstance(metrics_per_k[str(k)].get("r2_mean"), float)
+                                and np.isnan(metrics_per_k[str(k)]["r2_mean"]))]
+            best_sp = (max(valid_sp, key=lambda k: metrics_per_k[str(k)]["spearman_mean"])
+                       if valid_sp else PLS_K_VALUES[0])
+            best_r2 = (max(valid_r2, key=lambda k: metrics_per_k[str(k)]["r2_mean"])
+                       if valid_r2 else PLS_K_VALUES[0])
             results[f"tfidf__{cleaning}__na__L00__year-{yt}"] = {
                 "method": "tfidf", "cleaning": cleaning, "pooling": "na",
                 "layer": 0, "year_transform": yt,
@@ -394,11 +411,21 @@ def run_tfidf_pls(orcc_df, orcc_positions, y_raw, y_log, y_ruler, fragment_ids) 
             }
 
         # ── ruler ─────────────────────────────────────────────────────────
+        nan_ruler = {"macro_f1_mean": float("nan"), "accuracy_mean": float("nan"),
+                     "skipped": True}
         metrics_per_k = {}
         for k in PLS_K_VALUES:
-            metrics_per_k[str(k)] = fit_plsda_stratified_kfold(
-                X, y_ruler, n_components=k, n_splits=N_SPLITS)
-        best_k = max(PLS_K_VALUES, key=lambda k: metrics_per_k[str(k)]["macro_f1_mean"])
+            try:
+                metrics_per_k[str(k)] = fit_plsda_stratified_kfold(
+                    X, y_ruler, n_components=k, n_splits=N_SPLITS)
+            except Exception as e:
+                print(f"    [plsda-skip] tfidf {cleaning} k={k} ruler: {type(e).__name__}: {e}", flush=True)
+                metrics_per_k[str(k)] = {**nan_ruler, "error": f"{type(e).__name__}: {e}"}
+        valid_k = [k for k in PLS_K_VALUES
+                   if not (isinstance(metrics_per_k[str(k)].get("macro_f1_mean"), float)
+                           and np.isnan(metrics_per_k[str(k)]["macro_f1_mean"]))]
+        best_k = (max(valid_k, key=lambda k: metrics_per_k[str(k)]["macro_f1_mean"])
+                  if valid_k else PLS_K_VALUES[0])
         results[f"tfidf__{cleaning}__na__L00__ruler"] = {
             "method": "tfidf", "cleaning": cleaning, "pooling": "na",
             "layer": 0, "target": "ruler",
