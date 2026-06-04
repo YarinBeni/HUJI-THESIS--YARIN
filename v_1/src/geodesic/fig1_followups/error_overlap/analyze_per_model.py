@@ -32,6 +32,25 @@ import numpy as np
 
 META = ["ruler", "period", "provenance", "domain", "sub_genre"]
 
+# Okabe-Ito colorblind-safe palette — consistent model->color across every plot.
+_PALETTE = ["#0072B2", "#E69F00", "#009E73", "#D55E00", "#CC79A7",
+            "#56B4E9", "#999999", "#F0E442"]
+
+
+def _setup(plt):
+    plt.rcParams.update({
+        "figure.dpi": 150, "savefig.dpi": 150,
+        "axes.spines.top": False, "axes.spines.right": False,
+        "axes.grid": True, "grid.color": "#dddddd", "grid.linewidth": 0.8,
+        "axes.axisbelow": True, "axes.edgecolor": "#666666",
+        "font.size": 11, "axes.titlesize": 12, "axes.titleweight": "bold",
+        "legend.frameon": False, "xtick.color": "#333333", "ytick.color": "#333333",
+    })
+
+
+def _cmap(models):
+    return {m: _PALETTE[i % len(_PALETTE)] for i, m in enumerate(models)}
+
 
 def group_analysis(rows, models, meta_cols, out, tol, plt, min_n=10, top_k=14):
     """Same error analysis as the fragment level, but aggregated per metadata
@@ -92,7 +111,8 @@ def grouped_bars(rows, models, labels, out, tol, plt, min_n=10, top_k=14):
     Two per label: fraction-correct and mean-abs-error. Reads the error
     distribution differences across models at a glance (softer than unique sets)."""
     import numpy as np
-    colors = plt.cm.tab10(np.linspace(0, 1, 10))
+    _setup(plt)
+    cm = _cmap(models)
     for label in labels:
         vals = np.array([r.get(label, "") for r in rows])
         groups, counts = np.unique(vals, return_counts=True)
@@ -113,26 +133,64 @@ def grouped_bars(rows, models, labels, out, tol, plt, min_n=10, top_k=14):
                 nmae[gi, mi] = np.mean(errs) if errs else np.nan
 
         def bars(M, ylab, title, fname, ylim=None):
-            x = np.arange(len(keep)); w = 0.8 / len(models)
-            fig, ax = plt.subplots(figsize=(max(7, 0.95 * len(keep)) + 1, 4.6))
+            x = np.arange(len(keep)); w = 0.82 / len(models)
+            fig, ax = plt.subplots(figsize=(max(7, 0.85 * len(keep)) + 1.5, 4.8))
             for mi, m in enumerate(models):
                 ax.bar(x + (mi - (len(models) - 1) / 2) * w, M[:, mi], w,
-                       color=colors[mi], label=m)
+                       color=cm[m], edgecolor="white", linewidth=0.6, label=m)
             ax.set_xticks(x)
             ax.set_xticklabels([f"{str(g)[:18]}\n(n={int((vals == g).sum())})" for g in keep],
-                               rotation=45, ha="right", fontsize=7)
+                               rotation=35, ha="right", fontsize=8)
             ax.set_ylabel(ylab); ax.set_title(title)
+            ax.grid(axis="x", visible=False)
             if ylim:
                 ax.set_ylim(*ylim)
-            ax.legend(fontsize=7, ncol=len(models)); ax.grid(True, axis="y", alpha=0.3)
-            fig.tight_layout(); fig.savefig(out / fname, dpi=150); plt.close(fig)
+            ax.legend(fontsize=8, ncol=len(models), loc="upper center",
+                      bbox_to_anchor=(0.5, 1.0))
+            fig.tight_layout(); fig.savefig(out / fname); plt.close(fig)
             print(f"[ok] {fname}")
 
+        nice = {"ruler": "ruler", "period": "period", "provenance": "provenance",
+                "domain": "domain", "sub_genre": "object type", "century": "century (BCE)"}.get(label, label)
         bars(nfrac, f"fraction correct (±{tol:.0f} yr)",
-             f"bars frac correct by {label}".replace(" ", "_"),
-             f"bars_frac_{label}.png", ylim=(0, 1))
-        bars(nmae, "mean abs error (yr)", f"bars MAE by {label}",
-             f"bars_mae_{label}.png")
+             f"Dating accuracy by {nice}", f"bars_frac_{label}.png", ylim=(0, 1))
+        bars(nmae, "mean abs error (years)",
+             f"Dating error by {nice}", f"bars_mae_{label}.png")
+
+
+def year_line(rows, models, out, tol, plt, bin_yr=50):
+    """Fine-grained dating accuracy vs year: one smooth line per model over
+    `bin_yr`-year bins (far finer + cleaner than the chunky century bars)."""
+    import numpy as np
+    _setup(plt)
+    cm = _cmap(models)
+    yrs = np.array([float(r["year_true"]) for r in rows])
+    lo, hi = (np.floor(yrs.min() / bin_yr) * bin_yr, np.ceil(yrs.max() / bin_yr) * bin_yr)
+    edges = np.arange(lo, hi + bin_yr, bin_yr)
+    centers = (edges[:-1] + edges[1:]) / 2
+    idx = np.digitize(yrs, edges) - 1
+
+    fig, ax = plt.subplots(figsize=(11, 5))
+    counts = np.array([(idx == b).sum() for b in range(len(centers))])
+    # shade bin counts as a light context band
+    ax2 = ax.twinx()
+    ax2.fill_between(centers, counts, color="#eeeeee", step="mid", zorder=0)
+    ax2.set_ylabel("# fragments per bin", color="#999999")
+    ax2.set_ylim(0, counts.max() * 3); ax2.tick_params(colors="#999999")
+    ax2.grid(False); ax2.spines["top"].set_visible(False)
+
+    for m in models:
+        ok = np.array([r[f"_ok_{m}"] for r in rows], dtype=float)
+        frac = np.array([ok[idx == b].mean() if (idx == b).sum() >= 5 else np.nan
+                         for b in range(len(centers))])
+        ax.plot(centers, frac, "-o", ms=4, lw=2, color=cm[m], label=m, zorder=3)
+    ax.set_xlabel("year (BCE)"); ax.set_ylabel(f"fraction correct (±{tol:.0f} yr)")
+    ax.set_ylim(0, 1.02); ax.invert_xaxis()   # older on the right -> time flows left
+    ax.set_title(f"Dating accuracy across time ({bin_yr}-year bins)")
+    ax.set_zorder(ax2.get_zorder() + 1); ax.patch.set_visible(False)
+    ax.legend(ncol=len(models), loc="upper left")
+    fig.tight_layout(); fig.savefig(out / "year_accuracy_line.png"); plt.close(fig)
+    print("[ok] year_accuracy_line.png")
 
 
 def distance_and_map(rows, models, out, tol, plt):
@@ -149,6 +207,7 @@ def distance_and_map(rows, models, out, tol, plt):
     import numpy as np
     from scipy.spatial.distance import jensenshannon
     from scipy.stats import wasserstein_distance
+    _setup(plt)
 
     errs = {m: np.array([r[f"_err_{m}"] for r in rows if not np.isnan(r[f"_err_{m}"])])
             for m in models}
@@ -189,24 +248,43 @@ def distance_and_map(rows, models, out, tol, plt):
                              f"{JS[i, j]:.4f}", f"{W[i, j]:.1f}"])
     print("[ok] distribution_distances.csv")
 
-    # MDS map from the JS distances
+    # Node-edge graph: nodes positioned by MDS on Wasserstein (so on-page
+    # distance ~ years), every pair connected by an edge LABELED with the
+    # Wasserstein distance; thicker/darker edge = closer (more similar errors).
+    cm = _cmap(models)
     try:
         from sklearn.manifold import MDS
         mds = MDS(n_components=2, dissimilarity="precomputed", random_state=0,
-                  n_init=8, normalized_stress="auto")
-        xy = mds.fit_transform(JS)
-        fig, ax = plt.subplots(figsize=(6, 5))
-        ax.scatter(xy[:, 0], xy[:, 1], s=180, c=range(n), cmap="tab10", zorder=3)
+                  n_init=12, normalized_stress="auto")
+        xy = mds.fit_transform(W)
+        fig, ax = plt.subplots(figsize=(7, 6))
+        wmax = W.max()
+        for i in range(n):
+            for j in range(i + 1, n):
+                close = 1 - W[i, j] / wmax           # 0..1, 1 = closest
+                ax.plot([xy[i, 0], xy[j, 0]], [xy[i, 1], xy[j, 1]],
+                        color=str(0.85 - 0.6 * close), lw=1 + 5 * close, zorder=1)
+                mx, my = (xy[i, 0] + xy[j, 0]) / 2, (xy[i, 1] + xy[j, 1]) / 2
+                ax.text(mx, my, f"{W[i, j]:.1f}y", fontsize=8, ha="center", va="center",
+                        bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.85),
+                        zorder=2)
         for i, m in enumerate(models):
+            ax.scatter(xy[i, 0], xy[i, 1], s=420, color=cm[m],
+                       edgecolor="white", linewidth=2, zorder=3)
             ax.annotate(m, (xy[i, 0], xy[i, 1]), textcoords="offset points",
-                        xytext=(8, 4), fontsize=9)
-        ax.set_title("Model map (MDS on JS distance of error distributions)\n"
-                     "close = similar error behavior")
-        ax.set_xticks([]); ax.set_yticks([]); ax.grid(True, alpha=0.2)
-        fig.tight_layout(); fig.savefig(out / "model_map_mds.png", dpi=150); plt.close(fig)
-        print(f"[ok] model_map_mds.png  (MDS stress={mds.stress_:.4f})")
+                        xytext=(0, 16), ha="center", fontsize=10, fontweight="bold")
+        ax.set_title("Model similarity graph", fontsize=13, pad=18)
+        ax.text(0.5, 1.005, "edge = Wasserstein distance of error distributions (yr) · "
+                "thicker = more alike", transform=ax.transAxes, ha="center",
+                va="bottom", fontsize=9, color="#555555")
+        ax.set_xticks([]); ax.set_yticks([]); ax.grid(False)
+        ax.margins(0.22)
+        for s in ax.spines.values():
+            s.set_visible(False)
+        fig.savefig(out / "model_graph.png", bbox_inches="tight"); plt.close(fig)
+        print(f"[ok] model_graph.png  (MDS stress={mds.stress_:.4f})")
     except Exception as e:
-        print(f"[warn] MDS skipped: {type(e).__name__}: {e}")
+        print(f"[warn] graph skipped: {type(e).__name__}: {e}")
 
 
 def main() -> None:
@@ -218,6 +296,7 @@ def main() -> None:
                     help="how many example fragment_ids to print per set")
     ap.add_argument("--min-n", type=int, default=10, help="min fragments per metadata group")
     ap.add_argument("--top-k", type=int, default=14, help="max groups per metadata label")
+    ap.add_argument("--year-bin", type=int, default=50, help="bin width (yr) for the year line")
     args = ap.parse_args()
     out = args.out_dir or args.pred_csv.parent
     out.mkdir(parents=True, exist_ok=True)
@@ -330,8 +409,11 @@ def main() -> None:
         r["century"] = f"{int(float(r['year_true']) // 100) * 100}"
 
     print("\n--- grouped bars (one color per model) per metadata value ---")
-    grouped_bars(rows, models, meta_cols + ["century"], out, args.tol, plt,
+    grouped_bars(rows, models, meta_cols, out, args.tol, plt,
                  min_n=args.min_n, top_k=args.top_k)
+
+    print("\n--- fine-grained accuracy-vs-year line ---")
+    year_line(rows, models, out, args.tol, plt, bin_yr=args.year_bin)
 
     print("\n--- model error-distribution distances + MDS map ---")
     distance_and_map(rows, models, out, args.tol, plt)
