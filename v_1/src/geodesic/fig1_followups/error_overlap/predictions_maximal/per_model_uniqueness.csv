@@ -1,0 +1,4 @@
+model,frac_correct,unique_win,unique_loss,win_top_period,win_top_subgenre,loss_top_period,loss_top_subgenre
+thalesian_cunei400m,0.824,24,82,Neo-Assyrian:14; Neo-Babylonian:8; Middle Babylonian:2,None:7; cylinder:5; brick:3,Neo-Assyrian:66; Neo-Babylonian:15; wall slab (with reliefs):1,brick:17; None:16; wall slab (with reliefs):12
+qwen3_32b,0.830,21,72,Neo-Assyrian:12; Neo-Babylonian:9,cylinder:5; wall slab (with reliefs):4; None:4,Neo-Assyrian:56; Neo-Babylonian:13; Middle Babylonian:1,None:18; cylinder:14; brick:9
+tfidf,0.828,29,82,Neo-Assyrian:18; Neo-Babylonian:10; Middle Babylonian:1,None:9; cylinder:7; brick:6,Neo-Assyrian:61; Neo-Babylonian:21,cylinder:20; None:18; slab:8
