@@ -47,13 +47,19 @@ FRAGMENT_ORDER = (_REPO_ROOT / "v_1/src/linear_probing/results/orcc_round2_phase
                   / "balanced_subset/corpus_fragment_order.json")
 TFIDF_PARAMS = dict(analyzer="char_wb", ngram_range=(2, 5))
 
-# model -> (method, layer, cleaning, pooling). tfidf handled specially (no acts).
-MODELS = {
-    "mlm":                 ("mlm",                 1,  "tier0", "mean"),
-    "thalesian_cunei400m": ("thalesian_cunei400m", 12, "tier0", "mean"),
-    "qwen3_32b":           ("qwen3_32b",           9,  "tier0", "mean"),
-    "tfidf":               ("tfidf",               0,  "tier0", "na"),
+# best layer per (cleaning, model) from T1. mlm has no maximal activations
+# (tier0-only) -> it will skip gracefully on --cleaning maximal.
+LAYERS_BY_CLEANING = {
+    "tier0":   {"mlm": 1,  "thalesian_cunei400m": 12, "qwen3_32b": 9, "tfidf": 0},
+    "maximal": {"mlm": 1,  "thalesian_cunei400m": 9,  "qwen3_32b": 7, "tfidf": 0},
 }
+POOLING = {"mlm": "mean", "thalesian_cunei400m": "mean", "qwen3_32b": "mean", "tfidf": "na"}
+
+
+def build_models(cleaning: str) -> dict:
+    """model -> (method, layer, cleaning, pooling) for the requested cleaning."""
+    layers = LAYERS_BY_CLEANING[cleaning]
+    return {m: (m, layers[m], cleaning, POOLING[m]) for m in layers}
 
 
 def _features(model: str, layer: int, cleaning: str, pooling: str,
@@ -90,10 +96,14 @@ def main() -> None:
     ap.add_argument("--out-dir", type=Path, required=True)
     ap.add_argument("--k", type=int, default=5)
     ap.add_argument("--n-splits", type=int, default=5)
+    ap.add_argument("--cleaning", default="tier0", choices=["tier0", "maximal"],
+                    help="text/activation cleaning variant (default tier0)")
     ap.add_argument("--activations-base", type=Path,
                     default=_REPO_ROOT / "v_1/src/linear_probing/results")
     args = ap.parse_args()
     args.out_dir.mkdir(parents=True, exist_ok=True)
+    models_cfg = build_models(args.cleaning)
+    print(f"[cleaning] {args.cleaning}  models={list(models_cfg)}")
 
     df = pd.read_parquet(ORCC_PARQUET).reset_index(drop=True)
     df["_pos"] = np.arange(len(df))
@@ -107,7 +117,7 @@ def main() -> None:
     groups = labeled["ruler"].astype(str).values
 
     all_preds: dict[str, np.ndarray] = {}
-    for name, (method, layer, cleaning, pooling) in MODELS.items():
+    for name, (method, layer, cleaning, pooling) in models_cfg.items():
         X = _features(method, layer, cleaning, pooling, labeled, args.activations_base)
         if X is None:
             print(f"[skip] {name}: no activations at L{layer:02d}")
