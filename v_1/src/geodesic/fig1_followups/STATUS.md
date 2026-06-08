@@ -29,14 +29,14 @@ The 2×2 design = {imbalanced, balanced} × {tier0, maximal}:
 | | tier0 (full length) | maximal (≤32 words) |
 |---|---|---|
 | **imbalanced** | [x] `predictions/` (4 models) | [x] `predictions_maximal/` (3 models) |
-| **balanced** | [ ] `predictions_tier0_balanced/` — **sbatch ready, NOT run** | [x] `predictions_maximal_balanced/` (job 9437) |
+| **balanced** | [x] `predictions_tier0_balanced/` (job 9526) | [x] `predictions_maximal_balanced/` (job 9437) |
 
 - [x] Length is main axis; qwen3_32b short-text specialist; thalesian length-hungry.
 - [x] Universal failures = rare-period + very-short (+ scribal damage `he-pi2`/`eššu`).
 - [x] No model has unique dating power (unique-wins≈0; JS 0.08–0.11) → one shared signal.
 - [x] Maximal length-control: equalizing length collapses TF-IDF's lead, halves length slopes.
 - [x] Balanced+maximal (both crutches off): thalesian Sp 0.41 leads; acc@100 is meaningless (188-yr span, dummy=0.937) → use **±25 vs dummy floor** + MAE/std + Spearman; signal weak at fine resolution.
-- [ ] **Balanced+tier0 (4th cell)** — isolates length-vs-class. Run: `sbatch error_overlap/sbatch/error_overlap_tier0_balanced.sbatch` → writes `predictions_tier0_balanced/`, then compare to `predictions_maximal_balanced/`.
+- [x] **Balanced+tier0 (4th cell, job 9526)** — 2×2 complete. **Result: with classes balanced, the rank flips by length.** tier0 (full text): tfidf 0.474 > thalesian 0.430 > qwen 0.311. maximal (≤32w): thalesian 0.407 > qwen 0.276 > tfidf 0.245. **TF-IDF's lead is purely length** (Δ +0.228); thalesian/qwen length-robust (Δ +0.02–0.04). So thalesian "winning" balanced-maximal = it's just the last model standing when text is truncated, NOT a class-balancing edge. Fig: `predictions_tier0_balanced/balanced_length_compare.png` (script `balanced_length_compare.py`).
 
 ### Analysis scripts (`error_overlap/`)
 `dump_oof_predictions.py` (--cleaning), `dump_oof_predictions_balanced.py` (--cleaning, per-draw best-k),
