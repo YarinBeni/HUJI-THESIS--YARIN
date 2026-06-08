@@ -40,7 +40,9 @@ The 2×2 design = {imbalanced, balanced} × {tier0, maximal}:
 
 ### Analysis scripts (`error_overlap/`)
 `dump_oof_predictions.py` (--cleaning), `dump_oof_predictions_balanced.py` (--cleaning, per-draw best-k),
-`error_map.py`, `analyze_per_model.py`, `compare_anchor.py` (--anchor tfidf), `tier0_vs_maximal.py`.
+`error_map.py`, `analyze_per_model.py`, `compare_anchor.py` (--anchor tfidf), `tier0_vs_maximal.py`,
+`balanced_length_compare.py` (balanced tier0-vs-maximal), `balanced_summary.py` (scale-aware
+summary + accuracy@N + chronology for any predictions_* dir; wired into both balanced sbatchs).
 
 ## Workflow reminders
 - Yarin runs ONLY `sbatch` on cluster (no interactive python); activations cluster-only.
