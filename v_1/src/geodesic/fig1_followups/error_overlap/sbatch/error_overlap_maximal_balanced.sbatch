@@ -43,6 +43,7 @@ echo ""; echo "--- analyses on balanced+maximal ---"
 python -u "$EO/error_map.py"         --pred-csv "$PRED" || echo "WARN error_map failed"
 python -u "$EO/analyze_per_model.py" --pred-csv "$PRED" --tol 100 --examples 0 || echo "WARN per_model failed"
 python -u "$EO/compare_anchor.py"    --pred-csv "$PRED" --anchor tfidf --tol 100 || echo "WARN compare failed"
+python -u "$EO/balanced_summary.py"  --pred-csv "$PRED" || echo "WARN summary failed"
 
 echo ""; echo "=== Committing ==="
 git add "$OUT"/*.csv "$OUT"/*.json "$OUT"/*.png "$EO/dump_oof_predictions_balanced.py" \

@@ -1,0 +1,5 @@
+model,spearman,mae,mae_over_std,acc@25,acc@25_lift_vs_dummy
+tfidf,0.245,38.2,1.307,0.406,+0.022
+thalesian_cunei400m,0.407,36.0,1.231,0.420,+0.036
+qwen3_32b,0.276,39.1,1.337,0.414,+0.031
+DUMMY(median),0.000,39.1,1.336,0.384,+0.000
