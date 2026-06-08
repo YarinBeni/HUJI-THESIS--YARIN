@@ -64,9 +64,14 @@ PLS_K_VALUES = [1, 2, 3, 5]      # identical grid to run_mc_probes
 N_SPLITS = 5
 TFIDF_PARAMS = dict(analyzer="char_wb", ngram_range=(2, 5))
 
-# best MAXIMAL layer per model (same as dump_oof_predictions.py LAYERS_BY_CLEANING)
-MAXIMAL_LAYER = {"thalesian_cunei400m": 9, "qwen3_32b": 7, "tfidf": 0}
+# best layer per (cleaning, model) from T1 (same as dump_oof_predictions.py).
+LAYER_BY_CLEANING = {
+    "tier0":   {"thalesian_cunei400m": 12, "qwen3_32b": 9, "tfidf": 0},
+    "maximal": {"thalesian_cunei400m": 9,  "qwen3_32b": 7, "tfidf": 0},
+}
 POOLING = {"thalesian_cunei400m": "mean", "qwen3_32b": "mean", "tfidf": "na"}
+_CLEANING = "maximal"                       # set by main() from --cleaning
+_LAYER = LAYER_BY_CLEANING[_CLEANING]
 
 
 def _tfidf_draw(texts: list[str]) -> np.ndarray:
@@ -78,9 +83,9 @@ def _tfidf_draw(texts: list[str]) -> np.ndarray:
 
 
 def _activations_full(model: str, acts_base: Path) -> np.ndarray | None:
-    """Full-corpus L2-normalized maximal activations (row order = parquet)."""
-    rmp._CLEANING, rmp._POOLING = "maximal", POOLING[model]
-    X = rmp._load_orcc_activations(model, MAXIMAL_LAYER[model], acts_base)
+    """Full-corpus L2-normalized activations for the active cleaning (row order = parquet)."""
+    rmp._CLEANING, rmp._POOLING = _CLEANING, POOLING[model]
+    X = rmp._load_orcc_activations(model, _LAYER[model], acts_base)
     return None if X is None else l2_normalize(X)
 
 
@@ -96,15 +101,21 @@ def _oof_at_k(X, y, groups, k) -> np.ndarray:
 
 
 def main() -> None:
+    global _CLEANING, _LAYER
     ap = argparse.ArgumentParser()
     ap.add_argument("--out-dir", type=Path, required=True)
     ap.add_argument("--models", default="tfidf,thalesian_cunei400m,qwen3_32b",
                     help="comma-sep subset of {tfidf,thalesian_cunei400m,qwen3_32b}")
+    ap.add_argument("--cleaning", default="maximal", choices=["tier0", "maximal"],
+                    help="text/activation cleaning (default maximal)")
     ap.add_argument("--draw-range", default="0-199", help="inclusive, e.g. 0-199")
     ap.add_argument("--activations-base", type=Path,
                     default=_REPO_ROOT / "v_1/src/linear_probing/results")
     args = ap.parse_args()
     args.out_dir.mkdir(parents=True, exist_ok=True)
+    _CLEANING = args.cleaning
+    _LAYER = LAYER_BY_CLEANING[_CLEANING]
+    print(f"[cleaning] {_CLEANING}  layers={_LAYER}")
     models = [m for m in args.models.split(",") if m]
     lo, hi = (int(x) for x in args.draw_range.split("-"))
     draw_ids = list(range(lo, hi + 1))
@@ -126,20 +137,20 @@ def main() -> None:
     for m in models:
         if m == "tfidf":
             feats[m] = "tfidf"                       # sentinel: built in the loop
-            print("[feat] tfidf: per-draw fit on text_maximal")
+            print(f"[feat] tfidf: per-draw fit on text_{_CLEANING}")
             continue
         X = _activations_full(m, args.activations_base)
         if X is None:
-            print(f"[skip] {m}: no maximal activations at L{MAXIMAL_LAYER[m]:02d}")
+            print(f"[skip] {m}: no {_CLEANING} activations at L{_LAYER[m]:02d}")
             continue
         feats[m] = X
-        print(f"[feat] {m}: X={X.shape} (L{MAXIMAL_LAYER[m]}, {POOLING[m]})")
+        print(f"[feat] {m}: X={X.shape} (L{_LAYER[m]}, {POOLING[m]})")
 
     for di in draw_ids:
         pos, y_raw, _, y_ruler, _ = rmp._draw_subset(df, frag_order, draws, di)
         for m, X in feats.items():
             if m == "tfidf":
-                texts = df.iloc[pos]["text_maximal"].fillna("").astype(str).tolist()
+                texts = df.iloc[pos][f"text_{_CLEANING}"].fillna("").astype(str).tolist()
                 Xd = _tfidf_draw(texts)
             else:
                 Xd = X[pos]
