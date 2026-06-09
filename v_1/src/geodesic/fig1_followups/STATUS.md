@@ -20,8 +20,8 @@ _Last updated: 2026-06-08_
 ## Task 4 — PLS k-sweep  (`pls_ksweep/`)
 - [x] Balanced k-sweep 1..64 (k=128 above the ~126 balanced ceiling). Temporal signal ~2–3 dim.
 - [x] Selection-bias result: Fig-1A "PLS>Ridge" is partly best-k-per-draw inflation; honest fixed-k → PLS>Ridge only for qwen3_32b.
-- [ ] **TF-IDF 4th curve backfill** — `pls_ksweep/sbatch/pls_ksweep_tfidf.sbatch` NOT run (bug fixed, just submit).
-- Figs: `pls_components_tradeoff`, `per_method_panels`, `fixed_k3_pls_vs_ridge`, `best_k_vs_fixed_k`.
+- [x] **TF-IDF 4th curve** — cluster sbatch timed out (run_mc_probes tfidf path does 6× redundant work); computed lean locally via `tfidf_ksweep_local.py` (~13 min, parallel). tfidf peaks k=3 (0.376) **above its Ridge** (0.355). Refined rule: **PLS>Ridge exactly for the high-dim spaces (qwen3_32b 5120-dim, tfidf ~8000-dim sparse); Ridge≥PLS for low-dim mlm/thalesian.**
+- Figs (all 4 models now): `pls_components_tradeoff`, `per_method_panels`, `fixed_k3_pls_vs_ridge`, `best_k_vs_fixed_k`.
 
 ## Task 3 — error analysis  (`error_overlap/`)
 The 2×2 design = {imbalanced, balanced} × {tier0, maximal}:
