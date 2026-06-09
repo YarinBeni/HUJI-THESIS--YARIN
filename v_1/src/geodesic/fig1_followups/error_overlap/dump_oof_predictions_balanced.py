@@ -64,14 +64,49 @@ PLS_K_VALUES = [1, 2, 3, 5]      # identical grid to run_mc_probes
 N_SPLITS = 5
 TFIDF_PARAMS = dict(analyzer="char_wb", ngram_range=(2, 5))
 
-# best layer per (cleaning, model) from T1 (same as dump_oof_predictions.py).
+# best layer per (cleaning, model). Known values from T1 / pls_best_layers.json;
+# None = resolve from the maximal PLS summary via --layers-json (see _resolve_layers).
 LAYER_BY_CLEANING = {
-    "tier0":   {"thalesian_cunei400m": 12, "qwen3_32b": 9, "tfidf": 0},
-    "maximal": {"thalesian_cunei400m": 9,  "qwen3_32b": 7, "tfidf": 0},
+    "tier0":   {"tfidf": 0, "mlm": 1, "thalesian_akk300m": None,
+                "thalesian_cunei400m": 12, "qwen3_1b7": None, "qwen3_8b": None,
+                "qwen3_32b": 9, "random": None},
+    "maximal": {"tfidf": 0, "mlm": None, "thalesian_akk300m": 8,
+                "thalesian_cunei400m": 9, "qwen3_1b7": None, "qwen3_8b": None,
+                "qwen3_32b": 7, "random": 10},
 }
-POOLING = {"thalesian_cunei400m": "mean", "qwen3_32b": "mean", "tfidf": "na"}
+POOLING = {m: ("na" if m == "tfidf" else "mean")
+           for m in ("tfidf", "mlm", "thalesian_akk300m", "thalesian_cunei400m",
+                     "qwen3_1b7", "qwen3_8b", "qwen3_32b", "random")}
 _CLEANING = "maximal"                       # set by main() from --cleaning
-_LAYER = LAYER_BY_CLEANING[_CLEANING]
+_LAYER = dict(LAYER_BY_CLEANING[_CLEANING])
+
+
+def _resolve_layers(models, cleaning, probes_dir, pool="mean", tag="mc_balanced_maximal"):
+    """Fill any None best-layer from <model>_pls__<tag>__summary.json (argmax
+    year-raw Spearman over <cleaning>/<pool> layers). TF-IDF stays at 0."""
+    import re
+    lk = re.compile(r"__L(\d+)__")
+    layers = dict(LAYER_BY_CLEANING[cleaning])
+    for m in models:
+        if m == "tfidf" or layers.get(m) is not None:
+            continue
+        p = probes_dir / f"{m}_pls__{tag}__summary.json"
+        if not p.exists():
+            print(f"[layers] WARN no summary for {m} at {p} — model skipped")
+            continue
+        pc = json.load(open(p)).get("per_config", {})
+        best = (None, -np.inf)
+        for k, rec in pc.items():
+            if f"__{cleaning}__{pool}__" not in k or not k.endswith("year-raw"):
+                continue
+            mm = lk.search(k)
+            sp = rec.get("spearman_mean")
+            if mm and sp is not None and sp > best[1]:
+                best = (int(mm.group(1)), sp)
+        if best[0] is not None:
+            layers[m] = best[0]
+            print(f"[layers] {m}: best maximal layer L{best[0]} (Sp {best[1]:.3f})")
+    return layers
 
 
 def _tfidf_draw(texts: list[str]) -> np.ndarray:
@@ -104,19 +139,28 @@ def main() -> None:
     global _CLEANING, _LAYER
     ap = argparse.ArgumentParser()
     ap.add_argument("--out-dir", type=Path, required=True)
-    ap.add_argument("--models", default="tfidf,thalesian_cunei400m,qwen3_32b",
-                    help="comma-sep subset of {tfidf,thalesian_cunei400m,qwen3_32b}")
+    ap.add_argument("--models",
+                    default="tfidf,mlm,thalesian_akk300m,thalesian_cunei400m,"
+                            "qwen3_1b7,qwen3_8b,qwen3_32b,random",
+                    help="comma-sep model subset (default: all 8)")
     ap.add_argument("--cleaning", default="maximal", choices=["tier0", "maximal"],
                     help="text/activation cleaning (default maximal)")
     ap.add_argument("--draw-range", default="0-199", help="inclusive, e.g. 0-199")
+    ap.add_argument("--pls-k", type=int, default=None,
+                    help="fixed PLS n_components (e.g. 3). Omit = best-k-per-draw "
+                         "selection over [1,2,3,5] (the old, selection-biased path).")
+    ap.add_argument("--layers-json", type=Path, default=None,
+                    help="probes dir holding <model>_pls__<tag>__summary.json; used "
+                         "to auto-resolve any unknown best maximal layer.")
     ap.add_argument("--activations-base", type=Path,
                     default=_REPO_ROOT / "v_1/src/linear_probing/results")
     args = ap.parse_args()
     args.out_dir.mkdir(parents=True, exist_ok=True)
     _CLEANING = args.cleaning
-    _LAYER = LAYER_BY_CLEANING[_CLEANING]
-    print(f"[cleaning] {_CLEANING}  layers={_LAYER}")
     models = [m for m in args.models.split(",") if m]
+    _LAYER = (_resolve_layers(models, _CLEANING, args.layers_json)
+              if args.layers_json else dict(LAYER_BY_CLEANING[_CLEANING]))
+    print(f"[cleaning] {_CLEANING}  fixed_k={args.pls_k}  layers={_LAYER}")
     lo, hi = (int(x) for x in args.draw_range.split("-"))
     draw_ids = list(range(lo, hi + 1))
 
@@ -154,16 +198,20 @@ def main() -> None:
                 Xd = _tfidf_draw(texts)
             else:
                 Xd = X[pos]
-            # best k by mean OOF Spearman (year-raw) — run_mc_probes' selector
-            best_k, best_sp = PLS_K_VALUES[0], -np.inf
-            for k in PLS_K_VALUES:
-                try:
-                    sp = fit_pls_groupkfold(Xd, y_raw, y_ruler, n_components=k,
-                                            n_splits=N_SPLITS)["spearman_mean"]
-                except Exception:
-                    sp = np.nan
-                if np.isfinite(sp) and sp > best_sp:
-                    best_sp, best_k = sp, k
+            if args.pls_k is not None:
+                # fixed k — honest, no per-draw selection (removes selection bias)
+                best_k = args.pls_k
+            else:
+                # best k by mean OOF Spearman (year-raw) — run_mc_probes' selector
+                best_k, best_sp = PLS_K_VALUES[0], -np.inf
+                for k in PLS_K_VALUES:
+                    try:
+                        sp = fit_pls_groupkfold(Xd, y_raw, y_ruler, n_components=k,
+                                                n_splits=N_SPLITS)["spearman_mean"]
+                    except Exception:
+                        sp = np.nan
+                    if np.isfinite(sp) and sp > best_sp:
+                        best_sp, best_k = sp, k
             best_k_log[m].append(best_k)
             pred = _oof_at_k(Xd, y_raw, y_ruler, best_k)
             ok = ~np.isnan(pred)
