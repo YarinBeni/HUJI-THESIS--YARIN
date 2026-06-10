@@ -1,0 +1,46 @@
+{
+  "model_id": "Qwen/Qwen3-1.7B",
+  "mode": "full_ft_above_cut",
+  "freeze": {
+    "n_blocks": 28,
+    "cut": 19,
+    "tied_embeddings": true,
+    "lm_head_trained": false,
+    "trainable_params": 453026048,
+    "total_params": 2031739904
+  },
+  "seq_len": 2048,
+  "epochs": 3.0,
+  "lr": 1e-05,
+  "global_batch": 64,
+  "seed": 42,
+  "train_chunks": 4412,
+  "val_chunks": 573,
+  "base_val_loss": 2.4045424461364746,
+  "base_val_ppl": 11.07336246309753,
+  "best_val_loss": 2.0423901081085205,
+  "best_val_ppl": 7.709012570547676,
+  "eval_history": [
+    {
+      "epoch": 1.0,
+      "eval_loss": 2.0818145275115967,
+      "eval_ppl": 8.019006428728265
+    },
+    {
+      "epoch": 2.0,
+      "eval_loss": 2.0443179607391357,
+      "eval_ppl": 7.723888745640477
+    },
+    {
+      "epoch": 3.0,
+      "eval_loss": 2.0423901081085205,
+      "eval_ppl": 7.709012570547676
+    },
+    {
+      "epoch": 3.0,
+      "eval_loss": 2.0423901081085205,
+      "eval_ppl": 7.709012570547676
+    }
+  ],
+  "finished": "2026-06-10T21:25:45.787841"
+}
