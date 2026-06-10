@@ -30,7 +30,11 @@ mkdir -p "$MF/ksweep_probes" "$MF/logs"
 LAYERS=$(python -u "$MF/maximal_ksweep.py" --emit-layers --std-probes "$MF/probes")
 echo "best-layer union: $LAYERS"
 
-PROBES="tfidf_pls,mlm_pls,thalesian_akk300m_pls,thalesian_cunei400m_pls,qwen3_1b7_pls,qwen3_8b_pls,qwen3_32b_pls,random_pls"
+# NOTE: tfidf excluded — its char-n-gram dim is huge, so high-k PLS is pathologically
+# slow (k=64 PLS on ~tens-of-thousands of dims x 200 draws blocked the whole job for
+# 3h+). TF-IDF is a flat surface baseline already shown as a point in fig1/fig2; its
+# k-curve, if wanted, is cheap via the local pls_ksweep/tfidf_ksweep_local.py path.
+PROBES="mlm_pls,thalesian_akk300m_pls,thalesian_cunei400m_pls,qwen3_1b7_pls,qwen3_8b_pls,qwen3_32b_pls,random_pls"
 python -u v_1/src/linear_probing/round2_phase0/run_mc_probes.py \
     --draws-matrix   "$SUBSET/draws_matrix.npy" \
     --fragment-order "$SUBSET/corpus_fragment_order.json" \
