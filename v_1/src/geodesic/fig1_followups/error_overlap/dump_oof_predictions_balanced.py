@@ -97,7 +97,9 @@ def _resolve_layers(models, cleaning, probes_dir, pool="mean", tag="mc_balanced_
         pc = json.load(open(p)).get("per_config", {})
         best = (None, -np.inf)
         for k, rec in pc.items():
-            if f"__{cleaning}__{pool}__" not in k or not k.endswith("year-raw"):
+            # match __<cleaning>__ for ANY pool token: mlm carries none, tfidf
+            # uses __na__; require mean (exclude __last__) for the neural models.
+            if f"__{cleaning}__" not in k or "__last__" in k or not k.endswith("year-raw"):
                 continue
             mm = lk.search(k)
             sp = rec.get("spearman_mean")
@@ -161,6 +163,10 @@ def main() -> None:
     _LAYER = (_resolve_layers(models, _CLEANING, args.layers_json)
               if args.layers_json else dict(LAYER_BY_CLEANING[_CLEANING]))
     print(f"[cleaning] {_CLEANING}  fixed_k={args.pls_k}  layers={_LAYER}")
+    dropped = [m for m in models if _LAYER.get(m) is None]
+    if dropped:
+        print(f"[warn] no resolved layer for {dropped} — dropping from this run")
+        models = [m for m in models if _LAYER.get(m) is not None]
     lo, hi = (int(x) for x in args.draw_range.split("-"))
     draw_ids = list(range(lo, hi + 1))
 
