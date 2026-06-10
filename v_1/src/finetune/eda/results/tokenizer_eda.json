@@ -1,0 +1,1001 @@
+{
+  "corpus": {
+    "n_fragments": 40429,
+    "n_words": 2450094,
+    "n_signs": 4894736,
+    "n_chars": 18770515,
+    "n_unique_words": 249780,
+    "by_split": {
+      "test": 235660,
+      "train": 1960636,
+      "val": 253798
+    }
+  },
+  "tokenizers": {
+    "qwen3": {
+      "model_id": "Qwen/Qwen3-8B",
+      "vocab_size": 151669,
+      "total_tokens": 11252825,
+      "tokens_per_word": 4.593,
+      "tokens_per_sign": 2.299,
+      "chars_per_token": 1.668,
+      "unique_tokens_used": 2676,
+      "pct_byte_fallback_tokens": 8.29,
+      "token_char_len_dist": {
+        "0": 112944,
+        "1": 6416513,
+        "2": 3800163,
+        "3": 873784,
+        "4": 48700,
+        "5": 581,
+        "6": 60,
+        "7": 55,
+        "8": 25
+      },
+      "frag_tokens_quantiles": {
+        "0.5": 82,
+        "0.9": 547,
+        "0.95": 957,
+        "0.99": 2957
+      },
+      "frags_over_2048_tokens": 680,
+      "top2000_words_single_token": 182,
+      "top2000_words_two_tokens": 275,
+      "top2000_words_3plus_tokens": 1543,
+      "special_chars": {
+        "š": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "š"
+          ]
+        },
+        "ṣ": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ṣ"
+          ]
+        },
+        "ṭ": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ṭ"
+          ]
+        },
+        "ḫ": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ḫ"
+          ]
+        },
+        "ī": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ī"
+          ]
+        },
+        "ā": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ā"
+          ]
+        },
+        "ū": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ū"
+          ]
+        },
+        "ē": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ē"
+          ]
+        },
+        "₂": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "₂"
+          ]
+        },
+        "₃": {
+          "alone_n_tokens": 2,
+          "after_a_n_tokens": 3,
+          "alone_pieces": [
+            "�",
+            "�"
+          ]
+        },
+        "₄": {
+          "alone_n_tokens": 2,
+          "after_a_n_tokens": 3,
+          "alone_pieces": [
+            "�",
+            "�"
+          ]
+        },
+        "ʾ": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ʾ"
+          ]
+        }
+      },
+      "top_word_examples": [
+        {
+          "word": "ina",
+          "freq": 80627,
+          "n_tokens": 2,
+          "pieces": [
+            " in",
+            "a"
+          ]
+        },
+        {
+          "word": "ša₂",
+          "freq": 51898,
+          "n_tokens": 3,
+          "pieces": [
+            " š",
+            "a",
+            "₂"
+          ]
+        },
+        {
+          "word": "a-na",
+          "freq": 36413,
+          "n_tokens": 2,
+          "pieces": [
+            " a",
+            "-na"
+          ]
+        },
+        {
+          "word": "ša",
+          "freq": 29008,
+          "n_tokens": 2,
+          "pieces": [
+            " š",
+            "a"
+          ]
+        },
+        {
+          "word": "LUGAL",
+          "freq": 26302,
+          "n_tokens": 3,
+          "pieces": [
+            " L",
+            "UG",
+            "AL"
+          ]
+        },
+        {
+          "word": "ana",
+          "freq": 24992,
+          "n_tokens": 1,
+          "pieces": [
+            " ana"
+          ]
+        },
+        {
+          "word": "u",
+          "freq": 23311,
+          "n_tokens": 1,
+          "pieces": [
+            " u"
+          ]
+        },
+        {
+          "word": "KUR",
+          "freq": 22447,
+          "n_tokens": 2,
+          "pieces": [
+            " K",
+            "UR"
+          ]
+        },
+        {
+          "word": "DIŠ",
+          "freq": 22051,
+          "n_tokens": 2,
+          "pieces": [
+            " DI",
+            "Š"
+          ]
+        },
+        {
+          "word": "IGI",
+          "freq": 18171,
+          "n_tokens": 2,
+          "pieces": [
+            " I",
+            "GI"
+          ]
+        },
+        {
+          "word": "la",
+          "freq": 15155,
+          "n_tokens": 1,
+          "pieces": [
+            " la"
+          ]
+        },
+        {
+          "word": "u₃",
+          "freq": 14716,
+          "n_tokens": 3,
+          "pieces": [
+            " u",
+            "�",
+            "�"
+          ]
+        },
+        {
+          "word": "E₂",
+          "freq": 14397,
+          "n_tokens": 2,
+          "pieces": [
+            " E",
+            "₂"
+          ]
+        },
+        {
+          "word": "i-na",
+          "freq": 12050,
+          "n_tokens": 2,
+          "pieces": [
+            " i",
+            "-na"
+          ]
+        },
+        {
+          "word": "MIN",
+          "freq": 9114,
+          "n_tokens": 1,
+          "pieces": [
+            " MIN"
+          ]
+        },
+        {
+          "word": "MAN",
+          "freq": 9075,
+          "n_tokens": 1,
+          "pieces": [
+            " MAN"
+          ]
+        },
+        {
+          "word": "A",
+          "freq": 8646,
+          "n_tokens": 1,
+          "pieces": [
+            " A"
+          ]
+        },
+        {
+          "word": "1",
+          "freq": 8420,
+          "n_tokens": 2,
+          "pieces": [
+            " ",
+            "1"
+          ]
+        },
+        {
+          "word": "NU",
+          "freq": 8249,
+          "n_tokens": 1,
+          "pieces": [
+            " NU"
+          ]
+        },
+        {
+          "word": "BE",
+          "freq": 8135,
+          "n_tokens": 1,
+          "pieces": [
+            " BE"
+          ]
+        },
+        {
+          "word": "EN",
+          "freq": 7510,
+          "n_tokens": 1,
+          "pieces": [
+            " EN"
+          ]
+        },
+        {
+          "word": "TA",
+          "freq": 7156,
+          "n_tokens": 1,
+          "pieces": [
+            " TA"
+          ]
+        },
+        {
+          "word": "UGU",
+          "freq": 6777,
+          "n_tokens": 2,
+          "pieces": [
+            " U",
+            "GU"
+          ]
+        },
+        {
+          "word": "DUMU",
+          "freq": 6721,
+          "n_tokens": 3,
+          "pieces": [
+            " D",
+            "UM",
+            "U"
+          ]
+        },
+        {
+          "word": "BI",
+          "freq": 6318,
+          "n_tokens": 1,
+          "pieces": [
+            " BI"
+          ]
+        },
+        {
+          "word": "1(N01)",
+          "freq": 6306,
+          "n_tokens": 6,
+          "pieces": [
+            " ",
+            "1",
+            "(N",
+            "0",
+            "1",
+            ")"
+          ]
+        },
+        {
+          "word": "lu",
+          "freq": 6014,
+          "n_tokens": 1,
+          "pieces": [
+            " lu"
+          ]
+        },
+        {
+          "word": "30",
+          "freq": 5912,
+          "n_tokens": 3,
+          "pieces": [
+            " ",
+            "3",
+            "0"
+          ]
+        },
+        {
+          "word": "ŠA₃",
+          "freq": 5859,
+          "n_tokens": 5,
+          "pieces": [
+            " �",
+            "�",
+            "A",
+            "�",
+            "�"
+          ]
+        },
+        {
+          "word": "2",
+          "freq": 5685,
+          "n_tokens": 2,
+          "pieces": [
+            " ",
+            "2"
+          ]
+        },
+        {
+          "word": "a-di",
+          "freq": 5530,
+          "n_tokens": 2,
+          "pieces": [
+            " a",
+            "-di"
+          ]
+        },
+        {
+          "word": "15",
+          "freq": 5445,
+          "n_tokens": 3,
+          "pieces": [
+            " ",
+            "1",
+            "5"
+          ]
+        },
+        {
+          "word": "lugal",
+          "freq": 5444,
+          "n_tokens": 2,
+          "pieces": [
+            " l",
+            "ugal"
+          ]
+        },
+        {
+          "word": "URU",
+          "freq": 4910,
+          "n_tokens": 2,
+          "pieces": [
+            " UR",
+            "U"
+          ]
+        },
+        {
+          "word": "ŋeš",
+          "freq": 4685,
+          "n_tokens": 4,
+          "pieces": [
+            " �",
+            "�",
+            "e",
+            "š"
+          ]
+        },
+        {
+          "word": "KI",
+          "freq": 4589,
+          "n_tokens": 2,
+          "pieces": [
+            " K",
+            "I"
+          ]
+        },
+        {
+          "word": "a",
+          "freq": 4319,
+          "n_tokens": 1,
+          "pieces": [
+            " a"
+          ]
+        },
+        {
+          "word": "01",
+          "freq": 4238,
+          "n_tokens": 3,
+          "pieces": [
+            " ",
+            "0",
+            "1"
+          ]
+        },
+        {
+          "word": "{d}UTU",
+          "freq": 4235,
+          "n_tokens": 5,
+          "pieces": [
+            " {",
+            "d",
+            "}",
+            "UT",
+            "U"
+          ]
+        },
+        {
+          "word": "ul",
+          "freq": 4166,
+          "n_tokens": 1,
+          "pieces": [
+            " ul"
+          ]
+        }
+      ],
+      "domain_bpe_pieces_already_single_token": 904,
+      "domain_bpe_pieces_missing": 5864
+    },
+    "gpt_oss": {
+      "model_id": "openai/gpt-oss-120b",
+      "vocab_size": 200019,
+      "total_tokens": 10286022,
+      "tokens_per_word": 4.198,
+      "tokens_per_sign": 2.101,
+      "chars_per_token": 1.825,
+      "unique_tokens_used": 3636,
+      "pct_byte_fallback_tokens": 9.24,
+      "token_char_len_dist": {
+        "0": 112878,
+        "1": 5122063,
+        "2": 3465346,
+        "3": 1511395,
+        "4": 73001,
+        "5": 1180,
+        "6": 79,
+        "7": 55,
+        "8": 25
+      },
+      "frag_tokens_quantiles": {
+        "0.5": 76,
+        "0.9": 499,
+        "0.95": 883,
+        "0.99": 2680
+      },
+      "frags_over_2048_tokens": 605,
+      "top2000_words_single_token": 215,
+      "top2000_words_two_tokens": 378,
+      "top2000_words_3plus_tokens": 1407,
+      "special_chars": {
+        "š": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "š"
+          ]
+        },
+        "ṣ": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ṣ"
+          ]
+        },
+        "ṭ": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ṭ"
+          ]
+        },
+        "ḫ": {
+          "alone_n_tokens": 2,
+          "after_a_n_tokens": 3,
+          "alone_pieces": [
+            "�",
+            "�"
+          ]
+        },
+        "ī": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ī"
+          ]
+        },
+        "ā": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ā"
+          ]
+        },
+        "ū": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ū"
+          ]
+        },
+        "ē": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "ē"
+          ]
+        },
+        "₂": {
+          "alone_n_tokens": 1,
+          "after_a_n_tokens": 2,
+          "alone_pieces": [
+            "₂"
+          ]
+        },
+        "₃": {
+          "alone_n_tokens": 2,
+          "after_a_n_tokens": 3,
+          "alone_pieces": [
+            "�",
+            "�"
+          ]
+        },
+        "₄": {
+          "alone_n_tokens": 2,
+          "after_a_n_tokens": 3,
+          "alone_pieces": [
+            "�",
+            "�"
+          ]
+        },
+        "ʾ": {
+          "alone_n_tokens": 2,
+          "after_a_n_tokens": 3,
+          "alone_pieces": [
+            "�",
+            "�"
+          ]
+        }
+      },
+      "top_word_examples": [
+        {
+          "word": "ina",
+          "freq": 80627,
+          "n_tokens": 1,
+          "pieces": [
+            " ina"
+          ]
+        },
+        {
+          "word": "ša₂",
+          "freq": 51898,
+          "n_tokens": 3,
+          "pieces": [
+            " š",
+            "a",
+            "₂"
+          ]
+        },
+        {
+          "word": "a-na",
+          "freq": 36413,
+          "n_tokens": 2,
+          "pieces": [
+            " a",
+            "-na"
+          ]
+        },
+        {
+          "word": "ša",
+          "freq": 29008,
+          "n_tokens": 2,
+          "pieces": [
+            " š",
+            "a"
+          ]
+        },
+        {
+          "word": "LUGAL",
+          "freq": 26302,
+          "n_tokens": 3,
+          "pieces": [
+            " L",
+            "UG",
+            "AL"
+          ]
+        },
+        {
+          "word": "ana",
+          "freq": 24992,
+          "n_tokens": 1,
+          "pieces": [
+            " ana"
+          ]
+        },
+        {
+          "word": "u",
+          "freq": 23311,
+          "n_tokens": 1,
+          "pieces": [
+            " u"
+          ]
+        },
+        {
+          "word": "KUR",
+          "freq": 22447,
+          "n_tokens": 2,
+          "pieces": [
+            " K",
+            "UR"
+          ]
+        },
+        {
+          "word": "DIŠ",
+          "freq": 22051,
+          "n_tokens": 2,
+          "pieces": [
+            " DI",
+            "Š"
+          ]
+        },
+        {
+          "word": "IGI",
+          "freq": 18171,
+          "n_tokens": 2,
+          "pieces": [
+            " IG",
+            "I"
+          ]
+        },
+        {
+          "word": "la",
+          "freq": 15155,
+          "n_tokens": 1,
+          "pieces": [
+            " la"
+          ]
+        },
+        {
+          "word": "u₃",
+          "freq": 14716,
+          "n_tokens": 3,
+          "pieces": [
+            " u",
+            "�",
+            "�"
+          ]
+        },
+        {
+          "word": "E₂",
+          "freq": 14397,
+          "n_tokens": 2,
+          "pieces": [
+            " E",
+            "₂"
+          ]
+        },
+        {
+          "word": "i-na",
+          "freq": 12050,
+          "n_tokens": 2,
+          "pieces": [
+            " i",
+            "-na"
+          ]
+        },
+        {
+          "word": "MIN",
+          "freq": 9114,
+          "n_tokens": 1,
+          "pieces": [
+            " MIN"
+          ]
+        },
+        {
+          "word": "MAN",
+          "freq": 9075,
+          "n_tokens": 1,
+          "pieces": [
+            " MAN"
+          ]
+        },
+        {
+          "word": "A",
+          "freq": 8646,
+          "n_tokens": 1,
+          "pieces": [
+            " A"
+          ]
+        },
+        {
+          "word": "1",
+          "freq": 8420,
+          "n_tokens": 2,
+          "pieces": [
+            " ",
+            "1"
+          ]
+        },
+        {
+          "word": "NU",
+          "freq": 8249,
+          "n_tokens": 1,
+          "pieces": [
+            " NU"
+          ]
+        },
+        {
+          "word": "BE",
+          "freq": 8135,
+          "n_tokens": 1,
+          "pieces": [
+            " BE"
+          ]
+        },
+        {
+          "word": "EN",
+          "freq": 7510,
+          "n_tokens": 1,
+          "pieces": [
+            " EN"
+          ]
+        },
+        {
+          "word": "TA",
+          "freq": 7156,
+          "n_tokens": 1,
+          "pieces": [
+            " TA"
+          ]
+        },
+        {
+          "word": "UGU",
+          "freq": 6777,
+          "n_tokens": 2,
+          "pieces": [
+            " U",
+            "GU"
+          ]
+        },
+        {
+          "word": "DUMU",
+          "freq": 6721,
+          "n_tokens": 3,
+          "pieces": [
+            " D",
+            "UM",
+            "U"
+          ]
+        },
+        {
+          "word": "BI",
+          "freq": 6318,
+          "n_tokens": 1,
+          "pieces": [
+            " BI"
+          ]
+        },
+        {
+          "word": "1(N01)",
+          "freq": 6306,
+          "n_tokens": 5,
+          "pieces": [
+            " ",
+            "1",
+            "(N",
+            "01",
+            ")"
+          ]
+        },
+        {
+          "word": "lu",
+          "freq": 6014,
+          "n_tokens": 1,
+          "pieces": [
+            " lu"
+          ]
+        },
+        {
+          "word": "30",
+          "freq": 5912,
+          "n_tokens": 2,
+          "pieces": [
+            " ",
+            "30"
+          ]
+        },
+        {
+          "word": "ŠA₃",
+          "freq": 5859,
+          "n_tokens": 4,
+          "pieces": [
+            " Š",
+            "A",
+            "�",
+            "�"
+          ]
+        },
+        {
+          "word": "2",
+          "freq": 5685,
+          "n_tokens": 2,
+          "pieces": [
+            " ",
+            "2"
+          ]
+        },
+        {
+          "word": "a-di",
+          "freq": 5530,
+          "n_tokens": 2,
+          "pieces": [
+            " a",
+            "-di"
+          ]
+        },
+        {
+          "word": "15",
+          "freq": 5445,
+          "n_tokens": 2,
+          "pieces": [
+            " ",
+            "15"
+          ]
+        },
+        {
+          "word": "lugal",
+          "freq": 5444,
+          "n_tokens": 2,
+          "pieces": [
+            " l",
+            "ugal"
+          ]
+        },
+        {
+          "word": "URU",
+          "freq": 4910,
+          "n_tokens": 2,
+          "pieces": [
+            " UR",
+            "U"
+          ]
+        },
+        {
+          "word": "ŋeš",
+          "freq": 4685,
+          "n_tokens": 4,
+          "pieces": [
+            " �",
+            "�",
+            "e",
+            "š"
+          ]
+        },
+        {
+          "word": "KI",
+          "freq": 4589,
+          "n_tokens": 1,
+          "pieces": [
+            " KI"
+          ]
+        },
+        {
+          "word": "a",
+          "freq": 4319,
+          "n_tokens": 1,
+          "pieces": [
+            " a"
+          ]
+        },
+        {
+          "word": "01",
+          "freq": 4238,
+          "n_tokens": 2,
+          "pieces": [
+            " ",
+            "01"
+          ]
+        },
+        {
+          "word": "{d}UTU",
+          "freq": 4235,
+          "n_tokens": 5,
+          "pieces": [
+            " {",
+            "d",
+            "}",
+            "UT",
+            "U"
+          ]
+        },
+        {
+          "word": "ul",
+          "freq": 4166,
+          "n_tokens": 1,
+          "pieces": [
+            " ul"
+          ]
+        }
+      ],
+      "domain_bpe_pieces_already_single_token": 1504,
+      "domain_bpe_pieces_missing": 5264
+    }
+  },
+  "domain_bpe": {
+    "4000": {
+      "total_tokens": 9453824,
+      "tokens_per_word": 3.859
+    },
+    "8000": {
+      "total_tokens": 9435088,
+      "tokens_per_word": 3.851
+    },
+    "16000": {
+      "total_tokens": 9434554,
+      "tokens_per_word": 3.851
+    }
+  }
+}

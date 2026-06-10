@@ -55,6 +55,13 @@ def run(args):
         device_map='auto',
         output_hidden_states=True,
     )
+    if args.lora_adapter:
+        # Fine-tune round: probe LoRA checkpoints (gpt-oss arms) without
+        # persisting a merged copy of the full model to disk.
+        from peft import PeftModel
+        print(f"Merging LoRA adapter: {args.lora_adapter}")
+        model = PeftModel.from_pretrained(model, args.lora_adapter)
+        model = model.merge_and_unload()
     model.eval()
     print(f"Model loaded. Device: {next(model.parameters()).device}")
 
@@ -132,6 +139,7 @@ def run(args):
     # Save metadata
     metadata = {
         'model_id': args.model,
+        'lora_adapter': args.lora_adapter,
         'model_type': 'pretrained',
         'text_col': args.text_col,
         'n_texts': len(df),
@@ -182,6 +190,10 @@ def parse_args():
     parser.add_argument(
         '--output-dir', type=str, default=None,
         help='Override default output directory path',
+    )
+    parser.add_argument(
+        '--lora-adapter', type=str, default=None,
+        help='Optional PEFT/LoRA adapter dir to merge into --model before extraction',
     )
     return parser.parse_args()
 

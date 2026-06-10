@@ -677,6 +677,48 @@ PROBE_DISPATCH: dict[str, Any] = {
 }
 
 
+def _register_dynamic_probes(probes: list[str], acts_base: Path) -> None:
+    """Auto-register activation probes for methods not in PROBE_DISPATCH.
+
+    Fine-tune round (v_1/src/finetune): new methods such as `gpt_oss_120b` or
+    per-checkpoint variants like `qwen3_8b_ft12` produce activation dirs under
+    orcc__embed/activations/ in the standard <method>_<cleaning>_<pooling>/
+    layer_NN.npz layout. Instead of hand-adding three dispatch entries plus a
+    layer-count constant for every checkpoint, infer the layer count from the
+    files on disk and register on the fly. Static probe names are untouched;
+    an unknown name with no activations on disk still fails loudly.
+
+    Must run AFTER _CLEANING/_POOLING are set (the dir leaf depends on them).
+    """
+    runners = {"pls": _run_acts_pls, "cls": _run_acts_cls,
+               "cls_numeric": _run_acts_ridge_year}
+    for name in probes:
+        if name in PROBE_DISPATCH:
+            continue
+        for suffix in ("_cls_numeric", "_pls", "_cls"):
+            if name.endswith(suffix):
+                method, kind = name[: -len(suffix)], suffix[1:]
+                break
+        else:
+            raise SystemExit(f"Unknown probe '{name}'. Valid: {sorted(PROBE_DISPATCH)}")
+        base = ACT_BASE_MAP.get(method, "orcc__embed/activations")
+        acts_dir = Path(acts_base) / base / _act_dir_suffix(method)
+        layer_files = sorted(acts_dir.glob("layer_*.npz"))
+        if not layer_files:
+            raise SystemExit(
+                f"Unknown probe '{name}' and no activations at {acts_dir} to "
+                f"auto-register it from. Valid static probes: {sorted(PROBE_DISPATCH)}")
+        n_layers = max(int(f.stem.split("_")[1]) for f in layer_files) + 1
+        ACT_BASE_MAP.setdefault(method, base)
+        runner = runners[kind]
+        PROBE_DISPATCH[name] = (
+            kind,
+            (lambda m, n, r: (lambda *a, **kw: r(m, n, *a, **kw)))(method, n_layers, runner),
+        )
+        print(f"[dynamic-probe] registered '{name}': method={method} "
+              f"n_layers={n_layers} acts_dir={acts_dir}")
+
+
 # ---------------------------------------------------------------------------
 # Summary aggregation
 # ---------------------------------------------------------------------------
@@ -821,9 +863,7 @@ def main() -> None:
         print("[layers] activation probes will scan ALL layers (slow for qwen/random)")
 
     probes = [p.strip() for p in args.probes.split(",") if p.strip()]
-    for p in probes:
-        if p not in PROBE_DISPATCH:
-            raise SystemExit(f"Unknown probe '{p}'. Valid: {sorted(PROBE_DISPATCH)}")
+    _register_dynamic_probes(probes, args.activations_base)
 
     # Load draws matrix + fragment order + corpus
     draws_matrix = np.load(args.draws_matrix)

@@ -1,0 +1,16 @@
+{
+  "created": "2026-06-10T21:18:24.534888",
+  "construction": "value_clean (fallback value_raw), sorted (line_num, word_idx), space-joined, tier0",
+  "train": {
+    "n_fragments": 32343,
+    "n_words": 1960636,
+    "n_chars": 15025222,
+    "orcc_probe_overlap": 504
+  },
+  "val": {
+    "n_fragments": 4042,
+    "n_words": 253798,
+    "n_chars": 1947804,
+    "orcc_probe_overlap": 67
+  }
+}

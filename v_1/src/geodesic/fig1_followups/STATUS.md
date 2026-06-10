@@ -4,7 +4,7 @@ One place to track everything from the 03.06.26 advisor review onward. Update
 this file as work lands. Detail/findings live in the per-script READMEs and in
 memory `project_fig1_followups.md`; this is the checklist + pointers.
 
-_Last updated: 2026-06-08_
+_Last updated: 2026-06-10_
 
 ---
 
@@ -13,8 +13,8 @@ _Last updated: 2026-06-08_
 - [x] **Task 3 — error overlap / per-fragment analysis** (see `error_overlap/`). Done across regimes (below).
 - [x] **Task 4 — PLS components tradeoff** (see `pls_ksweep/`). Done; selection-bias finding.
 - [ ] **Task 1 — closed-model baseline** (GPT-5 / Claude / Gemini via OpenRouter). NOT started.
-- [ ] **Task 2 — gpt-oss-120B** (open-weights, keeps activations). NOT started.
-- [ ] **Task 5 — fine-tune** Qwen / gpt-oss on Akkadian NTP. NOT started (after 1,2).
+- [ ] **Task 2 — gpt-oss-120B** (open-weights, keeps activations). IN PROGRESS — extraction+probe jobs ready (`v_1/src/finetune/sbatch/FT0*`), runs as step 0 of Task 5.
+- [ ] **Task 5 — fine-tune** Qwen / gpt-oss on Akkadian NTP. IN PROGRESS — pre-EDA done (no vocab expansion: `v_1/src/finetune/eda/results/TOKENIZER_EDA.md`), plan + depth-ablation pipeline built (`v_1/src/finetune/PLAN_finetune_ntp.md`), jobs FT0–FT7 awaiting submission.
 - [ ] **Present figs 0/2/3/4/5** to advisors (only Fig 1 shown). Handoff: `yarin/HANDOFF_fig_presentation.md`.
 
 ## Task 4 — PLS k-sweep  (`pls_ksweep/`)
