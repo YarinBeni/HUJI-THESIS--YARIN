@@ -5,6 +5,41 @@ whether (and *at which depth*) it improves the balanced year-PLS signal.
 Full design + rationale: **`PLAN_finetune_ntp.md`**. Tokenizer pre-EDA (why no
 vocab expansion): **`eda/results/TOKENIZER_EDA.md`**.
 
+## RUN LOG — submitted 2026-06-11 (update as jobs land)
+
+Phase-1 jobs (submitted; dependency-chained, every job pulls main at start and
+commits its summaries back to main):
+
+| Job ID | sbatch | what | depends on | status |
+|---|---|---|---|---|
+| **9554** | FT1_prepare_data | NTP train/val parquets → `v_1/data/finetune/` | — | submitted |
+| **9555** | FT0_extract_gptoss_base | gpt-oss-120b BASE acts, ORCC, tier0+maximal (**= meeting Task 2**) | — | submitted |
+| **9556** | FT0b_probe_gptoss_base | gpt-oss base balanced probes → its fig4 layer curve | afterok:9555 | queued |
+| **9557_[0-3]** | FT2_qwen3_1b7_ablation | pilot CPT, cuts {0,9,19,25} (array idx 0→cut0, 1→cut9, 2→cut19, 3→cut25) | afterok:9554 | queued |
+| **9558** | FT3_probe_qwen3_1b7_ft | extract+probe 4 pilot ckpts, builds scoreboard | afterok:9557 (whole array) | queued |
+
+**⛔ GATE after 9558:** `git pull` → review `results/scoreboard_best.csv` +
+`results/train_summaries/qwen3_1b7_cut*.json` (val ppl must drop a lot from
+the Akkadian-naive base). Pilot target to beat: base qwen3_1b7 year-PLS
+**0.355 @ L9 (maximal)** / 0.397 (tier0). Only then submit phase 2
+(FT4→FT5 for Qwen3-8B; FT6→FT7 for gpt-oss-120b LoRA) — commands in §Submit order.
+
+Concurrent (unrelated round, same cluster): **9552** = maximal_figs M4 PLS
+k-sweep (re-run without tfidf), **9553** = M5 mlm-fix + re-render all maximal
+figures to 8 models (afterok:9552). Those finish the *maximal panel set*
+(fig1/2/4 + MAE + k-sweep) whose **fig4 layer peaks are exactly the input that
+chose this round's unfreeze cuts** (1b7 peak L9 → cuts {0,9,19,25}; 8b peak
+L16 → cuts {0,12,24,32}).
+
+Useful monitoring (on the cluster):
+
+```bash
+squeue -u $USER
+tail -f v_1/src/finetune/logs/FT2_9557_0.out                     # one pilot arm
+sacct -j 9557 --format=JobID,JobName%18,State,Elapsed,MaxRSS     # whole array
+grep -h "\[eval\]" v_1/src/finetune/logs/FT2_9557_*.out          # ppl per arm
+```
+
 ## Layout
 
 ```
