@@ -54,15 +54,19 @@ def _summary(probes: Path, model: str, probe: str, tag: str) -> dict | None:
 
 
 def _per_layer(per_config: dict, suffix: str, value_key: str) -> dict[int, tuple]:
-    """{layer_int -> (mean, std)} for configs matching maximal/mean/<suffix>."""
+    """{layer_int -> (mean, std)} for this cleaning's configs ending in <suffix>.
+
+    Matches `__<cleaning>__` (NOT a specific pool token) so it also catches the
+    pool-less keys: tfidf uses `__na__` and mlm carries no pool token at all.
+    `__last__` is excluded (we only ran mean). Keys without an L## token (e.g.
+    a layer-less tfidf) fall back to layer 0.
+    """
     out: dict[int, tuple] = {}
     for key, rec in per_config.items():
-        if f"__{CLEANING}__{POOL}__" not in key or not key.endswith(suffix):
+        if f"__{CLEANING}__" not in key or "__last__" in key or not key.endswith(suffix):
             continue
         m = _LKEY.search(key)
-        if not m:
-            continue
-        L = int(m.group(1))
+        L = int(m.group(1)) if m else 0
         out[L] = (rec.get(f"{value_key}_mean"), rec.get(f"{value_key}_std"))
     return out
 
@@ -267,10 +271,17 @@ def fig4_A(data: dict, fig_out: Path) -> None:
         ax.scatter([Ls[bi]], [y[bi]], marker="*", s=130, color=c,
                    edgecolor="black", linewidth=0.6, zorder=4)
         ax.annotate(f"L{Ls[bi]}", (Ls[bi], y[bi]), fontsize=7, color=c)
+    # TF-IDF has no layers — show it as a horizontal baseline across the axis.
+    tf = data["pls"].get("tfidf", {})
+    if tf:
+        tval = next(iter(tf.values()))[0]
+        if tval is not None:
+            ax.axhline(tval, ls=":", lw=2.0, color=prs.MODEL_COLOR["tfidf"],
+                       label=f"TF-IDF (no layers, {tval:.2f})")
     ax.axhline(0, color="black", lw=0.8)
     ax.set_xlabel("Layer index  (raw: 0 = embedding … max = final)")
     ax.set_ylabel("Year PLS Spearman  (balanced)")
-    prs.set_panel_title(ax, "Supervised year signal by layer  (★ = best layer)",
+    prs.set_panel_title(ax, "Supervised (PLS) year signal by layer  (★ = best layer)",
                         "balanced · maximal · mean-pool · 200 MC draws · raw layer index")
     ax.legend(frameon=False, ncol=2, fontsize=8.5, loc="best")
     prs.add_panel_label(ax, "A")
