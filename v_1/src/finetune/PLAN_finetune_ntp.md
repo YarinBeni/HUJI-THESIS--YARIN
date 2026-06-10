@@ -86,3 +86,20 @@ and completes meeting Task 2). FT3 after FT2, FT5 after FT4, FT7 after FT6 + FT0
   with methods `gpt_oss_120b`, `qwen3_1b7_ft{00,09,19,25}`, `qwen3_8b_ft{00,12,24,32}`, `gpt_oss_120b_ft{00,12,24,32}`
 - probes: `v_1/src/finetune/results/probes/` (JSON summaries committed by jobs)
 - scoreboard + figures: `v_1/src/finetune/results/` (built after FT3/FT5/FT7)
+
+## FT8 / "M6" — fold winners into the maximal_figs panel set (after FT5/FT7)
+
+The FT probes are format-identical to the M-track (same draws/config/summary
+JSONs), so the fine-tuned models can join the 8-model maximal figures. Planned
+job, built once the scoreboard names the winners:
+
+1. Extend the model registries (`make_maximal_figs.py` ALL_MODELS/LAYERED +
+   styling/param-count registries in `plot_round3_story_figures.py`) with
+   `gpt_oss_120b` (base) and the **best cut per family only** — full 4-cut
+   grids stay in `finetune/results/figures/` (20 curves would be unreadable;
+   8 → ~11 models in the headline figures).
+2. Render fig1/2/4 from the union of `maximal_figs/probes/` +
+   `finetune/results/probes/` (fig2 needs gpt-oss's size point: 117B total /
+   5.1B active — plot at total params, annotate active).
+3. `dump_oof_predictions_balanced.py` + `analyze_per_model.py` for the new
+   methods → per-ruler MAE plots include them.
