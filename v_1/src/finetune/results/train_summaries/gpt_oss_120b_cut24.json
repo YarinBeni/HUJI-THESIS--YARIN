@@ -1,0 +1,53 @@
+{
+  "model_id": "openai/gpt-oss-120b",
+  "mode": "lora",
+  "freeze": {
+    "n_blocks": 36,
+    "cut": 24,
+    "lora_r": 32,
+    "lora_alpha": 64,
+    "lora_dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj"
+    ],
+    "trainable_params": 7962624,
+    "total_params": 116837119296
+  },
+  "seq_len": 2048,
+  "epochs": 3.0,
+  "lr": 0.0002,
+  "global_batch": 32,
+  "seed": 42,
+  "train_chunks": 4033,
+  "val_chunks": 526,
+  "base_val_loss": 2.6375362873077393,
+  "base_val_ppl": 13.978721594474672,
+  "best_val_loss": 1.7031704187393188,
+  "best_val_ppl": 5.491329637054255,
+  "eval_history": [
+    {
+      "epoch": 1.0,
+      "eval_loss": 1.8012923002243042,
+      "eval_ppl": 6.057470478941155
+    },
+    {
+      "epoch": 2.0,
+      "eval_loss": 1.7177973985671997,
+      "eval_ppl": 5.57224151047761
+    },
+    {
+      "epoch": 3.0,
+      "eval_loss": 1.7031704187393188,
+      "eval_ppl": 5.491329637054255
+    },
+    {
+      "epoch": 3.0,
+      "eval_loss": 1.7031704187393188,
+      "eval_ppl": 5.491329637054255
+    }
+  ],
+  "finished": "2026-06-11T20:31:08.104931"
+}
