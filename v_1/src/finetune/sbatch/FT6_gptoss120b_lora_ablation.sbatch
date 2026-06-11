@@ -28,6 +28,7 @@ conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
 git pull --rebase origin main || echo "WARN pull failed"
 mkdir -p v_1/src/finetune/logs v_1/src/finetune/results/train_summaries
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True  # 240GB bf16-dequant base; reduce fragmentation
 
 python -c "import peft" 2>/dev/null || pip install -q peft
 
