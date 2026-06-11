@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=maxfig_M4
 #SBATCH --partition=voltagepark
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=32
 #SBATCH --mem=64G
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
 #SBATCH --output=v_1/src/geodesic/maximal_figs/logs/M4_%j.out
 
 # ===========================================================================
@@ -44,9 +44,12 @@ python -u v_1/src/linear_probing/round2_phase0/run_mc_probes.py \
     --cleaning       maximal \
     --pooling        mean \
     --layers         "$LAYERS" \
-    --pls-k          1,2,3,5,8,16,32,64,128 \
-    --n-jobs         "${SLURM_CPUS_PER_TASK:-16}" \
+    --pls-k          1,2,3,5,8,16,32,64 \
+    --n-jobs         "${SLURM_CPUS_PER_TASK:-32}" \
     || echo "WARN ksweep probe step failed"
+# NB: k=128 dropped — balanced sample caps PLS components at 126, so k=128 was
+# always skipped (pure wasted attempts). k=64 covers the high end. run_mc_probes
+# writes per-draw JSONs and skips completed ones, so a resubmit RESUMES the sweep.
 
 echo ""; echo "--- render maximal k-sweep figures ---"
 python -u "$MF/maximal_ksweep.py" \
