@@ -30,6 +30,11 @@ free 8-GPU node) → **FT0b=9569** (afterok:9568). Old 9555/9556 dead.
 depth, converges by epoch 2. NB base ppl is *low* — Qwen3-1.7B is less
 Akkadian-naive than assumed. Dating-probe verdict pending 9558's scoreboard.
 
+**Phase-2 jobs (launched 2026-06-11, gate waived):**
+- **FT4=9588_[0-3]** Qwen3-8B ablation cuts {0,12,24,32} → **FT5=9589** probe
+- **FT6=9590_[0-3]** gpt-oss-120b LoRA cuts {0,12,24,32} → **FT7=9591** probe
+- M4 k-sweep resubmit **9586** (running) → **M5=9587** re-render figs to 8 models
+
 **Gate decision (2026-06-11):** gate WAIVED — free grant cluster, redo cost
 low, parallelism saves wall-clock. Pilot trained cleanly (ppl 11.1→6.65,
 converged epoch 2) so the shared recipe is validated; FT4/FT5 (8B) and
