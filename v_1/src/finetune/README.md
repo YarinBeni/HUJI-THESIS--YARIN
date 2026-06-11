@@ -35,6 +35,14 @@ Akkadian-naive than assumed. Dating-probe verdict pending 9558's scoreboard.
 - **FT6=9590_[0-3]** gpt-oss-120b LoRA cuts {0,12,24,32} → **FT7=9591** probe
 - M4 k-sweep resubmit **9586** (running) → **M5=9587** re-render figs to 8 models
 
+**Qwen3-32B added for completeness (FT4b/FT5b):** cuts {0,21,43,58}, 8 GPUs.
+Folds into the same maximal/mean/balanced PLS plots as 8B. Submit:
+```bash
+cd ~/projects/HUJI-THESIS--YARIN && git pull --rebase origin main
+FT4b=$(sbatch --parsable v_1/src/finetune/sbatch/FT4b_qwen3_32b_ablation.sbatch); echo "FT4b=$FT4b"
+FT5b=$(sbatch --parsable --dependency=afterok:$FT4b v_1/src/finetune/sbatch/FT5b_probe_qwen3_32b_ft.sbatch); echo "FT5b=$FT5b"
+```
+
 **Gate decision (2026-06-11):** gate WAIVED — free grant cluster, redo cost
 low, parallelism saves wall-clock. Pilot trained cleanly (ppl 11.1→6.65,
 converged epoch 2) so the shared recipe is validated; FT4/FT5 (8B) and

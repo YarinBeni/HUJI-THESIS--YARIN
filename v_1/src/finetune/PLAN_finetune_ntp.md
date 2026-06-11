@@ -21,12 +21,13 @@ Meeting rule: cuts at 0 % / ~33 % / ~67 % / ~90 % of depth ("for a 30-layer mode
 |---|---|---|---|---|
 | qwen3_1b7 (pilot) | `Qwen/Qwen3-1.7B` | 28 | **0, 9, 19, 25** | hs 9 ≈ block 8 → cut 9 sits at the peak |
 | qwen3_8b (main) | `Qwen/Qwen3-8B` | 36 | **0, 12, 24, 32** | hs 16 ≈ block 15 → straddled by cuts 12/24 |
+| qwen3_32b (completeness) | `Qwen/Qwen3-32B` | 64 | **0, 21, 43, 58** | base peaks early (~hs 6 maximal); cuts span 0/33/67/90% |
 | gpt_oss_120b | `openai/gpt-oss-120b` | 36 (MoE, 128 experts) | **0, 12, 24, 32** | unknown → measured in step FT0 |
 
 Notes:
 - Same checkpoints that were probed (NOT `-Base` variants) so before/after is apples-to-apples.
 - Qwen3-1.7B has tied embeddings → in cut>0 arms we freeze the tie (lm_head trains only for cut=0). Logged in metadata.
-- qwen3_32b is excluded for now (65 blocks, marginal probing gain over 8B, 4× cost). Can be added later with cuts 0/21/43/58.
+- qwen3_32b added (FT4b/FT5b) for a complete Qwen scale ladder in the figures; 8 GPUs (cut=0 full-FT needs bf16 weights + fp32 AdamW > 4 GPUs), micro-batch 1.
 
 ### Training recipe
 
@@ -95,9 +96,11 @@ job, built once the scoreboard names the winners:
 
 1. Extend the model registries (`make_maximal_figs.py` ALL_MODELS/LAYERED +
    styling/param-count registries in `plot_round3_story_figures.py`) with
-   `gpt_oss_120b` (base) and the **best cut per family only** — full 4-cut
-   grids stay in `finetune/results/figures/` (20 curves would be unreadable;
-   8 → ~11 models in the headline figures).
+   `gpt_oss_120b` (base) and the **best cut per family only** — for all three
+   Qwen scales (1.7B/8B/32B) + gpt-oss. Full 4-cut grids stay in
+   `finetune/results/figures/` (would be unreadable in the headline panels;
+   8 → ~12 models). Every fine-tuned arm uses the same maximal/mean/balanced
+   year-PLS config as the base models, so they drop in directly.
 2. Render fig1/2/4 from the union of `maximal_figs/probes/` +
    `finetune/results/probes/` (fig2 needs gpt-oss's size point: 117B total /
    5.1B active — plot at total params, annotate active).
