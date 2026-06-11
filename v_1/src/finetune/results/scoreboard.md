@@ -4,6 +4,7 @@
 
 | family | arm | best layer | Spearman |
 |---|---|---|---|
+| gpt_oss_120b | base | 5 | 0.3301 ± 0.0724 |
 | qwen3_1b7 | base | 9 | 0.3549 ± 0.0802 |
 | qwen3_1b7 | ft00 | 5 | 0.3416 ± 0.0836 |
 | qwen3_1b7 | ft09 | 9 | 0.3556 ± 0.0804 |
