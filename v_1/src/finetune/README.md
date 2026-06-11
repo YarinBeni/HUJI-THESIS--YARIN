@@ -22,13 +22,13 @@ commits its summaries back to main):
 bf16 (~240GB); 4×H100 (320GB) left no dispatch headroom and `device_map=auto`
 overloaded one GPU. FT0/FT7 bumped to **`--gres=gpu:8`** + `mem=512G` +
 `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` (FT6 already 8-GPU, same env
-added). Resubmit only the gpt-oss branch:
-```bash
-cd ~/projects/HUJI-THESIS--YARIN && git pull --rebase origin main
-scancel 9556                                    # dead dependency from the failed 9555
-FT0=$(sbatch --parsable v_1/src/finetune/sbatch/FT0_extract_gptoss_base.sbatch);  echo "FT0=$FT0"
-FT0B=$(sbatch --parsable --dependency=afterok:$FT0 v_1/src/finetune/sbatch/FT0b_probe_gptoss_base.sbatch); echo "FT0b=$FT0B"
-```
+added). Resubmitted on 8 GPUs: **FT0=9568** (PD on Resources — waiting for a
+free 8-GPU node) → **FT0b=9569** (afterok:9568). Old 9555/9556 dead.
+
+**Pilot training result (9557 arms, all ✅):** base val ppl 11.1 → best 6.65
+(cut00) / 7.13 (cut09) / 7.71 (cut19) / 8.69 (cut25). Monotonic in unfrozen
+depth, converges by epoch 2. NB base ppl is *low* — Qwen3-1.7B is less
+Akkadian-naive than assumed. Dating-probe verdict pending 9558's scoreboard.
 
 **⛔ GATE after 9558:** `git pull` → review `results/scoreboard_best.csv` +
 `results/train_summaries/qwen3_1b7_cut*.json` (val ppl must drop a lot from
