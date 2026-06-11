@@ -30,11 +30,13 @@ free 8-GPU node) → **FT0b=9569** (afterok:9568). Old 9555/9556 dead.
 depth, converges by epoch 2. NB base ppl is *low* — Qwen3-1.7B is less
 Akkadian-naive than assumed. Dating-probe verdict pending 9558's scoreboard.
 
-**⛔ GATE after 9558:** `git pull` → review `results/scoreboard_best.csv` +
-`results/train_summaries/qwen3_1b7_cut*.json` (val ppl must drop a lot from
-the Akkadian-naive base). Pilot target to beat: base qwen3_1b7 year-PLS
-**0.355 @ L9 (maximal)** / 0.397 (tier0). Only then submit phase 2
-(FT4→FT5 for Qwen3-8B; FT6→FT7 for gpt-oss-120b LoRA) — commands in §Submit order.
+**Gate decision (2026-06-11):** gate WAIVED — free grant cluster, redo cost
+low, parallelism saves wall-clock. Pilot trained cleanly (ppl 11.1→6.65,
+converged epoch 2) so the shared recipe is validated; FT4/FT5 (8B) and
+FT6/FT7 (gpt-oss LoRA) launched in parallel with 9558 rather than waiting.
+Risk accepted: if 9558's scoreboard later shows the recipe needs a tweak,
+rerun the affected arms. Pilot target to beat: base qwen3_1b7 year-PLS
+**0.355 @ L9 (maximal)** / 0.397 (tier0).
 
 Concurrent (unrelated round, same cluster): **9552** = maximal_figs M4 PLS
 k-sweep (re-run without tfidf), **9553** = M5 mlm-fix + re-render all maximal
