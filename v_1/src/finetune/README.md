@@ -3,7 +3,12 @@
 Fine-tune Qwen3 + gpt-oss-120b on Akkadian next-token prediction and measure
 whether (and *at which depth*) it improves the balanced year-PLS signal.
 Full design + rationale: **`PLAN_finetune_ntp.md`**. Tokenizer pre-EDA (why no
-vocab expansion): **`eda/results/TOKENIZER_EDA.md`**.
+vocab expansion): **`eda/results/TOKENIZER_EDA.md`**. **Findings: `RESULTS_finetune.md`**.
+
+> **TL;DR (2026-06-12):** NTP fine-tuning does **not** improve dating on the
+> length-controlled (maximal) metric at any scale or depth — the signal lives
+> in early/frozen layers. Only gpt-oss-120b on tier0 with full-depth training
+> gains (+0.048), i.e. where the length confound lives. See `RESULTS_finetune.md`.
 
 ## RUN LOG — submitted 2026-06-11 (update as jobs land)
 
@@ -31,17 +36,15 @@ depth, converges by epoch 2. NB base ppl is *low* — Qwen3-1.7B is less
 Akkadian-naive than assumed. Dating-probe verdict pending 9558's scoreboard.
 
 **Phase-2 jobs (launched 2026-06-11, gate waived):**
-- **FT4=9588_[0-3]** Qwen3-8B ablation cuts {0,12,24,32} → **FT5=9589** probe
-- **FT6=9590_[0-3]** gpt-oss-120b LoRA cuts {0,12,24,32} → **FT7=9591** probe
-- M4 k-sweep resubmit **9586** (running) → **M5=9587** re-render figs to 8 models
+- **FT4=9588** Qwen3-8B ablation → **FT5=9589** probe — ✅ done (flat at maximal)
+- **FT6=9590** gpt-oss-120b LoRA → **FT7=9591** probe — ✅ done (tier0 +0.048 full-depth only)
+- **FT4b=9596** Qwen3-32B ablation ✅ trained → **FT5b=9597** probe 🏃 running (last tile)
+- M4 k-sweep **9586** ✅ done (ksweep figs rendered). **M5=9587 did NOT commit** —
+  fig1/2/4 still 7-model Jun-10 versions, mlm-at-maximal re-render pending; needs
+  `tail .../logs/M5_9587.out` to diagnose.
 
-**Qwen3-32B added for completeness (FT4b/FT5b):** cuts {0,21,43,58}, 8 GPUs.
-Folds into the same maximal/mean/balanced PLS plots as 8B. Submit:
-```bash
-cd ~/projects/HUJI-THESIS--YARIN && git pull --rebase origin main
-FT4b=$(sbatch --parsable v_1/src/finetune/sbatch/FT4b_qwen3_32b_ablation.sbatch); echo "FT4b=$FT4b"
-FT5b=$(sbatch --parsable --dependency=afterok:$FT4b v_1/src/finetune/sbatch/FT5b_probe_qwen3_32b_ft.sbatch); echo "FT5b=$FT5b"
-```
+**Remaining:** FT5b (32B probe) finishing; then **FT8/M6** to fold best cut per
+family + gpt-oss into the maximal fig1/2/4 + MAE panels.
 
 **Gate decision (2026-06-11):** gate WAIVED — free grant cluster, redo cost
 low, parallelism saves wall-clock. Pilot trained cleanly (ppl 11.1→6.65,
