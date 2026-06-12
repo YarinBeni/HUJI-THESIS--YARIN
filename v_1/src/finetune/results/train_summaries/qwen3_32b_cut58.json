@@ -1,0 +1,46 @@
+{
+  "model_id": "Qwen/Qwen3-32B",
+  "mode": "full_ft_above_cut",
+  "freeze": {
+    "n_blocks": 64,
+    "cut": 58,
+    "tied_embeddings": false,
+    "lm_head_trained": true,
+    "trainable_params": 3703507456,
+    "total_params": 32762123264
+  },
+  "seq_len": 2048,
+  "epochs": 3.0,
+  "lr": 1e-05,
+  "global_batch": 64,
+  "seed": 42,
+  "train_chunks": 4412,
+  "val_chunks": 573,
+  "base_val_loss": 1.9786828756332397,
+  "base_val_ppl": 7.233209671551113,
+  "best_val_loss": 1.6706819534301758,
+  "best_val_ppl": 5.315791683752619,
+  "eval_history": [
+    {
+      "epoch": 1.0,
+      "eval_loss": 1.7002084255218506,
+      "eval_ppl": 5.475088420974581
+    },
+    {
+      "epoch": 2.0,
+      "eval_loss": 1.6721080541610718,
+      "eval_ppl": 5.323377946259641
+    },
+    {
+      "epoch": 3.0,
+      "eval_loss": 1.6706819534301758,
+      "eval_ppl": 5.315791683752619
+    },
+    {
+      "epoch": 3.0,
+      "eval_loss": 1.6706819534301758,
+      "eval_ppl": 5.315791683752619
+    }
+  ],
+  "finished": "2026-06-12T05:20:47.685558"
+}
