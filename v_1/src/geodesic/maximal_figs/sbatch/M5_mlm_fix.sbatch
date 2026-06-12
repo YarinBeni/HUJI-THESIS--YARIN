@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=maxfig_M5
 #SBATCH --partition=voltagepark
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=32
 #SBATCH --mem=64G
-#SBATCH --time=03:00:00
+#SBATCH --time=12:00:00
 #SBATCH --output=v_1/src/geodesic/maximal_figs/logs/M5_%j.out
 
 # ===========================================================================
@@ -56,8 +56,9 @@ python -u "$RMP" \
     --draws-matrix "$SUBSET/draws_matrix.npy" --fragment-order "$SUBSET/corpus_fragment_order.json" \
     --output-dir "$MF/ksweep_probes" --method-tag mc_balanced_ksweep_maximal \
     --probes mlm_pls --cleaning maximal --pooling mean \
-    --layers all --pls-k 1,2,3,5,8,16,32,64,128 --n-jobs "${SLURM_CPUS_PER_TASK:-16}" \
+    --layers all --pls-k 1,2,3,5,8,16,32,64 --n-jobs "${SLURM_CPUS_PER_TASK:-32}" \
     || echo "WARN mlm ksweep failed"
+    # k=128 dropped: balanced sample caps PLS components at 126 -> always skipped (matches M4 fix)
 
 # 4. re-render fig1/2/4 (8 models)
 echo "--- 4. re-render fig1/2/4 ---"
