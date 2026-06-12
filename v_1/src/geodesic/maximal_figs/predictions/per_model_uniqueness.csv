@@ -1,8 +1,9 @@
 model,frac_correct,unique_win,unique_loss,win_top_period,win_top_subgenre,loss_top_period,loss_top_subgenre
 tfidf,0.972,2,2,Neo-Babylonian:2,brick:1; None:1,Neo-Babylonian:2,cylinder:2
-thalesian_akk300m,0.954,1,13,Neo-Babylonian:1,brick:1,Neo-Assyrian:13,wall slab (with reliefs):3; brick:3; slab (sculptured):2
-thalesian_cunei400m,0.968,1,7,Neo-Babylonian:1,stele:1,Neo-Assyrian:5; Neo-Babylonian:2,cylinder:1; brick:1; None:1
-qwen3_1b7,0.956,0,10,,,Neo-Assyrian:9; Neo-Babylonian:1,wall slab (with reliefs):4; None:2; slab:1
+mlm,0.944,1,18,Neo-Babylonian:1,statue base:1,Neo-Assyrian:18,wall slab (with reliefs):3; block:3; door socket:2
+thalesian_akk300m,0.954,1,9,Neo-Babylonian:1,brick:1,Neo-Assyrian:9,wall slab (with reliefs):3; slab (sculptured):2; brick:2
+thalesian_cunei400m,0.968,1,5,Neo-Babylonian:1,stele:1,Neo-Assyrian:3; Neo-Babylonian:2,cylinder:1; brick:1; None:1
+qwen3_1b7,0.956,0,9,,,Neo-Assyrian:8; Neo-Babylonian:1,wall slab (with reliefs):4; None:2; slab:1
 qwen3_8b,0.957,0,6,,,Neo-Assyrian:4; Neo-Babylonian:2,wall slab (with reliefs):2; slab:2; cylinder:2
 qwen3_32b,0.962,0,4,,,Neo-Assyrian:4,cylinder:1; wall slab (with reliefs):1; brick:1
-random,0.951,1,14,Neo-Babylonian:1,cylinder:1,Neo-Assyrian:8; Neo-Babylonian:6,cylinder:7; wall slab (with reliefs):2; bead:1
+random,0.951,1,12,Neo-Babylonian:1,cylinder:1,Neo-Assyrian:7; Neo-Babylonian:5,cylinder:6; wall slab (with reliefs):2; bead:1
