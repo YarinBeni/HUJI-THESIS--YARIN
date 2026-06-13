@@ -7,10 +7,11 @@
 #SBATCH --output=v_1/src/geodesic/maximal_figs/logs/M4_%j.out
 
 # ===========================================================================
-# M4 — MAXIMAL PLS k-sweep (components tradeoff + per-method panels), 8 models.
+# M4 — MAXIMAL PLS k-sweep (components tradeoff + per-method panels), 9 models.
 # RUN AFTER M3 (needs mlm maximal activations + every model's best maximal layer).
+# Also requires gpt_oss_120b activations extracted (FT0_extract_gptoss_base.sbatch).
 #
-# Sweeps wide k = 1,2,3,5,8,16,32,64,128 at each model's BEST maximal layer
+# Sweeps wide k = 1,2,3,5,8,16,32,64 at each model's BEST maximal layer
 # (resolved from the M1/M3 standard probe summaries), balanced/maximal/mean.
 # Writes ksweep_tradeoff_maximal.png + ksweep_per_method_maximal.png.
 # ===========================================================================
@@ -24,7 +25,17 @@ export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 
 MF=v_1/src/geodesic/maximal_figs
 SUBSET=v_1/src/linear_probing/results/orcc_round2_phase0/balanced_subset
-mkdir -p "$MF/ksweep_probes" "$MF/logs"
+mkdir -p "$MF/ksweep_probes" "$MF/logs" "$MF/probes"
+
+# Make gpt_oss_120b probe summary visible to maximal_ksweep.py --emit-layers
+# (its probe lives in the finetune results tree, not the standard MF/probes dir)
+GPT_PROBE=v_1/src/finetune/results/probes/gpt_oss_120b_pls__mc_balanced_maximal__summary.json
+if [ -f "$GPT_PROBE" ]; then
+    cp "$GPT_PROBE" "$MF/probes/gpt_oss_120b_pls__mc_balanced_maximal__summary.json"
+    echo "Copied gpt_oss_120b probe summary to $MF/probes/"
+else
+    echo "WARN: gpt_oss_120b probe summary not found at $GPT_PROBE — model will be skipped"
+fi
 
 # best maximal layer per model -> union, from the standard probe summaries
 LAYERS=$(python -u "$MF/maximal_ksweep.py" --emit-layers --std-probes "$MF/probes")
@@ -34,7 +45,7 @@ echo "best-layer union: $LAYERS"
 # slow (k=64 PLS on ~tens-of-thousands of dims x 200 draws blocked the whole job for
 # 3h+). TF-IDF is a flat surface baseline already shown as a point in fig1/fig2; its
 # k-curve, if wanted, is cheap via the local pls_ksweep/tfidf_ksweep_local.py path.
-PROBES="mlm_pls,thalesian_akk300m_pls,thalesian_cunei400m_pls,qwen3_1b7_pls,qwen3_8b_pls,qwen3_32b_pls,random_pls"
+PROBES="mlm_pls,thalesian_akk300m_pls,thalesian_cunei400m_pls,qwen3_1b7_pls,qwen3_8b_pls,qwen3_32b_pls,random_pls,gpt_oss_120b_pls"
 python -u v_1/src/linear_probing/round2_phase0/run_mc_probes.py \
     --draws-matrix   "$SUBSET/draws_matrix.npy" \
     --fragment-order "$SUBSET/corpus_fragment_order.json" \
@@ -60,7 +71,7 @@ python -u "$MF/maximal_ksweep.py" \
 echo ""; echo "=== Committing ==="
 git add "$MF/figures"/ksweep_*.png "$MF/tables"/ksweep_*.csv \
         "$MF/maximal_ksweep.py" "$MF/sbatch"/*.sbatch
-git commit -m "maximal_figs M4: PLS k-sweep (tradeoff + per-method) maximal/mean/balanced, 8 models (job ${SLURM_JOB_ID:-NA})" \
+git commit -m "maximal_figs M4: PLS k-sweep (tradeoff + per-method) maximal/mean/balanced, 9 models incl. gpt_oss_120b (job ${SLURM_JOB_ID:-NA})" \
     || echo "Nothing to commit"
 git pull --rebase origin main || echo "WARN pull failed"
 git push origin main || echo "WARN push failed"
