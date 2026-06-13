@@ -5,10 +5,13 @@ whether (and *at which depth*) it improves the balanced year-PLS signal.
 Full design + rationale: **`PLAN_finetune_ntp.md`**. Tokenizer pre-EDA (why no
 vocab expansion): **`eda/results/TOKENIZER_EDA.md`**. **Findings: `RESULTS_finetune.md`**.
 
-> **TL;DR (2026-06-12):** NTP fine-tuning does **not** improve dating on the
-> length-controlled (maximal) metric at any scale or depth — the signal lives
-> in early/frozen layers. Only gpt-oss-120b on tier0 with full-depth training
-> gains (+0.048), i.e. where the length confound lives. See `RESULTS_finetune.md`.
+> **TL;DR (2026-06-14, COMPLETE):** NTP fine-tuning does **not** improve dating
+> on the length-controlled (maximal) metric at **any** scale (1.7B/8B/32B/
+> gpt-oss-120b) or unfreeze depth — max Δ +0.0013, signal lives in early/frozen
+> layers (32B: FT arms byte-identical to base at L6). Only gpt-oss-120b on tier0
+> with full-depth training gains (+0.048), i.e. where the length confound lives.
+> Scale doesn't win; the 0.4B Akkadian-trained Thalesian-400M does. Full writeup:
+> `RESULTS_finetune.md`. Comparison plot: `results/figures/maximal_pls_bestlayer.png`.
 
 ## RUN LOG — submitted 2026-06-11 (update as jobs land)
 
@@ -38,14 +41,27 @@ Akkadian-naive than assumed. Dating-probe verdict pending 9558's scoreboard.
 **Phase-2 jobs (launched 2026-06-11, gate waived):**
 - **FT4=9588** Qwen3-8B ablation → **FT5=9589** probe — ✅ done (flat at maximal)
 - **FT6=9590** gpt-oss-120b LoRA → **FT7=9591** probe — ✅ done (tier0 +0.048 full-depth only)
-- **FT4b=9596** Qwen3-32B ablation ✅ trained → **FT5b=9597** probe 🏃 running (last tile)
-- M4 k-sweep **9586** ✅ + M5 mlm-fix **9648** ✅ (9587 timed out at 3h → bumped to
-  12h, resubmitted as 9648). Maximal panel set complete: fig1/2/4 + MAE + k-sweep
-  now all **8 models**. NB at maximal the 37M mlm lands at 0.311 (≈ random); only
+- **FT4b=9596** Qwen3-32B ablation ✅ → **FT5b=9597** probe ✅ done (flat at maximal, Δ=0.000; ft21/43/58 byte-identical to base at L6)
+- M4 k-sweep **9586** ✅ + M5 mlm-fix **9648** ✅ + gpt-oss-into-ksweep **9655** ✅.
+  Maximal panel set complete: fig1/2/4 + MAE = 8 models, k-sweep = **9 models**
+  (gpt-oss added). NB at maximal the 37M mlm lands at 0.311 (≈ random); only
   thalesian_cunei400m (0.411) clearly leads.
 
-**Remaining:** FT5b (32B probe) finishing; then **FT8/M6** to fold best cut per
-family + gpt-oss into the maximal fig1/2/4 + MAE panels.
+**DONE (2026-06-14):** all four families probed (base + depth ablation) across
+maximal + tier0. gpt-oss folded into the canonical maximal panels + k-sweep
+(9 models). Local comparison plot `plot_maximal_pls.py --with-ft` →
+`results/figures/maximal_pls_{bestlayer,layerwise}.png`. Optional polish left:
+FT8/M6 to fold the best FT *cut* into the cluster fig1/2/4 (local plot already shows it).
+
+### gpt-oss k-sweep — debugging trail (resolved)
+Getting gpt-oss into the k-sweep took three fixes, all now in: (1) renderer
+`maximal_ksweep.py` had a hardcoded 8-model `MODELS` list — added `gpt_oss_120b`;
+(2) M4 copies the gpt-oss std-probe summary into `probes/` so `--emit-layers`
+resolves its best layer; (3) the first ksweep draws (job 9650) were computed
+before gpt-oss's best layer L5 was in the union, and `run_mc_probes` resume
+skips a draw whole-file — so M4 now **purges** gpt-oss ksweep draws before
+recompute. Lesson: when adding a model to a resumable sweep, purge its stale
+per-draw files or the layer set silently stays out of date.
 
 **Gate decision (2026-06-11):** gate WAIVED — free grant cluster, redo cost
 low, parallelism saves wall-clock. Pilot trained cleanly (ppl 11.1→6.65,

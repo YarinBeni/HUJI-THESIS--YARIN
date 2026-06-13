@@ -14,7 +14,8 @@ _Last updated: 2026-06-10_
 - [x] **Task 4 — PLS components tradeoff** (see `pls_ksweep/`). Done; selection-bias finding.
 - [ ] **Task 1 — closed-model baseline** (GPT-5 / Claude / Gemini via OpenRouter). NOT started.
 - [x] **Task 2 — gpt-oss-120B** (open-weights, keeps activations). DONE — base 0.404 tier0 / 0.330 maximal; on maximal it falls *below* Qwen3-8B → scale doesn't win once length is controlled. (`v_1/src/finetune/RESULTS_finetune.md`)
-- [x] **Task 5 — fine-tune** Qwen/gpt-oss on Akkadian NTP. DONE (32B probe finishing). **Result: NTP fine-tuning does NOT improve dating on the maximal metric at any scale/depth** — signal is in early/frozen layers; only gpt-oss tier0 full-depth gains (+0.048, the length confound). Pre-EDA → no vocab expansion. Full writeup: `v_1/src/finetune/RESULTS_finetune.md`; design: `PLAN_finetune_ntp.md`; run log: `README.md`.
+- [x] **Task 5 — fine-tune** Qwen/gpt-oss on Akkadian NTP. **DONE — all 4 families (1.7B/8B/32B/gpt-oss-120b) probed.** NTP fine-tuning does NOT improve dating on the maximal metric at any scale/depth (max Δ +0.0013; 32B FT byte-identical to base at L6) — signal is in early/frozen layers; only gpt-oss tier0 full-depth gains (+0.048, the length confound). Pre-EDA → no vocab expansion. Writeup: `v_1/src/finetune/RESULTS_finetune.md`; comparison plot: `v_1/src/finetune/results/figures/maximal_pls_bestlayer.png`; design: `PLAN_finetune_ntp.md`; run log: `README.md`.
+- Maximal panel set now includes gpt-oss: **fig1/2/4 = 9 models** (regen via `maximal_figs/regen_figs_from_csv.py`) and **k-sweep = 9 models** (job 9655). mlm-at-maximal fix landed for all panels (job 9648). (MAE per-ruler panels still 8-model — gpt-oss MAE not yet regenerated.)
 - [ ] **Present figs 0/2/3/4/5** to advisors (only Fig 1 shown). Handoff: `yarin/HANDOFF_fig_presentation.md`.
 
 ## Task 4 — PLS k-sweep  (`pls_ksweep/`)
