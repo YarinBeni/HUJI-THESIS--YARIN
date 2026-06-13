@@ -39,9 +39,10 @@ Akkadian-naive than assumed. Dating-probe verdict pending 9558's scoreboard.
 - **FT4=9588** Qwen3-8B ablation → **FT5=9589** probe — ✅ done (flat at maximal)
 - **FT6=9590** gpt-oss-120b LoRA → **FT7=9591** probe — ✅ done (tier0 +0.048 full-depth only)
 - **FT4b=9596** Qwen3-32B ablation ✅ trained → **FT5b=9597** probe 🏃 running (last tile)
-- M4 k-sweep **9586** ✅ done (ksweep figs rendered). **M5=9587 did NOT commit** —
-  fig1/2/4 still 7-model Jun-10 versions, mlm-at-maximal re-render pending; needs
-  `tail .../logs/M5_9587.out` to diagnose.
+- M4 k-sweep **9586** ✅ + M5 mlm-fix **9648** ✅ (9587 timed out at 3h → bumped to
+  12h, resubmitted as 9648). Maximal panel set complete: fig1/2/4 + MAE + k-sweep
+  now all **8 models**. NB at maximal the 37M mlm lands at 0.311 (≈ random); only
+  thalesian_cunei400m (0.411) clearly leads.
 
 **Remaining:** FT5b (32B probe) finishing; then **FT8/M6** to fold best cut per
 family + gpt-oss into the maximal fig1/2/4 + MAE panels.
