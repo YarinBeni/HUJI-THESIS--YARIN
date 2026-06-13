@@ -55,11 +55,27 @@ def run(args):
     print(f"Text column: {args.text_col}  |  N={len(texts)}")
 
     # ── Load model + tokenizer ──────────────────────────────────────────────
+    import transformers as _tf
     from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
-    print(f"Loading seq2seq model: {args.model}")
+    print(f"Loading seq2seq model: {args.model}  (transformers {_tf.__version__})")
+
+    # Diagnostic: read the RAW config model_type even if Auto* can't map it.
+    # `google/umt5-base` declares model_type='umt5'; some transformers builds
+    # don't register it (while accepting 'mt5'/'t5'), which is why a plain
+    # AutoModelForSeq2SeqLM can fail with "Unrecognized model ... model_type".
+    raw_model_type = None
+    try:
+        import json as _json
+        from huggingface_hub import hf_hub_download as _dl
+        _raw = _json.load(open(_dl(args.model, "config.json")))
+        raw_model_type = _raw.get("model_type")
+        print(f"  raw config: model_type={raw_model_type} "
+              f"architectures={_raw.get('architectures')}")
+    except Exception as e:  # local path / offline — non-fatal
+        print(f"  (could not read raw config.json: {type(e).__name__}: {e})")
+
     tokenizer = AutoTokenizer.from_pretrained(args.model)
-    # T5/UMT5 should have pad_token already. Defensive check, fallback if missing.
     if tokenizer.pad_token is None:
         if tokenizer.eos_token is not None:
             tokenizer.pad_token = tokenizer.eos_token
@@ -70,10 +86,38 @@ def run(args):
     model_kwargs = dict(torch_dtype=torch.bfloat16)
     if torch.cuda.is_available():
         model_kwargs['device_map'] = 'auto'
-    model = AutoModelForSeq2SeqLM.from_pretrained(args.model, **model_kwargs)
+
+    # Robust load chain (keeps Auto first so existing models are unaffected):
+    #   1. AutoModelForSeq2SeqLM            (works when model_type is registered)
+    #   2. explicit UMT5ForConditionalGeneration (correct class, bypasses mapping)
+    #   3. explicit (M)T5ForConditionalGeneration (last resort; umt5≈mt5-base arch)
+    model, load_path, errs = None, None, []
+    try:
+        model = AutoModelForSeq2SeqLM.from_pretrained(args.model, **model_kwargs)
+        load_path = "AutoModelForSeq2SeqLM"
+    except Exception as e:
+        errs.append(f"Auto: {type(e).__name__}: {e}")
+        for cls_name in ("UMT5ForConditionalGeneration",
+                         "MT5ForConditionalGeneration",
+                         "T5ForConditionalGeneration"):
+            try:
+                cls = getattr(_tf, cls_name)
+            except AttributeError:
+                errs.append(f"{cls_name}: not in this transformers")
+                continue
+            try:
+                model = cls.from_pretrained(args.model, **model_kwargs)
+                load_path = cls_name
+                break
+            except Exception as e2:
+                errs.append(f"{cls_name}: {type(e2).__name__}: {e2}")
+    if model is None:
+        raise RuntimeError("All seq2seq load strategies failed:\n  " + "\n  ".join(errs))
+
     model.eval()
     device = next(model.parameters()).device
-    print(f"Model loaded. Device: {device}")
+    print(f"Model loaded via {load_path}. Device: {device}  "
+          f"(class={type(model).__name__})")
 
     # ── Extract activations at all encoder layers ───────────────────────────
     batch_size = args.batch_size
