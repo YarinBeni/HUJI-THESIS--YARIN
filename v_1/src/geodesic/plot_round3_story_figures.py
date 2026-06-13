@@ -48,6 +48,7 @@ MODEL_ORDER = [
     "qwen3_1b7",
     "qwen3_8b",
     "qwen3_32b",
+    "gpt_oss_120b",
     "random",
 ]
 
@@ -60,6 +61,7 @@ MODEL_LABEL = {
     "qwen3_1b7": "Qwen3 1.7B",
     "qwen3_8b": "Qwen3 8B",
     "qwen3_32b": "Qwen3 32B",
+    "gpt_oss_120b": "GPT-OSS 120B",
     "random": "Random-init 8B",
 }
 
@@ -72,6 +74,7 @@ MODEL_SHORT = {  # for tight axis tick labels
     "qwen3_1b7": "Qwen3 1.7B",
     "qwen3_8b": "Qwen3 8B",
     "qwen3_32b": "Qwen3 32B",
+    "gpt_oss_120b": "GPT-OSS 120B",
     "random": "Random 8B",
 }
 
@@ -84,6 +87,7 @@ PARAMS_B = {
     "qwen3_1b7": 1.7,
     "qwen3_8b": 8.0,
     "qwen3_32b": 32.0,
+    "gpt_oss_120b": 120.0,
     "random": 8.0,
 }
 
@@ -96,6 +100,7 @@ FAMILY = {
     "qwen3_1b7": "qwen",
     "qwen3_8b": "qwen",
     "qwen3_32b": "qwen",
+    "gpt_oss_120b": "gpt_oss",
     "random": "random",
 }
 
@@ -111,6 +116,7 @@ MODEL_COLOR = {
     "qwen3_1b7":           "#8fcf6e",   # light green
     "qwen3_8b":            "#4b8f3a",   # mid green
     "qwen3_32b":           "#1f4d12",   # dark green
+    "gpt_oss_120b":        "#c0392b",   # crimson red
     "random":              "#7a4ec0",
 }
 
@@ -123,6 +129,7 @@ MODEL_MARKER = {
     "qwen3_1b7":           "o",
     "qwen3_8b":            "o",
     "qwen3_32b":           "o",
+    "gpt_oss_120b":        "^",
     "random":              "X",
 }
 
@@ -130,6 +137,7 @@ MODEL_MARKER = {
 FAMILY_LINESTYLE = {
     "akkadian": "-",
     "qwen":     "--",
+    "gpt_oss":  (0, (5, 2)),
     "random":   ":",
     "surface":  "-.",
     "metadata": (0, (1, 1)),

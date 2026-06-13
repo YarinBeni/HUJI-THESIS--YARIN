@@ -17,6 +17,8 @@ Writes into figures/:
 from __future__ import annotations
 
 import csv
+import json
+import re
 import sys
 from pathlib import Path
 
@@ -55,6 +57,60 @@ def load_data(tables: Path) -> dict:
         data["ruler"][r["model"]] = (_float(r["macro_f1"]), _float(r["macro_f1_std"]),
                                      r.get("source", ""))
     return data
+
+
+_LKEY = re.compile(r"__L(\d+)__")
+FINETUNE_PROBES = HERE.parent.parent / "finetune" / "results" / "probes"
+
+
+def _load_probe_layers(probe_json: Path, value_key: str, suffix: str) -> dict:
+    """Read {layer -> (mean, std)} from a probe summary JSON for maximal/mean configs."""
+    if not probe_json.exists():
+        return {}
+    pc = json.load(open(probe_json)).get("per_config", {})
+    out: dict = {}
+    for k, rec in pc.items():
+        if "__maximal__" not in k or "__last__" in k or not k.endswith(suffix):
+            continue
+        if "__mean__" not in k:
+            continue
+        m = _LKEY.search(k)
+        L = int(m.group(1)) if m else 0
+        out[L] = (rec.get(f"{value_key}_mean"), rec.get(f"{value_key}_std"))
+    return out
+
+
+def inject_gpt_oss_120b(data: dict) -> None:
+    """Load gpt_oss_120b probe data from the finetune results and inject into data."""
+    pls = _load_probe_layers(
+        FINETUNE_PROBES / "gpt_oss_120b_pls__mc_balanced_maximal__summary.json",
+        "spearman", "year-raw",
+    )
+    ridge = _load_probe_layers(
+        FINETUNE_PROBES / "gpt_oss_120b_cls_numeric__mc_balanced_maximal__summary.json",
+        "spearman", "year-raw",
+    )
+    # ruler: best macro_f1 over cls and pls probes
+    best_ruler: tuple = (None, None, None)
+    for probe, src in [("cls", "cls"), ("pls", "plsda")]:
+        p = FINETUNE_PROBES / f"gpt_oss_120b_{probe}__mc_balanced_maximal__summary.json"
+        if not p.exists():
+            continue
+        for k, rec in json.load(open(p)).get("per_config", {}).items():
+            if "__maximal__" not in k or "__last__" in k or not k.endswith("ruler"):
+                continue
+            f1 = rec.get("macro_f1_mean")
+            if f1 is not None and (best_ruler[0] is None or f1 > best_ruler[0]):
+                best_ruler = (f1, rec.get("macro_f1_std"), src)
+    if pls:
+        data["pls"]["gpt_oss_120b"] = pls
+        print(f"[gpt_oss_120b] {len(pls)} PLS layers loaded")
+    if ridge:
+        data["ridge"]["gpt_oss_120b"] = ridge
+        print(f"[gpt_oss_120b] {len(ridge)} Ridge layers loaded")
+    if best_ruler[0] is not None:
+        data["ruler"]["gpt_oss_120b"] = best_ruler
+        print(f"[gpt_oss_120b] ruler macro_f1={best_ruler[0]:.3f}")
 
 
 def regen_ksweep(tables: Path, fig_out: Path) -> None:
@@ -132,6 +188,7 @@ def main() -> None:
     fig_out.mkdir(parents=True, exist_ok=True)
 
     data = load_data(tables)
+    inject_gpt_oss_120b(data)
     mmf.fig1_ACD(data, fig_out)
     mmf.fig2_AB(data, fig_out)
     mmf.fig4_A(data, fig_out)
