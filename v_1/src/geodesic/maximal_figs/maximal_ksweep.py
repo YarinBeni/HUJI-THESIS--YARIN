@@ -131,8 +131,6 @@ def main() -> None:
     for m, (ks, means, stds, nd, rb, ck) in curves.items():
         c = prs.MODEL_COLOR.get(m, "#333")
         ax.plot(ks, means, "-o", color=c, label=f"{prs.MODEL_SHORT.get(m, m)} (n={nd})")
-        ax.fill_between(ks, np.array(means) - np.array(stds), np.array(means) + np.array(stds),
-                        color=c, alpha=0.12)
         if rb is not None:
             ax.axhline(rb, ls="--", color=c, lw=1, alpha=0.6)
         for k, mu, sd in zip(ks, means, stds):
@@ -157,8 +155,6 @@ def main() -> None:
             ks, means, stds, nd, rb, ck = curves[m]
             c = prs.MODEL_COLOR.get(m, "#333")
             ax.plot(ks, means, "-o", color=c)
-            ax.fill_between(ks, np.array(means) - np.array(stds), np.array(means) + np.array(stds),
-                            color=c, alpha=0.15)
             if rb is not None:
                 ax.axhline(rb, ls="--", color="firebrick", lw=1.2, label=f"Ridge {rb:.3f}")
             bi = int(np.argmax(means))
