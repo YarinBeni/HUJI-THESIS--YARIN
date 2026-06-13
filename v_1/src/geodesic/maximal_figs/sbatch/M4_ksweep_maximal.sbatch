@@ -37,6 +37,15 @@ else
     echo "WARN: gpt_oss_120b probe summary not found at $GPT_PROBE — model will be skipped"
 fi
 
+# Purge stale gpt_oss_120b ksweep draws. They were first computed (job 9650)
+# before gpt-oss resolved its best layer, so they only cover the OTHER models'
+# union layers and MISS gpt-oss's own best layer L5. run_mc_probes resume skips
+# a draw whole-file if it exists, so it never back-fills the missing layer ->
+# the renderer's collect(L05) finds nothing and gpt-oss is dropped. Deleting
+# forces a fresh recompute at the current (gpt-oss-inclusive) layer union.
+echo "--- purge stale gpt_oss_120b ksweep draws (missing-layer fix) ---"
+rm -fv "$MF/ksweep_probes"/gpt_oss_120b_pls__mc_balanced_ksweep_maximal__*.json
+
 # best maximal layer per model -> union, from the standard probe summaries
 LAYERS=$(python -u "$MF/maximal_ksweep.py" --emit-layers --std-probes "$MF/probes")
 echo "best-layer union: $LAYERS"
