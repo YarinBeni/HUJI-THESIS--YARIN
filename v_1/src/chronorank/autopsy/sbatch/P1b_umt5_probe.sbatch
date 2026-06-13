@@ -32,6 +32,25 @@ ACTS=v_1/src/linear_probing/results/orcc__embed/activations
 SUBSET=v_1/src/linear_probing/results/orcc_round2_phase0/balanced_subset
 OUT=v_1/src/chronorank/autopsy/results/probes
 
+# ---- 0) pre-fetch google/umt5-base (force clean download; HF throttles
+#         unauthenticated requests and can leave a truncated config.json,
+#         which makes AutoConfig fail with "no model_type key"). Retry. ------
+export HF_HUB_DOWNLOAD_TIMEOUT=60
+python - <<'PY' || { echo "FAILED: could not pre-fetch google/umt5-base"; exit 1; }
+import time
+from huggingface_hub import snapshot_download
+for i in range(6):
+    try:
+        p = snapshot_download("google/umt5-base",
+                              force_download=(i == 0))  # ignore any corrupt cache
+        print("pre-fetch OK:", p, flush=True); break
+    except Exception as e:
+        print(f"pre-fetch attempt {i} failed: {type(e).__name__}: {e}", flush=True)
+        time.sleep(30)
+else:
+    raise SystemExit("could not download google/umt5-base after retries")
+PY
+
 # ---- 1) extract vanilla uMT5-base (GPU, encoder-only, mean pool) -----------
 for CLEAN in tier0 maximal; do
     OUTDIR=${ACTS}/umt5_base_${CLEAN}_mean
