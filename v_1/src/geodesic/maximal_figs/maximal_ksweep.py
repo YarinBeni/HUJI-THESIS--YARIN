@@ -33,7 +33,7 @@ CLEANING = "maximal"
 STD_TAG = "mc_balanced_maximal"          # standard probes (best-layer source)
 KSWEEP_TAG = "mc_balanced_ksweep_maximal"
 MODELS = ["tfidf", "mlm", "thalesian_akk300m", "thalesian_cunei400m",
-          "qwen3_1b7", "qwen3_8b", "qwen3_32b", "random"]
+          "qwen3_1b7", "qwen3_8b", "qwen3_32b", "gpt_oss_120b", "random"]
 _LKEY = re.compile(r"__L(\d+)__")
 
 
