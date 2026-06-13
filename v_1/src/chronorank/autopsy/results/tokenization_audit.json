@@ -1,0 +1,689 @@
+{
+  "corpora": [
+    "orcc",
+    "seal",
+    "letters",
+    "archibab",
+    "oracc_1mill"
+  ],
+  "sample": 3000,
+  "tokenizers": [
+    {
+      "short": "thalesian_cunei400m",
+      "model_id": "Thalesian/cuneiformBase-400m",
+      "vocab_size": 256300,
+      "unk_token": "<unk>",
+      "unk_id": 3,
+      "per_corpus": {
+        "orcc": {
+          "fertility": 6.218770861487862,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1202,
+          "total_words": 245668,
+          "primary_col": "text_tier0"
+        },
+        "seal": {
+          "fertility": 6.014893301719028,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 384,
+          "total_words": 40488,
+          "primary_col": "text_tier0"
+        },
+        "letters": {
+          "fertility": 5.438751540218621,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 4957,
+          "total_words": 277558,
+          "primary_col": "full_text"
+        },
+        "archibab": {
+          "fertility": 6.313396161861218,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1288,
+          "total_words": 64302,
+          "primary_col": "value_raw"
+        },
+        "oracc_1mill": {
+          "fertility": 5.927247638410781,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 3000,
+          "total_words": 136243,
+          "primary_col": "value_clean"
+        }
+      },
+      "orcc_per_cleaning": {
+        "text_tier0": {
+          "fertility": 6.218770861487862,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1202,
+          "total_words": 245668
+        },
+        "text_maximal": {
+          "fertility": 5.017614964925955,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1196,
+          "total_words": 19245
+        }
+      },
+      "category": {
+        "plain": {
+          "n_words": 73719,
+          "fertility": 4.281447116754161,
+          "byte_rate": 0.0
+        },
+        "diacritic": {
+          "n_words": 64107,
+          "fertility": 6.071614644266616,
+          "byte_rate": 0.0
+        },
+        "logogram": {
+          "n_words": 54633,
+          "fertility": 4.258323723756704,
+          "byte_rate": 0.0
+        },
+        "determinative": {
+          "n_words": 31954,
+          "fertility": 6.756618889653877,
+          "byte_rate": 0.0
+        },
+        "index_number": {
+          "n_words": 21255,
+          "fertility": 6.110750411667843,
+          "byte_rate": 0.0
+        }
+      },
+      "char_probe": {
+        "š": 1,
+        "ṣ": 2,
+        "ṭ": 2,
+        "ḫ": 2,
+        "ʾ": 2,
+        "ʿ": 2,
+        "ā": 2,
+        "ē": 2,
+        "ī": 2,
+        "ū": 2,
+        "â": 1,
+        "ê": 2,
+        "î": 2,
+        "û": 1,
+        "à": 1,
+        "è": 1,
+        "ì": 2,
+        "ù": 2
+      },
+      "samples": {
+        "determinative": {
+          "word": "d-aš-šur",
+          "tokens": [
+            "▁d",
+            "-",
+            "a",
+            "š",
+            "-",
+            "šu",
+            "r"
+          ],
+          "n_tokens": 7
+        },
+        "logogram": {
+          "word": "E2-GAL",
+          "tokens": [
+            "▁E",
+            "2",
+            "-",
+            "GAL"
+          ],
+          "n_tokens": 4
+        },
+        "diacritic": {
+          "word": "kiš-ša2-ti",
+          "tokens": [
+            "▁ki",
+            "š",
+            "-",
+            "ša",
+            "2",
+            "-",
+            "ti"
+          ],
+          "n_tokens": 7
+        },
+        "index_number": {
+          "word": "GAL-u2",
+          "tokens": [
+            "▁GAL",
+            "-",
+            "u",
+            "2"
+          ],
+          "n_tokens": 4
+        },
+        "plain": {
+          "word": "dan-nu",
+          "tokens": [
+            "▁dan",
+            "-",
+            "nu"
+          ],
+          "n_tokens": 3
+        }
+      },
+      "char_probe_mean": 1.7222222222222223
+    },
+    {
+      "short": "umt5_base",
+      "model_id": "google/umt5-base",
+      "vocab_size": 256300,
+      "unk_token": "<unk>",
+      "unk_id": 3,
+      "per_corpus": {
+        "orcc": {
+          "fertility": 5.223663643616589,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1202,
+          "total_words": 245668,
+          "primary_col": "text_tier0"
+        },
+        "seal": {
+          "fertility": 5.024377593360996,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 384,
+          "total_words": 40488,
+          "primary_col": "text_tier0"
+        },
+        "letters": {
+          "fertility": 4.791157163547799,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 4957,
+          "total_words": 277558,
+          "primary_col": "full_text"
+        },
+        "archibab": {
+          "fertility": 5.3334266430282105,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1288,
+          "total_words": 64302,
+          "primary_col": "value_raw"
+        },
+        "oracc_1mill": {
+          "fertility": 4.949267118310665,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 3000,
+          "total_words": 136243,
+          "primary_col": "value_clean"
+        }
+      },
+      "orcc_per_cleaning": {
+        "text_tier0": {
+          "fertility": 5.223663643616589,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1202,
+          "total_words": 245668
+        },
+        "text_maximal": {
+          "fertility": 4.079760976877111,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1196,
+          "total_words": 19245
+        }
+      },
+      "category": {
+        "plain": {
+          "n_words": 73719,
+          "fertility": 4.281447116754161,
+          "byte_rate": 0.0
+        },
+        "diacritic": {
+          "n_words": 64107,
+          "fertility": 6.071614644266616,
+          "byte_rate": 0.0
+        },
+        "logogram": {
+          "n_words": 54633,
+          "fertility": 4.258323723756704,
+          "byte_rate": 0.0
+        },
+        "determinative": {
+          "n_words": 31954,
+          "fertility": 6.756618889653877,
+          "byte_rate": 0.0
+        },
+        "index_number": {
+          "n_words": 21255,
+          "fertility": 6.110750411667843,
+          "byte_rate": 0.0
+        }
+      },
+      "char_probe": {
+        "š": 1,
+        "ṣ": 2,
+        "ṭ": 2,
+        "ḫ": 2,
+        "ʾ": 2,
+        "ʿ": 2,
+        "ā": 2,
+        "ē": 2,
+        "ī": 2,
+        "ū": 2,
+        "â": 1,
+        "ê": 2,
+        "î": 2,
+        "û": 1,
+        "à": 1,
+        "è": 1,
+        "ì": 2,
+        "ù": 2
+      },
+      "samples": {
+        "determinative": {
+          "word": "d-aš-šur",
+          "tokens": [
+            "▁d",
+            "-",
+            "a",
+            "š",
+            "-",
+            "šu",
+            "r"
+          ],
+          "n_tokens": 7
+        },
+        "logogram": {
+          "word": "E2-GAL",
+          "tokens": [
+            "▁E",
+            "2",
+            "-",
+            "GAL"
+          ],
+          "n_tokens": 4
+        },
+        "diacritic": {
+          "word": "kiš-ša2-ti",
+          "tokens": [
+            "▁ki",
+            "š",
+            "-",
+            "ša",
+            "2",
+            "-",
+            "ti"
+          ],
+          "n_tokens": 7
+        },
+        "index_number": {
+          "word": "GAL-u2",
+          "tokens": [
+            "▁GAL",
+            "-",
+            "u",
+            "2"
+          ],
+          "n_tokens": 4
+        },
+        "plain": {
+          "word": "dan-nu",
+          "tokens": [
+            "▁dan",
+            "-",
+            "nu"
+          ],
+          "n_tokens": 3
+        }
+      },
+      "char_probe_mean": 1.7222222222222223
+    },
+    {
+      "short": "qwen3_8b",
+      "model_id": "Qwen/Qwen3-8B",
+      "vocab_size": 151643,
+      "unk_token": null,
+      "unk_id": null,
+      "per_corpus": {
+        "orcc": {
+          "fertility": 5.0600363091652145,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1202,
+          "total_words": 245668,
+          "primary_col": "text_tier0"
+        },
+        "seal": {
+          "fertility": 4.703640584864651,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 384,
+          "total_words": 40488,
+          "primary_col": "text_tier0"
+        },
+        "letters": {
+          "fertility": 4.786790508650444,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 4957,
+          "total_words": 277558,
+          "primary_col": "full_text"
+        },
+        "archibab": {
+          "fertility": 4.945149451027961,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1288,
+          "total_words": 64302,
+          "primary_col": "value_raw"
+        },
+        "oracc_1mill": {
+          "fertility": 4.971771026768348,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 3000,
+          "total_words": 136243,
+          "primary_col": "value_clean"
+        }
+      },
+      "orcc_per_cleaning": {
+        "text_tier0": {
+          "fertility": 5.0600363091652145,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1202,
+          "total_words": 245668
+        },
+        "text_maximal": {
+          "fertility": 3.8684333593141074,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1196,
+          "total_words": 19245
+        }
+      },
+      "category": {
+        "plain": {
+          "n_words": 73719,
+          "fertility": 3.499437051506396,
+          "byte_rate": 0.0
+        },
+        "diacritic": {
+          "n_words": 64107,
+          "fertility": 6.2255135944592634,
+          "byte_rate": 0.0
+        },
+        "logogram": {
+          "n_words": 54633,
+          "fertility": 4.469093771163949,
+          "byte_rate": 0.0
+        },
+        "determinative": {
+          "n_words": 31954,
+          "fertility": 6.627495775176817,
+          "byte_rate": 0.0
+        },
+        "index_number": {
+          "n_words": 21255,
+          "fertility": 5.279416607856975,
+          "byte_rate": 0.0
+        }
+      },
+      "char_probe": {
+        "š": 1,
+        "ṣ": 1,
+        "ṭ": 1,
+        "ḫ": 1,
+        "ʾ": 1,
+        "ʿ": 1,
+        "ā": 1,
+        "ē": 1,
+        "ī": 1,
+        "ū": 1,
+        "â": 1,
+        "ê": 1,
+        "î": 1,
+        "û": 1,
+        "à": 1,
+        "è": 1,
+        "ì": 1,
+        "ù": 1
+      },
+      "samples": {
+        "determinative": {
+          "word": "d-aš-šur",
+          "tokens": [
+            "d",
+            "-a",
+            "Å¡",
+            "-",
+            "Å¡",
+            "ur"
+          ],
+          "n_tokens": 6
+        },
+        "logogram": {
+          "word": "E2-GAL",
+          "tokens": [
+            "E",
+            "2",
+            "-G",
+            "AL"
+          ],
+          "n_tokens": 4
+        },
+        "diacritic": {
+          "word": "kiš-ša2-ti",
+          "tokens": [
+            "ki",
+            "Å¡",
+            "-",
+            "Å¡",
+            "a",
+            "2",
+            "-t",
+            "i"
+          ],
+          "n_tokens": 8
+        },
+        "index_number": {
+          "word": "GAL-u2",
+          "tokens": [
+            "G",
+            "AL",
+            "-u",
+            "2"
+          ],
+          "n_tokens": 4
+        },
+        "plain": {
+          "word": "dan-nu",
+          "tokens": [
+            "dan",
+            "-n",
+            "u"
+          ],
+          "n_tokens": 3
+        }
+      },
+      "char_probe_mean": 1.0
+    },
+    {
+      "short": "gpt_oss_120b",
+      "model_id": "openai/gpt-oss-120b",
+      "vocab_size": 199998,
+      "unk_token": null,
+      "unk_id": null,
+      "per_corpus": {
+        "orcc": {
+          "fertility": 4.426058745949819,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1202,
+          "total_words": 245668,
+          "primary_col": "text_tier0"
+        },
+        "seal": {
+          "fertility": 4.029663110057301,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 384,
+          "total_words": 40488,
+          "primary_col": "text_tier0"
+        },
+        "letters": {
+          "fertility": 4.235413859445593,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 4957,
+          "total_words": 277558,
+          "primary_col": "full_text"
+        },
+        "archibab": {
+          "fertility": 4.238515131722186,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1288,
+          "total_words": 64302,
+          "primary_col": "value_raw"
+        },
+        "oracc_1mill": {
+          "fertility": 4.649244364848102,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 3000,
+          "total_words": 136243,
+          "primary_col": "value_clean"
+        }
+      },
+      "orcc_per_cleaning": {
+        "text_tier0": {
+          "fertility": 4.426058745949819,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1202,
+          "total_words": 245668
+        },
+        "text_maximal": {
+          "fertility": 3.3168615224733697,
+          "unk_rate": 0.0,
+          "byte_rate": 0.0,
+          "n_texts": 1196,
+          "total_words": 19245
+        }
+      },
+      "category": {
+        "plain": {
+          "n_words": 73719,
+          "fertility": 3.012737557481789,
+          "byte_rate": 0.0
+        },
+        "diacritic": {
+          "n_words": 64107,
+          "fertility": 5.08381300014039,
+          "byte_rate": 0.0
+        },
+        "logogram": {
+          "n_words": 54633,
+          "fertility": 4.125912909779803,
+          "byte_rate": 0.0
+        },
+        "determinative": {
+          "n_words": 31954,
+          "fertility": 6.240783626463041,
+          "byte_rate": 0.0
+        },
+        "index_number": {
+          "n_words": 21255,
+          "fertility": 4.7888496824276645,
+          "byte_rate": 0.0
+        }
+      },
+      "char_probe": {
+        "š": 1,
+        "ṣ": 1,
+        "ṭ": 1,
+        "ḫ": 2,
+        "ʾ": 2,
+        "ʿ": 2,
+        "ā": 1,
+        "ē": 1,
+        "ī": 1,
+        "ū": 1,
+        "â": 1,
+        "ê": 1,
+        "î": 1,
+        "û": 1,
+        "à": 1,
+        "è": 1,
+        "ì": 1,
+        "ù": 1
+      },
+      "samples": {
+        "determinative": {
+          "word": "d-aš-šur",
+          "tokens": [
+            "d",
+            "-a",
+            "Å¡",
+            "-",
+            "Å¡",
+            "ur"
+          ],
+          "n_tokens": 6
+        },
+        "logogram": {
+          "word": "E2-GAL",
+          "tokens": [
+            "E",
+            "2",
+            "-G",
+            "AL"
+          ],
+          "n_tokens": 4
+        },
+        "diacritic": {
+          "word": "kiš-ša2-ti",
+          "tokens": [
+            "ki",
+            "Å¡",
+            "-",
+            "Å¡a",
+            "2",
+            "-ti"
+          ],
+          "n_tokens": 6
+        },
+        "index_number": {
+          "word": "GAL-u2",
+          "tokens": [
+            "GAL",
+            "-u",
+            "2"
+          ],
+          "n_tokens": 3
+        },
+        "plain": {
+          "word": "dan-nu",
+          "tokens": [
+            "dan",
+            "-n",
+            "u"
+          ],
+          "n_tokens": 3
+        }
+      },
+      "char_probe_mean": 1.1666666666666667
+    }
+  ]
+}
