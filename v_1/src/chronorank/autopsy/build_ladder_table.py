@@ -22,11 +22,18 @@ from pathlib import Path
 
 import pandas as pd
 
+# NOTE: qwen3_1b7 / qwen3_32b base maximal+mean PLS are NOT re-probed by P1b; their
+# canonical numbers live in v_1/src/geodesic/maximal_figs/tables/T1_year_pls_maximal.csv
+# (qwen3_1b7=0.355 L9, qwen3_32b=0.340 L6). Qwen3-1.7B is the *size-matched* (0.4B-class)
+# architecture comparator for uMT5 — fairer than the 8B. Listed here so a full re-probe
+# (point --probes-dir at a run that includes them) tabulates them too.
 LADDER = [
     ("thalesian_cunei400m", "Thalesian (uMT5-base + cuneiform finetune)"),
     ("thalesian_akk300m",   "Thalesian AKK-300m (uMT5 + finetune, variant)"),
     ("umt5_base",           "vanilla google/umt5-base (NO finetune)"),
+    ("qwen3_1b7",           "Qwen3-1.7B base (decoder-only, SIZE-MATCHED)"),
     ("qwen3_8b",            "Qwen3-8B base (decoder-only)"),
+    ("qwen3_32b",           "Qwen3-32B base (decoder-only)"),
     ("gpt_oss_120b",        "gpt-oss-120b base (decoder-only)"),
     ("random",              "random (same tokenizer as Qwen, untrained)"),
 ]

@@ -49,7 +49,8 @@ cd ~/projects/HUJI-THESIS--YARIN && git pull && sbatch v_1/src/chronorank/autops
 
 ## Status — COMPLETE (see FINDINGS_1ab.md)
 - [x] P1a done — **(T) rejected**: uMT5/Thalesian tokenizers are the *least* efficient on Akkadian.
-- [x] P1b done (job 9661) — **(A) rejected**: vanilla uMT5 (0.297) = random floor (0.301) < Qwen (0.366).
+- [x] P1b done (job 9661) — **(A) rejected**: vanilla uMT5 (0.297) = random floor (0.301), below
+      size-matched Qwen-1.7B (0.355); Qwen flat across scale. (canonical: maximal_figs/T1_year_pls_maximal.csv)
 - [x] **Verdict: (F) the cuneiform finetune** — Thalesian 0.413 vs uMT5 0.297 (Δ+0.116, maximal).
       Next finetune = **seq2seq/translation objective** (1c), since Round-3 NTP finetune was flat.
 - [ ] 1c objective ablation — ON HOLD (needs Akkadian→English translation data).
