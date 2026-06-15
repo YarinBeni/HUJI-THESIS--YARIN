@@ -43,7 +43,7 @@ SLIDES = [
     # 1 ── TITLE ────────────────────────────────────────────────────────────────
     {
         "kind": "title",
-        "title": "Honest Computational Dating of Low-Resource Akkadian",
+        "title": "Diachronic Interpretable Dating of Low-Resource Ancient Akkadian",
         "subtitle": "A confounder-controlled benchmark, and the model that best supports automatic dating",
         "meta": (
             "M.Sc. Thesis &middot; Yarin Beer &middot; Computer Science, HUJI<br>"

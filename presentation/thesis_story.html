@@ -90,7 +90,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 <section class="slide slide-title" data-index="0">
   <div class="title-inner">
     <div class="title-kicker">M.Sc. Thesis &mdash; Advisor Meeting &mdash; June 2026</div>
-    <h1 class="title-h1">Honest Computational Dating of Low-Resource Akkadian</h1>
+    <h1 class="title-h1">Diachronic Interpretable Dating of Low-Resource Ancient Akkadian</h1>
     <div class="title-sub">A confounder-controlled benchmark, and the model that best supports automatic dating</div>
     <div class="title-meta">M.Sc. Thesis &middot; Yarin Beer &middot; Computer Science, HUJI<br>Advisors: Prof. Nathan Wasserman &nbsp;·&nbsp; Dr. Barak Sober &nbsp;·&nbsp; Prof. Gabriel Stanovsky</div>
   </div>
@@ -183,7 +183,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 <div id="hint">← → navigate &nbsp;·&nbsp; F fullscreen</div>
 <script>
 const TOTAL = 12;
-const TITLES = ["Honest Computational Dating of Low-Resource Akkadian", "The thesis: a 400M translation model beats the 120B LLM \u2014 and we explain why", "Maximal \u00b7 mean-pool \u00b7 balanced \u00b7 PLS \u00b7 Spearman", "The experimental journey \u2014 what each phase contributed", "PLS vs Ridge across all models \u2014 the 400M translation encoder wins", "Thalesian's signal deepens with layer; LLMs peak mid-network then decay", "k = 3\u20135 PLS components capture it; Ridge (dashed) confirms PLS is not cherry-picking", "Scale and next-token finetuning both do nothing", "Thalesian wins despite the least efficient Akkadian tokenizer", "The translation finetune alone builds a deep diachronic representation", "Chronology is entangled in Qwen's embedding space, not laid out on a clean axis", "What we contribute, and what is missing to wrap it into a thesis"];
+const TITLES = ["Diachronic Interpretable Dating of Low-Resource Ancient Akkadian", "The thesis: a 400M translation model beats the 120B LLM \u2014 and we explain why", "Maximal \u00b7 mean-pool \u00b7 balanced \u00b7 PLS \u00b7 Spearman", "The experimental journey \u2014 what each phase contributed", "PLS vs Ridge across all models \u2014 the 400M translation encoder wins", "Thalesian's signal deepens with layer; LLMs peak mid-network then decay", "k = 3\u20135 PLS components capture it; Ridge (dashed) confirms PLS is not cherry-picking", "Scale and next-token finetuning both do nothing", "Thalesian wins despite the least efficient Akkadian tokenizer", "The translation finetune alone builds a deep diachronic representation", "Chronology is entangled in Qwen's embedding space, not laid out on a clean axis", "What we contribute, and what is missing to wrap it into a thesis"];
 let cur = 0;
 const slides = Array.from(document.querySelectorAll('.slide'));
 slides.forEach((s,i) => s.setAttribute('data-num', (i+1)+'/'+TOTAL));
