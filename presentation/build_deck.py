@@ -47,14 +47,14 @@ SLIDES = [
         "subtitle": "A confounder-controlled benchmark, and the model that best supports automatic dating",
         "meta": (
             "M.Sc. Thesis &middot; Yarin Beer &middot; Computer Science, HUJI<br>"
-            "Advisors: Prof. Nathan Wasserman &nbsp;·&nbsp; Dr. Barak Sober &nbsp;·&nbsp; Prof. Gabriel Stanovsky"
+            "Advisors: Prof. Gabriel Stanovsky &nbsp;·&nbsp; Dr. Barak Sober"
         ),
     },
 
     # 2 ── POINTS 1–4: HOOK · REFRAME · SURPRISE · CLAIM ───────────────────────
     {
         "kind": "text",
-        "eyebrow": "The thesis in brief — Hook · Reframe · Surprise · Claim",
+        "eyebrow": "",
         "title": "The thesis: a 400M translation model beats the 120B LLM — and we explain why",
         "body": [
             (
@@ -85,8 +85,8 @@ SLIDES = [
                 "<strong>400M &gt; 120B.</strong> "
                 "Scale is not the lever. "
                 "Next-token finetuning on Akkadian is flat. "
-                "<strong>The translation objective is what builds the diachronic signal</strong> "
-                "— not architecture, not tokenizer, not data volume alone."
+                "<strong>The translation objective might build the diachronic signal</strong> "
+                "instead of architecture, tokenizer, or finetune data alone."
             ),
         ],
     },
@@ -329,10 +329,7 @@ SLIDES = [
                 "What is missing to wrap it into a thesis — if at all?",
                 "Is the applied story — honest dating method + recommended model + "
                 "&ldquo;why the small model wins&rdquo; explanation — already a coherent CS thesis? "
-                "If not, what is the minimum still needed: bootstrap confidence intervals "
-                "over the MC draws, one non-linear probe (MLP/kernel) to settle "
-                "absent-vs-entangled, a small qualitative ordering of held-out fragments, "
-                "or releasing the benchmark?"
+                "If not, what is the minimum still needed?"
             ),
         ],
     },
