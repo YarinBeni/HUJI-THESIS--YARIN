@@ -54,7 +54,7 @@ SLIDES = [
     # 2 ── POINTS 1–4: HOOK · REFRAME · SURPRISE · CLAIM ───────────────────────
     {
         "kind": "text",
-        "eyebrow": "1–4 — Hook · Reframe · Surprise · Claim",
+        "eyebrow": "The thesis in brief — Hook · Reframe · Surprise · Claim",
         "title": "The thesis: a 400M translation model beats the 120B LLM — and we explain why",
         "body": [
             (
@@ -133,45 +133,47 @@ SLIDES = [
         ],
     },
 
-    # 4 ── POINTS 5–8: MEASUREMENT · NEGATIVES · GENRE · STRUCTURE ──────────────
+    # 4 ── THE EXPERIMENTAL JOURNEY — PHASES & CONTRIBUTIONS ────────────────────
     {
         "kind": "text",
-        "eyebrow": "5–8 — Measurement · Negatives · Genre · Structure",
-        "title": "How we earned the right to those claims",
+        "eyebrow": "How the project unfolded",
+        "title": "The experimental journey — what each phase contributed",
         "body": [
             (
-                "5 — Honest measurement machinery",
-                "Confounder elimination (maximal cleaning, genre restriction) + 200 balanced "
-                "Monte Carlo draws (GroupKFold by ruler) + Spearman rank correlation = numbers "
-                "that measure <em>dating</em>, not format recognition. "
-                "This is the same obsession with not overclaiming that controls for a "
-                "convenient proxy by building a controlled setup — each step earns the next claim."
+                "Phase 1 — Frame the thesis &amp; assemble the benchmark",
+                "Goal: honest, interpretable dating. Decision: probe <strong>frozen LLM "
+                "activations</strong> — not text generation, not direct regression (which "
+                "overfits a tiny test set). EDA found no obvious 1-D time manifold. "
+                "Assembled the embedding zoo: TF-IDF, a from-scratch MLM, Qwen 1.7B/8B/32B, "
+                "GPT-OSS 120B, and seq2seq encoders (base, Akkadian-only, multilingual)."
             ),
             (
-                "6 — Negative results as findings — with a hypothesized why",
-                "Next-token finetuning on Akkadian adds nothing, <em>possibly because</em> NTP "
-                "rewards local next-sign prediction and does not force alignment of surface "
-                "orthography with meaning — which the translation objective does. "
-                "Scale adds nothing, <em>possibly because</em> the LLM's internal chronology is "
-                "entangled with genre and provenance, not laid out on a clean linear axis a probe can reach."
+                "Phase 2 — Make the task &amp; data honest",
+                "Target → <strong>Spearman ordering</strong>, since fine years or 100-yr buckets "
+                "overclaim on a 180-yr span. Isolated <em>royal inscriptions</em> to kill the "
+                "style confounder. Maximal cleaning flipped TF-IDF from best to worst — proof the "
+                "confounder was real. Monte-Carlo balanced 38 → 8 rulers (≥21 fragments); "
+                "confirmed ordering ≠ ruler lookup."
             ),
             (
-                "7 — Genre as the analytical lens",
-                "Royal inscriptions are a homogeneous genre — fixed register, single-voice "
-                "authority, direct ruler–date link. Restricting to one genre closes the genre "
-                "confounder. The fact that TF-IDF <em>flips from winner to loser</em> under "
-                "maximal cleaning is direct evidence the confounder was real — and that our "
-                "cleaning works."
+                "Phase 3 — Lock the probing pipeline",
+                "Mean pooling beat last-token across the board. PLS isolated the few temporal "
+                "directions across models with mismatched embedding dims. "
+                "Pipeline frozen: <strong>maximal → mean → balanced MC → PLS → Spearman</strong>."
             ),
             (
-                "8 — Standard paper structure",
-                "This is a methods paper with a benchmark, a results table, and an explanation. "
-                "Each section earns the next: the protocol earns the results, the results earn "
-                "the autopsy, the autopsy earns the explanation. "
-                "Contributions: <strong>(1)</strong> the honest method, "
-                "<strong>(2)</strong> the benchmark, "
-                "<strong>(3)</strong> the model ranking, "
-                "<strong>(4)</strong> the why."
+                "Phase 4 — Controls &amp; tuning",
+                "Prompting (zero/few-shot, CoT) added nothing. A randomized-Qwen baseline fixed "
+                "the floor. Layer scans: Thalesian peaks late, every LLM peaks early-to-middle. "
+                "k = 3–5 PLS components was the sweet spot everywhere."
+            ),
+            (
+                "Phase 5 — Autopsy of the LLM paradox",
+                "Qwen recites rulers and dates in plain English yet never encodes them decodably. "
+                "NTP finetuning on ORACC/EBL/Archibab: zero gain. mT5 base near the bottom. "
+                "Tokenizer disproved — Thalesian fragments most yet wins. "
+                "<strong>400M multilingual ≫ 300M Akkadian-only</strong> → multilingual transfer "
+                "is the lever; scale 1.7B → 120B stayed flat."
             ),
         ],
     },
@@ -299,9 +301,7 @@ SLIDES = [
         "takeaway": (
             "Prior work reports a linearly-recoverable internal timeline in LLMs. "
             "For Akkadian it does not surface: the chronological signal is tangled together "
-            "with genre and location, plausibly on a non-linear manifold a linear probe cannot reach. "
-            "This is why scaling and prompting the LLM do not help — "
-            "and why a translation encoder, which packages chronology in a directly decodable form, wins instead."
+            "with genre and location, plausibly on a non-linear manifold a linear probe cannot reach."
         ),
         "note": None,
     },
