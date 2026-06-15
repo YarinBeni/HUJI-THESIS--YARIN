@@ -18,367 +18,331 @@ def img(rel_path):
     return f"data:{mime};base64,{b64}"
 
 
-# ─── SLIDE DEFINITIONS ────────────────────────────────────────────────────────
-# kind: "title" | "text" | "figure" | "method"
-# takeaway: one bold sentence – the thing to remember from this slide
-# note: smaller context line (shown lighter, for reference)
+# ─── SLIDES ───────────────────────────────────────────────────────────────────
 SLIDES = [
 
-    # ── 1. TITLE ───────────────────────────────────────────────────────────────
+    # 1 ── TITLE ────────────────────────────────────────────────────────────────
     {
         "kind": "title",
-        "title": "Dating Ancient Akkadian with Language Models",
-        "subtitle": "How we built an honest evaluation — and what it revealed",
+        "title": "Honest, Interpretable Dating of Low-Resource Akkadian",
+        "subtitle": "A benchmark protocol, a surprising result, and what it says about LLM temporal representations",
         "meta": (
             "M.Sc. Thesis &middot; Yarin Beer &middot; Computer Science, HUJI<br>"
-            "Advisors: Prof. Nathan Wasserman · Dr. Barak Sober · Prof. Gabriel Stanovsky"
+            "Advisors: Prof. Nathan Wasserman &nbsp;·&nbsp; Dr. Barak Sober &nbsp;·&nbsp; Prof. Gabriel Stanovsky"
         ),
     },
 
-    # ── 2. THE QUESTION ────────────────────────────────────────────────────────
+    # 2 ── THE QUESTION ─────────────────────────────────────────────────────────
     {
         "kind": "text",
         "eyebrow": "1 — The question",
-        "title": "Can a model date Akkadian — or is it just pattern-matching artifacts?",
+        "title": "Two questions in one",
         "body": [
             (
-                "The goal",
-                "3,000 years of Akkadian literature is largely undated. Dating is partly a "
-                "distributional problem — features that change in frequency over time. "
-                "Language models should be able to help. But <em>should</em> is the question."
+                "The humanities question",
+                "3,000 years of Akkadian literature is largely undated. "
+                "Can we build a model that assigns chronological order to texts in an "
+                "<strong>interpretable</strong> way — one a philologist can actually trust and inspect?"
             ),
             (
-                "The fundamental trap",
-                "A model can date texts by exploiting <strong>corpus artifacts</strong> — "
-                "royal names, letter-opening formulae, archive provenance, sign conventions — "
-                "without learning anything about linguistic change. We needed a way to "
-                "tell the difference."
+                "The CS question",
+                "LLMs are trained on 15 trillion tokens of modern text. "
+                "Akkadian has roughly 10 million digitised words — a <em>million-fold</em> less. "
+                "Does the broad world-knowledge in a large pretrained model "
+                "<strong>transfer</strong> to this tiny, ancient, out-of-distribution language?"
             ),
             (
-                "Our approach",
-                "We use LLMs as <strong>frozen feature extractors</strong> and probe their "
-                "hidden-state representations with a minimal linear model. A linear probe "
-                "cannot learn the task — it can only reveal what is already encoded. "
-                "Every experiment below is a step toward a probe we could actually trust."
+                'Why "honest" is the hard part',
+                "A model can score well on a dating benchmark by exploiting "
+                "<strong>corpus artifacts</strong> — royal names, letter-opening formulae, "
+                "archive provenance — without learning anything about linguistic change. "
+                "Almost every methodological decision in this thesis is a deliberate move "
+                "<em>away</em> from inflating results and <em>toward</em> measuring something real."
             ),
         ],
     },
 
-    # ── 3. THE MODELS ──────────────────────────────────────────────────────────
+    # 3 ── WHY HONEST EVALUATION IS HARD ────────────────────────────────────────
     {
         "kind": "text",
-        "eyebrow": "2 — The setup",
-        "title": "Six model families — three questions answered",
+        "eyebrow": "2 — The confounders we had to eliminate",
+        "title": "Four ways a model can fake a date",
         "body": [
             (
-                "The scale question (do bigger LLMs know more Akkadian?)",
-                "Qwen3&thinsp;1.7B / 8B / 32B &nbsp;·&nbsp; GPT-OSS 120B &nbsp;·&nbsp; "
-                "Random-weight Qwen (architecture-only control)"
+                "Genre / format as period proxy",
+                "Almost all Old Babylonian texts in our corpus are <em>letters</em>; "
+                "Neo-Assyrian texts are royal inscriptions. "
+                "A model that recognises letter-opening formulae dates by genre, not language. "
+                "<strong>Fix:</strong> switch to a single homogeneous genre (royal inscriptions) "
+                "and aggressively remove structural markers."
             ),
             (
-                "The Akkadian-specialist question (does domain training help?)",
-                "MLM trained from scratch on our 10M-word corpus &nbsp;·&nbsp; "
-                "TF-IDF over lemmata n-grams (the vocabulary-counting baseline)"
+                "Ruler name as year lookup table",
+                "Royal inscriptions contain the king's name — "
+                "and each king maps almost perfectly to a narrow date range. "
+                "Classifying rulers is not dating language; it's reading a name. "
+                "<strong>Fix:</strong> maximal cleaning removes names and formulae; "
+                "Spearman on chronological order replaces ruler classification."
             ),
             (
-                "The transfer-learning question (does multilingual fine-tuning matter?)",
-                "Thalesian cuneiformBase-400M &mdash; a uMT5-base fine-tuned to <em>translate</em> "
-                "Akkadian, Sumerian, Hittite, Linear&thinsp;B, Elamite into English/German &nbsp;·&nbsp; "
-                "Thalesian akk300M (Akkadian-only fine-tune) &nbsp;·&nbsp; "
-                "Vanilla uMT5-base (no fine-tune &mdash; our strongest control)"
+                "Class imbalance inflating accuracy",
+                "Three Sargonid kings account for 76% of dated inscriptions. "
+                "A model that always predicts the majority king's year window "
+                "looks accurate even if it has learned nothing. "
+                "<strong>Fix:</strong> Monte Carlo balanced resampling over 8 well-attested rulers."
+            ),
+            (
+                "Overclaiming on a 180-year window",
+                "Our test corpus spans only 188 years. "
+                "Fine-grained year prediction in that window overstates precision. "
+                "<strong>Fix:</strong> Spearman rank correlation — we ask for correct "
+                "<em>ordering</em>, not exact years."
             ),
         ],
     },
 
-    # ── 4. FIRST RESULT — letters 99% — red flag ───────────────────────────────
-    {
-        "kind": "figure",
-        "eyebrow": "3 — First alarm: the result is too good",
-        "title": "99% period accuracy — but n-gram counting is already at 96.7%",
-        "fig": "v_1/src/linear_probing/results/letters__probe_cls__period/figures/layer_accuracy_curve.png",
-        "takeaway": (
-            "On the 4,957-letter corpus, Qwen scores 99% at tier-0 — "
-            "but the 2–5-gram baseline (dotted red line) already reaches 96.7%. "
-            "The LLM is not using learned representations; "
-            "it is counting vocabulary, and the vocabulary gives away the period."
-        ),
-        "note": (
-            "Maximal cleaning (green) drops the curve to 87–93%, which is where honest "
-            "evaluation starts. Tier-0 = raw text; maximal = 11 cleaning filters "
-            "(names, logograms, determinatives, formulae, digits removed)."
-        ),
-    },
-
-    # ── 5. RANDOM WEIGHTS ──────────────────────────────────────────────────────
-    {
-        "kind": "figure",
-        "eyebrow": "4 — Proof the easy result is fake",
-        "title": "Random-weight Qwen scores 97% on raw text — pretraining is nearly irrelevant",
-        "fig": "v_1/src/linear_probing/results/letters__probe_cls__period/figures/random_baseline_comparison.png",
-        "takeaway": (
-            "On tier-0 letters (left), pretrained Qwen and a Qwen with fully randomized weights "
-            "are almost identical — the letter <em>format</em> labels the period, "
-            "not anything the model learned. "
-            "Only after maximal cleaning (right) does a 7-point pretraining gap emerge."
-        ),
-        "note": (
-            "This finding forced us to move to a harder dataset and stricter cleaning. "
-            "A result that holds even with random weights is a result we cannot publish."
-        ),
-    },
-
-    # ── 6. HARDER TASK — ORCC — cleaning flips TF-IDF ──────────────────────────
-    {
-        "kind": "figure",
-        "eyebrow": "5 — Harder dataset: royal inscriptions with exact year dates",
-        "title": "With raw text, Qwen falls below random on ruler classification",
-        "fig": "v_1/src/linear_probing/results/orcc__probe_cls/figures/best_of_ruler.png",
-        "takeaway": (
-            "On ORCC royal inscriptions (893 texts, 38 rulers), "
-            "TF-IDF dominates at 32.5% macro-F1 because it can read the king's name in the title — "
-            "while trained Qwen (blue) sits below the random-weight baseline (purple). "
-            "Royal names are a strong artifact; the model is confused, not dating."
-        ),
-        "note": (
-            "After maximal cleaning, TF-IDF collapses to near-random — "
-            "proving the TF-IDF advantage was entirely the ruler name in the text. "
-            "This is what we want: an evaluation where the easy shortcut is gone."
-        ),
-    },
-
-    # ── 7. METRIC PROBLEM — accuracy@N → Spearman ──────────────────────────────
-    {
-        "kind": "figure",
-        "eyebrow": "6 — The metric is also broken",
-        "title": "A dummy that guesses the mean date passes most accuracy thresholds",
-        "fig": "v_1/src/geodesic/fig1_followups/error_overlap/predictions_maximal_balanced/accuracy_at_N.png",
-        "takeaway": (
-            "76% of ORCC inscriptions belong to three Sargonid kings within a 188-year window. "
-            "A model that always predicts the corpus mean (grey dashed) clears ±50 years at 77% — "
-            "better than any real model. Accuracy is measuring class distribution, not dating ability."
-        ),
-        "note": (
-            "This forced two changes: (1) switch from accuracy to Spearman rank correlation — "
-            "test chronological ordering, not exact-year prediction; "
-            "(2) Monte-Carlo balanced resampling to prevent the majority class from dominating."
-        ),
-    },
-
-    # ── 8. CHRONOLOGY — models win at extremes ──────────────────────────────────
-    {
-        "kind": "figure",
-        "eyebrow": "7 — Balanced Spearman: where real models earn their keep",
-        "title": "Real models beat the dummy only at the chronological extremes",
-        "fig": "v_1/src/geodesic/fig1_followups/error_overlap/predictions_maximal_balanced/balanced_maximal_chronology.png",
-        "takeaway": (
-            "Under balanced Spearman scoring, Thalesian outperforms the dummy "
-            "at the early and late extremes of the timeline — "
-            "exactly where dating is hardest and most valuable to philologists. "
-            "TF-IDF only wins in the dense Sargonid centre where names are present."
-        ),
-        "note": (
-            "Left panel: accuracy-at-N curves confirm all models beat the dummy by ±25 years. "
-            "Right panel (MAE by true date): the real story — Thalesian's advantage is at the extremes."
-        ),
-    },
-
-    # ── 9. THE PROTOCOL — METHOD SLIDE ─────────────────────────────────────────
+    # 4 ── THE PROTOCOL ─────────────────────────────────────────────────────────
     {
         "kind": "method",
-        "eyebrow": "8 — The evaluation protocol we built",
-        "title": "Maximal · mean-pool · balanced · PLS · Spearman",
+        "eyebrow": "3 — The evaluation protocol",
+        "title": "Five deliberate choices — each closing one confound",
         "lead": (
-            "Every ingredient was forced by a specific confound we discovered. "
-            "This is the methodological contribution — a reusable honest benchmark "
-            "for probing diachronic signal in low-resource ancient-language models."
+            "This protocol is the methodological contribution. "
+            "It is reusable for any low-resource ancient language with dated texts. "
+            "Each ingredient addresses one specific failure mode listed on the previous slide."
         ),
         "items": [
             (
                 "✂", "Maximal cleaning",
                 "Remove royal names, logograms, determinatives, formulae, digits. "
-                "<strong>Solves:</strong> surface artifacts (ruler names, letter format) "
-                "that make any model look like it's dating when it's just pattern-matching."
+                "<strong>Closes:</strong> genre-format shortcut and ruler-name lookup."
             ),
             (
                 "μ", "Mean pooling",
-                "Average all token representations into one document vector. "
-                "<strong>Solves:</strong> Akkadian has many short syllabic tokens — "
-                "the diachronic signal is document-level, not concentrated in one token."
+                "Average all token hidden states into one document vector. "
+                "<strong>Closes:</strong> single-token assumptions; "
+                "the diachronic signal is document-level, not concentrated in one token "
+                "(last-token pooling consistently underperformed)."
             ),
             (
-                "⚖", "Balanced (200 MC draws)",
-                "Monte-Carlo stratified resampling + GroupKFold by ruler. "
-                "<strong>Solves:</strong> 76% Sargonid imbalance and ruler-leakage "
-                "across folds — prevents majority-class guessing from looking like dating."
+                "⚖", "Balanced resampling",
+                "200 Monte Carlo draws of 8 balanced rulers, GroupKFold by ruler. "
+                "<strong>Closes:</strong> majority-class imbalance and "
+                "ruler identity leaking across folds."
             ),
             (
                 "PLS", "Partial Least-Squares",
-                "Find the k latent directions in the embedding space most aligned with the date axis. "
-                "<strong>Solves:</strong> high dimensionality — different models have different "
-                "embedding sizes; PLS finds the right subspace in each."
+                "Project each embedding onto the latent directions most correlated with date. "
+                "<strong>Closes:</strong> the embedding also encodes genre, provenance, location — "
+                "PLS isolates only the date-relevant subspace (k≈3–5 optimal)."
             ),
             (
                 "ρ", "Spearman correlation",
-                "Score chronological ordering, not exact year prediction. "
-                "<strong>Solves:</strong> 188-year window, ordinal task, "
-                "and allows fair comparison across very different model types."
+                "Score chronological <em>ordering</em>, not absolute year prediction. "
+                "<strong>Closes:</strong> overclaiming on a narrow window; "
+                "one scale-free number allows fair comparison across any model type."
             ),
         ],
     },
 
-    # ── 10. THE HEADLINE RESULT ─────────────────────────────────────────────────
+    # 5 ── ARTIFACT EVIDENCE ────────────────────────────────────────────────────
     {
         "kind": "figure",
-        "eyebrow": "9 — The headline result",
-        "title": "A 400M translation model beats every LLM up to 120B",
+        "eyebrow": "4 — Evidence: the artifact confounders are real",
+        "title": "Without our fixes: TF-IDF beats every neural model by reading the king's name",
+        "fig": "v_1/src/linear_probing/results/orcc__probe_cls/figures/best_of_ruler.png",
+        "takeaway": (
+            "On raw ORCC text, TF-IDF (green) reaches 32.5% macro-F1 on ruler classification — "
+            "because the king's name appears in the inscription title. "
+            "Trained Qwen (blue) falls <em>below</em> the random-weight baseline (purple): "
+            "the model is confused, not dating. After maximal cleaning, "
+            "TF-IDF collapses to near-random — proving the win was entirely the artifact."
+        ),
+        "note": (
+            "This is the result that forced us off ruler classification entirely. "
+            "If the top method wins by reading a name, the benchmark is testing reading, not dating."
+        ),
+    },
+
+    # 6 ── IMBALANCE EVIDENCE ───────────────────────────────────────────────────
+    {
+        "kind": "figure",
+        "eyebrow": "5 — Evidence: the imbalance confound is real",
+        "title": "A dummy that predicts the corpus mean clears most accuracy thresholds",
+        "fig": "v_1/src/geodesic/fig1_followups/error_overlap/predictions_maximal_balanced/accuracy_at_N.png",
+        "takeaway": (
+            "Because three Sargonid kings dominate the corpus, "
+            "a model that always guesses the median year (grey dashed) "
+            "already achieves 77% accuracy within ±50 years — "
+            "better than any real model at that threshold. "
+            "Raw accuracy was measuring class distribution, not dating ability."
+        ),
+        "note": (
+            "This is why we switched to Spearman rank correlation under balanced resampling. "
+            "The dummy cannot get a better Spearman score by guessing the mean — "
+            "Spearman only rewards correct <em>ordering</em>."
+        ),
+    },
+
+    # 7 ── SPEARMAN FIX ─────────────────────────────────────────────────────────
+    {
+        "kind": "figure",
+        "eyebrow": "6 — After our fixes: Spearman reveals real structure",
+        "title": "Real models outperform the dummy only at the chronological extremes",
+        "fig": "v_1/src/geodesic/fig1_followups/error_overlap/predictions_maximal_balanced/balanced_maximal_chronology.png",
+        "takeaway": (
+            "Under balanced Spearman scoring, Thalesian and TF-IDF beat the dummy "
+            "at the early and late ends of the timeline — "
+            "exactly where dating is hardest and most useful to philologists. "
+            "In the dense Sargonid centre, both collapse to the dummy's level: "
+            "this is honest, and it's what an honest protocol should look like."
+        ),
+        "note": (
+            "Right panel: median absolute error by true year (BCE). "
+            "Left panel: accuracy-at-N curves confirm all models beat the dummy at ±25 years "
+            "but the advantage is modest and meaningful — not inflated."
+        ),
+    },
+
+    # 8 ── HEADLINE RESULT ──────────────────────────────────────────────────────
+    {
+        "kind": "figure",
+        "eyebrow": "7 — The result",
+        "title": "A 400M multilingual translation model beats every LLM up to 120B",
         "fig": "v_1/src/chronorank/autopsy/results/figures/factor_ladder_bars.png",
         "takeaway": (
             "Under our honest protocol, Thalesian-400M (Spearman 0.41) outperforms "
             "Qwen3-8B (0.36), Qwen3-32B (0.34), GPT-OSS-120B (0.33), "
-            "and our homegrown Akkadian MLM (0.31). "
-            "Most strikingly: random-weight Qwen (0.30) "
-            "ties the trained giants — scale and pretraining are not the answer."
+            "and our Akkadian MLM (0.31). "
+            "Crucially: a random-weight Qwen-8B scores 0.30 — "
+            "statistically tied with the trained giants. "
+            "Scale and LLM pretraining are not the lever here."
         ),
         "note": (
-            "Vanilla uMT5-base (the un-fine-tuned base of Thalesian, red bar far right) = 0.297, "
-            "at the random floor. The entire Thalesian advantage (Δ+0.114) comes from the fine-tune — "
-            "this is what we investigate next."
+            "Vanilla uMT5-base (no fine-tune, red bar far right) = 0.297 — at the random floor. "
+            "The full Thalesian advantage (Δ = +0.114) comes from the fine-tune alone, "
+            "not from the architecture or pretraining. This is what we investigate in the autopsy."
         ),
     },
 
-    # ── 11. NTP FINETUNE NULL ───────────────────────────────────────────────────
+    # 9 ── NTP + SCALE NULL ─────────────────────────────────────────────────────
     {
         "kind": "figure",
-        "eyebrow": "10 — Rule out 1: more Akkadian exposure",
-        "title": "Fine-tuning Qwen on Akkadian with next-token prediction does nothing",
+        "eyebrow": "8 — Ruling out scale and next-token finetuning",
+        "title": "Bigger models and Akkadian NTP finetuning both do nothing",
         "fig": "v_1/src/finetune/results/figures/maximal_pls_bestlayer.png",
         "takeaway": (
-            "Each '+NTP (ft)' bar lands exactly on its base model — "
-            "fine-tuning Qwen on all our Akkadian text with standard next-token prediction "
-            "produces zero improvement at any scale from 1.7B to 120B. "
-            "The objective matters, not the exposure."
+            "Every '+NTP (ft)' bar sits within noise of its untouched base model — "
+            "across all scales from 1.7B to 120B. "
+            "We tried finetuning Qwen on our entire Akkadian corpus with next-token prediction: "
+            "zero improvement at every scale, at every layer. "
+            "The training <em>objective</em> is what's missing, not exposure to Akkadian."
         ),
         "note": (
-            "We tried checkpoints at multiple stages (ft00 through ft32). "
-            "Layer-by-layer curves (not shown) confirm the overlay is exact: "
-            "NTP shifts no layer's Spearman by more than noise."
+            "We also tested zero-shot, few-shot, and chain-of-thought prompting — "
+            "none improved results. And Qwen can correctly name Akkadian rulers and their date ranges "
+            "in plain English, yet that declarative knowledge does not surface "
+            "as a linearly decodable temporal representation."
         ),
     },
 
-    # ── 12. LAYER-BY-LAYER NTP CONFIRMATION ────────────────────────────────────
+    # 10 ── TOKENIZER RULED OUT ─────────────────────────────────────────────────
     {
         "kind": "figure",
-        "eyebrow": "10b — The NTP null, layer by layer",
-        "title": "Every fine-tune checkpoint overlays the base model at every layer",
-        "fig": "v_1/src/finetune/results/figures/ftcurves_qwen3_8b_maximal.png",
-        "takeaway": (
-            "Across all 37 layers of Qwen3-8B, "
-            "every NTP checkpoint (ft00–ft32, coloured lines) "
-            "traces the exact same curve as the untouched base model (black). "
-            "Next-token finetuning leaves the diachronic representation entirely unchanged."
-        ),
-        "note": (
-            "This is the complement of the Thalesian result: "
-            "Thalesian's fine-tune DID change the representation (rises to 0.41 at layer 10). "
-            "The difference between them is the fine-tuning objective — NTP vs translation."
-        ),
-    },
-
-    # ── 13. TOKENIZER NOT THE CAUSE ────────────────────────────────────────────
-    {
-        "kind": "figure",
-        "eyebrow": "11 — Rule out 2: the tokenizer",
-        "title": "Thalesian wins despite the worst Akkadian tokenizer in the group",
+        "eyebrow": "9 — Ruling out the tokenizer",
+        "title": "Thalesian wins despite the least efficient Akkadian tokenizer",
         "fig": "v_1/src/chronorank/autopsy/results/figures/fertility_by_corpus.png",
         "takeaway": (
-            "Thalesian (blue) fragments Akkadian words into more subword tokens "
-            "than every other model on every corpus — it is the least efficient tokenizer. "
-            "If tokenizer quality drove performance, Thalesian should lose. "
-            "It wins, so the tokenizer is ruled out."
+            "Thalesian (blue) produces the most subword tokens per Akkadian word "
+            "on every corpus in our benchmark — it fragments Akkadian more than any other model. "
+            "If tokenizer efficiency drove performance, Thalesian should lose. "
+            "It wins across the board, ruling the tokenizer out as the explanation."
         ),
         "note": (
-            "Lower fertility (fewer tokens per word) is assumed to be better "
-            "because it preserves morphological units. "
-            "GPT-OSS (4.43 tok/word) is the most efficient; Thalesian (6.22) the least. "
-            "Performance ranking is the reverse of efficiency ranking."
+            "GPT-OSS has the most efficient tokenizer (4.43 tokens/word) "
+            "and ranks fourth. Thalesian sits at 6.22 tokens/word and ranks first. "
+            "Tokenizer quality and dating performance are inversely ordered."
         ),
     },
 
-    # ── 14. THE ANSWER — TRANSLATION FINETUNE ──────────────────────────────────
+    # 11 ── TRANSLATION FINETUNE ────────────────────────────────────────────────
     {
         "kind": "figure",
-        "eyebrow": "12 — What does carry the win",
-        "title": "The translation fine-tune alone builds a deep diachronic representation",
+        "eyebrow": "10 — What does carry the win",
+        "title": "The translation fine-tune alone builds a diachronic representation",
         "fig": "v_1/src/chronorank/autopsy/results/figures/factor_ladder_layerwise.png",
         "takeaway": (
-            "Vanilla uMT5-base (red) starts at the random floor and decays below it "
-            "as depth increases — its deeper layers actively hurt. "
-            "The cuneiform <em>translation</em> fine-tune (green, Thalesian) "
-            "builds a representation that rises to 0.41 at layer 10. "
-            "Forcing the model to map text to meaning instills a diachronic signal "
-            "that next-token prediction cannot."
+            "Vanilla uMT5-base (red) sits at the random floor at the embedding layer "
+            "and <em>decays below it</em> as depth increases — its deeper layers actively destroy "
+            "any date signal. "
+            "The cuneiform <strong>translation</strong> fine-tune (green, Thalesian) "
+            "builds a representation that rises steadily to 0.41 at layer 10. "
+            "Training a model to map Akkadian text to its English meaning "
+            "is what instills temporal structure — next-token prediction alone cannot."
         ),
         "note": (
-            "Qwen3-1.7B (blue, size-matched to 0.4B uMT5) peaks around 0.35 then declines. "
-            "uMT5 base at layer 0 = 0.297; Thalesian at best layer = 0.411. Δ finetune = +0.114."
+            "This is the key ablation: same architecture, same tokenizer, same size (0.4B) — "
+            "the only difference is the fine-tuning objective. "
+            "Thalesian 0.411 vs. vanilla uMT5 0.297: Δ = +0.114, entirely from the fine-tune."
         ),
     },
 
-    # ── 15. OPEN QUESTION — MANIFOLD STRUCTURE ─────────────────────────────────
+    # 12 ── INTERPRETABILITY / ENTANGLEMENT ─────────────────────────────────────
     {
         "kind": "figure",
-        "eyebrow": "13 — What we still don't fully understand",
-        "title": "The embeddings have structure — but it's entangled",
+        "eyebrow": "11 — What we found (and didn't find) about LLM temporal representations",
+        "title": "Time is encoded — but entangled with genre and provenance",
         "fig": "v_1/src/linear_probing/results/letters__probe_cls__period/figures/tsne_best_layer.png",
         "takeaway": (
-            "t-SNE of the best layer shows the embeddings do organize by period — "
-            "but the signal is entangled with genre, provenance, and text length. "
-            "A linear probe may be the wrong tool: "
-            "the diachronic axis could live on a non-linear manifold "
-            "that PLS and Spearman never fully reach."
+            "Prior work claims LLMs carry an internal timeline recoverable by linear probing. "
+            "With these tools, we did not find it for Akkadian in large pretrained LLMs — "
+            "random weights nearly match trained ones on the same task. "
+            "The t-SNE shows that period structure <em>does</em> exist in the embeddings (left, tier-0), "
+            "but it collapses under cleaning (right, maximal), suggesting it is entangled with "
+            "genre and provenance rather than encoding pure linguistic change."
         ),
         "note": (
-            "Left: tier-0 (raw text) — period clusters are sharp. "
-            "Right: maximal cleaning — clusters blur. "
-            "The next step is to inspect the PLS component vectors of Thalesian directly "
-            "to understand what geometric structure the translation fine-tune creates."
+            "The open question: is the diachronic signal absent, or is it nonlinear? "
+            "A kernel or MLP probe on the same Qwen embeddings would distinguish these two cases. "
+            "Two outcomes, both publishable: if weak → 'LLMs don't encode it'; "
+            "if strong → 'the signal exists but is nonlinearly entangled, which is why the "
+            "translation model wins'."
         ),
     },
 
-    # ── 16. SUMMARY & THESIS ───────────────────────────────────────────────────
+    # 13 ── THESIS DISCUSSION ───────────────────────────────────────────────────
     {
         "kind": "text",
-        "eyebrow": "14 — Wrapping into a thesis",
-        "title": "What we know, what we built, and what's open",
+        "eyebrow": "12 — Wrapping into a thesis",
+        "title": "What's done, what's open, and what to discuss today",
         "body": [
             (
-                "The methodological contribution (ready to write up)",
-                "A reusable, honest evaluation protocol for probing diachronic signal: "
-                "maximal cleaning · mean pooling · balanced Monte-Carlo resampling · "
-                "PLS probing · Spearman correlation. "
-                "Each ingredient is justified by a specific confound we discovered and eliminated."
+                "Ready to write (solid chapters)",
+                "The evaluation protocol and its justification — "
+                "maximal cleaning · mean pooling · balanced MC · PLS · Spearman. "
+                "The full model comparison (TF-IDF / MLM / Qwen 1.7–32B / gpt-oss-120B / "
+                "Thalesian / random / vanilla uMT5). "
+                "The autopsy: tokenizer ruled out, NTP ruled out, translation FT is the lever."
             ),
             (
-                "The empirical finding (ready to write up)",
-                "Large LLMs do not encode a useful Akkadian diachronic signal — "
-                "scale and NTP fine-tuning are null. "
-                "A 400M translation-fine-tuned model wins, "
-                "and the win comes from the translation objective, "
-                "not the tokenizer or architecture."
+                "Missing for a publication (minimal effort)",
+                "(1) Bootstrap CIs on Spearman across MC draws — you have the data, it's reporting. "
+                "(2) One nonlinear probe (MLP or kernel PLS) on Qwen — closes the biggest reviewer hole. "
+                "(3) Package the cleaned benchmark + pipeline on GitHub/HuggingFace — "
+                "nearly every ALP accepted paper ships a resource."
             ),
             (
                 "In progress",
-                "Geodesic / manifold structure of Thalesian's PLS embedding. "
-                "Error-overlap analysis: where models agree and disagree. "
-                "The -ma particle: a previously unreported diachronic marker "
-                "(rate drops sixfold from OB to LB). [Paper in prep with Wasserman & Ni.]"
+                "Geodesic / manifold analysis of Thalesian's PLS subspace. "
+                "Error-overlap analysis across models. "
+                "The –ma particle: a previously unreported diachronic marker "
+                "(rate drops sixfold OB→LB). [Paper in prep, Wasserman & Ni.]"
             ),
             (
                 "Discussion for today",
-                "Which of the above is the central chapter of the CS thesis? "
-                "What is the minimum still needed to converge? "
-                "Is the methodological protocol alone, "
-                "paired with the translation-objective finding, enough for a publication?"
+                "Is the methodological protocol + translation-FT finding the thesis core? "
+                "What is the minimal experiment still needed? "
+                "Is this shaped as an ALP paper, an ACL findings paper, or a chapter first?"
             ),
         ],
     },
@@ -391,13 +355,12 @@ def slide_html(idx, s):
     kind = s["kind"]
     ew = s.get("eyebrow", "")
     ew_html = f'<div class="eyebrow">{ew}</div>' if ew else ""
-    n = idx + 1
 
     if kind == "title":
         return f"""
 <section class="slide slide-title" data-index="{idx}">
   <div class="title-inner">
-    <div class="title-kicker">M.Sc. Thesis Advisor Meeting &mdash; June 2026</div>
+    <div class="title-kicker">M.Sc. Thesis &mdash; Advisor Meeting &mdash; June 2026</div>
     <h1 class="title-h1">{s["title"]}</h1>
     <div class="title-sub">{s["subtitle"]}</div>
     <div class="title-meta">{s["meta"]}</div>
@@ -463,117 +426,111 @@ TEMPLATE = r"""<!DOCTYPE html>
 <meta charset="utf-8">
 <title>Akkadian Dating — Thesis Story</title>
 <style>
-/* ── RESET & VARIABLES ── */
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --bg:#ddd8cf;
-  --slide-bg:#ffffff;
+  --white:#ffffff;
   --ink:#1c2028;
   --ink-mid:#3d4552;
   --ink-light:#6b7484;
   --green:#1a5c3a;
-  --green-light:#e8f4ee;
+  --green-bg:#eaf4ef;
   --green-mid:#2d7a52;
   --red:#8b1a10;
-  --gold:#7c5e00;
   --border:#dde1e9;
-  --border-light:#eef0f4;
-  --shadow:0 4px 24px rgba(0,0,0,.13), 0 1px 4px rgba(0,0,0,.08);
+  --border-light:#eef0f5;
+  --shadow:0 4px 28px rgba(0,0,0,.14),0 1px 4px rgba(0,0,0,.07);
   --serif:"Iowan Old Style","Palatino Linotype",Georgia,serif;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--sans);}
 
-/* ── PROGRESS ── */
+/* progress bar */
 #progress{position:fixed;top:0;left:0;height:3px;background:var(--green);z-index:100;transition:width .3s;}
 
-/* ── TOP BAR ── */
-#topbar{position:fixed;top:6px;left:0;right:0;display:flex;align-items:center;
-        justify-content:space-between;padding:0 22px;z-index:90;pointer-events:none;}
-#slide-title-label{font-size:11.5px;letter-spacing:.06em;color:rgba(80,80,80,.75);
-                   font-family:var(--sans);max-width:60%;}
+/* top info bar */
+#topbar{position:fixed;top:8px;left:24px;right:24px;display:flex;justify-content:space-between;
+        align-items:center;z-index:90;pointer-events:none;}
+#slide-label{font-size:11px;letter-spacing:.07em;color:rgba(60,60,60,.6);max-width:55%;}
+#counter-top{font-size:11px;color:rgba(60,60,60,.6);font-variant-numeric:tabular-nums;}
 
-/* ── STAGE ── */
+/* stage */
 .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-       padding:32px 28px 60px;}
+       padding:32px 28px 58px;}
 
-/* ── SLIDE BASE ── */
+/* slide base */
 .slide{display:none;flex-direction:column;
        width:min(1200px,96vw);height:min(700px,88vh);
-       background:var(--slide-bg);border-radius:12px;
-       box-shadow:var(--shadow);padding:48px 60px 52px;
-       position:relative;overflow:hidden;}
+       background:var(--white);border-radius:12px;
+       box-shadow:var(--shadow);
+       padding:46px 58px 46px;position:relative;overflow:hidden;}
 .slide::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;
-               background:linear-gradient(90deg,var(--green),#2ea86b);}
-.slide.active{display:flex;animation:appear .3s ease;}
-@keyframes appear{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+               background:linear-gradient(90deg,var(--green) 0%,#2ea86b 100%);}
+.slide.active{display:flex;animation:appear .28s ease;}
+@keyframes appear{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
 
-/* ── EYEBROW ── */
-.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-         color:var(--green);margin-bottom:11px;}
+/* slide number badge */
+.slide::after{content:attr(data-num);position:absolute;bottom:14px;right:20px;
+              font-size:10.5px;color:var(--border);font-variant-numeric:tabular-nums;}
 
-/* ── SLIDE HEADING ── */
-.sh{font-family:var(--serif);font-size:30px;line-height:1.15;color:var(--ink);
-    margin-bottom:18px;max-width:92%;}
+/* eyebrow */
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+         color:var(--green);margin-bottom:10px;}
+
+/* slide heading */
+.sh{font-family:var(--serif);font-size:28px;line-height:1.15;color:var(--ink);
+    margin-bottom:16px;max-width:94%;}
 
 /* ── TITLE SLIDE ── */
-.slide-title{justify-content:center;background:var(--slide-bg);}
-.title-inner{max-width:800px;}
-.title-kicker{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-              color:var(--green);margin-bottom:20px;}
-.title-h1{font-family:var(--serif);font-size:52px;line-height:1.07;color:var(--ink);
-          letter-spacing:-.3px;margin-bottom:18px;}
-.title-sub{font-family:var(--serif);font-size:23px;color:var(--ink-mid);
-           font-style:italic;margin-bottom:28px;}
-.title-meta{font-size:15px;line-height:1.8;color:var(--ink-light);}
+.slide-title{justify-content:center;}
+.title-kicker{font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+              color:var(--green);margin-bottom:22px;}
+.title-h1{font-family:var(--serif);font-size:48px;line-height:1.08;
+          color:var(--ink);letter-spacing:-.3px;margin-bottom:18px;}
+.title-sub{font-family:var(--serif);font-size:21px;color:var(--ink-mid);
+           font-style:italic;margin-bottom:30px;line-height:1.35;}
+.title-meta{font-size:14.5px;line-height:1.9;color:var(--ink-light);}
 
 /* ── TEXT SLIDES ── */
-.text-points{display:flex;flex-direction:column;gap:16px;flex:1;min-height:0;overflow:auto;}
-.tp{border-left:3px solid var(--border);padding-left:18px;}
-.tp-h{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--green);
-      margin-bottom:5px;}
-.tp-b{font-size:17px;line-height:1.55;color:var(--ink-mid);}
+.text-points{display:flex;flex-direction:column;gap:14px;flex:1;min-height:0;overflow:auto;
+             padding-right:4px;}
+.tp{border-left:3px solid var(--border-light);padding-left:18px;}
+.tp:hover{border-left-color:var(--green-mid);}
+.tp-h{font-size:16px;font-weight:700;color:var(--green);margin-bottom:4px;}
+.tp-b{font-size:16.5px;line-height:1.55;color:var(--ink-mid);}
 .tp-b strong,.tp-b em{color:var(--ink);}
 
 /* ── FIGURE SLIDES ── */
-.slide-figure{padding-bottom:44px;}
 .fig-wrap{flex:1;display:flex;align-items:center;justify-content:center;
-          min-height:0;margin:2px 0 14px;}
+          min-height:0;margin:2px 0 12px;}
 .fig-wrap img{max-width:100%;max-height:100%;object-fit:contain;
-              border-radius:6px;border:1px solid var(--border-light);}
-.takeaway{background:var(--green-light);border-left:4px solid var(--green);
-          border-radius:7px;padding:13px 18px;font-size:17px;line-height:1.5;color:var(--ink);}
-.tk-label{display:inline-block;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
-          font-weight:800;color:var(--green);margin-right:10px;vertical-align:1px;}
-.fig-note{margin-top:9px;font-size:13.5px;color:var(--ink-light);line-height:1.5;
+              border-radius:5px;border:1px solid var(--border-light);}
+.takeaway{background:var(--green-bg);border-left:4px solid var(--green);
+          border-radius:7px;padding:12px 18px;font-size:16.5px;line-height:1.5;color:var(--ink);}
+.tk-label{display:inline-block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+          font-weight:800;color:var(--green);margin-right:10px;vertical-align:2px;}
+.fig-note{margin-top:8px;font-size:13px;color:var(--ink-light);line-height:1.5;
           padding-left:22px;}
 
 /* ── METHOD SLIDE ── */
-.method-lead{font-size:16px;line-height:1.55;color:var(--ink-mid);margin-bottom:18px;}
-.method-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;flex:1;min-height:0;}
-.mc{background:#f9fafb;border:1px solid var(--border);border-radius:9px;
-    padding:16px 14px;display:flex;flex-direction:column;gap:6px;}
-.mc-icon{font-size:22px;font-weight:800;color:var(--green);}
-.mc-name{font-family:var(--serif);font-size:15.5px;font-weight:700;color:var(--ink);}
-.mc-body{font-size:12.5px;line-height:1.45;color:var(--ink-light);}
+.method-lead{font-size:15.5px;line-height:1.55;color:var(--ink-mid);margin-bottom:16px;}
+.method-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;flex:1;min-height:0;}
+.mc{background:#f8f9fb;border:1px solid var(--border);border-radius:9px;
+    padding:15px 13px;display:flex;flex-direction:column;gap:7px;}
+.mc-icon{font-size:20px;font-weight:800;color:var(--green);}
+.mc-name{font-family:var(--serif);font-size:14.5px;font-weight:700;color:var(--ink);}
+.mc-body{font-size:12px;line-height:1.45;color:var(--ink-light);}
 .mc-body strong{color:var(--red);}
 
-/* ── CHROME ── */
-#chrome{position:fixed;bottom:14px;left:0;right:0;display:flex;align-items:center;
-        justify-content:center;gap:16px;z-index:90;}
-.btn{background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.18);
-     width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;
+/* ── BOTTOM NAV ── */
+#chrome{position:fixed;bottom:12px;left:0;right:0;display:flex;align-items:center;
+        justify-content:center;gap:14px;z-index:90;}
+.btn{background:rgba(255,255,255,.75);border:1px solid rgba(0,0,0,.18);
+     width:36px;height:36px;border-radius:50%;font-size:17px;cursor:pointer;
      display:flex;align-items:center;justify-content:center;color:#333;
-     box-shadow:0 1px 4px rgba(0,0,0,.12);transition:.15s;}
-.btn:hover{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.18);}
-#counter{font-size:13px;color:#555;font-variant-numeric:tabular-nums;
-         min-width:110px;text-align:center;background:rgba(255,255,255,.65);
-         border-radius:20px;padding:4px 14px;}
-#hint{position:fixed;bottom:14px;right:18px;font-size:11.5px;color:rgba(0,0,0,.35);z-index:90;}
-
-/* ── SLIDE NUMBER ── */
-.slide::after{content:attr(data-index);position:absolute;bottom:16px;right:22px;
-              font-size:11px;color:var(--border);font-variant-numeric:tabular-nums;}
+     box-shadow:0 1px 4px rgba(0,0,0,.1);transition:.13s;}
+.btn:hover{background:var(--white);box-shadow:0 2px 8px rgba(0,0,0,.18);}
+#hint{position:fixed;bottom:12px;right:16px;font-size:11px;color:rgba(0,0,0,.32);z-index:90;}
 
 @media print{
   body{overflow:visible;background:#fff;}
@@ -587,12 +544,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 <body>
 <div id="progress"></div>
 <div id="topbar">
-  <div id="slide-title-label"></div>
-  <div id="counter"></div>
+  <div id="slide-label"></div>
+  <div id="counter-top"></div>
 </div>
-<div class="stage">
-__SLIDES__
-</div>
+<div class="stage">__SLIDES__</div>
 <div id="chrome">
   <button class="btn" id="prev">&#8249;</button>
   <button class="btn" id="next">&#8250;</button>
@@ -603,19 +558,19 @@ const TOTAL = __TOTAL__;
 const TITLES = __TITLES__;
 let cur = 0;
 const slides = Array.from(document.querySelectorAll('.slide'));
+slides.forEach((s,i) => s.setAttribute('data-num', (i+1)+'/'+TOTAL));
 
 function go(n){
-  cur = Math.max(0, Math.min(TOTAL - 1, n));
-  slides.forEach((s,i) => s.classList.toggle('active', i === cur));
-  document.getElementById('counter').textContent = (cur + 1) + ' / ' + TOTAL;
-  document.getElementById('progress').style.width = ((cur + 1) / TOTAL * 100) + '%';
-  document.getElementById('slide-title-label').textContent = TITLES[cur] || '';
+  cur = Math.max(0, Math.min(TOTAL-1, n));
+  slides.forEach((s,i) => s.classList.toggle('active', i===cur));
+  document.getElementById('counter-top').textContent = (cur+1)+' / '+TOTAL;
+  document.getElementById('progress').style.width = ((cur+1)/TOTAL*100)+'%';
+  document.getElementById('slide-label').textContent = TITLES[cur]||'';
   history.replaceState(null,'','#'+(cur+1));
 }
-
-document.getElementById('next').onclick = () => go(cur + 1);
-document.getElementById('prev').onclick = () => go(cur - 1);
-document.addEventListener('keydown', e => {
+document.getElementById('next').onclick = ()=>go(cur+1);
+document.getElementById('prev').onclick = ()=>go(cur-1);
+document.addEventListener('keydown', e=>{
   if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1);}
   else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1);}
   else if(e.key==='Home') go(0);
@@ -625,13 +580,11 @@ document.addEventListener('keydown', e => {
     else document.exitFullscreen();
   }
 });
-
 const h = parseInt((location.hash||'#1').slice(1),10);
-go(isNaN(h) ? 0 : h - 1);
+go(isNaN(h)?0:h-1);
 </script>
 </body>
 </html>"""
-
 
 if __name__ == "__main__":
     build()
