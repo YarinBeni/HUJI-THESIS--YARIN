@@ -24,8 +24,8 @@ SLIDES = [
     # 1 ── TITLE ────────────────────────────────────────────────────────────────
     {
         "kind": "title",
-        "title": "Honest, Interpretable Dating of Low-Resource Akkadian",
-        "subtitle": "A benchmark protocol, a surprising result, and what it says about LLM temporal representations",
+        "title": "Honest Computational Dating of Low-Resource Akkadian",
+        "subtitle": "Confounder-controlled chronological probing across embedding sources",
         "meta": (
             "M.Sc. Thesis &middot; Yarin Beer &middot; Computer Science, HUJI<br>"
             "Advisors: Prof. Nathan Wasserman &nbsp;·&nbsp; Dr. Barak Sober &nbsp;·&nbsp; Prof. Gabriel Stanovsky"
@@ -35,214 +35,164 @@ SLIDES = [
     # 2 ── THE QUESTION ─────────────────────────────────────────────────────────
     {
         "kind": "text",
-        "eyebrow": "1 — The question",
-        "title": "Two questions in one",
+        "eyebrow": "1 — The problem and our approach",
+        "title": "Dating Akkadian is expert, slow, and uncertain — can it be done computationally in a way scholars can trust?",
         "body": [
             (
-                "The humanities question",
-                "3,000 years of Akkadian literature is largely undated. "
-                "Can we build a model that assigns chronological order to texts in an "
-                "<strong>interpretable</strong> way — one a philologist can actually trust and inspect?"
+                "The scholarly problem",
+                "Assyriologists date cuneiform texts by hand: ruler names, script style, "
+                "archival context. It is subjective, expertise-bound, and for many fragments "
+                "the date remains uncertain. We ask whether computation can help — "
+                "and more importantly, whether it can be done in a way a philologist "
+                "can actually trust and inspect."
             ),
             (
-                "The CS question",
-                "LLMs are trained on 15 trillion tokens of modern text. "
-                "Akkadian has roughly 10 million digitised words — a <em>million-fold</em> less. "
-                "Does the broad world-knowledge in a large pretrained model "
-                "<strong>transfer</strong> to this tiny, ancient, out-of-distribution language?"
+                "Why not just run a year regressor?",
+                "With a tiny labelled test set, a powerful regressor posts strong test numbers "
+                "while learning surface shortcuts that generalise poorly. "
+                "We instead cast dating as a <strong>chronological-ordering</strong> task: "
+                "probe frozen text embeddings with a deliberately weak linear model "
+                "and measure <strong>Spearman rank correlation</strong> against true date. "
+                "This resists the overfitting and shortcuts regression invites."
             ),
             (
-                'Why "honest" is the hard part',
-                "A model can score well on a dating benchmark by exploiting "
-                "<strong>corpus artifacts</strong> — royal names, letter-opening formulae, "
-                "archive provenance — without learning anything about linguistic change. "
-                "Almost every methodological decision in this thesis is a deliberate move "
-                "<em>away</em> from inflating results and <em>toward</em> measuring something real."
+                "The honest-evaluation spine",
+                "Every design choice below exists so the system measures <em>dating</em> "
+                "and nothing merely correlated with it — genre, ruler name, class imbalance. "
+                "A model that exploits those shortcuts scores well but teaches us nothing "
+                "and generalises to nothing. "
+                "The protocol we built to close those doors is the methodological contribution."
             ),
         ],
     },
 
-    # 3 ── WHY HONEST EVALUATION IS HARD ────────────────────────────────────────
-    {
-        "kind": "text",
-        "eyebrow": "2 — The confounders we had to eliminate",
-        "title": "Four ways a model can fake a date",
-        "body": [
-            (
-                "Genre / format as period proxy",
-                "Almost all Old Babylonian texts in our corpus are <em>letters</em>; "
-                "Neo-Assyrian texts are royal inscriptions. "
-                "A model that recognises letter-opening formulae dates by genre, not language. "
-                "<strong>Fix:</strong> switch to a single homogeneous genre (royal inscriptions) "
-                "and aggressively remove structural markers."
-            ),
-            (
-                "Ruler name as year lookup table",
-                "Royal inscriptions contain the king's name — "
-                "and each king maps almost perfectly to a narrow date range. "
-                "Classifying rulers is not dating language; it's reading a name. "
-                "<strong>Fix:</strong> maximal cleaning removes names and formulae; "
-                "Spearman on chronological order replaces ruler classification."
-            ),
-            (
-                "Class imbalance inflating accuracy",
-                "Three Sargonid kings account for 76% of dated inscriptions. "
-                "A model that always predicts the majority king's year window "
-                "looks accurate even if it has learned nothing. "
-                "<strong>Fix:</strong> Monte Carlo balanced resampling over 8 well-attested rulers."
-            ),
-            (
-                "Overclaiming on a 180-year window",
-                "Our test corpus spans only 188 years. "
-                "Fine-grained year prediction in that window overstates precision. "
-                "<strong>Fix:</strong> Spearman rank correlation — we ask for correct "
-                "<em>ordering</em>, not exact years."
-            ),
-        ],
-    },
-
-    # 4 ── THE PROTOCOL ─────────────────────────────────────────────────────────
-    {
-        "kind": "method",
-        "eyebrow": "3 — The evaluation protocol",
-        "title": "Five deliberate choices — each closing one confound",
-        "lead": (
-            "This protocol is the methodological contribution. "
-            "It is reusable for any low-resource ancient language with dated texts. "
-            "Each ingredient addresses one specific failure mode listed on the previous slide."
-        ),
-        "items": [
-            (
-                "✂", "Maximal cleaning",
-                "Remove royal names, logograms, determinatives, formulae, digits. "
-                "<strong>Closes:</strong> genre-format shortcut and ruler-name lookup."
-            ),
-            (
-                "μ", "Mean pooling",
-                "Average all token hidden states into one document vector. "
-                "<strong>Closes:</strong> single-token assumptions; "
-                "the diachronic signal is document-level, not concentrated in one token "
-                "(last-token pooling consistently underperformed)."
-            ),
-            (
-                "⚖", "Balanced resampling",
-                "200 Monte Carlo draws of 8 balanced rulers, GroupKFold by ruler. "
-                "<strong>Closes:</strong> majority-class imbalance and "
-                "ruler identity leaking across folds."
-            ),
-            (
-                "PLS", "Partial Least-Squares",
-                "Project each embedding onto the latent directions most correlated with date. "
-                "<strong>Closes:</strong> the embedding also encodes genre, provenance, location — "
-                "PLS isolates only the date-relevant subspace (k≈3–5 optimal)."
-            ),
-            (
-                "ρ", "Spearman correlation",
-                "Score chronological <em>ordering</em>, not absolute year prediction. "
-                "<strong>Closes:</strong> overclaiming on a narrow window; "
-                "one scale-free number allows fair comparison across any model type."
-            ),
-        ],
-    },
-
-    # 5 ── ARTIFACT EVIDENCE ────────────────────────────────────────────────────
+    # 3 ── BEST LAYER PER MODEL ─────────────────────────────────────────────────
     {
         "kind": "figure",
-        "eyebrow": "4 — Evidence: the artifact confounders are real",
-        "title": "Without our fixes: TF-IDF beats every neural model by reading the king's name",
-        "fig": "v_1/src/linear_probing/results/orcc__probe_cls/figures/best_of_ruler.png",
+        "eyebrow": "3 — Where in each model does the year signal live?",
+        "title": "Thalesian's signal deepens with layer; LLMs peak mid-network then decay",
+        "fig": "v_1/src/geodesic/maximal_figs/figures/fig4_maximal_A.png",
         "takeaway": (
-            "On raw ORCC text, TF-IDF (green) reaches 32.5% macro-F1 on ruler classification — "
-            "because the king's name appears in the inscription title. "
-            "Trained Qwen (blue) falls <em>below</em> the random-weight baseline (purple): "
-            "the model is confused, not dating. After maximal cleaning, "
-            "TF-IDF collapses to near-random — proving the win was entirely the artifact."
+            "Each model's year-PLS Spearman across all layers (balanced · maximal · mean). "
+            "Thalesian-400M (dark brown) rises steadily to its best at layer 10 (★). "
+            "Qwen models (green dashes) peak around layers 15–16 then fall. "
+            "Most models are at or below TF-IDF (blue dotted) "
+            "except Thalesian — which climbs well above it. "
+            "We use each model's starred best layer for the main comparison."
         ),
         "note": (
-            "This is the result that forced us off ruler classification entirely. "
-            "If the top method wins by reading a name, the benchmark is testing reading, not dating."
+            "Random-8B (purple dotted) sits flat near 0.30 across all layers — "
+            "this is the random floor: what the architecture gives you for free "
+            "before any training. Trained LLMs barely clear it."
         ),
     },
 
-    # 6 ── IMBALANCE EVIDENCE ───────────────────────────────────────────────────
+    # 4 ── K SWEEP ──────────────────────────────────────────────────────────────
     {
         "kind": "figure",
-        "eyebrow": "5 — Evidence: the imbalance confound is real",
-        "title": "A dummy that predicts the corpus mean clears most accuracy thresholds",
-        "fig": "v_1/src/geodesic/fig1_followups/error_overlap/predictions_maximal_balanced/accuracy_at_N.png",
+        "eyebrow": "4 — How many PLS dimensions does the date signal need?",
+        "title": "k = 3–5 components captures the date signal; Ridge (dashed) confirms PLS is not cherry-picking",
+        "fig": "v_1/src/geodesic/maximal_figs/figures/ksweep_tradeoff_maximal.png",
         "takeaway": (
-            "Because three Sargonid kings dominate the corpus, "
-            "a model that always guesses the median year (grey dashed) "
-            "already achieves 77% accuracy within ±50 years — "
-            "better than any real model at that threshold. "
-            "Raw accuracy was measuring class distribution, not dating ability."
+            "Spearman ρ vs. number of PLS components k for all models (solid lines). "
+            "Most models plateau between k = 3 and k = 5 — the chronological information "
+            "in the embedding fits in very few latent directions. "
+            "Dashed lines show Ridge regression (all dimensions) at each model's best layer: "
+            "PLS matches or beats Ridge at k ≈ 3, proving the compression is principled, "
+            "not overfitting."
         ),
         "note": (
-            "This is why we switched to Spearman rank correlation under balanced resampling. "
-            "The dummy cannot get a better Spearman score by guessing the mean — "
-            "Spearman only rewards correct <em>ordering</em>."
+            "We use k = 3 in the fixed-k validation and allow the MC draws to pick "
+            "the best k per draw in the headline comparison — "
+            "both give consistent rankings (see PLS vs. Ridge slide)."
         ),
     },
 
-    # 7 ── SPEARMAN FIX ─────────────────────────────────────────────────────────
+    # 5 ── PLS VS RIDGE ─────────────────────────────────────────────────────────
     {
         "kind": "figure",
-        "eyebrow": "6 — After our fixes: Spearman reveals real structure",
-        "title": "Real models outperform the dummy only at the chronological extremes",
-        "fig": "v_1/src/geodesic/fig1_followups/error_overlap/predictions_maximal_balanced/balanced_maximal_chronology.png",
+        "eyebrow": "5 — Validation: PLS methodology is sound",
+        "title": "PLS at fixed k = 3 matches Ridge on all four representative models",
+        "fig": "v_1/src/geodesic/fig1_followups/pls_ksweep/fixed_k3_pls_vs_ridge.png",
         "takeaway": (
-            "Under balanced Spearman scoring, Thalesian and TF-IDF beat the dummy "
-            "at the early and late ends of the timeline — "
-            "exactly where dating is hardest and most useful to philologists. "
-            "In the dense Sargonid centre, both collapse to the dummy's level: "
-            "this is honest, and it's what an honest protocol should look like."
+            "Fair head-to-head: PLS at k = 3 (blue) vs. Ridge with all embedding dimensions (red), "
+            "each at its own best layer. "
+            "PLS matches Ridge for MLM (0.382 vs 0.408) and Thalesian (0.376 vs 0.384), "
+            "and <em>beats</em> Ridge for Qwen3-32B (0.375 vs 0.326). "
+            "Using PLS is not cherry-picking — it recovers the same signal with a fraction of the dimensions."
         ),
         "note": (
-            "Right panel: median absolute error by true year (BCE). "
-            "Left panel: accuracy-at-N curves confirm all models beat the dummy at ±25 years "
-            "but the advantage is modest and meaningful — not inflated."
+            "This removes the concern that per-draw best-k selection inflated results. "
+            "The ranking (Thalesian ≈ MLM > TF-IDF > Qwen) is preserved under both methods."
         ),
     },
 
-    # 8 ── HEADLINE RESULT ──────────────────────────────────────────────────────
+    # 6 ── NTP + SCALE NULL (was slide 9) ───────────────────────────────────────
     {
         "kind": "figure",
-        "eyebrow": "7 — The result",
-        "title": "A 400M multilingual translation model beats every LLM up to 120B",
+        "eyebrow": "6 — Does finetuning or scale help?",
+        "title": "NTP finetuning and model scale both do nothing",
+        "fig": "v_1/src/finetune/results/figures/maximal_pls_bestlayer.png",
+        "takeaway": (
+            "Every '+NTP (ft)' bar sits within noise of its untouched base model "
+            "across all scales from 1.7B to 120B. "
+            "We finetuned all Qwen sizes on our full Akkadian corpus with next-token prediction — "
+            "zero improvement everywhere. "
+            "And the random-weight Qwen (0.301) ties the trained giants (0.33–0.36): "
+            "LLM pretraining provides almost no advantage over random weights on this task."
+        ),
+        "note": (
+            "We also tested zero-shot, few-shot, and chain-of-thought prompting: no improvement. "
+            "Qwen can name Akkadian rulers and their dates correctly in plain English, "
+            "yet that declarative knowledge does not surface as a decodable temporal representation."
+        ),
+    },
+
+    # 7 ── HEADLINE + AUTOPSY SETUP (was slide 8) ────────────────────────────────
+    {
+        "kind": "figure",
+        "eyebrow": "7 — The result and the autopsy question",
+        "title": "A 400M translation model beats every LLM — what explains the win?",
         "fig": "v_1/src/chronorank/autopsy/results/figures/factor_ladder_bars.png",
         "takeaway": (
-            "Under our honest protocol, Thalesian-400M (Spearman 0.41) outperforms "
-            "Qwen3-8B (0.36), Qwen3-32B (0.34), GPT-OSS-120B (0.33), "
-            "and our Akkadian MLM (0.31). "
-            "Crucially: a random-weight Qwen-8B scores 0.30 — "
-            "statistically tied with the trained giants. "
-            "Scale and LLM pretraining are not the lever here."
+            "Thalesian-400M (0.411) leads; Qwen3-8B (0.363) and all larger models cluster "
+            "just above the dashed random floor at 0.30. "
+            "The <strong>random floor</strong> (bar labelled \"random (floor)\", dashed line) "
+            "is a Qwen3-8B with fully randomized weights — scoring 0.301. "
+            "Trained LLMs are only 3–6 points above a random network. "
+            "The red bar at far right is vanilla uMT5-base (no finetune) at 0.297 — "
+            "at the random floor. So the entire Thalesian advantage "
+            "comes from the finetune alone (Δ = +0.114)."
         ),
         "note": (
-            "Vanilla uMT5-base (no fine-tune, red bar far right) = 0.297 — at the random floor. "
-            "The full Thalesian advantage (Δ = +0.114) comes from the fine-tune alone, "
-            "not from the architecture or pretraining. This is what we investigate in the autopsy."
+            "Next three slides ask: is it the tokenizer? the architecture? the training objective? "
+            "Each question is answered by one controlled comparison."
         ),
     },
+
+    # 8 ── HEADLINE RESULT (AFTER AUTOPSY SETUP) ────────────────────────────────
+    # (factor_ladder_bars is already shown as slide 7/autopsy — this is now the
+    #  scale-scatter view if we want, or we re-use after the tokenizer/FT analysis)
 
     # 9 ── NTP + SCALE NULL ─────────────────────────────────────────────────────
     {
         "kind": "figure",
-        "eyebrow": "8 — Ruling out scale and next-token finetuning",
-        "title": "Bigger models and Akkadian NTP finetuning both do nothing",
+        "eyebrow": "8 — Does scale or Akkadian finetuning help?",
+        "title": "Scale and NTP finetuning both do nothing — the training objective is what matters",
         "fig": "v_1/src/finetune/results/figures/maximal_pls_bestlayer.png",
         "takeaway": (
-            "Every '+NTP (ft)' bar sits within noise of its untouched base model — "
+            "Every '+NTP (ft)' bar lands within noise of its untouched base model "
             "across all scales from 1.7B to 120B. "
-            "We tried finetuning Qwen on our entire Akkadian corpus with next-token prediction: "
-            "zero improvement at every scale, at every layer. "
-            "The training <em>objective</em> is what's missing, not exposure to Akkadian."
+            "We finetuned Qwen on all available Akkadian text with next-token prediction — "
+            "zero improvement at any scale. "
+            "Queried in plain English, Qwen correctly names Akkadian rulers and dates; "
+            "yet that declarative knowledge does not appear as a linearly decodable "
+            "temporal representation in the hidden states."
         ),
         "note": (
-            "We also tested zero-shot, few-shot, and chain-of-thought prompting — "
-            "none improved results. And Qwen can correctly name Akkadian rulers and their date ranges "
-            "in plain English, yet that declarative knowledge does not surface "
-            "as a linearly decodable temporal representation."
+            "Zero-shot, few-shot, and chain-of-thought prompting also produced no gains. "
+            "The evidence points to the training <em>objective</em> as the missing ingredient, "
+            "not the amount of Akkadian data or the number of parameters."
         ),
     },
 
@@ -287,62 +237,68 @@ SLIDES = [
         ),
     },
 
-    # 12 ── INTERPRETABILITY / ENTANGLEMENT ─────────────────────────────────────
+    # 12 ── WHY THE SMALL MODEL WINS — INTERPRETABILITY AS SUPPORT ─────────────
     {
         "kind": "figure",
-        "eyebrow": "11 — What we found (and didn't find) about LLM temporal representations",
-        "title": "Time is encoded — but entangled with genre and provenance",
+        "eyebrow": "11 — Why does the small translation model win? (Interpretability as support)",
+        "title": "LLM embeddings entangle time with genre — the internal timeline does not surface linearly",
         "fig": "v_1/src/linear_probing/results/letters__probe_cls__period/figures/tsne_best_layer.png",
         "takeaway": (
-            "Prior work claims LLMs carry an internal timeline recoverable by linear probing. "
-            "With these tools, we did not find it for Akkadian in large pretrained LLMs — "
-            "random weights nearly match trained ones on the same task. "
-            "The t-SNE shows that period structure <em>does</em> exist in the embeddings (left, tier-0), "
-            "but it collapses under cleaning (right, maximal), suggesting it is entangled with "
-            "genre and provenance rather than encoding pure linguistic change."
+            "Prior work reports an internal LLM timeline recoverable by linear probing. "
+            "Under our protocol it does not surface for Akkadian: random-weight Qwen "
+            "nearly ties the trained giants. "
+            "The t-SNE shows <em>why</em>: period structure exists in LLM embeddings (left, raw text) "
+            "but collapses when confounders are cleaned away (right, maximal). "
+            "Chronology is entangled with genre and provenance on a likely nonlinear manifold — "
+            "exactly the form a linear probe cannot reach, and the translation model "
+            "sidesteps by packaging chronological signal in a linearly decodable form."
         ),
         "note": (
-            "The open question: is the diachronic signal absent, or is it nonlinear? "
-            "A kernel or MLP probe on the same Qwen embeddings would distinguish these two cases. "
-            "Two outcomes, both publishable: if weak → 'LLMs don't encode it'; "
-            "if strong → 'the signal exists but is nonlinearly entangled, which is why the "
-            "translation model wins'."
+            "Open experiment: a small MLP or kernel probe on the same Qwen embeddings "
+            "would distinguish 'signal absent' from 'signal nonlinearly entangled' — "
+            "both outcomes are publishable and close the main reviewer objection. "
+            "Visualising Thalesian's PLS component vectors would further confirm "
+            "that its chronological signal is genuine and structured."
         ),
     },
 
     # 13 ── THESIS DISCUSSION ───────────────────────────────────────────────────
     {
         "kind": "text",
-        "eyebrow": "12 — Wrapping into a thesis",
-        "title": "What's done, what's open, and what to discuss today",
+        "eyebrow": "12 — Contributions and discussion",
+        "title": "What we built, what we found, and what's still open",
         "body": [
             (
-                "Ready to write (solid chapters)",
-                "The evaluation protocol and its justification — "
-                "maximal cleaning · mean pooling · balanced MC · PLS · Spearman. "
-                "The full model comparison (TF-IDF / MLM / Qwen 1.7–32B / gpt-oss-120B / "
-                "Thalesian / random / vanilla uMT5). "
-                "The autopsy: tokenizer ruled out, NTP ruled out, translation FT is the lever."
+                "Contributions (ready to write)",
+                "<strong>(1)</strong> The first confounder-controlled method for dating low-resource Akkadian, "
+                "cast as chronological-ordering probing — resists overfitting and surface shortcuts. "
+                "<strong>(2)</strong> A cleaned royal-inscription benchmark for Akkadian chronology (to be released). "
+                "<strong>(3)</strong> A benchmark across TF-IDF / MLM / Qwen 1.7–120B / multilingual seq2seq, "
+                "identifying the 400M translation encoder as the recommended dating system. "
+                "<strong>(4)</strong> An explanation: the LLM internal timeline from prior work "
+                "does not surface linearly for Akkadian — accounting for why scale and prompting fail."
             ),
             (
-                "Missing for a publication (minimal effort)",
-                "(1) Bootstrap CIs on Spearman across MC draws — you have the data, it's reporting. "
-                "(2) One nonlinear probe (MLP or kernel PLS) on Qwen — closes the biggest reviewer hole. "
-                "(3) Package the cleaned benchmark + pipeline on GitHub/HuggingFace — "
-                "nearly every ALP accepted paper ships a resource."
+                "Minimal gap to publication",
+                "<strong>(a)</strong> Bootstrap CIs across MC draws — data exists, reporting step only. "
+                "<strong>(b)</strong> One nonlinear probe (MLP or kernel) on Qwen — closes the "
+                "biggest reviewer hole (absent vs. nonlinearly entangled). "
+                "<strong>(c)</strong> Release the benchmark and cleaning pipeline on GitHub/HuggingFace — "
+                "ALP and similar venues expect a shipped resource."
             ),
             (
                 "In progress",
-                "Geodesic / manifold analysis of Thalesian's PLS subspace. "
+                "Geodesic / manifold structure of Thalesian's PLS subspace. "
                 "Error-overlap analysis across models. "
-                "The –ma particle: a previously unreported diachronic marker "
-                "(rate drops sixfold OB→LB). [Paper in prep, Wasserman & Ni.]"
+                "The –ma particle: sixfold OB→LB decline, previously unreported "
+                "(paper in prep, Wasserman & Ni)."
             ),
             (
                 "Discussion for today",
-                "Is the methodological protocol + translation-FT finding the thesis core? "
-                "What is the minimal experiment still needed? "
-                "Is this shaped as an ALP paper, an ACL findings paper, or a chapter first?"
+                "Does the applied framing (dating method + winning model) "
+                "feel right for the CS thesis, or should the interpretability angle lead? "
+                "Which venue — ALP, ACL Findings, or chapter-first? "
+                "What is the minimum still needed to converge?"
             ),
         ],
     },
