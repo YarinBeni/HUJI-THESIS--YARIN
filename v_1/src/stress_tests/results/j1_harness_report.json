@@ -1,0 +1,132 @@
+{
+  "king_token": {
+    "per_ruler": [
+      {
+        "ruler": "Ashurbanipal",
+        "n": 268,
+        "hits": 126,
+        "coverage": 0.47
+      },
+      {
+        "ruler": "Sennacherib",
+        "n": 237,
+        "hits": 159,
+        "coverage": 0.671
+      },
+      {
+        "ruler": "Esarhaddon",
+        "n": 176,
+        "hits": 81,
+        "coverage": 0.46
+      },
+      {
+        "ruler": "Sargon II",
+        "n": 144,
+        "hits": 76,
+        "coverage": 0.528
+      },
+      {
+        "ruler": "Tiglath-pileser III",
+        "n": 75,
+        "hits": 15,
+        "coverage": 0.2
+      },
+      {
+        "ruler": "Nabonidus",
+        "n": 68,
+        "hits": 12,
+        "coverage": 0.176
+      },
+      {
+        "ruler": "Sîn-šarru-iškun",
+        "n": 21,
+        "hits": 9,
+        "coverage": 0.429
+      },
+      {
+        "ruler": "Shalmaneser V",
+        "n": 12,
+        "hits": 12,
+        "coverage": 1.0
+      },
+      {
+        "ruler": "Šamaš-šuma-ukin",
+        "n": 6,
+        "hits": 1,
+        "coverage": 0.167
+      },
+      {
+        "ruler": "Nebuchadnezzar II",
+        "n": 87,
+        "hits": 0,
+        "coverage": 0.0
+      },
+      {
+        "ruler": "Nabopolassar",
+        "n": 15,
+        "hits": 0,
+        "coverage": 0.0
+      },
+      {
+        "ruler": "Nebuchadnezzar I",
+        "n": 10,
+        "hits": 0,
+        "coverage": 0.0
+      }
+    ],
+    "overall": {
+      "mapped_rulers": 12,
+      "rows_with_mapped_ruler": 1119,
+      "rows_with_name_found": 491,
+      "coverage_within_mapped": 0.439,
+      "share_of_corpus_mapped": 0.931
+    }
+  },
+  "gazetteer": {
+    "n_sites": 56,
+    "rows_covered": 1172,
+    "rows_total": 1202,
+    "coverage_by_count": 0.975,
+    "uncovered_values": [
+      " Ahmar (Til Barsip)",
+      "Acharneh (Tunip)",
+      "Ben Shemen",
+      "Brissa",
+      "Cave Kalm-karra",
+      "Larnaka",
+      "Negub Tunnel",
+      "Padakku",
+      "Qalʾeh-i Imam",
+      "Selaʾ",
+      "Syria",
+      "Tell Baradan",
+      "Tell al-Lahm",
+      "Turlu Höyük",
+      "Wadi Bastura Tunnel",
+      "Zalu-Ab",
+      "el-Ghab",
+      "uncertain"
+    ]
+  },
+  "anchors": {
+    "n_ruler_anchors": 40,
+    "n_year_anchors": 113,
+    "ruler_anchor_example": {
+      "kind": "ruler",
+      "ruler": "Unidentified Neo-Babylonian Ruler",
+      "year": 7,
+      "prompt": "an Akkadian royal inscription from the reign of Unidentified Neo-Babylonian Ruler"
+    },
+    "year_anchor_example": {
+      "kind": "year",
+      "ruler": null,
+      "year": 7,
+      "prompt": "an Akkadian royal inscription from the year 7 BCE"
+    }
+  },
+  "metric_sanity": {
+    "proximity_perfect": 0.0,
+    "proximity_reversed": 0.7,
+    "ninveh_babylon_km": 440.1
+  }
+}
