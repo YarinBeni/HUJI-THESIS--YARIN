@@ -66,13 +66,26 @@ sbatch v_1/src/stress_tests/sbatch/J4b_king_extract_gptoss.sbatch  # gpt-oss-120
 ```
 All six are independent — fire them together; `squeue -u $USER` to watch.
 
+### Analysis experiments (P1/P2/P3/P7)
+```bash
+# Run NOW (CPU, use existing on-disk mean acts; no GPU):
+sbatch v_1/src/stress_tests/sbatch/J7_p2_geography.sbatch   # P2 geography (positive control)
+sbatch v_1/src/stress_tests/sbatch/J9_p7_ksparse.sbatch     # P7 neuron localization
+# P3 (A Matter of Time): anchors (GPU) then timeline (CPU)
+sbatch v_1/src/stress_tests/sbatch/J5_p3_anchors.sbatch     # array, 6 models
+#   ...after J5: sbatch v_1/src/stress_tests/sbatch/J8_p3_timeline.sbatch
+# P1 year-probe — RUN AFTER J4 (needs king activations):
+sbatch v_1/src/stress_tests/sbatch/J6_p1_probe.sbatch
+```
+
 ## Status
 - **J1 shared harness — DONE**, validated locally.
-- **J2 (T9 knowledge), J3 (T10 prompt), J4 (king extraction) — BUILT**, scripts +
-  sbatch committed; compile-checked + reprobe logic unit-tested locally.
-  Awaiting cluster run (no GPU/models locally).
-- J5 (P3 anchors), J6 (P1 probe), J7 (P2 geography), J9 (P7 k-sparse), J10 (GUI),
-  J11 (aggregate) — pending.
+- **J2 (T9), J3 (T10), J4 (king extraction) — BUILT** (test jobs).
+- **J5 (P3 anchors), J6 (P1 probe), J7 (P2 geo), J8 (P3 timeline), J9 (P7 k-sparse)
+  — BUILT**; compile-checked, logic unit-tested locally (P2 labels on real data;
+  P7 localizes synthetic signal at k=1; P3 recovers a directional timeline at 0.99).
+  Awaiting cluster run.
+- J10 (GUI embedding update), J11 (aggregate tables/figures) — pending.
 
 ## What still needs a human
 - `ruler_spellings.csv` — expert review to lift king-token coverage (now ~44%).
