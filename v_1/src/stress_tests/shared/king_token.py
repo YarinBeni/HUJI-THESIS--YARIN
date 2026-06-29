@@ -79,6 +79,41 @@ def name_token_span(text: str, tokenizer, spellings: list[str]) -> Optional[tupl
     return (min(toks), max(toks))
 
 
+def name_span_by_ids(input_ids, tokenizer, spellings: list[str]) -> Optional[tuple[int, int]]:
+    """Tokenizer-agnostic fallback for tokenizers without offset mapping
+    (e.g. some sentencepiece models). Tokenize each spelling alone and find the
+    EARLIEST contiguous matching subsequence of token ids in ``input_ids``.
+    Returns inclusive (tok_start, tok_end) or None."""
+    ids = list(int(x) for x in input_ids)
+    best = None
+    for sp in spellings:
+        sub = tokenizer(sp, add_special_tokens=False)["input_ids"]
+        if not sub:
+            continue
+        L = len(sub)
+        for i in range(len(ids) - L + 1):
+            if ids[i:i + L] == sub:
+                if best is None or i < best[0]:
+                    best = (i, i + L - 1)
+                break
+    return best
+
+
+def locate_king_tokens(text, tokenizer, spellings, input_ids=None):
+    """Unified entry: try char-offset mapping first, fall back to id-subsequence.
+    `input_ids` (the actual model input, possibly with special tokens) is used for
+    the fallback; pass it from the extractor."""
+    try:
+        span = name_token_span(text, tokenizer, spellings)
+        if span is not None:
+            return span
+    except Exception:
+        pass
+    if input_ids is not None:
+        return name_span_by_ids(input_ids, tokenizer, spellings)
+    return None
+
+
 def coverage_report(df, spellings_map: dict[str, list[str]], text_col: str = "text_tier0"):
     """Per-ruler word-level coverage (fraction of fragments where the ruler's own
     name was located). Returns (per_ruler_rows, overall_dict)."""

@@ -46,6 +46,34 @@ structurally indirect). `ruler_spellings.csv` should be reviewed/expanded by the
 Assyriologist advisor to raise coverage on the Assyrian-royal subset before P1 results
 are finalized; rows are marked `verified` / `review` / `low_coverage_expected`.
 
+## Cluster jobs — paste-ready (run in parallel)
+
+All sbatch live in `sbatch/`. Each pulls THIS branch, runs, and pushes results
+(big `*.npz` activations are gitignored / cluster-local; only JSON summaries +
+coverage come back). Paste into the Schmidt web terminal:
+
+```bash
+cd ~/projects/HUJI-THESIS--YARIN && git pull origin claude/stress-test-timeline-analysis-9sh2vs
+# --- Test 1: T9 direct knowledge (kp0/kp1/kp2) ---
+sbatch v_1/src/stress_tests/sbatch/J2a_t9_qwen3.sbatch      # qwen3 x3 (array)
+sbatch v_1/src/stress_tests/sbatch/J2b_t9_gptoss.sbatch     # gpt-oss-120B (gpu:4)
+# --- Test 2: T10 prompt-reprobe (mean + king_last + king_mean, pv0-pv3) ---
+sbatch v_1/src/stress_tests/sbatch/J3a_t10_qwen3.sbatch     # qwen3 x3 (array)
+sbatch v_1/src/stress_tests/sbatch/J3b_t10_gptoss.sbatch    # gpt-oss-120B (gpu:4)
+# --- Test 3: king-token activation extraction (tier0) ---
+sbatch v_1/src/stress_tests/sbatch/J4_king_extract.sbatch   # 6 models (array)
+sbatch v_1/src/stress_tests/sbatch/J4b_king_extract_gptoss.sbatch  # gpt-oss-120B (gpu:4)
+```
+All six are independent — fire them together; `squeue -u $USER` to watch.
+
 ## Status
-- **J1 shared harness — DONE** (this commit).
-- J2–J11 (T9/T10 redo, P1/P2/P3/P7 probes, GUI, aggregate) — pending.
+- **J1 shared harness — DONE**, validated locally.
+- **J2 (T9 knowledge), J3 (T10 prompt), J4 (king extraction) — BUILT**, scripts +
+  sbatch committed; compile-checked + reprobe logic unit-tested locally.
+  Awaiting cluster run (no GPU/models locally).
+- J5 (P3 anchors), J6 (P1 probe), J7 (P2 geography), J9 (P7 k-sparse), J10 (GUI),
+  J11 (aggregate) — pending.
+
+## What still needs a human
+- `ruler_spellings.csv` — expert review to lift king-token coverage (now ~44%).
+- gpt-oss-120B GPU count: sbatch requests `gpu:4`; adjust if the cluster fits it in fewer.
