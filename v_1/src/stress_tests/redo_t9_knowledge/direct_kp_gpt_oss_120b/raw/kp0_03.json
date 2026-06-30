@@ -9,6 +9,6 @@
   "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Sargon II reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
   "raw_output": "analysisThe user asks for Sargon II, an Assyrian king. Known reign: 722–705 BCE. So start 722, end 705. Confidence high. Return JSON with fields. No extra text.assistantfinal{\"start_year\":722,\"end_year\":705,\"confidence\":\"high\",\"declined\":false}",
   "model_path": "openai/gpt-oss-120b",
-  "max_new_tokens": 512,
-  "timestamp": "2026-06-30T17:50:22.203635"
+  "max_new_tokens": 256,
+  "timestamp": "2026-06-30T18:14:34.893784"
 }

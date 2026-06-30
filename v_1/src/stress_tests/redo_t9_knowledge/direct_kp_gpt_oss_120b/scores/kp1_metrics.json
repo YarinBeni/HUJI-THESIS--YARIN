@@ -1,14 +1,14 @@
 {
   "variant": "kp1",
   "total_periods": 2,
-  "parse_errors": 1,
-  "aggregate_recall": 0.25,
+  "parse_errors": 2,
+  "aggregate_recall": 0.0,
   "total_targets": 8,
-  "total_hits": 2,
+  "total_hits": 0,
   "per_period": [
     {
       "period": "Neo-Assyrian",
-      "raw_output": "analysisThe user asks: \"Which rulers reigned during the Neo-Assyrian period in Mesopotamia? List only rulers who held the title of king (not regents or officials). Return ONLY a JSON object with these fields: \"period\": \"Neo-Assyrian\", \"rulers\": an array of ruler names (romanized, chronological order), \"confidence\": \"high\" if you are certain of the list, \"low\" if approximate.\"\n\nWe must output only JSON, no markdown fences, no extra text. Provide list of Neo-Assyrian kings. Need to be accurate. Neo-Assyrian period roughly 911–609 BCE. Kings: Starting with Adad-nirari II (911–891), then Tukulti-Ninurta II (891–884), Ashurnasirpal II (884–859), Shalmaneser III (859–824), Shamshi-Adad V (824–811), Adad-nirari III (811–783), Shalmaneser IV (783–773), Ashur-dan III (773–755), Ashur-nirari V (755–745), Tiglath-Pileser III (745–727), Shalmaneser V (727–722), Sargon II (722–705), Sennacherib (705–681), Esarhaddon (681–669), Ashurbanipal (669–631), Ashur-etil-ilani (631–627), Sinsharishkun (627–612), and possibly Ashur-uballit II (612–609) as last king (though his reign is contested). Also there is a brief reign of \"Ashur-nirari V\"? Already included. Also \"Shalmaneser V\" included. Also \"Ashur-dan III\" etc. Also \"Ashur-nirari V\". Also \"Ashur-nirari V\" is correct. Also \"Ashur-nirari V\" is 755-745. Also \"Ashur-nirari V\" is correct.\n\nList in chronological order. Should we include \"Ashur-uballit II\"? He was a claimant after fall of Nineveh, considered last king of Neo-Assyrian. Probably include. Also \"Nabû-šuma-ukîn II\"? No, that's Babylonian.\n\nThus list: [\"Adad-nirari II\",\"Tukulti-Ninurta II\",\"Ashurnasirpal II\",\"Shalmaneser III\",\"Shamshi",
+      "raw_output": "analysisThe user asks: \"Which rulers reigned during the Neo-Assyrian period in Mesopotamia? List only rulers who held the title of king (not regents or officials). Return ONLY a JSON object with these fields: \"period\": \"Neo-Assyrian\", \"rulers\": an array of ruler names (romanized, chronological order), \"confidence\": \"high\" if you are certain of the list, \"low\" if approximate.\"\n\nWe must output only JSON, no markdown fences, no extra text. Provide list of Neo-Assyrian kings. Need to be accurate. Neo-Assyrian period roughly 911–609 BCE. Kings: Starting with Adad-nirari II (911–891), then Tukulti-Ninurta II (891–884), Ashurnasirpal II (884–859), Shalmaneser III (859–824), Shamshi-Adad V (824–811), Adad-nirari III (811–783), Shalmaneser IV (783–773), Ashur-dan III (773–755), Ashur-nirari V (755–745), Tiglath-Pileser III (745–727), Shalmaneser V (727–722),",
       "parsed": null,
       "parse_error": true,
       "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
@@ -26,32 +26,17 @@
     },
     {
       "period": "Neo-Babylonian",
-      "raw_output": "analysisThe user asks: \"Which rulers reigned during the Neo-Babylonian period in Mesopotamia? List only rulers who held the title of king (not regents or officials). Return ONLY a JSON object with these fields: \"period\": \"Neo-Babylonian\", \"rulers\": an array of ruler names (romanized, chronological order), \"confidence\": \"high\" if you are certain of the list, \"low\" if approximate.\"\n\nWe must comply: Provide only JSON, no extra text, no markdown fences. Must be precise. The Neo-Babylonian period (also called Chaldean or 626–539 BCE). Kings: Nabopolassar (626–605 BCE), Nebuchadnezzar II (605–562 BCE), Amel-Marduk (also known as Evil-Merodach) (562–560 BCE), Neriglissar (560–556 BCE), Labashi-Marduk (556 BCE), Nabonidus (556–539 BCE). Also possibly a short reign of Belshazzar? Actually Belshazzar was co-regent, not king; he was son of Nabonidus, but not officially king. So list those six.\n\nThus confidence high.\n\nReturn JSON:\n\n{\n  \"period\": \"Neo-Babylonian\",\n  \"rulers\": [\"Nabopolassar\", \"Nebuchadnezzar II\", \"Amel-Marduk\", \"Neriglissar\", \"Labashi-Marduk\", \"Nabonidus\"],\n  \"confidence\": \"high\"\n}\n\nMake sure no extra spaces? It's fine.\n\nReturn only JSON, no markdown fences.assistantfinal{\n  \"period\": \"Neo-Babylonian\",\n  \"rulers\": [\n    \"Nabopolassar\",\n    \"Nebuchadnezzar II\",\n    \"Amel-Marduk\",\n    \"Neriglissar\",\n    \"Labashi-Marduk\",\n    \"Nabonidus\"\n  ],\n  \"confidence\": \"high\"\n}",
-      "parsed": {
-        "period": "Neo-Babylonian",
-        "rulers": [
-          "Nabopolassar",
-          "Nebuchadnezzar II",
-          "Amel-Marduk",
-          "Neriglissar",
-          "Labashi-Marduk",
-          "Nabonidus"
-        ],
-        "confidence": "high"
-      },
-      "parse_error": false,
-      "recall": 1.0,
-      "found_targets": [
+      "raw_output": "analysisThe user asks: \"Which rulers reigned during the Neo-Babylonian period in Mesopotamia? List only rulers who held the title of king (not regents or officials). Return ONLY a JSON object with these fields: \"period\": \"Neo-Babylonian\", \"rulers\": an array of ruler names (romanized, chronological order), \"confidence\": \"high\" if you are certain of the list, \"low\" if approximate.\"\n\nWe must comply: Provide only JSON, no extra text, no markdown fences. Must be precise. The Neo-Babylonian period (also called Chaldean or 626–539 BCE). Kings: Nabopolassar (626–605 BCE), Nebuchadnezzar II (605–562 BCE), Amel-Marduk (also known as Evil-Merodach) (562–560 BCE), Neriglissar (560–556 BCE), Labashi-Marduk (556 BCE), Nabonidus (556–539 BCE). Also possibly a short reign of Belshazzar? Actually Belshazzar was co-regent, not king; he was son of Nabonidus, but not officially king. So list those six.\n\nThus confidence high.\n\nReturn JSON",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "recall": 0.0,
+      "found_targets": [],
+      "missed_targets": [
         "Nebuchadnezzar II",
         "Nabonidus"
       ],
-      "missed_targets": [],
-      "extras": [
-        "Nabopolassar",
-        "Amel-Marduk",
-        "Neriglissar",
-        "Labashi-Marduk"
-      ]
+      "extras": []
     }
   ]
 }

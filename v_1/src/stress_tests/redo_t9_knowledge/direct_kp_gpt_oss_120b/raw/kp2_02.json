@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 2,
+  "input_value": "Nergal-nasir-apli",
+  "fill": {
+    "ruler": "Nergal-nasir-apli"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Nergal-nasir-apli reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "analysisWe need to answer about Nergal-nasir-apli, an Akkadian/Assyrian/Babylonian ruler. I need to recall if such a ruler existed. Nergal-nasir-apli sounds like a Babylonian king name? Possibly a minor ruler of the 2nd dynasty of Isin? Actually Nergal-nasir-apli is known as a king of Babylon? Let's think: There is a king named Nergal-šuma-ibni? Not sure. Nergal-nasir-apli maybe a ruler of the Sealand? I recall a king \"Nergal-šuma-ibni\" (or \"Nergal-šuma-iddina\") but not Nergal-nasir-apli. Could be a governor? Might be a ruler of the city of Larsa? I think there is a king \"Nergal-šuma-ibni\" of Babylon (c. 1155 BCE). Nergal-nasir-apli maybe a later period? I cannot find known references. Likely unknown. So we should return declined true.\n\nThus JSON: {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true",
+  "model_path": "openai/gpt-oss-120b",
+  "max_new_tokens": 256,
+  "timestamp": "2026-06-30T18:20:31.808631"
+}

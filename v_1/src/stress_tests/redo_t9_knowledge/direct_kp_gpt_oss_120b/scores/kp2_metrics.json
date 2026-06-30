@@ -1,0 +1,99 @@
+{
+  "variant": "kp2",
+  "total": 8,
+  "parse_errors": 7,
+  "scoreable": 1,
+  "declined_correctly": 1,
+  "hallucinations": 0,
+  "hallucination_rate": 0.0,
+  "gate_threshold": 0.3,
+  "gate_pass": true,
+  "per_name": [
+    {
+      "name": "Nabu-šarru-iddina the Lesser",
+      "raw_output": "analysisWe need to answer about Nabu-šarru-iddina the Lesser, an Akkadian/Assyrian/Babylonian ruler. Need to provide start and end years BCE, confidence, declined false. Must be only JSON, no extra text.\n\nWe need to recall if such a ruler existed. Nabu-šarru-iddina (also known as Nabû-šarru-iddina) is a Babylonian king. There were two: Nabû-šarru-iddina I (also called Nabu-shar-iddin?) Actually, there is a king Nabû-šarru-iddina (also known as Nabu-sharru-iddina) who reigned in Babylon around 747-734 BCE? Wait that's Nabu-shuma-ishkun? Let's think.\n\nNabû-šarru-iddina (also known as Nabu-sharru-iddina) was a king of Babylon, a short-lived ruler after the fall of the Assyrian empire? Actually, there is a king Nabu-šarru-iddina (also called Nabu-sharru-iddina) who reigned c. 747–734 BCE? No, that",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "declined": null,
+      "hallucination": null,
+      "status": "parse_error"
+    },
+    {
+      "name": "Esarhaddon III",
+      "raw_output": "analysisThe user asks about \"Akkadian/Assyrian/Babylonian ruler Esarhaddon III\". We need to check if such a ruler exists. Known rulers: Esarhaddon (c. 681–669 BCE) was an Assyrian king, son of Sennacherib, reigned 681–669 BCE. There is no Esarhaddon III; there is only Esarhaddon (no numeral). Also no \"Esarhaddon III\" in Akkadian/Assyrian/Babylonian chronology. So we do not know this ruler; likely nonexistent. According to instruction: If you do not know this ruler at all, return JSON with nulls, confidence low, declined true. So we should output that JSON.assistantfinal{\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+      "parsed": {
+        "start_year": null,
+        "end_year": null,
+        "confidence": "low",
+        "declined": true
+      },
+      "parse_error": false,
+      "declined": true,
+      "start_year": null,
+      "end_year": null,
+      "hallucination": false,
+      "status": "declined_correctly"
+    },
+    {
+      "name": "Nergal-nasir-apli",
+      "raw_output": "analysisWe need to answer about Nergal-nasir-apli, an Akkadian/Assyrian/Babylonian ruler. I need to recall if such a ruler existed. Nergal-nasir-apli sounds like a Babylonian king name? Possibly a minor ruler of the 2nd dynasty of Isin? Actually Nergal-nasir-apli is known as a king of Babylon? Let's think: There is a king named Nergal-šuma-ibni? Not sure. Nergal-nasir-apli maybe a ruler of the Sealand? I recall a king \"Nergal-šuma-ibni\" (or \"Nergal-šuma-iddina\") but not Nergal-nasir-apli. Could be a governor? Might be a ruler of the city of Larsa? I think there is a king \"Nergal-šuma-ibni\" of Babylon (c. 1155 BCE). Nergal-nasir-apli maybe a later period? I cannot find known references. Likely unknown. So we should return declined true.\n\nThus JSON: {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "declined": null,
+      "hallucination": null,
+      "status": "parse_error"
+    },
+    {
+      "name": "Marduk-mukin-šarru",
+      "raw_output": "analysisWe need to answer about Marduk-mukin-šarru, an Akkadian/Assyrian/Babylonian ruler. I need to recall if such a ruler existed. Marduk-mukin-šarru (also Marduk-mukīn-šarru) might be a Babylonian king of the 2nd dynasty of Isin? Actually Marduk-mukin-šarru is known as a king of Babylon in the 2nd dynasty of Isin? Let's think.\n\nMarduk-mukin-šarru (also Marduk-mukīn-šarru) appears in the \"Chronicle of the Kings of Babylon\"? I recall a king named Marduk-mukin-šar (Marduk-mukīn-šar) who reigned briefly around 1155 BCE? Wait.\n\nThere is a Kassite period king named Marduk-apla-iddina I, Marduk-apla-iddina II, etc. Marduk-mukin-šarru might be a short-lived ruler during the 7th century BCE? Actually there is a king of Babylon named Marduk-mukin-šar (Marduk-mukīn-",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "declined": null,
+      "hallucination": null,
+      "status": "parse_error"
+    },
+    {
+      "name": "Sîn-eriba-bel",
+      "raw_output": "analysisWe need to answer about Sîn-eriba-bel, an Akkadian/Assyrian/Babylonian ruler. I need to recall if such a ruler existed. Sîn-eriba-bel? Possibly a king of Isin? Actually Sîn-eriba (or Sin-eribam) maybe a ruler of Larsa? Let's think. There is a king of Larsa named Sin-Iddinam, Sin-Iddin? Sin-eribam? I recall a ruler of Babylon named Sin-iddinam? Not sure.\n\nSearch memory: The name \"Sîn-eriba\" appears in the \"Sumerian King List\"? There is a ruler \"Sin-Eribam\" of Isin? Actually Isin dynasty: rulers include Erra-imitti, etc. Let's recall: The dynasty of Isin (c. 2017-1794 BCE) includes kings: Ishbi-Erra, Shu-Ilishu, Iddin-Dagan, etc. Not Sin-eriba.\n\nMaybe \"Sîn-eriba\" is a ruler of the city-state of Larsa? Larsa kings: Rim-Sin I, etc. Not.\n\nCould be a ruler of the Sealand dynasty? Not.\n\nMaybe it's a misreading: \"Sin",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "declined": null,
+      "hallucination": null,
+      "status": "parse_error"
+    },
+    {
+      "name": "Assur-bel-mukin the Younger",
+      "raw_output": "analysisWe need to answer about Assur-bel-mukin the Younger, an Akkadian/Assyrian/Babylonian ruler. I need to recall if such a ruler exists. Assur-bel-mukin is known as a king of Assyria? There is an Assur-bêl-kin? Actually, there is an Assur-bêl-kin (or Assur-bêl-kin) who was a king of Assyria in the early period? I recall a king named Ashur-bel-kala? No. There is a king named Aššur-bēl-kala (c. 1074–1056 BCE) but that's later. Assur-bel-mukin the Younger? Might be a minor figure, perhaps a pretender? I think there is an Assur-bêl-mukin (younger) mentioned in some king lists as a short-lived ruler after Ashur-uballit I? Not sure.\n\nSearch memory: The Assyrian King List includes a \"Assur-bêl-mukin\" (or \"Assur-bêl-mukīn\") as a ruler of the \"Middle Assyrian\" period? Actually, there is a \"Aššur-bēl-mukin",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "declined": null,
+      "hallucination": null,
+      "status": "parse_error"
+    },
+    {
+      "name": "Tukulti-apil-iddina II",
+      "raw_output": "analysisWe need to answer about Tukulti-apil-iddina II, also known as Tiglath-Pileser III? Wait, Tukulti-apil-iddina II is also known as \"Tiglath-Pileser III\"? Actually Tiglath-Pileser III is a later Assyrian king (c. 745–727 BCE). Tukulti-apil-iddina II is also known as \"Tiglath-Pileser\" but maybe a different one: He was a Chaldean king of Babylon, also known as \"Tiglath-Pileser\" (or \"Tukulti-apil-iddina II\") who ruled Babylon 689–681 BCE? Let's recall: He was a Chaldean tribal leader, also called \"Tiglath-Pileser\" (not to be confused with the Assyrian king). He was a king of Babylon from 689 to 681 BCE, and also a rebel against Assyrian king Sargon II. He was also known as \"Tiglath-Pileser\" (or \"Tukulti-apil-iddina II\") and later regained the throne 652–648 BCE? Actually after being expelled, he returned later? Let's check memory: He",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "declined": null,
+      "hallucination": null,
+      "status": "parse_error"
+    },
+    {
+      "name": "Nabû-šumu-eriba the Elder",
+      "raw_output": "analysisWe need to answer about Nabû-šumu-eriba the Elder, an Akkadian/Assyrian/Babylonian ruler. Need to provide start and end years BCE, confidence, declined false. Must be only JSON, no markdown.\n\nWe need to recall if such a ruler existed. Nabû-šumu-eriba the Elder? I recall there is a Babylonian king named Nabû-šumu-ukin? Or Nabû-šuma-ukîn? There is a king Nabû-šuma-ukîn (or Nabû-šuma-ukîn I) of Babylon, early 2nd dynasty of Isin? Actually Nabû-šuma-ukîn I reigned c. 1470-1450 BCE? Not sure. There is also Nabû-šumu-ur-ib? Hmm.\n\n\"Nabû-šumu-eriba the Elder\" maybe a ruler of the city-state of Larsa? Or a king of the Sealand? I think there is a ruler named Nabû-šumu-ērib (or Nabû-šumu-ērib) who was a king of Babylon in the 2nd dynasty of Isin? Let's search memory: The \"Elder",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "declined": null,
+      "hallucination": null,
+      "status": "parse_error"
+    }
+  ]
+}

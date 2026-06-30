@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 5,
+  "input_value": "Assur-bel-mukin the Younger",
+  "fill": {
+    "ruler": "Assur-bel-mukin the Younger"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Assur-bel-mukin the Younger reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "analysisWe need to answer about Assur-bel-mukin the Younger, an Akkadian/Assyrian/Babylonian ruler. I need to recall if such a ruler exists. Assur-bel-mukin is known as a king of Assyria? There is an Assur-bêl-kin? Actually, there is an Assur-bêl-kin (or Assur-bêl-kin) who was a king of Assyria in the early period? I recall a king named Ashur-bel-kala? No. There is a king named Aššur-bēl-kala (c. 1074–1056 BCE) but that's later. Assur-bel-mukin the Younger? Might be a minor figure, perhaps a pretender? I think there is an Assur-bêl-mukin (younger) mentioned in some king lists as a short-lived ruler after Ashur-uballit I? Not sure.\n\nSearch memory: The Assyrian King List includes a \"Assur-bêl-mukin\" (or \"Assur-bêl-mukīn\") as a ruler of the \"Middle Assyrian\" period? Actually, there is a \"Aššur-bēl-mukin",
+  "model_path": "openai/gpt-oss-120b",
+  "max_new_tokens": 256,
+  "timestamp": "2026-06-30T18:21:06.120758"
+}

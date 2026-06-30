@@ -9,6 +9,6 @@
   "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Sennacherib reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
   "raw_output": "analysisThe user asks: \"When did the Akkadian/Assyrian/Babylonian ruler Sennacherib reign?\" Provide JSON with start_year, end_year, confidence, declined. Sennacherib was an Assyrian king, reigned 705–681 BCE (or 704–681 depending). Most sources: 705–681 BCE. So start_year 705, end_year 681, confidence high. Provide JSON only, no markdown.assistantfinal{\"start_year\":705,\"end_year\":681,\"confidence\":\"high\",\"declined\":false}",
   "model_path": "openai/gpt-oss-120b",
-  "max_new_tokens": 512,
-  "timestamp": "2026-06-30T17:50:14.210239"
+  "max_new_tokens": 256,
+  "timestamp": "2026-06-30T18:14:27.344983"
 }

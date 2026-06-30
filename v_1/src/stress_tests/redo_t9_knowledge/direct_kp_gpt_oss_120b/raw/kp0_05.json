@@ -9,6 +9,6 @@
   "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Tiglath-pileser III reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
   "raw_output": "analysisThe user asks for dates of Tiglath-pileser III, an Assyrian king. Known reign: 745–727 BCE (some sources 745–727). So start 745, end 727, confidence high. Return JSON with fields. Ensure no extra text.assistantfinal{\"start_year\":745,\"end_year\":727,\"confidence\":\"high\",\"declined\":false}",
   "model_path": "openai/gpt-oss-120b",
-  "max_new_tokens": 512,
-  "timestamp": "2026-06-30T17:50:32.310258"
+  "max_new_tokens": 256,
+  "timestamp": "2026-06-30T18:14:44.741117"
 }

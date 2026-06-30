@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 4,
+  "input_value": "Sîn-eriba-bel",
+  "fill": {
+    "ruler": "Sîn-eriba-bel"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Sîn-eriba-bel reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "analysisWe need to answer about Sîn-eriba-bel, an Akkadian/Assyrian/Babylonian ruler. I need to recall if such a ruler existed. Sîn-eriba-bel? Possibly a king of Isin? Actually Sîn-eriba (or Sin-eribam) maybe a ruler of Larsa? Let's think. There is a king of Larsa named Sin-Iddinam, Sin-Iddin? Sin-eribam? I recall a ruler of Babylon named Sin-iddinam? Not sure.\n\nSearch memory: The name \"Sîn-eriba\" appears in the \"Sumerian King List\"? There is a ruler \"Sin-Eribam\" of Isin? Actually Isin dynasty: rulers include Erra-imitti, etc. Let's recall: The dynasty of Isin (c. 2017-1794 BCE) includes kings: Ishbi-Erra, Shu-Ilishu, Iddin-Dagan, etc. Not Sin-eriba.\n\nMaybe \"Sîn-eriba\" is a ruler of the city-state of Larsa? Larsa kings: Rim-Sin I, etc. Not.\n\nCould be a ruler of the Sealand dynasty? Not.\n\nMaybe it's a misreading: \"Sin",
+  "model_path": "openai/gpt-oss-120b",
+  "max_new_tokens": 256,
+  "timestamp": "2026-06-30T18:20:54.684024"
+}

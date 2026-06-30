@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 7,
+  "input_value": "Nabû-šumu-eriba the Elder",
+  "fill": {
+    "ruler": "Nabû-šumu-eriba the Elder"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Nabû-šumu-eriba the Elder reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "analysisWe need to answer about Nabû-šumu-eriba the Elder, an Akkadian/Assyrian/Babylonian ruler. Need to provide start and end years BCE, confidence, declined false. Must be only JSON, no markdown.\n\nWe need to recall if such a ruler existed. Nabû-šumu-eriba the Elder? I recall there is a Babylonian king named Nabû-šumu-ukin? Or Nabû-šuma-ukîn? There is a king Nabû-šuma-ukîn (or Nabû-šuma-ukîn I) of Babylon, early 2nd dynasty of Isin? Actually Nabû-šuma-ukîn I reigned c. 1470-1450 BCE? Not sure. There is also Nabû-šumu-ur-ib? Hmm.\n\n\"Nabû-šumu-eriba the Elder\" maybe a ruler of the city-state of Larsa? Or a king of the Sealand? I think there is a ruler named Nabû-šumu-ērib (or Nabû-šumu-ērib) who was a king of Babylon in the 2nd dynasty of Isin? Let's search memory: The \"Elder",
+  "model_path": "openai/gpt-oss-120b",
+  "max_new_tokens": 256,
+  "timestamp": "2026-06-30T18:21:28.877146"
+}

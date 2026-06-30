@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 3,
+  "input_value": "Marduk-mukin-šarru",
+  "fill": {
+    "ruler": "Marduk-mukin-šarru"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Marduk-mukin-šarru reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "analysisWe need to answer about Marduk-mukin-šarru, an Akkadian/Assyrian/Babylonian ruler. I need to recall if such a ruler existed. Marduk-mukin-šarru (also Marduk-mukīn-šarru) might be a Babylonian king of the 2nd dynasty of Isin? Actually Marduk-mukin-šarru is known as a king of Babylon in the 2nd dynasty of Isin? Let's think.\n\nMarduk-mukin-šarru (also Marduk-mukīn-šarru) appears in the \"Chronicle of the Kings of Babylon\"? I recall a king named Marduk-mukin-šar (Marduk-mukīn-šar) who reigned briefly around 1155 BCE? Wait.\n\nThere is a Kassite period king named Marduk-apla-iddina I, Marduk-apla-iddina II, etc. Marduk-mukin-šarru might be a short-lived ruler during the 7th century BCE? Actually there is a king of Babylon named Marduk-mukin-šar (Marduk-mukīn-",
+  "model_path": "openai/gpt-oss-120b",
+  "max_new_tokens": 256,
+  "timestamp": "2026-06-30T18:20:43.272517"
+}

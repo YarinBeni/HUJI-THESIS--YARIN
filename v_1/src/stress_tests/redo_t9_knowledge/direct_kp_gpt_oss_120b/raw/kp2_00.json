@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 0,
+  "input_value": "Nabu-šarru-iddina the Lesser",
+  "fill": {
+    "ruler": "Nabu-šarru-iddina the Lesser"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Nabu-šarru-iddina the Lesser reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "analysisWe need to answer about Nabu-šarru-iddina the Lesser, an Akkadian/Assyrian/Babylonian ruler. Need to provide start and end years BCE, confidence, declined false. Must be only JSON, no extra text.\n\nWe need to recall if such a ruler existed. Nabu-šarru-iddina (also known as Nabû-šarru-iddina) is a Babylonian king. There were two: Nabû-šarru-iddina I (also called Nabu-shar-iddin?) Actually, there is a king Nabû-šarru-iddina (also known as Nabu-sharru-iddina) who reigned in Babylon around 747-734 BCE? Wait that's Nabu-shuma-ishkun? Let's think.\n\nNabû-šarru-iddina (also known as Nabu-sharru-iddina) was a king of Babylon, a short-lived ruler after the fall of the Assyrian empire? Actually, there is a king Nabu-šarru-iddina (also called Nabu-sharru-iddina) who reigned c. 747–734 BCE? No, that",
+  "model_path": "openai/gpt-oss-120b",
+  "max_new_tokens": 256,
+  "timestamp": "2026-06-30T18:20:11.956792"
+}
