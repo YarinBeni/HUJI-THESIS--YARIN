@@ -1,0 +1,39 @@
+=== J4 king-extract thalesian_akk300m (Thalesian/AKK_300m, encoder) === job 12200_3 g0375 Tue Jun 30 18:13:34 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              main       -> FETCH_HEAD
+fatal: Cannot rebase onto multiple branches.
+WARN pull failed
+Invalid model-index. Not loading eval results into CardData.
+Fetching 10 files:   0%|          | 0/10 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 10 files:  10%|█         | 1/10 [00:00<00:06,  1.32it/s]Fetching 10 files:  30%|███       | 3/10 [00:00<00:01,  3.65it/s]Fetching 10 files:  60%|██████    | 6/10 [00:10<00:08,  2.11s/it]Fetching 10 files: 100%|██████████| 10/10 [00:10<00:00,  1.08s/it]
+Invalid model-index. Not loading eval results into CardData.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/204 [00:00<?, ?it/s]Loading weights:  20%|█▉        | 40/204 [00:00<00:00, 394.04it/s]Loading weights:  39%|███▉      | 80/204 [00:00<00:00, 344.14it/s]Loading weights:  56%|█████▋    | 115/204 [00:00<00:00, 288.85it/s]Loading weights:  71%|███████   | 145/204 [00:00<00:00, 262.18it/s]Loading weights:  88%|████████▊ | 180/204 [00:00<00:00, 286.92it/s]Loading weights: 100%|██████████| 204/204 [00:04<00:00, 49.84it/s] 
+The tied weights mapping and config for this model specifies to tie shared.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+[thalesian_akk300m] 0/1202 found=1 (0s)
+[thalesian_akk300m] 200/1202 found=70 (3s)
+[thalesian_akk300m] 400/1202 found=171 (6s)
+[thalesian_akk300m] 600/1202 found=274 (8s)
+[thalesian_akk300m] 800/1202 found=315 (10s)
+[thalesian_akk300m] 1000/1202 found=360 (13s)
+[thalesian_akk300m] 1200/1202 found=450 (15s)
+[thalesian_akk300m] DONE  coverage=0.374 (450/1202)  layers=9
+[W630 18:14:31.544758777 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+[main 5dc6cb96] J4: king-token acts thalesian_akk300m (job 12200_3)
+ 4 files changed, 24 insertions(+)
+ create mode 100644 v_1/src/linear_probing/results/orcc__embed/activations/thalesian_akk300m_tier0_kinglast/king_coverage.json
+ create mode 100644 v_1/src/linear_probing/results/orcc__embed/activations/thalesian_akk300m_tier0_kinglast/metadata.json
+ create mode 100644 v_1/src/linear_probing/results/orcc__embed/activations/thalesian_akk300m_tier0_kingmean/king_coverage.json
+ create mode 100644 v_1/src/linear_probing/results/orcc__embed/activations/thalesian_akk300m_tier0_kingmean/metadata.json
+error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+=== Done thalesian_akk300m. Tue Jun 30 18:15:19 UTC 2026 ===

@@ -1,0 +1,11 @@
+=== J4 king-extract qwen3_8b (Qwen/Qwen3-8B, causal) === job 12200_1 g0375 Tue Jun 30 18:13:34 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              main       -> FETCH_HEAD
+fatal: Cannot rebase onto multiple branches.
+WARN pull failed
+Fetching 15 files:   0%|          | 0/15 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 15 files:   7%|▋         | 1/15 [00:00<00:10,  1.29it/s]Fetching 15 files:  20%|██        | 3/15 [00:00<00:03,  3.67it/s]Fetching 15 files:  47%|████▋     | 7/15 [00:17<00:22,  2.83s/it]Fetching 15 files:  53%|█████▎    | 8/15 [00:18<00:17,  2.50s/it]Fetching 15 files: 100%|██████████| 15/15 [00:18<00:00,  1.22s/it]
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   0%|          | 1/399 [00:04<29:26,  4.44s/it]Loading weights:   1%|          | 2/399 [00:06<19:03,  2.88s/it]Loading weights:   1%|          | 4/399 [00:06<07:22,  1.12s/it]Loading weights:   1%|▏         | 5/399 [00:06<05:22,  1.22it/s]Loading weights:   2%|▏         | 6/399 [00:06<04:03,  1.61it/s]Loading weights:   3%|▎         | 10/399 [00:06<01:34,  4.11it/s]Loading weights:   4%|▍         | 15/399 [00:06<00:49,  7.72it/s]Loading weights:   5%|▍         | 18/399 [00:07<00:44,  8.48it/s]Loading weights:   6%|▌         | 24/399 [00:07<00:26, 14.19it/s]Loading weights:   7%|▋         | 28/399 [00:07<00:30, 12.17it/s]Loading weights:   9%|▊         | 34/399 [00:07<00:20, 17.54it/s]Loading weights:  10%|▉         | 38/399 [00:08<00:28, 12.71it/s]Loading weights:  10%|█         | 41/399 [00:08<00:26, 13.44it/s]/var/spool/slurmd/job12208/slurm_script: line 36: 326874 Bus error               (core dumped) python -u v_1/src/stress_tests/p1_gurnee_tegmark/extract_king_acts.py --hfid "$H" --method "$M" --arch "$A" --max-tokens 512
+FAILED extract qwen3_8b

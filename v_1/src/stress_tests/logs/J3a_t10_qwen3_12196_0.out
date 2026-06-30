@@ -1,0 +1,84 @@
+=== J3a T10 qwen3_1b7 (Qwen/Qwen3-1.7B) === job 12196_0 g0377 Tue Jun 30 18:13:34 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              main       -> FETCH_HEAD
+fatal: Cannot rebase onto multiple branches.
+WARN pull failed
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:29, 10.33it/s]Loading weights:   1%|▏         | 4/311 [00:00<00:32,  9.37it/s]Loading weights:  20%|█▉        | 61/311 [00:00<00:01, 166.89it/s]Loading weights:  39%|███▉      | 122/311 [00:00<00:00, 287.16it/s]Loading weights:  52%|█████▏    | 161/311 [00:00<00:00, 308.71it/s]Loading weights:  65%|██████▌   | 203/311 [00:00<00:00, 333.80it/s]Loading weights:  79%|███████▉  | 247/311 [00:00<00:00, 343.92it/s]Loading weights:  92%|█████████▏| 285/311 [00:01<00:00, 304.91it/s]Loading weights: 100%|██████████| 311/311 [00:01<00:00, 267.64it/s]
+The tied weights mapping and config for this model specifies to tie model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+[pv0] 0/1202 found=0 (3s)
+[pv0] 200/1202 found=14 (31s)
+[pv0] 400/1202 found=56 (82s)
+[pv0] 600/1202 found=87 (93s)
+[pv0] 800/1202 found=107 (110s)
+[pv0] 1000/1202 found=115 (141s)
+[pv0] 1200/1202 found=131 (152s)
+[pv0] DONE coverage=0.109 layers=29
+[W630 18:16:49.383922160 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:31,  9.78it/s]Loading weights:   1%|          | 2/311 [00:00<00:35,  8.76it/s]Loading weights:  19%|█▊        | 58/311 [00:00<00:01, 239.91it/s]Loading weights:  37%|███▋      | 115/311 [00:00<00:00, 363.42it/s]Loading weights:  55%|█████▍    | 171/311 [00:00<00:00, 431.91it/s]Loading weights:  76%|███████▌  | 235/311 [00:00<00:00, 496.06it/s]Loading weights:  94%|█████████▍| 292/311 [00:00<00:00, 515.54it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 411.17it/s]
+The tied weights mapping and config for this model specifies to tie model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+[pv1] 0/1202 found=0 (3s)
+[pv1] 200/1202 found=14 (35s)
+[pv1] 400/1202 found=56 (91s)
+[pv1] 600/1202 found=87 (103s)
+[pv1] 800/1202 found=107 (123s)
+[pv1] 1000/1202 found=115 (156s)
+[pv1] 1200/1202 found=131 (169s)
+[pv1] DONE coverage=0.109 layers=29
+[W630 18:20:10.894743257 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:49,  6.30it/s]Loading weights:  20%|█▉        | 61/311 [00:00<00:01, 186.58it/s]Loading weights:  41%|████      | 127/311 [00:00<00:00, 327.77it/s]Loading weights:  62%|██████▏   | 193/311 [00:00<00:00, 425.22it/s]Loading weights:  83%|████████▎ | 259/311 [00:00<00:00, 493.05it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 389.01it/s]
+The tied weights mapping and config for this model specifies to tie model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+[pv2] 0/1202 found=0 (3s)
+[pv2] 200/1202 found=14 (38s)
+[pv2] 400/1202 found=56 (100s)
+[pv2] 600/1202 found=87 (117s)
+[pv2] 800/1202 found=107 (142s)
+[pv2] 1000/1202 found=115 (179s)
+[pv2] 1200/1202 found=131 (198s)
+[pv2] DONE coverage=0.109 layers=29
+[W630 18:24:32.641275297 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:36,  8.56it/s]Loading weights:  20%|█▉        | 61/311 [00:00<00:01, 227.53it/s]Loading weights:  41%|████      | 127/311 [00:00<00:00, 374.69it/s]Loading weights:  62%|██████▏   | 193/311 [00:00<00:00, 465.97it/s]Loading weights:  83%|████████▎ | 259/311 [00:00<00:00, 525.89it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 435.75it/s]
+The tied weights mapping and config for this model specifies to tie model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+[pv3] 0/1202 found=0 (3s)
+[pv3] 200/1202 found=14 (32s)
+[pv3] 400/1202 found=56 (86s)
+[pv3] 600/1202 found=87 (99s)
+[pv3] 800/1202 found=107 (118s)
+[pv3] 1000/1202 found=115 (150s)
+[pv3] 1200/1202 found=131 (163s)
+[pv3] DONE coverage=0.109 layers=29
+[W630 18:28:02.489466284 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+qwen3_1b7 pv0  mean      best-year-spearman=0.479
+qwen3_1b7 pv0  king_last best-year-spearman=0.667
+qwen3_1b7 pv0  king_mean best-year-spearman=0.684
+qwen3_1b7 pv1  mean      best-year-spearman=0.459
+qwen3_1b7 pv1  king_last best-year-spearman=0.734
+qwen3_1b7 pv1  king_mean best-year-spearman=-0.229
+qwen3_1b7 pv2  mean      best-year-spearman=0.474
+qwen3_1b7 pv2  king_last best-year-spearman=0.646
+qwen3_1b7 pv2  king_mean best-year-spearman=0.464
+qwen3_1b7 pv3  mean      best-year-spearman=0.457
+qwen3_1b7 pv3  king_last best-year-spearman=0.732
+qwen3_1b7 pv3  king_mean best-year-spearman=-0.253
+wrote v_1/src/stress_tests/redo_t10_prompt/results/qwen3_1b7__t10_king_summary.json
+[main d680195a] J3a: T10 prompt-reprobe (mean+king) qwen3_1b7 (job 12196_0)
+ 1 file changed, 36437 insertions(+)
+ create mode 100644 v_1/src/stress_tests/redo_t10_prompt/results/qwen3_1b7__t10_king_summary.json
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              main       -> FETCH_HEAD
+   6e3f7fad..185d81f5  main       -> origin/main
+Rebasing (1/1)[KSuccessfully rebased and updated refs/heads/main.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   185d81f5..73c5cbf8  HEAD -> main
+=== Done qwen3_1b7. Tue Jun 30 18:33:09 UTC 2026 ===

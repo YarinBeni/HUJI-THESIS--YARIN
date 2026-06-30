@@ -1,0 +1,22 @@
+=== J4 king-extract umt5_base (google/umt5-base, encoder) === job 12200_5 g0379 Tue Jun 30 18:13:34 UTC 2026
+/var/spool/slurmd/job12200/slurm_script: line 30: 112713 Bus error               (core dumped) git pull --rebase origin main
+WARN pull failed
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 9 files:  11%|█         | 1/9 [00:00<00:03,  2.37it/s]Fetching 9 files:  22%|██▏       | 2/9 [00:00<00:01,  3.88it/s]Fetching 9 files:  56%|█████▌    | 5/9 [00:25<00:24,  6.06s/it]Fetching 9 files: 100%|██████████| 9/9 [00:25<00:00,  2.85s/it]
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/p1_gurnee_tegmark/extract_king_acts.py", line 128, in <module>
+    run(parse_args())
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/p1_gurnee_tegmark/extract_king_acts.py", line 47, in run
+    tok, core, _model = xl.load_model(args.hfid, args.arch)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/shared/extract_lib.py", line 59, in load_model
+    model = AutoModelForSeq2SeqLM.from_pretrained(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/models/auto/auto_factory.py", line 319, in from_pretrained
+    config, kwargs = AutoConfig.from_pretrained(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1471, in from_pretrained
+    raise ValueError(
+ValueError: Unrecognized model in google/umt5-base. Should have a `model_type` key in its config.json.
+[W630 18:14:23.324431721 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+FAILED extract umt5_base
