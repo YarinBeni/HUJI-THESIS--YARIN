@@ -1,0 +1,14 @@
+{
+  "variant": "kp0",
+  "input_idx": 4,
+  "input_value": "Nebuchadnezzar II",
+  "fill": {
+    "ruler": "Nebuchadnezzar II"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Nebuchadnezzar II reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's see. The user is asking about the reign dates of Nebuchadnezzar II, specifying whether he was Akkadian, Assyrian, or Babylonian. First, I need to confirm which of these he belongs to. Nebuchadnezzar II is a well-known Babylonian king, right? He's famous for events like the destruction of Jerusalem and the Babylonian Captivity.\n\nNow, I need to recall his reign dates. From what I remember, his reign started around 605 BCE. He became king after the Battle of Carchemish, which was a significant event where the Babylonians defeated the Egyptians. His reign ended with his death, which I think was around 562 BCE. So the start year would be 605 and end year 562. \n\nConfidence level: I'm pretty sure about these dates because they are commonly cited in historical sources. However, sometimes there might be slight variations depending on the source, but the general consensus is around those years. So the confidence should be \"high\". \n\nAlso, the user mentioned if the ruler isn't known, return declined as true. But Nebuchadnezzar II is a major figure, so declined is false. Let me double-check to make sure I'm not mixing him up with another ruler. Yes, Nebuchadnezzar II of Babylon, also known as Nebuchadrezzar in the Bible. His reign is well-documented in both Babylonian records and biblical texts. The dates 605-562 BCE are standard in most historical references. So the JSON should have start_year 605, end_year 562, confidence high, and declined false.\n</think>\n\n{\"start_year\": 605, \"end_year\": 562, \"confidence\": \"high\", \"declined\": false}",
+  "model_path": "Qwen/Qwen3-32B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-06-30T17:51:26.896204"
+}

@@ -1,0 +1,14 @@
+{
+  "variant": "kp0",
+  "input_idx": 1,
+  "input_value": "Sennacherib",
+  "fill": {
+    "ruler": "Sennacherib"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Sennacherib reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's see. The user is asking about the reign dates of Sennacherib. First, I need to determine which of the three mentioned cultures he belongs to: Akkadian, Assyrian, or Babylonian. Sennacherib is a well-known Assyrian king. I remember that he was a significant figure in the Neo-Assyrian Empire.\n\nNow, for his reign dates. From what I recall, Sennacherib ruled from around 704 BCE to 681 BCE. Let me verify that. Checking historical records, yes, he became king after the death of his father, Sargon II, in 705 BCE. His reign started in 704. He was assassinated in 681 BCE, which marks the end of his reign. \n\nConfidence level here is high because these dates are well-documented in historical sources, including Assyrian royal inscriptions and other contemporary records. There's no significant discrepancy among scholars regarding these dates. The user also mentioned \"declined,\" which in this context probably refers to whether the information is declined or not. Since we have the dates, \"declined\" should be false. \n\nSo the JSON should have start_year 704, end_year 681, confidence high, and declined false. I need to make sure there are no typos in the numbers. Let me double-check once more. Yes, 704 to 681 BCE is correct for Sennacherib's reign as the Assyrian king.\n</think>\n\n{\"start_year\": 704, \"end_year\": 681, \"confidence\": \"high\", \"declined\": false}",
+  "model_path": "Qwen/Qwen3-32B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-06-30T17:50:43.328026"
+}

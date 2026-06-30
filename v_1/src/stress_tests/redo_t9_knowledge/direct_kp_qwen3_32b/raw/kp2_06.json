@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 6,
+  "input_value": "Tukulti-apil-iddina II",
+  "fill": {
+    "ruler": "Tukulti-apil-iddina II"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Tukulti-apil-iddina II reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's see. The user is asking about the reign dates of Tukulti-apil-iddina II, specifying whether he was Akkadian, Assyrian, or Babylonian. First, I need to check if this ruler exists in historical records.\n\nI recall that Tukulti-apil-iddina is a name that appears in the context of Babylonian history. There was a Tukulti-apil-iddina I who ruled in the 12th century BCE, part of the Kassite dynasty. But the user is asking about Tukulti-apil-iddina II. \n\nLooking into Babylonian kings, I don't remember a second Tukulti-apil-iddina. The name might be confused with another ruler. For Assyrian kings, the name doesn't ring a bell. Akkadian rulers are from much earlier, around the 24th-22nd centuries BCE, so that's unlikely. \n\nMaybe there's a confusion with the name. For example, there was a Tukulti-Ninurta I of Assyria, but that's a different name. Alternatively, the user might have mixed up the names. \n\nSince I can't find any historical records of a Tukulti-apil-iddina II in any of the mentioned empires, the correct response would be to indicate that the ruler is unknown. Therefore, the JSON should have null for start and end years, low confidence, and declined set to true.\n</think>\n\n{\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "model_path": "Qwen/Qwen3-32B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-06-30T17:55:34.023027"
+}
