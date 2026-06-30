@@ -1,0 +1,25 @@
+=== J5 P3 anchors thalesian_cunei400m === job 12175_4 g0379 Tue Jun 30 17:45:05 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              claude/stress-test-timeline-analysis-9sh2vs -> FETCH_HEAD
+fatal: Cannot rebase onto multiple branches.
+WARN pull failed
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/303 [00:00<?, ?it/s]Loading weights:   4%|▍         | 12/303 [00:00<00:03, 91.14it/s]Loading weights:   9%|▉         | 28/303 [00:00<00:02, 120.55it/s]Loading weights:  18%|█▊        | 54/303 [00:00<00:01, 164.57it/s]Loading weights:  29%|██▉       | 89/303 [00:00<00:00, 224.46it/s]Loading weights:  37%|███▋      | 112/303 [00:00<00:00, 214.11it/s]Loading weights:  44%|████▍     | 134/303 [00:00<00:01, 121.07it/s]Loading weights:  52%|█████▏    | 158/303 [00:01<00:01, 144.32it/s]Loading weights:  60%|██████    | 183/303 [00:01<00:00, 151.61it/s]Loading weights:  67%|██████▋   | 202/303 [00:01<00:00, 140.34it/s]Loading weights:  72%|███████▏  | 219/303 [00:01<00:00, 136.08it/s]Loading weights:  78%|███████▊  | 235/303 [00:01<00:00, 133.48it/s]Loading weights:  83%|████████▎ | 250/303 [00:01<00:00, 125.92it/s]Loading weights:  87%|████████▋ | 264/303 [00:02<00:00, 84.47it/s] Loading weights:  91%|█████████ | 275/303 [00:02<00:00, 73.50it/s]Loading weights:  97%|█████████▋| 295/303 [00:02<00:00, 89.56it/s]Loading weights: 100%|██████████| 303/303 [00:03<00:00, 80.04it/s]
+[thalesian_cunei400m] anchor 0/153
+[thalesian_cunei400m] anchor 50/153
+[thalesian_cunei400m] anchor 100/153
+[thalesian_cunei400m] anchor 150/153
+[thalesian_cunei400m] DONE 153 anchors x 13 layers
+[main 10ed3009] J5: P3 anchors thalesian_cunei400m (job 12175_4)
+ 2 files changed, 927 insertions(+)
+ create mode 100644 v_1/src/stress_tests/p3_matter_of_time/anchors/thalesian_cunei400m/anchors.json
+ create mode 100644 v_1/src/stress_tests/p3_matter_of_time/anchors/thalesian_cunei400m/metadata.json
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              claude/stress-test-timeline-analysis-9sh2vs -> FETCH_HEAD
+Current branch main is up to date.
+error: src refspec claude/stress-test-timeline-analysis-9sh2vs does not match any
+error: failed to push some refs to 'https://github.com/YarinBeni/HUJI-THESIS--YARIN.git'
+WARN push failed
+=== Done thalesian_cunei400m. Tue Jun 30 17:45:42 UTC 2026 ===

@@ -1,0 +1,75 @@
+=== J2b T9 gpt_oss_120b (openai/gpt-oss-120b) === job 12168 g0377 Tue Jun 30 17:45:05 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              claude/stress-test-timeline-analysis-9sh2vs -> FETCH_HEAD
+fatal: Cannot rebase onto multiple branches.
+WARN pull failed
+[run_kp] Loading model: openai/gpt-oss-120b
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+MXFP4 quantization requires Triton and kernels installed: CUDA requires Triton >= 3.4.0, XPU requires Triton >= 3.5.0, we will default to dequantizing the model to bf16
+Loading weights:   0%|          | 0/615 [00:00<?, ?it/s]Loading weights:   0%|          | 1/615 [00:03<37:32,  3.67s/it]Loading weights:   1%|          | 5/615 [00:17<34:37,  3.41s/it]Loading weights:   1%|          | 7/615 [00:31<48:45,  4.81s/it]Loading weights:   4%|▎         | 22/615 [00:37<12:24,  1.26s/it]Loading weights:   9%|▉         | 56/615 [00:37<03:16,  2.84it/s]Loading weights:  12%|█▏        | 75/615 [00:37<02:01,  4.43it/s]Loading weights:  17%|█▋        | 107/615 [00:37<01:02,  8.19it/s]Loading weights:  20%|██        | 126/615 [00:37<00:43, 11.23it/s]Loading weights:  26%|██▌       | 158/615 [00:46<01:18,  5.80it/s]Loading weights:  28%|██▊       | 170/615 [00:57<02:09,  3.43it/s]Loading weights:  28%|██▊       | 175/615 [01:03<02:54,  2.52it/s]Loading weights:  30%|██▉       | 183/615 [01:06<02:45,  2.60it/s]Loading weights:  31%|███       | 192/615 [01:11<02:59,  2.36it/s]Loading weights:  37%|███▋      | 226/615 [01:11<01:15,  5.16it/s]Loading weights:  40%|███▉      | 245/615 [01:11<00:50,  7.33it/s]Loading weights:  45%|████▌     | 277/615 [01:11<00:27, 12.40it/s]Loading weights:  48%|████▊     | 296/615 [01:12<00:19, 16.42it/s]Loading weights:  53%|█████▎    | 328/615 [01:22<00:46,  6.12it/s]Loading weights:  54%|█████▎    | 330/615 [01:33<01:36,  2.96it/s]Loading weights:  56%|█████▌    | 345/615 [01:41<01:44,  2.59it/s]Loading weights:  56%|█████▌    | 345/615 [02:00<01:44,  2.59it/s]Loading weights:  56%|█████▋    | 347/615 [03:25<12:46,  2.86s/it]Loading weights:  62%|██████▏   | 379/615 [03:25<05:22,  1.37s/it]Loading weights:  65%|██████▍   | 398/615 [03:25<03:25,  1.05it/s]Loading weights:  70%|██████▉   | 430/615 [03:25<01:41,  1.83it/s]Loading weights:  73%|███████▎  | 450/615 [03:25<01:05,  2.51it/s]Loading weights:  78%|███████▊  | 481/615 [03:25<00:33,  4.01it/s]Loading weights:  78%|███████▊  | 481/615 [03:40<00:33,  4.01it/s]Loading weights:  81%|████████  | 498/615 [03:52<01:04,  1.81it/s]Loading weights:  81%|████████▏ | 500/615 [04:13<01:45,  1.09it/s]Loading weights:  87%|████████▋ | 532/615 [04:13<00:41,  2.01it/s]Loading weights:  90%|█████████ | 556/615 [04:13<00:19,  2.98it/s]Loading weights:  95%|█████████▍| 583/615 [04:13<00:07,  4.52it/s]Loading weights:  98%|█████████▊| 605/615 [04:13<00:01,  6.28it/s]Loading weights: 100%|██████████| 615/615 [04:13<00:00,  2.42it/s]
+[run_kp] Model loaded on cuda:0 in 263.4s
+[run_kp] kp0[0] 'Ashurbanipal' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/raw/kp0_00.json
+[run_kp] kp0[1] 'Sennacherib' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/raw/kp0_01.json
+[run_kp] kp0[2] 'Esarhaddon' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/raw/kp0_02.json
+[run_kp] kp0[3] 'Sargon II' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/raw/kp0_03.json
+[run_kp] kp0[4] 'Nebuchadnezzar II' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/raw/kp0_04.json
+[run_kp] kp0[5] 'Tiglath-pileser III' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/raw/kp0_05.json
+[run_kp] kp0[6] 'Nabonidus' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/raw/kp0_06.json
+[run_kp] kp0[7] 'Sîn-šarru-iškun' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/raw/kp0_07.json
+[run_kp] Done: 8 raw outputs in v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/raw
+[parse_kp] kp0: 8 records, 0 parse errors -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/parsed/kp0.json
+[score_kp] kp0: accuracy=1.000 (8/8), parse_errors=0
+[score_kp] Wrote v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/scores/kp0_metrics.json
+[run_kp] Loading model: openai/gpt-oss-120b
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+MXFP4 quantization requires Triton and kernels installed: CUDA requires Triton >= 3.4.0, XPU requires Triton >= 3.5.0, we will default to dequantizing the model to bf16
+Loading weights:   0%|          | 0/615 [00:00<?, ?it/s]Loading weights:   0%|          | 1/615 [00:02<24:54,  2.43s/it]Loading weights:   1%|          | 5/615 [00:27<57:52,  5.69s/it]Loading weights:   1%|          | 7/615 [00:46<1:12:03,  7.11s/it]Loading weights:   4%|▎         | 22/615 [00:49<15:28,  1.57s/it] Loading weights:   9%|▉         | 56/615 [00:49<04:05,  2.28it/s]Loading weights:  12%|█▏        | 75/615 [00:49<02:31,  3.57it/s]Loading weights:  17%|█▋        | 107/615 [00:49<01:16,  6.62it/s]Loading weights:  20%|██        | 126/615 [00:49<00:53,  9.11it/s]Loading weights:  26%|██▌       | 158/615 [00:52<00:46,  9.75it/s]Loading weights:  28%|██▊       | 170/615 [00:53<00:40, 11.08it/s]Loading weights:  29%|██▉       | 180/615 [00:56<00:56,  7.73it/s]Loading weights:  31%|███       | 192/615 [00:58<00:58,  7.24it/s]Loading weights:  34%|███▍      | 211/615 [00:58<00:37, 10.81it/s]Loading weights:  40%|███▉      | 243/615 [00:58<00:19, 19.00it/s]Loading weights:  43%|████▎     | 262/615 [00:58<00:14, 25.21it/s]Loading weights:  48%|████▊     | 294/615 [00:58<00:08, 39.22it/s]Loading weights:  51%|█████     | 313/615 [01:04<00:27, 11.10it/s]Loading weights:  53%|█████▎    | 328/615 [01:13<00:59,  4.80it/s]Loading weights:  55%|█████▍    | 337/615 [01:17<01:10,  3.94it/s]Loading weights:  56%|█████▌    | 345/615 [01:18<01:02,  4.32it/s]Loading weights:  59%|█████▉    | 364/615 [01:18<00:37,  6.70it/s]Loading weights:  64%|██████▍   | 396/615 [01:19<00:17, 12.26it/s]Loading weights:  67%|██████▋   | 415/615 [01:19<00:12, 16.65it/s]Loading weights:  73%|███████▎  | 447/615 [01:19<00:06, 26.72it/s]Loading weights:  76%|███████▌  | 466/615 [01:19<00:04, 34.08it/s]Loading weights:  79%|███████▊  | 483/615 [01:24<00:12, 10.49it/s]Loading weights:  84%|████████▍ | 517/615 [01:24<00:05, 17.40it/s]Loading weights:  89%|████████▉ | 549/615 [01:24<00:02, 25.99it/s]Loading weights:  92%|█████████▏| 568/615 [01:24<00:01, 32.36it/s]Loading weights:  98%|█████████▊| 600/615 [01:25<00:00, 46.81it/s]Loading weights: 100%|██████████| 615/615 [01:25<00:00,  7.23it/s]
+[run_kp] Model loaded on cuda:0 in 95.0s
+[run_kp] kp1[0] 'Neo-Assyrian' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/raw/kp1_00.json
+[run_kp] kp1[1] 'Neo-Babylonian' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/raw/kp1_01.json
+[run_kp] Done: 2 raw outputs in v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/raw
+[parse_kp] kp1: 2 records, 1 parse errors -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/parsed/kp1.json
+[score_kp] kp1: aggregate_recall=0.250 (2/8), parse_errors=1
+[score_kp] Wrote v_1/src/stress_tests/redo_t9_knowledge/direct_kp_gpt_oss_120b/scores/kp1_metrics.json
+[run_kp] Loading model: openai/gpt-oss-120b
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+MXFP4 quantization requires Triton and kernels installed: CUDA requires Triton >= 3.4.0, XPU requires Triton >= 3.5.0, we will default to dequantizing the model to bf16
+Loading weights:   0%|          | 0/615 [00:00<?, ?it/s]Loading weights:   0%|          | 1/615 [00:00<01:26,  7.10it/s]Loading weights:   1%|          | 4/615 [00:00<00:33, 18.32it/s]Loading weights:   1%|          | 6/615 [00:00<01:41,  6.03it/s]Loading weights:   1%|▏         | 8/615 [00:01<01:53,  5.36it/s]Loading weights:   4%|▎         | 22/615 [00:01<00:43, 13.49it/s]Loading weights:   4%|▍         | 24/615 [00:02<01:10,  8.43it/s]Loading weights:   9%|▉         | 56/615 [00:02<00:17, 32.55it/s]Loading weights:  12%|█▏        | 75/615 [00:02<00:11, 47.62it/s]Loading weights:  17%|█▋        | 107/615 [00:03<00:06, 77.68it/s]Loading weights:  20%|██        | 126/615 [00:03<00:05, 92.34it/s]Loading weights:  26%|██▌       | 158/615 [00:03<00:06, 70.35it/s]Loading weights:  28%|██▊       | 172/615 [00:04<00:08, 51.34it/s]Loading weights:  30%|██▉       | 182/615 [00:05<00:15, 28.74it/s]Loading weights:  34%|███▍      | 209/615 [00:05<00:09, 43.87it/s]Loading weights:  37%|███▋      | 228/615 [00:05<00:06, 55.80it/s]Loading weights:  42%|████▏     | 260/615 [00:05<00:04, 80.89it/s]Loading weights:  45%|████▌     | 279/615 [00:05<00:03, 93.53it/s]Loading weights:  51%|█████     | 311/615 [00:06<00:02, 121.35it/s]Loading weights:  54%|█████▎    | 330/615 [00:12<00:25, 10.99it/s] Loading weights:  59%|█████▉    | 362/615 [00:12<00:14, 16.99it/s]Loading weights:  62%|██████▏   | 381/615 [00:12<00:10, 21.66it/s]Loading weights:  67%|██████▋   | 413/615 [00:13<00:06, 32.39it/s]Loading weights:  70%|███████   | 432/615 [00:13<00:04, 40.02it/s]Loading weights:  75%|███████▌  | 464/615 [00:13<00:02, 57.21it/s]Loading weights:  79%|███████▊  | 484/615 [00:23<00:17,  7.52it/s]Loading weights:  84%|████████▍ | 517/615 [00:23<00:08, 11.67it/s]Loading weights:  89%|████████▉ | 549/615 [00:23<00:03, 17.15it/s]Loading weights:  93%|█████████▎| 569/615 [00:23<00:02, 21.67it/s]Loading weights:  98%|█████████▊| 600/615 [00:23<00:00, 31.21it/s]Loading weights: 100%|██████████| 615/615 [00:23<00:00, 26.06it/s]
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/round2_phase1a/run_kp.py", line 218, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/round2_phase1a/run_kp.py", line 214, in main
+    run_inference(args.variant, model_path, out_dir, max_new_tokens=args.max_new_tokens)
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/linear_probing/round2_phase1a/run_kp.py", line 145, in run_inference
+    model = AutoModelForCausalLM.from_pretrained(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/models/auto/auto_factory.py", line 374, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/modeling_utils.py", line 4157, in from_pretrained
+    accelerate_dispatch(model, hf_quantizer, device_map, offload_folder, disk_offload_index, offload_buffers)
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/integrations/accelerate.py", line 389, in accelerate_dispatch
+    dispatch_model(model, **device_map_kwargs)
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/accelerate/big_modeling.py", line 432, in dispatch_model
+    attach_align_device_hook_on_blocks(
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/accelerate/hooks.py", line 695, in attach_align_device_hook_on_blocks
+    attach_align_device_hook_on_blocks(
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/accelerate/hooks.py", line 695, in attach_align_device_hook_on_blocks
+    attach_align_device_hook_on_blocks(
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/accelerate/hooks.py", line 695, in attach_align_device_hook_on_blocks
+    attach_align_device_hook_on_blocks(
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/accelerate/hooks.py", line 653, in attach_align_device_hook_on_blocks
+    add_hook_to_module(module, hook)
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/accelerate/hooks.py", line 183, in add_hook_to_module
+    module = hook.init_hook(module)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/accelerate/hooks.py", line 305, in init_hook
+    set_module_tensor_to_device(module, name, self.execution_device, tied_params_map=self.tied_params_map)
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/accelerate/utils/modeling.py", line 335, in set_module_tensor_to_device
+    new_value = old_value.to(device, non_blocking=non_blocking)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 3.96 GiB. GPU 2 has a total capacity of 79.19 GiB of which 2.72 GiB is free. Including non-PyTorch memory, this process has 76.46 GiB memory in use. Of the allocated memory 55.89 GiB is allocated by PyTorch, and 19.97 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+FAIL run kp2

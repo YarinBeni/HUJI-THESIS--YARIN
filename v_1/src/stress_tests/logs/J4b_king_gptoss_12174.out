@@ -1,0 +1,36 @@
+=== J4b king-extract gpt_oss_120b === job 12174 g0374 Tue Jun 30 17:45:05 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              claude/stress-test-timeline-analysis-9sh2vs -> FETCH_HEAD
+fatal: Cannot rebase onto multiple branches.
+WARN pull failed
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+MXFP4 quantization requires Triton and kernels installed: CUDA requires Triton >= 3.4.0, XPU requires Triton >= 3.5.0, we will default to dequantizing the model to bf16
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/615 [00:00<?, ?it/s]Loading weights:   0%|          | 1/615 [00:12<2:08:57, 12.60s/it]Loading weights:   0%|          | 2/615 [00:12<53:45,  5.26s/it]  Loading weights:   1%|          | 5/615 [00:50<1:46:32, 10.48s/it]Loading weights:   1%|          | 7/615 [01:04<1:32:31,  9.13s/it]Loading weights:   4%|▎         | 22/615 [01:21<26:02,  2.64s/it] Loading weights:   4%|▍         | 24/615 [01:36<32:16,  3.28s/it]Loading weights:   9%|▉         | 56/615 [01:36<07:32,  1.24it/s]Loading weights:  12%|█▏        | 75/615 [01:36<04:27,  2.02it/s]Loading weights:  17%|█▋        | 107/615 [01:36<02:11,  3.88it/s]Loading weights:  20%|██        | 126/615 [01:37<01:30,  5.42it/s]Loading weights:  20%|██        | 126/615 [01:49<01:30,  5.42it/s]Loading weights:  26%|██▌       | 158/615 [04:15<16:18,  2.14s/it]Loading weights:  26%|██▌       | 160/615 [05:20<24:28,  3.23s/it]Loading weights:  28%|██▊       | 175/615 [06:04<23:04,  3.15s/it]Loading weights:  29%|██▉       | 177/615 [06:11<23:07,  3.17s/it]Loading weights:  34%|███▍      | 209/615 [06:11<10:02,  1.48s/it]Loading weights:  37%|███▋      | 228/615 [06:11<06:36,  1.02s/it]Loading weights:  42%|████▏     | 260/615 [06:12<03:28,  1.70it/s]Loading weights:  45%|████▌     | 279/615 [06:12<02:25,  2.31it/s]Loading weights:  51%|█████     | 311/615 [06:12<01:20,  3.77it/s]Loading weights:  51%|█████     | 311/615 [06:30<01:20,  3.77it/s]Loading weights:  51%|█████     | 313/615 [06:49<04:28,  1.13it/s]Loading weights:  53%|█████▎    | 328/615 [06:59<03:58,  1.20it/s]Loading weights:  54%|█████▎    | 330/615 [07:09<04:50,  1.02s/it]Loading weights:  54%|█████▎    | 330/615 [07:20<04:50,  1.02s/it]Loading weights:  56%|█████▌    | 345/615 [07:24<04:31,  1.00s/it]Loading weights:  56%|█████▋    | 347/615 [07:32<05:20,  1.20s/it]Loading weights:  62%|██████▏   | 379/615 [07:32<01:58,  1.99it/s]Loading weights:  65%|██████▍   | 398/615 [07:32<01:13,  2.95it/s]Loading weights:  70%|██████▉   | 430/615 [07:32<00:35,  5.24it/s]Loading weights:  73%|███████▎  | 449/615 [07:32<00:23,  7.13it/s]Loading weights:  78%|███████▊  | 481/615 [07:33<00:11, 11.58it/s]Loading weights:  78%|███████▊  | 481/615 [07:50<00:11, 11.58it/s]Loading weights:  79%|███████▊  | 483/615 [08:14<01:44,  1.26it/s]Loading weights:  81%|████████  | 498/615 [09:54<04:36,  2.37s/it]Loading weights:  81%|████████▏ | 500/615 [10:03<04:43,  2.47s/it]Loading weights:  87%|████████▋ | 532/615 [10:03<01:37,  1.17s/it]Loading weights:  90%|████████▉ | 551/615 [10:03<00:51,  1.23it/s]Loading weights:  95%|█████████▍| 583/615 [10:03<00:14,  2.14it/s]Loading weights:  98%|█████████▊| 602/615 [10:03<00:04,  2.90it/s]Loading weights: 100%|██████████| 615/615 [10:03<00:00,  1.02it/s]
+[gpt_oss_120b] 0/1202 found=1 (3s)
+[gpt_oss_120b] 200/1202 found=70 (23s)
+[gpt_oss_120b] 400/1202 found=171 (41s)
+[gpt_oss_120b] 600/1202 found=274 (61s)
+[gpt_oss_120b] 800/1202 found=315 (79s)
+[gpt_oss_120b] 1000/1202 found=360 (97s)
+[gpt_oss_120b] 1200/1202 found=455 (116s)
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/p1_gurnee_tegmark/extract_king_acts.py", line 128, in <module>
+    run(parse_args())
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/p1_gurnee_tegmark/extract_king_acts.py", line 104, in run
+    (d / "king_coverage.json").write_text(json.dumps(cov), encoding="utf-8")
+                                          ^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type NAType is not JSON serializable
+FAILED extract gpt_oss_120b

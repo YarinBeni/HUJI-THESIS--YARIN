@@ -1,0 +1,135 @@
+{
+  "variant": "kp0",
+  "n_inputs": 8,
+  "n_parse_errors": 0,
+  "results": [
+    {
+      "input_idx": 0,
+      "input_value": "Ashurbanipal",
+      "fill": {
+        "ruler": "Ashurbanipal"
+      },
+      "raw_output": "analysisThe user asks for dates of Ashurbanipal, an Assyrian king. Provide JSON with start_year, end_year, confidence, declined. Need to be precise: Ashurbanipal reigned c. 669–631 BCE (some sources 668–627). There's some variation. Typically 668–627 BCE. Provide confidence maybe \"high\" if we consider that as established. Could note start 668, end 627. Provide JSON only, no extra text.assistantfinal{\"start_year\": 668, \"end_year\": 627, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 668,
+        "end_year": 627,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "parse_error_reason": ""
+    },
+    {
+      "input_idx": 1,
+      "input_value": "Sennacherib",
+      "fill": {
+        "ruler": "Sennacherib"
+      },
+      "raw_output": "analysisThe user asks: \"When did the Akkadian/Assyrian/Babylonian ruler Sennacherib reign?\" Provide JSON with start_year, end_year, confidence, declined. Sennacherib was an Assyrian king, reigned 705–681 BCE (or 704–681 depending). Most sources: 705–681 BCE. So start_year 705, end_year 681, confidence high. Provide JSON only, no markdown.assistantfinal{\"start_year\":705,\"end_year\":681,\"confidence\":\"high\",\"declined\":false}",
+      "parsed": {
+        "start_year": 705,
+        "end_year": 681,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "parse_error_reason": ""
+    },
+    {
+      "input_idx": 2,
+      "input_value": "Esarhaddon",
+      "fill": {
+        "ruler": "Esarhaddon"
+      },
+      "raw_output": "analysisThe user asks for dates of Esarhaddon, an Assyrian king. Known reign: 681–669 BCE (or 681–669). Some sources say 681–669 BCE. So start 681, end 669. Confidence high. Return JSON with fields.assistantfinal{\"start_year\":681,\"end_year\":669,\"confidence\":\"high\",\"declined\":false}",
+      "parsed": {
+        "start_year": 681,
+        "end_year": 669,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "parse_error_reason": ""
+    },
+    {
+      "input_idx": 3,
+      "input_value": "Sargon II",
+      "fill": {
+        "ruler": "Sargon II"
+      },
+      "raw_output": "analysisThe user asks for Sargon II, an Assyrian king. Known reign: 722–705 BCE. So start 722, end 705. Confidence high. Return JSON with fields. No extra text.assistantfinal{\"start_year\":722,\"end_year\":705,\"confidence\":\"high\",\"declined\":false}",
+      "parsed": {
+        "start_year": 722,
+        "end_year": 705,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "parse_error_reason": ""
+    },
+    {
+      "input_idx": 4,
+      "input_value": "Nebuchadnezzar II",
+      "fill": {
+        "ruler": "Nebuchadnezzar II"
+      },
+      "raw_output": "analysisThe user asks: \"When did the Akkadian/Assyrian/Babylonian ruler Nebuchadnezzar II reign? Return ONLY a JSON object with fields start_year, end_year, confidence, declined.\" Nebuchadnezzar II was a Neo-Babylonian king, reigned 605–562 BCE (some sources 605–562). So start_year 605, end_year 562, confidence high. Provide JSON only, no markdown.assistantfinal{\"start_year\":605,\"end_year\":562,\"confidence\":\"high\",\"declined\":false}",
+      "parsed": {
+        "start_year": 605,
+        "end_year": 562,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "parse_error_reason": ""
+    },
+    {
+      "input_idx": 5,
+      "input_value": "Tiglath-pileser III",
+      "fill": {
+        "ruler": "Tiglath-pileser III"
+      },
+      "raw_output": "analysisThe user asks for dates of Tiglath-pileser III, an Assyrian king. Known reign: 745–727 BCE (some sources 745–727). So start 745, end 727, confidence high. Return JSON with fields. Ensure no extra text.assistantfinal{\"start_year\":745,\"end_year\":727,\"confidence\":\"high\",\"declined\":false}",
+      "parsed": {
+        "start_year": 745,
+        "end_year": 727,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "parse_error_reason": ""
+    },
+    {
+      "input_idx": 6,
+      "input_value": "Nabonidus",
+      "fill": {
+        "ruler": "Nabonidus"
+      },
+      "raw_output": "analysisThe user asks: \"When did the Akkadian/Assyrian/Babylonian ruler Nabonidus reign? Return ONLY a JSON object with fields start_year, end_year, confidence, declined.\" Need to provide dates for Nabonidus, the last king of the Neo-Babylonian Empire. He reigned from 556 BCE to 539 BCE (or 555-539). There is some slight variation: 556-539 BCE is common. Confidence high. So JSON: {\"start_year\": 556, \"end_year\": 539, \"confidence\": \"high\", \"declined\": false}. Ensure no extra text, no markdown.assistantfinal{\"start_year\": 556, \"end_year\": 539, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 556,
+        "end_year": 539,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "parse_error_reason": ""
+    },
+    {
+      "input_idx": 7,
+      "input_value": "Sîn-šarru-iškun",
+      "fill": {
+        "ruler": "Sîn-šarru-iškun"
+      },
+      "raw_output": "analysisWe need to answer with JSON only. The user asks about Sîn-šarru-iškun, an Akkadian/Assyrian/Babylonian ruler. Actually Sinsharishkun (also spelled Sinsharishkun) was an Assyrian king, the penultimate king of the Neo-Assyrian Empire, reigned c. 627–612 BCE. He succeeded Ashurbanipal (or his son). Dates: 627–612 BCE. Confidence high. Provide JSON.\n\nMake sure no extra text. Provide fields: start_year, end_year, confidence, declined. So:\n\n{\n  \"start_year\": 627,\n  \"end_year\": 612,\n  \"confidence\": \"high\",\n  \"declined\": false\n}\n\nReturn exactly that.assistantfinal{\"start_year\":627,\"end_year\":612,\"confidence\":\"high\",\"declined\":false}",
+      "parsed": {
+        "start_year": 627,
+        "end_year": 612,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "parse_error_reason": ""
+    }
+  ]
+}
