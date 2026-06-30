@@ -10,5 +10,5 @@
   "raw_output": "<think>\nOkay, let's see. The user is asking about Sargon II's reign dates. First, I need to confirm which Sargon they're referring to. There are a few Sargons in ancient Mesopotamian history. The most famous is Sargon of Akkad, who ruled much earlier, around the 24th century BCE. But the user mentioned Akkadian, Assyrian, and Babylonian rulers, so maybe they're thinking of a later one.\n\nSargon II was an Assyrian king. Let me recall. Assyrian kings often have similar names, so I need to be careful. Sargon II reigned in the 8th century BCE. I think his reign started around 722 BCE and ended in 705 BCE. He was known for moving the capital to Dur-Sharrukin. His successor was Sennacherib. I should check if these dates are widely accepted. Some sources might have slight variations, but generally, 722–705 BCE is the standard. The confidence here is high because these dates are well-established by historical records and archaeological evidence. The user wants a JSON object with start_year, end_year, confidence, and declined. Since I know the dates, declined is false. Let me structure that.\n</think>\n\n{\"start_year\": 722, \"end_year\": 705, \"confidence\": \"high\", \"declined\": false}",
   "model_path": "Qwen/Qwen3-32B",
   "max_new_tokens": 512,
-  "timestamp": "2026-06-30T17:51:12.701530"
+  "timestamp": "2026-06-30T18:15:03.027968"
 }
