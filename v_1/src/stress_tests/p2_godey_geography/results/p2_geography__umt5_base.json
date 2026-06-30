@@ -1,0 +1,279 @@
+{
+  "method": "umt5_base",
+  "n_rows": 1172,
+  "n_sites": 56,
+  "cleanings": {
+    "tier0": {
+      "n_layers": 13,
+      "best_layer_by_skill": 9,
+      "per_layer": {
+        "0": {
+          "lat_spearman": 0.3368771945581082,
+          "lon_spearman": 0.2014828509542445,
+          "geo": {
+            "gc_km_mean": 219.79375335434239,
+            "gc_km_median": 189.36653801331386,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.1740557932432969
+          }
+        },
+        "1": {
+          "lat_spearman": 0.3158736708358009,
+          "lon_spearman": 0.2436671372346289,
+          "geo": {
+            "gc_km_mean": 227.57066443795443,
+            "gc_km_median": 204.96661731951792,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.14483160211892043
+          }
+        },
+        "2": {
+          "lat_spearman": 0.2922490054238247,
+          "lon_spearman": 0.13119794807096496,
+          "geo": {
+            "gc_km_mean": 219.34916312748584,
+            "gc_km_median": 182.70503680639882,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.17572648095233667
+          }
+        },
+        "3": {
+          "lat_spearman": 0.33591732797843565,
+          "lon_spearman": 0.21035464905646595,
+          "geo": {
+            "gc_km_mean": 209.26816933757522,
+            "gc_km_median": 168.4032025988468,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.21360898803934925
+          }
+        },
+        "4": {
+          "lat_spearman": 0.34665272550327353,
+          "lon_spearman": 0.2037574831169932,
+          "geo": {
+            "gc_km_mean": 210.08091219743193,
+            "gc_km_median": 178.0380547135772,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.21055485093837667
+          }
+        },
+        "5": {
+          "lat_spearman": 0.3444867607508014,
+          "lon_spearman": 0.2604605257877704,
+          "geo": {
+            "gc_km_mean": 211.5104715903138,
+            "gc_km_median": 182.0931279409839,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.2051828315759251
+          }
+        },
+        "6": {
+          "lat_spearman": 0.3338004335589343,
+          "lon_spearman": 0.25952178967200884,
+          "geo": {
+            "gc_km_mean": 212.99262569365155,
+            "gc_km_median": 183.58441264526311,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.199613171035123
+          }
+        },
+        "7": {
+          "lat_spearman": 0.3291053288634703,
+          "lon_spearman": 0.25136524695263773,
+          "geo": {
+            "gc_km_mean": 212.56562492201175,
+            "gc_km_median": 183.79615044571057,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.2012177608300293
+          }
+        },
+        "8": {
+          "lat_spearman": 0.33147494040715514,
+          "lon_spearman": 0.24135926421489,
+          "geo": {
+            "gc_km_mean": 208.99137506750515,
+            "gc_km_median": 177.7685746784409,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.2146491296281744
+          }
+        },
+        "9": {
+          "lat_spearman": 0.3483377818054185,
+          "lon_spearman": 0.212328521339409,
+          "geo": {
+            "gc_km_mean": 203.0211771447787,
+            "gc_km_median": 168.14253421482135,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.23708402740034706
+          }
+        },
+        "10": {
+          "lat_spearman": 0.33159844963882473,
+          "lon_spearman": 0.19977150934775645,
+          "geo": {
+            "gc_km_mean": 204.58338031137754,
+            "gc_km_median": 168.86768555211862,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.23121355730946547
+          }
+        },
+        "11": {
+          "lat_spearman": 0.3097697209341417,
+          "lon_spearman": 0.18007492472912406,
+          "geo": {
+            "gc_km_mean": 208.17280632959893,
+            "gc_km_median": 173.09685136238414,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.21772515929957192
+          }
+        },
+        "12": {
+          "lat_spearman": 0.3425674261152277,
+          "lon_spearman": 0.22621554181644993,
+          "geo": {
+            "gc_km_mean": 210.00261305864535,
+            "gc_km_median": 178.50616565480175,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.21084908459646678
+          }
+        }
+      }
+    },
+    "maximal": {
+      "n_layers": 13,
+      "best_layer_by_skill": 4,
+      "per_layer": {
+        "0": {
+          "lat_spearman": 0.22829891065478636,
+          "lon_spearman": 0.19086577483940725,
+          "geo": {
+            "gc_km_mean": 227.57674806966293,
+            "gc_km_median": 200.47078254139146,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.14480874095799579
+          }
+        },
+        "1": {
+          "lat_spearman": 0.18117541020289546,
+          "lon_spearman": 0.13228886647688406,
+          "geo": {
+            "gc_km_mean": 245.22232639253147,
+            "gc_km_median": 229.85754340673418,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.0784999265889681
+          }
+        },
+        "2": {
+          "lat_spearman": 0.20664117948017313,
+          "lon_spearman": 0.143737074967533,
+          "geo": {
+            "gc_km_mean": 229.25257084470059,
+            "gc_km_median": 197.78792473470352,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.13851130942743795
+          }
+        },
+        "3": {
+          "lat_spearman": 0.24546147644905492,
+          "lon_spearman": 0.13593268277188497,
+          "geo": {
+            "gc_km_mean": 223.1678798770351,
+            "gc_km_median": 191.7188531616173,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.16137645085184438
+          }
+        },
+        "4": {
+          "lat_spearman": 0.279553869600888,
+          "lon_spearman": 0.17490765991873453,
+          "geo": {
+            "gc_km_mean": 216.5811588787623,
+            "gc_km_median": 183.23426546541043,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.18612812812665558
+          }
+        },
+        "5": {
+          "lat_spearman": 0.2951955763624072,
+          "lon_spearman": 0.17184021631394306,
+          "geo": {
+            "gc_km_mean": 220.92224761213123,
+            "gc_km_median": 198.69661398479195,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.16981512088407724
+          }
+        },
+        "6": {
+          "lat_spearman": 0.2926966152784081,
+          "lon_spearman": 0.18528162513714558,
+          "geo": {
+            "gc_km_mean": 221.30973548952298,
+            "gc_km_median": 191.52376445524231,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.16835901322571167
+          }
+        },
+        "7": {
+          "lat_spearman": 0.2538406561238941,
+          "lon_spearman": 0.1564129238239142,
+          "geo": {
+            "gc_km_mean": 228.824481495883,
+            "gc_km_median": 207.3570280805968,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.14011998989371177
+          }
+        },
+        "8": {
+          "lat_spearman": 0.24984440606300057,
+          "lon_spearman": 0.11372639026819491,
+          "geo": {
+            "gc_km_mean": 226.93487352434187,
+            "gc_km_median": 202.55292532903246,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.14722078658750837
+          }
+        },
+        "9": {
+          "lat_spearman": 0.26294826859761355,
+          "lon_spearman": 0.1452841962216397,
+          "geo": {
+            "gc_km_mean": 226.7219485948744,
+            "gc_km_median": 199.231314182374,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.14802091902659653
+          }
+        },
+        "10": {
+          "lat_spearman": 0.26340598244822105,
+          "lon_spearman": 0.09898125426448656,
+          "geo": {
+            "gc_km_mean": 230.779968095042,
+            "gc_km_median": 212.5083522945859,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.1327716335218092
+          }
+        },
+        "11": {
+          "lat_spearman": 0.264671374333312,
+          "lon_spearman": 0.11572916773024801,
+          "geo": {
+            "gc_km_mean": 226.58030590648568,
+            "gc_km_median": 208.6357436726201,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.1485531860092505
+          }
+        },
+        "12": {
+          "lat_spearman": 0.24627927171818947,
+          "lon_spearman": 0.1440234191575057,
+          "geo": {
+            "gc_km_mean": 228.51122570690015,
+            "gc_km_median": 203.26553203313355,
+            "centroid_km_mean": 266.1121072783148,
+            "skill_vs_centroid": 0.1412971471158565
+          }
+        }
+      }
+    }
+  }
+}
