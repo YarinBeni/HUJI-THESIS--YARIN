@@ -37,7 +37,10 @@ def _ensure_local(hf_id: str, arch: str) -> str:
     last = None
     for i in range(5):
         try:
-            path = snapshot_download(hf_id, force_download=(i == 0))
+            # No force_download: re-downloading multi-GB weights every run races
+            # with concurrent array tasks on the shared NFS cache -> half-written
+            # files -> SIGBUS on mmap load. Use cache; patch the config if needed.
+            path = snapshot_download(hf_id)
             cfg = os.path.join(path, "config.json")
             if os.path.exists(cfg):
                 with open(cfg) as f:
@@ -74,8 +77,14 @@ def load_model(hf_id: str, arch: str, dtype="bfloat16"):
 
     if arch == ARCH_CAUSAL:
         from transformers import AutoModelForCausalLM
-        model = AutoModelForCausalLM.from_pretrained(
-            path, torch_dtype=td, device_map="auto", output_hidden_states=True)
+        try:
+            model = AutoModelForCausalLM.from_pretrained(
+                path, torch_dtype=td, device_map="auto", output_hidden_states=True,
+                attn_implementation="sdpa")  # avoid materializing full attention matrix (OOM)
+        except Exception as e:  # noqa: BLE001
+            print(f"[load] sdpa failed ({type(e).__name__}); default attention", flush=True)
+            model = AutoModelForCausalLM.from_pretrained(
+                path, torch_dtype=td, device_map="auto", output_hidden_states=True)
         core = getattr(model, "model", model)  # base transformer; skips LM head
     elif arch == ARCH_ENCODER:
         # Proven load chain from round2_phase3/extract_enc_activations.py:

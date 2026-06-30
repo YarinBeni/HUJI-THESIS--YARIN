@@ -51,8 +51,14 @@ def run(args):
     tok = AutoTokenizer.from_pretrained(args.model_path, use_fast=True)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
-    model = AutoModelForCausalLM.from_pretrained(
-        args.model_path, torch_dtype=torch.bfloat16, device_map="auto", output_hidden_states=True)
+    try:
+        model = AutoModelForCausalLM.from_pretrained(
+            args.model_path, torch_dtype=torch.bfloat16, device_map="auto",
+            output_hidden_states=True, attn_implementation="sdpa")  # avoid OOM on big attention
+    except Exception as e:  # noqa: BLE001
+        print(f"[load] sdpa failed ({type(e).__name__}); default attention", flush=True)
+        model = AutoModelForCausalLM.from_pretrained(
+            args.model_path, torch_dtype=torch.bfloat16, device_map="auto", output_hidden_states=True)
     model.eval()
     core = getattr(model, "model", model)
 

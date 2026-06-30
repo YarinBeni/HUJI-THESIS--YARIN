@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=J3a_t10_qwen3
 #SBATCH --partition=voltagepark
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:2
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=128G
 #SBATCH --time=08:00:00
@@ -22,7 +22,7 @@ M="${MODELS[$SLURM_ARRAY_TASK_ID]}"; H="${HFIDS[$SLURM_ARRAY_TASK_ID]}"
 echo "=== J3a T10 ${M} (${H}) === job ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export PYTORCH_ALLOC_CONF=expandable_segments:True
 cd ~/projects/HUJI-THESIS--YARIN
 git pull --rebase origin main || echo "WARN pull failed"
 mkdir -p v_1/src/stress_tests/logs

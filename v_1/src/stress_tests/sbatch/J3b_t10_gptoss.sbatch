@@ -16,7 +16,7 @@ M=gpt_oss_120b; H=openai/gpt-oss-120b
 echo "=== J3b T10 ${M} (${H}) === job ${SLURM_JOB_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export PYTORCH_ALLOC_CONF=expandable_segments:True
 cd ~/projects/HUJI-THESIS--YARIN
 git pull --rebase origin main || echo "WARN pull failed"
 mkdir -p v_1/src/stress_tests/logs
