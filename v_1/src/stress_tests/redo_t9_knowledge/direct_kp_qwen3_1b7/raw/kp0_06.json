@@ -1,0 +1,14 @@
+{
+  "variant": "kp0",
+  "input_idx": 6,
+  "input_value": "Nabonidus",
+  "fill": {
+    "ruler": "Nabonidus"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Nabonidus reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's see. The user is asking about Nabonidus, a ruler from the Akkadian, Assyrian, or Babylonian period. I need to figure out his reign dates.\n\nFirst, I remember that Nabonidus was a king of Babylon. He was part of the Babylonian Empire. From what I recall, he reigned around the 6th century BCE. The Babylonian Empire was in decline during this time, so his reign might have been during a period of instability.\n\nI think he was the last king of the Babylonian dynasty before the Achaemenid Empire under Darius I. His reign started around 556 BCE and ended in 539 BCE. Wait, but I need to confirm the exact years. Some sources say he ruled from 556 to 539 BCE. However, there's a bit of confusion because the Babylonian Empire was in decline, and his reign might have been short. \n\nI should check if there's any historical consensus. The start year is 556 BCE, end year 539 BCE. The confidence level would be high because this is a well-documented period with records from the time. The decline field should be false because he was part of the Babylonian Empire that was declining, but he was still a ruler during that time. \n\nWait, but I need to make sure. If he was the last king before the Achaemenids, his reign would be around 556-539 BCE. So the JSON should have start_year 556, end_year 539, confidence high, and declined false. \n\nI think that's correct. No need to mention anything else. Just return the JSON with those values.\n</think>\n\n{\"start_year\": 556, \"end_year\": 539, \"confidence\": \"high\", \"declined\": false}",
+  "model_path": "Qwen/Qwen3-1.7B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-06-30T17:46:41.473471"
+}

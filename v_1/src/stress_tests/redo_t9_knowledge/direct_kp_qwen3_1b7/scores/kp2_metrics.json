@@ -1,0 +1,117 @@
+{
+  "variant": "kp2",
+  "total": 8,
+  "parse_errors": 4,
+  "scoreable": 4,
+  "declined_correctly": 1,
+  "hallucinations": 3,
+  "hallucination_rate": 0.75,
+  "gate_threshold": 0.3,
+  "gate_pass": false,
+  "per_name": [
+    {
+      "name": "Nabu-šarru-iddina the Lesser",
+      "raw_output": "<think>\nOkay, let's see. The user is asking about Nabu-šarru-iddina the Lesser. I need to figure out his reign dates. First, I should recall if I know anything about this ruler.\n\nNabu-šarru-iddina is a name that might be a variant of Nabu-zeri or another name. Wait, I remember that the Assyrian king Ashurbanipal is sometimes referred to as \"Nabu-zeri\" in some sources. But the user is asking about Nabu-šarru-iddina the Lesser. \n\nI think Nabu-šarru-iddina was a king of the Babylonian dynasty, but I'm not sure about the exact dates. The Babylonian kings often have names that are similar to their predecessors. Let me think. The reign of Nabu-šarru-iddina the Lesser might be around the time of the Babylonian Empire's decline. \n\nWait, the Babylonian Empire was in decline during the 7th century BCE. The Assyrian Empire was more powerful then. So maybe Nabu-šarru-iddina was a king during the late Babylonian period. \n\nI need to check if there are any records about his reign. The Babylonian kings list is a bit tricky. The name Nabu-šarru-iddina might be a variant of Nabu-zeri, but I'm not certain. If I can't find exact dates, I should return the default with low confidence. \n\nAlternatively, if I recall that Nabu-šarru-iddina was a king who ruled around 627 BCE, but I'm not sure. Wait, the Babylonian Empire's decline started around 627 BCE, so maybe he was a king during that time. But I need to be precise. \n\nSince I'm not certain about the exact dates, I should set the confidence to low and decline to false. The user might not have the exact information, so the answer should reflect that.\n</think>\n\n{\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+      "parsed": {
+        "start_year": null,
+        "end_year": null,
+        "confidence": "low",
+        "declined": true
+      },
+      "parse_error": false,
+      "declined": true,
+      "start_year": null,
+      "end_year": null,
+      "hallucination": false,
+      "status": "declined_correctly"
+    },
+    {
+      "name": "Esarhaddon III",
+      "raw_output": "<think>\nOkay, let's see. The user is asking about Esarhaddon III's reign. I need to recall his dates. Esarhaddon was a king of Assyria, right? He was the son of Sargon II. I remember that he ruled around the 7th century BCE. Let me think... His reign started in 680 BCE and ended in 627 BCE. I think that's correct. The confidence should be high because these dates are well-documented. The declined field should be false since he was a ruling king during that time. I don't see any ambiguity here. So the JSON should have start_year 680, end_year 627, confidence high, and declined false.\n</think>\n\n{\"start_year\": 680, \"end_year\": 627, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 680,
+        "end_year": 627,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "declined": false,
+      "start_year": 680,
+      "end_year": 627,
+      "hallucination": true,
+      "status": "hallucination"
+    },
+    {
+      "name": "Nergal-nasir-apli",
+      "raw_output": "<think>\nOkay, let's see. The user is asking about the reign of Nergal-nasir-apli, a ruler from the Akkadian, Assyrian, or Babylonian period. I need to figure out the start and end years of his reign, along with confidence and whether he declined.\n\nFirst, I recall that Nergal-nasir-apli was a king of the Babylonian dynasty. The Babylonian kings were often referred to by their names, and their reigns are recorded in historical texts. However, I'm not sure about the exact dates for this particular ruler. \n\nI remember that the Babylonian dynasty had several kings, and some of their reigns are well-documented. For example, Nebuchadnezzar II is a well-known king, but Nergal-nasir-apli might be a lesser-known figure. \n\nLooking up some references, I think Nergal-nasir-apli was a king of the Babylonian dynasty, but I don't have specific dates for his reign. The Babylonian kings often had their reigns recorded in the Babylonian Chronicles, which are part of the Assyrian and Babylonian historical records. \n\nSince I can't recall exact dates for Nergal-nasir-apli, I might need to check if there's any historical evidence. If there's no clear record, then the confidence would be low. Also, the decline of the Babylonian dynasty is a known fact, but I need to confirm if Nergal-nasir-apli was part of that decline. \n\nWait, the user wants the JSON with start_year, end_year, confidence, and declined. If I can't find the exact dates, I should return null for start and end, low confidence, and declined as false. But I need to make sure that the decline is not marked as true unless he was part of the decline. \n\nAlternatively, if there's a known period when he ruled, but I don't have that information. So, the safest answer would be to set start_year and end_year to null, confidence as low, and declined as false. That way, it's clear that the information isn't certain.\n</think>\n\n{\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": false}",
+      "parsed": {
+        "start_year": null,
+        "end_year": null,
+        "confidence": "low",
+        "declined": false
+      },
+      "parse_error": false,
+      "declined": false,
+      "start_year": null,
+      "end_year": null,
+      "hallucination": true,
+      "status": "hallucination"
+    },
+    {
+      "name": "Marduk-mukin-šarru",
+      "raw_output": "<think>\nOkay, let's see. The user is asking about the reign of Marduk-mukin-šarru. First, I need to recall if I know anything about this ruler. Marduk-mukin-šarru is a name that might be a variant of Marduk or another deity, but I'm not sure. The Akkadian, Assyrian, and Babylonian empires are well-documented, but I need to check if Marduk-mukin-šarru is a known ruler.\n\nI remember that Marduk was a significant deity in Babylonian religion, but there's also a king named Marduk-šarru, who was the king of Babylon. However, the name Marduk-mukin-šarru sounds a bit different. Maybe it's a variant spelling. Let me think. The name \"Marduk-mukin-šarru\" could be a form of Marduk-šarru, where \"mukin\" might be a variant of \"mukin\" (meaning \"king\" in Akkadian). \n\nIf I recall correctly, Marduk-šarru reigned during the late Babylonian period, around the 8th century BCE. The Babylonian Empire was established by Hammurabi, and later kings like Nebuchadnezzar II ruled. However, Marduk-šarru might have been a minor ruler or a king in a specific region. \n\nWait, I need to confirm the exact dates. If Marduk-šarru was a king, his reign would be around the 8th century BCE. The Babylonian Empire was in decline by the 6th century BCE, so if he reigned in the 8th century, that would be around 668 BCE to 627 BCE. But I'm not entirely sure about the exact years. \n\nSince the user is asking for a precise answer, and if I'm not certain, I should return the JSON with \"declined\": true. However, if I can't find the exact dates, maybe the confidence is low. But if I'm certain that Marduk-mukin-šarru reigned around 668-627 BCE, then the JSON would have those years. \n\nWait, I think I might be mixing up the names. Let me check. Marduk-šarru is a king of Babylon,",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "declined": null,
+      "hallucination": null,
+      "status": "parse_error"
+    },
+    {
+      "name": "Sîn-eriba-bel",
+      "raw_output": "<think>\nOkay, let's see. The user is asking about the reign of Sîn-eriba-bel. First, I need to recall if I know anything about this ruler. Sîn-eriba-bel is a name that might be a variant of Sennacherib, but I'm not sure. Sennacherib is a well-known Assyrian king, but his reign is more commonly associated with the 8th century BCE. \n\nWait, Sîn-eriba-bel... Maybe there's a confusion with the name. Let me think. Sennacherib's reign was from 705 to 681 BCE. But if the user is asking about Sîn-eriba-bel, perhaps that's a different name. Alternatively, maybe it's a misspelling or a variant of another ruler. \n\nI should check if there's a ruler named Sîn-eriba-bel. Let me try to remember. I recall that Sennacherib was the king of Assyria during the reign of Nebuchadnezzar II. But Sîn-eriba-bel might be a different name. Alternatively, maybe it's a name from a different period. \n\nWait, another thought: sometimes names in ancient texts can be transliterated differently. For example, Sîn-eriba-bel might be a variant of Sennacherib. If that's the case, then his reign would be from 705 to 681 BCE. But I need to confirm if Sîn-eriba-bel is the same as Sennacherib. \n\nAlternatively, maybe Sîn-eriba-bel is a different ruler. If I can't find any records of a ruler named Sîn-eriba-bel, then I should return the default response with nulls and low confidence. But I need to be careful here. \n\nSince I don't have specific information about Sîn-eriba-bel, I should consider that the name might be a misspelling or a less-known ruler. Therefore, the best approach is to return the default JSON with nulls and low confidence. However, if there's a possibility that Sîn-eriba-bel is a variant of Sennacherib, then the start and end years would be 705 and 681. But without concrete evidence, it's safer to assume that the name is not recognized, leading to the default response.\n</think>\n\n{\"start_year\": null",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "declined": null,
+      "hallucination": null,
+      "status": "parse_error"
+    },
+    {
+      "name": "Assur-bel-mukin the Younger",
+      "raw_output": "<think>\nOkay, let's try to figure out when Assur-bel-mukin the Younger ruled. First, I need to recall any information I have about this ruler. I remember that Assur-bel-mukin was a king from the Assyrian dynasty, but I'm not sure about his exact reign dates.\n\nI think he was part of the Assyrian kings who ruled around the 8th century BCE. The Assyrian Empire was active during that time, and there were several kings in that period. The name Assur-bel-mukin... maybe that's a transliteration of a name. Let me think. The Assyrian kings often had names that were similar to their Babylonian counterparts. \n\nI recall that the Assyrian kings were usually referred to by their throne names, like \"Assur\" for the god, so maybe Assur-bel-mukin is a king named Assur-bel-mukin. Now, I need to find the dates. \n\nI remember that the reign of Assur-bel-mukin the Younger is sometimes cited in historical records. Let me try to remember. The Assyrian kings from the 8th century BCE include kings like Sargon II, but that's a different name. Wait, maybe Assur-bel-mukin was a later king. \n\nI think the Assyrian Empire declined around 612 BCE, so if Assur-bel-mukin was a ruler during that time, his reign might have been around 627 BCE. But I'm not entirely sure. \n\nAlternatively, maybe he was a king during the reign of the Babylonian king Nebuchadnezzar II, but that's a different time. \n\nWait, I need to check if there are any historical sources that mention his reign. The Babylonian Chronicle, for example, might have records. But I don't have access to that right now. \n\nI think the general consensus is that Assur-bel-mukin the Younger ruled around 627 BCE. So the start year would be 627 and end year 612, but I'm not certain. However, since the decline of the Assyrian Empire is around 612, maybe his reign ended around that time. \n\nBut I need to be precise. If I'm not certain, I should set the confidence to \"low\" and mark declined as false. Wait, the user wants the decline field to be false if it's certain. But if I'm not sure,",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "declined": null,
+      "hallucination": null,
+      "status": "parse_error"
+    },
+    {
+      "name": "Tukulti-apil-iddina II",
+      "raw_output": "<think>\nOkay, let's see. The user is asking about Tukulti-apil-iddina II, a ruler from the Akkadian, Assyrian, or Babylonian period. I need to figure out his reign dates.\n\nFirst, I recall that Tukulti-apil-iddina II was a king of the Assyrian Empire. His reign is known from historical records. From what I remember, he reigned around the 8th century BCE. The Akkadian Empire was established by Sargon of Akkad around 2334 BCE, and the Assyrian Empire rose later. \n\nI think Tukulti-apil-iddina II's reign started around 745 BCE and ended around 727 BCE. Wait, but I need to confirm the exact years. Some sources might say 745-727, but others might have different numbers. The key is to check if there's a consensus. \n\nI remember that his reign was marked by the Babylonian revolt, which might have influenced the end of his rule. Also, his death in 727 BCE is a key point. So, the start year would be 745 BCE and end year 727 BCE. \n\nConfidence here is high because there are multiple historical sources that mention his reign dates. The decline field should be false since he was a significant ruler and his reign is well-documented. \n\nI should make sure there's no confusion with other kings. For example, Tukulti-apil-iddina II is sometimes confused with Tukulti-Ninurta II, but that's a different ruler. So, the correct dates are 745-727 BCE. \n\nTherefore, the JSON should have start_year 745, end_year 727, confidence high, and declined false.\n</think>\n\n{\"start_year\": 745, \"end_year\": 727, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 745,
+        "end_year": 727,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "declined": false,
+      "start_year": 745,
+      "end_year": 727,
+      "hallucination": true,
+      "status": "hallucination"
+    },
+    {
+      "name": "Nabû-šumu-eriba the Elder",
+      "raw_output": "<think>\nOkay, let's see. The user is asking about Nabû-šumu-eriba the Elder, a ruler from the Akkadian, Assyrian, or Babylonian period. I need to figure out his reign dates.\n\nFirst, I recall that Nabû-šumu-eriba is a name that appears in historical records. The Akkadian and Babylonian empires were in the ancient Near East, so this ruler would be from that region. The name \"Nabû\" is a common name in Sumerian and Akkadian, often associated with deities or important figures.\n\nI remember that the Assyrian Empire was established by Assur-uballit, but there are other rulers. Nabû-šumu-eriba might be a lesser-known figure. Let me think about the timeline. The Babylonian Empire was established by Hammurabi, but there were many rulers between the Akkadians and Babylonians. \n\nWait, there's a ruler named Nabu-zeri-eriba, but that's different. The user specified Nabû-šumu-eriba the Elder. I need to check if there's a known reign period for this ruler. \n\nI think Nabû-šumu-eriba was a king of the Babylonian Empire. His reign is often cited in historical texts. The Babylonian Empire was established around 1894 BCE, and the first Babylonian king was Hammurabi. However, there were several rulers after that. \n\nI recall that Nabû-šumu-eriba was a king of the Babylonian Empire, and his reign is recorded in the Babylonian annals. The start year is around 1894 BCE, but I need to confirm. Alternatively, some sources might place his reign in the 18th century BCE. \n\nWait, the Babylonian Empire was in the 18th to 16th centuries BCE. If Nabû-šumu-eriba was a king during that time, his reign would start around 1894 BCE and end around 1840 BCE. But I need to be precise. \n\nAnother thought: the name \"Nabû-šumu-eriba\" might be a variant of a known ruler. For example, there's a ruler named Nabu-zeri-eriba, but that's different. \n\nI think the correct dates for Nabû-šumu-eriba are around 189",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "declined": null,
+      "hallucination": null,
+      "status": "parse_error"
+    }
+  ]
+}
