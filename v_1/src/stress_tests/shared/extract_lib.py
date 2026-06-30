@@ -78,9 +78,31 @@ def load_model(hf_id: str, arch: str, dtype="bfloat16"):
             path, torch_dtype=td, device_map="auto", output_hidden_states=True)
         core = getattr(model, "model", model)  # base transformer; skips LM head
     elif arch == ARCH_ENCODER:
-        from transformers import AutoModelForSeq2SeqLM
-        model = AutoModelForSeq2SeqLM.from_pretrained(
-            path, torch_dtype=td, device_map="auto", output_hidden_states=True)
+        # Proven load chain from round2_phase3/extract_enc_activations.py:
+        # Auto first; on failure use the explicit UMT5/MT5/T5 class, which bypasses
+        # AutoConfig's model_type registry (works even with the truncated config).
+        import transformers
+        kw = dict(torch_dtype=td, device_map="auto", output_hidden_states=True)
+        try:
+            from transformers import AutoModelForSeq2SeqLM
+            model = AutoModelForSeq2SeqLM.from_pretrained(path, **kw)
+        except Exception as e:  # noqa: BLE001
+            print(f"[load] Auto failed ({type(e).__name__}); trying explicit seq2seq classes", flush=True)
+            model = None
+            for cls_name in ("UMT5ForConditionalGeneration",
+                             "MT5ForConditionalGeneration",
+                             "T5ForConditionalGeneration"):
+                cls = getattr(transformers, cls_name, None)
+                if cls is None:
+                    continue
+                try:
+                    model = cls.from_pretrained(path, **kw)
+                    print(f"[load] loaded via {cls_name}", flush=True)
+                    break
+                except Exception as e2:  # noqa: BLE001
+                    print(f"[load] {cls_name} failed: {type(e2).__name__}: {e2}", flush=True)
+            if model is None:
+                raise
         core = model.get_encoder()
     else:
         raise ValueError(f"unknown arch {arch!r}")
