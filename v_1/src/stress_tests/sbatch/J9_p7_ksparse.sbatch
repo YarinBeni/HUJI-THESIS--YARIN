@@ -15,7 +15,7 @@ echo "=== J9 P7 k-sparse === job ${SLURM_JOB_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
-git pull --rebase origin claude/stress-test-timeline-analysis-9sh2vs || echo "WARN pull failed"
+git pull --rebase origin main || echo "WARN pull failed"
 mkdir -p v_1/src/stress_tests/logs
 export OMP_NUM_THREADS=4 MKL_NUM_THREADS=4
 
@@ -24,6 +24,5 @@ for M in qwen3_1b7 qwen3_8b qwen3_32b gpt_oss_120b thalesian_akk300m thalesian_c
 done
 git add v_1/src/stress_tests/p7_ksparse/results/*.json 2>/dev/null || true
 git commit -m "J9: P7 k-sparse probe (job ${SLURM_JOB_ID})" || echo "nothing to commit"
-git pull --rebase origin claude/stress-test-timeline-analysis-9sh2vs || true
-git push origin claude/stress-test-timeline-analysis-9sh2vs || echo "WARN push failed"
+for _i in 1 2 3 4 5; do git pull --rebase origin main && git push origin HEAD:main && break || sleep $((RANDOM % 8 + 5)); done
 echo "=== Done. $(date) ==="

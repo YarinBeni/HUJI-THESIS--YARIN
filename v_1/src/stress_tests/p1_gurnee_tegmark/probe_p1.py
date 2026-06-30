@@ -18,6 +18,8 @@ import json
 import sys
 from pathlib import Path
 
+import warnings
+warnings.filterwarnings("ignore")
 import numpy as np
 import pandas as pd
 

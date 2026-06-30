@@ -13,6 +13,8 @@ import json
 import sys
 from pathlib import Path
 
+import warnings
+warnings.filterwarnings("ignore")
 import numpy as np
 
 _REPO = Path(__file__).resolve().parents[4]

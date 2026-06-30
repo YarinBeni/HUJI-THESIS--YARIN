@@ -16,7 +16,7 @@ echo "=== J4b king-extract gpt_oss_120b === job ${SLURM_JOB_ID} $(hostname) $(da
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
-git pull --rebase origin claude/stress-test-timeline-analysis-9sh2vs || echo "WARN pull failed"
+git pull --rebase origin main || echo "WARN pull failed"
 mkdir -p v_1/src/stress_tests/logs
 export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 
@@ -28,6 +28,5 @@ ACTS=v_1/src/linear_probing/results/orcc__embed/activations
 git add "${ACTS}/gpt_oss_120b_tier0_kinglast/metadata.json" "${ACTS}/gpt_oss_120b_tier0_kinglast/king_coverage.json" \
         "${ACTS}/gpt_oss_120b_tier0_kingmean/metadata.json" "${ACTS}/gpt_oss_120b_tier0_kingmean/king_coverage.json" 2>/dev/null || true
 git commit -m "J4b: king-token acts gpt_oss_120b (job ${SLURM_JOB_ID})" || echo "nothing to commit"
-git pull --rebase origin claude/stress-test-timeline-analysis-9sh2vs || true
-git push origin claude/stress-test-timeline-analysis-9sh2vs || echo "WARN push failed"
+for _i in 1 2 3 4 5; do git pull --rebase origin main && git push origin HEAD:main && break || sleep $((RANDOM % 8 + 5)); done
 echo "=== Done gpt_oss_120b. $(date) ==="
