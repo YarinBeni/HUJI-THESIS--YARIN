@@ -1,0 +1,190 @@
+{
+  "variant": "kp0",
+  "tolerance_years": 50,
+  "total": 8,
+  "correct": 7,
+  "parse_errors": 1,
+  "error_rate": 0.125,
+  "accuracy": 0.875,
+  "accuracy_scoreable": 1.0,
+  "per_ruler": [
+    {
+      "ruler": "Ashurbanipal",
+      "raw_output": "<think>\nOkay, the user is asking about the reign dates of Ashurbanipal, who was an Akkadian, Assyrian, and Babylonian ruler. Wait, actually, Ashurbanipal was the last king of the Neo-Assyrian Empire. Let me confirm his dates.\n\nFrom what I remember, Ashurbanipal reigned during the late 7th century BCE. His reign started around 669 BCE and ended with his death in 627 BCE. I think he was the son of Esarhaddon. The Neo-Assyrian Empire fell after him, so his death marked the end of that empire. \n\nI should check if there's any uncertainty here. Most sources agree on these dates, so the confidence should be high. The user specified to return a JSON object with start_year and end_year as integers in BCE. So 669 BCE for start and 627 BCE for end. \n\nWait, but the user mentioned Akkadian/Assyrian/Babylonian. Ashurbanipal was Assyrian, not Babylonian. Maybe the user is conflating the empires. But the question is about the ruler's reign, so the dates remain the same. \n\nI need to make sure there's no confusion with other rulers. For example, Nebuchadnezzar II was the Babylonian king, but Ashurbanipal was Assyrian. So the answer should focus on his Assyrian reign. \n\nTherefore, the JSON should have start_year 669, end_year 627, confidence high, and declined false. No need to mention the Babylonian part since he wasn't a Babylonian ruler. The user might have made a mistake in the list, but the answer is based on established knowledge.\n</think>\n\n{\"start_year\": 669, \"end_year\": 627, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 669,
+        "end_year": 627,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        577,
+        719
+      ],
+      "gt_start": 668,
+      "gt_end": 631,
+      "gt_end_alt": 627,
+      "hits": [
+        668,
+        631,
+        627
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Sennacherib",
+      "raw_output": "<think>\nOkay, the user is asking about the reign dates of Sennacherib, an Akkadian, Assyrian, or Babylonian ruler. First, I need to confirm which civilization Sennacherib belonged to. From what I remember, Sennacherib was an Assyrian king. The Akkadian Empire was earlier, around 2300-2100 BCE, and Babylonian rulers like Hammurabi were later. So Sennacherib is Assyrian.\n\nNow, I need to recall his reign dates. I think he was a significant king of Assyria, known for his military campaigns and the construction of the Palace at Nineveh. His reign is often associated with the late 8th century BCE. Let me try to remember the exact years. I believe he started his reign around 717 BCE and ended around 681 BCE. Wait, but some sources might vary slightly. Let me check my memory. Yes, Sennacherib's reign is generally accepted as 717–681 BCE. \n\nWait, but I should be careful. Some sources might have different dates due to the way ancient chronologies are calculated. However, the standard dates are 717 BCE to 681 BCE. I'm pretty confident about these dates because they are well-established in Assyrian history. The confidence level here should be high because there's a lot of archaeological evidence and records from his time, like the annals and inscriptions. \n\nSo the JSON should have start_year as 717, end_year as 681, confidence \"high\", and declined false. I need to make sure not to include any other information and just return the JSON object as specified.\n</think>\n\n{\"start_year\": 717, \"end_year\": 681, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 717,
+        "end_year": 681,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        631,
+        767
+      ],
+      "gt_start": 705,
+      "gt_end": 681,
+      "gt_end_alt": null,
+      "hits": [
+        705,
+        681
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Esarhaddon",
+      "raw_output": "<think>\nOkay, the user is asking about the reign dates of Esarhaddon, an Akkadian, Assyrian, or Babylonian ruler. First, I need to confirm which Esarhaddon they're referring to. There were two notable rulers with that name: Esarhaddon of Assyria and Esarhaddon of Babylon. Wait, actually, Esarhaddon is primarily known as the Assyrian king. He was the son of Sennacherib. Let me recall his reign dates.\n\nFrom what I remember, Esarhaddon reigned as the King of Assyria from around 681 BCE to 669 BCE. He was a significant figure, expanding the Assyrian Empire. But I should verify if there's a Babylonian counterpart. There's also a Babylonian king named Esarhaddon, but he was a later ruler, perhaps in the 6th century BCE. However, the more famous one is the Assyrian. \n\nWait, the user mentioned Akkadian, Assyrian, or Babylonian. The Assyrian Esarhaddon's reign is well-documented. His father, Sennacherib, was killed by his sons, and Esarhaddon became king. He ruled until his death in 669 BCE. So the start year would be 681 BCE and end year 669 BCE. Confidence is high because this is a well-established date in Assyrian history. The Babylonian Esarhaddon might have different dates, but the user might be referring to the Assyrian one. Since the question includes Assyrian, it's safe to go with the Assyrian dates. So the JSON should have start_year 681, end_year 669, confidence high, and declined false.\n</think>\n\n{\"start_year\": 681, \"end_year\": 669, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 681,
+        "end_year": 669,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        619,
+        731
+      ],
+      "gt_start": 681,
+      "gt_end": 669,
+      "gt_end_alt": null,
+      "hits": [
+        681,
+        669
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Sargon II",
+      "raw_output": "<think>\nOkay, the user is asking about the reign dates of Sargon II, specifically as an Akkadian, Assyrian, or Babylonian ruler. First, I need to confirm which Sargon they're referring to because there were two notable Sargons: Sargon of Akkad and Sargon II of Assyria. The user mentioned Akkadian/Assyrian/Babylonian, so it's likely Sargon II of Assyria since Sargon of Akkad was earlier and Babylonian isn't directly related.\n\nSargon II was the king of the Neo-Assyrian Empire. His reign dates are well-documented in historical records. From what I remember, he ruled from around 722 BCE until his death in 705 BCE. The confidence here should be high because there are multiple sources, including Assyrian inscriptions and historical records from the Neo-Assyrian period. The user wants the years in BCE, so I need to present them as integers. Also, the \"declined\" field should be false since the information is established. Let me double-check the dates to make sure. Yes, Sargon II's reign started in 722 BCE and ended in 705 BCE. So the JSON should have those years with high confidence and declined set to false.\n</think>\n\n{\"start_year\": 722, \"end_year\": 705, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 722,
+        "end_year": 705,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        655,
+        772
+      ],
+      "gt_start": 722,
+      "gt_end": 705,
+      "gt_end_alt": null,
+      "hits": [
+        722,
+        705
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Nebuchadnezzar II",
+      "raw_output": "<think>\nOkay, the user is asking about the reign dates of Nebuchadnezzar II, specifically for the Akkadian, Assyrian, or Babylonian periods. First, I need to confirm which civilization he belonged to. Nebuchadnezzar II is most famously associated with Babylon, not Akkadian or Assyrian. The Akkadian Empire was earlier, around 2334–2154 BCE, and Assyria was a later empire, though overlapping with Babylonian periods.\n\nNebuchadnezzar II was the king of Babylon, not Assyria. He's known for building the Ishtar Gate and the Hanging Gardens, though the latter's existence is debated. His reign is well-documented in historical records. The standard dates for his reign are 634 BCE to 562 BCE. However, I should check if there's any uncertainty. Some sources might vary slightly, but the consensus is pretty solid. The confidence level here should be high because there's ample archaeological and textual evidence, like the Babylonian chronicles and Assyrian records. So the answer should include start_year 634, end_year 562, confidence high, and declined false.\n</think>\n\n{\"start_year\": 634, \"end_year\": 562, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 634,
+        "end_year": 562,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        512,
+        684
+      ],
+      "gt_start": 605,
+      "gt_end": 562,
+      "gt_end_alt": null,
+      "hits": [
+        605,
+        562
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Tiglath-pileser III",
+      "raw_output": "<think>\nOkay, the user is asking about the reign dates of Tiglath-pileser III, specifically for the Akkadian, Assyrian, or Babylonian periods. First, I need to confirm which civilization he belonged to. Tiglath-pileser III is a well-known Assyrian king, not Akkadian or Babylonian. The Akkadian Empire was earlier, around 2334–2154 BCE, and Babylonian rulers like Hammurabi were later. So, focusing on Assyria.\n\nNext, I recall that Tiglath-pileser III was a significant figure in the Assyrian Empire. He's known for his military campaigns and administrative reforms. His reign is a key part of the Assyrian Empire's history. Now, the exact dates. From what I remember, his reign started around 745 BCE. Let me verify that. Yes, he came to power after the death of his father, Ashur-dan III, and he's noted for expanding Assyrian territory. \n\nAs for the end year, he was assassinated in 727 BCE, which marks the end of his reign. So the start year is 745 BCE and the end year is 727 BCE. The confidence level here is high because historical records, including Assyrian inscriptions and ancient sources like the Assyrian annals, provide clear evidence. There's no significant scholarly debate about these dates. Therefore, the JSON should have start_year 745, end_year 727, confidence \"high\", and declined false. I need to make sure not to include any markdown and just return the JSON as specified.\n</think>\n\n{\"start_year\": 745, \"end_year\": 727, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 745,
+        "end_year": 727,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        677,
+        795
+      ],
+      "gt_start": 745,
+      "gt_end": 727,
+      "gt_end_alt": null,
+      "hits": [
+        745,
+        727
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Nabonidus",
+      "raw_output": "<think>\nOkay, the user is asking about the reign dates of Nabonidus, an Akkadian/Assyrian/Babylonian ruler. First, I need to confirm which Nabonidus they're referring to. There were a few rulers with that name, but the most prominent is the last king of the Neo-Babylonian Empire.\n\nI remember that Nabonidus reigned towards the end of the Babylonian Empire before the Persian conquest. Let me think... The Neo-Babylonian Empire was ruled by several kings, and Nabonidus was the last one. His reign started around 556 BCE. He was known for his religious policies and the construction of the temple at Teima. \n\nWait, but I should verify the exact dates. Some sources might say 556 BCE as the start. As for the end year, he was deposed by the Achaemenid Empire under Cyrus the Great in 539 BCE. So his reign ended in 539 BCE. \n\nI'm pretty confident about these dates because they are well-documented in historical records. The confidence level should be high. Also, the user specified to return false for \"declined\", so I don't need to mark it as declined. \n\nLet me double-check. Yes, Nabonidus' reign is generally accepted as 556–539 BCE. No conflicting information comes to mind. So the JSON should have start_year 556, end_year 539, confidence high, and declined false.\n</think>\n\n{\"start_year\": 556, \"end_year\": 539, \"confidence\": \"high\", \"declined\": false}",
+      "parsed": {
+        "start_year": 556,
+        "end_year": 539,
+        "confidence": "high",
+        "declined": false
+      },
+      "parse_error": false,
+      "correct": true,
+      "pred_window": [
+        489,
+        606
+      ],
+      "gt_start": 556,
+      "gt_end": 539,
+      "gt_end_alt": null,
+      "hits": [
+        556,
+        539
+      ],
+      "reason": "within_tolerance"
+    },
+    {
+      "ruler": "Sîn-šarru-iškun",
+      "raw_output": "<think>\nOkay, let's tackle this query about Sîn-šarru-iškun. First, I need to confirm which civilization this ruler belongs to. The user mentioned Akkadian, Assyrian, or Babylonian. Sîn-šarru-iškun is a name that sounds Babylonian. Let me recall Babylonian kings.\n\nWait, I think Sîn-šarru-iškun was a Babylonian king. Let me check the timeline. The Babylonian Empire under Nebuchadnezzar II is well-known, but that's later. Sîn-šarru-iškun might be from the earlier period. Wait, there's a king named Sin-shar-ishkun, which is the same as Sîn-šarru-iškun. He was the last king of the Neo-Babylonian Empire. \n\nNow, the Neo-Babylonian Empire's reign was during the 7th century BCE. Nebuchadnezzar II was his father, ruling from around 605 to 562 BCE. So Sin-shar-ishkun would have succeeded him. Let me verify the dates. Nebuchadnezzar II died in 562 BCE, and Sin-shar-ishkun took the throne. His reign ended with the fall of Babylon to the Persians in 539 BCE under Cyrus the Great. \n\nSo the start year would be 562 BCE, and the end year 539 BCE. But wait, I need to be careful here. Some sources might have slightly different dates. For example, the exact year of Nebuchadnezzar's death is sometimes cited as 562 BCE, and Sin-shar-ishkun's reign started then. His death in 539 BCE is well-documented. \n\nConfidence level: I'm pretty sure about these dates because they are standard in historical references. So confidence should be high. The user didn't mention any uncertainty, so I can state the years as 562 and 539. \n\nWait, but the user might have a typo in the name. Let me double-check the spelling. Sîn-šarru-iškun is the same as Sin-shar-ishkun. Yes, that's correct. \n\nSo the JSON should have start_year 562, end_year 539, confidence high",
+      "parsed": null,
+      "parse_error": true,
+      "parse_error_reason": "json decode error: Expecting value: line 1 column 1 (char 0)",
+      "correct": false,
+      "reason": "parse_error"
+    }
+  ]
+}

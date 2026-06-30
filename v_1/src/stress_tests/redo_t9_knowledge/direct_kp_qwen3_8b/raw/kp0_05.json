@@ -1,0 +1,14 @@
+{
+  "variant": "kp0",
+  "input_idx": 5,
+  "input_value": "Tiglath-pileser III",
+  "fill": {
+    "ruler": "Tiglath-pileser III"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Tiglath-pileser III reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, the user is asking about the reign dates of Tiglath-pileser III, specifically for the Akkadian, Assyrian, or Babylonian periods. First, I need to confirm which civilization he belonged to. Tiglath-pileser III is a well-known Assyrian king, not Akkadian or Babylonian. The Akkadian Empire was earlier, around 2334–2154 BCE, and Babylonian rulers like Hammurabi were later. So, focusing on Assyria.\n\nNext, I recall that Tiglath-pileser III was a significant figure in the Assyrian Empire. He's known for his military campaigns and administrative reforms. His reign is a key part of the Assyrian Empire's history. Now, the exact dates. From what I remember, his reign started around 745 BCE. Let me verify that. Yes, he came to power after the death of his father, Ashur-dan III, and he's noted for expanding Assyrian territory. \n\nAs for the end year, he was assassinated in 727 BCE, which marks the end of his reign. So the start year is 745 BCE and the end year is 727 BCE. The confidence level here is high because historical records, including Assyrian inscriptions and ancient sources like the Assyrian annals, provide clear evidence. There's no significant scholarly debate about these dates. Therefore, the JSON should have start_year 745, end_year 727, confidence \"high\", and declined false. I need to make sure not to include any markdown and just return the JSON as specified.\n</think>\n\n{\"start_year\": 745, \"end_year\": 727, \"confidence\": \"high\", \"declined\": false}",
+  "model_path": "Qwen/Qwen3-8B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-06-30T17:47:09.805006"
+}

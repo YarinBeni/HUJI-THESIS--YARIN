@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 7,
+  "input_value": "Nabû-šumu-eriba the Elder",
+  "fill": {
+    "ruler": "Nabû-šumu-eriba the Elder"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Nabû-šumu-eriba the Elder reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's tackle this query about Nabû-šumu-eriba the Elder. First, I need to confirm if this ruler is indeed from the Akkadian, Assyrian, or Babylonian dynasties. The name sounds Babylonian, maybe from the First Babylonian Dynasty. \n\nI recall that Nabû-šumu-eriba is associated with the reign of King Nebuchadnezzar I, but wait, that's a different name. Wait, maybe there's confusion with Nebuchadnezzar I, who was a Babylonian king. Let me check. \n\nWait, Nabû-šumu-eriba the Elder might be a different figure. Let me think. The First Babylonian Dynasty rulers include kings like Sumu-abum, Meli-Shipak, and others. But I'm not sure about Nabû-šumu-eriba. \n\nAlternatively, could this be a misrendering of a name? For example, Nabû-šumu-eriba might be a variant of Nebuchadnezzar, but that's more likely to be Nebuchadnezzar I, who reigned around 1100-1077 BCE. However, the name Nabû-šumu-eriba doesn't ring a bell. \n\nLooking up historical records, I don't find a ruler by that exact name. It's possible that the user is conflating names or there's a transliteration error. Since there's no established record of Nabû-šumu-eriba the Elder as a known ruler in the Akkadian, Assyrian, or Babylonian empires, the correct response would be to state that the ruler isn't known. \n\nTherefore, the JSON should have start_year and end_year as null, confidence as low, and declined set to true.\n</think>\n\n{\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "model_path": "Qwen/Qwen3-8B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-06-30T17:52:17.422699"
+}

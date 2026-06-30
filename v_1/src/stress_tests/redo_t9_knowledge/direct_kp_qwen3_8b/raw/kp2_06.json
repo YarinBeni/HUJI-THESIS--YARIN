@@ -1,0 +1,14 @@
+{
+  "variant": "kp2",
+  "input_idx": 6,
+  "input_value": "Tukulti-apil-iddina II",
+  "fill": {
+    "ruler": "Tukulti-apil-iddina II"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Tukulti-apil-iddina II reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, let's tackle this query. The user is asking about the reign dates of Tukulti-apil-iddina II, specifically for the Akkadian, Assyrian, or Babylonian periods. First, I need to confirm which civilization this ruler belongs to. Tukulti-apil-iddina II is a name that sounds Assyrian. Let me recall.\n\nI remember that Tukulti-apil-iddina II was an Assyrian king. His reign is associated with the late 8th century BCE. Wait, but I need to be precise. Let me think. The Assyrian Empire had several kings with similar names. There's also a Tukulti-apil-iddina I, so the II would be the later one. \n\nNow, the exact dates. I think he reigned around 785–755 BCE. But I should verify. Let me check my memory. The Assyrian kings after Tiglath-Pileser III include Shalmaneser V, then Sargon II, then Sennacherib. Wait, Tukulti-apil-iddina II might be the one who came after Sennacherib. Wait, no, Sennacherib was followed by Esarhaddon. Hmm, maybe I'm mixing up the order. \n\nWait, Tukulti-apil-iddina II is also known as Tiglath-Pileser III? No, that's a different name. Wait, no, Tiglath-Pileser III was an earlier king. Let me get this straight. Tukulti-apil-iddina II is sometimes referred to as Tukulti-apil-iddina, and his reign is often cited as 785–755 BCE. But I need to be careful here. \n\nAlternatively, some sources might have different dates. Let me think. The Assyrian king who was known for his campaigns against the Babylonians was Sennacherib, who reigned around 705–681 BCE. Then Esarhaddon came after him. So Tukulti-apil-iddina II must be earlier. \n\nWait, I think Tukulti-apil-iddina II was the king who was defeated by the Babylonians under Nabopolassar, leading to the fall of Assyria. That would place him in the late 8th century. So his reign would be around 785–755 BCE. But I need",
+  "model_path": "Qwen/Qwen3-8B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-06-30T17:52:08.589425"
+}

@@ -1,0 +1,14 @@
+{
+  "variant": "kp0",
+  "input_idx": 2,
+  "input_value": "Esarhaddon",
+  "fill": {
+    "ruler": "Esarhaddon"
+  },
+  "system_prompt": "You are a precise reference assistant for ancient Near Eastern history.\nAnswer only from established historical knowledge. When asked about a ruler's\nreign dates, return a JSON object and nothing else. Do not include markdown\nfences, prose, or explanation outside the JSON.",
+  "user_message": "When did the Akkadian/Assyrian/Babylonian ruler Esarhaddon reign?\nReturn ONLY a JSON object with these fields:\n  \"start_year\": the year BCE the reign began (integer, e.g. 668)\n  \"end_year\": the year BCE the reign ended (integer, e.g. 627)\n  \"confidence\": \"high\" if you are certain, \"low\" if approximate\n  \"declined\": false\n\nIf you do not know this ruler at all, return:\n  {\"start_year\": null, \"end_year\": null, \"confidence\": \"low\", \"declined\": true}",
+  "raw_output": "<think>\nOkay, the user is asking about the reign dates of Esarhaddon, an Akkadian, Assyrian, or Babylonian ruler. First, I need to confirm which Esarhaddon they're referring to. There were two notable rulers with that name: Esarhaddon of Assyria and Esarhaddon of Babylon. Wait, actually, Esarhaddon is primarily known as the Assyrian king. He was the son of Sennacherib. Let me recall his reign dates.\n\nFrom what I remember, Esarhaddon reigned as the King of Assyria from around 681 BCE to 669 BCE. He was a significant figure, expanding the Assyrian Empire. But I should verify if there's a Babylonian counterpart. There's also a Babylonian king named Esarhaddon, but he was a later ruler, perhaps in the 6th century BCE. However, the more famous one is the Assyrian. \n\nWait, the user mentioned Akkadian, Assyrian, or Babylonian. The Assyrian Esarhaddon's reign is well-documented. His father, Sennacherib, was killed by his sons, and Esarhaddon became king. He ruled until his death in 669 BCE. So the start year would be 681 BCE and end year 669 BCE. Confidence is high because this is a well-established date in Assyrian history. The Babylonian Esarhaddon might have different dates, but the user might be referring to the Assyrian one. Since the question includes Assyrian, it's safe to go with the Assyrian dates. So the JSON should have start_year 681, end_year 669, confidence high, and declined false.\n</think>\n\n{\"start_year\": 681, \"end_year\": 669, \"confidence\": \"high\", \"declined\": false}",
+  "model_path": "Qwen/Qwen3-8B",
+  "max_new_tokens": 512,
+  "timestamp": "2026-06-30T17:46:49.103673"
+}
