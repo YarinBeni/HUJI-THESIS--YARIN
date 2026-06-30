@@ -19,23 +19,46 @@ ARCH_CAUSAL = "causal"
 ARCH_ENCODER = "encoder"
 
 
-def _ensure_downloaded(hf_id: str):
-    """HF sometimes serves a truncated config.json to unauthenticated clients,
-    which makes AutoConfig fail with 'no model_type key' (seen on google/umt5-base).
-    Force a clean snapshot with retries before loading."""
+def _ensure_local(hf_id: str, arch: str) -> str:
+    """Download a clean snapshot (with retries) and return its local path.
+
+    HF serves a TRUNCATED config.json (813 bytes, no `model_type`) for
+    google/umt5-base to unauthenticated clients, which makes AutoConfig fail with
+    'Unrecognized model ... should have a model_type key' — and force_download does
+    NOT fix it (the hub keeps returning the truncated body). Since every encoder
+    model we use is umt5-family, we patch `model_type: "umt5"` into the cached
+    config when it's missing. Loading from the local path then succeeds.
+    """
+    import json
+    import os
     import time
     from huggingface_hub import snapshot_download
+
+    last = None
     for i in range(5):
         try:
-            snapshot_download(hf_id, force_download=(i == 0))
-            return
+            path = snapshot_download(hf_id, force_download=(i == 0))
+            cfg = os.path.join(path, "config.json")
+            if os.path.exists(cfg):
+                with open(cfg) as f:
+                    d = json.load(f)
+                if not d.get("model_type"):
+                    if arch != ARCH_ENCODER:
+                        raise ValueError(f"{hf_id} config has no model_type and is not an encoder")
+                    d["model_type"] = "umt5"
+                    with open(cfg, "w") as f:
+                        json.dump(d, f)
+                    print(f"[fix] injected model_type=umt5 into {hf_id} config.json", flush=True)
+            return path
         except Exception as e:  # noqa: BLE001
-            print(f"[download] {hf_id} attempt {i} failed: {type(e).__name__}: {e}", flush=True)
-            time.sleep(20)
+            last = e
+            print(f"[download] {hf_id} attempt {i}: {type(e).__name__}: {e}", flush=True)
+            time.sleep(15)
+    raise RuntimeError(f"could not prepare {hf_id}: {last}")
 
 
 def load_model(hf_id: str, arch: str, dtype="bfloat16"):
-    """Returns (tokenizer, core_module, n_hidden_states). core_module(input_ids,
+    """Returns (tokenizer, core_module, full_model). core_module(input_ids,
     attention_mask, output_hidden_states=True) yields .hidden_states of length
     n_layers+1 (index 0 = embeddings)."""
     import os
@@ -43,21 +66,21 @@ def load_model(hf_id: str, arch: str, dtype="bfloat16"):
     from transformers import AutoTokenizer
 
     os.environ.setdefault("HF_HUB_DOWNLOAD_TIMEOUT", "60")
-    _ensure_downloaded(hf_id)
+    path = _ensure_local(hf_id, arch)   # local snapshot, config patched if needed
     td = getattr(torch, dtype)
-    tok = AutoTokenizer.from_pretrained(hf_id, use_fast=True)
+    tok = AutoTokenizer.from_pretrained(path, use_fast=True)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 
     if arch == ARCH_CAUSAL:
         from transformers import AutoModelForCausalLM
         model = AutoModelForCausalLM.from_pretrained(
-            hf_id, torch_dtype=td, device_map="auto", output_hidden_states=True)
+            path, torch_dtype=td, device_map="auto", output_hidden_states=True)
         core = getattr(model, "model", model)  # base transformer; skips LM head
     elif arch == ARCH_ENCODER:
         from transformers import AutoModelForSeq2SeqLM
         model = AutoModelForSeq2SeqLM.from_pretrained(
-            hf_id, torch_dtype=td, device_map="auto", output_hidden_states=True)
+            path, torch_dtype=td, device_map="auto", output_hidden_states=True)
         core = model.get_encoder()
     else:
         raise ValueError(f"unknown arch {arch!r}")
