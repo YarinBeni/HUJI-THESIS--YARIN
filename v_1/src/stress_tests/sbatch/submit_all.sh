@@ -23,8 +23,10 @@ J5=$(sbatch --parsable $S/J5_p3_anchors.sbatch)
 echo "J4=$J4  J4b=$J4b  J5=$J5"
 
 # --- dependent jobs (auto-start after their inputs finish OK) ---
-J6=$(sbatch --parsable --dependency=afterok:${J4}:${J4b} $S/J6_p1_probe.sbatch)
-J8=$(sbatch --parsable --dependency=afterok:${J5}        $S/J8_p3_timeline.sbatch)
+# afterany (not afterok): array jobs report failure if ANY task fails, but the
+# probe scripts skip missing models — so run once the inputs FINISH, partial or not.
+J6=$(sbatch --parsable --dependency=afterany:${J4}:${J4b} $S/J6_p1_probe.sbatch)
+J8=$(sbatch --parsable --dependency=afterany:${J5}        $S/J8_p3_timeline.sbatch)
 echo "J6=$J6 (after J4,J4b)   J8=$J8 (after J5)"
 
 echo "All submitted. Watch: squeue -u \$USER"
