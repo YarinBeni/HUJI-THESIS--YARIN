@@ -10,5 +10,5 @@
   "raw_output": "<think>\nOkay, let's see. The user is asking about Esarhaddon, a ruler from the Akkadian, Assyrian, or Babylonian period. I need to figure out his reign dates.\n\nFirst, I recall that Esarhaddon was a king of Assyria. He was the son of Sargon II and ruled around 680-627 BCE. Wait, but I should double-check the exact years. Sargon II reigned from 934 to 911 BCE, and Esarhaddon was his son. So his reign would start after Sargon II's death. Sargon II died in 911 BCE, so Esarhaddon would have ruled starting in 889 BCE. Then, he died in 627 BCE. So the start year is 889, end year 627. The confidence should be high because this is a well-documented fact. The declined field is false because he was a ruling king, not a declined one. I need to make sure there's no confusion with other rulers. Yes, Esarhaddon is known for his campaigns, like the Battle of Qarqar. So the JSON should have start_year 889, end_year 627, confidence high, and declined false.\n</think>\n\n{\"start_year\": 889, \"end_year\": 627, \"confidence\": \"high\", \"declined\": false}",
   "model_path": "Qwen/Qwen3-1.7B",
   "max_new_tokens": 512,
-  "timestamp": "2026-06-30T17:46:20.431603"
+  "timestamp": "2026-06-30T18:14:11.458480"
 }
