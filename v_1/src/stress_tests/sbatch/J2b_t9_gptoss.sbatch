@@ -16,6 +16,7 @@ M=gpt_oss_120b; H=openai/gpt-oss-120b
 echo "=== J2b T9 ${M} (${H}) === job ${SLURM_JOB_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 cd ~/projects/HUJI-THESIS--YARIN
 git pull --rebase origin main || echo "WARN pull failed"
 mkdir -p v_1/src/stress_tests/logs
@@ -24,7 +25,7 @@ KP=v_1/src/linear_probing/round2_phase1a
 OUT=v_1/src/stress_tests/redo_t9_knowledge/direct_kp_${M}
 mkdir -p "$OUT/raw" "$OUT/parsed" "$OUT/scores"
 for V in kp0 kp1 kp2; do
-    python -u $KP/run_kp.py   --variant "$V" --model_path "$H" --out_dir "$OUT" --max_new_tokens 512 || { echo "FAIL run $V"; exit 1; }
+    python -u $KP/run_kp.py   --variant "$V" --model_path "$H" --out_dir "$OUT" --max_new_tokens 256 || { echo "FAIL run $V"; exit 1; }
     python -u $KP/parse_kp.py --variant "$V" --out_dir "$OUT" || { echo "FAIL parse $V"; exit 1; }
     python -u $KP/score_kp.py --variant "$V" --out_dir "$OUT" || { echo "FAIL score $V"; exit 1; }
 done

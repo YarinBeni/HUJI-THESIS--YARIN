@@ -19,13 +19,31 @@ ARCH_CAUSAL = "causal"
 ARCH_ENCODER = "encoder"
 
 
+def _ensure_downloaded(hf_id: str):
+    """HF sometimes serves a truncated config.json to unauthenticated clients,
+    which makes AutoConfig fail with 'no model_type key' (seen on google/umt5-base).
+    Force a clean snapshot with retries before loading."""
+    import time
+    from huggingface_hub import snapshot_download
+    for i in range(5):
+        try:
+            snapshot_download(hf_id, force_download=(i == 0))
+            return
+        except Exception as e:  # noqa: BLE001
+            print(f"[download] {hf_id} attempt {i} failed: {type(e).__name__}: {e}", flush=True)
+            time.sleep(20)
+
+
 def load_model(hf_id: str, arch: str, dtype="bfloat16"):
     """Returns (tokenizer, core_module, n_hidden_states). core_module(input_ids,
     attention_mask, output_hidden_states=True) yields .hidden_states of length
     n_layers+1 (index 0 = embeddings)."""
+    import os
     import torch
     from transformers import AutoTokenizer
 
+    os.environ.setdefault("HF_HUB_DOWNLOAD_TIMEOUT", "60")
+    _ensure_downloaded(hf_id)
     td = getattr(torch, dtype)
     tok = AutoTokenizer.from_pretrained(hf_id, use_fast=True)
     if tok.pad_token is None:

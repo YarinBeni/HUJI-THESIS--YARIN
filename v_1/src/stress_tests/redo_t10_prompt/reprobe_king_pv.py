@@ -27,8 +27,8 @@ PLS_KS = [1, 2, 3, 5]
 
 def probe_one(X, years, rulers):
     """Return best-k PLS block + ridge block for one (layer,pool)."""
-    mask = np.isfinite(X).all(axis=1)
-    X, y, g = X[mask], years[mask].astype(float), rulers[mask]
+    mask = np.isfinite(X).all(axis=1) & np.isfinite(np.asarray(years, dtype=float))
+    X, y, g = X[mask], np.asarray(years, dtype=float)[mask], rulers[mask]
     out = {"n": int(mask.sum()), "n_rulers": int(len(set(g)))}
     if out["n"] < 20 or out["n_rulers"] < 3:
         out["skipped"] = "insufficient coverage"

@@ -86,7 +86,8 @@ def run(args):
             if sub is not None:
                 span = (s_start + sub[0], s_start + sub[1])
         found[i] = span is not None
-        fids.append(str(row.fragment_id)); rulers.append(str(row.ruler)); years.append(row.year)
+        fids.append(str(row.fragment_id)); rulers.append(str(row.ruler))
+        years.append(np.nan if pd.isna(row.year) else float(row.year))  # NA -> NaN (int32 can't hold NA)
 
         ids = input_ids.to(model.device)
         attn = torch.ones_like(ids)
@@ -114,7 +115,7 @@ def run(args):
             mean=np.vstack(buf["mean"][L]), king_last=np.vstack(buf["king_last"][L]),
             king_mean=np.vstack(buf["king_mean"][L]),
             fragment_ids=np.array(fids), rulers=np.array(rulers),
-            years=np.array(years, dtype=np.int32), found=found)
+            years=np.array(years, dtype=np.float32), found=found)
     print(f"[{args.variant}] DONE coverage={found.mean():.3f} layers={len(buf['mean'])}", flush=True)
 
 

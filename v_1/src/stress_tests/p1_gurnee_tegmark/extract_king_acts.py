@@ -96,7 +96,7 @@ def run(args):
     # coverage as JSON (committed; the *.npz layer dumps are gitignored/cluster-only)
     cov = dict(
         fragment_ids=df["fragment_id"].astype(str).tolist(),
-        years=df["year"].tolist(),
+        years=[None if pd.isna(v) else int(v) for v in df["year"]],  # NA -> null (JSON-safe)
         rulers=df["ruler"].astype(str).tolist(),
         found=found.astype(int).tolist(),
     )
