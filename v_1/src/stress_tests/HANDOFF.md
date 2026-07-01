@@ -128,36 +128,67 @@ read the flat best-k keys. Re-run J6_p1_mc + J7 to regenerate with these.
   (*MLM mean tier0 ≈ 0.424 in the former `balanced_mc_scoreboard.json`; J4d adds its
   maximal-mean + king sites. TF-IDF cited from that scoreboard: PLS 0.407 / Ridge 0.355.)
   (null/shuffled ≈ 0.01 everywhere.) mean-pool ≈ random & flat across scale/objective;
-  king_last much higher; king_mean washes out. **These PLS numbers are pre-ridge;
-  re-run J6_p1_mc to add the Ridge column + best-k, then J11 rebuilds the table.**
+  king_last much higher; king_mean washes out. **This table is the PRE-re-run reference
+  (PLS-only, missing MLM/random-king). The AUTHORITATIVE post-wave numbers — with the Ridge
+  column, best-k, the MLM row, and the random king_last cell — are in
+  `results/RESULTS_stress_tests.md` (J11 output); the user pastes it into the next session.**
 - **T10 balanced-MC (qwen3-1.7B):** mean = 0.406 across ALL pv0–pv3 (prompting doesn't change it);
   king_last 0.49–0.53; king_mean ≈ 0.
 
-## 7. NEXT STEPS (what's left)
-0. **DONE — code merged to `main`** at `85db68b8` (ort merge, no conflict) and the **full
-   re-run wave was submitted 2026-07 as jobs 12274–12282** with dependencies:
-   `J4c(12274) J4d(12275)` → `J6(12276)`; `J7(12277)`, `J3r(12278)`; `J5b(12279) J5c(12280)`
-   → `J8(12281)`; all → `J11(12282)`. Verify with
-   `sacct -j 12274-12282 --format=JobID,JobName%22,State,ExitCode,Elapsed -X`.
-   **Watch:** J5b (gpt-oss anchors, gpu:4) may OOM and finish in <4 min — if so J8 still runs
-   (afterany) and just drops the gpt-oss timeline curve. J4d (MLM) finishing fast is normal
-   (tiny model); confirm its log ends `[mlm] DONE king_coverage=0.44…`.
-1. **When the queue drains:** `git pull origin main` then read
-   `v_1/src/stress_tests/results/RESULTS_stress_tests.md` (J11 output). **[DECISIVE] random
-   `king_last`:** if ≈0 while pretrained ≈0.66 → "date-at-the-name" is real signal (claim
-   airtight); if high → name-token identity, reinterpret. If any job FAILED, re-submit just
-   that one (+ its dependents) — the sbatch are idempotent (they overwrite their own outputs).
-2. **T10 balanced-MC for qwen3-8B/32B (+gpt-oss).** J3r_t10_reprobe_mc only produced qwen3-1.7B
-   (others' prompted acts may not have been on disk at run time). Re-run J3a for 8B/32B if their
-   `acts_<model>/prompted_king` are missing, then `sbatch J3r_t10_reprobe_mc.sbatch`.
-3. **P3 timeline** (`p3_matter_of_time/results/p3_timeline__*.json`) — results exist now; interpret
-   3a (anchors form ordered line) vs 3b (texts project) for the dissociation figure.
-4. **gpt-oss-120B T10** never succeeded (OOM even sdpa+gpu:4). Optional; ladder stands without it.
-5. **ruler_spellings.csv** expert review to raise king coverage above ~44%.
-6. **GUI (J10)** — add new embeddings to `v_1/src/viz/seal_eda*.html`. **J11 aggregate DONE**
-   (`aggregate_tables.py` → `results/RESULTS_stress_tests.md`, labels + TF-IDF cite); rerun after
-   the wave above to fill in Ridge/best-k/MLM/random-king cells.
-7. Write-up: the claim in §1, with the balanced-MC table as the centerpiece.
+## 7. ROADMAP FROM HERE (fresh agent starts here)
+
+**State on entry:** the full re-run wave finished — jobs 12274–12282 (`J4c J4d → J6`;
+`J7 J3r`; `J5b J5c → J8`; all → `J11`). J4c/J4d/J5b/J5c/J8 confirmed COMPLETED 0:0
+(J4d: MLM king coverage 0.391 = 470/1202; J5b: gpt-oss anchors loaded fine, 153×37).
+J6/J7/J3r were still running at handoff; J11 auto-fires after. **The user pastes the
+final logs + `RESULTS_stress_tests.md` into the next session** — read those first.
+Code is on `main`; sbatch startup sync hardened to `git fetch origin main && git merge
+--ff-only FETCH_HEAD` (fixes a benign "Cannot rebase onto multiple branches" warning).
+
+Do these in order:
+
+1. **Verify nothing failed silently / no config missed.** From the pasted logs: every job
+   `COMPLETED 0:0` in `sacct`; each per-model line printed (no `WARN … failed`); `RESULTS_
+   stress_tests.md` has ALL rows populated — the 8 models + `MLM` + `TF-IDF (cited)`, each
+   with mean t0/max, king_last, king_mean, a Ridge value, and a best-k. Spot-check: does
+   every method that should have king sites have non-`—` king_last? Is P2 lat/lon `best_k`
+   no longer `kNone` (that = pre-rewrite JSON, needs the J7 re-run)? Cross-check counts vs
+   §6. If a cell is empty, trace which job/site produced it and re-submit just that job.
+2. **[DECISIVE] Read the `random king_last` cell.** ≈0 while pretrained ≈0.5–0.7 ⇒ the date
+   really lives at the king's-name token (claim airtight). High ⇒ it's name-token identity,
+   reinterpret. Do the same sanity read for `MLM king_last` and the new Ridge column
+   (Ridge≈PLS ⇒ linear; PLS≫Ridge ⇒ needs the low-rank projection).
+3. **Analysis: our results × our experiments × the 4 papers.** Write a short section mapping
+   each finding to the paper it stress-tests: P1 mean-pool≈random & flat across scale/objective
+   vs **Gurnee–Tegmark** (they found it at the last-entity token — which we REPLICATE only at
+   `king_last`); P2 geography passing vs **Godey** (positive control, so the year-null isn't a
+   broken probe); P3 3a-high/3b-low vs **"A Matter of Time"** (anchors form a line, texts don't
+   project); P7 weak small-k vs **k-sparse "Haystack"** (date is distributed/absent, not a few
+   neurons). Land the thesis line (§1): declarative knowledge (T9) present & local (king token)
+   but NOT a global text-level geometry — unmoved by scale/prompt/objective.
+4. **Figures — 4-panel story style (match prior work).** Reuse the aesthetic of
+   `v_1/src/geodesic/plot_round3_story_figures.py` and `v_1/src/geodesic/fig1_followups/
+   pls_ksweep/per_method_panels.py`. Proposed 4 panels: (a) P1 balanced-MC Spearman bars
+   mean vs king_last across the ladder (+random/TF-IDF/MLM); (b) layer-sweep curves (best-k
+   PLS per layer) for a representative model; (c) P2 geography skill vs P1 year skill
+   (positive-control contrast); (d) P3 3a-vs-3b scatter. Read numbers from the result JSONs
+   (schemas in §5); commit PNens/PDFs under `p*/figures/` or `results/figures/`.
+5. **GUI — add the new embeddings to the self-contained HTML.** Pipeline lives in `v_1/src/viz/`:
+   `01b_compute_tfidf_orcc_coords.py` (per-method 2-D coords: tSNE/PCA/UMAP/PLS-year/PLS-ruler)
+   → `02_merge_coords.py` → `03_build_standalone_html.py` → `seal_eda.html`. Add the stress-test
+   ORCC methods × layers × cleaning × {mean, king_last, king_mean} so the segment embeddings for
+   the extracted layers are browsable; extend the Method/Pooling/Layer dropdowns. king coords use
+   the `*_tier0_king{last,mean}` acts (partial coverage — only the 44% name-found rows). Verify by
+   opening the html and confirming new methods + PLS-Year coloring render.
+6. **Loose ends (lower priority):** T10 balanced-MC only has qwen3-1.7B — re-run `J3a` for 8B/32B
+   if their `acts_<model>/prompted_king` are missing, then `sbatch J3r_t10_reprobe_mc.sbatch`.
+   gpt-oss-120B T10 OOMs even at gpu:4 (optional). `ruler_spellings.csv` needs Assyriologist
+   review to lift king coverage above ~44%.
+
+**How to run any re-submit:** all sbatch are idempotent (overwrite their own outputs) and
+committed under `sbatch/`; submit with `sbatch <path>` (+ `--dependency=afterany:<jobid>` if it
+consumes another job's acts). J11 (`aggregate_tables.py`) or a local
+`python v_1/src/stress_tests/aggregate_tables.py` rebuilds the table any time.
 
 ## 8. Operational notes (cluster + git)
 - Cluster: Slurm `voltagepark`, `conda activate thesis`, repo `~/projects/HUJI-THESIS--YARIN`, work on `main`.
