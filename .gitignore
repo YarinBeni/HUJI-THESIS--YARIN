@@ -39,3 +39,7 @@ v_1/src/linear_probing/results/orcc_round1/activations/
 
 # Generated standalone HTML (built from seal_eda.html + seal_viz_data.json)
 v_1/src/viz/seal_eda_standalone.html
+
+# Cluster job logs — never commit (huge)
+*.out
+**/logs/
