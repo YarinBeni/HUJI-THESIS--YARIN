@@ -1,86 +1,127 @@
 {
   "method": "qwen3_32b",
+  "protocol": "geo_groupkfold_by_site",
   "n_rows": 1172,
   "n_sites": 56,
   "cleanings": {
     "tier0": {
       "n_layers": 65,
-      "best_layer_by_skill": 37,
+      "best_layer_by_skill": 63,
       "per_layer": {
         "0": {
-          "lat_spearman": 0.3483062610210941,
-          "lon_spearman": 0.14926816819098487,
+          "lat_spearman": 0.3728441055973557,
+          "lat_best_k": 5,
+          "lon_spearman": 0.28198085185583244,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.35190501812562924,
+          "lon_ridge_spearman": 0.19946210133565714,
           "geo": {
-            "gc_km_mean": 216.7081043003352,
-            "gc_km_median": 185.1255452257077,
+            "k": 5,
+            "gc_km_mean": 213.54195185954532,
+            "gc_km_median": 174.12159132313306,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.1856510907499227
+            "skill_vs_centroid": 0.19754890507025558
           }
         },
         "1": {
-          "lat_spearman": 0.3305588020807956,
-          "lon_spearman": 0.250158565989872,
+          "lat_spearman": 0.37199367910314096,
+          "lat_best_k": 5,
+          "lon_spearman": 0.29612182982338986,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.21623450444127312,
+          "lon_ridge_spearman": 0.020427008316600034,
           "geo": {
-            "gc_km_mean": 224.8859518392262,
-            "gc_km_median": 202.70965663351032,
+            "k": 5,
+            "gc_km_mean": 202.61539063670756,
+            "gc_km_median": 165.6815266188666,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.1549202547029248
+            "skill_vs_centroid": 0.2386088979228549
           }
         },
         "2": {
           "lat_spearman": 0.3560491539010242,
+          "lat_best_k": 3,
           "lon_spearman": 0.27325749496973495,
+          "lon_best_k": 3,
+          "lat_ridge_spearman": 0.2569976905799935,
+          "lon_ridge_spearman": 0.08262421500384443,
           "geo": {
-            "gc_km_mean": 206.75698527872643,
-            "gc_km_median": 178.25672181894083,
+            "k": 5,
+            "gc_km_mean": 193.74631759967704,
+            "gc_km_median": 155.20185871266898,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.22304555251787728
+            "skill_vs_centroid": 0.27193723133744385
           }
         },
         "3": {
           "lat_spearman": 0.3520239770319748,
+          "lat_best_k": 3,
           "lon_spearman": 0.2925874270432496,
+          "lon_best_k": 3,
+          "lat_ridge_spearman": 0.2592582323431683,
+          "lon_ridge_spearman": 0.10237334077713187,
           "geo": {
-            "gc_km_mean": 205.19155987822273,
-            "gc_km_median": 172.686629360879,
+            "k": 5,
+            "gc_km_mean": 193.10680213914384,
+            "gc_km_median": 152.57361064457865,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.22892813116683175
+            "skill_vs_centroid": 0.2743404119633609
           }
         },
         "4": {
-          "lat_spearman": 0.31300692361377486,
-          "lon_spearman": 0.2545022045757519,
+          "lat_spearman": 0.35543795878766465,
+          "lat_best_k": 5,
+          "lon_spearman": 0.32279292210949057,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2945489914950796,
+          "lon_ridge_spearman": 0.1655661378546914,
           "geo": {
-            "gc_km_mean": 204.10041268190372,
-            "gc_km_median": 168.04933163435288,
+            "k": 5,
+            "gc_km_mean": 191.892693246321,
+            "gc_km_median": 147.38485548373188,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2330284601878554
+            "skill_vs_centroid": 0.278902808260321
           }
         },
         "5": {
-          "lat_spearman": 0.3250496235762995,
-          "lon_spearman": 0.27004596525741353,
+          "lat_spearman": 0.38529045680317725,
+          "lat_best_k": 5,
+          "lon_spearman": 0.3324952314371181,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.323149430874078,
+          "lon_ridge_spearman": 0.19062621697772986,
           "geo": {
-            "gc_km_mean": 197.4879863982608,
-            "gc_km_median": 160.04066792026293,
+            "k": 5,
+            "gc_km_mean": 188.61012958698777,
+            "gc_km_median": 146.82715064208884,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2578767331630014
+            "skill_vs_centroid": 0.29123807437393734
           }
         },
         "6": {
-          "lat_spearman": 0.34759559356363107,
-          "lon_spearman": 0.28622952177242333,
+          "lat_spearman": 0.4014760646498836,
+          "lat_best_k": 5,
+          "lon_spearman": 0.31510307218964734,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.3362703606398235,
+          "lon_ridge_spearman": 0.21944190931155272,
           "geo": {
-            "gc_km_mean": 196.52136214549785,
-            "gc_km_median": 162.1538700896147,
+            "k": 5,
+            "gc_km_mean": 190.5427813200703,
+            "gc_km_median": 144.71729979690667,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2615091280308982
+            "skill_vs_centroid": 0.28397552719842956
           }
         },
         "7": {
           "lat_spearman": 0.39581657072757104,
+          "lat_best_k": 3,
           "lon_spearman": 0.3076384969298728,
+          "lon_best_k": 3,
+          "lat_ridge_spearman": 0.24881176713693537,
+          "lon_ridge_spearman": -0.05135259642954513,
           "geo": {
+            "k": 3,
             "gc_km_mean": 191.60982415202625,
             "gc_km_median": 158.64258600461116,
             "centroid_km_mean": 266.1121072783148,
@@ -89,8 +130,13 @@
         },
         "8": {
           "lat_spearman": 0.3796112513087548,
+          "lat_best_k": 3,
           "lon_spearman": 0.2949395857493097,
+          "lon_best_k": 3,
+          "lat_ridge_spearman": 0.23345433221561435,
+          "lon_ridge_spearman": -0.05124393829611336,
           "geo": {
+            "k": 3,
             "gc_km_mean": 192.9645354997572,
             "gc_km_median": 160.01544228551205,
             "centroid_km_mean": 266.1121072783148,
@@ -98,9 +144,14 @@
           }
         },
         "9": {
-          "lat_spearman": 0.38040376290805444,
-          "lon_spearman": 0.27929576167701814,
+          "lat_spearman": 0.3898858227535052,
+          "lat_best_k": 5,
+          "lon_spearman": 0.28971483952253757,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.22869554548174992,
+          "lon_ridge_spearman": -0.06207597380787885,
           "geo": {
+            "k": 3,
             "gc_km_mean": 192.11436992831136,
             "gc_km_median": 159.20926574476675,
             "centroid_km_mean": 266.1121072783148,
@@ -109,8 +160,13 @@
         },
         "10": {
           "lat_spearman": 0.3912847467873346,
-          "lon_spearman": 0.2658392457061979,
+          "lat_best_k": 3,
+          "lon_spearman": 0.282412332258029,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.22890004893267352,
+          "lon_ridge_spearman": -0.07234636480343709,
           "geo": {
+            "k": 3,
             "gc_km_mean": 192.3229446070137,
             "gc_km_median": 154.29934685651136,
             "centroid_km_mean": 266.1121072783148,
@@ -119,8 +175,13 @@
         },
         "11": {
           "lat_spearman": 0.38820864352370266,
+          "lat_best_k": 3,
           "lon_spearman": 0.2641021448208506,
+          "lon_best_k": 3,
+          "lat_ridge_spearman": 0.2309229842810182,
+          "lon_ridge_spearman": -0.07510750679017017,
           "geo": {
+            "k": 3,
             "gc_km_mean": 195.17628277252513,
             "gc_km_median": 158.22670908221352,
             "centroid_km_mean": 266.1121072783148,
@@ -129,8 +190,13 @@
         },
         "12": {
           "lat_spearman": 0.3831353375860217,
+          "lat_best_k": 3,
           "lon_spearman": 0.2614025647996123,
+          "lon_best_k": 3,
+          "lat_ridge_spearman": 0.22741362500726464,
+          "lon_ridge_spearman": -0.07931569591064491,
           "geo": {
+            "k": 3,
             "gc_km_mean": 194.13812342926394,
             "gc_km_median": 160.02757038697976,
             "centroid_km_mean": 266.1121072783148,
@@ -139,8 +205,13 @@
         },
         "13": {
           "lat_spearman": 0.38054337748882805,
+          "lat_best_k": 3,
           "lon_spearman": 0.26023952319216204,
+          "lon_best_k": 3,
+          "lat_ridge_spearman": 0.2246043852367246,
+          "lon_ridge_spearman": -0.08123019388284489,
           "geo": {
+            "k": 3,
             "gc_km_mean": 191.35483468648076,
             "gc_km_median": 157.10447036283082,
             "centroid_km_mean": 266.1121072783148,
@@ -149,8 +220,13 @@
         },
         "14": {
           "lat_spearman": 0.37634213577385894,
-          "lon_spearman": 0.25565474573764985,
+          "lat_best_k": 3,
+          "lon_spearman": 0.25881941581946605,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.21811604632599463,
+          "lon_ridge_spearman": -0.08584813189681106,
           "geo": {
+            "k": 3,
             "gc_km_mean": 190.62245781728566,
             "gc_km_median": 157.18162016796472,
             "centroid_km_mean": 266.1121072783148,
@@ -159,8 +235,13 @@
         },
         "15": {
           "lat_spearman": 0.36803065589262246,
-          "lon_spearman": 0.2528810788276178,
+          "lat_best_k": 3,
+          "lon_spearman": 0.26817533126226645,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.21476529219752033,
+          "lon_ridge_spearman": -0.0914239606286236,
           "geo": {
+            "k": 3,
             "gc_km_mean": 190.06343098196712,
             "gc_km_median": 152.21735461307813,
             "centroid_km_mean": 266.1121072783148,
@@ -169,8 +250,13 @@
         },
         "16": {
           "lat_spearman": 0.3664958899587791,
-          "lon_spearman": 0.25182840887751906,
+          "lat_best_k": 3,
+          "lon_spearman": 0.2970329074378973,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2107592408001992,
+          "lon_ridge_spearman": -0.08979956402518548,
           "geo": {
+            "k": 3,
             "gc_km_mean": 189.9944713815752,
             "gc_km_median": 153.81391269333625,
             "centroid_km_mean": 266.1121072783148,
@@ -179,8 +265,13 @@
         },
         "17": {
           "lat_spearman": 0.36032291198221933,
-          "lon_spearman": 0.24831605527765666,
+          "lat_best_k": 3,
+          "lon_spearman": 0.302641234510585,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.20707687496553018,
+          "lon_ridge_spearman": -0.08803700780617532,
           "geo": {
+            "k": 3,
             "gc_km_mean": 189.58709535891012,
             "gc_km_median": 154.03678660502501,
             "centroid_km_mean": 266.1121072783148,
@@ -189,8 +280,13 @@
         },
         "18": {
           "lat_spearman": 0.3587504352455897,
-          "lon_spearman": 0.2381079225333387,
+          "lat_best_k": 3,
+          "lon_spearman": 0.3096685506807503,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.20657040313160208,
+          "lon_ridge_spearman": -0.08609554226043067,
           "geo": {
+            "k": 3,
             "gc_km_mean": 189.02979349475692,
             "gc_km_median": 152.5816189834598,
             "centroid_km_mean": 266.1121072783148,
@@ -199,8 +295,13 @@
         },
         "19": {
           "lat_spearman": 0.35439077581589684,
-          "lon_spearman": 0.23542441357667726,
+          "lat_best_k": 3,
+          "lon_spearman": 0.30860330173660844,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.20533029058512564,
+          "lon_ridge_spearman": -0.08503807707426725,
           "geo": {
+            "k": 3,
             "gc_km_mean": 188.91504349160283,
             "gc_km_median": 151.4241039339434,
             "centroid_km_mean": 266.1121072783148,
@@ -208,9 +309,14 @@
           }
         },
         "20": {
-          "lat_spearman": 0.3453120029478561,
-          "lon_spearman": 0.2250298497020791,
+          "lat_spearman": 0.35241273436296217,
+          "lat_best_k": 2,
+          "lon_spearman": 0.30405811042280184,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.20422758932056362,
+          "lon_ridge_spearman": -0.08170446586768054,
           "geo": {
+            "k": 3,
             "gc_km_mean": 189.80245751264513,
             "gc_km_median": 150.87508937253153,
             "centroid_km_mean": 266.1121072783148,
@@ -218,9 +324,14 @@
           }
         },
         "21": {
-          "lat_spearman": 0.33629378754808403,
-          "lon_spearman": 0.21191891212935465,
+          "lat_spearman": 0.3578071533031676,
+          "lat_best_k": 2,
+          "lon_spearman": 0.3221564861259673,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.20703935816993452,
+          "lon_ridge_spearman": -0.0736585051860079,
           "geo": {
+            "k": 3,
             "gc_km_mean": 190.46348903386487,
             "gc_km_median": 152.93037812845841,
             "centroid_km_mean": 266.1121072783148,
@@ -228,9 +339,14 @@
           }
         },
         "22": {
-          "lat_spearman": 0.3426619876188316,
-          "lon_spearman": 0.2214503932476211,
+          "lat_spearman": 0.36230521485868444,
+          "lat_best_k": 2,
+          "lon_spearman": 0.3266719381053511,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.20762082729202247,
+          "lon_ridge_spearman": -0.07276926629498198,
           "geo": {
+            "k": 3,
             "gc_km_mean": 190.41400346248668,
             "gc_km_median": 152.35745023155147,
             "centroid_km_mean": 266.1121072783148,
@@ -238,9 +354,14 @@
           }
         },
         "23": {
-          "lat_spearman": 0.3359499374188238,
-          "lon_spearman": 0.21945558822648137,
+          "lat_spearman": 0.35988322359514835,
+          "lat_best_k": 2,
+          "lon_spearman": 0.31901090254412556,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.21192051831711317,
+          "lon_ridge_spearman": -0.07264448252260056,
           "geo": {
+            "k": 3,
             "gc_km_mean": 190.9647533666358,
             "gc_km_median": 152.99587361790532,
             "centroid_km_mean": 266.1121072783148,
@@ -248,9 +369,14 @@
           }
         },
         "24": {
-          "lat_spearman": 0.33382350281784473,
-          "lon_spearman": 0.22069015875847459,
+          "lat_spearman": 0.3633378970154344,
+          "lat_best_k": 2,
+          "lon_spearman": 0.3135315813323497,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.21007617310541615,
+          "lon_ridge_spearman": -0.07484280880496674,
           "geo": {
+            "k": 3,
             "gc_km_mean": 190.75735958503034,
             "gc_km_median": 151.1714638814484,
             "centroid_km_mean": 266.1121072783148,
@@ -258,9 +384,14 @@
           }
         },
         "25": {
-          "lat_spearman": 0.3293526628720658,
-          "lon_spearman": 0.21038164200679588,
+          "lat_spearman": 0.35980766569264644,
+          "lat_best_k": 2,
+          "lon_spearman": 0.28704247585969633,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.21281502732527907,
+          "lon_ridge_spearman": -0.07159672343248627,
           "geo": {
+            "k": 3,
             "gc_km_mean": 189.95534315476382,
             "gc_km_median": 147.99754828368714,
             "centroid_km_mean": 266.1121072783148,
@@ -268,9 +399,14 @@
           }
         },
         "26": {
-          "lat_spearman": 0.32808216787855204,
-          "lon_spearman": 0.20812361673702767,
+          "lat_spearman": 0.3402419316645653,
+          "lat_best_k": 2,
+          "lon_spearman": 0.2810481203750671,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2115890794209634,
+          "lon_ridge_spearman": -0.0736288956602539,
           "geo": {
+            "k": 3,
             "gc_km_mean": 188.96300581579862,
             "gc_km_median": 147.40040327215803,
             "centroid_km_mean": 266.1121072783148,
@@ -278,9 +414,14 @@
           }
         },
         "27": {
-          "lat_spearman": 0.3234294186166124,
-          "lon_spearman": 0.21051222272638398,
+          "lat_spearman": 0.34516895432034883,
+          "lat_best_k": 5,
+          "lon_spearman": 0.28564223562819197,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.21804169387265177,
+          "lon_ridge_spearman": -0.06898632130895885,
           "geo": {
+            "k": 3,
             "gc_km_mean": 186.66301273829828,
             "gc_km_median": 145.37483136066817,
             "centroid_km_mean": 266.1121072783148,
@@ -288,9 +429,14 @@
           }
         },
         "28": {
-          "lat_spearman": 0.3369370849814063,
-          "lon_spearman": 0.21174388749209572,
+          "lat_spearman": 0.3567083875072582,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2926835326357366,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.23794521989923206,
+          "lon_ridge_spearman": -0.05781541695184985,
           "geo": {
+            "k": 3,
             "gc_km_mean": 185.8945039768159,
             "gc_km_median": 144.46610069124586,
             "centroid_km_mean": 266.1121072783148,
@@ -298,9 +444,14 @@
           }
         },
         "29": {
-          "lat_spearman": 0.33712875969057743,
-          "lon_spearman": 0.20987786540973397,
+          "lat_spearman": 0.3607163715198499,
+          "lat_best_k": 5,
+          "lon_spearman": 0.29083599157187284,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.24047760705762383,
+          "lon_ridge_spearman": -0.057020435244043016,
           "geo": {
+            "k": 3,
             "gc_km_mean": 185.89241052872552,
             "gc_km_median": 145.41739387857814,
             "centroid_km_mean": 266.1121072783148,
@@ -308,9 +459,14 @@
           }
         },
         "30": {
-          "lat_spearman": 0.34092842230858555,
-          "lon_spearman": 0.21052072258193333,
+          "lat_spearman": 0.36146930946130956,
+          "lat_best_k": 5,
+          "lon_spearman": 0.28211828907267233,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.24509273836967965,
+          "lon_ridge_spearman": -0.05335231131683634,
           "geo": {
+            "k": 3,
             "gc_km_mean": 185.70684043847754,
             "gc_km_median": 146.87174125159737,
             "centroid_km_mean": 266.1121072783148,
@@ -318,9 +474,14 @@
           }
         },
         "31": {
-          "lat_spearman": 0.33489264840646915,
-          "lon_spearman": 0.2104569291775431,
+          "lat_spearman": 0.3589528018297625,
+          "lat_best_k": 5,
+          "lon_spearman": 0.27964140074063853,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2508925324803998,
+          "lon_ridge_spearman": -0.037110396740010806,
           "geo": {
+            "k": 3,
             "gc_km_mean": 185.87333941639636,
             "gc_km_median": 145.60727289667705,
             "centroid_km_mean": 266.1121072783148,
@@ -328,9 +489,14 @@
           }
         },
         "32": {
-          "lat_spearman": 0.3234490337928654,
-          "lon_spearman": 0.19766008787869063,
+          "lat_spearman": 0.36546424976342845,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2765538581714345,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.25742065174716167,
+          "lon_ridge_spearman": -0.012642310913597972,
           "geo": {
+            "k": 3,
             "gc_km_mean": 185.5351666036816,
             "gc_km_median": 144.09895674122725,
             "centroid_km_mean": 266.1121072783148,
@@ -338,9 +504,14 @@
           }
         },
         "33": {
-          "lat_spearman": 0.3381875804492096,
-          "lon_spearman": 0.21813341794474161,
+          "lat_spearman": 0.37490177662641944,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2623359701554888,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2651911806839401,
+          "lon_ridge_spearman": 0.006552321496304775,
           "geo": {
+            "k": 3,
             "gc_km_mean": 183.08401998092543,
             "gc_km_median": 141.99215156580004,
             "centroid_km_mean": 266.1121072783148,
@@ -348,9 +519,14 @@
           }
         },
         "34": {
-          "lat_spearman": 0.350157091273832,
-          "lon_spearman": 0.22734926193123933,
+          "lat_spearman": 0.38344835612967254,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2812677672765928,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.26113703785542886,
+          "lon_ridge_spearman": 0.002493544198208658,
           "geo": {
+            "k": 3,
             "gc_km_mean": 182.83324531167537,
             "gc_km_median": 140.31766609883954,
             "centroid_km_mean": 266.1121072783148,
@@ -358,9 +534,14 @@
           }
         },
         "35": {
-          "lat_spearman": 0.3421061300420719,
-          "lon_spearman": 0.20993831438132854,
+          "lat_spearman": 0.3891174127265675,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2899365688786735,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2644687544260508,
+          "lon_ridge_spearman": 0.0028275353923065613,
           "geo": {
+            "k": 3,
             "gc_km_mean": 182.68409210494693,
             "gc_km_median": 139.49356096826108,
             "centroid_km_mean": 266.1121072783148,
@@ -368,9 +549,14 @@
           }
         },
         "36": {
-          "lat_spearman": 0.34194115470394637,
-          "lon_spearman": 0.20628515562378774,
+          "lat_spearman": 0.3874917782395185,
+          "lat_best_k": 5,
+          "lon_spearman": 0.282192977775983,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.26630431091648776,
+          "lon_ridge_spearman": 0.00412680023038587,
           "geo": {
+            "k": 3,
             "gc_km_mean": 181.80539874670345,
             "gc_km_median": 135.98890619359616,
             "centroid_km_mean": 266.1121072783148,
@@ -378,9 +564,14 @@
           }
         },
         "37": {
-          "lat_spearman": 0.34718095245575126,
-          "lon_spearman": 0.21417243072346748,
+          "lat_spearman": 0.38816174445949475,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2906791536952562,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2679454198648149,
+          "lon_ridge_spearman": 0.0069550501065901785,
           "geo": {
+            "k": 3,
             "gc_km_mean": 180.79608835618507,
             "gc_km_median": 136.98806078369262,
             "centroid_km_mean": 266.1121072783148,
@@ -388,9 +579,14 @@
           }
         },
         "38": {
-          "lat_spearman": 0.3319415522925432,
-          "lon_spearman": 0.18303195318743676,
+          "lat_spearman": 0.37529713349135696,
+          "lat_best_k": 5,
+          "lon_spearman": 0.29609917870338776,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2519955533086081,
+          "lon_ridge_spearman": -0.0017694477717945314,
           "geo": {
+            "k": 3,
             "gc_km_mean": 182.75009187715847,
             "gc_km_median": 134.61920129104413,
             "centroid_km_mean": 266.1121072783148,
@@ -398,9 +594,14 @@
           }
         },
         "39": {
-          "lat_spearman": 0.32926795571388257,
-          "lon_spearman": 0.17651871965935872,
+          "lat_spearman": 0.37237361194481605,
+          "lat_best_k": 5,
+          "lon_spearman": 0.292654869760968,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.24599528161177886,
+          "lon_ridge_spearman": -0.008482168181939385,
           "geo": {
+            "k": 3,
             "gc_km_mean": 184.08250461957667,
             "gc_km_median": 138.2166121654636,
             "centroid_km_mean": 266.1121072783148,
@@ -408,9 +609,14 @@
           }
         },
         "40": {
-          "lat_spearman": 0.32427125764448445,
-          "lon_spearman": 0.16364856336716666,
+          "lat_spearman": 0.37408461583055486,
+          "lat_best_k": 5,
+          "lon_spearman": 0.3069370245424931,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2338110148372,
+          "lon_ridge_spearman": -0.016696163586217096,
           "geo": {
+            "k": 3,
             "gc_km_mean": 185.06857858137832,
             "gc_km_median": 138.17706859345537,
             "centroid_km_mean": 266.1121072783148,
@@ -418,9 +624,14 @@
           }
         },
         "41": {
-          "lat_spearman": 0.3209194435624264,
-          "lon_spearman": 0.1726804923465836,
+          "lat_spearman": 0.3747849557828179,
+          "lat_best_k": 5,
+          "lon_spearman": 0.31522016770969197,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.23034783057352504,
+          "lon_ridge_spearman": -0.018431047299378493,
           "geo": {
+            "k": 3,
             "gc_km_mean": 188.9551873969501,
             "gc_km_median": 146.4743753497322,
             "centroid_km_mean": 266.1121072783148,
@@ -428,99 +639,149 @@
           }
         },
         "42": {
-          "lat_spearman": 0.3301879064228483,
-          "lon_spearman": 0.16161184043545906,
+          "lat_spearman": 0.3831676034326794,
+          "lat_best_k": 2,
+          "lon_spearman": 0.31349303463759365,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.22084932059108592,
+          "lon_ridge_spearman": -0.022763436960462048,
           "geo": {
-            "gc_km_mean": 191.73649701290717,
-            "gc_km_median": 149.9972317627031,
+            "k": 5,
+            "gc_km_mean": 190.88703283074506,
+            "gc_km_median": 145.72342895333827,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2794897647690321
+            "skill_vs_centroid": 0.28268189379634345
           }
         },
         "43": {
-          "lat_spearman": 0.32851295277932413,
-          "lon_spearman": 0.1415948131028175,
+          "lat_spearman": 0.39423352259272904,
+          "lat_best_k": 2,
+          "lon_spearman": 0.31058132208753647,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.20851313163431218,
+          "lon_ridge_spearman": -0.03459015328108355,
           "geo": {
-            "gc_km_mean": 192.58206334093066,
-            "gc_km_median": 149.10567500449721,
+            "k": 5,
+            "gc_km_mean": 190.51382441058684,
+            "gc_km_median": 147.96976320761092,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2763122831554685
+            "skill_vs_centroid": 0.2840843418997959
           }
         },
         "44": {
-          "lat_spearman": 0.3356041966551574,
-          "lon_spearman": 0.16477027659628835,
+          "lat_spearman": 0.4129958162262008,
+          "lat_best_k": 2,
+          "lon_spearman": 0.307679922515667,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2210240318524177,
+          "lon_ridge_spearman": -0.031159320198771587,
           "geo": {
-            "gc_km_mean": 192.74241291954533,
-            "gc_km_median": 149.0812779697145,
+            "k": 5,
+            "gc_km_mean": 188.2222129566721,
+            "gc_km_median": 145.18510288723115,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.27570971914492926
+            "skill_vs_centroid": 0.2926957932063614
           }
         },
         "45": {
-          "lat_spearman": 0.326526468863529,
-          "lon_spearman": 0.17408595489488982,
+          "lat_spearman": 0.4222196263766154,
+          "lat_best_k": 2,
+          "lon_spearman": 0.3155770832818501,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.21985118651212926,
+          "lon_ridge_spearman": -0.029686817576691185,
           "geo": {
-            "gc_km_mean": 194.24797477965228,
-            "gc_km_median": 156.32712646777256,
+            "k": 5,
+            "gc_km_mean": 188.26280153451094,
+            "gc_km_median": 148.55444465601062,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2700520965906411
+            "skill_vs_centroid": 0.29254326885016446
           }
         },
         "46": {
-          "lat_spearman": 0.3272907786594045,
-          "lon_spearman": 0.16675598860714191,
+          "lat_spearman": 0.42358340706506825,
+          "lat_best_k": 2,
+          "lon_spearman": 0.2999367801739128,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.221763682751823,
+          "lon_ridge_spearman": -0.026940476767196804,
           "geo": {
-            "gc_km_mean": 193.24231889874747,
-            "gc_km_median": 153.35804493346774,
+            "k": 5,
+            "gc_km_mean": 190.37411873254544,
+            "gc_km_median": 151.52650456116504,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2738311650862095
+            "skill_vs_centroid": 0.28460932995640953
           }
         },
         "47": {
-          "lat_spearman": 0.32561706368850174,
-          "lon_spearman": 0.15905776316374348,
+          "lat_spearman": 0.42472263800406884,
+          "lat_best_k": 2,
+          "lon_spearman": 0.3006455768568546,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.22115918788617855,
+          "lon_ridge_spearman": -0.025969063452027617,
           "geo": {
-            "gc_km_mean": 193.28520054631676,
-            "gc_km_median": 151.17758911256348,
+            "k": 5,
+            "gc_km_mean": 189.5183248198354,
+            "gc_km_median": 148.69931702301082,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2736700237987729
+            "skill_vs_centroid": 0.2878252449384926
           }
         },
         "48": {
-          "lat_spearman": 0.3237186082616254,
-          "lon_spearman": 0.16367710467604246,
+          "lat_spearman": 0.44143124983167736,
+          "lat_best_k": 2,
+          "lon_spearman": 0.310074676824558,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2257773183385733,
+          "lon_ridge_spearman": -0.02541220460491768,
           "geo": {
-            "gc_km_mean": 189.3474963394396,
-            "gc_km_median": 143.15123845087393,
+            "k": 5,
+            "gc_km_mean": 188.21445786233798,
+            "gc_km_median": 145.62350286607978,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.28846718672063465
+            "skill_vs_centroid": 0.2927249354141829
           }
         },
         "49": {
-          "lat_spearman": 0.3247163059876607,
-          "lon_spearman": 0.1737702965536175,
+          "lat_spearman": 0.4371037134988079,
+          "lat_best_k": 2,
+          "lon_spearman": 0.309888598185881,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.22444493592781703,
+          "lon_ridge_spearman": -0.03368357009487672,
           "geo": {
-            "gc_km_mean": 190.0960196644465,
-            "gc_km_median": 146.96263932448875,
+            "k": 5,
+            "gc_km_mean": 188.5499976315026,
+            "gc_km_median": 143.66915465946204,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.28565437473450417
+            "skill_vs_centroid": 0.29146403912278007
           }
         },
         "50": {
-          "lat_spearman": 0.3255489537086146,
-          "lon_spearman": 0.186800803815202,
+          "lat_spearman": 0.39018743260367816,
+          "lat_best_k": 2,
+          "lon_spearman": 0.3082361735706257,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2201718623737859,
+          "lon_ridge_spearman": -0.03988600145479642,
           "geo": {
-            "gc_km_mean": 191.00447199818203,
-            "gc_km_median": 147.9783927054791,
+            "k": 5,
+            "gc_km_mean": 186.80980365215137,
+            "gc_km_median": 140.88961934423443,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.28224057916155254
+            "skill_vs_centroid": 0.29800336571392705
           }
         },
         "51": {
-          "lat_spearman": 0.34090788326528293,
-          "lon_spearman": 0.19142419144495493,
+          "lat_spearman": 0.3815739665567986,
+          "lat_best_k": 5,
+          "lon_spearman": 0.27137418551953935,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.23775124420287844,
+          "lon_ridge_spearman": -0.028223050810232984,
           "geo": {
+            "k": 3,
             "gc_km_mean": 184.76943016275106,
             "gc_km_median": 136.67580044080486,
             "centroid_km_mean": 266.1121072783148,
@@ -528,9 +789,14 @@
           }
         },
         "52": {
-          "lat_spearman": 0.34165761890751656,
-          "lon_spearman": 0.19328157979614352,
+          "lat_spearman": 0.3846792130887821,
+          "lat_best_k": 5,
+          "lon_spearman": 0.26174689876191737,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2519708639717307,
+          "lon_ridge_spearman": -0.021935452298827082,
           "geo": {
+            "k": 3,
             "gc_km_mean": 183.91602030924736,
             "gc_km_median": 136.91533209687782,
             "centroid_km_mean": 266.1121072783148,
@@ -538,185 +804,275 @@
           }
         },
         "53": {
-          "lat_spearman": 0.35383039828819374,
-          "lon_spearman": 0.19974516377446763,
+          "lat_spearman": 0.38302803813927955,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2533043911641047,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.27354831043816685,
+          "lon_ridge_spearman": -0.0017284483466789013,
           "geo": {
-            "gc_km_mean": 185.1577391622055,
-            "gc_km_median": 138.55006981813256,
+            "k": 5,
+            "gc_km_mean": 182.572103924994,
+            "gc_km_median": 138.563824649855,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.3042115180105005
+            "skill_vs_centroid": 0.31392785622470765
           }
         },
         "54": {
-          "lat_spearman": 0.35260366184112374,
-          "lon_spearman": 0.1934953294438251,
+          "lat_spearman": 0.37531411161273587,
+          "lat_best_k": 5,
+          "lon_spearman": 0.23094028399439304,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.27703927901016545,
+          "lon_ridge_spearman": 0.0028450295514029847,
           "geo": {
-            "gc_km_mean": 188.34324502146595,
-            "gc_km_median": 142.56882346599957,
+            "k": 5,
+            "gc_km_mean": 183.87374249535645,
+            "gc_km_median": 138.1164198765983,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.29224097712891306
+            "skill_vs_centroid": 0.3090365396150462
           }
         },
         "55": {
-          "lat_spearman": 0.35256970896670503,
-          "lon_spearman": 0.1923155229671064,
+          "lat_spearman": 0.3770883716040546,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2353877052052722,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.29450592602013304,
+          "lon_ridge_spearman": 0.01785434537997476,
           "geo": {
-            "gc_km_mean": 188.84661963535885,
-            "gc_km_median": 146.30072190997333,
+            "k": 5,
+            "gc_km_mean": 185.57362125070054,
+            "gc_km_median": 140.40456463895188,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2903493885836146
+            "skill_vs_centroid": 0.3026487101670374
           }
         },
         "56": {
-          "lat_spearman": 0.35706634385119,
-          "lon_spearman": 0.21693923311185168,
+          "lat_spearman": 0.37662522520225994,
+          "lat_best_k": 5,
+          "lon_spearman": 0.23318748867495676,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.30415177833465235,
+          "lon_ridge_spearman": 0.03120167636924366,
           "geo": {
-            "gc_km_mean": 190.63311406856687,
-            "gc_km_median": 148.70024482561178,
+            "k": 5,
+            "gc_km_mean": 186.82682214009466,
+            "gc_km_median": 138.5375989492809,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2836360734643607
+            "skill_vs_centroid": 0.2979394133890315
           }
         },
         "57": {
-          "lat_spearman": 0.3452996862719882,
-          "lon_spearman": 0.22277308002756546,
+          "lat_spearman": 0.37490669583188785,
+          "lat_best_k": 5,
+          "lon_spearman": 0.24975877068421426,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2948342904499819,
+          "lon_ridge_spearman": 0.017648845552971783,
           "geo": {
-            "gc_km_mean": 196.0886855909064,
-            "gc_km_median": 155.71903407814136,
+            "k": 5,
+            "gc_km_mean": 189.20727301800395,
+            "gc_km_median": 142.84013722742282,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.26313504636665785
+            "skill_vs_centroid": 0.28899411998522684
           }
         },
         "58": {
-          "lat_spearman": 0.3389082441135155,
-          "lon_spearman": 0.22092189182710587,
+          "lat_spearman": 0.37227351037797796,
+          "lat_best_k": 5,
+          "lon_spearman": 0.24369227317863934,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.30011003793186486,
+          "lon_ridge_spearman": 0.027833793029132636,
           "geo": {
-            "gc_km_mean": 197.14337619639772,
-            "gc_km_median": 160.0064979430902,
+            "k": 5,
+            "gc_km_mean": 190.0271856728308,
+            "gc_km_median": 144.59433712813413,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2591717144601232
+            "skill_vs_centroid": 0.28591304012301166
           }
         },
         "59": {
-          "lat_spearman": 0.33038192216477325,
-          "lon_spearman": 0.22393988326388853,
+          "lat_spearman": 0.3779741210118555,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2513652928717912,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.30168979728970186,
+          "lon_ridge_spearman": 0.04003999563747567,
           "geo": {
-            "gc_km_mean": 198.2861623061849,
-            "gc_km_median": 161.72368398494825,
+            "k": 5,
+            "gc_km_mean": 189.5671915327108,
+            "gc_km_median": 144.30813468299948,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2548773359687605
+            "skill_vs_centroid": 0.28764161288441137
           }
         },
         "60": {
-          "lat_spearman": 0.33257971061526703,
-          "lon_spearman": 0.23327137352684044,
+          "lat_spearman": 0.3802723601462161,
+          "lat_best_k": 5,
+          "lon_spearman": 0.26419369571964835,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.31594579925067545,
+          "lon_ridge_spearman": 0.06071743929600306,
           "geo": {
-            "gc_km_mean": 197.3555761799472,
-            "gc_km_median": 159.63819627772648,
+            "k": 5,
+            "gc_km_mean": 187.0285213359728,
+            "gc_km_median": 140.30025851877298,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.25837430623349356
+            "skill_vs_centroid": 0.2971814651771255
           }
         },
         "61": {
-          "lat_spearman": 0.33046015133601303,
-          "lon_spearman": 0.25587310052105955,
+          "lat_spearman": 0.3966660770232133,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2927581549355558,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.3231855414555123,
+          "lon_ridge_spearman": 0.08015705167319573,
           "geo": {
-            "gc_km_mean": 193.14068745412715,
-            "gc_km_median": 152.78311225233642,
+            "k": 5,
+            "gc_km_mean": 182.9870202614284,
+            "gc_km_median": 135.14936618406762,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.27421307722714805
+            "skill_vs_centroid": 0.3123686774985761
           }
         },
         "62": {
-          "lat_spearman": 0.3181701771574019,
-          "lon_spearman": 0.2697133014098689,
+          "lat_spearman": 0.403613794854615,
+          "lat_best_k": 5,
+          "lon_spearman": 0.30407726205714625,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.32648320573822553,
+          "lon_ridge_spearman": 0.09280902789413734,
           "geo": {
-            "gc_km_mean": 192.4007271850214,
-            "gc_km_median": 150.35000035831553,
+            "k": 5,
+            "gc_km_mean": 184.759863697359,
+            "gc_km_median": 134.49246905619975,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2769937108355688
+            "skill_vs_centroid": 0.30570666029814686
           }
         },
         "63": {
-          "lat_spearman": 0.3413896895690976,
-          "lon_spearman": 0.28929634874515553,
+          "lat_spearman": 0.4027925397857762,
+          "lat_best_k": 5,
+          "lon_spearman": 0.32801418877904276,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.3258133519392161,
+          "lon_ridge_spearman": 0.11378147257345092,
           "geo": {
-            "gc_km_mean": 188.99809627275042,
-            "gc_km_median": 143.66681717413454,
+            "k": 5,
+            "gc_km_mean": 179.33022015637363,
+            "gc_km_median": 129.2362493083339,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2897801674424165
+            "skill_vs_centroid": 0.3261102548452629
           }
         },
         "64": {
-          "lat_spearman": 0.30101074775191117,
-          "lon_spearman": 0.2484831884982276,
+          "lat_spearman": 0.4143742403335563,
+          "lat_best_k": 5,
+          "lon_spearman": 0.3545724800499314,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2983188310997318,
+          "lon_ridge_spearman": 0.15199079486876796,
           "geo": {
-            "gc_km_mean": 198.16008369466928,
-            "gc_km_median": 157.9950497354239,
+            "k": 5,
+            "gc_km_mean": 183.37708006193088,
+            "gc_km_median": 144.29152953343169,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.25535111603388083
+            "skill_vs_centroid": 0.31090290502962736
           }
         }
       }
     },
     "maximal": {
       "n_layers": 65,
-      "best_layer_by_skill": 5,
+      "best_layer_by_skill": 64,
       "per_layer": {
         "0": {
-          "lat_spearman": 0.20481514142475843,
+          "lat_spearman": 0.206879165706979,
+          "lat_best_k": 5,
           "lon_spearman": 0.08686602639506788,
+          "lon_best_k": 3,
+          "lat_ridge_spearman": 0.19082945586634734,
+          "lon_ridge_spearman": 0.0400646126561984,
           "geo": {
-            "gc_km_mean": 231.51843930143266,
-            "gc_km_median": 202.59737157678768,
+            "k": 5,
+            "gc_km_mean": 229.40198384434964,
+            "gc_km_median": 195.22802717631671,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.12999659553521237
+            "skill_vs_centroid": 0.1379498430545727
           }
         },
         "1": {
           "lat_spearman": 0.2301606641837657,
-          "lon_spearman": 0.1433829107594969,
+          "lat_best_k": 3,
+          "lon_spearman": 0.15660892300335966,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.1652527754534251,
+          "lon_ridge_spearman": -0.007431377398017171,
           "geo": {
-            "gc_km_mean": 228.37833962936296,
-            "gc_km_median": 201.94992851089967,
+            "k": 5,
+            "gc_km_mean": 218.38352132652423,
+            "gc_km_median": 179.810824305118,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.14179650837715463
+            "skill_vs_centroid": 0.17935518394837013
           }
         },
         "2": {
           "lat_spearman": 0.27446914067636846,
-          "lon_spearman": 0.1769172845977467,
+          "lat_best_k": 3,
+          "lon_spearman": 0.19020749636462486,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.21100732775035097,
+          "lon_ridge_spearman": 0.10285997813384527,
           "geo": {
-            "gc_km_mean": 217.88785482984022,
-            "gc_km_median": 187.19953103990247,
+            "k": 5,
+            "gc_km_mean": 215.10630944539432,
+            "gc_km_median": 175.40512824628468,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.18121780681718092
+            "skill_vs_centroid": 0.1916703390709532
           }
         },
         "3": {
-          "lat_spearman": 0.28978356831111257,
-          "lon_spearman": 0.21942156217384778,
+          "lat_spearman": 0.32504528090709395,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2687817143479095,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.23882772614368009,
+          "lon_ridge_spearman": 0.13552200865648575,
           "geo": {
-            "gc_km_mean": 211.0285392815382,
-            "gc_km_median": 178.81997279679643,
+            "k": 5,
+            "gc_km_mean": 208.1676320368056,
+            "gc_km_median": 166.22280884466102,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20699384391093167
+            "skill_vs_centroid": 0.2177446033333149
           }
         },
         "4": {
-          "lat_spearman": 0.2978261708219047,
-          "lon_spearman": 0.26316282648130573,
+          "lat_spearman": 0.3476084312927681,
+          "lat_best_k": 5,
+          "lon_spearman": 0.28460994276800755,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.26834307849121186,
+          "lon_ridge_spearman": 0.18266791285082273,
           "geo": {
-            "gc_km_mean": 205.7101161684681,
-            "gc_km_median": 173.2637250836284,
+            "k": 5,
+            "gc_km_mean": 201.2573595083405,
+            "gc_km_median": 161.65533281852842,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.22697949269431383
+            "skill_vs_centroid": 0.2437121273183771
           }
         },
         "5": {
-          "lat_spearman": 0.2725916867100088,
-          "lon_spearman": 0.26569054997272756,
+          "lat_spearman": 0.3410480300568896,
+          "lat_best_k": 5,
+          "lon_spearman": 0.304698261157086,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2761666644569928,
+          "lon_ridge_spearman": 0.19962240643773171,
           "geo": {
+            "k": 3,
             "gc_km_mean": 200.52653622142628,
             "gc_km_median": 164.7932420152093,
             "centroid_km_mean": 266.1121072783148,
@@ -724,69 +1080,104 @@
           }
         },
         "6": {
-          "lat_spearman": 0.2431256525526725,
-          "lon_spearman": 0.2558419000691782,
+          "lat_spearman": 0.3331350130127774,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2808602429869306,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2810988594609589,
+          "lon_ridge_spearman": 0.21406332118250684,
           "geo": {
-            "gc_km_mean": 208.49067995138054,
-            "gc_km_median": 176.03111162463264,
+            "k": 5,
+            "gc_km_mean": 202.3786550987856,
+            "gc_km_median": 164.98499872422843,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2165306491172556
+            "skill_vs_centroid": 0.23949850621743118
           }
         },
         "7": {
-          "lat_spearman": 0.2691331039659121,
-          "lon_spearman": 0.22280388360402043,
+          "lat_spearman": 0.33409545012903136,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2999453563273692,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11350898278587035,
+          "lon_ridge_spearman": -0.13334258349052272,
           "geo": {
-            "gc_km_mean": 207.72359248443223,
-            "gc_km_median": 173.23709421896245,
+            "k": 5,
+            "gc_km_mean": 204.5389621770115,
+            "gc_km_median": 167.71986230089027,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.21941322170966315
+            "skill_vs_centroid": 0.2313804724296391
           }
         },
         "8": {
-          "lat_spearman": 0.26585593675192964,
-          "lon_spearman": 0.20606167370092365,
+          "lat_spearman": 0.34259295230431486,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2935099667383422,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.12271673463582014,
+          "lon_ridge_spearman": -0.104876078299807,
           "geo": {
-            "gc_km_mean": 211.84520835103825,
-            "gc_km_median": 182.26327842149192,
+            "k": 5,
+            "gc_km_mean": 203.90981980015104,
+            "gc_km_median": 167.52940230668872,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2039249528414775
+            "skill_vs_centroid": 0.2337446729288012
           }
         },
         "9": {
-          "lat_spearman": 0.26461741836444147,
-          "lon_spearman": 0.1953890009475961,
+          "lat_spearman": 0.3562758070162284,
+          "lat_best_k": 5,
+          "lon_spearman": 0.3053182860070235,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11681104559541056,
+          "lon_ridge_spearman": -0.11837701880778745,
           "geo": {
-            "gc_km_mean": 210.53166307472054,
-            "gc_km_median": 180.48050569438988,
+            "k": 5,
+            "gc_km_mean": 204.5989966850028,
+            "gc_km_median": 171.02310066946723,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2088610126463173
+            "skill_vs_centroid": 0.23115487387042555
           }
         },
         "10": {
-          "lat_spearman": 0.2749302665404071,
-          "lon_spearman": 0.1907030871723998,
+          "lat_spearman": 0.36323584358470995,
+          "lat_best_k": 5,
+          "lon_spearman": 0.3020654738477374,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.10972524393780413,
+          "lon_ridge_spearman": -0.14264105134144517,
           "geo": {
-            "gc_km_mean": 206.2393906557829,
-            "gc_km_median": 171.82339055006645,
+            "k": 5,
+            "gc_km_mean": 204.49234694141757,
+            "gc_km_median": 167.64787455212348,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.22499057722283067
+            "skill_vs_centroid": 0.2315556438491987
           }
         },
         "11": {
-          "lat_spearman": 0.2834746635825178,
-          "lon_spearman": 0.19536707305458662,
+          "lat_spearman": 0.36248771182367606,
+          "lat_best_k": 5,
+          "lon_spearman": 0.3014268373561884,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11535449833371782,
+          "lon_ridge_spearman": -0.14459722095331615,
           "geo": {
-            "gc_km_mean": 205.039438823746,
-            "gc_km_median": 169.7194576146626,
+            "k": 5,
+            "gc_km_mean": 204.67331412909596,
+            "gc_km_median": 167.0208425534444,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.22949977390805298
+            "skill_vs_centroid": 0.23087560268335605
           }
         },
         "12": {
-          "lat_spearman": 0.2949703074236369,
-          "lon_spearman": 0.20387219502879633,
+          "lat_spearman": 0.36024240147801767,
+          "lat_best_k": 5,
+          "lon_spearman": 0.297460081190031,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11305909138651402,
+          "lon_ridge_spearman": -0.15091109569054587,
           "geo": {
+            "k": 3,
             "gc_km_mean": 203.72651409170052,
             "gc_km_median": 168.00142025805832,
             "centroid_km_mean": 266.1121072783148,
@@ -794,9 +1185,14 @@
           }
         },
         "13": {
-          "lat_spearman": 0.29777511587627037,
-          "lon_spearman": 0.19896596616077267,
+          "lat_spearman": 0.351242955113785,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2859743973079088,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11070817138535163,
+          "lon_ridge_spearman": -0.15486111227661759,
           "geo": {
+            "k": 3,
             "gc_km_mean": 203.1889406137735,
             "gc_km_median": 165.65881076718279,
             "centroid_km_mean": 266.1121072783148,
@@ -804,9 +1200,14 @@
           }
         },
         "14": {
-          "lat_spearman": 0.30057323561953203,
-          "lon_spearman": 0.19262110216444805,
+          "lat_spearman": 0.3463099525970935,
+          "lat_best_k": 5,
+          "lon_spearman": 0.29231803210152046,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.10682474578556034,
+          "lon_ridge_spearman": -0.15522658969025832,
           "geo": {
+            "k": 3,
             "gc_km_mean": 203.51695417740848,
             "gc_km_median": 164.8433243790891,
             "centroid_km_mean": 266.1121072783148,
@@ -814,9 +1215,14 @@
           }
         },
         "15": {
-          "lat_spearman": 0.2949135934922581,
-          "lon_spearman": 0.18597260125986947,
+          "lat_spearman": 0.34706681681877133,
+          "lat_best_k": 5,
+          "lon_spearman": 0.3077679979346226,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.10561851457644217,
+          "lon_ridge_spearman": -0.15426061440046693,
           "geo": {
+            "k": 3,
             "gc_km_mean": 202.56883501753492,
             "gc_km_median": 164.30997862956008,
             "centroid_km_mean": 266.1121072783148,
@@ -824,129 +1230,194 @@
           }
         },
         "16": {
-          "lat_spearman": 0.3017280907587341,
-          "lon_spearman": 0.1843462748570411,
+          "lat_spearman": 0.3452634293879794,
+          "lat_best_k": 5,
+          "lon_spearman": 0.32383248925184493,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.10625766363785223,
+          "lon_ridge_spearman": -0.15101628982650317,
           "geo": {
-            "gc_km_mean": 203.20042455587537,
-            "gc_km_median": 164.50721061065914,
+            "k": 5,
+            "gc_km_mean": 202.98159694280037,
+            "gc_km_median": 165.48419434227816,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2364104488362978
+            "skill_vs_centroid": 0.23723276246686908
           }
         },
         "17": {
-          "lat_spearman": 0.30338767168611736,
-          "lon_spearman": 0.18696583722009014,
+          "lat_spearman": 0.3492864060003936,
+          "lat_best_k": 5,
+          "lon_spearman": 0.3337486830159853,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.10768174341081274,
+          "lon_ridge_spearman": -0.15042144015553802,
           "geo": {
-            "gc_km_mean": 204.74659354078065,
-            "gc_km_median": 167.28676381855908,
+            "k": 5,
+            "gc_km_mean": 203.70463883330248,
+            "gc_km_median": 165.45368004009467,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.23060023222977488
+            "skill_vs_centroid": 0.2345157049909914
           }
         },
         "18": {
-          "lat_spearman": 0.29553263092170545,
-          "lon_spearman": 0.18577896948707562,
+          "lat_spearman": 0.3378955887763795,
+          "lat_best_k": 5,
+          "lon_spearman": 0.3132738714522439,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11133395491933266,
+          "lon_ridge_spearman": -0.14738186590368282,
           "geo": {
-            "gc_km_mean": 207.0458517975267,
-            "gc_km_median": 170.0230455091611,
+            "k": 5,
+            "gc_km_mean": 204.25066575970715,
+            "gc_km_median": 166.4691492547864,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.22196004565479366
+            "skill_vs_centroid": 0.23246383695691653
           }
         },
         "19": {
-          "lat_spearman": 0.313035502078055,
-          "lon_spearman": 0.20274097222415957,
+          "lat_spearman": 0.3367719459764761,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2974291579127865,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.1147633361880678,
+          "lon_ridge_spearman": -0.1478149014060502,
           "geo": {
-            "gc_km_mean": 207.66827873495063,
-            "gc_km_median": 172.14648400147695,
+            "k": 5,
+            "gc_km_mean": 203.70556720729525,
+            "gc_km_median": 164.98143876596473,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.21962108053295137
+            "skill_vs_centroid": 0.23451221633351438
           }
         },
         "20": {
-          "lat_spearman": 0.3304469934201379,
-          "lon_spearman": 0.24296391019102376,
+          "lat_spearman": 0.33442636499110545,
+          "lat_best_k": 5,
+          "lon_spearman": 0.30278217979719135,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11454373517594846,
+          "lon_ridge_spearman": -0.15073458476588095,
           "geo": {
-            "gc_km_mean": 208.72518521850165,
-            "gc_km_median": 177.4220015616321,
+            "k": 5,
+            "gc_km_mean": 205.91053910589412,
+            "gc_km_median": 166.81651397821696,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2156494217671754
+            "skill_vs_centroid": 0.22622634042523493
           }
         },
         "21": {
-          "lat_spearman": 0.32325379910528945,
-          "lon_spearman": 0.23430067013066913,
+          "lat_spearman": 0.344169674606309,
+          "lat_best_k": 5,
+          "lon_spearman": 0.3203153226549126,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11538793602009763,
+          "lon_ridge_spearman": -0.14726932973122708,
           "geo": {
-            "gc_km_mean": 212.7734921137619,
-            "gc_km_median": 186.09193205219833,
+            "k": 5,
+            "gc_km_mean": 207.19830776071666,
+            "gc_km_median": 164.80444452902316,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2004366344323012
+            "skill_vs_centroid": 0.22138714438867235
           }
         },
         "22": {
-          "lat_spearman": 0.31609641113347453,
-          "lon_spearman": 0.2344344847045795,
+          "lat_spearman": 0.343522512003912,
+          "lat_best_k": 5,
+          "lon_spearman": 0.32824850189391375,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11644631573382017,
+          "lon_ridge_spearman": -0.145699506204249,
           "geo": {
-            "gc_km_mean": 213.43462267722768,
-            "gc_km_median": 186.3713483971717,
+            "k": 5,
+            "gc_km_mean": 207.87773399832997,
+            "gc_km_median": 168.13507506147005,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.19795222825391434
+            "skill_vs_centroid": 0.2188339864562422
           }
         },
         "23": {
-          "lat_spearman": 0.3164627307027319,
-          "lon_spearman": 0.24108979583112955,
+          "lat_spearman": 0.3453122689370653,
+          "lat_best_k": 5,
+          "lon_spearman": 0.33548391176241676,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11594548219463112,
+          "lon_ridge_spearman": -0.1444103655491111,
           "geo": {
-            "gc_km_mean": 213.4454629007155,
-            "gc_km_median": 186.02319750859868,
+            "k": 5,
+            "gc_km_mean": 207.7681459159274,
+            "gc_km_median": 168.55358347354831,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.19791149270227526
+            "skill_vs_centroid": 0.21924579816794298
           }
         },
         "24": {
-          "lat_spearman": 0.31321473253562265,
-          "lon_spearman": 0.23367724090420158,
+          "lat_spearman": 0.3416820622981957,
+          "lat_best_k": 5,
+          "lon_spearman": 0.32737966059699664,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11304212566050918,
+          "lon_ridge_spearman": -0.14620536289471928,
           "geo": {
-            "gc_km_mean": 213.83886737810727,
-            "gc_km_median": 186.6446892444995,
+            "k": 5,
+            "gc_km_mean": 207.867238480034,
+            "gc_km_median": 170.1182264877407,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.19643315155720176
+            "skill_vs_centroid": 0.2188734266696295
           }
         },
         "25": {
-          "lat_spearman": 0.3083993821534859,
-          "lon_spearman": 0.22915198518732727,
+          "lat_spearman": 0.3407448420647813,
+          "lat_best_k": 5,
+          "lon_spearman": 0.3194042246027495,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11679260082352624,
+          "lon_ridge_spearman": -0.14185523241405834,
           "geo": {
-            "gc_km_mean": 214.0048282658049,
-            "gc_km_median": 189.16745292238215,
+            "k": 5,
+            "gc_km_mean": 207.8203860011113,
+            "gc_km_median": 170.62469133623145,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.1958095012866634
+            "skill_vs_centroid": 0.2190494896056675
           }
         },
         "26": {
-          "lat_spearman": 0.31233237801239155,
-          "lon_spearman": 0.23688329524704616,
+          "lat_spearman": 0.33140574505673936,
+          "lat_best_k": 5,
+          "lon_spearman": 0.30654385203426937,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11859659636317826,
+          "lon_ridge_spearman": -0.14024313801741556,
           "geo": {
-            "gc_km_mean": 212.7024335027756,
-            "gc_km_median": 184.70313859327229,
+            "k": 5,
+            "gc_km_mean": 208.31527376582227,
+            "gc_km_median": 169.49945396551692,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20070365952827696
+            "skill_vs_centroid": 0.21718979306734587
           }
         },
         "27": {
-          "lat_spearman": 0.31590108295695424,
-          "lon_spearman": 0.24873825735683197,
+          "lat_spearman": 0.32538504575205607,
+          "lat_best_k": 5,
+          "lon_spearman": 0.27825965483810305,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.14154009155494857,
+          "lon_ridge_spearman": -0.12294587616627649,
           "geo": {
-            "gc_km_mean": 211.04970141262442,
-            "gc_km_median": 179.29842771461995,
+            "k": 5,
+            "gc_km_mean": 208.78669717336572,
+            "gc_km_median": 168.09221686390742,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20691432054274428
+            "skill_vs_centroid": 0.2154182712363214
           }
         },
         "28": {
-          "lat_spearman": 0.32610451639133714,
-          "lon_spearman": 0.2618812060929203,
+          "lat_spearman": 0.35333711328734907,
+          "lat_best_k": 2,
+          "lon_spearman": 0.263990440268614,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.15355623655247283,
+          "lon_ridge_spearman": -0.11906399580838352,
           "geo": {
+            "k": 3,
             "gc_km_mean": 208.09663461577662,
             "gc_km_median": 173.62848473741002,
             "centroid_km_mean": 266.1121072783148,
@@ -954,9 +1425,14 @@
           }
         },
         "29": {
-          "lat_spearman": 0.3294680991455769,
-          "lon_spearman": 0.259178571869036,
+          "lat_spearman": 0.33472311090988055,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2766127225938946,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.18105101624497477,
+          "lon_ridge_spearman": -0.09565145880162981,
           "geo": {
+            "k": 3,
             "gc_km_mean": 206.35055049225664,
             "gc_km_median": 174.17119422881927,
             "centroid_km_mean": 266.1121072783148,
@@ -964,9 +1440,14 @@
           }
         },
         "30": {
-          "lat_spearman": 0.3324565415574192,
-          "lon_spearman": 0.255320951166029,
+          "lat_spearman": 0.3380405635393339,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2899799208617416,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.18106455463987428,
+          "lon_ridge_spearman": -0.09960840178779551,
           "geo": {
+            "k": 3,
             "gc_km_mean": 205.150746794634,
             "gc_km_median": 171.05410362154998,
             "centroid_km_mean": 266.1121072783148,
@@ -974,9 +1455,14 @@
           }
         },
         "31": {
-          "lat_spearman": 0.33279523257695376,
-          "lon_spearman": 0.25195883005618547,
+          "lat_spearman": 0.3369725045305785,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2895291797943843,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.18961410413051136,
+          "lon_ridge_spearman": -0.08211378300971744,
           "geo": {
+            "k": 3,
             "gc_km_mean": 205.8645839617954,
             "gc_km_median": 172.43876252379658,
             "centroid_km_mean": 266.1121072783148,
@@ -984,9 +1470,14 @@
           }
         },
         "32": {
-          "lat_spearman": 0.3060605741451584,
-          "lon_spearman": 0.22375035403587112,
+          "lat_spearman": 0.33690695399259846,
+          "lat_best_k": 5,
+          "lon_spearman": 0.27947342084311266,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.21357604858556323,
+          "lon_ridge_spearman": -0.03043589354464004,
           "geo": {
+            "k": 3,
             "gc_km_mean": 207.1341294653883,
             "gc_km_median": 173.42770675871742,
             "centroid_km_mean": 266.1121072783148,
@@ -994,9 +1485,14 @@
           }
         },
         "33": {
-          "lat_spearman": 0.314592941808681,
-          "lon_spearman": 0.21430309049601637,
+          "lat_spearman": 0.34682228435642204,
+          "lat_best_k": 5,
+          "lon_spearman": 0.3034949609426232,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.23404063806703168,
+          "lon_ridge_spearman": -0.014392710068055061,
           "geo": {
+            "k": 3,
             "gc_km_mean": 207.71757844359234,
             "gc_km_median": 173.9023619735978,
             "centroid_km_mean": 266.1121072783148,
@@ -1004,9 +1500,14 @@
           }
         },
         "34": {
-          "lat_spearman": 0.31935208992333725,
-          "lon_spearman": 0.23342331438488786,
+          "lat_spearman": 0.32673647123705046,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2782335640153723,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2280932084563317,
+          "lon_ridge_spearman": -0.02020230790652152,
           "geo": {
+            "k": 3,
             "gc_km_mean": 207.8408025772327,
             "gc_km_median": 175.89420636538722,
             "centroid_km_mean": 266.1121072783148,
@@ -1014,9 +1515,14 @@
           }
         },
         "35": {
-          "lat_spearman": 0.3207368986840452,
-          "lon_spearman": 0.24371757553199763,
+          "lat_spearman": 0.3278026595033142,
+          "lat_best_k": 5,
+          "lon_spearman": 0.25699205970958017,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.225032184129775,
+          "lon_ridge_spearman": -0.025088528343010723,
           "geo": {
+            "k": 3,
             "gc_km_mean": 207.99420908987176,
             "gc_km_median": 172.7648178568301,
             "centroid_km_mean": 266.1121072783148,
@@ -1024,9 +1530,14 @@
           }
         },
         "36": {
-          "lat_spearman": 0.31634045569699404,
-          "lon_spearman": 0.23980469283578237,
+          "lat_spearman": 0.32710152052057334,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2404536888122374,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2176154424204488,
+          "lon_ridge_spearman": -0.02982861515769837,
           "geo": {
+            "k": 3,
             "gc_km_mean": 208.6723453973651,
             "gc_km_median": 178.7465137838745,
             "centroid_km_mean": 266.1121072783148,
@@ -1034,9 +1545,14 @@
           }
         },
         "37": {
-          "lat_spearman": 0.30682433780178464,
-          "lon_spearman": 0.21581039242697056,
+          "lat_spearman": 0.33068596946669077,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2419625968732344,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.20305879657831455,
+          "lon_ridge_spearman": -0.045289801672683205,
           "geo": {
+            "k": 3,
             "gc_km_mean": 209.5768992539412,
             "gc_km_median": 176.05185175550866,
             "centroid_km_mean": 266.1121072783148,
@@ -1044,9 +1560,14 @@
           }
         },
         "38": {
-          "lat_spearman": 0.3152499928866238,
-          "lon_spearman": 0.21479063021617117,
+          "lat_spearman": 0.3267036789475375,
+          "lat_best_k": 5,
+          "lon_spearman": 0.24064710724510607,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.19976716908455872,
+          "lon_ridge_spearman": -0.047860108829443866,
           "geo": {
+            "k": 3,
             "gc_km_mean": 209.84014271424462,
             "gc_km_median": 173.2501432345721,
             "centroid_km_mean": 266.1121072783148,
@@ -1054,263 +1575,393 @@
           }
         },
         "39": {
-          "lat_spearman": 0.3137689789410606,
-          "lon_spearman": 0.2208491636941869,
+          "lat_spearman": 0.3286246705936232,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2358358338746586,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.18091664246385397,
+          "lon_ridge_spearman": -0.0734869706809311,
           "geo": {
-            "gc_km_mean": 211.66474906024288,
-            "gc_km_median": 177.91248669785256,
+            "k": 5,
+            "gc_km_mean": 210.52819959002557,
+            "gc_km_median": 174.54007357116222,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20460308542492522
+            "skill_vs_centroid": 0.20887402778016595
           }
         },
         "40": {
-          "lat_spearman": 0.30826933766818776,
-          "lon_spearman": 0.2225684037974798,
+          "lat_spearman": 0.33787318494117147,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2613120285800513,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.17007123437670235,
+          "lon_ridge_spearman": -0.0826143742322981,
           "geo": {
-            "gc_km_mean": 212.11248366974476,
-            "gc_km_median": 179.17513122419479,
+            "k": 5,
+            "gc_km_mean": 210.29204841651747,
+            "gc_km_median": 172.2500090294152,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20292058170842353
+            "skill_vs_centroid": 0.20976144014153253
           }
         },
         "41": {
-          "lat_spearman": 0.30818166987135537,
-          "lon_spearman": 0.22129191899596423,
+          "lat_spearman": 0.35120911510566755,
+          "lat_best_k": 5,
+          "lon_spearman": 0.26769768543129513,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.1683057316653388,
+          "lon_ridge_spearman": -0.08763095453432247,
           "geo": {
-            "gc_km_mean": 212.19482722273983,
-            "gc_km_median": 181.39913476920202,
+            "k": 5,
+            "gc_km_mean": 209.14638044101508,
+            "gc_km_median": 177.3013476402149,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20261114989099416
+            "skill_vs_centroid": 0.2140666481503669
           }
         },
         "42": {
-          "lat_spearman": 0.3033913381316645,
-          "lon_spearman": 0.21561153560729063,
+          "lat_spearman": 0.35774221445026855,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2721268348565026,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.16017193337018582,
+          "lon_ridge_spearman": -0.09514473251700797,
           "geo": {
-            "gc_km_mean": 212.996659548725,
-            "gc_km_median": 183.5935108752209,
+            "k": 5,
+            "gc_km_mean": 208.77452433106365,
+            "gc_km_median": 173.12639214004287,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.19959801255505716
+            "skill_vs_centroid": 0.21546401452258734
           }
         },
         "43": {
-          "lat_spearman": 0.29860681299549324,
-          "lon_spearman": 0.20623666318820988,
+          "lat_spearman": 0.3558206716024472,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2738295097948975,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.1480153656381342,
+          "lon_ridge_spearman": -0.10764262612933924,
           "geo": {
-            "gc_km_mean": 212.87474299114567,
-            "gc_km_median": 184.98436024550858,
+            "k": 5,
+            "gc_km_mean": 208.29774024923958,
+            "gc_km_median": 171.80022059617326,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20005615239253483
+            "skill_vs_centroid": 0.21725568077445545
           }
         },
         "44": {
-          "lat_spearman": 0.2971090024999825,
-          "lon_spearman": 0.2055767995264165,
+          "lat_spearman": 0.357052994943279,
+          "lat_best_k": 5,
+          "lon_spearman": 0.28735939130898513,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.13532020998917632,
+          "lon_ridge_spearman": -0.12056356492756658,
           "geo": {
-            "gc_km_mean": 213.17385754938033,
-            "gc_km_median": 183.96096746803315,
+            "k": 5,
+            "gc_km_mean": 206.78337401894123,
+            "gc_km_median": 168.32742357381682,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.19893213529577858
+            "skill_vs_centroid": 0.22294638852085102
           }
         },
         "45": {
-          "lat_spearman": 0.28786886757819424,
-          "lon_spearman": 0.20914087540719745,
+          "lat_spearman": 0.3634780304495817,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2996456132892189,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.1242519462602989,
+          "lon_ridge_spearman": -0.1258270507282205,
           "geo": {
-            "gc_km_mean": 214.5804054750344,
-            "gc_km_median": 184.921945074122,
+            "k": 5,
+            "gc_km_mean": 205.42305795854335,
+            "gc_km_median": 166.4396831145121,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.19364658876413188
+            "skill_vs_centroid": 0.22805820426764523
           }
         },
         "46": {
-          "lat_spearman": 0.2821222215168514,
-          "lon_spearman": 0.20667637804673658,
+          "lat_spearman": 0.35597934539535714,
+          "lat_best_k": 5,
+          "lon_spearman": 0.29342564235353236,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11981381885982201,
+          "lon_ridge_spearman": -0.12632179074047342,
           "geo": {
-            "gc_km_mean": 215.5565723886558,
-            "gc_km_median": 186.5187393280139,
+            "k": 5,
+            "gc_km_mean": 205.3980216892324,
+            "gc_km_median": 165.21166279675055,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.18997833434457456
+            "skill_vs_centroid": 0.2281522859295697
           }
         },
         "47": {
-          "lat_spearman": 0.29036123232177447,
-          "lon_spearman": 0.20194385795172895,
+          "lat_spearman": 0.35749154111115633,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2825536509752011,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11892032150076058,
+          "lon_ridge_spearman": -0.12684488195537355,
           "geo": {
-            "gc_km_mean": 216.1234076600392,
-            "gc_km_median": 185.98561702008,
+            "k": 5,
+            "gc_km_mean": 207.35424953309897,
+            "gc_km_median": 171.3824543409495,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.18784827240496293
+            "skill_vs_centroid": 0.22080114409737694
           }
         },
         "48": {
-          "lat_spearman": 0.2995360513728323,
-          "lon_spearman": 0.21008568213086135,
+          "lat_spearman": 0.36074927399776235,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2770900840720262,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.1208781183643719,
+          "lon_ridge_spearman": -0.1273217786070221,
           "geo": {
-            "gc_km_mean": 213.67643700809646,
-            "gc_km_median": 184.2240289351979,
+            "k": 5,
+            "gc_km_mean": 205.40059441342356,
+            "gc_km_median": 168.86707260713584,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.1970435347963263
+            "skill_vs_centroid": 0.22814261810867464
           }
         },
         "49": {
-          "lat_spearman": 0.29219936435334387,
-          "lon_spearman": 0.20191943881564234,
+          "lat_spearman": 0.35697491346000215,
+          "lat_best_k": 5,
+          "lon_spearman": 0.27534973046234035,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.11951059002242442,
+          "lon_ridge_spearman": -0.13008322515469953,
           "geo": {
-            "gc_km_mean": 214.40158862373974,
-            "gc_km_median": 184.7423286195733,
+            "k": 5,
+            "gc_km_mean": 205.4996348899974,
+            "gc_km_median": 163.45234907272112,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.19431854936420956
+            "skill_vs_centroid": 0.22777044234565968
           }
         },
         "50": {
-          "lat_spearman": 0.2892209703129179,
-          "lon_spearman": 0.2030704762301131,
+          "lat_spearman": 0.3393070905864388,
+          "lat_best_k": 5,
+          "lon_spearman": 0.25826191506081164,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.1110413601432651,
+          "lon_ridge_spearman": -0.1313393396982442,
           "geo": {
-            "gc_km_mean": 213.839926146063,
-            "gc_km_median": 180.33098956382238,
+            "k": 5,
+            "gc_km_mean": 207.0643833476654,
+            "gc_km_median": 166.86441427660498,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.19642917290336837
+            "skill_vs_centroid": 0.22189040752247324
           }
         },
         "51": {
-          "lat_spearman": 0.27610779591642126,
-          "lon_spearman": 0.17328356588705351,
+          "lat_spearman": 0.30824881045979347,
+          "lat_best_k": 5,
+          "lon_spearman": 0.21987711931361026,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.1240769117755344,
+          "lon_ridge_spearman": -0.12089666399240082,
           "geo": {
-            "gc_km_mean": 211.60064233819145,
-            "gc_km_median": 177.85237407237832,
+            "k": 5,
+            "gc_km_mean": 206.67856604226967,
+            "gc_km_median": 163.30617212791336,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20484398661017045
+            "skill_vs_centroid": 0.22334023748076304
           }
         },
         "52": {
-          "lat_spearman": 0.28686322456277125,
-          "lon_spearman": 0.1793937760098901,
+          "lat_spearman": 0.33532793959271845,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2485772971318901,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.14802045052088203,
+          "lon_ridge_spearman": -0.1072611931755651,
           "geo": {
-            "gc_km_mean": 211.92180548813442,
-            "gc_km_median": 178.29185146963408,
+            "k": 5,
+            "gc_km_mean": 205.98456743190744,
+            "gc_km_median": 170.9701500518912,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20363711499043202
+            "skill_vs_centroid": 0.22594815569034832
           }
         },
         "53": {
-          "lat_spearman": 0.28905593000490826,
-          "lon_spearman": 0.18336423539787733,
+          "lat_spearman": 0.34660411549092224,
+          "lat_best_k": 5,
+          "lon_spearman": 0.263507069433318,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.1733909909856074,
+          "lon_ridge_spearman": -0.08711313281904691,
           "geo": {
-            "gc_km_mean": 211.0813166317159,
-            "gc_km_median": 178.5263899978405,
+            "k": 5,
+            "gc_km_mean": 204.02022069388875,
+            "gc_km_median": 162.13450628972333,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20679551640634164
+            "skill_vs_centroid": 0.23332980682268212
           }
         },
         "54": {
-          "lat_spearman": 0.2924852444059949,
-          "lon_spearman": 0.18055977289783526,
+          "lat_spearman": 0.3286808621727209,
+          "lat_best_k": 5,
+          "lon_spearman": 0.26180349746028087,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.18163805329786148,
+          "lon_ridge_spearman": -0.07776377299624765,
           "geo": {
-            "gc_km_mean": 210.5147324464215,
-            "gc_km_median": 179.43704487624348,
+            "k": 5,
+            "gc_km_mean": 203.76642089126008,
+            "gc_km_median": 169.19159890584984,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20892463481094636
+            "skill_vs_centroid": 0.23428353946275038
           }
         },
         "55": {
-          "lat_spearman": 0.3012896257955189,
-          "lon_spearman": 0.18437820109684538,
+          "lat_spearman": 0.3305261048380788,
+          "lat_best_k": 5,
+          "lon_spearman": 0.22308711752971394,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.204897624076846,
+          "lon_ridge_spearman": -0.05130076255660454,
           "geo": {
-            "gc_km_mean": 208.59879725329006,
-            "gc_km_median": 175.91734072197815,
+            "k": 5,
+            "gc_km_mean": 204.44400720729007,
+            "gc_km_median": 165.79784485846062,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2161243643261752
+            "skill_vs_centroid": 0.23173729561477185
           }
         },
         "56": {
           "lat_spearman": 0.30480936035672435,
+          "lat_best_k": 3,
           "lon_spearman": 0.1990074678635026,
+          "lon_best_k": 3,
+          "lat_ridge_spearman": 0.22219298834556833,
+          "lon_ridge_spearman": -0.01762532630934414,
           "geo": {
-            "gc_km_mean": 208.03557495863572,
-            "gc_km_median": 173.39138701934,
+            "k": 5,
+            "gc_km_mean": 201.4347897153351,
+            "gc_km_median": 162.20468024746773,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.21824084936856858
+            "skill_vs_centroid": 0.24304537747069344
           }
         },
         "57": {
-          "lat_spearman": 0.29216348213100396,
-          "lon_spearman": 0.15745184660810935,
+          "lat_spearman": 0.3081298583215952,
+          "lat_best_k": 5,
+          "lon_spearman": 0.19176342272624577,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2192738398369471,
+          "lon_ridge_spearman": -0.010445735537608247,
           "geo": {
-            "gc_km_mean": 211.04971995169302,
-            "gc_km_median": 180.75746351612224,
+            "k": 5,
+            "gc_km_mean": 198.82672633070703,
+            "gc_km_median": 160.32659845473992,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20691425087635895
+            "skill_vs_centroid": 0.25284599650791906
           }
         },
         "58": {
-          "lat_spearman": 0.29054496480878717,
-          "lon_spearman": 0.1425617625692996,
+          "lat_spearman": 0.3238671019940834,
+          "lat_best_k": 2,
+          "lon_spearman": 0.18390156869640573,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2270010761305823,
+          "lon_ridge_spearman": 0.004178792747334591,
           "geo": {
-            "gc_km_mean": 212.8772863026769,
-            "gc_km_median": 182.89714399326039,
+            "k": 5,
+            "gc_km_mean": 202.02883756044383,
+            "gc_km_median": 160.6541235024651,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.20004659509896694
+            "skill_vs_centroid": 0.24081305572034395
           }
         },
         "59": {
-          "lat_spearman": 0.2854722097298217,
-          "lon_spearman": 0.12443777219158911,
+          "lat_spearman": 0.28868729290065476,
+          "lat_best_k": 5,
+          "lon_spearman": 0.18388686662380538,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.23765393088071196,
+          "lon_ridge_spearman": 0.020954176954411936,
           "geo": {
-            "gc_km_mean": 213.13943462540328,
-            "gc_km_median": 184.500964298756,
+            "k": 5,
+            "gc_km_mean": 205.20043137091008,
+            "gc_km_median": 166.45350403544032,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.19906149026699393
+            "skill_vs_centroid": 0.22889479374081956
           }
         },
         "60": {
-          "lat_spearman": 0.2840197638371734,
-          "lon_spearman": 0.12316235575928422,
+          "lat_spearman": 0.29856890166759803,
+          "lat_best_k": 5,
+          "lon_spearman": 0.19296810182395457,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.24225724836331652,
+          "lon_ridge_spearman": 0.031042257525567628,
           "geo": {
-            "gc_km_mean": 209.92127026641828,
-            "gc_km_median": 180.52402262330838,
+            "k": 5,
+            "gc_km_mean": 202.96322886918136,
+            "gc_km_median": 165.93916504246909,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.21115475574032794
+            "skill_vs_centroid": 0.23730178628471355
           }
         },
         "61": {
-          "lat_spearman": 0.28412754267799667,
-          "lon_spearman": 0.11965465981233844,
+          "lat_spearman": 0.31355983521507896,
+          "lat_best_k": 5,
+          "lon_spearman": 0.23408473294311538,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2498512294139767,
+          "lon_ridge_spearman": 0.04448096376761746,
           "geo": {
-            "gc_km_mean": 207.5104452550201,
-            "gc_km_median": 171.35498684929883,
+            "k": 5,
+            "gc_km_mean": 203.6515111144982,
+            "gc_km_median": 162.36177110254033,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.22021418951076066
+            "skill_vs_centroid": 0.2347153491159718
           }
         },
         "62": {
-          "lat_spearman": 0.27649643473978514,
-          "lon_spearman": 0.12333219714049819,
+          "lat_spearman": 0.32175956449595716,
+          "lat_best_k": 5,
+          "lon_spearman": 0.24009062418703334,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2546392075685653,
+          "lon_ridge_spearman": 0.0529201657980739,
           "geo": {
-            "gc_km_mean": 206.46261864242817,
-            "gc_km_median": 170.00474190744683,
+            "k": 5,
+            "gc_km_mean": 202.3322628398597,
+            "gc_km_median": 161.78726808503154,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.22415172780358272
+            "skill_vs_centroid": 0.23967283973198028
           }
         },
         "63": {
-          "lat_spearman": 0.30783780057825855,
-          "lon_spearman": 0.19015270750681337,
+          "lat_spearman": 0.33015940969416135,
+          "lat_best_k": 5,
+          "lon_spearman": 0.2508294314453098,
+          "lon_best_k": 5,
+          "lat_ridge_spearman": 0.2705787818358649,
+          "lon_ridge_spearman": 0.09044396653468267,
           "geo": {
-            "gc_km_mean": 205.3573923917279,
-            "gc_km_median": 161.9996405811763,
+            "k": 5,
+            "gc_km_mean": 198.38026800783666,
+            "gc_km_median": 159.10449102950275,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.22830496330272654
+            "skill_vs_centroid": 0.2545237041757007
           }
         },
         "64": {
           "lat_spearman": 0.3504654429367341,
+          "lat_best_k": 3,
           "lon_spearman": 0.29721413813686837,
+          "lon_best_k": 3,
+          "lat_ridge_spearman": 0.3362989099242885,
+          "lon_ridge_spearman": 0.22469039196452073,
           "geo": {
-            "gc_km_mean": 208.51074964521575,
-            "gc_km_median": 177.65899306338497,
+            "k": 5,
+            "gc_km_mean": 197.37009603388782,
+            "gc_km_median": 157.93509565512556,
             "centroid_km_mean": 266.1121072783148,
-            "skill_vs_centroid": 0.2164552309258757
+            "skill_vs_centroid": 0.25831974331229046
           }
         }
       }
