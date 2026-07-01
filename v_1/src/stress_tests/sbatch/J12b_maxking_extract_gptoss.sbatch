@@ -17,6 +17,7 @@ echo "=== J12b maxking-extract ${M} === job ${SLURM_JOB_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 export PYTORCH_ALLOC_CONF=expandable_segments:True
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True   # reduce fragmentation OOM (120B on gpu:4)
 cd ~/projects/HUJI-THESIS--YARIN
 source v_1/src/stress_tests/sbatch/_common.sh
 sync_main

@@ -66,6 +66,12 @@ def run(args):
         enc = tok(text, return_tensors="pt", truncation=True, max_length=args.max_tokens)
         input_ids = enc["input_ids"]
         attn = enc.get("attention_mask", torch.ones_like(input_ids))
+        # ~6/1202 fragments are all logograms/determinatives -> maximal empties them
+        # -> 0 tokens, which crashes causal attention. They are never king-found and
+        # never in the draws, so substitute a 1-token dummy and mark not-found.
+        if input_ids.shape[1] == 0:
+            fb = tok.eos_token_id if tok.eos_token_id is not None else (tok.pad_token_id or 0)
+            input_ids = torch.tensor([[fb]]); attn = torch.ones_like(input_ids); name = None
         span = (kt.locate_king_tokens(text, tok, sp, input_ids=input_ids[0].tolist())
                 if name is not None else None)
         if span is not None and span[1] >= input_ids.shape[1]:
