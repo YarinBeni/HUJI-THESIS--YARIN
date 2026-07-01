@@ -44,6 +44,29 @@
   missing) → then `sbatch J3r_t10_reprobe_mc.sbatch` (CPU array; gpt-oss task skips cleanly
   if no acts) → `sbatch J11_aggregate.sbatch`. Land code on `main` first via the header FF.
 
+### `maximal-with-kings` config (NEW — fairer 3-site comparison)
+Motivation: king_last's high score is name-token identity (random matches it), and the old
+setup compared `mean` (maximal) vs `king_*` (tier0) — not apples-to-apples. This config puts
+**all 3 sites (mean / king_last / king_mean) on ONE cleaning** and rebalances so the random
+baseline is a real control.
+- **Cleaning** `shared/cleaning.py::clean_maximal_keepking`: full `maximal` on the context but
+  the commissioning ruler's name span is frozen (name-aware truncation keeps it), so king
+  coverage = tier0 ceiling while context is truly maximal. Activation tag = `_maxking_*`.
+- **Subset** `p1_gurnee_tegmark/build_maxking_subset.py` → `…/balanced_subset_maxking/`
+  (committed): **5 rulers** (dropped Neb II / Tiglath-pileser III / Nabonidus, E[king-found/draw]<6),
+  **k=9** (capped by Sîn-šarru-iškun's 9 king-found), draws from **king-found only** (identical
+  fragment set for all 3 sites).
+- **Probe** `shared/mc_maxking.py` + `p1_gurnee_tegmark/probe_maxking.py` → three analyses per
+  site/layer: `year_group` (legacy GroupKFold Spearman — degenerate for a per-king-constant
+  label, kept for continuity), `year_strat` (StratifiedKFold Spearman/MAE/**±10yr acc**),
+  `ruler_clf` (**StratifiedKFold macro-F1 control** vs chance + shuffle). Best layer by ruler-F1.
+- **Finding on `year`:** it is a single constant per king (nunique=1 except Esarhaddon), so
+  year-probe ≡ ruler-id; adjacent king labels are 12–38 yr apart → **±50 too coarse, ±10 used**.
+- **Jobs:** `J12_maxking_extract` (GPU array: qwen3×3 + thal×2 + umt5), `J12b`(gpt-oss gpu:4),
+  `J12c`(random Qwen3-8B) → then `J13_maxking_probe` (CPU). EDA: `eda/class_imbalance_analysis.py`,
+  `results/eda/fig_year_tolerance.png` (counts + tolerance bands). MLM maxking = TODO (needs a
+  maxking variant of extract_mlm_king_acts.py).
+
 ---
 
 ## 1. The thesis question and the current (refined) finding

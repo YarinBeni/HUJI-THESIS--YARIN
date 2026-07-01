@@ -1,0 +1,25 @@
+{
+  "config": "maximal-with-kings",
+  "n_draws": 200,
+  "k": 9,
+  "n_rulers": 5,
+  "rulers": [
+    "Ashurbanipal",
+    "Sennacherib",
+    "Esarhaddon",
+    "Sargon II",
+    "Sîn-šarru-iškun"
+  ],
+  "total_frags_per_draw": 45,
+  "draw_from": "king_found_only (maximal_keepking)",
+  "king_found_per_ruler": {
+    "Ashurbanipal": 126,
+    "Sennacherib": 159,
+    "Esarhaddon": 81,
+    "Sargon II": 76,
+    "Sîn-šarru-iškun": 9
+  },
+  "corpus_path": "/home/user/HUJI-THESIS--YARIN/v_1/data/evaluation/corpora/orcc_corpus.parquet",
+  "seed_base": 42,
+  "produced_by": "build_maxking_subset.py"
+}
