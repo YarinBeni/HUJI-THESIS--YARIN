@@ -23,7 +23,8 @@ source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 export PYTORCH_ALLOC_CONF=expandable_segments:True
 cd ~/projects/HUJI-THESIS--YARIN
-git pull --rebase origin main || echo "WARN pull failed"
+source v_1/src/stress_tests/sbatch/_common.sh
+sync_main
 mkdir -p v_1/src/stress_tests/logs
 
 KP=v_1/src/linear_probing/round2_phase1a
@@ -36,5 +37,5 @@ for V in kp0 kp1 kp2; do
 done
 git add "$OUT/"
 git commit -m "J2a: redo T9 elicitation ${M} (job ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID})" || echo "nothing to commit"
-for _i in 1 2 3 4 5; do git pull --rebase origin main && git push origin HEAD:main && break || sleep $((RANDOM % 8 + 5)); done
+push_main
 echo "=== Done ${M}. $(date) ==="

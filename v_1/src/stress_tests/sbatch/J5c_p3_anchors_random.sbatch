@@ -18,7 +18,8 @@ source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 export PYTORCH_ALLOC_CONF=expandable_segments:True
 cd ~/projects/HUJI-THESIS--YARIN
-git pull --rebase origin main || echo "WARN pull failed"
+source v_1/src/stress_tests/sbatch/_common.sh
+sync_main
 mkdir -p v_1/src/stress_tests/logs
 
 python -u v_1/src/stress_tests/p3_matter_of_time/extract_anchor_acts.py \
@@ -28,5 +29,5 @@ python -u v_1/src/stress_tests/p3_matter_of_time/extract_anchor_acts.py \
 AN=v_1/src/stress_tests/p3_matter_of_time/anchors/random
 git add "$AN/anchors.json" "$AN/metadata.json" 2>/dev/null || true
 git commit -m "J5c: P3 anchors random (control) (job ${SLURM_JOB_ID})" || echo "nothing to commit"
-for _i in 1 2 3 4 5; do git pull --rebase origin main && git push origin HEAD:main && break || sleep $((RANDOM % 8 + 5)); done
+push_main
 echo "=== Done random anchors. $(date) ==="

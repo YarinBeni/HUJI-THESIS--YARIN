@@ -13,6 +13,39 @@
 
 ---
 
+## Session update (2026-07-01) — decisive control landed + imbalance diagnosis + sbatch hardening
+- **DECISIVE control resolved (§7.1):** `random Qwen3-8B king_last = 0.643 PLS / 0.495 Ridge`
+  (see `results/RESULTS_stress_tests.md`). It is **as high as the pretrained models**
+  (8B 0.480, 32B/gpt-oss 0.645, MLM 0.704). So the high king_last is **NOT a learned
+  chronology** — it is **name-token identity readout**: the king-name span is a near
+  one-hot ruler id and `year` is a function of ruler, so any pooling that reads the name
+  token recovers the date, even with random weights. The §1 claim's "date is linearly
+  recoverable at the king token" leg must be **reinterpreted** accordingly. The robust,
+  surviving dissociation: models *know* dates behaviorally (T9) and the date is *trivially*
+  readable from name identity, but it is **not diffused into a text-level geometry**
+  (mean-pool ≈ random ≈ 0.35–0.40, flat across scale/objective/prompting/training).
+- **WHY king_last is "so easy" — data-side diagnosis:** `eda/class_imbalance_analysis.py`
+  → `results/eda/class_imbalance.md` + 4 PNGs. Balanced-MC uses **only 8 rulers × k=21**
+  (k capped by the smallest class, Sîn-šarru-iškun = 21 frags; 33/41 rulers dropped).
+  `year` is an **8-level step function of ruler**. King-name coverage is very uneven
+  (Sennacherib 0.67 … **Nebuchadnezzar II 0.00**), so the king pool shrinks to
+  **~62 frags/draw (~37%)** over **~7/8 groups** — with GroupKFold folds of 1–2 rulers
+  (1–2 distinct years) Spearman is coarse, high, and high-variance (±0.3–0.4; the
+  `ConstantInputWarning` in the logs). This is the sample-size story behind the inflated
+  king_last / the strong random baseline.
+- **sbatch hardening (fixes the log errors):** new `sbatch/_common.sh` (`sync_main`,
+  `push_main`, `commit_push`) serializes git with `flock`, always rebases onto a single
+  `FETCH_HEAD` with `--autostash`, and clears stale rebase/index locks → fixes the J8
+  "unstaged changes" and J5b "Cannot rebase onto multiple branches" races. All 18 sbatch
+  files migrated. **J3r is now a per-model array job** (`--array=0-3`, one model each) —
+  the old serial job TIMED OUT at 3h; now each model gets its own wall clock. Log-name
+  mismatches fixed (J3r/J7/J4/J4b `--output` now match the script stem).
+- **Rerun order:** `sbatch J3a_t10_qwen3.sbatch` (GPU, re-extract 8b/32b prompted acts if
+  missing) → then `sbatch J3r_t10_reprobe_mc.sbatch` (CPU array; gpt-oss task skips cleanly
+  if no acts) → `sbatch J11_aggregate.sbatch`. Land code on `main` first via the header FF.
+
+---
+
 ## 1. The thesis question and the current (refined) finding
 We stress-test the "LLMs build a world-model timeline" literature (Gurnee–Tegmark,
 Godey geography, A Matter of Time, k-sparse "Finding Neurons in a Haystack") on

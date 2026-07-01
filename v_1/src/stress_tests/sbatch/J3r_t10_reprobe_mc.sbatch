@@ -1,38 +1,44 @@
 #!/bin/bash
-#SBATCH --job-name=J3r_t10_mc
+#SBATCH --job-name=J3r_t10_reprobe_mc
 #SBATCH --partition=voltagepark
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64G
-#SBATCH --time=03:00:00
-#SBATCH --output=v_1/src/stress_tests/logs/J3r_t10_mc_%j.out
+#SBATCH --time=05:00:00
+#SBATCH --array=0-3
+#SBATCH --output=v_1/src/stress_tests/logs/J3r_t10_reprobe_mc_%A_%a.out
 # ===========================================================================
-# J3r (MC) — re-run the T10 reprobe under Monte-Carlo BALANCED draws on the
-# prompted activations already extracted by J3a (acts_<model>/prompted_king/,
-# gitignored but on cluster NFS). CPU only, no GPU, no re-extraction.
-# Runs for whichever models have prompted acts on disk (qwen3 set; gpt-oss only
-# if its T10 extraction ever succeeded).
+# J3r (MC) — T10 reprobe under Monte-Carlo BALANCED draws on the prompted
+# activations from J3a (acts_<model>/prompted_king/, gitignored, on cluster NFS).
+# CPU only, no GPU, no re-extraction.
+#
+# WHY AN ARRAY: the old single job looped all 4 models serially and TIMED OUT at
+# 3h (the per-model PLS k-sweep + Ridge over every pv variant x layer is heavy;
+# only qwen3_1b7 finished). Each array task now does ONE model in its own wall
+# clock, in parallel. Task->model:  0 qwen3_1b7 | 1 qwen3_8b | 2 qwen3_32b |
+# 3 gpt_oss_120b. A model with no prompted acts on disk exits cleanly (run J3a
+# first to produce 8b/32b/gpt-oss prompted acts if missing).
 #   sbatch v_1/src/stress_tests/sbatch/J3r_t10_reprobe_mc.sbatch
 # ===========================================================================
 set -uo pipefail
-echo "=== J3r MC T10 reprobe === job ${SLURM_JOB_ID} $(hostname) $(date)"
+MODELS=(qwen3_1b7 qwen3_8b qwen3_32b gpt_oss_120b)
+M=${MODELS[${SLURM_ARRAY_TASK_ID:-0}]}
+echo "=== J3r MC T10 reprobe [$M] === job ${SLURM_JOB_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
-git pull --rebase origin main || echo "WARN pull failed"
+source v_1/src/stress_tests/sbatch/_common.sh
+sync_main
 mkdir -p v_1/src/stress_tests/logs
 export OMP_NUM_THREADS=2 MKL_NUM_THREADS=2
 
 RP=v_1/src/stress_tests/redo_t10_prompt/reprobe_king_mc.py
-for M in qwen3_1b7 qwen3_8b qwen3_32b gpt_oss_120b; do
-    AD=v_1/src/stress_tests/redo_t10_prompt/acts_${M}/prompted_king
-    if [ -d "$AD" ] && ls "$AD"/pv*/L*.npz >/dev/null 2>&1; then
-        echo "--- T10 MC reprobe: $M ---"
-        python -u $RP --acts-dir "$AD" --model "$M" || echo "WARN t10_mc $M failed"
-    else
-        echo "skip $M (no prompted acts on disk)"
-    fi
-done
-git add v_1/src/stress_tests/redo_t10_prompt/results/*__t10_mc_summary.json 2>/dev/null || true
-git commit -m "J3r MC: T10 balanced-MC reprobe (job ${SLURM_JOB_ID})" || echo "nothing to commit"
-for _i in 1 2 3 4 5; do git pull --rebase origin main && git push origin HEAD:main && break || sleep $((RANDOM % 8 + 5)); done
-echo "=== Done. $(date) ==="
+AD=v_1/src/stress_tests/redo_t10_prompt/acts_${M}/prompted_king
+if [ -d "$AD" ] && ls "$AD"/pv*/L*.npz >/dev/null 2>&1; then
+    echo "--- T10 MC reprobe: $M ---"
+    python -u $RP --acts-dir "$AD" --model "$M" || { echo "FAIL t10_mc $M"; exit 1; }
+    commit_push "J3r MC: T10 balanced-MC reprobe $M (job ${SLURM_JOB_ID})" \
+        "v_1/src/stress_tests/redo_t10_prompt/results/${M}__t10_mc_summary.json"
+else
+    echo "skip $M (no prompted acts on disk — run J3a to extract them first)"
+fi
+echo "=== Done [$M]. $(date) ==="

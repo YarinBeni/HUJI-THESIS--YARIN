@@ -16,7 +16,8 @@ echo "=== J6 P1 year-probe === job ${SLURM_JOB_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
-git pull --rebase origin main || echo "WARN pull failed"
+source v_1/src/stress_tests/sbatch/_common.sh
+sync_main
 mkdir -p v_1/src/stress_tests/logs
 export OMP_NUM_THREADS=4 MKL_NUM_THREADS=4
 
@@ -25,5 +26,5 @@ for M in qwen3_1b7 qwen3_8b qwen3_32b gpt_oss_120b thalesian_akk300m thalesian_c
 done
 git add v_1/src/stress_tests/p1_gurnee_tegmark/results/*.json 2>/dev/null || true
 git commit -m "J6: P1 year-probe (job ${SLURM_JOB_ID})" || echo "nothing to commit"
-for _i in 1 2 3 4 5; do git pull --rebase origin main && git push origin HEAD:main && break || sleep $((RANDOM % 8 + 5)); done
+push_main
 echo "=== Done. $(date) ==="

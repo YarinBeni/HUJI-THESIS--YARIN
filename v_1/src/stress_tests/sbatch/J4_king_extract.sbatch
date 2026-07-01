@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=J4_king
+#SBATCH --job-name=J4_king_extract
 #SBATCH --partition=voltagepark
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=96G
 #SBATCH --time=06:00:00
-#SBATCH --output=v_1/src/stress_tests/logs/J4_king_%A_%a.out
+#SBATCH --output=v_1/src/stress_tests/logs/J4_king_extract_%A_%a.out
 #SBATCH --array=0-5
 # ===========================================================================
 # J4 — king-token activation extraction (tier0). Array: one task per GPU-light
@@ -27,7 +27,8 @@ source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 export PYTORCH_ALLOC_CONF=expandable_segments:True
 cd ~/projects/HUJI-THESIS--YARIN
-git pull --rebase origin main || echo "WARN pull failed"
+source v_1/src/stress_tests/sbatch/_common.sh
+sync_main
 mkdir -p v_1/src/stress_tests/logs
 export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 
@@ -39,5 +40,5 @@ ACTS=v_1/src/linear_probing/results/orcc__embed/activations
 git add "${ACTS}/${M}_tier0_kinglast/metadata.json" "${ACTS}/${M}_tier0_kinglast/king_coverage.json" \
         "${ACTS}/${M}_tier0_kingmean/metadata.json" "${ACTS}/${M}_tier0_kingmean/king_coverage.json" 2>/dev/null || true
 git commit -m "J4: king-token acts ${M} (job ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID})" || echo "nothing to commit"
-for _i in 1 2 3 4 5; do git pull --rebase origin main && git push origin HEAD:main && break || sleep $((RANDOM % 8 + 5)); done
+push_main
 echo "=== Done ${M}. $(date) ==="

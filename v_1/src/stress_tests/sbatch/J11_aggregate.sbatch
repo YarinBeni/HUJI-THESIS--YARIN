@@ -16,12 +16,13 @@ echo "=== J11 aggregate === job ${SLURM_JOB_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
-git pull --rebase origin main || echo "WARN pull failed"
+source v_1/src/stress_tests/sbatch/_common.sh
+sync_main
 mkdir -p v_1/src/stress_tests/logs
 
 python -u v_1/src/stress_tests/aggregate_tables.py || echo "WARN aggregate failed"
 
 git add v_1/src/stress_tests/results/RESULTS_stress_tests.md 2>/dev/null || true
 git commit -m "J11: aggregate balanced-MC tables (job ${SLURM_JOB_ID})" || echo "nothing to commit"
-for _i in 1 2 3 4 5; do git pull --rebase origin main && git push origin HEAD:main && break || sleep $((RANDOM % 8 + 5)); done
+push_main
 echo "=== Done. $(date) ==="
