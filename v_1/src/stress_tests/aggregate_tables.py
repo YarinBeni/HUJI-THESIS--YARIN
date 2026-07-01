@@ -1,0 +1,125 @@
+"""J11 — aggregate the balanced-MC stress-test results into the write-up tables.
+
+Reads whatever result JSONs are on disk (re-runnable at any stage) and emits
+results/RESULTS_stress_tests.md with:
+  * P1 balanced-MC year table: mean(tier0,maximal) + king_last/king_mean, each
+    with best-k PLS Spearman (±std) and the Ridge arm; TF-IDF cited from the
+    former balanced-MC scoreboard (no king token possible for a bag-of-signs).
+  * P2 geography table: best-layer great-circle skill + lat/lon best-k PLS/Ridge.
+
+Display labels: random -> "random Qwen3-8B", mlm -> "MLM (AeneasForMLM)".
+
+    python v_1/src/stress_tests/aggregate_tables.py
+"""
+from __future__ import annotations
+
+import glob
+import json
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+_REPO = HERE.parents[2]  # .../v_1/src/stress_tests -> repo root
+P1_MC = HERE / "p1_gurnee_tegmark" / "results" / "mc"
+P2 = HERE / "p2_godey_geography" / "results"
+SCOREBOARD = _REPO / "v_1/src/linear_probing/results/balanced_mc_scoreboard.json"
+OUT = HERE / "results" / "RESULTS_stress_tests.md"
+
+LABELS = {
+    "random": "random Qwen3-8B", "mlm": "MLM (AeneasForMLM)",
+    "qwen3_1b7": "Qwen3-1.7B", "qwen3_8b": "Qwen3-8B", "qwen3_32b": "Qwen3-32B",
+    "gpt_oss_120b": "gpt-oss-120B", "thalesian_akk300m": "Thalesian-AKK-300m",
+    "thalesian_cunei400m": "Thalesian-cunei-400m", "umt5_base": "uMT5-base",
+}
+# canonical ladder order for the tables
+ORDER = ["qwen3_1b7", "qwen3_8b", "qwen3_32b", "gpt_oss_120b",
+         "thalesian_akk300m", "thalesian_cunei400m", "umt5_base", "mlm", "random"]
+
+
+def _cell(blk):
+    """PLS best-k Spearman (±std) + ridge, from a site's 'best' block."""
+    if not blk or blk.get("missing") or blk.get("insufficient"):
+        return "—"
+    b = blk.get("best", {})
+    sp = b.get("spearman_mean")
+    if sp is None or sp != sp:
+        return "—"
+    k = b.get("best_k")
+    rg = b.get("ridge", {}).get("spearman_mean")
+    kstr = f",k{k}" if k is not None else ""
+    txt = f"{sp:.3f}±{b.get('spearman_std', float('nan')):.02f} (L{blk.get('best_layer')}{kstr})"
+    if rg is not None and rg == rg:
+        txt += f" / R {rg:.3f}"
+    return txt
+
+
+def p1_table():
+    rows = {}
+    for fp in glob.glob(str(P1_MC / "p1_year_mc__*.json")):
+        d = json.loads(Path(fp).read_text())
+        rows[d["method"]] = d.get("sites", {})
+    lines = ["## P1 — balanced-MC year probe (PLS best-k Spearman ±std / Ridge R)\n",
+             "| model | mean tier0 | mean maximal | king_last (t0) | king_mean (t0) |",
+             "|---|---|---|---|---|"]
+    for m in ORDER:
+        s = rows.get(m)
+        if s is None:
+            continue
+        lines.append(f"| {LABELS.get(m, m)} | {_cell(s.get('mean_tier0'))} | "
+                     f"{_cell(s.get('mean_maximal'))} | {_cell(s.get('king_last'))} | "
+                     f"{_cell(s.get('king_mean'))} |")
+    # TF-IDF cited from the former scoreboard (bag-of-signs: no king token)
+    if SCOREBOARD.exists():
+        sb = json.loads(SCOREBOARD.read_text()).get("tfidf", {})
+        pls, ridge = sb.get("mc_pls"), sb.get("mc_ridge")
+        if pls:
+            cell = f"{pls[0]:.3f}±{pls[1]:.02f} ({pls[2]})"
+            if ridge:
+                cell += f" / R {ridge[0]:.3f}"
+            lines.append(f"| TF-IDF *(cited)* | {cell} | — | n/a¹ | n/a¹ |")
+    lines.append("\n¹ TF-IDF is a bag-of-signs vector — there is no per-token "
+                 "representation, so the king_last/king_mean sites do not exist. "
+                 "Numbers cited from `balanced_mc_scoreboard.json` (former run).")
+    return "\n".join(lines)
+
+
+def p2_table():
+    lines = ["\n## P2 — geography (positive control): best-layer great-circle skill\n",
+             "| model | cleaning | best L | gc km | skill vs centroid | lat PLS/Ridge | lon PLS/Ridge |",
+             "|---|---|---|---|---|---|---|"]
+    got = False
+    for m in ORDER:
+        fp = P2 / f"p2_geography__{m}.json"
+        if not fp.exists():
+            continue
+        got = True
+        d = json.loads(fp.read_text())
+        for cl, blk in d.get("cleanings", {}).items():
+            if blk.get("missing"):
+                continue
+            bl = str(blk["best_layer_by_skill"])
+            pl = blk["per_layer"][bl]; g = pl["geo"]
+            lines.append(
+                f"| {LABELS.get(m, m)} | {cl} | {bl} | {g.get('gc_km_mean', float('nan')):.0f} "
+                f"| {g.get('skill_vs_centroid', float('nan')):+.3f} (k{g.get('k')}) "
+                f"| {pl.get('lat_spearman', float('nan')):.3f}(k{pl.get('lat_best_k')})/"
+                f"{pl.get('lat_ridge_spearman', float('nan')):.3f} "
+                f"| {pl.get('lon_spearman', float('nan')):.3f}(k{pl.get('lon_best_k')})/"
+                f"{pl.get('lon_ridge_spearman', float('nan')):.3f} |")
+    return "\n".join(lines) if got else "\n## P2 — geography\n(no results yet)"
+
+
+def main():
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    md = ("# Stress-test results (balanced-MC)\n\n"
+          "Auto-generated by `aggregate_tables.py`. PLS is swept over k∈{1,2,3,5} "
+          "(best-k shown); Ridge is the linear-baseline arm; both under the "
+          "200-draw balanced Monte-Carlo protocol (GroupKFold-by-ruler within each "
+          "draw). king_* sites are tier0-only.\n\n"
+          + p1_table() + "\n" + p2_table() + "\n")
+    OUT.write_text(md, encoding="utf-8")
+    print(f"wrote {OUT}")
+    print(md)
+
+
+if __name__ == "__main__":
+    main()
