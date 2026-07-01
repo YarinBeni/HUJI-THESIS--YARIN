@@ -16,7 +16,7 @@ echo "=== J11 aggregate === job ${SLURM_JOB_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
-git pull --rebase origin main || echo "WARN pull failed"
+git fetch origin main && git merge --ff-only FETCH_HEAD || echo "WARN sync failed"
 mkdir -p v_1/src/stress_tests/logs
 
 python -u v_1/src/stress_tests/aggregate_tables.py || echo "WARN aggregate failed"

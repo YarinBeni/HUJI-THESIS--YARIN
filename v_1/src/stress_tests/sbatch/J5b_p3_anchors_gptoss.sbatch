@@ -18,7 +18,7 @@ source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 export PYTORCH_ALLOC_CONF=expandable_segments:True
 cd ~/projects/HUJI-THESIS--YARIN
-git pull --rebase origin main || echo "WARN pull failed"
+git fetch origin main && git merge --ff-only FETCH_HEAD || echo "WARN sync failed"
 mkdir -p v_1/src/stress_tests/logs
 
 python -u v_1/src/stress_tests/p3_matter_of_time/extract_anchor_acts.py \
