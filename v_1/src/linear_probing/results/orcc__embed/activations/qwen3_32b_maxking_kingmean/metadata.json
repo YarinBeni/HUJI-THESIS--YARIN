@@ -1,0 +1,12 @@
+{
+  "method": "qwen3_32b",
+  "hfid": "Qwen/Qwen3-32B",
+  "arch": "causal",
+  "cleaning": "maximal_keepking",
+  "config": "maximal-with-kings",
+  "n": 1202,
+  "n_found": 491,
+  "coverage": 0.408,
+  "n_layers": 65,
+  "pool": "kingmean"
+}
