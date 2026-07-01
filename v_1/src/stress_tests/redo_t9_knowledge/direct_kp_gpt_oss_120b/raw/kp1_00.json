@@ -10,5 +10,5 @@
   "raw_output": "analysisThe user asks: \"Which rulers reigned during the Neo-Assyrian period in Mesopotamia? List only rulers who held the title of king (not regents or officials). Return ONLY a JSON object with these fields: \"period\": \"Neo-Assyrian\", \"rulers\": an array of ruler names (romanized, chronological order), \"confidence\": \"high\" if you are certain of the list, \"low\" if approximate.\"\n\nWe must output only JSON, no markdown fences, no extra text. Provide list of Neo-Assyrian kings. Need to be accurate. Neo-Assyrian period roughly 911–609 BCE. Kings: Starting with Adad-nirari II (911–891), then Tukulti-Ninurta II (891–884), Ashurnasirpal II (884–859), Shalmaneser III (859–824), Shamshi-Adad V (824–811), Adad-nirari III (811–783), Shalmaneser IV (783–773), Ashur-dan III (773–755), Ashur-nirari V (755–745), Tiglath-Pileser III (745–727), Shalmaneser V (727–722),",
   "model_path": "openai/gpt-oss-120b",
   "max_new_tokens": 256,
-  "timestamp": "2026-06-30T18:18:15.714575"
+  "timestamp": "2026-06-30T18:45:28.445977"
 }

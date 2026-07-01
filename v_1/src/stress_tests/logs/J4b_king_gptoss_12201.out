@@ -1,36 +1,0 @@
-=== J4b king-extract gpt_oss_120b === job 12201 g0374 Tue Jun 30 18:13:34 UTC 2026
-From https://github.com/YarinBeni/HUJI-THESIS--YARIN
- * branch              main       -> FETCH_HEAD
-fatal: Cannot rebase onto multiple branches.
-WARN pull failed
-Fetching 37 files:   0%|          | 0/37 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 37 files:   3%|▎         | 1/37 [00:00<00:23,  1.50it/s]Fetching 37 files:  22%|██▏       | 8/37 [02:57<11:07, 23.02s/it]Fetching 37 files: 100%|██████████| 37/37 [02:57<00:00,  4.80s/it]
-`torch_dtype` is deprecated! Use `dtype` instead!
-MXFP4 quantization requires Triton and kernels installed: CUDA requires Triton >= 3.4.0, XPU requires Triton >= 3.5.0, we will default to dequantizing the model to bf16
-The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
-Loading weights:   0%|          | 0/615 [00:00<?, ?it/s]Loading weights:   0%|          | 1/615 [00:03<38:22,  3.75s/it]Loading weights:   1%|          | 5/615 [00:10<19:43,  1.94s/it]Loading weights:   1%|          | 7/615 [00:32<54:01,  5.33s/it]Loading weights:   4%|▎         | 22/615 [00:37<13:18,  1.35s/it]Loading weights:   4%|▍         | 24/615 [00:39<13:03,  1.33s/it]Loading weights:   9%|▉         | 56/615 [00:40<03:05,  3.01it/s]Loading weights:  12%|█▏        | 75/615 [00:40<01:50,  4.88it/s]Loading weights:  15%|█▍        | 92/615 [00:40<01:12,  7.20it/s]Loading weights:  18%|█▊        | 109/615 [00:40<00:48, 10.39it/s]Loading weights:  20%|██        | 126/615 [00:40<00:33, 14.74it/s]Loading weights:  23%|██▎       | 143/615 [00:40<00:22, 20.57it/s]Loading weights:  23%|██▎       | 143/615 [00:54<00:22, 20.57it/s]Loading weights:  26%|██▌       | 158/615 [00:56<02:35,  2.94it/s]Loading weights:  26%|██▌       | 160/615 [01:03<03:38,  2.08it/s]Loading weights:  28%|██▊       | 175/615 [01:12<03:57,  1.86it/s]Loading weights:  28%|██▊       | 175/615 [01:24<03:57,  1.86it/s]Loading weights:  29%|██▉       | 177/615 [01:25<06:39,  1.10it/s]Loading weights:  34%|███▍      | 209/615 [01:25<02:32,  2.66it/s]Loading weights:  37%|███▋      | 228/615 [01:25<01:37,  3.96it/s]Loading weights:  42%|████▏     | 260/615 [01:26<00:50,  7.04it/s]Loading weights:  45%|████▌     | 279/615 [01:26<00:35,  9.52it/s]Loading weights:  48%|████▊     | 296/615 [01:26<00:25, 12.56it/s]Loading weights:  51%|█████     | 313/615 [01:26<00:18, 16.75it/s]Loading weights:  51%|█████     | 313/615 [01:40<00:18, 16.75it/s]Loading weights:  54%|█████▎    | 330/615 [01:44<01:36,  2.95it/s]Loading weights:  56%|█████▌    | 345/615 [01:56<02:05,  2.15it/s]Loading weights:  56%|█████▋    | 347/615 [02:12<03:39,  1.22it/s]Loading weights:  62%|██████▏   | 379/615 [02:12<01:33,  2.53it/s]Loading weights:  65%|██████▍   | 399/615 [02:12<00:58,  3.67it/s]Loading weights:  70%|██████▉   | 430/615 [02:13<00:29,  6.18it/s]Loading weights:  73%|███████▎  | 451/615 [02:13<00:19,  8.50it/s]Loading weights:  78%|███████▊  | 481/615 [02:13<00:10, 13.13it/s]Loading weights:  78%|███████▊  | 481/615 [02:24<00:10, 13.13it/s]Loading weights:  81%|████████▏ | 500/615 [02:35<00:39,  2.92it/s]Loading weights:  84%|████████▎ | 515/615 [02:37<00:30,  3.24it/s]Loading weights:  87%|████████▋ | 534/615 [02:38<00:17,  4.50it/s]Loading weights:  92%|█████████▏| 566/615 [02:38<00:06,  7.48it/s]Loading weights:  95%|█████████▍| 583/615 [02:38<00:03,  9.65it/s]Loading weights:  98%|█████████▊| 600/615 [02:38<00:01, 12.63it/s]Loading weights: 100%|██████████| 615/615 [02:38<00:00,  3.88it/s]
-[gpt_oss_120b] 0/1202 found=1 (2s)
-[gpt_oss_120b] 200/1202 found=70 (26s)
-[gpt_oss_120b] 400/1202 found=171 (45s)
-[gpt_oss_120b] 600/1202 found=274 (65s)
-[gpt_oss_120b] 800/1202 found=315 (86s)
-[gpt_oss_120b] 1000/1202 found=360 (107s)
-[gpt_oss_120b] 1200/1202 found=455 (128s)
-[gpt_oss_120b] DONE  coverage=0.379 (455/1202)  layers=37
-[W630 18:23:31.729685029 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
-[main 6318df5c] J4b: king-token acts gpt_oss_120b (job 12201)
- 4 files changed, 24 insertions(+)
- create mode 100644 v_1/src/linear_probing/results/orcc__embed/activations/gpt_oss_120b_tier0_kinglast/king_coverage.json
- create mode 100644 v_1/src/linear_probing/results/orcc__embed/activations/gpt_oss_120b_tier0_kinglast/metadata.json
- create mode 100644 v_1/src/linear_probing/results/orcc__embed/activations/gpt_oss_120b_tier0_kingmean/king_coverage.json
- create mode 100644 v_1/src/linear_probing/results/orcc__embed/activations/gpt_oss_120b_tier0_kingmean/metadata.json
-From https://github.com/YarinBeni/HUJI-THESIS--YARIN
- * branch              main       -> FETCH_HEAD
-There is no candidate for rebasing against among the refs that you just fetched.
-Generally this means that you provided a wildcard refspec which had no
-matches on the remote end.
-From https://github.com/YarinBeni/HUJI-THESIS--YARIN
- * branch              main       -> FETCH_HEAD
-Already up to date.
-Everything up-to-date
-=== Done gpt_oss_120b. Tue Jun 30 18:24:15 UTC 2026 ===

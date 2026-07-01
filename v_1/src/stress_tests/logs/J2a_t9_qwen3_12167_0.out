@@ -1,89 +1,0 @@
-=== J2a T9 qwen3_1b7 (Qwen/Qwen3-1.7B) === job 12167_0 g0377 Tue Jun 30 17:45:05 UTC 2026
-From https://github.com/YarinBeni/HUJI-THESIS--YARIN
- * branch              claude/stress-test-timeline-analysis-9sh2vs -> FETCH_HEAD
-fatal: Cannot rebase onto multiple branches.
-WARN pull failed
-[run_kp] Loading model: Qwen/Qwen3-1.7B
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-`torch_dtype` is deprecated! Use `dtype` instead!
-Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:05<13:28,  2.62s/it]Loading weights:   2%|▏         | 5/311 [00:05<04:41,  1.09it/s]Loading weights:   2%|▏         | 6/311 [00:05<03:48,  1.34it/s]Loading weights:   4%|▍         | 13/311 [00:05<01:08,  4.36it/s]Loading weights:   5%|▌         | 16/311 [00:06<01:01,  4.81it/s]Loading weights:   6%|▌         | 18/311 [00:06<00:57,  5.09it/s]Loading weights:   7%|▋         | 21/311 [00:06<00:46,  6.29it/s]Loading weights:   8%|▊         | 24/311 [00:07<00:35,  7.97it/s]Loading weights:   8%|▊         | 26/311 [00:07<00:39,  7.21it/s]Loading weights:   9%|▉         | 28/311 [00:08<00:46,  6.03it/s]Loading weights:  10%|▉         | 31/311 [00:08<00:35,  7.85it/s]Loading weights:  12%|█▏        | 37/311 [00:08<00:23, 11.88it/s]Loading weights:  13%|█▎        | 39/311 [00:08<00:28,  9.69it/s]Loading weights:  37%|███▋      | 114/311 [00:09<00:02, 73.09it/s]Loading weights:  39%|███▉      | 121/311 [00:09<00:02, 64.30it/s]Loading weights:  41%|████      | 127/311 [00:09<00:04, 40.75it/s]Loading weights:  44%|████▎     | 136/311 [00:10<00:03, 44.57it/s]Loading weights:  46%|████▌     | 142/311 [00:10<00:05, 33.52it/s]Loading weights:  47%|████▋     | 147/311 [00:10<00:04, 33.05it/s]Loading weights:  49%|████▊     | 151/311 [00:11<00:06, 24.07it/s]Loading weights:  50%|████▉     | 154/311 [00:11<00:07, 21.26it/s]Loading weights:  51%|█████     | 158/311 [00:11<00:06, 23.34it/s]Loading weights:  52%|█████▏    | 161/311 [00:11<00:08, 18.31it/s]Loading weights:  53%|█████▎    | 164/311 [00:11<00:07, 19.56it/s]Loading weights:  54%|█████▎    | 167/311 [00:11<00:07, 20.50it/s]Loading weights:  55%|█████▍    | 170/311 [00:12<00:09, 14.58it/s]Loading weights:  55%|█████▌    | 172/311 [00:12<00:10, 13.01it/s]Loading weights:  58%|█████▊    | 179/311 [00:12<00:06, 19.75it/s]Loading weights:  59%|█████▊    | 182/311 [00:13<00:09, 13.34it/s]Loading weights:  60%|█████▉    | 186/311 [00:13<00:07, 16.28it/s]Loading weights:  61%|██████    | 190/311 [00:13<00:07, 16.38it/s]Loading weights:  62%|██████▏   | 193/311 [00:14<00:13,  9.06it/s]Loading weights:  63%|██████▎   | 197/311 [00:14<00:13,  8.72it/s]Loading weights:  65%|██████▍   | 202/311 [00:15<00:09, 11.55it/s]Loading weights:  66%|██████▌   | 204/311 [00:15<00:12,  8.55it/s]Loading weights:  67%|██████▋   | 208/311 [00:15<00:09, 10.97it/s]Loading weights:  68%|██████▊   | 213/311 [00:16<00:08, 11.61it/s]Loading weights:  69%|██████▉   | 215/311 [00:16<00:10,  8.96it/s]Loading weights:  71%|███████   | 221/311 [00:16<00:06, 13.58it/s]Loading weights:  72%|███████▏  | 224/311 [00:16<00:06, 12.95it/s]Loading weights:  73%|███████▎  | 226/311 [00:17<00:11,  7.68it/s]Loading weights:  75%|███████▍  | 232/311 [00:17<00:06, 12.06it/s]Loading weights:  76%|███████▌  | 235/311 [00:17<00:05, 13.07it/s]Loading weights:  77%|███████▋  | 238/311 [00:18<00:05, 12.84it/s]Loading weights:  78%|███████▊  | 244/311 [00:18<00:03, 18.61it/s]Loading weights:  79%|███████▉  | 247/311 [00:19<00:06,  9.90it/s]Loading weights:  80%|████████  | 250/311 [00:19<00:07,  8.67it/s]Loading weights:  81%|████████  | 252/311 [00:19<00:06,  9.67it/s]Loading weights:  82%|████████▏ | 254/311 [00:20<00:07,  8.12it/s]Loading weights:  82%|████████▏ | 256/311 [00:20<00:06,  8.98it/s]Loading weights:  83%|████████▎ | 258/311 [00:21<00:14,  3.56it/s]Loading weights:  83%|████████▎ | 259/311 [00:22<00:14,  3.53it/s]Loading weights:  84%|████████▍ | 262/311 [00:22<00:09,  5.37it/s]Loading weights:  85%|████████▍ | 264/311 [00:22<00:07,  6.15it/s]Loading weights:  86%|████████▌ | 268/311 [00:22<00:05,  7.45it/s]Loading weights:  87%|████████▋ | 270/311 [00:23<00:06,  5.97it/s]Loading weights:  88%|████████▊ | 273/311 [00:23<00:04,  7.65it/s]Loading weights:  89%|████████▊ | 276/311 [00:23<00:03,  9.65it/s]Loading weights:  89%|████████▉ | 278/311 [00:23<00:03,  9.54it/s]Loading weights:  90%|█████████ | 280/311 [00:24<00:03, 10.11it/s]Loading weights:  92%|█████████▏| 285/311 [00:24<00:01, 16.02it/s]Loading weights:  93%|█████████▎| 290/311 [00:24<00:01, 17.60it/s]Loading weights:  94%|█████████▍| 293/311 [00:25<00:01, 10.15it/s]Loading weights:  95%|█████████▌| 296/311 [00:25<00:01, 10.41it/s]Loading weights:  97%|█████████▋| 301/311 [00:25<00:00, 12.39it/s]Loading weights:  97%|█████████▋| 303/311 [00:25<00:00, 11.00it/s]Loading weights: 100%|█████████▉| 310/311 [00:26<00:00, 18.27it/s]Loading weights: 100%|██████████| 311/311 [00:26<00:00, 11.95it/s]
-The tied weights mapping and config for this model specifies to tie model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
-[run_kp] Model loaded on cuda:0 in 30.8s
-The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
-[run_kp] kp0[0] 'Ashurbanipal' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_00.json
-[run_kp] kp0[1] 'Sennacherib' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_01.json
-[run_kp] kp0[2] 'Esarhaddon' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_02.json
-[run_kp] kp0[3] 'Sargon II' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_03.json
-[run_kp] kp0[4] 'Nebuchadnezzar II' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_04.json
-[run_kp] kp0[5] 'Tiglath-pileser III' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_05.json
-[run_kp] kp0[6] 'Nabonidus' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_06.json
-[run_kp] kp0[7] 'Sîn-šarru-iškun' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_07.json
-[run_kp] Done: 8 raw outputs in v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw
-[parse_kp] kp0: 8 records, 0 parse errors -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/parsed/kp0.json
-[score_kp] kp0: accuracy=0.875 (7/8), parse_errors=0
-[score_kp] Wrote v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/scores/kp0_metrics.json
-[run_kp] Loading model: Qwen/Qwen3-1.7B
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-`torch_dtype` is deprecated! Use `dtype` instead!
-Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:35,  8.67it/s]Loading weights:  19%|█▉        | 60/311 [00:00<00:01, 224.41it/s]Loading weights:  41%|████      | 127/311 [00:00<00:00, 380.58it/s]Loading weights:  64%|██████▎   | 198/311 [00:00<00:00, 488.31it/s]Loading weights:  86%|████████▋ | 269/311 [00:00<00:00, 550.82it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 442.70it/s]
-The tied weights mapping and config for this model specifies to tie model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
-[run_kp] Model loaded on cuda:0 in 3.4s
-The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
-[run_kp] kp1[0] 'Neo-Assyrian' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp1_00.json
-[run_kp] kp1[1] 'Neo-Babylonian' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp1_01.json
-[run_kp] Done: 2 raw outputs in v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw
-[parse_kp] kp1: 2 records, 0 parse errors -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/parsed/kp1.json
-[score_kp] kp1: aggregate_recall=0.500 (4/8), parse_errors=0
-[score_kp] Wrote v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/scores/kp1_metrics.json
-[run_kp] Loading model: Qwen/Qwen3-1.7B
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-`torch_dtype` is deprecated! Use `dtype` instead!
-Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:25, 12.14it/s]Loading weights:  24%|██▍       | 76/311 [00:00<00:00, 348.42it/s]Loading weights:  48%|████▊     | 149/311 [00:00<00:00, 499.93it/s]Loading weights:  72%|███████▏  | 224/311 [00:00<00:00, 585.74it/s]Loading weights:  94%|█████████▍| 292/311 [00:00<00:00, 614.43it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 527.43it/s]
-The tied weights mapping and config for this model specifies to tie model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
-[run_kp] Model loaded on cuda:0 in 3.2s
-The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
-[run_kp] kp2[0] 'Nabu-šarru-iddina the Lesser' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_00.json
-[run_kp] kp2[1] 'Esarhaddon III' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_01.json
-[run_kp] kp2[2] 'Nergal-nasir-apli' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_02.json
-[run_kp] kp2[3] 'Marduk-mukin-šarru' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_03.json
-[run_kp] kp2[4] 'Sîn-eriba-bel' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_04.json
-[run_kp] kp2[5] 'Assur-bel-mukin the Younger' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_05.json
-[run_kp] kp2[6] 'Tukulti-apil-iddina II' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_06.json
-[run_kp] kp2[7] 'Nabû-šumu-eriba the Elder' -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_07.json
-[run_kp] Done: 8 raw outputs in v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw
-[parse_kp] kp2: 8 records, 4 parse errors -> v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/parsed/kp2.json
-[score_kp] kp2: hallucination_rate=0.750 (3/4), gate_pass=False, parse_errors=4
-[score_kp] Wrote v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/scores/kp2_metrics.json
-[main e1057151] J2a: redo T9 elicitation qwen3_1b7 (job 12167_0)
- 24 files changed, 957 insertions(+)
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/parsed/kp0.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/parsed/kp1.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/parsed/kp2.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_00.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_01.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_02.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_03.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_04.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_05.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_06.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp0_07.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp1_00.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp1_01.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_00.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_01.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_02.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_03.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_04.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_05.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_06.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/raw/kp2_07.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/scores/kp0_metrics.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/scores/kp1_metrics.json
- create mode 100644 v_1/src/stress_tests/redo_t9_knowledge/direct_kp_qwen3_1b7/scores/kp2_metrics.json
-From https://github.com/YarinBeni/HUJI-THESIS--YARIN
- * branch              claude/stress-test-timeline-analysis-9sh2vs -> FETCH_HEAD
-Current branch main is up to date.
-error: src refspec claude/stress-test-timeline-analysis-9sh2vs does not match any
-error: failed to push some refs to 'https://github.com/YarinBeni/HUJI-THESIS--YARIN.git'
-WARN push failed
-=== Done qwen3_1b7. Tue Jun 30 17:49:13 UTC 2026 ===

@@ -10,5 +10,5 @@
   "raw_output": "analysisThe user asks: \"When did the Akkadian/Assyrian/Babylonian ruler Nebuchadnezzar II reign? Return ONLY a JSON object with fields start_year, end_year, confidence, declined.\" Nebuchadnezzar II was a Neo-Babylonian king, reigned 605–562 BCE (some sources 605–562). So start_year 605, end_year 562, confidence high. Provide JSON only, no markdown.assistantfinal{\"start_year\":605,\"end_year\":562,\"confidence\":\"high\",\"declined\":false}",
   "model_path": "openai/gpt-oss-120b",
   "max_new_tokens": 256,
-  "timestamp": "2026-06-30T18:14:40.673192"
+  "timestamp": "2026-06-30T18:44:20.709517"
 }

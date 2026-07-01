@@ -1,35 +1,0 @@
-=== J4 king-extract thalesian_cunei400m (Thalesian/cuneiformBase-400m, encoder) === job 12173_4 g0379 Tue Jun 30 17:45:05 UTC 2026
-From https://github.com/YarinBeni/HUJI-THESIS--YARIN
- * branch              claude/stress-test-timeline-analysis-9sh2vs -> FETCH_HEAD
-fatal: Cannot rebase onto multiple branches.
-WARN pull failed
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-`torch_dtype` is deprecated! Use `dtype` instead!
-The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
-Loading weights:   0%|          | 0/303 [00:00<?, ?it/s]Loading weights:   3%|▎         | 9/303 [00:00<00:03, 78.73it/s]Loading weights:   6%|▌         | 17/303 [00:00<00:04, 64.78it/s]Loading weights:  11%|█         | 32/303 [00:00<00:02, 98.25it/s]Loading weights:  18%|█▊        | 54/303 [00:00<00:01, 134.56it/s]Loading weights:  29%|██▉       | 89/303 [00:00<00:01, 200.41it/s]Loading weights:  36%|███▋      | 110/303 [00:00<00:00, 194.05it/s]Loading weights:  43%|████▎     | 130/303 [00:01<00:01, 114.31it/s]Loading weights:  51%|█████     | 155/303 [00:01<00:01, 141.14it/s]Loading weights:  58%|█████▊    | 177/303 [00:01<00:00, 155.79it/s]Loading weights:  65%|██████▍   | 196/303 [00:01<00:00, 144.11it/s]Loading weights:  70%|███████   | 213/303 [00:01<00:00, 142.73it/s]Loading weights:  76%|███████▌  | 229/303 [00:01<00:00, 119.19it/s]Loading weights:  80%|████████  | 243/303 [00:01<00:00, 117.60it/s]Loading weights:  85%|████████▌ | 258/303 [00:02<00:00, 87.87it/s] Loading weights:  89%|████████▉ | 269/303 [00:02<00:00, 81.84it/s]Loading weights:  92%|█████████▏| 279/303 [00:02<00:00, 76.53it/s]Loading weights:  98%|█████████▊| 298/303 [00:02<00:00, 82.18it/s]Loading weights: 100%|██████████| 303/303 [00:04<00:00, 73.51it/s]
-[thalesian_cunei400m] 0/1202 found=1 (1s)
-[thalesian_cunei400m] 200/1202 found=70 (5s)
-[thalesian_cunei400m] 400/1202 found=170 (9s)
-[thalesian_cunei400m] 600/1202 found=272 (12s)
-[thalesian_cunei400m] 800/1202 found=313 (16s)
-[thalesian_cunei400m] 1000/1202 found=358 (19s)
-[thalesian_cunei400m] 1200/1202 found=446 (22s)
-Traceback (most recent call last):
-  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/p1_gurnee_tegmark/extract_king_acts.py", line 128, in <module>
-    run(parse_args())
-  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/p1_gurnee_tegmark/extract_king_acts.py", line 104, in run
-    (d / "king_coverage.json").write_text(json.dumps(cov), encoding="utf-8")
-                                          ^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/json/__init__.py", line 231, in dumps
-    return _default_encoder.encode(obj)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/json/encoder.py", line 200, in encode
-    chunks = self.iterencode(o, _one_shot=True)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/json/encoder.py", line 258, in iterencode
-    return _iterencode(o, 0)
-           ^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/json/encoder.py", line 180, in default
-    raise TypeError(f'Object of type {o.__class__.__name__} '
-TypeError: Object of type NAType is not JSON serializable
-FAILED extract thalesian_cunei400m

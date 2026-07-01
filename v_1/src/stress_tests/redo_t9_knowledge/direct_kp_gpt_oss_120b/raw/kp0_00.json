@@ -10,5 +10,5 @@
   "raw_output": "analysisThe user asks for dates of Ashurbanipal, an Assyrian king. Provide JSON with start_year, end_year, confidence, declined. Need to be precise: Ashurbanipal reigned c. 669–631 BCE (some sources 668–627). There's some variation. Typically 668–627 BCE. Provide confidence maybe \"high\" if we consider that as established. Could note start 668, end 627. Provide JSON only, no extra text.assistantfinal{\"start_year\": 668, \"end_year\": 627, \"confidence\": \"high\", \"declined\": false}",
   "model_path": "openai/gpt-oss-120b",
   "max_new_tokens": 256,
-  "timestamp": "2026-06-30T18:14:21.617189"
+  "timestamp": "2026-06-30T18:44:00.747478"
 }

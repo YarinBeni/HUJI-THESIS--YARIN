@@ -1,69 +1,0 @@
-=== J3b T10 gpt_oss_120b (openai/gpt-oss-120b) === job 12172 g0374 Tue Jun 30 17:45:05 UTC 2026
-From https://github.com/YarinBeni/HUJI-THESIS--YARIN
- * branch              claude/stress-test-timeline-analysis-9sh2vs -> FETCH_HEAD
-fatal: Cannot rebase onto multiple branches.
-WARN pull failed
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-`torch_dtype` is deprecated! Use `dtype` instead!
-MXFP4 quantization requires Triton and kernels installed: CUDA requires Triton >= 3.4.0, XPU requires Triton >= 3.5.0, we will default to dequantizing the model to bf16
-The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
-Loading weights:   0%|          | 0/615 [00:00<?, ?it/s]Loading weights:   0%|          | 1/615 [00:12<2:07:30, 12.46s/it]Loading weights:   0%|          | 2/615 [00:12<53:09,  5.20s/it]  Loading weights:   1%|          | 5/615 [00:50<1:46:22, 10.46s/it]Loading weights:   1%|          | 7/615 [01:11<1:46:44, 10.53s/it]Loading weights:   4%|▎         | 22/615 [01:36<32:51,  3.32s/it] Loading weights:   9%|▉         | 56/615 [01:36<08:33,  1.09it/s]Loading weights:  12%|█▏        | 75/615 [01:36<05:15,  1.71it/s]Loading weights:  17%|█▋        | 107/615 [01:36<02:38,  3.20it/s]Loading weights:  20%|██        | 126/615 [01:36<01:50,  4.44it/s]Loading weights:  20%|██        | 126/615 [01:50<01:50,  4.44it/s]Loading weights:  26%|██▌       | 158/615 [04:04<15:17,  2.01s/it]Loading weights:  26%|██▌       | 160/615 [05:09<23:15,  3.07s/it]Loading weights:  28%|██▊       | 175/615 [05:58<22:55,  3.13s/it]Loading weights:  29%|██▉       | 177/615 [06:11<24:05,  3.30s/it]Loading weights:  34%|███▍      | 209/615 [06:11<10:29,  1.55s/it]Loading weights:  38%|███▊      | 231/615 [06:11<06:32,  1.02s/it]Loading weights:  42%|████▏     | 260/615 [06:11<03:41,  1.60it/s]Loading weights:  46%|████▌     | 281/615 [06:12<02:28,  2.25it/s]Loading weights:  51%|█████     | 311/615 [06:12<01:25,  3.55it/s]Loading weights:  51%|█████     | 311/615 [06:30<01:25,  3.55it/s]Loading weights:  54%|█████▎    | 330/615 [07:03<04:14,  1.12it/s]Loading weights:  56%|█████▌    | 345/615 [07:23<04:27,  1.01it/s]Loading weights:  56%|█████▋    | 347/615 [07:32<05:00,  1.12s/it]Loading weights:  62%|██████▏   | 379/615 [07:32<02:18,  1.71it/s]Loading weights:  65%|██████▍   | 398/615 [07:32<01:30,  2.39it/s]Loading weights:  70%|██████▉   | 430/615 [07:32<00:45,  4.03it/s]Loading weights:  73%|███████▎  | 450/615 [07:32<00:30,  5.46it/s]Loading weights:  78%|███████▊  | 481/615 [07:32<00:15,  8.58it/s]Loading weights:  78%|███████▊  | 481/615 [07:50<00:15,  8.58it/s]Loading weights:  81%|████████  | 498/615 [07:52<00:40,  2.91it/s]Loading weights:  81%|████████▏ | 500/615 [09:46<04:38,  2.42s/it]Loading weights:  84%|████████▎ | 515/615 [10:03<03:25,  2.06s/it]Loading weights:  87%|████████▋ | 534/615 [10:03<01:50,  1.36s/it]Loading weights:  92%|█████████▏| 566/615 [10:03<00:37,  1.32it/s]Loading weights:  95%|█████████▌| 587/615 [10:03<00:14,  1.87it/s]Loading weights: 100%|██████████| 615/615 [10:03<00:00,  1.02it/s]
-Traceback (most recent call last):
-  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/redo_t10_prompt/extract_prompted_king_acts.py", line 135, in <module>
-    run(parse_args())
-  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/redo_t10_prompt/extract_prompted_king_acts.py", line 94, in run
-    hs = core(input_ids=ids, attention_mask=attn, output_hidden_states=True,
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/utils/generic.py", line 917, in wrapper
-    output = func(self, *args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/utils/output_capturing.py", line 253, in wrapper
-    outputs = func(self, *args, **kwargs)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/models/gpt_oss/modeling_gpt_oss.py", line 500, in forward
-    hidden_states = decoder_layer(
-                    ^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/modeling_layers.py", line 93, in __call__
-    return super().__call__(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
-    return inner()
-           ^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1829, in inner
-    result = forward_call(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/accelerate/hooks.py", line 192, in new_forward
-    output = module._old_forward(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/models/gpt_oss/modeling_gpt_oss.py", line 374, in forward
-    hidden_states, _ = self.self_attn(
-                       ^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
-    return inner()
-           ^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1829, in inner
-    result = forward_call(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/accelerate/hooks.py", line 192, in new_forward
-    output = module._old_forward(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/models/gpt_oss/modeling_gpt_oss.py", line 332, in forward
-    attn_output, attn_weights = attention_interface(
-                                ^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/models/gpt_oss/modeling_gpt_oss.py", line 257, in eager_attention_forward
-    attn_weights = torch.matmul(query, key_states.transpose(2, 3)) * scaling
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 19.73 GiB. GPU 0 has a total capacity of 79.19 GiB of which 5.56 GiB is free. Including non-PyTorch memory, this process has 73.62 GiB memory in use. Of the allocated memory 56.05 GiB is allocated by PyTorch, and 16.91 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
-FAIL extract pv0 gpt_oss_120b

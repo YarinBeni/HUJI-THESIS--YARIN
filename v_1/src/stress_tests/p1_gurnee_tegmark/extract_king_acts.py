@@ -40,30 +40,11 @@ DEFAULT_CORPUS = _REPO / "v_1/data/evaluation/corpora/orcc_corpus.parquet"
 DEFAULT_ACTS = _REPO / "v_1/src/linear_probing/results/orcc__embed/activations"
 
 
-def _load_random(hfid):
-    """Random-weight model (mirrors 01b_extract_random_baseline.py): pretrained
-    tokenizer + from_config init with SEED=42. The critical control for king_last."""
-    import torch
-    from transformers import AutoTokenizer, AutoConfig, AutoModelForCausalLM
-    tok = AutoTokenizer.from_pretrained(hfid, use_fast=True)
-    if tok.pad_token is None:
-        tok.pad_token = tok.eos_token
-    cfg = AutoConfig.from_pretrained(hfid)
-    torch.manual_seed(42)
-    model = AutoModelForCausalLM.from_config(cfg).to(
-        "cuda" if torch.cuda.is_available() else "cpu").to(torch.bfloat16)
-    model.eval()
-    return tok, getattr(model, "model", model), model
-
-
 def run(args):
     import torch
     df = pd.read_parquet(args.corpus)
     spellings = kt.load_spellings()
-    if args.random:
-        tok, core, _model = _load_random(args.hfid)
-    else:
-        tok, core, _model = xl.load_model(args.hfid, args.arch)
+    tok, core, _model = xl.load_model(args.hfid, args.arch)
 
     out_last = Path(args.acts_root) / f"{args.method}_tier0_kinglast"
     out_mean = Path(args.acts_root) / f"{args.method}_tier0_kingmean"
@@ -140,8 +121,6 @@ def parse_args():
     p.add_argument("--corpus", default=str(DEFAULT_CORPUS))
     p.add_argument("--acts-root", default=str(DEFAULT_ACTS))
     p.add_argument("--max-tokens", type=int, default=512)
-    p.add_argument("--random", action="store_true",
-                   help="random-weight model (from_config, seed=42) — the king_last control")
     return p.parse_args()
 
 

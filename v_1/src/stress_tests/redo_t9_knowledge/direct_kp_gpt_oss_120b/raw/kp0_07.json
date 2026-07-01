@@ -10,5 +10,5 @@
   "raw_output": "analysisWe need to answer with JSON only. The user asks about Sîn-šarru-iškun, an Akkadian/Assyrian/Babylonian ruler. Actually Sinsharishkun (also spelled Sinsharishkun) was an Assyrian king, the penultimate king of the Neo-Assyrian Empire, reigned c. 627–612 BCE. He succeeded Ashurbanipal (or his son). Dates: 627–612 BCE. Confidence high. Provide JSON.\n\nMake sure no extra text. Provide fields: start_year, end_year, confidence, declined. So:\n\n{\n  \"start_year\": 627,\n  \"end_year\": 612,\n  \"confidence\": \"high\",\n  \"declined\": false\n}\n\nReturn exactly that.assistantfinal{\"start_year\":627,\"end_year\":612,\"confidence\":\"high\",\"declined\":false}",
   "model_path": "openai/gpt-oss-120b",
   "max_new_tokens": 256,
-  "timestamp": "2026-06-30T18:15:01.259374"
+  "timestamp": "2026-06-30T18:44:42.293503"
 }

@@ -1,58 +1,0 @@
-=== J3a T10 qwen3_32b (Qwen/Qwen3-32B) === job 12196_2 g0375 Tue Jun 30 18:13:34 UTC 2026
-From https://github.com/YarinBeni/HUJI-THESIS--YARIN
- * branch              main       -> FETCH_HEAD
-fatal: Cannot rebase onto multiple branches.
-WARN pull failed
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-`torch_dtype` is deprecated! Use `dtype` instead!
-The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
-Loading weights:   0%|          | 0/707 [00:00<?, ?it/s]Loading weights:   0%|          | 1/707 [00:01<23:18,  1.98s/it]Loading weights:   0%|          | 2/707 [00:02<13:43,  1.17s/it]Loading weights:   1%|          | 6/707 [00:02<03:25,  3.41it/s]Loading weights:   2%|▏         | 16/707 [00:02<01:00, 11.47it/s]Loading weights:   4%|▎         | 26/707 [00:02<00:33, 20.54it/s]Loading weights:   5%|▍         | 32/707 [00:03<00:26, 25.52it/s]Loading weights:   5%|▌         | 38/707 [00:03<00:21, 30.47it/s]Loading weights:   6%|▌         | 44/707 [00:03<00:24, 26.98it/s]Loading weights:   7%|▋         | 49/707 [00:03<00:31, 20.78it/s]Loading weights:   7%|▋         | 53/707 [00:04<00:38, 17.17it/s]Loading weights:   8%|▊         | 60/707 [00:04<00:27, 23.11it/s]Loading weights:  10%|▉         | 70/707 [00:04<00:19, 33.41it/s]Loading weights:  11%|█         | 76/707 [00:04<00:17, 36.76it/s]Loading weights:  12%|█▏        | 83/707 [00:04<00:15, 40.21it/s]Loading weights:  13%|█▎        | 93/707 [00:04<00:12, 50.53it/s]Loading weights:  14%|█▍        | 102/707 [00:04<00:10, 57.08it/s]Loading weights:  15%|█▌        | 109/707 [00:05<00:10, 59.61it/s]Loading weights:  16%|█▋        | 116/707 [00:05<00:10, 55.58it/s]Loading weights:  18%|█▊        | 126/707 [00:05<00:09, 63.19it/s]Loading weights:  19%|█▉        | 136/707 [00:05<00:08, 68.54it/s]Loading weights:  20%|██        | 144/707 [00:05<00:08, 68.21it/s]Loading weights:  21%|██▏       | 152/707 [00:05<00:08, 65.14it/s]Loading weights:  22%|██▏       | 159/707 [00:05<00:08, 63.52it/s]Loading weights:  24%|██▍       | 168/707 [00:05<00:08, 66.76it/s]Loading weights:  25%|██▍       | 175/707 [00:06<00:08, 66.11it/s]Loading weights:  26%|██▌       | 182/707 [00:06<00:09, 54.34it/s]Loading weights:  27%|██▋       | 192/707 [00:06<00:08, 62.51it/s]Loading weights:  29%|██▊       | 202/707 [00:06<00:07, 68.86it/s]Loading weights:  30%|██▉       | 210/707 [00:06<00:07, 67.52it/s]Loading weights:  31%|███       | 217/707 [00:06<00:07, 62.94it/s]Loading weights:  32%|███▏      | 224/707 [00:07<00:10, 44.02it/s]Loading weights:  33%|███▎      | 230/707 [00:07<00:24, 19.31it/s]Loading weights:  33%|███▎      | 234/707 [00:08<00:23, 20.15it/s]Loading weights:  34%|███▎      | 238/707 [00:08<00:33, 13.91it/s]Loading weights:  35%|███▍      | 246/707 [00:08<00:25, 18.28it/s]Loading weights:  35%|███▌      | 249/707 [00:09<00:31, 14.61it/s]Loading weights:  36%|███▋      | 258/707 [00:09<00:20, 22.07it/s]Loading weights:  38%|███▊      | 268/707 [00:09<00:14, 31.26it/s]Loading weights:  39%|███▉      | 274/707 [00:09<00:12, 35.34it/s]Loading weights:  40%|███▉      | 280/707 [00:09<00:10, 39.41it/s]Loading weights:  41%|████      | 290/707 [00:09<00:08, 49.52it/s]Loading weights:  42%|████▏     | 297/707 [00:09<00:07, 53.46it/s]Loading weights:  43%|████▎     | 304/707 [00:10<00:07, 51.62it/s]Loading weights:  44%|████▍     | 313/707 [00:10<00:06, 58.04it/s]Loading weights:  46%|████▌     | 323/707 [00:10<00:05, 65.26it/s]Loading weights:  47%|████▋     | 331/707 [00:10<00:05, 66.37it/s]Loading weights:  48%|████▊     | 339/707 [00:10<00:05, 64.42it/s]Loading weights:  49%|████▉     | 346/707 [00:10<00:05, 61.61it/s]Loading weights:  50%|████▉     | 353/707 [00:10<00:06, 52.35it/s]Loading weights:  51%|█████     | 359/707 [00:11<00:08, 40.84it/s]Loading weights:  51%|█████▏    | 364/707 [00:11<00:08, 42.45it/s]Loading weights:  52%|█████▏    | 369/707 [00:13<00:50,  6.71it/s]Loading weights:  53%|█████▎    | 373/707 [00:14<00:46,  7.24it/s]Loading weights:  53%|█████▎    | 376/707 [00:14<00:39,  8.39it/s]Loading weights:  54%|█████▎    | 379/707 [00:16<01:24,  3.89it/s]Loading weights:  55%|█████▍    | 388/707 [00:16<00:44,  7.11it/s]Loading weights:  56%|█████▌    | 395/707 [00:16<00:30, 10.21it/s]Loading weights:  57%|█████▋    | 402/707 [00:17<00:22, 13.85it/s]Loading weights:  58%|█████▊    | 412/707 [00:17<00:14, 20.74it/s]Loading weights:  60%|█████▉    | 422/707 [00:17<00:10, 27.86it/s]Loading weights:  61%|██████    | 428/707 [00:17<00:08, 31.19it/s]Loading weights:  61%|██████▏   | 434/707 [00:17<00:10, 25.65it/s]Loading weights:  62%|██████▏   | 439/707 [00:17<00:10, 26.42it/s]Loading weights:  63%|██████▎   | 445/707 [00:18<00:08, 30.39it/s]Loading weights:  64%|██████▎   | 450/707 [00:18<00:16, 15.18it/s]Loading weights:  64%|██████▍   | 456/707 [00:19<00:13, 19.24it/s]Loading weights:  66%|██████▌   | 466/707 [00:19<00:08, 27.73it/s]Loading weights:  67%|██████▋   | 471/707 [00:19<00:07, 30.61it/s]Loading weights:  68%|██████▊   | 478/707 [00:19<00:06, 35.96it/s]Loading weights:  69%|██████▉   | 488/707 [00:19<00:04, 46.21it/s]Loading weights:  70%|███████   | 495/707 [00:19<00:04, 49.08it/s]Loading weights:  71%|███████   | 501/707 [00:19<00:04, 47.78it/s]Loading weights:  72%|███████▏  | 511/707 [00:19<00:03, 57.19it/s]Loading weights:  74%|███████▎  | 521/707 [00:20<00:02, 64.66it/s]Loading weights:  75%|███████▍  | 529/707 [00:20<00:02, 65.81it/s]Loading weights:  76%|███████▌  | 536/707 [00:20<00:02, 62.19it/s]Loading weights:  77%|███████▋  | 544/707 [00:20<00:02, 63.88it/s]Loading weights:  78%|███████▊  | 553/707 [00:20<00:02, 67.26it/s]Loading weights:  79%|███████▉  | 560/707 [00:20<00:02, 67.20it/s]Loading weights:  80%|████████  | 567/707 [00:20<00:02, 60.33it/s]Loading weights:  82%|████████▏ | 577/707 [00:20<00:01, 67.03it/s]Loading weights:  83%|████████▎ | 587/707 [00:20<00:01, 72.01it/s]Loading weights:  84%|████████▍ | 595/707 [00:21<00:01, 70.82it/s]Loading weights:  85%|████████▌ | 603/707 [00:21<00:01, 67.18it/s]Loading weights:  86%|████████▋ | 610/707 [00:21<00:01, 64.99it/s]Loading weights:  88%|████████▊ | 620/707 [00:21<00:01, 70.59it/s]Loading weights:  89%|████████▉ | 628/707 [00:21<00:01, 69.80it/s]Loading weights:  90%|████████▉ | 636/707 [00:21<00:01, 66.40it/s]Loading weights:  91%|█████████ | 643/707 [00:21<00:00, 64.48it/s]Loading weights:  92%|█████████▏| 653/707 [00:21<00:00, 70.11it/s]Loading weights:  93%|█████████▎| 661/707 [00:22<00:00, 69.66it/s]Loading weights:  94%|█████████▍| 668/707 [00:22<00:00, 64.05it/s]Loading weights:  96%|█████████▌| 676/707 [00:22<00:00, 65.15it/s]Loading weights:  97%|█████████▋| 686/707 [00:22<00:00, 70.81it/s]Loading weights:  98%|█████████▊| 694/707 [00:22<00:00, 70.19it/s]Loading weights:  99%|█████████▉| 702/707 [00:22<00:00, 66.60it/s]Loading weights: 100%|██████████| 707/707 [00:22<00:00, 31.11it/s]
-[pv0] 0/1202 found=0 (15s)
-Traceback (most recent call last):
-  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/redo_t10_prompt/extract_prompted_king_acts.py", line 136, in <module>
-    run(parse_args())
-  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/redo_t10_prompt/extract_prompted_king_acts.py", line 95, in run
-    hs = core(input_ids=ids, attention_mask=attn, output_hidden_states=True,
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/utils/generic.py", line 917, in wrapper
-    output = func(self, *args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/utils/output_capturing.py", line 253, in wrapper
-    outputs = func(self, *args, **kwargs)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 436, in forward
-    hidden_states = decoder_layer(
-                    ^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/modeling_layers.py", line 93, in __call__
-    return super().__call__(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
-    return inner()
-           ^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1829, in inner
-    result = forward_call(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 338, in forward
-    hidden_states = self.mlp(hidden_states)
-                    ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 82, in forward
-    down_proj = self.down_proj(self.act_fn(self.gate_proj(x)) * self.up_proj(x))
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
-torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 980.00 MiB. GPU 0 has a total capacity of 79.19 GiB of which 841.06 MiB is free. Including non-PyTorch memory, this process has 78.36 GiB memory in use. Of the allocated memory 77.57 GiB is allocated by PyTorch, and 126.43 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
-[W630 18:15:50.106081694 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
-FAIL extract pv0 qwen3_32b

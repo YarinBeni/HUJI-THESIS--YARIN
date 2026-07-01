@@ -1,22 +1,0 @@
-=== J5 P3 anchors umt5_base === job 12202_5 g0379 Tue Jun 30 18:13:34 UTC 2026
-/var/spool/slurmd/job12202/slurm_script: line 27: 112717 Bus error               (core dumped) git pull --rebase origin main
-WARN pull failed
-Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 9 files:  11%|█         | 1/9 [00:00<00:04,  1.67it/s]Fetching 9 files:  56%|█████▌    | 5/9 [00:13<00:11,  2.94s/it]Fetching 9 files: 100%|██████████| 9/9 [00:13<00:00,  1.55s/it]
-Traceback (most recent call last):
-  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/p3_matter_of_time/extract_anchor_acts.py", line 77, in <module>
-    run(parse_args())
-  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/p3_matter_of_time/extract_anchor_acts.py", line 34, in run
-    tok, core, _ = xl.load_model(args.hfid, args.arch)
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/stress_tests/shared/extract_lib.py", line 59, in load_model
-    model = AutoModelForSeq2SeqLM.from_pretrained(
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/models/auto/auto_factory.py", line 319, in from_pretrained
-    config, kwargs = AutoConfig.from_pretrained(
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1471, in from_pretrained
-    raise ValueError(
-ValueError: Unrecognized model in google/umt5-base. Should have a `model_type` key in its config.json.
-[W630 18:14:12.477115798 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
-FAIL anchors umt5_base
