@@ -20,7 +20,7 @@ git pull --rebase origin main || echo "WARN pull failed"
 mkdir -p v_1/src/stress_tests/logs
 export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 
-for M in qwen3_1b7 qwen3_8b qwen3_32b gpt_oss_120b thalesian_akk300m thalesian_cunei400m umt5_base random; do
+for M in qwen3_1b7 qwen3_8b qwen3_32b gpt_oss_120b thalesian_akk300m thalesian_cunei400m umt5_base random mlm; do
     echo "--- P1 MC: $M ---"
     python -u v_1/src/stress_tests/p1_gurnee_tegmark/probe_p1_mc.py --method "$M" --n-jobs 32 \
         || echo "WARN p1_mc $M failed"
