@@ -83,8 +83,9 @@ def run(args):
             print(f"  {k:13s}: {'missing' if s.get('missing') else 'insufficient'}")
         else:
             b = s["best"]
-            print(f"  {k:13s}: L{s['best_layer']} spearman={b['spearman_mean']:.3f}±{b['spearman_std']:.2f} "
-                  f"null={b['shuffled_spearman_mean']:.3f} r2={b['r2_mean']:.3f} mae={b['mae_mean']:.0f} "
+            rg = b.get("ridge", {}).get("spearman_mean", float("nan"))
+            print(f"  {k:13s}: L{s['best_layer']} PLS(k={b.get('best_k')})={b['spearman_mean']:.3f}±{b['spearman_std']:.2f} "
+                  f"ridge={rg:.3f} null={b['shuffled_spearman_mean']:.3f} mae={b['mae_mean']:.0f} "
                   f"(draws={b['n_draws_used']})")
     print(f"wrote {fp}")
 
