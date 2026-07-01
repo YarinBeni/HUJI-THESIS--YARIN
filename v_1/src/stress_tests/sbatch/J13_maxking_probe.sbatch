@@ -31,6 +31,8 @@ for M in qwen3_1b7 qwen3_8b qwen3_32b gpt_oss_120b thalesian_akk300m thalesian_c
         echo "skip $M (no maxking acts on disk)"
     fi
 done
-commit_push "J13: maxking probe results (job ${SLURM_JOB_ID})" \
-    v_1/src/stress_tests/p1_gurnee_tegmark/results/maxking/*.json
+python -u v_1/src/stress_tests/p1_gurnee_tegmark/aggregate_maxking.py || echo "WARN aggregate failed"
+commit_push "J13: maxking probe results + scoreboard (job ${SLURM_JOB_ID})" \
+    v_1/src/stress_tests/p1_gurnee_tegmark/results/maxking/*.json \
+    v_1/src/stress_tests/p1_gurnee_tegmark/results/maxking/RESULTS_maxking.md
 echo "=== Done. $(date) ==="
