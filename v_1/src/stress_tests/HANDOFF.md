@@ -3,13 +3,15 @@
 > Read this first. A fresh agent should be able to carry on from here.
 > Branch: `claude/stress-test-timeline-analysis-9sh2vs`. **The cluster runs from
 > `main`** (every sbatch does `git pull --rebase origin main` … `git push origin
-> HEAD:main`). This agent's environment now BLOCKS direct pushes to `main`
-> (auto-mode classifier), so new code is pushed to the feature branch and must be
-> fast-forwarded onto `main` on the cluster login node (not blocked there):
-> `git checkout main && git merge --ff-only origin/claude/stress-test-timeline-analysis-9sh2vs && git push origin main`.
-> The feature branch = `origin/main` + the new commits, so it's always a clean FF.
-> All work under `v_1/src/stress_tests/`. The user runs every cluster job by
-> pasting `sbatch`; the agent NEVER SSHes.
+> HEAD:main`). This agent's environment BLOCKS direct pushes to `main` (auto-mode
+> classifier), so new code is pushed to the feature branch, then landed on `main`
+> **on the cluster login node** (not blocked there). Because the cluster's own jobs
+> also push result JSONs to `main`, `main` may diverge from the branch's base — use
+> a MERGE, not `--ff-only`: `git fetch origin && git checkout main && git merge
+> --ff-only origin/main && git merge --no-edit origin/claude/stress-test-timeline-analysis-9sh2vs && git push origin main`.
+> Code and result JSONs touch disjoint files, so the merge is conflict-free.
+> (Last landed: `85db68b8`.) All work under `v_1/src/stress_tests/`. The user runs
+> every cluster job by pasting `sbatch`; the agent NEVER SSHes.
 
 ---
 
@@ -132,17 +134,19 @@ read the flat best-k keys. Re-run J6_p1_mc + J7 to regenerate with these.
   king_last 0.49–0.53; king_mean ≈ 0.
 
 ## 7. NEXT STEPS (what's left)
-0. **Land code on `main`** (see header FF command). All the ridge/best-k, MLM (J4d), P3
-   gpt-oss/random (J5b/J5c), and J11 code is on the feature branch only; the cluster won't
-   run it until `main` is fast-forwarded.
-1. **Re-run wave (in order) to regenerate with Ridge + best-k + MLM + random king:**
-   `sbatch J4c_king_random.sbatch` (if not done) ‖ `sbatch J4d_king_mlm.sbatch`, then AFTER both:
-   `sbatch J6_p1_mc.sbatch` (now covers mlm + fills random king_last), `sbatch J7_p2_geography.sbatch`
-   (adds lat/lon best-k + Ridge), `sbatch J3r_t10_reprobe_mc.sbatch`; P3: `sbatch J5b…` `sbatch J5c…`
-   then `sbatch J8_p3_timeline.sbatch`; finally `sbatch J11_aggregate.sbatch` (or run
-   `python v_1/src/stress_tests/aggregate_tables.py` locally). **[DECISIVE] random `king_last`:**
-   if ≈0 while pretrained ≈0.66 → "date-at-the-name" is real signal (claim airtight); if high →
-   name-token identity, reinterpret.
+0. **DONE — code merged to `main`** at `85db68b8` (ort merge, no conflict) and the **full
+   re-run wave was submitted 2026-07 as jobs 12274–12282** with dependencies:
+   `J4c(12274) J4d(12275)` → `J6(12276)`; `J7(12277)`, `J3r(12278)`; `J5b(12279) J5c(12280)`
+   → `J8(12281)`; all → `J11(12282)`. Verify with
+   `sacct -j 12274-12282 --format=JobID,JobName%22,State,ExitCode,Elapsed -X`.
+   **Watch:** J5b (gpt-oss anchors, gpu:4) may OOM and finish in <4 min — if so J8 still runs
+   (afterany) and just drops the gpt-oss timeline curve. J4d (MLM) finishing fast is normal
+   (tiny model); confirm its log ends `[mlm] DONE king_coverage=0.44…`.
+1. **When the queue drains:** `git pull origin main` then read
+   `v_1/src/stress_tests/results/RESULTS_stress_tests.md` (J11 output). **[DECISIVE] random
+   `king_last`:** if ≈0 while pretrained ≈0.66 → "date-at-the-name" is real signal (claim
+   airtight); if high → name-token identity, reinterpret. If any job FAILED, re-submit just
+   that one (+ its dependents) — the sbatch are idempotent (they overwrite their own outputs).
 2. **T10 balanced-MC for qwen3-8B/32B (+gpt-oss).** J3r_t10_reprobe_mc only produced qwen3-1.7B
    (others' prompted acts may not have been on disk at run time). Re-run J3a for 8B/32B if their
    `acts_<model>/prompted_king` are missing, then `sbatch J3r_t10_reprobe_mc.sbatch`.
