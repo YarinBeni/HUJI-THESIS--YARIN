@@ -20,7 +20,7 @@ git pull --rebase origin main || echo "WARN pull failed"
 mkdir -p v_1/src/stress_tests/logs
 export OMP_NUM_THREADS=4 MKL_NUM_THREADS=4
 
-for M in qwen3_1b7 qwen3_8b qwen3_32b thalesian_akk300m thalesian_cunei400m umt5_base; do
+for M in qwen3_1b7 qwen3_8b qwen3_32b gpt_oss_120b thalesian_akk300m thalesian_cunei400m umt5_base random; do
     python -u v_1/src/stress_tests/p3_matter_of_time/timeline_p3.py --method "$M" || echo "WARN p3 $M failed"
 done
 git add v_1/src/stress_tests/p3_matter_of_time/results/*.json 2>/dev/null || true

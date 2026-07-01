@@ -31,7 +31,7 @@ def run(args):
     import torch
     df = pd.read_parquet(CORPUS)
     items = anc.build_ruler_anchors(df) + anc.build_year_anchors(df, step=int(args.year_step))
-    tok, core, _ = xl.load_model(args.hfid, args.arch)
+    tok, core, _ = xl.load_model(args.hfid, args.arch, random=args.random)
 
     outdir = Path(args.out) / args.method
     outdir.mkdir(parents=True, exist_ok=True)
@@ -68,6 +68,8 @@ def parse_args():
     p.add_argument("--hfid", required=True)
     p.add_argument("--method", required=True)
     p.add_argument("--arch", required=True, choices=[xl.ARCH_CAUSAL, xl.ARCH_ENCODER])
+    p.add_argument("--random", action="store_true",
+                   help="random-init weights control (causal only); use with qwen3_8b hfid")
     p.add_argument("--year-step", default=10)
     p.add_argument("--out", default=str(Path(__file__).resolve().parent / "anchors"))
     return p.parse_args()
