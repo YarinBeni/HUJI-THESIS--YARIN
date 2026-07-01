@@ -44,7 +44,7 @@ def run(args):
     import torch
     df = pd.read_parquet(args.corpus)
     spellings = kt.load_spellings()
-    tok, core, _model = xl.load_model(args.hfid, args.arch)
+    tok, core, _model = xl.load_model(args.hfid, args.arch, random=args.random)
 
     out_last = Path(args.acts_root) / f"{args.method}_tier0_kinglast"
     out_mean = Path(args.acts_root) / f"{args.method}_tier0_kingmean"
@@ -118,6 +118,8 @@ def parse_args():
     p.add_argument("--hfid", required=True)
     p.add_argument("--method", required=True)
     p.add_argument("--arch", required=True, choices=[xl.ARCH_CAUSAL, xl.ARCH_ENCODER])
+    p.add_argument("--random", action="store_true",
+                   help="random-init weights control (causal only)")
     p.add_argument("--corpus", default=str(DEFAULT_CORPUS))
     p.add_argument("--acts-root", default=str(DEFAULT_ACTS))
     p.add_argument("--max-tokens", type=int, default=512)

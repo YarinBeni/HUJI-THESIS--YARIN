@@ -60,10 +60,11 @@ def _ensure_local(hf_id: str, arch: str) -> str:
     raise RuntimeError(f"could not prepare {hf_id}: {last}")
 
 
-def load_model(hf_id: str, arch: str, dtype="bfloat16"):
+def load_model(hf_id: str, arch: str, dtype="bfloat16", random=False, seed=42):
     """Returns (tokenizer, core_module, full_model). core_module(input_ids,
     attention_mask, output_hidden_states=True) yields .hidden_states of length
-    n_layers+1 (index 0 = embeddings)."""
+    n_layers+1 (index 0 = embeddings). random=True builds random-init weights
+    from config (the control baseline) with a fixed seed."""
     import os
     import torch
     from transformers import AutoTokenizer
@@ -74,6 +75,17 @@ def load_model(hf_id: str, arch: str, dtype="bfloat16"):
     tok = AutoTokenizer.from_pretrained(path, use_fast=True)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
+
+    if random:
+        # random-weights control: init from config only, fixed seed (matches
+        # 01b_extract_random_baseline.py). Causal only.
+        from transformers import AutoConfig, AutoModelForCausalLM
+        cfg = AutoConfig.from_pretrained(path)
+        torch.manual_seed(seed)
+        model = AutoModelForCausalLM.from_config(cfg, torch_dtype=td)
+        model = model.to("cuda" if torch.cuda.is_available() else "cpu")
+        model.eval()
+        return tok, getattr(model, "model", model), model
 
     if arch == ARCH_CAUSAL:
         from transformers import AutoModelForCausalLM
