@@ -1,7 +1,13 @@
 # Stress-Tests — Session Handoff / Context
 
 > Read this first. A fresh agent should be able to carry on from here.
-> Branch: `claude/stress-test-timeline-analysis-9sh2vs` (also on `main`, PR #1).
+> Branch: `claude/stress-test-timeline-analysis-9sh2vs`. **The cluster runs from
+> `main`** (every sbatch does `git pull --rebase origin main` … `git push origin
+> HEAD:main`). This agent's environment now BLOCKS direct pushes to `main`
+> (auto-mode classifier), so new code is pushed to the feature branch and must be
+> fast-forwarded onto `main` on the cluster login node (not blocked there):
+> `git checkout main && git merge --ff-only origin/claude/stress-test-timeline-analysis-9sh2vs && git push origin main`.
+> The feature branch = `origin/main` + the new commits, so it's always a clean FF.
 > All work under `v_1/src/stress_tests/`. The user runs every cluster job by
 > pasting `sbatch`; the agent NEVER SSHes.
 
@@ -52,15 +58,23 @@ shared/
   anchors.py          P3 ruler/year anchor prompts
   ruler_spellings.csv NEEDS EXPERT REVIEW (raises king coverage)
   sites_gazetteer.csv provenance -> lat/lon/region (P2), 97.5% row coverage
-p1_gurnee_tegmark/  extract_king_acts.py (J4/J4c), probe_p1.py (GKF), probe_p1_mc.py (MC)
-p2_godey_geography/ probe_p2.py (J7)
-p3_matter_of_time/  extract_anchor_acts.py (J5), timeline_p3.py (J8)
+p1_gurnee_tegmark/  extract_king_acts.py (J4/J4c HF king), extract_mlm_king_acts.py (J4d
+                    MLM king+mean, sign-level), probe_p1.py (GKF), probe_p1_mc.py (MC)
+p2_godey_geography/ probe_p2.py (J7) — now sweeps PLS k + Ridge, best-k per lat/lon
+p3_matter_of_time/  extract_anchor_acts.py (J5/J5b/J5c; --random flag), timeline_p3.py (J8)
 p7_ksparse/         probe_p7.py (J9)
 redo_t9_knowledge/  uses round2_phase1a run_kp/parse_kp/score_kp (J2)
 redo_t10_prompt/    extract_prompted_king_acts.py, reprobe_king_pv.py (GKF), reprobe_king_mc.py (MC)
-sbatch/             J2a,J2b,J3a,J3b,J3r_t10_reprobe_mc,J4,J4b,J4c_king_random,J5,J6_p1_probe,
-                    J6_p1_mc,J7,J8,J9, submit_all.sh
+aggregate_tables.py J11 — builds results/RESULTS_stress_tests.md (labels + TF-IDF cite)
+sbatch/             J2a,J2b,J3a,J3b,J3r_t10_reprobe_mc,J4,J4b,J4c_king_random,J4d_king_mlm,
+                    J5,J5b_p3_anchors_gptoss,J5c_p3_anchors_random,J6_p1_probe,J6_p1_mc,
+                    J7,J8,J9,J11_aggregate, submit_all.sh
 ```
+
+**mc_probe / probe_p1_mc / probe_p2 now report BOTH PLS (swept k∈{1,2,3,5},
+best-k surfaced + full per_k) AND a Ridge arm** (the user wanted both). Result
+JSONs gained `best_k`, `per_k`, and `ridge{spearman_mean,…}`; old printers still
+read the flat best-k keys. Re-run J6_p1_mc + J7 to regenerate with these.
 
 ## 4. The jobs (what each wanted to do)
 | Job | Purpose | GPU |
@@ -70,12 +84,15 @@ sbatch/             J2a,J2b,J3a,J3b,J3r_t10_reprobe_mc,J4,J4b,J4c_king_random,J5
 | J3r_t10_reprobe_mc | T10 reprobe under balanced-MC on existing prompted acts | CPU |
 | J4/J4b | king-token extraction (tier0) qwen3×3+thal×2+umt5 / gpt-oss | yes |
 | J4c_king_random | king-token extraction for RANDOM Qwen3-8B (the control) | yes |
-| J5 | P3 anchor embeddings | yes |
+| J4d_king_mlm | MLM king+mean acts on balanced-MC setup (mlm_{tier0,maximal}_mean + kinglast/kingmean) | yes |
+| J5 | P3 anchor embeddings (qwen×3, thal×2, umt5) | yes |
+| J5b/J5c | P3 anchors for gpt-oss-120B / random-Qwen3-8B | yes |
 | J6_p1_probe | P1 year-probe (GroupKFold) | CPU |
 | J6_p1_mc | P1 year-probe balanced-MC (mean + king sites) | CPU |
 | J7 | P2 geography (positive control) | CPU |
-| J8 | P3 timeline (3a anchors-form-line, 3b texts-project) | CPU |
+| J8 | P3 timeline (3a anchors-form-line, 3b texts-project); now incl. gpt-oss + random | CPU |
 | J9 | P7 k-sparse localization | CPU |
+| J11_aggregate | build results/RESULTS_stress_tests.md (P1+P2 tables, labels, TF-IDF cite) | CPU |
 
 ## 5. Where results live
 - **In git / local (pull `main`)** — all *result JSONs*:
@@ -103,18 +120,29 @@ sbatch/             J2a,J2b,J3a,J3b,J3r_t10_reprobe_mc,J4,J4b,J4c_king_random,J5
   | thal-akk300m | 0.344 | 0.322 | 0.691 | 0.083 |
   | thal-cunei400m | 0.411 | 0.411 | 0.574 | 0.072 |
   | umt5-base | 0.334 | 0.295 | 0.454 | 0.272 |
-  | random | 0.376 | 0.303 | **PENDING (J4c)** | PENDING |
+  | random Qwen3-8B | 0.376 | 0.303 | **PENDING (J4c→J6)** | PENDING |
+  | MLM (J4d) | ~0.42* | PENDING | PENDING | PENDING |
+  | TF-IDF (cited) | 0.407 | — | n/a (no token) | n/a |
+  (*MLM mean tier0 ≈ 0.424 in the former `balanced_mc_scoreboard.json`; J4d adds its
+  maximal-mean + king sites. TF-IDF cited from that scoreboard: PLS 0.407 / Ridge 0.355.)
   (null/shuffled ≈ 0.01 everywhere.) mean-pool ≈ random & flat across scale/objective;
-  king_last much higher; king_mean washes out.
+  king_last much higher; king_mean washes out. **These PLS numbers are pre-ridge;
+  re-run J6_p1_mc to add the Ridge column + best-k, then J11 rebuilds the table.**
 - **T10 balanced-MC (qwen3-1.7B):** mean = 0.406 across ALL pv0–pv3 (prompting doesn't change it);
   king_last 0.49–0.53; king_mean ≈ 0.
 
 ## 7. NEXT STEPS (what's left)
-1. **[DECISIVE] random `king_last`.** J4c (`sbatch J4c_king_random.sbatch`) extracts random-Qwen3-8B
-   king acts; THEN re-run `J6_p1_mc.sbatch` (must run AFTER J4c completes — they've been launched
-   together by mistake, so the random row stays PENDING until a post-J4c J6_p1_mc run). Fill the
-   `random king_last` cell. If ≈0 → the "date-at-the-name" result is real signal (claim airtight).
-   If high → it's name-token identity; reinterpret.
+0. **Land code on `main`** (see header FF command). All the ridge/best-k, MLM (J4d), P3
+   gpt-oss/random (J5b/J5c), and J11 code is on the feature branch only; the cluster won't
+   run it until `main` is fast-forwarded.
+1. **Re-run wave (in order) to regenerate with Ridge + best-k + MLM + random king:**
+   `sbatch J4c_king_random.sbatch` (if not done) ‖ `sbatch J4d_king_mlm.sbatch`, then AFTER both:
+   `sbatch J6_p1_mc.sbatch` (now covers mlm + fills random king_last), `sbatch J7_p2_geography.sbatch`
+   (adds lat/lon best-k + Ridge), `sbatch J3r_t10_reprobe_mc.sbatch`; P3: `sbatch J5b…` `sbatch J5c…`
+   then `sbatch J8_p3_timeline.sbatch`; finally `sbatch J11_aggregate.sbatch` (or run
+   `python v_1/src/stress_tests/aggregate_tables.py` locally). **[DECISIVE] random `king_last`:**
+   if ≈0 while pretrained ≈0.66 → "date-at-the-name" is real signal (claim airtight); if high →
+   name-token identity, reinterpret.
 2. **T10 balanced-MC for qwen3-8B/32B (+gpt-oss).** J3r_t10_reprobe_mc only produced qwen3-1.7B
    (others' prompted acts may not have been on disk at run time). Re-run J3a for 8B/32B if their
    `acts_<model>/prompted_king` are missing, then `sbatch J3r_t10_reprobe_mc.sbatch`.
@@ -122,7 +150,9 @@ sbatch/             J2a,J2b,J3a,J3b,J3r_t10_reprobe_mc,J4,J4b,J4c_king_random,J5
    3a (anchors form ordered line) vs 3b (texts project) for the dissociation figure.
 4. **gpt-oss-120B T10** never succeeded (OOM even sdpa+gpu:4). Optional; ladder stands without it.
 5. **ruler_spellings.csv** expert review to raise king coverage above ~44%.
-6. **GUI (J10)** — add new embeddings to `v_1/src/viz/seal_eda*.html`; **aggregate tables/figures (J11)**.
+6. **GUI (J10)** — add new embeddings to `v_1/src/viz/seal_eda*.html`. **J11 aggregate DONE**
+   (`aggregate_tables.py` → `results/RESULTS_stress_tests.md`, labels + TF-IDF cite); rerun after
+   the wave above to fill in Ridge/best-k/MLM/random-king cells.
 7. Write-up: the claim in §1, with the balanced-MC table as the centerpiece.
 
 ## 8. Operational notes (cluster + git)
