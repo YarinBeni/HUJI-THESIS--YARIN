@@ -1,0 +1,5 @@
+model,kp0_correct,kp0_total,kp0_accuracy,kp0_parse_errors,kp1_recall,kp1_hits,kp1_targets,kp2_hallucination_rate,kp2_gate_pass
+qwen3_1b7,7,8,0.875,0,0.5,4,8,0.75,False
+qwen3_8b,7,8,0.875,1,0.625,5,8,0.0,True
+qwen3_32b,6,8,0.75,2,0.25,2,8,0.0,True
+gpt_oss_120b,8,8,1.0,0,0.0,0,8,0.0,True
