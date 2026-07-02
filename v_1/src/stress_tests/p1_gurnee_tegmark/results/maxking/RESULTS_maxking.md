@@ -16,6 +16,10 @@ All three sites on ONE cleaning (clean_maximal_keepking). `ruler_clf` is the con
 | qwen3_32b | king_last | L4 | 0.982 | 0.20 / 0.08 | 0.977 | 0.98 | -0.190 |
 | qwen3_32b | king_mean | L0 | 0.970 | 0.20 / 0.07 | 0.976 | 0.95 | -0.120 |
 | | | | | | | | |
+| gpt_oss_120b | mean | L1 | 0.750 | 0.20 / 0.07 | 0.781 | 0.35 | -0.069 |
+| gpt_oss_120b | king_last | L7 | 0.982 | 0.20 / 0.08 | 0.967 | 0.94 | -0.550 |
+| gpt_oss_120b | king_mean | L0 | 0.966 | 0.20 / 0.07 | 0.977 | 0.95 | -0.150 |
+| | | | | | | | |
 | thalesian_akk300m | mean | L0 | 0.700 | 0.20 / 0.08 | 0.706 | 0.32 | -0.265 |
 | thalesian_akk300m | king_last | L7 | 0.975 | 0.20 / 0.08 | 0.962 | 0.90 | -0.228 |
 | thalesian_akk300m | king_mean | L2 | 0.998 | 0.20 / 0.08 | 0.975 | 0.96 | -0.582 |
