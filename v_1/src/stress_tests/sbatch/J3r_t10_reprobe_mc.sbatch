@@ -3,7 +3,7 @@
 #SBATCH --partition=voltagepark
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64G
-#SBATCH --time=05:00:00
+#SBATCH --time=12:00:00
 #SBATCH --array=0-3
 #SBATCH --output=v_1/src/stress_tests/logs/J3r_t10_reprobe_mc_%A_%a.out
 # ===========================================================================
