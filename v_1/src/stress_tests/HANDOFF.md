@@ -1,15 +1,48 @@
 # Stress-Tests — Session Handoff / Context
 
 > Read this first. A fresh agent should be able to carry on from here.
-> Branch: `claude/stress-test-timeline-analysis-9sh2vs`. **The cluster runs from
+> Branch: `claude/akkadian-dating-handoff-sdplzf`. **The cluster runs from
 > `main`** (every sbatch does `git pull --rebase origin main` … `git push origin
-> HEAD:main`). This agent's environment now BLOCKS direct pushes to `main`
+> HEAD:main`). This agent's environment BLOCKS direct pushes to `main`
 > (auto-mode classifier), so new code is pushed to the feature branch and must be
 > fast-forwarded onto `main` on the cluster login node (not blocked there):
-> `git checkout main && git merge --ff-only origin/claude/stress-test-timeline-analysis-9sh2vs && git push origin main`.
+> `git checkout main && git merge --ff-only origin/claude/akkadian-dating-handoff-sdplzf && git push origin main`.
 > The feature branch = `origin/main` + the new commits, so it's always a clean FF.
 > All work under `v_1/src/stress_tests/`. The user runs every cluster job by
 > pasting `sbatch`; the agent NEVER SSHes.
+
+---
+
+## Session update (2026-07-02) — gpt-oss maxking LANDED; T10-32B still pending
+- **Jobs 12321 (J12b gpt-oss maxking extract, gpu:8) + 12322 (J13 re-probe) SUCCEEDED
+  and are on `main`** (commits `2c468510`, `1b5c1fbc`). gpt-oss-120B rows are now in
+  `RESULTS_maxking.md`: mean F1 **0.750** (random 0.741 — pattern holds, random ≈
+  trained), king_last 0.982 / king_mean 0.966 (≈ everyone incl. random). The maxking
+  story is unchanged by the biggest model.
+- **CSVs regenerated** via `eda/export_result_csvs.py`: only `p1_maxking.csv` changed
+  (+3 gpt-oss rows); all other CSVs byte-identical (no silent drift). Committed on
+  the feature branch.
+- **Job 12320_2 (J3r T10 balanced-MC, qwen3-32B, 12h limit) has NOT landed** —
+  `redo_t10_prompt/results/qwen3_32b__t10_mc_summary.json` is still absent from
+  `main`. Ask the user for `sacct`/log status; if it timed out or died, re-run
+  `sbatch J3r_t10_reprobe_mc.sbatch` (prompted acts are on disk). This is the last
+  missing cell of the T10-MC table.
+- **New interpretive caveat (T10-MC, verified in the JSONs):** the `mean` numbers are
+  bit-identical across pv0–pv3 because the **best layer is L0 = the embedding layer**,
+  which is context-independent by construction (same fragment tokens → same embedding
+  rows regardless of prompt). Deeper, genuinely prompted layers DO differ across
+  variants but are all LOWER than L0 (e.g. 8B: L0 0.388, L5 ≈0.30, L18 ≈0.25–0.26).
+  Substantive reading for the write-up: prompting never lifts any contextual layer
+  above the context-free embedding baseline — an even stronger null than "the numbers
+  don't move."
+- **Next work queue (user's plan):** (1) audit every results table end-to-end —
+  aggregate and cross-check that nothing silently failed and no model×site×config
+  cell is missing vs the §11 matrix in `results/RESULTS_stress_tests_explained.md`;
+  (2) analysis pass: our results vs each mirrored paper (G–T, Godey, Matter-of-Time,
+  Haystack) — what replicated, what didn't, under which control; (3) figures in the
+  established 4-panel style; (4) GUI: add the new embeddings (maxking sites, prompted
+  acts, anchors) for the extracted layers into the self-contained
+  `v_1/src/viz/seal_eda*.html` explorer (J10); (5) then write-up per §7.7.
 
 ---
 
