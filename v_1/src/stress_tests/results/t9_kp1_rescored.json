@@ -84,21 +84,20 @@
       }
     },
     "gpt_oss_120b": {
-      "orig_recall": 0.0,
-      "rescored_recall": 0.375,
+      "orig_recall": 0.875,
+      "rescored_recall": 1.0,
       "per_period": {
         "Neo-Assyrian": {
           "found": [
-            "Tiglath-pileser III"
-          ],
-          "missed": [
             "Ashurbanipal",
             "Sennacherib",
             "Esarhaddon",
             "Sargon II",
+            "Tiglath-pileser III",
             "Sîn-šarru-iškun"
           ],
-          "recall": 0.16666666666666666
+          "missed": [],
+          "recall": 1.0
         },
         "Neo-Babylonian": {
           "found": [
