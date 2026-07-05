@@ -10,7 +10,10 @@ reading these files IN THIS ORDER before doing anything:
 
 1. `v_1/src/stress_tests/HANDOFF.md` — session handoff: the thesis question,
    data/protocol, code map, cluster+git conventions, and running NEXT-STEPS.
-2. `v_1/src/stress_tests/results/RESULTS_stress_tests_explained.md` — the full briefing:
+2. `v_1/src/stress_tests/ADVISOR_WALKTHROUGH.md` — the narrative tour: each experiment,
+   the published claim it mirrors, the config, the result table, and the "so what?"
+   cross-cutting patterns. Best single read for an advisor.
+3. `v_1/src/stress_tests/results/RESULTS_stress_tests_explained.md` — the full briefing:
    every experiment (T9, P2, P1 a/b/c, P3, P7, T10, EDA), the paper it mirrors, exact
    config, models run, WHERE each result file lives, headline numbers, conclusions,
    caveats, a config matrix (§11), and the one-paragraph conclusion (§12). Primary doc.
