@@ -1,0 +1,114 @@
+{
+  "rule": "normalized substring scan over RAW output (+ listed variants)",
+  "note": "recovers format/parse losses; cannot recover truncation (gpt-oss NA list cut at max_new_tokens=512)",
+  "models": {
+    "qwen3_1b7": {
+      "orig_recall": 0.5,
+      "rescored_recall": 0.5,
+      "per_period": {
+        "Neo-Assyrian": {
+          "found": [
+            "Ashurbanipal",
+            "Sennacherib",
+            "Esarhaddon",
+            "Sargon II"
+          ],
+          "missed": [
+            "Tiglath-pileser III",
+            "Sîn-šarru-iškun"
+          ],
+          "recall": 0.6666666666666666
+        },
+        "Neo-Babylonian": {
+          "found": [],
+          "missed": [
+            "Nebuchadnezzar II",
+            "Nabonidus"
+          ],
+          "recall": 0.0
+        }
+      }
+    },
+    "qwen3_8b": {
+      "orig_recall": 0.625,
+      "rescored_recall": 0.75,
+      "per_period": {
+        "Neo-Assyrian": {
+          "found": [
+            "Ashurbanipal",
+            "Sennacherib",
+            "Esarhaddon",
+            "Sargon II",
+            "Tiglath-pileser III"
+          ],
+          "missed": [
+            "Sîn-šarru-iškun"
+          ],
+          "recall": 0.8333333333333334
+        },
+        "Neo-Babylonian": {
+          "found": [
+            "Nebuchadnezzar II"
+          ],
+          "missed": [
+            "Nabonidus"
+          ],
+          "recall": 0.5
+        }
+      }
+    },
+    "qwen3_32b": {
+      "orig_recall": 0.25,
+      "rescored_recall": 1.0,
+      "per_period": {
+        "Neo-Assyrian": {
+          "found": [
+            "Ashurbanipal",
+            "Sennacherib",
+            "Esarhaddon",
+            "Sargon II",
+            "Tiglath-pileser III",
+            "Sîn-šarru-iškun"
+          ],
+          "missed": [],
+          "recall": 1.0
+        },
+        "Neo-Babylonian": {
+          "found": [
+            "Nebuchadnezzar II",
+            "Nabonidus"
+          ],
+          "missed": [],
+          "recall": 1.0
+        }
+      }
+    },
+    "gpt_oss_120b": {
+      "orig_recall": 0.0,
+      "rescored_recall": 0.375,
+      "per_period": {
+        "Neo-Assyrian": {
+          "found": [
+            "Tiglath-pileser III"
+          ],
+          "missed": [
+            "Ashurbanipal",
+            "Sennacherib",
+            "Esarhaddon",
+            "Sargon II",
+            "Sîn-šarru-iškun"
+          ],
+          "recall": 0.16666666666666666
+        },
+        "Neo-Babylonian": {
+          "found": [
+            "Nebuchadnezzar II",
+            "Nabonidus"
+          ],
+          "missed": [],
+          "recall": 1.0
+        }
+      }
+    }
+  }
+}
