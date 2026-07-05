@@ -6,6 +6,12 @@ nulls interpretable: T9 (the models *know* the dates) and P2 (the *pipeline work
 The decisive baseline everywhere is a **random-initialized Qwen3-8B** pushed through the identical
 extraction + probing.
 
+**The reporting standard (all experiments):** every result is presented as three lines —
+**SETUP** (text cleaning · pooling site · sampling/CV protocol), **PROBE** (the fitted model:
+PLS with k swept over {1,2,3,5}, best-k, + a Ridge arm, unless stated otherwise), **METRIC**
+(regression → **Spearman(predicted, true)**; classification → **macro-F1 vs chance**). Paired
+cells are PLS / Ridge (or F1 / ρ where two metrics apply). Baseline = the random-init row.
+
 **Shared machinery (all probing experiments):**
 - Corpus: 1,202 ORACC royal inscriptions, 41 rulers, `year` BCE derived from the ruler's reign.
   **`year` is one constant per ruler** (except Esarhaddon) → decoding year ≈ identifying the ruler.
