@@ -135,10 +135,12 @@ token identity, not learned.
   chance=0.20, shuffle≈0.08.
 - **Numbers (ruler macro-F1, chance 0.20):** mean — trained 0.66–0.90, **random 0.741**;
   king_last/king_mean ≈ 0.94–0.99 **for everyone incl. random**.
-- **What we saw:** **random ≥ every trained model on `mean`**, and ≈ everyone on the king
-  sites → even whole-text recoverability is token identity, not learned. **Only
-  Thalesian-cunei beats random on mean (0.897)** — the one real positive.
-- **Not run:** gpt-oss (OOM), MLM (needs its own extractor), TF-IDF (no per-token reps).
+- **What we saw:** **random (0.741) ≥ every trained model on `mean`** except
+  Thalesian-cunei (0.897, the one real positive). **gpt-oss-120B = 0.750 ≈ random** — the
+  largest model does *not* beat a random net, so there is **no scale effect**. King sites
+  ≈ 0.94–0.99 for everyone incl. random → token identity, not learned.
+- **Not run:** MLM (needs its own extractor), TF-IDF (no per-token reps). gpt-oss **is**
+  included now (re-extracted on gpu:8; the earlier gpu:4 run OOM'd).
 
 ---
 
@@ -188,8 +190,8 @@ token identity, not learned.
   **pv0 = bare/zero-shot** (no system), **pv1 = framed zero-shot** (expert-Assyriologist
   system prompt), **pv2 = few-shot k=5**, **pv3 = chain-of-thought**.
 - **Config:** tier0 text in prompt; span-mean + king_last/king_mean; **GKF and balanced-MC
-  (8-ruler draws)**; PLS(best-k)+Ridge. **Causal only:** qwen3 1.7/8/32B (GKF); MC done for
-  1.7B & 8B (32B MC file absent — task didn't finish). gpt-oss OOM'd; no random/MLM/TF-IDF.
+  (8-ruler draws)**; PLS(best-k)+Ridge. **Causal only:** qwen3 1.7/8/32B — GKF and MC all
+  present (32B MC finished on the 12h rerun). gpt-oss never ran on T10; no random/MLM/TF-IDF.
 - **Numbers (MC mean):** **identical ≈0.388–0.390 across pv0–pv3**; king_last 0.42–0.52.
 - **What we saw:** **prompting (framing / few-shot / CoT) does not make the date more
   linearly recoverable** from the activations.
@@ -234,8 +236,8 @@ and the balanced-subset draws are committed.
   `sbatch/_common.sh` (`sync_main`/`push_main`/`commit_push`: flock + rebase-autostash +
   retry) serializes commits. The agent env blocks direct `main` pushes → code lands via a
   feature branch fast-forwarded onto `main` on the login node.
-- Extraction is GPU (per-model); probing is CPU. gpt-oss-120B repeatedly **OOMs** on gpu:4
-  — it's excluded from maxking/T10 and the ladder stands without it.
+- Extraction is GPU (per-model); probing is CPU. gpt-oss-120B (~240GB bf16) **OOMs on
+  gpu:4** but runs fine on **gpu:8** (maxking complete). It still never succeeded on T10.
 
 ---
 
@@ -247,7 +249,7 @@ and the balanced-subset draws are committed.
 | P2 | Godey geo (control) | tier0+maximal | GKF-by-site | PLS(k)+Ridge | mean | 8 (incl. both Thalesian) | yes | fold + skill |
 | P1a | Gurnee–Tegmark | tier0+maximal / tier0 | GKF-by-ruler (imbal.) | PLS+Ridge+MLP | mean, king_last, king_mean | 8 | mean only | fold + shuffle |
 | P1b | Gurnee–Tegmark | tier0+maximal / tier0 | balanced-MC 8×21 | PLS(k)+Ridge | mean, king_last, king_mean | 8 + MLM + TF-IDF | yes (incl. king) | ±std/200 + shuffle |
-| P1c | maxking | maximal_keepking | balanced-MC 5×9 | PLS(k)+Ridge; ruler-clf | mean, king_last, king_mean | 7 | yes | ±std/200 + chance+shuffle |
+| P1c | maxking | maximal_keepking | balanced-MC 5×9 | PLS(k)+Ridge; ruler-clf | mean, king_last, king_mean | 8 (incl. gpt-oss) | yes | ±std/200 + chance+shuffle |
 | P3 | Matter of Time | tier0 | none (PCA/Isomap+NN) | 1-D embed + nearest-anchor | anchors; mean | 8 | yes | none (random baseline) |
 | P7 | Haystack | tier0 | GKF-by-ruler | top-k-neuron logistic | mean | 8 | yes | none (random baseline) |
 | T10 | prompting | tier0 in prompt | GKF + balanced-MC 8×21 | PLS(k)+Ridge | span-mean, king_last, king_mean | qwen 1.7/8/32B | no | fold / ±std |
