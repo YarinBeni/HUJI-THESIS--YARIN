@@ -1,0 +1,122 @@
+{
+  "config": "site-balanced-mc",
+  "n_draws": 200,
+  "k": 21,
+  "min_count": 18,
+  "n_sites": 10,
+  "sites": {
+    "36.4,43.2": {
+      "canonical": "Kuyunjik (Nineveh)",
+      "n": 507,
+      "lat": 36.359,
+      "lon": 43.153,
+      "region": "Assyria",
+      "merged_names": [
+        "Kuyunjik (Nineveh)",
+        "Nineveh"
+      ]
+    },
+    "32.5,44.4": {
+      "canonical": "Babylon",
+      "n": 165,
+      "lat": 32.542,
+      "lon": 44.421,
+      "region": "Babylonia",
+      "merged_names": [
+        "Babylon",
+        "Babylon (Bābili)",
+        "Babylonia"
+      ]
+    },
+    "35.5,43.3": {
+      "canonical": "Qalat Sherqat (Assur)",
+      "n": 108,
+      "lat": 35.456,
+      "lon": 43.26,
+      "region": "Assyria",
+      "merged_names": [
+        "Assyria",
+        "Qalat Sherqat (Assur)"
+      ]
+    },
+    "36.1,43.3": {
+      "canonical": "Nimrud (Kalhu)",
+      "n": 105,
+      "lat": 36.099,
+      "lon": 43.328,
+      "region": "Assyria",
+      "merged_names": [
+        "Nimrud",
+        "Nimrud (Kalhu)"
+      ]
+    },
+    "36.5,43.2": {
+      "canonical": "Khorsabad (Dur-Šarrukin)",
+      "n": 60,
+      "lat": 36.509,
+      "lon": 43.229,
+      "region": "Assyria",
+      "merged_names": [
+        "Dur-Šarrukin",
+        "Khorsabad (Dur-Šarrukin)"
+      ]
+    },
+    "33.1,44.2": {
+      "canonical": "Sippar",
+      "n": 30,
+      "lat": 33.06,
+      "lon": 44.243,
+      "region": "Babylonia",
+      "merged_names": [
+        "Sippar",
+        "Tell Abu Habbah (Sippar-Yahrurum)"
+      ]
+    },
+    "33.5,48.3": {
+      "canonical": "Luristan",
+      "n": 28,
+      "lat": 33.5,
+      "lon": 48.3,
+      "region": "Iran/Zagros",
+      "merged_names": [
+        "Luristan"
+      ]
+    },
+    "32.4,44.3": {
+      "canonical": "Borsippa",
+      "n": 25,
+      "lat": 32.388,
+      "lon": 44.341,
+      "region": "Babylonia",
+      "merged_names": [
+        "Birs Nimrud (Borsippa)",
+        "Borsippa"
+      ]
+    },
+    "31.3,45.6": {
+      "canonical": "Uruk",
+      "n": 23,
+      "lat": 31.322,
+      "lon": 45.636,
+      "region": "Babylonia",
+      "merged_names": [
+        "Uruk",
+        "Warka (Uruk)"
+      ]
+    },
+    "31.0,46.1": {
+      "canonical": "Ur",
+      "n": 21,
+      "lat": 30.962,
+      "lon": 46.103,
+      "region": "Babylonia",
+      "merged_names": [
+        "Ur"
+      ]
+    }
+  },
+  "coordinate_merge": "0.1 deg rounding (~11 km)",
+  "total_frags_per_draw": 210,
+  "seed_base": 42,
+  "produced_by": "build_site_balanced_subset.py"
+}

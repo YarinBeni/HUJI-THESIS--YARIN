@@ -69,6 +69,34 @@ baseline is a real control.
 
 ---
 
+## Gap-fix wave (2026-07-05) — submitted after the advisor-deck review
+New jobs closing the review gaps (all code on `main` once the feature branch is FF'd):
+- **J2c** — T9 kp1 rerun for gpt-oss @ `max_new_tokens=2048` (the J2b run used 256 and
+  truncated the reasoning channel); re-runs parse/score + `eda/rescore_t9_kp1.py`.
+- **J14** — P2 geography under **site-balanced MC**: 10 coordinate-merged sites × k=21 ×
+  200 draws (`p2_godey_geography/build_site_balanced_subset.py`, draws committed in
+  `balanced_subset_sites/`), GroupKFold-by-merged-site within each draw, tier0+maximal,
+  PLS-k sweep + Ridge → `p2_godey_geography/results/mc/p2_geo_mc__*.json`.
+- **J9b** — P7 v2: classification **and k-sparse year-regression** × 3 cleanings
+  (tier0/maximal/maxking) → `p7_ksparse/results/v2/`; `plot_p7_curves.py` renders the
+  3-panel per-k curves.
+- **J3b/J3c/J3r** — T10 completed: gpt-oss on gpu:8 (J3b, array = cleaning), qwen ×
+  {maximal, maxking} prompted variants (J3c), MC reprobe array = model × cleaning (J3r,
+  `--array=3-11`; extractor gained `--cleaning`, reprobe gained `--tag`).
+- **J15** — P3 v2 `timeline_p3_pls.py`: PLS(k=3) fit on the 153 anchors vs year →
+  3-D anchor manifold → Isomap-1D geodesic timeline (`geo1`) + PLS-comp-1 (`pls1`) →
+  texts projected via `pls.transform`, year by inverse-distance interpolation over the
+  5 nearest anchors + ruler-F1 via nearest ruler-anchor; × 3 cleanings →
+  `p3_matter_of_time/results/pls/`.
+- **J16** — `eda/dump_gui_coords.py`: PCA/t-SNE 2-D coords of maxking-mean embeddings
+  (+P3 anchors) → committed `v_1/src/viz/maxking_coords.json`; GUI merge happens
+  off-cluster after it lands.
+- Known caveat to carry: the year-anchor grid spans 7–1132 BCE and includes the bogus
+  min-digit years (e.g. "year 7 BCE", "Unidentified NB Ruler"); kept identical to the
+  original 153 for comparability — a filtered-anchor rerun is an open option.
+
+---
+
 ## 1. The thesis question and the current (refined) finding
 We stress-test the "LLMs build a world-model timeline" literature (Gurnee–Tegmark,
 Godey geography, A Matter of Time, k-sparse "Finding Neurons in a Haystack") on

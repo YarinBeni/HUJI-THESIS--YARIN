@@ -34,13 +34,27 @@ from run_pv import (                          # noqa: E402
     render_user_prompt, select_fewshot_examples,
 )
 import king_token as kt                        # noqa: E402
+from cleaning import clean_maximal_keepking    # noqa: E402
+
+
+def _fragment_text(row, cleaning, spellings):
+    """The fragment text to embed inside the prompt, per --cleaning.
+    tier0 (default, original behavior) / maximal (names destroyed -> king sites all
+    NaN, mean-only) / maxking (maximal context, king name frozen in)."""
+    if cleaning == "tier0":
+        return str(row.text_tier0)
+    if cleaning == "maximal":
+        return str(row.text_maximal)
+    sp = spellings.get(getattr(row, "ruler", None), [])
+    return clean_maximal_keepking(str(row.text_tier0), sp)[0]
 
 
 def run(args):
     import torch
     from transformers import AutoTokenizer, AutoModelForCausalLM
 
-    out_dir = Path(args.out_dir) / "prompted_king" / args.variant
+    sub = "prompted_king" if args.cleaning == "tier0" else f"prompted_king_{args.cleaning}"
+    out_dir = Path(args.out_dir) / sub / args.variant
     out_dir.mkdir(parents=True, exist_ok=True)
     np.random.seed(SEED); torch.manual_seed(SEED)
 
@@ -76,7 +90,9 @@ def run(args):
     t0 = time.time()
 
     for i, row in enumerate(df.itertuples(index=False)):
-        text = str(row.text_tier0)
+        text = _fragment_text(row, args.cleaning, spellings)
+        if not text.strip():
+            text = "..."   # ~6 all-logogram frags empty under maximal; keep seq non-empty
         up = render_user_prompt(prompt["user_template"], text, fewshot)
         pstr, input_ids = build_chat_prompt(tok, prompt.get("system_prompt"), up, args.variant)
         try:
@@ -128,6 +144,8 @@ def run(args):
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--variant", required=True, choices=["pv0", "pv1", "pv2", "pv3"])
+    p.add_argument("--cleaning", default="tier0", choices=["tier0", "maximal", "maxking"],
+                   help="fragment text cleaning inside the prompt (default tier0 = original)")
     p.add_argument("--model_path", required=True)
     p.add_argument("--out_dir", required=True)
     p.add_argument("--layers", default="all", help="'all' or comma list of layer indices")

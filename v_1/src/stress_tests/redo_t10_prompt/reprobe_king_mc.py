@@ -46,7 +46,8 @@ def run(args):
     draws = np.load(args.draws)
     order = json.loads(Path(args.fragment_order).read_text())
     acts = Path(args.acts_dir)
-    summary = {"model": args.model, "protocol": "mc_balanced", "variants": {}}
+    summary = {"model": args.model, "protocol": "mc_balanced",
+               "cleaning": args.tag or "tier0", "variants": {}}
     for vdir in sorted(acts.glob("pv*")):
         v = vdir.name
         vres = {}
@@ -65,7 +66,8 @@ def run(args):
             vres[str(L)] = row
         summary["variants"][v] = vres
     outdir = Path(args.out); outdir.mkdir(parents=True, exist_ok=True)
-    fp = outdir / f"{args.model}__t10_mc_summary.json"
+    suffix = f"__{args.tag}" if args.tag else ""
+    fp = outdir / f"{args.model}__t10_mc_summary{suffix}.json"
     fp.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     for v, vres in summary["variants"].items():
         for pool in POOLS:
@@ -79,6 +81,8 @@ def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--acts-dir", required=True)
     p.add_argument("--model", required=True)
+    p.add_argument("--tag", default="", help="cleaning tag for the output filename "
+                   "(e.g. 'maximal' -> <model>__t10_mc_summary__maximal.json)")
     p.add_argument("--draws", default=str(SUBSET / "draws_matrix.npy"))
     p.add_argument("--fragment-order", default=str(SUBSET / "corpus_fragment_order.json"))
     p.add_argument("--out", default=str(Path(__file__).resolve().parent / "results"))
