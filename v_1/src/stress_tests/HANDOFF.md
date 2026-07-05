@@ -119,8 +119,19 @@ structure over text. **The decisive missing control is `random king_last`** (§7
   with 9 nulls, 41 imbalanced rulers, `provenance`).
 - **Pooling sites:** `mean` (tier0+maximal) and `king_last`/`king_mean` (last / mean of
   the commissioning ruler's name span, **tier0 ONLY** — maximal strips logographic names).
-- **King-name coverage is intrinsically ~37–44%** (Neo-Babylonian texts are admin, never
-  name the king). `shared/ruler_spellings.csv` is first-pass; needs Assyriologist review.
+- **King-name coverage was ~37–44% and is now ~48%** after the 2026-07-05 spelling fix.
+  The old claim "Neo-Babylonian texts are admin, never name the king" was WRONG: the NB
+  royal inscriptions name the king as the opening word, but SYLLABICALLY
+  (`d-AG-ku-dur2-ri-u2-ṣur` / `d-na-bi-um-ku-du-ur2-ri-u2-ṣu-ur2` = Nabû-kudurri-uṣur =
+  Nebuchadnezzar II, usually with NO `m-` determinative), while `ruler_spellings.csv`
+  only listed logographic `NIG2-DU-URU3` forms that occur 0× in ORCC. Discovered via the
+  Thalesian English translations (J17: translator named Neb II in 63% of his texts while
+  our list found 0%), then corpus-mined and cross-validated (mined 60% vs translated 63%,
+  overlap 50/55). New coverage: Neb II 0→0.60, Nabonidus 0.18→0.56, Nabopolassar 0→0.80.
+  NOTE: all existing king-token activations (J4/J12) predate this fix — a re-extraction
+  would add the NB kings to king-site analyses and could add Neb II + Nabonidus to the
+  maxking retained set (E[found/draw] ≈ 12–13 ≥ 6), widening its span from 612–705 to
+  539–705 BCE.
 - **Two CV protocols, both present:**
   - **balanced-MC** = `draws_matrix.npy` (200 balanced draws) × GroupKFold-by-ruler within
     each, best-k Spearman averaged. THIS is the thesis-headline protocol (the 0.41 lineage).

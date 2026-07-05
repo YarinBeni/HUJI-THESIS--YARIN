@@ -12,6 +12,21 @@ PLS with k swept over {1,2,3,5}, best-k, + a Ridge arm, unless stated otherwise)
 (regression → **Spearman(predicted, true)**; classification → **macro-F1 vs chance**). Paired
 cells are PLS / Ridge (or F1 / ρ where two metrics apply). Baseline = the random-init row.
 
+**King-name coverage, and how the translation experiment fixed it (2026-07-05):** the king
+sites (`king_last`/`king_mean`) depend on locating the ruler's name via
+`shared/ruler_spellings.csv`. The Thalesian translation run (J17) exposed a gap: the English
+translation named **Nebuchadnezzar II in 63% of his texts while our spelling list found 0%**.
+Side-by-side inspection showed the name IS in the Akkadian — as the opening word — but
+written **syllabically without the `m-` determinative** (`d-AG-ku-dur2-ri-u2-ṣur`,
+`d-na-bi-um-ku-du-ur2-ri-u2-ṣu-ur2` = Nabû-kudurri-uṣur), while the CSV listed only
+logographic `NIG2-DU-URU3` forms that occur 0× in ORCC. We corpus-mined the real variants and
+cross-validated against the translations (mined 60% vs translated 63%, overlap 50/55 texts).
+Coverage after the fix: Neb II 0→0.60, Nabonidus 0.18→0.56, Nabopolassar 0→0.80; whole corpus
+40.8%→48.3%. Two implications: (1) the earlier claim "NB texts never name the king" is
+retracted — it was a spelling-list artifact; (2) all committed king-token results predate the
+fix; a re-extraction would add the NB kings to the king-site and maxking analyses (widening
+the maxking span from 612–705 to 539–705 BCE). Reproduce: `eda/translation_fidelity.py`.
+
 **Shared machinery (all probing experiments):**
 - Corpus: 1,202 ORACC royal inscriptions, 41 rulers, `year` BCE derived from the ruler's reign.
   **`year` is one constant per ruler** (except Esarhaddon) → decoding year ≈ identifying the ruler.
