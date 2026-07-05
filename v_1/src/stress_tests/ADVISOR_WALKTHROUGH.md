@@ -60,17 +60,18 @@ the maxking span from 612–705 to 539–705 BCE). Reproduce: `eda/translation_f
 | Qwen3-1.7B | 0.875 (7/8) | 0.50 | 0.50 | 0.75 (FAIL) |
 | Qwen3-8B | 0.875 (7/8)* | 0.625 | 0.75 | 0.00 (pass) |
 | Qwen3-32B | 0.75 (6/8) | 0.25 | **1.00** | 0.00 (pass) |
-| gpt-oss-120B | 1.00 (8/8) | 0.00† | ≥ 0.38 | 0.00 (pass) |
+| gpt-oss-120B | 1.00 (8/8) | 0.88 (7/8)† | **1.00** | 0.00 (pass) |
 
 *8B's one "miss" is a parse error (output truncated mid-JSON), not a wrong date — scoreable
-accuracy is 8/8. †gpt-oss emits its reasoning ("analysis") channel first and hit the
-`max_new_tokens=512` budget (run_kp.py) before printing the final JSON → the strict scorer
-(score_kp.py: JSON parse + exact diacritic-normalized name match, so "Assurbanipal" would not
-match "Ashurbanipal") zeroed both periods. ‡Rescored = normalized-substring scan of the RAW
-output (`eda/rescore_t9_kp1.py` → `results/t9_kp1_rescored.json`): recovers JSON/format losses —
-32B's Neo-Assyrian answer failed JSON parse yet its raw text names all 6 targets (0.25→1.00) —
-but cannot recover truncation: gpt-oss's Neo-Assyrian list is cut mid-way at "Shalmaneser V", so
-0.38 is a floor; its true kp1 needs a rerun with a larger token budget.
+accuracy is 8/8. †gpt-oss originally scored kp1 = 0.00: it emits its reasoning ("analysis")
+channel first and the J2b run's max_new_tokens=256 budget truncated generation before the
+final JSON. The J2c rerun @ 2048 tokens gives the true value: strict 0.88 (7/8), rescored
+1.00 — it names all 8 targets. ‡Rescored = normalized-substring scan of the RAW output
+(`eda/rescore_t9_kp1.py` → `results/t9_kp1_rescored.json`): also recovers 32B's Neo-Assyrian
+answer, which failed JSON parse yet names all 6 targets in the raw text (0.25→1.00). The
+strict scorer's exact-match would also miss variants ("Assurbanipal" ≠ "Ashurbanipal").
+Net: **every model ≥ 8B knows the full rosters** — kp1's original low numbers were scoring
+artifacts, not missing knowledge.
 
 **Takeaway:** the models demonstrably hold the king→date mapping (in English). Every null below is
 therefore NOT "the knowledge is absent."
@@ -273,6 +274,43 @@ never lifts recoverability above the context-free / bare baseline** — a strong
 "the number didn't move."
 
 ---
+
+## 6.5 The gap-fix wave (2026-07-05) — five new result sets
+
+All follow the reporting standard (SETUP/PROBE/METRIC); CSVs in `results/csv/`, slides 20–24
+in the deck.
+
+**P2 site-balanced MC** (`p2_geo_mc.csv`): 10 coordinate-merged sites × k=21 × 200 draws.
+Latitude (the Assyria↔Babylonia axis) decodes well — PLS 0.51–0.72, random 0.510, best
+Thalesian-cunei 0.693/0.748 — longitude weakly (0.17–0.41). Same shape as before: mostly
+token identity, small real cunei increment.
+
+**P3 v2 — the supervised geodesic timeline** (`p3_pls_timeline.csv`): PLS(k=3) fit on the
+anchors vs year → 3-D space → geodesic Isomap-1D → texts projected, year by 5-nearest-anchor
+interpolation, ruler by nearest ruler-anchor. **Decisive null**: text-projection Spearman
+−0.30…+0.12 across all models × 3 cleanings (best anywhere: cunei tier0 0.120 ≈ random
+maxking 0.119); ruler macro-F1 ≈ 0.00–0.01 ≈ chance everywhere. The "maybe PCA just missed
+the timeline" objection is closed: with year-supervised directions, a curved geodesic and
+interpolation, real texts still do not land on the anchor timeline.
+
+**P7 v2** (`p7_v2.csv` + `results/eda/fig_p7_kcurves_{cls,reg}.png`): classification AND a
+new k-sparse year-regression arm, × 3 cleanings. Every model's per-k curve hugs the random
+line in all panels (reg full-k: trained 0.22–0.46 vs random 0.377 tier0); cunei the only
+consistent small edge (0.462). No time-neurons under any cleaning or probe family.
+
+**T10 complete** (`t10_mc_cleanings.csv`): gpt-oss now has maximal/maxking rows (0.31–0.33)
+and qwen has all three cleanings — flat across pv0–pv3 everywhere, and the name-stripped
+cleanings sit BELOW tier0 (~0.28–0.35 vs ~0.39–0.42). One open cell: gpt-oss × tier0
+(extraction failed twice, under diagnosis).
+
+**Translation probe** (`translation_mc.csv`): ORCC → English (cuneiformBase-400m, chunked,
+per-notation prefixes) → embedded with qwen/random → identical MC probes. **The one clean
+trained>random gap in the suite:** qwen3-8B on English year ρ = 0.416 vs random-on-the-same-
+English 0.275 (on Akkadian they tie ~0.35). Interpretation: English is qwen's home language —
+"Esarhaddon" is an entity with pretraining knowledge, not just a token pattern. Absolute level
+stays weak, and eng_maximal ≈ random (0.27–0.30) — as predicted, since its hallucinated king
+names ("Ashurnasirpal II") make it neither name-free nor name-faithful
+(`eda/translation_fidelity.py`).
 
 ## 7. The cross-cutting patterns (what to say when they ask "so what?")
 

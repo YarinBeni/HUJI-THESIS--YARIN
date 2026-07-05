@@ -165,6 +165,97 @@ def t10():
         write(name, ["model", "pool", "pv0_bare", "pv1_framed", "pv2_fewshot", "pv3_cot"], rows)
 
 
+
+
+# ---- gap-fix wave families (2026-07-05) ----
+
+def p2_geo_mc():
+    rows = []
+    for fp in sorted(ST.glob("p2_godey_geography/results/mc/p2_geo_mc__*.json"),
+                     key=lambda p: mrank(p.stem.split("__")[1])):
+        d = jload(fp); m = d["method"]
+        for cl, blk in d.get("cleanings", {}).items():
+            if blk.get("missing") or blk.get("insufficient"):
+                continue
+            b = blk["best"]; r = b.get("ridge", {})
+            rows.append([m, cl, blk.get("best_layer"), okf(b.get("best_k")),
+                         okf(b.get("lat_spearman")), okf(r.get("lat_spearman")),
+                         okf(b.get("lon_spearman")), okf(r.get("lon_spearman")),
+                         okf(b.get("gc_km_mean")), okf(b.get("skill_mean")), okf(b.get("skill_std"))])
+    write("p2_geo_mc.csv", ["model", "cleaning", "best_layer", "pls_best_k",
+                            "lat_pls_spearman", "lat_ridge_spearman", "lon_pls_spearman",
+                            "lon_ridge_spearman", "gc_km", "skill_mean", "skill_std"], rows)
+
+
+def p3_pls():
+    rows = []
+    for fp in sorted(ST.glob("p3_matter_of_time/results/pls/p3pls__*.json"),
+                     key=lambda p: mrank(p.stem.split("__")[1])):
+        d = jload(fp); m = d["method"]
+        for cl, blk in d.get("cleanings", {}).items():
+            if blk.get("missing") or "best" not in blk:
+                continue
+            b = blk["best"]
+            rows.append([m, cl, blk.get("best_layer"), okf(b.get("pls1_spearman")),
+                         okf(b.get("geo1_spearman")), okf(b.get("proj_interp_spearman")),
+                         okf(b.get("proj_nn1_spearman")), okf(b.get("ruler_macro_f1"))])
+    write("p3_pls_timeline.csv", ["model", "cleaning", "best_layer", "anchors_pls1_spearman",
+                                  "anchors_geo1_spearman", "texts_interp_spearman",
+                                  "texts_nn1_spearman", "texts_ruler_macro_f1"], rows)
+
+
+def p7_v2():
+    rows = []
+    for fp in sorted(ST.glob("p7_ksparse/results/v2/p7_v2__*.json")):
+        d = jload(fp)
+        if "per_layer" not in d:
+            continue
+        kmax = str(max(d["ks"]))
+        bc, br = d["best_layer_cls"], d["best_layer_reg"]
+        rows.append([d["method"], d["cleaning"],
+                     okf(d["per_layer"][bc][kmax]["macro_f1"]), bc,
+                     okf(d["per_layer"][br][kmax]["reg_spearman"]), br])
+    rows.sort(key=lambda r: (mrank(r[0]), r[1]))
+    write("p7_v2.csv", ["model", "cleaning", "cls_macro_f1_fullk", "cls_best_layer",
+                        "reg_spearman_fullk", "reg_best_layer"], rows)
+
+
+def t10_cleanings():
+    rows = []
+    for fp in sorted(ST.glob("redo_t10_prompt/results/*t10_mc_summary*.json")):
+        d = jload(fp); m = d["model"]; cl = d.get("cleaning", "tier0")
+        for pool in ["mean", "king_last"]:
+            vals = []
+            for pv in ["pv0", "pv1", "pv2", "pv3"]:
+                layers = d["variants"].get(pv, {})
+                b = max(((p[pool].get("spearman_mean") if not p[pool].get("skipped") else None) or -9)
+                        for p in layers.values()) if layers else None
+                vals.append(okf(b if (b is not None and b > -9) else None))
+            rows.append([m, cl, pool] + vals)
+    rows.sort(key=lambda r: (mrank(r[0]), r[1], r[2]))
+    write("t10_mc_cleanings.csv", ["model", "cleaning", "pool", "pv0", "pv1", "pv2", "pv3"], rows)
+
+
+def translation():
+    rows = []
+    for fp in sorted(ST.glob("translation/results/trans_mc__*.json"),
+                     key=lambda p: mrank(p.stem.split("__")[1])):
+        d = jload(fp); m = d["method"]
+        for cl, blk in d.get("cleanings", {}).items():
+            if blk.get("missing"):
+                continue
+            y = blk.get("year_best", {}); yr = y.get("ridge", {})
+            g = blk.get("geo_best", {}); gr = g.get("ridge", {})
+            rows.append([m, cl, okf(y.get("spearman_mean")), okf(y.get("spearman_std")),
+                         okf(yr.get("spearman_mean")), okf(g.get("lat_spearman")),
+                         okf(gr.get("lat_spearman")), okf(g.get("lon_spearman")),
+                         okf(gr.get("lon_spearman"))])
+    write("translation_mc.csv", ["model", "cleaning", "year_pls_spearman", "year_pls_std",
+                                 "year_ridge_spearman", "lat_pls_spearman", "lat_ridge_spearman",
+                                 "lon_pls_spearman", "lon_ridge_spearman"], rows)
+
+
 if __name__ == "__main__":
     t9(); p2(); p1_gkf(); p1_mc(); p1_maxking(); p3(); p7(); t10()
+    p2_geo_mc(); p3_pls(); p7_v2(); t10_cleanings(); translation()
     print("done ->", OUT)
