@@ -1,0 +1,485 @@
+{
+  "method": "thalesian_cunei400m",
+  "protocol": "pls3_geodesic_timeline",
+  "n_components": 3,
+  "m_interp": 5,
+  "cleanings": {
+    "tier0": {
+      "per_layer": {
+        "0": {
+          "pls1_spearman": 0.5905661343231657,
+          "geo1_spearman": 0.2578645275932114,
+          "proj_nn1_spearman": -0.0728318863847147,
+          "proj_interp_spearman": -0.11160944459596288,
+          "proj_interp_mae": 326.4506419218986,
+          "ruler_macro_f1": 4.329004329004329e-05,
+          "ruler_acc": 0.0008382229673093043,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "1": {
+          "pls1_spearman": 0.553900150791462,
+          "geo1_spearman": 0.4949489026748761,
+          "proj_nn1_spearman": -0.10001263512412559,
+          "proj_interp_spearman": -0.09274677783416949,
+          "proj_interp_mae": 312.55798806019214,
+          "ruler_macro_f1": 0.0018500948766603416,
+          "ruler_acc": 0.005029337803855826,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "2": {
+          "pls1_spearman": 0.5914608812329153,
+          "geo1_spearman": 0.05178086781821745,
+          "proj_nn1_spearman": -0.04858303339911241,
+          "proj_interp_spearman": -0.016131036587204953,
+          "proj_interp_mae": 360.41730688464304,
+          "ruler_macro_f1": 0.006944350847241878,
+          "ruler_acc": 0.008382229673093043,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "3": {
+          "pls1_spearman": 0.6016485173530971,
+          "geo1_spearman": 0.2830591388905909,
+          "proj_nn1_spearman": 0.07143374006094519,
+          "proj_interp_spearman": 0.08575009619197262,
+          "proj_interp_mae": 313.19237991802504,
+          "ruler_macro_f1": 0.006153962492437991,
+          "ruler_acc": 0.009220452640402346,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "4": {
+          "pls1_spearman": 0.6049103702598548,
+          "geo1_spearman": 0.3165890433979613,
+          "proj_nn1_spearman": 0.14585774313872465,
+          "proj_interp_spearman": 0.10598768060230185,
+          "proj_interp_mae": 318.61716568377005,
+          "ruler_macro_f1": 0.006545209176788124,
+          "ruler_acc": 0.008382229673093043,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "5": {
+          "pls1_spearman": 0.6099631429187051,
+          "geo1_spearman": 0.31394370917106323,
+          "proj_nn1_spearman": 0.15592667312350805,
+          "proj_interp_spearman": 0.0831365793930708,
+          "proj_interp_mae": 324.3683553876648,
+          "ruler_macro_f1": 0.0025392247910455057,
+          "ruler_acc": 0.002514668901927913,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "6": {
+          "pls1_spearman": 0.6109365052909836,
+          "geo1_spearman": 0.612643658918095,
+          "proj_nn1_spearman": 0.09118047896212478,
+          "proj_interp_spearman": 0.11983931856369863,
+          "proj_interp_mae": 289.12851927081556,
+          "ruler_macro_f1": 0.005487012987012987,
+          "ruler_acc": 0.002514668901927913,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "7": {
+          "pls1_spearman": 0.6185625733092484,
+          "geo1_spearman": 0.3161031998730719,
+          "proj_nn1_spearman": 0.07873035865101326,
+          "proj_interp_spearman": 0.15112604631136659,
+          "proj_interp_mae": 258.04075913152735,
+          "ruler_macro_f1": 0.002330938152824924,
+          "ruler_acc": 0.004191114836546521,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "8": {
+          "pls1_spearman": 0.62453174737539,
+          "geo1_spearman": 0.3330758921167098,
+          "proj_nn1_spearman": 0.019259380468292602,
+          "proj_interp_spearman": 0.04037776015115485,
+          "proj_interp_mae": 203.22700491444547,
+          "ruler_macro_f1": 0.002539411764756106,
+          "ruler_acc": 0.008382229673093043,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "9": {
+          "pls1_spearman": 0.634600435598099,
+          "geo1_spearman": 0.3322449321568989,
+          "proj_nn1_spearman": 0.05689743984916281,
+          "proj_interp_spearman": 0.16854000943025785,
+          "proj_interp_mae": 199.12277685788888,
+          "ruler_macro_f1": 0.0009022370535162526,
+          "ruler_acc": 0.0016764459346186086,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "10": {
+          "pls1_spearman": 0.6325582174710637,
+          "geo1_spearman": 0.32345786564639833,
+          "proj_nn1_spearman": 0.09236525615946077,
+          "proj_interp_spearman": 0.1734942594180855,
+          "proj_interp_mae": 134.30688831127551,
+          "ruler_macro_f1": 0.0005891784611155083,
+          "ruler_acc": 0.002514668901927913,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "11": {
+          "pls1_spearman": 0.6274602111047236,
+          "geo1_spearman": 0.32556542135091876,
+          "proj_nn1_spearman": 0.07170159314180907,
+          "proj_interp_spearman": 0.1512351304326297,
+          "proj_interp_mae": 169.93600148888754,
+          "ruler_macro_f1": 0.0009741554298970566,
+          "ruler_acc": 0.002514668901927913,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "12": {
+          "pls1_spearman": 0.6226486848858186,
+          "geo1_spearman": 0.31892946892992874,
+          "proj_nn1_spearman": 0.10281179542417317,
+          "proj_interp_spearman": 0.17625524092744949,
+          "proj_interp_mae": 126.32900898544999,
+          "ruler_macro_f1": 0.00321396190665288,
+          "ruler_acc": 0.012573344509639563,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        }
+      },
+      "best_layer": "6",
+      "best": {
+        "pls1_spearman": 0.6109365052909836,
+        "geo1_spearman": 0.612643658918095,
+        "proj_nn1_spearman": 0.09118047896212478,
+        "proj_interp_spearman": 0.11983931856369863,
+        "proj_interp_mae": 289.12851927081556,
+        "ruler_macro_f1": 0.005487012987012987,
+        "ruler_acc": 0.002514668901927913,
+        "n_ruler_anchors": 40,
+        "n_texts": 1193
+      }
+    },
+    "maximal": {
+      "per_layer": {
+        "0": {
+          "pls1_spearman": 0.5905661343231657,
+          "geo1_spearman": 0.2578645275932114,
+          "proj_nn1_spearman": -0.08498286928453866,
+          "proj_interp_spearman": -0.13217813393676123,
+          "proj_interp_mae": 300.303504361613,
+          "ruler_macro_f1": 0.007142857142857143,
+          "ruler_acc": 0.0008382229673093043,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "1": {
+          "pls1_spearman": 0.553900150791462,
+          "geo1_spearman": 0.4949489026748761,
+          "proj_nn1_spearman": -0.03532810760437386,
+          "proj_interp_spearman": -0.07606519315312839,
+          "proj_interp_mae": 382.5755915285765,
+          "ruler_macro_f1": 0.0027665924487185562,
+          "ruler_acc": 0.004191114836546521,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "2": {
+          "pls1_spearman": 0.5914608812329153,
+          "geo1_spearman": 0.05178086781821745,
+          "proj_nn1_spearman": -0.15234520867199522,
+          "proj_interp_spearman": -0.1685048761785777,
+          "proj_interp_mae": 363.2255728427495,
+          "ruler_macro_f1": 0.0002898550724637681,
+          "ruler_acc": 0.0016764459346186086,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "3": {
+          "pls1_spearman": 0.6016485173530971,
+          "geo1_spearman": 0.2830591388905909,
+          "proj_nn1_spearman": -0.1242233599312861,
+          "proj_interp_spearman": -0.1343446988855172,
+          "proj_interp_mae": 263.38784614705366,
+          "ruler_macro_f1": 0.004677663438256658,
+          "ruler_acc": 0.006705783738474434,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "4": {
+          "pls1_spearman": 0.6049103702598548,
+          "geo1_spearman": 0.3165890433979613,
+          "proj_nn1_spearman": -0.04978776953614887,
+          "proj_interp_spearman": -0.036115356888376304,
+          "proj_interp_mae": 304.94480965030664,
+          "ruler_macro_f1": 0.0060414996360847,
+          "ruler_acc": 0.0075440067057837385,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "5": {
+          "pls1_spearman": 0.6099631429187051,
+          "geo1_spearman": 0.31394370917106323,
+          "proj_nn1_spearman": -0.01922188087685748,
+          "proj_interp_spearman": 0.0028077641083583764,
+          "proj_interp_mae": 312.10046471636616,
+          "ruler_macro_f1": 0.007263157894736842,
+          "ruler_acc": 0.002514668901927913,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "6": {
+          "pls1_spearman": 0.6109365052909836,
+          "geo1_spearman": 0.612643658918095,
+          "proj_nn1_spearman": 0.03529047201793594,
+          "proj_interp_spearman": -0.001787138675477276,
+          "proj_interp_mae": 289.0013768718167,
+          "ruler_macro_f1": 0.004524343701103559,
+          "ruler_acc": 0.009220452640402346,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "7": {
+          "pls1_spearman": 0.6185625733092484,
+          "geo1_spearman": 0.3161031998730719,
+          "proj_nn1_spearman": -0.05286973458262683,
+          "proj_interp_spearman": -0.006171157113146824,
+          "proj_interp_mae": 252.1454669304693,
+          "ruler_macro_f1": 0.009876268219580712,
+          "ruler_acc": 0.02179379715004191,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "8": {
+          "pls1_spearman": 0.62453174737539,
+          "geo1_spearman": 0.3330758921167098,
+          "proj_nn1_spearman": -0.07015539526153224,
+          "proj_interp_spearman": -0.0716837099277112,
+          "proj_interp_mae": 224.76255997205644,
+          "ruler_macro_f1": 0.020616713010293407,
+          "ruler_acc": 0.056160938809723386,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "9": {
+          "pls1_spearman": 0.634600435598099,
+          "geo1_spearman": 0.3322449321568989,
+          "proj_nn1_spearman": 0.07181998342567711,
+          "proj_interp_spearman": 0.023546939025279878,
+          "proj_interp_mae": 223.731574006595,
+          "ruler_macro_f1": 0.007073890583253406,
+          "ruler_acc": 0.010058675607711651,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "10": {
+          "pls1_spearman": 0.6325582174710637,
+          "geo1_spearman": 0.32345786564639833,
+          "proj_nn1_spearman": 0.029752802487329526,
+          "proj_interp_spearman": -0.008637196724508741,
+          "proj_interp_mae": 242.48972586320465,
+          "ruler_macro_f1": 0.007319110094237896,
+          "ruler_acc": 0.006705783738474434,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "11": {
+          "pls1_spearman": 0.6274602111047236,
+          "geo1_spearman": 0.32556542135091876,
+          "proj_nn1_spearman": -0.05793113544351484,
+          "proj_interp_spearman": 0.013842133670133424,
+          "proj_interp_mae": 210.04260088840107,
+          "ruler_macro_f1": 0.004290260116793659,
+          "ruler_acc": 0.010896898575020955,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "12": {
+          "pls1_spearman": 0.6226486848858186,
+          "geo1_spearman": 0.31892946892992874,
+          "proj_nn1_spearman": -0.06517875004622052,
+          "proj_interp_spearman": -0.03117896311711451,
+          "proj_interp_mae": 172.20078430007158,
+          "ruler_macro_f1": 0.01054374369591761,
+          "ruler_acc": 0.01592623637887678,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        }
+      },
+      "best_layer": "6",
+      "best": {
+        "pls1_spearman": 0.6109365052909836,
+        "geo1_spearman": 0.612643658918095,
+        "proj_nn1_spearman": 0.03529047201793594,
+        "proj_interp_spearman": -0.001787138675477276,
+        "proj_interp_mae": 289.0013768718167,
+        "ruler_macro_f1": 0.004524343701103559,
+        "ruler_acc": 0.009220452640402346,
+        "n_ruler_anchors": 40,
+        "n_texts": 1193
+      }
+    },
+    "maxking": {
+      "per_layer": {
+        "0": {
+          "pls1_spearman": 0.5905661343231657,
+          "geo1_spearman": 0.2578645275932114,
+          "proj_nn1_spearman": -0.11553646509379596,
+          "proj_interp_spearman": -0.09017421008951354,
+          "proj_interp_mae": 306.2809537030024,
+          "ruler_macro_f1": 0.007142857142857143,
+          "ruler_acc": 0.0008382229673093043,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "1": {
+          "pls1_spearman": 0.553900150791462,
+          "geo1_spearman": 0.4949489026748761,
+          "proj_nn1_spearman": -0.019769249409490985,
+          "proj_interp_spearman": -0.03588506334438953,
+          "proj_interp_mae": 375.38431334639847,
+          "ruler_macro_f1": 0.004205198358413133,
+          "ruler_acc": 0.004191114836546521,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "2": {
+          "pls1_spearman": 0.5914608812329153,
+          "geo1_spearman": 0.05178086781821745,
+          "proj_nn1_spearman": -0.06935429555621066,
+          "proj_interp_spearman": -0.10601444263160442,
+          "proj_interp_mae": 359.3521986339589,
+          "ruler_macro_f1": 0.000591715976331361,
+          "ruler_acc": 0.0016764459346186086,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "3": {
+          "pls1_spearman": 0.6016485173530971,
+          "geo1_spearman": 0.2830591388905909,
+          "proj_nn1_spearman": -0.08983761889126698,
+          "proj_interp_spearman": 0.032753225427601965,
+          "proj_interp_mae": 260.21783648115365,
+          "ruler_macro_f1": 0.004537239176060883,
+          "ruler_acc": 0.006705783738474434,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "4": {
+          "pls1_spearman": 0.6049103702598548,
+          "geo1_spearman": 0.3165890433979613,
+          "proj_nn1_spearman": 0.017715818658907173,
+          "proj_interp_spearman": 0.06626811468621126,
+          "proj_interp_mae": 304.05580087043376,
+          "ruler_macro_f1": 0.007072782290173595,
+          "ruler_acc": 0.0075440067057837385,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "5": {
+          "pls1_spearman": 0.6099631429187051,
+          "geo1_spearman": 0.31394370917106323,
+          "proj_nn1_spearman": 0.08756039267937697,
+          "proj_interp_spearman": 0.0813881482709075,
+          "proj_interp_mae": 311.72078411155707,
+          "ruler_macro_f1": 0.0075358851674641155,
+          "ruler_acc": 0.002514668901927913,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "6": {
+          "pls1_spearman": 0.6109365052909836,
+          "geo1_spearman": 0.612643658918095,
+          "proj_nn1_spearman": 0.08713028334100095,
+          "proj_interp_spearman": 0.09310126434736636,
+          "proj_interp_mae": 294.004395156444,
+          "ruler_macro_f1": 0.0035770962783346683,
+          "ruler_acc": 0.005029337803855826,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "7": {
+          "pls1_spearman": 0.6185625733092484,
+          "geo1_spearman": 0.3161031998730719,
+          "proj_nn1_spearman": 0.01767923485556962,
+          "proj_interp_spearman": 0.12244789588977971,
+          "proj_interp_mae": 262.57554296264044,
+          "ruler_macro_f1": 0.008429717718692015,
+          "ruler_acc": 0.01592623637887678,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "8": {
+          "pls1_spearman": 0.62453174737539,
+          "geo1_spearman": 0.3330758921167098,
+          "proj_nn1_spearman": 0.03368943921672129,
+          "proj_interp_spearman": 0.051192397791496674,
+          "proj_interp_mae": 219.3061533467337,
+          "ruler_macro_f1": 0.01811874209715759,
+          "ruler_acc": 0.04274937133277452,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "9": {
+          "pls1_spearman": 0.634600435598099,
+          "geo1_spearman": 0.3322449321568989,
+          "proj_nn1_spearman": 0.0972521050458008,
+          "proj_interp_spearman": 0.11451430724485338,
+          "proj_interp_mae": 204.97329983060254,
+          "ruler_macro_f1": 0.0055727590642070364,
+          "ruler_acc": 0.006705783738474434,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "10": {
+          "pls1_spearman": 0.6325582174710637,
+          "geo1_spearman": 0.32345786564639833,
+          "proj_nn1_spearman": 0.07925568972980303,
+          "proj_interp_spearman": 0.10113356338608379,
+          "proj_interp_mae": 205.6732049873407,
+          "ruler_macro_f1": 0.010022776475177972,
+          "ruler_acc": 0.01173512154233026,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "11": {
+          "pls1_spearman": 0.6274602111047236,
+          "geo1_spearman": 0.32556542135091876,
+          "proj_nn1_spearman": 0.02884782456793118,
+          "proj_interp_spearman": 0.10746992388362785,
+          "proj_interp_mae": 218.60224502678741,
+          "ruler_macro_f1": 0.003227436911110161,
+          "ruler_acc": 0.009220452640402346,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        },
+        "12": {
+          "pls1_spearman": 0.6226486848858186,
+          "geo1_spearman": 0.31892946892992874,
+          "proj_nn1_spearman": -0.002032280979019189,
+          "proj_interp_spearman": 0.03982604470577528,
+          "proj_interp_mae": 158.05735837667274,
+          "ruler_macro_f1": 0.010435239848957712,
+          "ruler_acc": 0.0075440067057837385,
+          "n_ruler_anchors": 40,
+          "n_texts": 1193
+        }
+      },
+      "best_layer": "6",
+      "best": {
+        "pls1_spearman": 0.6109365052909836,
+        "geo1_spearman": 0.612643658918095,
+        "proj_nn1_spearman": 0.08713028334100095,
+        "proj_interp_spearman": 0.09310126434736636,
+        "proj_interp_mae": 294.004395156444,
+        "ruler_macro_f1": 0.0035770962783346683,
+        "ruler_acc": 0.005029337803855826,
+        "n_ruler_anchors": 40,
+        "n_texts": 1193
+      }
+    }
+  }
+}
