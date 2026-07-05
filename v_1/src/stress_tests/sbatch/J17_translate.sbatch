@@ -16,9 +16,14 @@
 #      qwen3_1b7 / qwen3_8b / random — the comparison set vs their Akkadian rows.
 # Probe is J17p (CPU, submit with afterok on this job).
 #   sbatch v_1/src/stress_tests/sbatch/J17_translate.sbatch
+# Model-card notes honored: 512-token context -> texts are CHUNKED (~20 words ~ a
+# line) and re-joined; per-column prefixes (tier0 = complex transliteration,
+# maximal = simple transliteration). Check the log's PREFIX PROBE and adjust below
+# if a different candidate yields fluent English.
 # ===========================================================================
 set -uo pipefail
-PREFIX="Translate Akkadian simple transliteration to English: "   # <- adjust per model card if probe looks wrong
+PREFIX_T0="Translate Akkadian complex transliteration to English: "
+PREFIX_MAX="Translate Akkadian simple transliteration to English: "
 echo "=== J17 translate+extract === job ${SLURM_JOB_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
@@ -30,7 +35,8 @@ mkdir -p v_1/src/stress_tests/logs
 export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 
 T=v_1/src/stress_tests/translation
-python -u $T/translate_thalesian.py --prefix "$PREFIX" --batch-size 16 \
+python -u $T/translate_thalesian.py --prefix-tier0 "$PREFIX_T0" \
+    --prefix-maximal "$PREFIX_MAX" --batch-size 32 \
     || { echo "FAIL translate"; exit 1; }
 commit_push "J17: Thalesian English translations (job ${SLURM_JOB_ID})" \
     "$T/translations.parquet" "$T/translations_preview.json"
