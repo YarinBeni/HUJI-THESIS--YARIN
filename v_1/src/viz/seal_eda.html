@@ -281,6 +281,13 @@
         <option value="qwen">Qwen</option>
         <option value="random">Random Qwen</option>
         <option value="mlm">Yarin MLM</option>
+        <option value="qwen3_1b7">Qwen3-1.7B (follow-up)</option>
+        <option value="qwen3_8b">Qwen3-8B (follow-up)</option>
+        <option value="qwen3_32b">Qwen3-32B (follow-up)</option>
+        <option value="gpt_oss_120b">gpt-oss-120B (follow-up)</option>
+        <option value="thalesian_akk300m">Thalesian-AKK-300m (follow-up)</option>
+        <option value="thalesian_cunei400m">Thalesian-cunei-400m (follow-up)</option>
+        <option value="umt5_base">uMT5-base (follow-up)</option>
       </select>
     </div>
 
@@ -347,6 +354,19 @@
               <em>e.g.</em> <code>d-UTU LUGAL qa2-bu-um</code> → <code>qabu</code>.
               Designed to reduce text to a near-lemmatized form that discards
               most writing-convention signals.
+            </span>
+          </span>
+        </button>
+        <button data-val="maxking">
+          Max+Kings
+          <span class="tip">
+            <span class="ico" tabindex="0">i</span>
+            <span class="body">
+              <strong>maximal-with-kings</strong> — the full maximal cleaning, but the
+              commissioning ruler's name span is located first and frozen intact
+              (name-aware truncation keeps it). All three pooling sites live on one
+              text. Available for the follow-up methods (and Random Qwen) at two
+              layers each: L00 and that model's best maxking layer.
             </span>
           </span>
         </button>
@@ -565,6 +585,41 @@ const METHOD_DESC = {
     before tokenization. Hidden states are exposed at layers
     [0, 4, 8, 12, 16] only. Currently available on Raw Text (tier0) only.
   `,
+  qwen3_1b7: `
+    <strong>Qwen3-1.7B</strong> — follow-up stress-test embedding (maximal-with-kings
+    cleaning, mean pool). Two layers bundled: L00 and this model's best maxking
+    layer. See v_1/src/stress_tests/ADVISOR_WALKTHROUGH.md.
+  `,
+  qwen3_8b: `
+    <strong>Qwen3-8B</strong> — follow-up stress-test embedding (maximal-with-kings
+    cleaning, mean pool). Two layers bundled: L00 and this model's best maxking
+    layer. See v_1/src/stress_tests/ADVISOR_WALKTHROUGH.md.
+  `,
+  qwen3_32b: `
+    <strong>Qwen3-32B</strong> — follow-up stress-test embedding (maximal-with-kings
+    cleaning, mean pool). Two layers bundled: L00 and this model's best maxking
+    layer. See v_1/src/stress_tests/ADVISOR_WALKTHROUGH.md.
+  `,
+  gpt_oss_120b: `
+    <strong>gpt-oss-120B</strong> — follow-up stress-test embedding (maximal-with-kings
+    cleaning, mean pool). Two layers bundled: L00 and this model's best maxking
+    layer. See v_1/src/stress_tests/ADVISOR_WALKTHROUGH.md.
+  `,
+  thalesian_akk300m: `
+    <strong>Thalesian-AKK-300m</strong> — follow-up stress-test embedding (maximal-with-kings
+    cleaning, mean pool). Two layers bundled: L00 and this model's best maxking
+    layer. See v_1/src/stress_tests/ADVISOR_WALKTHROUGH.md.
+  `,
+  thalesian_cunei400m: `
+    <strong>Thalesian-cunei-400m</strong> — follow-up stress-test embedding (maximal-with-kings
+    cleaning, mean pool). Two layers bundled: L00 and this model's best maxking
+    layer. See v_1/src/stress_tests/ADVISOR_WALKTHROUGH.md.
+  `,
+  umt5_base: `
+    <strong>uMT5-base</strong> — follow-up stress-test embedding (maximal-with-kings
+    cleaning, mean pool). Two layers bundled: L00 and this model's best maxking
+    layer. See v_1/src/stress_tests/ADVISOR_WALKTHROUGH.md.
+  `
 };
 
 // ── State ──────────────────────────────────────────────────────────────────
@@ -601,7 +656,24 @@ const MLM_LAYERS = [0, 4, 8, 12, 16];
 
 function layerLabel(val) { return "L" + String(val).padStart(2, "0"); }
 
+function availableLayers(method, cleaning) {
+  if (!DATA) return null;
+  const re = new RegExp("^" + method + "__" + cleaning + "__L(\\d+)__");
+  const found = new Set();
+  Object.keys(DATA.embeddings).forEach(k => {
+    const m = k.match(re);
+    if (m) found.add(parseInt(m[1], 10));
+  });
+  return found.size ? [...found].sort((a, b) => a - b) : null;
+}
+
 function clampLayerForMethod(method, rawVal) {
+  const avail = availableLayers(method, state.cleaning);
+  if (avail && avail.length) {
+    return avail.reduce((prev, cur) =>
+      Math.abs(cur - rawVal) < Math.abs(prev - rawVal) ? cur : prev
+    );
+  }
   if (method === "mlm") {
     return MLM_LAYERS.reduce((prev, cur) =>
       Math.abs(cur - rawVal) < Math.abs(prev - rawVal) ? cur : prev
@@ -644,9 +716,14 @@ function configureSlider(method) {
     valEl.style.opacity = "1";
   } else {
     slider.disabled = false;
-    slider.min = 0; slider.max = 28; slider.step = 1;
-    slider.value = state.layer;
-    valEl.textContent = layerLabel(state.layer);
+    const avail = availableLayers(method, state.cleaning);
+    slider.min = 0;
+    slider.max = (avail && avail.length) ? avail[avail.length - 1] : 28;
+    slider.step = 1;
+    const snapped = clampLayerForMethod(method, state.layer);
+    state.layer = snapped;
+    slider.value = snapped;
+    valEl.textContent = layerLabel(snapped);
     valEl.style.opacity = "1";
   }
 }
@@ -813,6 +890,7 @@ function wireToggle(groupId, stateKey) {
       group.querySelectorAll("button").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       state[stateKey] = btn.dataset.val;
+      if (stateKey === "cleaning") configureSlider(state.method);
       render();
     });
   });
