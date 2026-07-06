@@ -93,6 +93,12 @@ def run(args):
         text = _fragment_text(row, args.cleaning, spellings)
         if not text.strip():
             text = "..."   # ~6 all-logogram frags empty under maximal; keep seq non-empty
+        if args.max_frag_words and len(text.split()) > args.max_frag_words:
+            # gpt-oss has no sdpa -> eager attention materializes seq x seq; the longest
+            # tier0 fragments (~12k tokens in-prompt) OOM even on gpu:8. Truncating the
+            # TAIL keeps the opening titulary (where the king's name lives) and the
+            # span indices stay valid.
+            text = " ".join(text.split()[:args.max_frag_words])
         up = render_user_prompt(prompt["user_template"], text, fewshot)
         pstr, input_ids = build_chat_prompt(tok, prompt.get("system_prompt"), up, args.variant)
         try:
@@ -146,6 +152,9 @@ def parse_args():
     p.add_argument("--variant", required=True, choices=["pv0", "pv1", "pv2", "pv3"])
     p.add_argument("--cleaning", default="tier0", choices=["tier0", "maximal", "maxking"],
                    help="fragment text cleaning inside the prompt (default tier0 = original)")
+    p.add_argument("--max-frag-words", type=int, default=0,
+                   help="cap fragment length in words (0 = no cap). Needed for gpt-oss: "
+                        "no sdpa -> eager attention OOMs on long tier0 fragments.")
     p.add_argument("--model_path", required=True)
     p.add_argument("--out_dir", required=True)
     p.add_argument("--layers", default="all", help="'all' or comma list of layer indices")

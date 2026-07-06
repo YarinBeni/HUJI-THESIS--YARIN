@@ -32,7 +32,7 @@ export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 EX=v_1/src/stress_tests/redo_t10_prompt/extract_prompted_king_acts.py
 OUT=v_1/src/stress_tests/redo_t10_prompt/acts_${M}
 for V in pv0 pv1 pv2 pv3; do
-    python -u $EX --variant "$V" --cleaning "$C" --model_path "$H" --out_dir "$OUT" --layers all \
+    python -u $EX --variant "$V" --cleaning "$C" --model_path "$H" --out_dir "$OUT" --layers all --max-frag-words 300 \
         || { echo "FAIL extract $V $M $C"; exit 1; }
 done
 echo "=== Done ${M} x ${C}. $(date) ==="
