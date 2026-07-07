@@ -21,7 +21,7 @@ sync_main
 mkdir -p v_1/src/stress_tests/logs
 export OMP_NUM_THREADS=2 MKL_NUM_THREADS=2
 
-for M in qwen3_1b7 qwen3_8b random; do
+for M in qwen3_1b7 qwen3_8b qwen3_32b gpt_oss_120b thalesian_akk300m thalesian_cunei400m umt5_base random; do
     python -u v_1/src/stress_tests/translation/probe_translation_mc.py --method "$M" --n-jobs 16 \
         || echo "WARN trans probe $M failed"
 done
