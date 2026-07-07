@@ -303,14 +303,16 @@ and qwen has all three cleanings — flat across pv0–pv3 everywhere, and the n
 cleanings sit BELOW tier0 (~0.28–0.35 vs ~0.39–0.42). One open cell: gpt-oss × tier0
 (extraction failed twice, under diagnosis).
 
-**Translation probe** (`translation_mc.csv`): ORCC → English (cuneiformBase-400m, chunked,
-per-notation prefixes) → embedded with qwen/random → identical MC probes. **The one clean
-trained>random gap in the suite:** qwen3-8B on English year ρ = 0.416 vs random-on-the-same-
-English 0.275 (on Akkadian they tie ~0.35). Interpretation: English is qwen's home language —
-"Esarhaddon" is an entity with pretraining knowledge, not just a token pattern. Absolute level
-stays weak, and eng_maximal ≈ random (0.27–0.30) — as predicted, since its hallucinated king
-names ("Ashurnasirpal II") make it neither name-free nor name-faithful
-(`eda/translation_fidelity.py`).
+**Translation probe** (`translation_mc.csv`, full 8-model ladder): ORCC → English
+(cuneiformBase-400m, chunked, per-notation prefixes) → embedded with each model → identical MC
+probes. **The one clean trained>random result in the suite, and it holds across the ladder:**
+on English, EVERY trained model beats random on year (0.366–0.437 vs 0.275; 32B best at 0.437,
+gpt-oss 0.366 — still no scale trend), whereas on Akkadian none did (all ≈ 0.31–0.39 ≈ random
+0.351). Interpretation: English is the models' home representation — "Esarhaddon" is an entity
+with pretraining knowledge, not just a token pattern. Absolute levels stay weak (≤ 0.44), and
+eng_maximal mostly ≈ random (0.26–0.34) — as predicted from its hallucinated king names
+("Ashurnasirpal II"; `eda/translation_fidelity.py`) — with one curiosity: Thalesian-cunei on
+eng_maximal (0.418) beats its own eng_tier0. Geography lat: cunei again top (0.701/0.719).
 
 ## 7. The cross-cutting patterns (what to say when they ask "so what?")
 
