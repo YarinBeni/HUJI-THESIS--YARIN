@@ -4,6 +4,11 @@
 > controls-first order: T9 → P2-siteMC → P1 → maxking → P3-merged → P7-v2 → T10 → translation),
 > full ladder added to every probing table, footnote technicalities cleaned. A5 kept both
 > (part-1 figures + P1 table). Below is the original audit for the record.
+>
+> **UPDATE 2026-07-07:** Yarin removed the merged P3 timeline slide for now (deck = 20 slides;
+> P3 numbers remain in results/csv/p3_*.csv and the walkthrough). P1 TF-IDF row now shows real
+> balanced-MC numbers in the fixed-k convention (results/tfidf_mc_recomputed.json). Translation
+> slide expanded to YEAR + GEO tables with lat+lon and akk-tier0/akk-maximal reference columns.
 
 Purpose: find (A) duplicate experiments shown under different configs, (B) model gaps
 per slide, (C) exposed technicalities to clean. **Nothing deleted yet** — each item has

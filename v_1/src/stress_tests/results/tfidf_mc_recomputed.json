@@ -1,0 +1,24 @@
+{
+  "what": "TF-IDF balanced-MC year-Spearman, fixed-k convention (comparable to model rows in p1_year_mc.csv)",
+  "source_draws": "v_1/src/linear_probing/results/orcc_round2_phase0/probes/tfidf_pls__mc_balanced__draw*.json (200 draws, key tfidf__{cleaning}__na__L00__year-raw)",
+  "convention": "PLS: per-k Spearman averaged over 200 draws, then best fixed k reported (mc_probe convention). The old scoreboard 0.407 took the best k inside each draw (per-draw-best-k, optimistic).",
+  "ridge": "recomputed locally: TfidfVectorizer(char_wb,(2,5)) on full corpus per cleaning, l2-normalized, Ridge(alpha=1.0), GroupKFold-by-ruler within each of the same 200 balanced draws",
+  "results": {
+    "tier0": {
+      "pls_spearman": 0.3762,
+      "pls_std": 0.068,
+      "pls_best_k": 3,
+      "ridge_spearman": 0.359,
+      "ridge_std": 0.0683
+    },
+    "maximal": {
+      "pls_spearman": 0.2708,
+      "pls_std": 0.083,
+      "pls_best_k": 2,
+      "ridge_spearman": 0.2685,
+      "ridge_std": 0.079
+    }
+  },
+  "validation": "tier0 ridge 0.3590 vs old scoreboard mc_ridge 0.3545 (same protocol, re-fit) -- agrees",
+  "shown_on": "thesis_story_9.html P1 slide, TF-IDF row (was: '(cited) 0.407/0.355' tier0-only, per-draw-best-k)"
+}

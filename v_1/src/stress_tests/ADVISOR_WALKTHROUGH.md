@@ -120,7 +120,9 @@ the corpus imbalance (Ashurbanipal 268 frags vs tail rulers 1) makes single-spli
 **Code: `probe_p1_mc.py` + engine `shared/mc_probe.py`.**
 - 200 balanced draws of **8 rulers × 21 fragments** (k=21 capped by the smallest class); within
   each draw GroupKFold-by-ruler (≤5 splits); PLS k∈{1,2,3,5} best-k + Ridge; mean ± std over draws;
-  shuffled null. Includes the MLM and a cited TF-IDF baseline.
+  shuffled null. Includes the MLM and a TF-IDF baseline run through the same 200 draws
+  (recomputed to the same fixed-k convention as the model rows — see
+  `results/tfidf_mc_recomputed.json`; the old scoreboard 0.407 was per-draw-best-k, optimistic).
 
 | model | mean tier0 | mean maximal | king_last (t0) | king_mean (t0) |
 |---|---|---|---|---|
@@ -133,7 +135,7 @@ the corpus imbalance (Ashurbanipal 268 frags vs tail rulers 1) makes single-spli
 | uMT5-base | 0.324 | 0.277 | 0.423 | 0.164 |
 | MLM (37M, from scratch) | 0.399 | 0.286 | 0.704 | 0.379 |
 | **random Qwen3-8B** | **0.351** | 0.293 | **0.643** | 0.183 |
-| TF-IDF (cited) | 0.407 | — | n/a | n/a |
+| TF-IDF | 0.376 / R 0.359 | 0.271 / R 0.269 | n/a | n/a |
 
 (PLS best-k Spearman, ±std ≈ 0.07 on mean / 0.2–0.4 on king; shuffled null ≈ 0.01 everywhere.)
 
