@@ -1,4 +1,9 @@
-# Deck consolidation audit — thesis_story_9.html (25 slides)
+# Deck consolidation audit — thesis_story_9.html
+
+> **STATUS 2026-07-06: EXECUTED.** A1–A4 accepted and applied (deck now 21 slides,
+> controls-first order: T9 → P2-siteMC → P1 → maxking → P3-merged → P7-v2 → T10 → translation),
+> full ladder added to every probing table, footnote technicalities cleaned. A5 kept both
+> (part-1 figures + P1 table). Below is the original audit for the record.
 
 Purpose: find (A) duplicate experiments shown under different configs, (B) model gaps
 per slide, (C) exposed technicalities to clean. **Nothing deleted yet** — each item has
