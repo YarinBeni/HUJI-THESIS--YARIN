@@ -333,8 +333,27 @@ def p8():
            "pred_mean", "pred_std"], rows)
 
 
+def p9():
+    rows = []
+    for fp in sorted(ST.glob("p9_gkpls/results/p9_gkpls__*.json"),
+                     key=lambda p: mrank(p.stem.split("__")[1])):
+        d = jload(fp); m = d["method"]
+        for cl, blk in d.get("cleanings", {}).items():
+            if not blk or blk.get("missing") or blk.get("skipped"):
+                continue
+            b = blk["best"]
+            rows.append([m, cl, blk.get("best_layer"),
+                         okf(b["gkpls"].get("spearman_mean")), okf(b["gkpls"].get("spearman_std")),
+                         okf(b["gkpls"].get("best_hyper")),
+                         okf(b["rbfkpls"].get("spearman_mean")), okf(b["rbfkpls"].get("best_hyper")),
+                         okf(b["krr_geo"].get("spearman_mean")), okf(b["krr_geo"].get("best_hyper"))])
+    write("p9_gkpls.csv",
+          ["model", "cleaning", "best_layer", "gkpls_spearman", "gkpls_std", "gkpls_a",
+           "rbfkpls_spearman", "rbfkpls_a", "krr_geo_spearman", "krr_geo_lam"], rows)
+
+
 if __name__ == "__main__":
     t9(); p2(); p1_gkf(); p1_mc(); p1_maxking(); p3(); p7(); t10()
     p2_geo_mc(); p3_pls(); p7_v2(); t10_cleanings(); translation()
-    t11(); e5(); p8()
+    t11(); e5(); p8(); p9()
     print("done ->", OUT)

@@ -135,8 +135,38 @@ y-on-dominant-axis ⇒ flat/high; y-on-transverse-axis ⇒ λ=1 end collapses (0
 - **J20** sbatch: all 9 methods × {tier0, maximal} on stored mean acts (CPU, per-layer
   sweep, best layer surfaced at λ=1-align1 and λ=0-pred; resumable — skips done JSONs).
 - Expected outcome given the nulls so far: "flat and low ≈ random" on Akkadian; the
-  interesting cells are engtier0-style (not in scope yet) and whether ANY trained model
-  separates from random at the λ=0 end. G-KPLS (§2 of the note) is the parked sibling.
+  interesting cells are engtier0-style and whether ANY trained model separates from
+  random at the λ=0 end. **TF-IDF result (local, 200 draws, committed): FLAT AND LOW
+  at every k** — align1 0.32–0.35 (tier0) / 0.23–0.26 (maximal) across the whole dial,
+  pred ≤ the P1b PLS baseline; supervision adds nothing. J20 now sweeps all 4 cleanings
+  (tier0/maximal/maxking/engtier0; missing acts dirs skip cleanly).
+- Formal correctness proofs (paper-style, for the thesis): `p8_lambda_probe/correctness.tex`
+  (exact Ky Fan optimality; endpoints = LPP-eigenmaps / SPCA; HSIC-with-linear-kernel
+  ⇔ mean-independence; leakage-freeness; Lipschitz/convex λ-path). Compiles with pdflatex.
+
+## P9 — G-KPLS, the geodesic kernel PLS (2026-07-10, working note §2)
+Kernel PLS on the geodesic Gram matrix K_G = −½·H·D_G²·H (Isomap = kPCA on K_G), the
+one-stage supervised repair of "Isomap→PLS". Nyström out-of-sample: test points connect
+to their k nearest TRAIN points and route through the FIXED train graph (note eq. 5) —
+leakage-free LORO/GroupKFold. Three arms per fold: **gkpls** (a∈{1,2,3,5} best-a),
+**rbfkpls** (Euclidean RBF KPLS — isolates geodesic vs kernel), **krr_geo** (kernel ridge
+on K_G via TRUNCATED spectral inverse — the clipped MDS Gram has a large null space that
+a dense solve amplifies catastrophically; isolates PLS vs kernel). Same balanced MC.
+Selftest (widening spiral, isometric 25-D lift): gkpls 0.90 / krr 0.95 / rbf 1.00.
+- Code: `p9_gkpls/{gkpls.py, run_acts.py}`; results → `p9_gkpls/results/p9_gkpls__*.json`.
+- **J21** sbatch: 9 methods × 4 cleanings (tier0/maximal/maxking/engtier0), CPU,
+  resumable. Interpretation grid is the note's §5 table (G-KPLS vs Isomap→PLS vs RBF).
+
+## T11 partial results (10/16 cells, J18a jobs 12677_0-9)
+`t11_gen_dating/results/t11_vs_probe.md` (rebuild: `python t11_gen_dating/build_t11_table.py`).
+Headlines: **qwen3-8B on Akkadian answers 98.5% but is ANTI-correlated** (MC −0.27 on
+tier0/maximal/maxking; MAE ~286yr) — hypothesis: "Babylon ⇒ Old-Babylonian/Hammurabi-era"
+prior inverts the ranking (NB texts are the LATEST but get dated ~1750 BCE; verify from
+raw JSONLs on the cluster). **On English translations 8B is genuinely good**: MC +0.52,
+acc@50 0.65, ρ=0.876 when it names the true ruler (45% naming rate) — behavioral
+counterpart of the translation-probe result. 1.7B declines 94–100%; 32B declines 87–98%
+on Akkadian (answer-rate collapses with scale? gpt-oss will tell). Pending: 32B
+maxking/engtier0, gpt-oss ×4 (12678), E5 (12679).
 
 ## E5 — word-shuffle control (2026-07-10)
 Does word ORDER matter to the embedding year signal? Each fragment is word-capped

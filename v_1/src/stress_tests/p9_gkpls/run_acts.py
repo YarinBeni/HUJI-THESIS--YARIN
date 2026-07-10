@@ -1,15 +1,14 @@
-"""P8 cluster runner — the lambda-dial probe on stored model activations (CPU).
+"""P9 cluster runner — G-KPLS (+ RBF-KPLS, KRR-on-K_G baselines) on stored
+mean activations, all four cleanings.
 
-SETUP   mean-pooled acts, tier0 + maximal cleanings, every stored layer;
-        200 balanced draws x GroupKFold-by-ruler (standard MC).
-PROBE   lambda-probe (MATH_NOTES.md): lambda grid 0..1, d=3, k=10 neighbors.
-METRIC  align1 = |Spearman(leading coord, year)| held-out; pred = ridge-on-Z_d
-        Spearman. Best layer surfaced twice: by align1 at lambda=1 (the
-        unsupervised question) and by pred at lambda=0 (the supervised one).
+SETUP   mean-pooled acts, {tier0, maximal, maxking, engtier0}, every layer;
+        200 balanced draws x GroupKFold-by-ruler.
+PROBE   G-KPLS a in {1,2,3,5} best-a; RBF-KPLS (isolates geodesic vs kernel);
+        KRR on K_G, lam in {1e-3,1e-2,1e-1} (isolates PLS vs kernel); k=10 graph.
+METRIC  Spearman(predicted year, true year), mean +- std over draws.
 
-Usage:  python run_acts.py --method qwen3_8b [--cleanings tier0,maximal]
-                           [--k 10] [--n-jobs 16]
-Writes  results/p8_lambda__{method}.json
+Usage:  python run_acts.py --method qwen3_8b [--n-jobs 16]
+Writes  results/p9_gkpls__{method}.json
 """
 from __future__ import annotations
 
@@ -29,15 +28,12 @@ _REPO = _THIS.parents[4]
 sys.path.insert(0, str(_THIS.parent))
 sys.path.insert(0, str(_THIS.parents[1] / "shared"))
 from geo_loader import find_acts_dir, load_layer, available_layers  # noqa: E402
-from lambda_probe import mc_lambda_probe, LAMBDAS                    # noqa: E402
+from gkpls import mc_gkpls_probe                                     # noqa: E402
 
 PARQUET = _REPO / "v_1/data/evaluation/corpora/orcc_corpus.parquet"
 BAL = _REPO / "v_1/src/linear_probing/results/orcc_round2_phase0/balanced_subset"
-
-
-def _score(pl, lam, key):
-    v = pl.get(f"{lam:.1f}", {}).get(f"{key}_mean", float("nan"))
-    return v if v == v else -9.0
+CLEANINGS = ["tier0", "maximal", "maxking", "engtier0"]
+ARMS = ("gkpls", "rbfkpls", "krr_geo")
 
 
 def run(args):
@@ -47,9 +43,8 @@ def run(args):
     dm = np.load(BAL / "draws_matrix.npy")[: args.n_draws]
     draw_rows = [np.where(r)[0] for r in dm]
 
-    out = {"method": args.method, "protocol": "p8_lambda_mc",
-           "k_neighbors": args.k, "d": args.d, "lambdas": LAMBDAS,
-           "cleanings": {}}
+    out = {"method": args.method, "protocol": "p9_gkpls_mc",
+           "k_neighbors": args.k, "cleanings": {}}
     for cl in args.cleanings.split(","):
         d = find_acts_dir(args.method, cl, "mean")
         if d is None:
@@ -63,8 +58,8 @@ def run(args):
 
         def one(L):
             t0 = time.time()
-            r = mc_lambda_probe(load_layer(d, L), year, ruler, draw_rows,
-                                k=args.k, d=args.d, l2_normalize=True)
+            r = mc_gkpls_probe(load_layer(d, L), year, ruler, draw_rows,
+                               k=args.k)
             print(f"    L{L:02d} done ({time.time()-t0:.0f}s)", flush=True)
             return L, r
 
@@ -73,21 +68,20 @@ def run(args):
         if not valid:
             out["cleanings"][cl] = {"skipped": True}
             continue
-        b_un = max(valid, key=lambda L: _score(valid[L]["per_lambda"], 1.0, "align1"))
-        b_su = max(valid, key=lambda L: _score(valid[L]["per_lambda"], 0.0, "pred"))
+        bL = max(valid, key=lambda L: valid[L]["gkpls"]["spearman_mean"]
+                 if valid[L]["gkpls"]["spearman_mean"] == valid[L]["gkpls"]["spearman_mean"] else -9)
         blk = {"per_layer": {str(L): r for L, r in res.items()},
-               "best_layer_unsup": b_un, "best_layer_sup": b_su,
-               "curves": {f"L{b_un} (best @λ=1 align1)": valid[b_un]["per_lambda"],
-                          f"L{b_su} (best @λ=0 pred)": valid[b_su]["per_lambda"]}}
+               "best_layer": bL,
+               "best": {arm: valid[bL][arm] for arm in ARMS}}
         out["cleanings"][cl] = blk
-        pu, ps = valid[b_un]["per_lambda"], valid[b_su]["per_lambda"]
-        print(f"  {cl}: unsup-best L{b_un} align1@1.0="
-              f"{_score(pu, 1.0, 'align1'):.3f} (pred@0.0={_score(pu, 0.0, 'pred'):.3f})"
-              f" | sup-best L{b_su} pred@0.0={_score(ps, 0.0, 'pred'):.3f}"
-              f" (align1@1.0={_score(ps, 1.0, 'align1'):.3f})", flush=True)
+        b = blk["best"]
+        print(f"  {cl}: L{bL}  gkpls={b['gkpls']['spearman_mean']:.3f}"
+              f"(a={b['gkpls']['best_hyper']})"
+              f"  rbfkpls={b['rbfkpls']['spearman_mean']:.3f}"
+              f"  krr_geo={b['krr_geo']['spearman_mean']:.3f}", flush=True)
 
     outdir = Path(args.out); outdir.mkdir(parents=True, exist_ok=True)
-    fp = outdir / f"p8_lambda__{args.method}.json"
+    fp = outdir / f"p9_gkpls__{args.method}.json"
     fp.write_text(json.dumps(out, indent=2), encoding="utf-8")
     print(f"wrote {fp}")
 
@@ -95,9 +89,8 @@ def run(args):
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--method", required=True)
-    p.add_argument("--cleanings", default="tier0,maximal,maxking,engtier0")
+    p.add_argument("--cleanings", default=",".join(CLEANINGS))
     p.add_argument("--k", type=int, default=10)
-    p.add_argument("--d", type=int, default=3)
     p.add_argument("--n-draws", type=int, default=200)
     p.add_argument("--n-jobs", type=int, default=16)
     p.add_argument("--out", default=str(_THIS.parent / "results"))
