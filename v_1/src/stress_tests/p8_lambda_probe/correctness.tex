@@ -1,0 +1,321 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\emergencystretch=1.2em
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\Xt}{\widetilde{X}}
+\newcommand{\Mh}{\widehat{M}}
+\newcommand{\Lh}{\widehat{L}}
+\newcommand{\HSIC}{\operatorname{HSIC}}
+
+\title{Correctness of the Supervision-Dial Spectral Probe}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent We prove that the supervision-dial spectral probe --- the estimator that
+interpolates, through a single parameter $\lambda\in[0,1]$, between Laplacian-eigenmaps
+manifold embedding ($\lambda=1$) and HSIC-maximizing supervised projection
+($\lambda=0$) --- returns an \emph{exact global maximizer} of its objective at every
+$\lambda$, that its two endpoints coincide with the established methods it claims to
+interpolate, that its out-of-sample map is leakage-free under grouped cross-validation,
+and that the solution path is well behaved in $\lambda$. All statements are
+finite-sample and exact; statistical approximation guarantees (graph-Laplacian and HSIC
+consistency) are inherited from the cited literature and are not re-proved here.
+\end{abstract}
+
+\section{Setup and the algorithm}
+
+Fix a training fold $\{(x_i,y_i)\}_{i=1}^{m}$, $x_i\in\R^{p}$, $y_i\in\R$, and let
+$P:\R^{p}\to\R^{r}$ be the PCA map fitted on the training fold only ($r\le m-1$),
+followed by a fixed positive rescaling; write $\tilde x_i = P(x_i)$ and stack rows into
+$\Xt\in\R^{m\times r}$. Define:
+
+\begin{enumerate}
+\item \textbf{Graph term.} $W\in\R^{m\times m}$: symmetric $k$-NN heat-kernel
+  affinities, $w_{ij}=\exp(-\|\tilde x_i-\tilde x_j\|^2/\sigma_x^2)>0$ on retained
+  edges, $w_{ij}=0$ otherwise, $w_{ii}=0$; degrees $d_i=\sum_j w_{ij}$,
+  $D=\diag(d_1,\dots,d_m)$, Laplacian $L=D-W$.
+\item \textbf{Dependence term.} $[K_y]_{ij}=\exp\!\big(-(y_i-y_j)^2/2\sigma_y^2\big)$;
+  $H=I_m-\tfrac1m\mathbf{1}\mathbf{1}^{\!\top}$; $M=HK_yH$.
+\item \textbf{Normalization.} $\Mh=M/\|M\|_2$, $\Lh=L/\|L\|_2$ (spectral norms;
+  both matrices are nonzero in any nondegenerate fold).
+\item \textbf{Pencil.} For $\lambda\in[0,1]$,
+  \[
+  A_\lambda \;=\; (1-\lambda)\,\Xt^{\!\top}\Mh\,\Xt \;-\; \lambda\,\Xt^{\!\top}\Lh\,\Xt,
+  \qquad
+  B \;=\; \Xt^{\!\top} D\,\Xt + \varepsilon I_r,\quad \varepsilon>0 .
+  \]
+\end{enumerate}
+
+The \emph{probe} solves, for each $\lambda$ on a grid, the program
+\begin{equation}\label{eq:program}
+\max_{V\in\R^{r\times d}}\;\; J_\lambda(V) \;=\; \tr\!\big(V^{\!\top} A_\lambda V\big)
+\qquad\text{s.t.}\quad V^{\!\top} B\, V = I_d ,
+\end{equation}
+by computing the $d$ eigenvectors of the generalized symmetric eigenproblem
+$A_\lambda v=\gamma B v$ with largest eigenvalues, $B$-orthonormalized, discarding
+directions whose embedding is constant across the training fold (Proposition~\ref{prop:trivial});
+the embedding is $Z=\Xt V$ on train and $z_\ast=V^{\!\top}P(x_\ast)$ on any new point.
+Note $J_\lambda(V) = (1-\lambda)\tr(Z^{\!\top}\Mh Z)-\lambda\tr(Z^{\!\top}\Lh Z)$ for
+$Z = \Xt V$: \eqref{eq:program} is the joint embedding objective restricted to linear
+maps of the (train-PCA) features, which is what furnishes the out-of-sample extension
+(Locality Preserving Projections; He \& Niyogi \cite{he2003lpp}).
+
+\section{Well-posedness}
+
+\begin{lemma}[The constraint metric is positive definite]\label{lem:pd}
+$B\succ 0$. Consequently the pencil $(A_\lambda,B)$ has $r$ real eigenvalues
+$\gamma_1(\lambda)\ge\dots\ge\gamma_r(\lambda)$ with a $B$-orthonormal eigenbasis, and
+\eqref{eq:program} is a maximization of a continuous function over a compact set, so a
+maximizer exists.
+\end{lemma}
+
+\begin{proof}
+Each vertex of the $k$-NN graph ($k\ge1$) has at least one incident edge, and heat
+weights on edges are strictly positive; hence $d_i>0$ for all $i$ and $D\succ0$, so
+$\Xt^{\!\top}D\Xt\succeq0$ and $B\succeq\varepsilon I\succ0$. For $B\succ0$ the change of
+variables $W=B^{1/2}V$ turns $(A_\lambda,B)$ into the symmetric matrix
+$\tilde A_\lambda = B^{-1/2}A_\lambda B^{-1/2}$, whose spectral decomposition yields the
+stated eigenpairs; the constraint set $\{V:V^{\!\top}BV=I_d\}$ is the preimage of the
+compact Stiefel manifold under the linear homeomorphism $B^{1/2}$, hence compact.
+\end{proof}
+
+\begin{lemma}[Smoothness identity]\label{lem:dirichlet}
+For any $Z\in\R^{m\times d}$ with rows $z_i$,
+$\;\tr(Z^{\!\top}LZ)=\tfrac12\sum_{i,j} w_{ij}\|z_i-z_j\|^2\ge 0$; in particular
+$L\succeq0$, and if the graph is connected then $\ker L=\operatorname{span}\{\mathbf 1\}$.
+\end{lemma}
+
+\begin{proof}
+$\tr(Z^{\!\top}LZ)=\sum_a z^{(a)\top}Lz^{(a)}$ columnwise, and for a vector $u$,
+$u^{\!\top}Lu=\sum_i d_i u_i^2-\sum_{i,j}w_{ij}u_iu_j
+=\tfrac12\sum_{i,j}w_{ij}(u_i-u_j)^2$ by symmetry of $W$. Nonnegativity is immediate;
+on a connected graph $u^{\!\top}Lu=0$ forces $u_i=u_j$ along every edge, hence $u$
+constant.
+\end{proof}
+
+\begin{lemma}[Dependence identity and what it measures]\label{lem:hsic}
+With the linear kernel on $Z$ and kernel $K_y$ on $y$, the (biased) empirical HSIC of
+Gretton et al.\ \cite{gretton2005hsic} is
+$\widehat{\HSIC}(Z,y)=(m-1)^{-2}\tr\!\big(Z^{\!\top}MZ\big)$, i.e.\ the first term of
+$J_\lambda$ up to the positive constants absorbed in $\Mh$. Its population counterpart is
+$\HSIC(Z,y)=\sum_{a=1}^{d}\big\|C_{z_a\varphi(y)}\big\|_{\mathrm{HS}}^2$, the summed
+squared cross-covariance operators between each embedding coordinate and the Gaussian
+RKHS $\mathcal H_y$ on $y$; it vanishes if and only if
+$\E[Z\mid y]=\E[Z]$ almost surely (mean-independence of the embedding from the year).
+The empirical estimator converges at rate $O(m^{-1/2})$
+\cite[Thm.~3]{gretton2005hsic}.
+\end{lemma}
+
+\begin{proof}
+The estimator form: with $K_Z=ZZ^{\!\top}$,
+$\widehat{\HSIC}=(m-1)^{-2}\tr(K_ZHK_yH)=(m-1)^{-2}\tr(Z^{\!\top}HK_yHZ)$ by cyclicity
+(and $M=HK_yH$). For the population claim, the linear kernel on $Z$ has feature map
+$z\mapsto z$, so the cross-covariance operator factorizes over coordinates and
+$\HSIC=\sum_a\|C_{z_a\varphi(y)}\|^2_{\mathrm{HS}}$ with
+$\|C_{z_a\varphi(y)}\|_{\mathrm{HS}}=\sup_{\|g\|_{\mathcal H_y}\le1}
+\operatorname{Cov}\!\big(z_a,\,g(y)\big)$. Thus $\HSIC=0$ iff
+$\operatorname{Cov}(z_a,g(y))=0$ for all $g\in\mathcal H_y$ and all $a$. The Gaussian
+RKHS is dense in $L^2(P_y)$ for any distribution $P_y$ on $\R$
+\cite{steinwart2008book,sriperumbudur2010}, so the condition extends to all
+$g\in L^2(P_y)$; choosing $g(y)=\E[z_a\mid y]$ gives
+$\operatorname{Var}\big(\E[z_a\mid y]\big)=0$, i.e.\ $\E[z_a\mid y]$ constant a.s.,
+for every $a$. The converse is immediate from the tower rule.
+\end{proof}
+
+\begin{remark}
+Lemma~\ref{lem:hsic} is the precise sense in which the $\lambda=0$ end is
+``supervised'': the probe maximizes dependence of the embedding on the year in
+\emph{any functional form} (the Gaussian kernel sees all of $L^2$), but through the
+first moment of $Z$. This is exactly the right target for a downstream regression
+readout, which consumes $\E[Z\mid y]$-type signal.
+\end{remark}
+
+\section{Exactness of the returned solution}
+
+\begin{theorem}[Correctness]\label{thm:main}
+For every $\lambda\in[0,1]$, the value of program \eqref{eq:program} equals
+$\sum_{j=1}^{d}\gamma_j(\lambda)$, and it is attained by
+$V^\ast=[v_1,\dots,v_d]$, the $B$-orthonormal eigenvectors of the pencil
+$(A_\lambda,B)$ associated with the $d$ largest eigenvalues. This is precisely the
+matrix returned by the algorithm; hence the algorithm outputs an exact global maximizer
+of its objective --- no relaxation, no local search.
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:pd}, $B\succ0$; substitute $W=B^{1/2}V$, a bijection between
+$\{V:V^{\!\top}BV=I_d\}$ and the Stiefel manifold $\{W:W^{\!\top}W=I_d\}$, under which
+$J_\lambda(V)=\tr(W^{\!\top}\tilde A_\lambda W)$ with
+$\tilde A_\lambda=B^{-1/2}A_\lambda B^{-1/2}$ symmetric. Let
+$\tilde A_\lambda=\sum_{j=1}^{r}\gamma_j u_ju_j^{\!\top}$ be its spectral decomposition,
+$\gamma_1\ge\dots\ge\gamma_r$ (these are the pencil eigenvalues: $\tilde A_\lambda w=\gamma w
+\iff A_\lambda v=\gamma Bv$ with $v=B^{-1/2}w$). For any feasible $W$,
+\[
+\tr\!\big(W^{\!\top}\tilde A_\lambda W\big)
+=\sum_{j=1}^{r}\gamma_j\,\underbrace{\|W^{\!\top}u_j\|_2^2}_{=:c_j},
+\qquad
+c_j = u_j^{\!\top}WW^{\!\top}u_j .
+\]
+Since $WW^{\!\top}$ is an orthogonal projection of rank $d$, we have $0\le c_j\le
+\|u_j\|^2=1$ and $\sum_j c_j=\tr(WW^{\!\top})=d$. Hence
+$\tr(W^{\!\top}\tilde A_\lambda W)\le\max\{\sum_j\gamma_jc_j : c\in[0,1]^r,\ \sum_jc_j=d\}
+=\sum_{j\le d}\gamma_j$, the maximum of a linear functional over that polytope being
+attained at the vertex $c=(1,\dots,1,0,\dots,0)$ ordered by $\gamma$. The bound is
+achieved by $W^\ast=[u_1,\dots,u_d]$, i.e.\ $V^\ast=B^{-1/2}W^\ast$, which is exactly
+the top-$d$ $B$-orthonormal generalized eigenbasis (Ky Fan's maximum principle
+\cite{fan1949}, in the generalized-pencil form). Ties among eigenvalues make the
+maximizer non-unique but do not affect the optimal value.
+\end{proof}
+
+\begin{proposition}[Endpoints]\label{prop:limits}
+As $\varepsilon\to0^+$ (and on the column space of $\Xt$):
+(i) at $\lambda=1$, program \eqref{eq:program} is equivalent to
+$\min_{V^{\!\top}BV=I}\tr(V^{\!\top}\Xt^{\!\top}L\Xt V)$ --- Locality Preserving
+Projections \cite{he2003lpp}, the linear out-of-sample form of Laplacian eigenmaps
+\cite{belkin2003}; the year never enters.
+(ii) at $\lambda=0$ it is supervised PCA with target kernel $K_y$
+\cite{barshan2011spca}, computed in the $D$-metric; the graph never enters beyond
+the metric. Rescaling $M\mapsto\Mh$, $L\mapsto\Lh$ multiplies the objective at each
+endpoint by a positive constant and therefore changes neither maximizer.
+\end{proposition}
+
+\begin{proof}
+(i) With $\lambda=1$, $J_1(V)=-\tr(V^{\!\top}\Xt^{\!\top}\Lh\Xt V)$, and maximizing $-f$
+is minimizing $f$; positive scaling ($\|L\|_2^{-1}$) preserves argmaxima. The
+minimization of $\tr(V^{\!\top}\Xt^{\!\top}L\Xt V)$ under $V^{\!\top}\Xt^{\!\top}D\Xt
+V=I$ is the LPP program verbatim. (ii) With $\lambda=0$,
+$J_0(V)=\tr(V^{\!\top}\Xt^{\!\top}\Mh\Xt V)$, whose maximization under an
+orthogonality constraint is the supervised-PCA program of \cite{barshan2011spca} with
+$K_y$ as target kernel; our constraint uses the $D$-metric rather than $I$, a
+change of inner product that Theorem~\ref{thm:main} handles exactly.
+\end{proof}
+
+\begin{proposition}[The constant direction carries nothing and may be discarded]
+\label{prop:trivial}
+$M\mathbf 1 = 0$ and $L\mathbf 1 = 0$. Consequently, any direction $v$ with embedding
+$\Xt v\in\operatorname{span}\{\mathbf 1\}$ has $v^{\!\top}A_\lambda v=0$ for every
+$\lambda$: it contributes zero dependence and zero smoothness penalty, i.e.\ zero
+information about $y$ and zero geometric content. Removing such directions from the
+returned basis (the algorithm's deflation step) changes the objective value by at most
+the amount that direction contributed, namely $0$, and is the standard trivial-solution
+removal of Laplacian eigenmaps \cite{belkin2003}.
+\end{proposition}
+
+\begin{proof}
+$H\mathbf 1=0$ gives $M\mathbf 1=HK_yH\mathbf 1=0$; $L\mathbf 1=(D-W)\mathbf 1=0$ since
+$d_i=\sum_jw_{ij}$. If $\Xt v=c\mathbf 1$ then
+$v^{\!\top}\Xt^{\!\top}\Mh\Xt v=c^2\mathbf 1^{\!\top}\Mh\mathbf 1=0$ and likewise for
+$\Lh$.
+\end{proof}
+
+\section{Leakage-freeness of the evaluation}
+
+\begin{proposition}[No test-set leakage]\label{prop:leakage}
+Fix a draw and a train/test split by ruler groups, $G_{\mathrm{tr}}\cap
+G_{\mathrm{te}}=\emptyset$. Every fitted object of the probe --- the PCA map $P$, the
+graph $W$ and bandwidth $\sigma_x$, the year kernel $K_y$ and bandwidth $\sigma_y$, the
+matrices $(A_\lambda,B)$, the eigenbasis $V^\ast$, and the ridge readout --- is a
+measurable function of the training fold alone. Test points enter only through the
+pointwise map $x_\ast\mapsto V^{\ast\top}P(x_\ast)$ and the fitted readout. Hence the
+reported test statistics are functions of (train fold, test fold) in which no test
+observation influences any fitted quantity, and, the split being grouped by ruler, they
+estimate generalization to unseen rulers.
+\end{proposition}
+
+\begin{proof}
+By construction: each listed object is computed from $\{(x_i,y_i):i\in\text{train}\}$
+only (the graph is never rebuilt with test nodes; cf.\ the Nystr\"om alternative in
+\cite{bengio2004oos}, which shares this property). The composition of a train-measurable
+map with a test point is evaluation, not fitting. The group condition makes the test
+rulers' identities, and therefore their constant year values, disjoint from training.
+\end{proof}
+
+\section{Regularity of the solution path in $\lambda$}
+
+\begin{proposition}[The dial is well behaved]\label{prop:path}
+Let $F_d(\lambda)=\sum_{j\le d}\gamma_j(\lambda)$ be the optimal value of
+\eqref{eq:program}. Then:
+(i) each $\gamma_j(\cdot)$ is Lipschitz on $[0,1]$ with constant
+$\big\|\tilde A_M\big\|_2+\big\|\tilde A_L\big\|_2$, where $\tilde A_M =
+B^{-1/2}\Xt^{\!\top}\Mh\Xt B^{-1/2}$ and $\tilde A_L$ analogously;
+(ii) $F_d$ is convex and continuous on $[0,1]$;
+(iii) the spectral projection onto the top-$d$ eigenspace is analytic in $\lambda$
+wherever $\gamma_d(\lambda)>\gamma_{d+1}(\lambda)$, so the embedding (up to rotation)
+and every continuous readout of it vary continuously in $\lambda$ outside the finitely
+many crossing points of these two eigenvalue branches.
+\end{proposition}
+
+\begin{proof}
+$\tilde A_\lambda=(1-\lambda)\tilde A_M-\lambda\tilde A_L$ is affine in $\lambda$;
+(i) is Weyl's perturbation inequality
+$|\gamma_j(\lambda)-\gamma_j(\lambda')|\le\|\tilde A_\lambda-\tilde
+A_{\lambda'}\|_2=|\lambda-\lambda'|\,\|\tilde A_M+\tilde A_L\|_2
+\le|\lambda-\lambda'|(\|\tilde A_M\|_2+\|\tilde A_L\|_2)$.
+(ii) By Theorem~\ref{thm:main},
+$F_d(\lambda)=\max_{V}\;\tr(V^{\!\top}A_\lambda V)$ over the fixed feasible set; for
+each fixed $V$ the map $\lambda\mapsto\tr(V^{\!\top}A_\lambda V)$ is affine, and a
+pointwise supremum of affine functions is convex; convex functions on an interval are
+continuous in its interior, and (i) supplies continuity at the endpoints.
+(iii) is Kato's analytic perturbation theory for symmetric pencils with isolated
+eigenvalue groups \cite{kato1966}; eigenvalue branches of a real-analytic (here affine)
+symmetric family are analytic, and crossings of the finitely many branch pairs are
+isolated unless the branches coincide identically, in which case the projection extends
+analytically anyway.
+\end{proof}
+
+\begin{remark}[Scope of the guarantee]
+Theorem~\ref{thm:main} and Propositions~\ref{prop:limits}--\ref{prop:path} are exact,
+finite-sample statements about the \emph{empirical} objective: the algorithm returns the
+global optimum of \eqref{eq:program}, interpolates the two named methods at its
+endpoints, evaluates without leakage, and traces a continuous path. What they do
+\emph{not} assert is statistical fidelity of the empirical objective to its population
+counterpart; those are the standard, separately-proved facts that the graph Laplacian
+converges to the Laplace--Beltrami operator of the data manifold
+\cite{belkin2008towards} and that empirical HSIC concentrates around population HSIC at
+rate $O(m^{-1/2})$ \cite{gretton2005hsic}, both under their respective sampling
+assumptions. The probe's inferential use in the thesis --- comparing the $\lambda$-curve
+of a trained model against a random-initialized control under an identical pipeline ---
+requires only the finite-sample guarantees proved here, since both arms share the same
+empirical objective and protocol.
+\end{remark}
+
+\begin{thebibliography}{9}\small
+\bibitem{gretton2005hsic} A.~Gretton, O.~Bousquet, A.~Smola, B.~Sch\"olkopf.
+Measuring statistical dependence with Hilbert--Schmidt norms. \emph{ALT}, 2005.
+\bibitem{belkin2003} M.~Belkin, P.~Niyogi. Laplacian eigenmaps for dimensionality
+reduction and data representation. \emph{Neural Computation} 15(6), 2003.
+\bibitem{belkin2008towards} M.~Belkin, P.~Niyogi. Towards a theoretical foundation for
+Laplacian-based manifold methods. \emph{JCSS} 74(8), 2008.
+\bibitem{he2003lpp} X.~He, P.~Niyogi. Locality preserving projections. \emph{NeurIPS},
+2003.
+\bibitem{barshan2011spca} E.~Barshan, A.~Ghodsi, Z.~Azimifar, M.~Zolghadri Jahromi.
+Supervised principal component analysis. \emph{Pattern Recognition} 44(7), 2011.
+\bibitem{fan1949} K.~Fan. On a theorem of Weyl concerning eigenvalues of linear
+transformations~I. \emph{PNAS} 35, 1949.
+\bibitem{bengio2004oos} Y.~Bengio et al. Out-of-sample extensions for LLE, Isomap, MDS,
+eigenmaps, and spectral clustering. \emph{NeurIPS}, 2004.
+\bibitem{sriperumbudur2010} B.~Sriperumbudur, A.~Gretton, K.~Fukumizu, B.~Sch\"olkopf,
+G.~Lanckriet. Hilbert space embeddings and metrics on probability measures.
+\emph{JMLR} 11, 2010.
+\bibitem{steinwart2008book} I.~Steinwart, A.~Christmann. \emph{Support Vector
+Machines}. Springer, 2008. (Universality/denseness of the Gaussian RKHS.)
+\bibitem{kato1966} T.~Kato. \emph{Perturbation Theory for Linear Operators}. Springer,
+1966.
+\end{thebibliography}
+
+\end{document}
