@@ -95,6 +95,25 @@ New jobs closing the review gaps (all code on `main` once the feature branch is 
   min-digit years (e.g. "year 7 BCE", "Unidentified NB Ruler"); kept identical to the
   original 153 for comparability — a filtered-anchor rerun is an open option.
 
+## T11 — generated-answer dating (2026-07-10, Yarin's idea)
+T10 only probed the ACTIVATIONS under dating prompts; T11 reads the model's actual
+ANSWER: each fragment is shown to the chat LLM ("expert Assyriologist… respond with
+JSON {\"year_bce\": int, \"basis\": …}"), the answer is parsed (thinking/harmony
+channels stripped, JSON → range → "N BCE" → century → bare-int fallbacks; selftest in
+`score_gen_dating.py --selftest`), and scored with the SAME 200 balanced 8×21 draws
+as every probe → directly comparable Spearman. Also logs whether the answer text
+names the true ruler (diacritic-folded) and conditions Spearman on that, separating
+name-lookup dating from style dating. Interpretation grid: probe>answer = linearly
+recoverable but not verbalized; answer>probe = knowledge a linear probe misses; both
+≈ random = strengthens "no timeline".
+- Code: `t11_gen_dating/{generate_dates.py, score_gen_dating.py}` (raw JSONLs
+  gitignored; `results/t11_gen__{model}__{cleaning}.json` committed by the jobs).
+- Inputs: tier0 / maximal / maxking / engtier0 (Thalesian English), ALL capped at
+  300 words (T10 gpt-oss parity → identical inputs across models).
+- Jobs: **J18a** (qwen3 ×4 cleanings, array 0-11, gpu:2), **J18b** (gpt-oss ×4,
+  array 0-3, gpu:8, 768 new tokens). Greedy decoding; Qwen thinking disabled,
+  gpt-oss reasoning_effort=low; resumable (appends to existing JSONL).
+
 ---
 
 ## 1. The thesis question and the current (refined) finding
