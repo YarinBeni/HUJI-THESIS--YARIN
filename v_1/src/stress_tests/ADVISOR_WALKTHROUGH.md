@@ -300,10 +300,11 @@ new k-sparse year-regression arm, × 3 cleanings. Every model's per-k curve hugs
 line in all panels (reg full-k: trained 0.22–0.46 vs random 0.377 tier0); cunei the only
 consistent small edge (0.462). No time-neurons under any cleaning or probe family.
 
-**T10 complete** (`t10_mc_cleanings.csv`): gpt-oss now has maximal/maxking rows (0.31–0.33)
-and qwen has all three cleanings — flat across pv0–pv3 everywhere, and the name-stripped
-cleanings sit BELOW tier0 (~0.28–0.35 vs ~0.39–0.42). One open cell: gpt-oss × tier0
-(extraction failed twice, under diagnosis).
+**T10 complete** (`t10_mc_cleanings.csv`, all 12 model × cleaning cells): flat across
+pv0–pv3 everywhere, and the name-stripped cleanings sit BELOW tier0 (~0.28–0.35 vs
+~0.39–0.42). The final cell (gpt-oss × tier0, mean 0.386–0.417 across variants — the two
+earlier failures were the eager-attention OOM, fixed by gpu:8 + the 300-word cap) matches
+the qwen tier0 band; prompting changes nothing at any scale.
 
 **Translation probe** (`translation_mc.csv`, full 8-model ladder): ORCC → English
 (cuneiformBase-400m, chunked, per-notation prefixes) → embedded with each model → identical MC
