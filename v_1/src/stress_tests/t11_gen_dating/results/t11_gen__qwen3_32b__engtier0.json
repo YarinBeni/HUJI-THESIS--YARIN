@@ -1,0 +1,29 @@
+{
+  "model": "qwen3_32b",
+  "cleaning": "engtier0",
+  "protocol": "generated-answer dating; MC = same 200 balanced 8x21 draws as probes",
+  "full_corpus": {
+    "n_generated": 1202,
+    "n_scoreable": 746,
+    "parse_status_counts": {
+      "json": 757,
+      "declined": 445
+    },
+    "spearman_all": 0.6791299439665007,
+    "mae": 63.361930294906166,
+    "acc@10yr": 0.21715817694369974,
+    "acc@25yr": 0.5683646112600537,
+    "acc@50yr": 0.8096514745308311,
+    "named_true_ruler_rate": 0.6648793565683646,
+    "spearman_when_named": 0.8699339044473526,
+    "spearman_when_unnamed": 0.36016588018435197,
+    "n_named": 496,
+    "n_unnamed": 250
+  },
+  "mc_balanced": {
+    "n_draws_used": 200,
+    "mean_frags_per_draw": 107.39,
+    "spearman_mean": 0.732789767267098,
+    "spearman_std": 0.062441504791578235
+  }
+}
