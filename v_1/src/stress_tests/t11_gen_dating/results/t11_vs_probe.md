@@ -18,8 +18,8 @@ conditioned on the answer text naming the true ruler.
 | qwen3_8b | engtier0 | 0.520±0.07 | 0.416 | 996/1202 | 0.15 | 0.453 | 0.876 (451) | 0.169 (545) |
 | qwen3_32b | tier0 | -0.232±0.26 | 0.381 | 113/1202 | 0.87 | 0.035 | — (4) | 0.008 (109) |
 | qwen3_32b | maximal | — | 0.332 | 18/1202 | 0.98 | 0.000 | — (0) | -0.303 (18) |
-| qwen3_32b | maxking | PENDING | | | | | | |
-| qwen3_32b | engtier0 | PENDING | | | | | | |
+| qwen3_32b | maxking | — | 0.760* | 20/1202 | 0.98 | 0.000 | — (0) | -0.364 (20) |
+| qwen3_32b | engtier0 | 0.733±0.06 | 0.437 | 746/1202 | 0.37 | 0.665 | 0.870 (496) | 0.360 (250) |
 | gpt_oss_120b | tier0 | PENDING | | | | | | |
 | gpt_oss_120b | maximal | PENDING | | | | | | |
 | gpt_oss_120b | maxking | PENDING | | | | | | |
