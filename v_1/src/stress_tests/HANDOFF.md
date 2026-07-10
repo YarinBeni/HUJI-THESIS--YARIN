@@ -114,6 +114,21 @@ recoverable but not verbalized; answer>probe = knowledge a linear probe misses; 
   array 0-3, gpu:8, 768 new tokens). Greedy decoding; Qwen thinking disabled,
   gpt-oss reasoning_effort=low; resumable (appends to existing JSONL).
 
+## E5 — word-shuffle control (2026-07-10)
+Does word ORDER matter to the embedding year signal? Each fragment is word-capped
+FIRST (both variants keep the exact same words), then shuffled (seed 42); the
+shuf + unshuf twins are extracted with identical settings (immune to historical
+extraction-setting mismatch) and probed with the standard balanced MC. If
+delta(unshuf − shuf) ≈ 0, the probe reads bag-of-tokens — TF-IDF-like — not
+composition; the unshuf rows also sanity-check against the historical P1 numbers.
+- Code: `e5_shuffle/{extract_shuffled_acts.py, probe_e5_mc.py}` (reuses T11's
+  `fragment_texts` so the texts match exactly). Acts dirs:
+  `{method}_{shuf|unshuf}{cleaning}_mean` (npz gitignored).
+- Scope: qwen3_8b (300 words / 2048 tokens) + thalesian_cunei400m (120 words /
+  512-token umT5 window) × {tier0, maximal, maxking, engtier0}. Note maximal/
+  maxking texts are ≤~32 words anyway (the maximal truncation filter).
+- Job: **J19** (array 0-1, gpu:2); commits `e5_shuffle/results/e5_mc__<model>.json`.
+
 ---
 
 ## 1. The thesis question and the current (refined) finding
