@@ -307,8 +307,34 @@ def e5():
            "shuf_best_layer", "delta_pls_spearman", "delta_ridge_spearman"], rows)
 
 
+def p8():
+    ORDER8 = ["tfidf"] + ORDER
+    rows = []
+    for fp in sorted(ST.glob("p8_lambda_probe/results/p8_lambda__*.json"),
+                     key=lambda p: (ORDER8.index(p.stem.split("__")[1])
+                                    if p.stem.split("__")[1] in ORDER8 else 99)):
+        d = jload(fp); m = d["method"]
+        for cl, blk in d.get("cleanings", {}).items():
+            if not blk or blk.get("missing") or blk.get("skipped"):
+                continue
+            if "curves" in blk:                    # run_acts schema: best layers
+                variants = blk["curves"]
+            else:                                  # tfidf schema: k blocks
+                variants = {kk: blk[kk]["per_lambda"] for kk in blk
+                            if kk.startswith("k") and blk[kk].get("per_lambda")}
+            for var, pl in variants.items():
+                for lam in sorted(pl, key=float):
+                    v = pl[lam]
+                    rows.append([m, cl, var, lam,
+                                 okf(v.get("align1_mean")), okf(v.get("align1_std")),
+                                 okf(v.get("pred_mean")), okf(v.get("pred_std"))])
+    write("p8_lambda.csv",
+          ["model", "cleaning", "variant", "lambda", "align1_mean", "align1_std",
+           "pred_mean", "pred_std"], rows)
+
+
 if __name__ == "__main__":
     t9(); p2(); p1_gkf(); p1_mc(); p1_maxking(); p3(); p7(); t10()
     p2_geo_mc(); p3_pls(); p7_v2(); t10_cleanings(); translation()
-    t11(); e5()
+    t11(); e5(); p8()
     print("done ->", OUT)

@@ -114,6 +114,30 @@ recoverable but not verbalized; answer>probe = knowledge a linear probe misses; 
   array 0-3, gpu:8, 768 new tokens). Greedy decoding; Qwen thinking disabled,
   gpt-oss reasoning_effort=low; resumable (appends to existing JSONL).
 
+## P8 — supervision-dial spectral probe (2026-07-10, Yarin's kernel-probe idea)
+Implements §4 of Yarin's June-2026 working note ("Supervised Nonlinear Dimension
+Reduction for Manifold-Structured Chronology"): ONE generalized eigenproblem
+`[(1-λ)HK_yH − λL]z = γDz` whose dial λ∈[0,1] interpolates pure manifold geometry
+(λ=1 = Laplacian eigenmaps, embedding never sees the year) and pure supervised
+kernel dependence (λ=0 = HSIC/supervised-PCA with an RBF year kernel). The λ-curve
+answers "how much supervision is needed to align the embedding with chronology" in
+one figure. Out-of-sample = LPP linear projection (train-fitted PCA→V), so held-out
+rulers are leakage-free; protocol = the SAME 200 balanced draws × GroupKFold-by-ruler.
+Readouts: `align1` = |Spearman(leading coord, y)| held-out; `pred` = ridge-on-Z₃.
+Theory + references in `p8_lambda_probe/MATH_NOTES.md` (Gretton HSIC, Belkin–Niyogi,
+He–Niyogi LPP, Barshan SPCA, Ky Fan). Selftest (`lambda_probe.py --selftest`):
+y-on-dominant-axis ⇒ flat/high; y-on-transverse-axis ⇒ λ=1 end collapses (0.11 vs
+0.97 at λ=0) — the dial demonstrably works.
+- Code: `p8_lambda_probe/{lambda_probe.py, run_tfidf_local.py, run_acts.py,
+  plot_lambda_curves.py}`; results → `p8_lambda_probe/results/p8_lambda__*.json`,
+  figures `fig_p8_lambda__*.png`.
+- TF-IDF arm runs LOCALLY (char_wb(2,5) + SVD-512, k∈{5,10,20}, d=3).
+- **J20** sbatch: all 9 methods × {tier0, maximal} on stored mean acts (CPU, per-layer
+  sweep, best layer surfaced at λ=1-align1 and λ=0-pred; resumable — skips done JSONs).
+- Expected outcome given the nulls so far: "flat and low ≈ random" on Akkadian; the
+  interesting cells are engtier0-style (not in scope yet) and whether ANY trained model
+  separates from random at the λ=0 end. G-KPLS (§2 of the note) is the parked sibling.
+
 ## E5 — word-shuffle control (2026-07-10)
 Does word ORDER matter to the embedding year signal? Each fragment is word-capped
 FIRST (both variants keep the exact same words), then shuffled (seed 42); the
