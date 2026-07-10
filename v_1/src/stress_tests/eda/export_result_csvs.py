@@ -255,7 +255,60 @@ def translation():
                                  "lon_pls_spearman", "lon_ridge_spearman"], rows)
 
 
+def t11():
+    CLEANINGS = ["tier0", "maximal", "maxking", "engtier0"]
+    rows = []
+    for fp in sorted(ST.glob("t11_gen_dating/results/t11_gen__*.json"),
+                     key=lambda p: (mrank(p.stem.split("__")[1]),
+                                    CLEANINGS.index(p.stem.split("__")[2])
+                                    if p.stem.split("__")[2] in CLEANINGS else 99)):
+        d = jload(fp); f = d["full_corpus"]; mc = d["mc_balanced"]
+        sc = f.get("parse_status_counts", {})
+        n_gen = f.get("n_generated") or 0
+        declined = sum(sc.get(k, 0) for k in ("declined", "ce_only", "unparsed"))
+        rows.append([d["model"], d["cleaning"],
+                     okf(mc.get("spearman_mean")), okf(mc.get("spearman_std")),
+                     okf(mc.get("n_draws_used")), okf(mc.get("mean_frags_per_draw")),
+                     okf(f.get("spearman_all")), okf(f.get("n_scoreable")), n_gen,
+                     okf(f["n_scoreable"] / n_gen if n_gen else None),
+                     okf(declined / n_gen if n_gen else None),
+                     okf(f.get("mae")), okf(f.get("acc@25yr")), okf(f.get("acc@50yr")),
+                     okf(f.get("named_true_ruler_rate")),
+                     okf(f.get("spearman_when_named")), okf(f.get("n_named")),
+                     okf(f.get("spearman_when_unnamed")), okf(f.get("n_unnamed"))])
+    write("t11_gen_dating.csv",
+          ["model", "cleaning", "mc_spearman_mean", "mc_spearman_std", "mc_n_draws",
+           "mc_frags_per_draw", "spearman_all", "n_scoreable", "n_generated",
+           "scoreable_rate", "decline_rate", "mae", "acc@25yr", "acc@50yr",
+           "named_true_ruler_rate", "spearman_when_named", "n_named",
+           "spearman_when_unnamed", "n_unnamed"], rows)
+
+
+def e5():
+    rows = []
+    for fp in sorted(ST.glob("e5_shuffle/results/e5_mc__*.json"),
+                     key=lambda p: mrank(p.stem.split("__")[1])):
+        d = jload(fp); m = d["method"]
+        for cl, blk in d.get("cleanings", {}).items():
+            u, s = blk.get("unshuf", {}), blk.get("shuf", {})
+            ub, sb = u.get("best"), s.get("best")
+            if not (ub and sb):
+                rows.append([m, cl] + [""] * 10); continue
+            rows.append([m, cl,
+                         okf(ub.get("spearman_mean")), okf(ub.get("spearman_std")),
+                         okf(ub.get("ridge", {}).get("spearman_mean")), okf(u.get("best_layer")),
+                         okf(sb.get("spearman_mean")), okf(sb.get("spearman_std")),
+                         okf(sb.get("ridge", {}).get("spearman_mean")), okf(s.get("best_layer")),
+                         okf(blk.get("delta_spearman")), okf(blk.get("delta_ridge"))])
+    rows.sort(key=lambda r: (mrank(r[0]), r[1]))
+    write("e5_shuffle.csv",
+          ["model", "cleaning", "unshuf_pls_spearman", "unshuf_pls_std", "unshuf_ridge_spearman",
+           "unshuf_best_layer", "shuf_pls_spearman", "shuf_pls_std", "shuf_ridge_spearman",
+           "shuf_best_layer", "delta_pls_spearman", "delta_ridge_spearman"], rows)
+
+
 if __name__ == "__main__":
     t9(); p2(); p1_gkf(); p1_mc(); p1_maxking(); p3(); p7(); t10()
     p2_geo_mc(); p3_pls(); p7_v2(); t10_cleanings(); translation()
+    t11(); e5()
     print("done ->", OUT)
