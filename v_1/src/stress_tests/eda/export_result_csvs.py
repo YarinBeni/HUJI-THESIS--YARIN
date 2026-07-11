@@ -352,8 +352,35 @@ def p9():
            "rbfkpls_spearman", "rbfkpls_a", "krr_geo_spearman", "krr_geo_lam"], rows)
 
 
+def t12():
+    ORDER12 = ["qwen25_7b"] + ORDER
+    rows = []
+    for fp in sorted(ST.glob("t12_forced_dating/results/t12*__*.json"),
+                     key=lambda p: (ORDER12.index(p.stem.split("__")[1])
+                                    if p.stem.split("__")[1] in ORDER12 else 99,
+                                    p.stem.split("__")[2], p.stem.split("__")[3])):
+        d = jload(fp); f = d["full_corpus"]; mc = d["mc_balanced"]
+        n = f.get("n_generated") or 0
+        rows.append([d["model"], d["cleaning"], d["variant"],
+                     "forced" if d.get("forced") else "unforced_ref",
+                     okf(mc.get("spearman_mean")), okf(mc.get("spearman_std")),
+                     okf(f.get("spearman_all")), okf(f.get("n_scoreable")), n,
+                     okf(f["n_scoreable"] / n if n else None),
+                     okf(f.get("mae")), okf(f.get("acc@25yr")), okf(f.get("acc@50yr")),
+                     okf(f.get("named_true_ruler_rate")),
+                     okf(f.get("spearman_when_named")), okf(f.get("spearman_when_unnamed")),
+                     okf(f.get("ruler_answer_rate")), okf(f.get("ruler_acc_when_answered")),
+                     okf(f.get("ruler_acc_overall"))])
+    write("t12_forced_dating.csv",
+          ["model", "cleaning", "variant", "mode", "mc_spearman_mean", "mc_spearman_std",
+           "spearman_all", "n_scoreable", "n_generated", "scoreable_rate", "mae",
+           "acc@25yr", "acc@50yr", "named_true_ruler_rate", "spearman_when_named",
+           "spearman_when_unnamed", "ruler_answer_rate", "ruler_acc_when_answered",
+           "ruler_acc_overall"], rows)
+
+
 if __name__ == "__main__":
     t9(); p2(); p1_gkf(); p1_mc(); p1_maxking(); p3(); p7(); t10()
     p2_geo_mc(); p3_pls(); p7_v2(); t10_cleanings(); translation()
-    t11(); e5(); p8(); p9()
+    t11(); e5(); p8(); p9(); t12()
     print("done ->", OUT)

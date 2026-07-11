@@ -168,6 +168,21 @@ counterpart of the translation-probe result. 1.7B declines 94–100%; 32B declin
 on Akkadian (answer-rate collapses with scale? gpt-oss will tell). Pending: 32B
 maxking/engtier0, gpt-oss ×4 (12678), E5 (12679).
 
+## T12 — FORCED-answer dating across prompt variants (2026-07-11, Yarin's ask)
+T11's models could answer {"year_bce": null} and mostly did on Akkadian. T12 removes the
+escape (forced single best guess, ruler + year) and runs all four T10 prompt variants
+(pv0 bare / pv1 expert / pv2 few-shot / pv3 CoT; templates reused verbatim from
+round2_phase1b/prompts with the null-escape sentence replaced; pv2 keeps the identical
+leakage-free few-shot pool, seed 42). Scoring = T11's parse ladder + balanced MC + a new
+RULER-identification accuracy (pv_parse.normalize_ruler + folded fallback).
+- Code: `t12_forced_dating/{generate_forced.py, score_forced.py}`; results →
+  `results/t12f__{model}__{cleaning}__{pv}.json`; CSV `t12_forced_dating.csv`.
+- **J22** sbatch: qwen3 {1.7B,8B,32B} × {tier0, engtier0} × pv0–3, gpu:4, resumable.
+- Reference rows committed NOW: the phase-1b Qwen2.5-7B UNforced direct answers rescored
+  through the same pipeline (`--phase1b` → t12ref__qwen25_7b__tier0__pv*.json): pv0 0.02,
+  pv1 −0.16 (anti-correlated), **pv2 +0.23 (few-shot anchors the range)**, pv3 0.04;
+  ruler acc 0.19–0.25 — the pv2 lift is the thing to watch on the qwen3 ladder.
+
 ## E5 — word-shuffle control (2026-07-10)
 Does word ORDER matter to the embedding year signal? Each fragment is word-capped
 FIRST (both variants keep the exact same words), then shuffled (seed 42); the
