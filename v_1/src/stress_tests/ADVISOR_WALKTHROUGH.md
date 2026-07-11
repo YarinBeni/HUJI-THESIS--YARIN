@@ -338,13 +338,13 @@ The unshuffled twins reproduce the historical P1b numbers exactly (cunei 0.377/0
 The embedding year-signal is a **bag of tokens**, TF-IDF-like, not composition — even for
 the cuneiform-domain translation model.
 
-**P9 — G-KPLS** (`p9_gkpls/`, deck slide 23, all 9 methods × 4 cleanings): kernel PLS on
+**P9 — G-KPLS** (`p9_gkpls/`, deck slide 23, all 9 methods × 4 cleanings; arms G-KPLS / RBF-KPLS / KRR-on-K_G, a ∈ {1,2,3,5}, k=10 cosine-equivalent NN graph): kernel PLS on
 the geodesic Gram K_G (Isomap's kernel), Nyström out-of-sample, vs RBF-KPLS and KRR-on-K_G.
 **G-KPLS ≤ RBF-KPLS in 30/34 cells** — curvature/geodesic structure does no work beyond a
 plain kernel (the note's "soften 'smooth curved timeline' to 'low-dimensional nonlinear
 structure'" outcome) — and **random matches trained on tier0** (0.330 vs 0.327–0.333).
 
-**P8 — the supervision-dial spectral probe** (`p8_lambda_probe/`, deck slide 23): one
+**P8 — the supervision-dial spectral probe** (`p8_lambda_probe/`, deck slide 24): one
 generalized eigenproblem interpolating Laplacian eigenmaps (λ=1, pure geometry) and
 HSIC-supervised projection (λ=0); formal proofs in `correctness.tex`. The λ-curve is
 **flat and low for every trained model**, and the **random net has the highest λ=1
