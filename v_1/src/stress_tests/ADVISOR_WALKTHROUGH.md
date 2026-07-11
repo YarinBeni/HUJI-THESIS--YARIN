@@ -347,9 +347,10 @@ structure'" outcome) — and **random matches trained on tier0** (0.330 vs 0.327
 **P8 — the supervision-dial spectral probe** (`p8_lambda_probe/`, deck slide 24): one
 generalized eigenproblem interpolating Laplacian eigenmaps (λ=1, pure geometry) and
 HSIC-supervised projection (λ=0); formal proofs in `correctness.tex`. The λ-curve is
-**flat and low for every trained model**, and the **random net has the highest λ=1
-(pure-geometry) alignment in every cleaning** (0.29–0.37 vs trained 0.16–0.32); TF-IDF
-flat too. The one supervised lift: Qwen3-32B on English (0.21→0.32). So even a probe
+**flat and low for every trained model**; at the pure-geometry end (λ=1) **random beats every
+trained model except Thalesian-cunei** (tier0 0.319 vs 0.287, engtier0 0.376 vs 0.370; on
+maximal/maxking random is top outright); TF-IDF flat too. The one dial-position win for
+supervision: Qwen3-32B on English (0.337 at λ=0.7 vs 0.208 at λ=1). So even a probe
 built to find a *curved, unsupervised* timeline finds nothing on Akkadian that a random
 network doesn't have — the strongest geometry-side null in the suite.
 
