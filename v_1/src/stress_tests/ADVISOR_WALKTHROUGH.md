@@ -317,6 +317,39 @@ eng_maximal mostly ≈ random (0.26–0.34) — as predicted from its hallucinat
 ("Ashurnasirpal II"; `eda/translation_fidelity.py`) — with one curiosity: Thalesian-cunei on
 eng_maximal (0.418) beats its own eng_tier0. Geography lat: cunei again top (0.701/0.719).
 
+## 6.6 The second wave (2026-07-10/11) — behavior, word order, and geometry
+
+**T11 — generated-answer dating** (`t11_gen_dating/`, deck slide 21, 12/16 cells; gpt-oss
+pending): ask the chat model for the fragment's year (JSON), score the ANSWER on the same
+200 balanced draws. On Akkadian, answers are refused (1.7B: 94–100% decline; 32B: 87–98%)
+or **anti-correlated** (8B answers 96% with MC ρ = −0.27 and MAE ≈ 286 yr — consistent
+with a "cuneiform+Babylon ⇒ Hammurabi-era" prior that dates the *latest* (NB) texts
+*oldest*). On the English translation the answer **beats every activation probe and scales**:
+8B 0.52, 32B **0.733** (probe 0.44); 8B's ρ = 0.876 when the answer names the true ruler
+vs 0.169 when not. The behavioral channel confirms the representational story: the
+knowledge is name-mediated and English-resident.
+
+**E5 — word-shuffle control** (`e5_shuffle/`, deck slide 22, qwen3-8B; cunei twin pending):
+word-cap first, shuffle (seed 42), extract shuf/unshuf twins identically, probe both.
+**Δ(unshuf−shuf) ≈ 0** on tier0/maxking/engtier0 (+0.006/+0.014/+0.013); the one larger
+PLS delta (maximal +0.062) is contradicted by its Ridge arm (−0.104) — the artifact
+signature. The embedding year-signal is a **bag of tokens**, TF-IDF-like, not composition.
+
+**P9 — G-KPLS** (`p9_gkpls/`, deck slide 23, all 9 methods × 4 cleanings): kernel PLS on
+the geodesic Gram K_G (Isomap's kernel), Nyström out-of-sample, vs RBF-KPLS and KRR-on-K_G.
+**G-KPLS ≤ RBF-KPLS in 30/34 cells** — curvature/geodesic structure does no work beyond a
+plain kernel (the note's "soften 'smooth curved timeline' to 'low-dimensional nonlinear
+structure'" outcome) — and **random matches trained on tier0** (0.330 vs 0.327–0.333).
+
+**P8 — the supervision-dial spectral probe** (`p8_lambda_probe/`, deck slide 23): one
+generalized eigenproblem interpolating Laplacian eigenmaps (λ=1, pure geometry) and
+HSIC-supervised projection (λ=0); formal proofs in `correctness.tex`. The λ-curve is
+**flat and low for every trained model**, and the **random net has the highest λ=1
+(pure-geometry) alignment in every cleaning** (0.29–0.37 vs trained 0.16–0.32); TF-IDF
+flat too. The one supervised lift: Qwen3-32B on English (0.21→0.32). So even a probe
+built to find a *curved, unsupervised* timeline finds nothing on Akkadian that a random
+network doesn't have — the strongest geometry-side null in the suite.
+
 ## 7. The cross-cutting patterns (what to say when they ask "so what?")
 
 1. **Trained − random ≈ 0 everywhere on time.** Across ~60 model×site×experiment comparisons the
