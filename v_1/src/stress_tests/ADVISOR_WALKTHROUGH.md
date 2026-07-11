@@ -329,11 +329,14 @@ with a "cuneiform+Babylon ⇒ Hammurabi-era" prior that dates the *latest* (NB) 
 vs 0.169 when not. The behavioral channel confirms the representational story: the
 knowledge is name-mediated and English-resident.
 
-**E5 — word-shuffle control** (`e5_shuffle/`, deck slide 22, qwen3-8B; cunei twin pending):
-word-cap first, shuffle (seed 42), extract shuf/unshuf twins identically, probe both.
-**Δ(unshuf−shuf) ≈ 0** on tier0/maxking/engtier0 (+0.006/+0.014/+0.013); the one larger
-PLS delta (maximal +0.062) is contradicted by its Ridge arm (−0.104) — the artifact
-signature. The embedding year-signal is a **bag of tokens**, TF-IDF-like, not composition.
+**E5 — word-shuffle control** (`e5_shuffle/`, deck slide 22; qwen3-8B + thal-cunei-400m,
+COMPLETE): word-cap first, shuffle (seed 42), extract shuf/unshuf twins identically, probe
+both. **Δ(unshuf−shuf) ≈ 0 across both models and all four cleanings** (PLS deltas
+−0.006…+0.062); the two larger deltas each have a disagreeing partner arm (8B maximal PLS
++0.062 / Ridge −0.104; cunei tier0 Ridge +0.148 / PLS +0.017) — the artifact signature.
+The unshuffled twins reproduce the historical P1b numbers exactly (cunei 0.377/0.390).
+The embedding year-signal is a **bag of tokens**, TF-IDF-like, not composition — even for
+the cuneiform-domain translation model.
 
 **P9 — G-KPLS** (`p9_gkpls/`, deck slide 23, all 9 methods × 4 cleanings): kernel PLS on
 the geodesic Gram K_G (Isomap's kernel), Nyström out-of-sample, vs RBF-KPLS and KRR-on-K_G.
