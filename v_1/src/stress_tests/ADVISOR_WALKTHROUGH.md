@@ -319,15 +319,16 @@ eng_maximal (0.418) beats its own eng_tier0. Geography lat: cunei again top (0.7
 
 ## 6.6 The second wave (2026-07-10/11) — behavior, word order, and geometry
 
-**T11 — generated-answer dating** (`t11_gen_dating/`, deck slide 21, 12/16 cells; gpt-oss
-pending): ask the chat model for the fragment's year (JSON), score the ANSWER on the same
+**T11 — generated-answer dating** (`t11_gen_dating/`, deck slide 21, COMPLETE 16/16): ask the chat model for the fragment's year (JSON), score the ANSWER on the same
 200 balanced draws. On Akkadian, answers are refused (1.7B: 94–100% decline; 32B: 87–98%)
 or **anti-correlated** (8B answers 96% with MC ρ = −0.27 and MAE ≈ 286 yr — consistent
 with a "cuneiform+Babylon ⇒ Hammurabi-era" prior that dates the *latest* (NB) texts
-*oldest*). On the English translation the answer **beats every activation probe and scales**:
-8B 0.52, 32B **0.733** (probe 0.44); 8B's ρ = 0.876 when the answer names the true ruler
-vs 0.169 when not. The behavioral channel confirms the representational story: the
-knowledge is name-mediated and English-resident.
+*oldest*). gpt-oss-120B is the third mode: it COMMITS on 52–73% of Akkadian
+fragments and lands at ρ ≈ 0 (−0.02…+0.03) — except the ≈5% where it names the true ruler
+(ρ 0.66–0.90 on those). On the English translation every model ≥8B beats its activation
+probe: 8B 0.52, 32B **0.733**, gpt-oss 0.537 (probes 0.37–0.44); peak at 32B, not monotone
+in scale. ρ_named = 0.85–0.88 vs ρ_unnamed 0.16–0.36 across models. The behavioral channel
+confirms the representational story: the knowledge is name-mediated and English-resident.
 
 **E5 — word-shuffle control** (`e5_shuffle/`, deck slide 22; qwen3-8B + thal-cunei-400m,
 COMPLETE): word-cap first, shuffle (seed 42), extract shuf/unshuf twins identically, probe
