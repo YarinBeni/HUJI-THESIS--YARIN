@@ -1,0 +1,29 @@
+{
+  "model": "gpt_oss_120b",
+  "cleaning": "maxking",
+  "protocol": "generated-answer dating; MC = same 200 balanced 8x21 draws as probes",
+  "full_corpus": {
+    "n_generated": 1202,
+    "n_scoreable": 680,
+    "parse_status_counts": {
+      "json": 693,
+      "declined": 509
+    },
+    "spearman_all": -0.0626313545530586,
+    "mae": 727.5558823529411,
+    "acc@10yr": 0.022058823529411766,
+    "acc@25yr": 0.08823529411764706,
+    "acc@50yr": 0.16911764705882354,
+    "named_true_ruler_rate": 0.051470588235294115,
+    "spearman_when_named": 0.9030660623129088,
+    "spearman_when_unnamed": -0.14185415567855053,
+    "n_named": 35,
+    "n_unnamed": 645
+  },
+  "mc_balanced": {
+    "n_draws_used": 200,
+    "mean_frags_per_draw": 102.33,
+    "spearman_mean": -0.006859830086080614,
+    "spearman_std": 0.07485366043631823
+  }
+}
