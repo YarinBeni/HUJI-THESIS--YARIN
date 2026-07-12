@@ -355,6 +355,19 @@ supervision: Qwen3-32B on English (0.337 at λ=0.7 vs 0.208 at λ=1). So even a 
 built to find a *curved, unsupervised* timeline finds nothing on Akkadian that a random
 network doesn't have — the strongest geometry-side null in the suite.
 
+**T12 — forced dating across prompt variants** (`t12_forced_dating/`, deck slide 25;
+1.7B complete, 8B 7/8, 32B pending): remove T11's null-escape, force a committed guess
+(ruler + year) under pv0–pv3. Answer rates jump to 94–99% — and Akkadian stays locked:
+every variant is null-or-inverted (8B keeps its anti-correlation on pv0/pv1; the best
+Akkadian cell in the whole grid is pv2 few-shot at +0.11 = range anchoring, still below
+the 0.35 activation probes), with ruler-ID accuracy 0.11–0.28. On English, forcing
+REVEALS the small model: 1.7B (94% refusal in T11) scores 0.31–0.44 with ruler-ID
+0.71–0.84; 8B forced (0.43–0.48) sits slightly BELOW its unforced 0.52 (self-selection
+was precision). Reference row: the phase-1b Qwen2.5-7B unforced answers rescored through
+the same pipeline. Behavioral verdict so far: neither permission nor prompting style
+unlocks Akkadian dating — the capability boundary is the script/language, not the
+elicitation.
+
 ## 7. The cross-cutting patterns (what to say when they ask "so what?")
 
 1. **Trained − random ≈ 0 everywhere on time.** Across ~60 model×site×experiment comparisons the
