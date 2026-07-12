@@ -330,14 +330,17 @@ probe: 8B 0.52, 32B **0.733**, gpt-oss 0.537 (probes 0.37–0.44); peak at 32B, 
 in scale. ρ_named = 0.85–0.88 vs ρ_unnamed 0.16–0.36 across models. The behavioral channel
 confirms the representational story: the knowledge is name-mediated and English-resident.
 
-**E5 — word-shuffle control** (`e5_shuffle/`, deck slide 22; qwen3-8B + thal-cunei-400m,
-COMPLETE): word-cap first, shuffle (seed 42), extract shuf/unshuf twins identically, probe
+**E5 — word-shuffle control** (`e5_shuffle/`, deck slide 22; SEVEN models — full ladder
+minus random (running) and MLM (no extractor)): word-cap first, shuffle (seed 42), extract shuf/unshuf twins identically, probe
 both. **Δ(unshuf−shuf) ≈ 0 across both models and all four cleanings** (PLS deltas
 −0.006…+0.062); the two larger deltas each have a disagreeing partner arm (8B maximal PLS
 +0.062 / Ridge −0.104; cunei tier0 Ridge +0.148 / PLS +0.017) — the artifact signature.
 The unshuffled twins reproduce the historical P1b numbers exactly (cunei 0.377/0.390).
-The embedding year-signal is a **bag of tokens**, TF-IDF-like, not composition — even for
-the cuneiform-domain translation model.
+The embedding year-signal is a **bag of tokens**, TF-IDF-like, not composition — at 1.7B
+and at 120B alike (Δ range across all 28 cells: −0.015…+0.062). Mechanistic footnote: on
+maximal/maxking the encoders' best layer is L0, the embedding layer, where mean-pooling is
+*provably* permutation-invariant (Δ = 0 to 1e-5) — the probe's signal never leaves the
+lexicon.
 
 **P9 — G-KPLS** (`p9_gkpls/`, deck slide 23, all 9 methods × 4 cleanings; arms G-KPLS / RBF-KPLS / KRR-on-K_G, a ∈ {1,2,3,5}, k=10 cosine-equivalent NN graph): kernel PLS on
 the geodesic Gram K_G (Isomap's kernel), Nyström out-of-sample, vs RBF-KPLS and KRR-on-K_G.
