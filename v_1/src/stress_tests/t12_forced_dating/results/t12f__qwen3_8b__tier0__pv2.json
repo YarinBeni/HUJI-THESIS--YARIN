@@ -1,0 +1,32 @@
+{
+  "model": "qwen3_8b",
+  "cleaning": "tier0",
+  "variant": "pv2",
+  "forced": true,
+  "protocol": "forced generated-answer dating (pv2); MC = same 200 draws",
+  "full_corpus": {
+    "n_generated": 1202,
+    "n_scoreable": 1193,
+    "parse_status_counts": {
+      "json": 1202
+    },
+    "spearman_all": 0.10587807055261701,
+    "mae": 109.81642917015927,
+    "acc@25yr": 0.2129086336965633,
+    "acc@50yr": 0.3076278290025147,
+    "named_true_ruler_rate": 0.12824811399832356,
+    "spearman_when_named": 0.989607326914413,
+    "spearman_when_unnamed": -0.013040749071833176,
+    "n_named": 153,
+    "n_unnamed": 1040,
+    "ruler_answer_rate": 0.9384359400998337,
+    "ruler_acc_when_answered": 0.1196808510638298,
+    "ruler_acc_overall": 0.11231281198003328
+  },
+  "mc_balanced": {
+    "n_draws_used": 200,
+    "mean_frags_per_draw": 168.0,
+    "spearman_mean": 0.11215798867386731,
+    "spearman_std": 0.06759239393220834
+  }
+}
