@@ -110,7 +110,8 @@ def score_records(recs, model, cleaning, variant, corpus, draws, order,
     mc = {"n_draws_used": len(sps),
           "mean_frags_per_draw": float(np.mean(taken)) if taken else 0.0,
           "spearman_mean": float(np.mean(sps)) if sps else float("nan"),
-          "spearman_std": float(np.std(sps)) if sps else float("nan")}
+          "spearman_std": float(np.std(sps)) if sps else float("nan"),
+          "per_draw_spearman": [round(float(x), 4) for x in sps]}
 
     out = {"model": model, "cleaning": cleaning, "variant": variant,
            "forced": not tag, "protocol":

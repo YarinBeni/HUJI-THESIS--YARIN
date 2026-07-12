@@ -71,7 +71,12 @@ def mc_year_probe(X, y, g, draw_rows_list, ks=PLS_KS, n_splits=5):
     rsp_m, rsp_s = _agg(ridge["sp"])
     out = {"n_draws_used": used, "best_k": int(best_k), "per_k": per_k,
            "ridge": {"spearman_mean": rsp_m, "spearman_std": rsp_s,
-                     "mae_mean": _agg(ridge["mae"])[0], "r2_mean": _agg(ridge["r2"])[0]}}
+                     "mae_mean": _agg(ridge["mae"])[0], "r2_mean": _agg(ridge["r2"])[0],
+                     "per_draw_spearman": [round(float(x), 4) for x in ridge["sp"]]},
+           # per-draw series at best k: draws are SHARED across models, so two
+           # runs' series are PAIRED — test differences with
+           # eda/significance_mc.py, not by eyeballing mean +- std overlap.
+           "per_draw_spearman": [round(float(x), 4) for x in perk[int(best_k)]["sp"]]}
     out.update(per_k[best_k])   # flat best-k PLS keys (back-compat with printers)
     return out
 
