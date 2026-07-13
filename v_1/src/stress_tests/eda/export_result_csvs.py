@@ -370,13 +370,14 @@ def t12():
                      okf(f.get("named_true_ruler_rate")),
                      okf(f.get("spearman_when_named")), okf(f.get("spearman_when_unnamed")),
                      okf(f.get("ruler_answer_rate")), okf(f.get("ruler_acc_when_answered")),
-                     okf(f.get("ruler_acc_overall"))])
+                     okf(f.get("ruler_acc_overall")),
+                     okf(f.get("ruler_macro_f1_canon8")), okf(f.get("n_canon8"))])
     write("t12_forced_dating.csv",
           ["model", "cleaning", "variant", "mode", "mc_spearman_mean", "mc_spearman_std",
            "spearman_all", "n_scoreable", "n_generated", "scoreable_rate", "mae",
            "acc@25yr", "acc@50yr", "named_true_ruler_rate", "spearman_when_named",
            "spearman_when_unnamed", "ruler_answer_rate", "ruler_acc_when_answered",
-           "ruler_acc_overall"], rows)
+           "ruler_acc_overall", "ruler_macro_f1_canon8", "n_canon8"], rows)
 
 
 if __name__ == "__main__":
