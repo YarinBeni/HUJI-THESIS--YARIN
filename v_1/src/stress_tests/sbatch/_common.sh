@@ -25,6 +25,11 @@ GIT_LOCK="${GIT_LOCK:-$HOME/.hujithesis_git.lock}"
 _git_abort_inflight() {
     git rebase --abort 2>/dev/null || true
     git merge  --abort 2>/dev/null || true
+    # a CORRUPT rebase state (job killed mid-rebase) survives a failed --abort
+    # and then blocks every future rebase with "there is already a rebase-merge
+    # directory" (seen: J22b/J22c, jobs 12743/12744). We run under the git lock,
+    # so any rebase dir still present here is stale — remove it outright.
+    rm -rf .git/rebase-merge .git/rebase-apply 2>/dev/null || true
     # drop a stale lock left by a killed job (only if clearly not in active use)
     find .git -maxdepth 1 -name index.lock -mmin +2 -delete 2>/dev/null || true
 }
