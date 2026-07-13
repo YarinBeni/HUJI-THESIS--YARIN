@@ -37,6 +37,26 @@ from pv_parse import parse_raw_output, normalize_ruler                          
 
 P1B = (_REPO / "v_1/src/linear_probing/results/orcc_round2_phase1b/direct_answers")
 
+CANON8 = ["Ashurbanipal", "Sennacherib", "Esarhaddon", "Sargon II",
+          "Nebuchadnezzar II", "Tiglath-pileser III", "Nabonidus", "Sin-sarru-iskun"]
+
+
+def ruler_macro_f1(pairs):
+    """pairs: (true_canon, pred_canon_or_None) restricted to true in CANON8.
+    Macro-F1 over the 8 canonical ruler classes ('none' predictions count as
+    misses, never as a class)."""
+    if not pairs:
+        return float("nan"), 0
+    f1s = []
+    for c in CANON8:
+        tp = sum(1 for t_, p in pairs if t_ == c and p == c)
+        fp_ = sum(1 for t_, p in pairs if t_ != c and p == c)
+        fn = sum(1 for t_, p in pairs if t_ == c and p != c)
+        prec = tp / (tp + fp_) if tp + fp_ else 0.0
+        rec = tp / (tp + fn) if tp + fn else 0.0
+        f1s.append(2 * prec * rec / (prec + rec) if prec + rec else 0.0)
+    return float(sum(f1s) / len(f1s)), len(pairs)
+
 
 def ruler_correct(parsed_ruler, true_ruler: str) -> bool:
     if not parsed_ruler:
@@ -61,6 +81,7 @@ def score_records(recs, model, cleaning, variant, corpus, draws, order,
     ruler_ok = np.zeros(n, dtype=bool)
     ruler_answered = np.zeros(n, dtype=bool)
     status_counts: dict[str, int] = {}
+    f1_pairs = []
     for r in recs:
         i = pos.get(str(r["fragment_id"]))
         if i is None:
@@ -75,6 +96,9 @@ def score_records(recs, model, cleaning, variant, corpus, draws, order,
         if pr.get("parsed_ruler"):
             ruler_answered[i] = True
             ruler_ok[i] = ruler_correct(pr["parsed_ruler"], str(r["ruler"]))
+        tc = normalize_ruler(str(r["ruler"]))
+        if tc in CANON8:
+            f1_pairs.append((tc, normalize_ruler(pr.get("parsed_ruler")) if pr.get("parsed_ruler") else None))
     true = df["year"].to_numpy(dtype=float)
     rulers = df["ruler"].astype(str).to_numpy()
 
@@ -95,6 +119,8 @@ def score_records(recs, model, cleaning, variant, corpus, draws, order,
         "ruler_acc_when_answered": (float(ruler_ok[ruler_answered].mean())
                                     if ruler_answered.any() else float("nan")),
         "ruler_acc_overall": float(ruler_ok.mean()),
+        "ruler_macro_f1_canon8": ruler_macro_f1(f1_pairs)[0],
+        "n_canon8": ruler_macro_f1(f1_pairs)[1],
     }
 
     dm = np.load(draws)
