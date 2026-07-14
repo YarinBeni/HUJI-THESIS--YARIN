@@ -72,9 +72,10 @@ def fragment_texts(df: pd.DataFrame, cleaning: str, translations_path: Path):
             sp = spellings.get(getattr(row, "ruler", None), [])
             out.append(clean_maximal_keepking(str(row.text_tier0), sp)[0])
         return out, "Akkadian transliteration"
-    if cleaning == "engtier0":
+    if cleaning in ("engtier0", "engmaximal"):
+        col = "eng_tier0" if cleaning == "engtier0" else "eng_maximal"
         tr = pd.read_parquet(translations_path).set_index("fragment_id")
-        eng = tr["eng_tier0"].reindex(df["fragment_id"].astype(str)).fillna("")
+        eng = tr[col].reindex(df["fragment_id"].astype(str)).fillna("")
         return eng.astype(str).tolist(), "English translation"
     raise ValueError(cleaning)
 

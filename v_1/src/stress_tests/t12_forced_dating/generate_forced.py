@@ -44,7 +44,7 @@ from run_pv import select_fewshot_examples, fill_fewshot_template               
 PROMPTS_DIR = (_REPO / "v_1/src/linear_probing/results/orcc_round2_phase1b/prompts")
 BAL = _REPO / "v_1/src/linear_probing/results/orcc_round2_phase0/balanced_subset"
 VARIANTS = ["pv0", "pv1", "pv2", "pv3"]
-CLEANINGS = ["tier0", "maximal", "maxking", "engtier0"]
+CLEANINGS = ["tier0", "maximal", "maxking", "engtier0", "engmaximal"]
 
 NULL_ESCAPE = ("If you cannot determine the ruler or year, use null for that "
                "field.")
@@ -58,7 +58,7 @@ PV0_FORCED_TAIL = (
     '{"ruler": "<name>", "year_bce": <positive integer, years BCE>}')
 
 
-def load_forced_template(variant: str, engtier0: bool):
+def load_forced_template(variant: str, english: bool):
     spec = parse_prompt_md(str(PROMPTS_DIR / f"{variant}.md"))
     user, system = spec["user_template"], spec["system_prompt"]
     if variant == "pv0":
@@ -67,7 +67,7 @@ def load_forced_template(variant: str, engtier0: bool):
     else:
         assert NULL_ESCAPE in user, f"{variant}: null-escape sentence drifted"
         user = user.replace(NULL_ESCAPE, FORCED)
-    if engtier0:
+    if english:
         repl = [("Akkadian royal inscription in transliteration",
                  "Mesopotamian royal inscription in English translation"),
                 ("transliterated cuneiform texts in standard romanized notation",
@@ -79,8 +79,8 @@ def load_forced_template(variant: str, engtier0: bool):
     return system, user
 
 
-def engify_examples(examples, translations_path):
-    tr = pd.read_parquet(translations_path).set_index("fragment_id")["eng_tier0"]
+def engify_examples(examples, translations_path, col="eng_tier0"):
+    tr = pd.read_parquet(translations_path).set_index("fragment_id")[col]
     out = []
     for ex in examples:
         e = dict(ex)
@@ -102,8 +102,8 @@ def run(args):
 
     df = pd.read_parquet(args.corpus)
     texts, _ = fragment_texts(df, args.cleaning, Path(args.translations))
-    system, user_tpl = load_forced_template(args.variant,
-                                            args.cleaning == "engtier0")
+    english = args.cleaning in ("engtier0", "engmaximal")
+    system, user_tpl = load_forced_template(args.variant, english)
 
     tok = AutoTokenizer.from_pretrained(args.model_path, use_fast=True)
     if tok.pad_token is None:
@@ -115,8 +115,9 @@ def run(args):
         fewshot = select_fewshot_examples(
             df, BAL / "draws_matrix.npy", BAL / "corpus_fragment_order.json",
             tok, n_examples=5, truncate_tokens=150, seed=42)
-        if args.cleaning == "engtier0":
-            fewshot = engify_examples(fewshot, args.translations)
+        if english:
+            col = "eng_tier0" if args.cleaning == "engtier0" else "eng_maximal"
+            fewshot = engify_examples(fewshot, args.translations, col)
         user_tpl = fill_fewshot_template(user_tpl, fewshot)
 
     def render(t):

@@ -88,6 +88,9 @@ def run(args):
 
     outdir = Path(args.out); outdir.mkdir(parents=True, exist_ok=True)
     fp = outdir / f"p8_lambda__{args.method}.json"
+    if fp.exists():   # merge: keep cleanings from earlier runs (new run wins on overlap)
+        prev = json.loads(fp.read_text(encoding="utf-8")).get("cleanings", {})
+        out["cleanings"] = {**prev, **out["cleanings"]}
     fp.write_text(json.dumps(out, indent=2), encoding="utf-8")
     print(f"wrote {fp}")
 
