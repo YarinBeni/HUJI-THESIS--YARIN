@@ -1,0 +1,290 @@
+{
+  "method": "tfidf",
+  "protocol": "p9_gkpls_mc",
+  "k_neighbors": 10,
+  "tfidf": "char_wb(2,5), SVD-512 (baseline convention)",
+  "cleanings": {
+    "maximal": {
+      "per_layer": {
+        "0": {
+          "n_draws_used": 200,
+          "k_neighbors": 10,
+          "gkpls": {
+            "per_hyper": {
+              "1": {
+                "spearman_mean": 0.28522866259236274,
+                "spearman_std": 0.0753949755927229
+              },
+              "2": {
+                "spearman_mean": 0.20112478092240302,
+                "spearman_std": 0.08560888471745899
+              },
+              "3": {
+                "spearman_mean": 0.12332311754480503,
+                "spearman_std": 0.09860346210275826
+              },
+              "5": {
+                "spearman_mean": 0.024967584076490957,
+                "spearman_std": 0.10557424714511036
+              }
+            },
+            "best_hyper": "1",
+            "spearman_mean": 0.28522866259236274,
+            "spearman_std": 0.0753949755927229
+          },
+          "rbfkpls": {
+            "per_hyper": {
+              "1": {
+                "spearman_mean": 0.312981514254055,
+                "spearman_std": 0.06854393722771682
+              },
+              "2": {
+                "spearman_mean": 0.25638171070454885,
+                "spearman_std": 0.07568944732777584
+              },
+              "3": {
+                "spearman_mean": 0.27116764967211643,
+                "spearman_std": 0.0807999614891862
+              },
+              "5": {
+                "spearman_mean": 0.25702280605913524,
+                "spearman_std": 0.08508890041573605
+              }
+            },
+            "best_hyper": "1",
+            "spearman_mean": 0.312981514254055,
+            "spearman_std": 0.06854393722771682
+          },
+          "krr_geo": {
+            "per_hyper": {
+              "0.001": {
+                "spearman_mean": 0.051046568721357495,
+                "spearman_std": 0.10387137589582074
+              },
+              "0.01": {
+                "spearman_mean": 0.07459150096063841,
+                "spearman_std": 0.10367715713290794
+              },
+              "0.1": {
+                "spearman_mean": 0.15418978734075553,
+                "spearman_std": 0.0961673140083251
+              }
+            },
+            "best_hyper": "0.1",
+            "spearman_mean": 0.15418978734075553,
+            "spearman_std": 0.0961673140083251
+          }
+        }
+      },
+      "best_layer": 0,
+      "best": {
+        "gkpls": {
+          "per_hyper": {
+            "1": {
+              "spearman_mean": 0.28522866259236274,
+              "spearman_std": 0.0753949755927229
+            },
+            "2": {
+              "spearman_mean": 0.20112478092240302,
+              "spearman_std": 0.08560888471745899
+            },
+            "3": {
+              "spearman_mean": 0.12332311754480503,
+              "spearman_std": 0.09860346210275826
+            },
+            "5": {
+              "spearman_mean": 0.024967584076490957,
+              "spearman_std": 0.10557424714511036
+            }
+          },
+          "best_hyper": "1",
+          "spearman_mean": 0.28522866259236274,
+          "spearman_std": 0.0753949755927229
+        },
+        "rbfkpls": {
+          "per_hyper": {
+            "1": {
+              "spearman_mean": 0.312981514254055,
+              "spearman_std": 0.06854393722771682
+            },
+            "2": {
+              "spearman_mean": 0.25638171070454885,
+              "spearman_std": 0.07568944732777584
+            },
+            "3": {
+              "spearman_mean": 0.27116764967211643,
+              "spearman_std": 0.0807999614891862
+            },
+            "5": {
+              "spearman_mean": 0.25702280605913524,
+              "spearman_std": 0.08508890041573605
+            }
+          },
+          "best_hyper": "1",
+          "spearman_mean": 0.312981514254055,
+          "spearman_std": 0.06854393722771682
+        },
+        "krr_geo": {
+          "per_hyper": {
+            "0.001": {
+              "spearman_mean": 0.051046568721357495,
+              "spearman_std": 0.10387137589582074
+            },
+            "0.01": {
+              "spearman_mean": 0.07459150096063841,
+              "spearman_std": 0.10367715713290794
+            },
+            "0.1": {
+              "spearman_mean": 0.15418978734075553,
+              "spearman_std": 0.0961673140083251
+            }
+          },
+          "best_hyper": "0.1",
+          "spearman_mean": 0.15418978734075553,
+          "spearman_std": 0.0961673140083251
+        }
+      }
+    },
+    "engtier0": {
+      "per_layer": {
+        "0": {
+          "n_draws_used": 200,
+          "k_neighbors": 10,
+          "gkpls": {
+            "per_hyper": {
+              "1": {
+                "spearman_mean": 0.28182054300452986,
+                "spearman_std": 0.07225298813908573
+              },
+              "2": {
+                "spearman_mean": 0.27803072398083273,
+                "spearman_std": 0.09192536106148953
+              },
+              "3": {
+                "spearman_mean": 0.2746360818625075,
+                "spearman_std": 0.10574892546577645
+              },
+              "5": {
+                "spearman_mean": 0.16909563909157158,
+                "spearman_std": 0.12269934647221668
+              }
+            },
+            "best_hyper": "1",
+            "spearman_mean": 0.28182054300452986,
+            "spearman_std": 0.07225298813908573
+          },
+          "rbfkpls": {
+            "per_hyper": {
+              "1": {
+                "spearman_mean": 0.3184908899776777,
+                "spearman_std": 0.06119600919952519
+              },
+              "2": {
+                "spearman_mean": 0.27714779556315045,
+                "spearman_std": 0.07812519151379158
+              },
+              "3": {
+                "spearman_mean": 0.35443725920043456,
+                "spearman_std": 0.08077166287239476
+              },
+              "5": {
+                "spearman_mean": 0.3497518665612839,
+                "spearman_std": 0.08217031245783414
+              }
+            },
+            "best_hyper": "3",
+            "spearman_mean": 0.35443725920043456,
+            "spearman_std": 0.08077166287239476
+          },
+          "krr_geo": {
+            "per_hyper": {
+              "0.001": {
+                "spearman_mean": 0.08790578925150999,
+                "spearman_std": 0.13397914251707416
+              },
+              "0.01": {
+                "spearman_mean": 0.14167533918162603,
+                "spearman_std": 0.12581757917013947
+              },
+              "0.1": {
+                "spearman_mean": 0.24546109466787275,
+                "spearman_std": 0.10502656793702744
+              }
+            },
+            "best_hyper": "0.1",
+            "spearman_mean": 0.24546109466787275,
+            "spearman_std": 0.10502656793702744
+          }
+        }
+      },
+      "best_layer": 0,
+      "best": {
+        "gkpls": {
+          "per_hyper": {
+            "1": {
+              "spearman_mean": 0.28182054300452986,
+              "spearman_std": 0.07225298813908573
+            },
+            "2": {
+              "spearman_mean": 0.27803072398083273,
+              "spearman_std": 0.09192536106148953
+            },
+            "3": {
+              "spearman_mean": 0.2746360818625075,
+              "spearman_std": 0.10574892546577645
+            },
+            "5": {
+              "spearman_mean": 0.16909563909157158,
+              "spearman_std": 0.12269934647221668
+            }
+          },
+          "best_hyper": "1",
+          "spearman_mean": 0.28182054300452986,
+          "spearman_std": 0.07225298813908573
+        },
+        "rbfkpls": {
+          "per_hyper": {
+            "1": {
+              "spearman_mean": 0.3184908899776777,
+              "spearman_std": 0.06119600919952519
+            },
+            "2": {
+              "spearman_mean": 0.27714779556315045,
+              "spearman_std": 0.07812519151379158
+            },
+            "3": {
+              "spearman_mean": 0.35443725920043456,
+              "spearman_std": 0.08077166287239476
+            },
+            "5": {
+              "spearman_mean": 0.3497518665612839,
+              "spearman_std": 0.08217031245783414
+            }
+          },
+          "best_hyper": "3",
+          "spearman_mean": 0.35443725920043456,
+          "spearman_std": 0.08077166287239476
+        },
+        "krr_geo": {
+          "per_hyper": {
+            "0.001": {
+              "spearman_mean": 0.08790578925150999,
+              "spearman_std": 0.13397914251707416
+            },
+            "0.01": {
+              "spearman_mean": 0.14167533918162603,
+              "spearman_std": 0.12581757917013947
+            },
+            "0.1": {
+              "spearman_mean": 0.24546109466787275,
+              "spearman_std": 0.10502656793702744
+            }
+          },
+          "best_hyper": "0.1",
+          "spearman_mean": 0.24546109466787275,
+          "spearman_std": 0.10502656793702744
+        }
+      }
+    }
+  }
+}
