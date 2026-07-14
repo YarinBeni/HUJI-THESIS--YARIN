@@ -33,6 +33,7 @@ from lambda_probe import mc_lambda_probe, LAMBDAS  # noqa: E402
 PARQUET = _REPO / "v_1/data/evaluation/corpora/orcc_corpus.parquet"
 BAL = _REPO / "v_1/src/linear_probing/results/orcc_round2_phase0/balanced_subset"
 CLEANINGS = ["tier0", "maximal"]
+TRANSLATIONS = _THIS.parents[1] / "translation/translations.parquet"
 SVD_DIM = 512
 
 
@@ -42,6 +43,7 @@ def main():
     p.add_argument("--ks", default="5,10,20")
     p.add_argument("--d", type=int, default=3)
     p.add_argument("--out", default=str(_THIS.parent / "results"))
+    p.add_argument("--cleanings", default="", help="override, e.g. engtier0")
     a = p.parse_args()
     ks = [int(x) for x in a.ks.split(",")]
 
@@ -56,8 +58,13 @@ def main():
     out = {"method": "tfidf", "protocol": "p8_lambda_mc",
            "tfidf": "char_wb(2,5) fit on full corpus (baseline convention)",
            "svd_dim": SVD_DIM, "d": a.d, "lambdas": LAMBDAS, "cleanings": {}}
-    for cl in CLEANINGS:
-        texts = df[f"text_{cl}"].fillna("").astype(str).tolist()
+    for cl in (a.cleanings.split(",") if a.cleanings else CLEANINGS):
+        if cl in ("tier0", "maximal"):
+            texts = df[f"text_{cl}"].fillna("").astype(str).tolist()
+        else:
+            col = "eng_tier0" if cl == "engtier0" else "eng_maximal"
+            tr = pd.read_parquet(TRANSLATIONS).set_index("fragment_id")[col]
+            texts = tr.reindex(df["fragment_id"].astype(str)).fillna("").astype(str).tolist()
         vec = TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 5))
         Xs = normalize(vec.fit_transform(texts), norm="l2")
         svd = TruncatedSVD(n_components=min(SVD_DIM, Xs.shape[1] - 1),
@@ -79,6 +86,9 @@ def main():
 
     outdir = Path(a.out); outdir.mkdir(parents=True, exist_ok=True)
     fp = outdir / "p8_lambda__tfidf.json"
+    if fp.exists():
+        prev = json.loads(fp.read_text(encoding="utf-8")).get("cleanings", {})
+        out["cleanings"] = {**prev, **out["cleanings"]}
     fp.write_text(json.dumps(out, indent=2), encoding="utf-8")
     print(f"wrote {fp}")
 
