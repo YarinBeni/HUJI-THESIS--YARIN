@@ -1,0 +1,55 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\title{Geodesic Kernel Probes for Chronology: Setup and Estimators}
+\author{Yarin Benizri}
+\date{}
+\begin{document}
+\maketitle
+
+\section{Setup}
+Let $x_{1},\dots,x_{n}\in\mathbb{R}^{d}$ be the mean-pooled hidden states of the
+$n=1202$ fragments (one layer at a time), with rows $\ell_{2}$-normalized, and let
+$y_{i}\in\mathbb{R}$ denote the labels (year BCE). All estimators below access the
+data only through a Gram matrix $K\in\mathbb{R}^{n\times n}$; they differ in which
+$K$ they build and which regression operator they apply to it.
+
+\section{Two kernels}
+\subsection{Geodesic (Isomap) kernel}
+Build the $k$-nearest-neighbor graph $G$ ($k=10$, Euclidean edge weights
+$w_{ij}=\lVert x_{i}-x_{j}\rVert_{2}$, symmetrized). Let $D_{G}(i,j)$ be the
+shortest-path distance in $G$. Double-center the squared distances:
+\[
+K_{G}=-\tfrac{1}{2}\,H\,D_{G}^{\circ2}\,H,\qquad H=I-\tfrac{1}{n}\mathbf{1}\mathbf{1}^{\top},
+\]
+where $D_{G}^{\circ2}$ is the entrywise square. We then project $K_{G}$ onto the
+positive-semidefinite cone by clipping negative eigenvalues, since geodesic
+distance matrices are in general not exactly Euclidean-embeddable. $K_{G}$ is
+precisely the Gram matrix whose kernel PCA reproduces Isomap.
+
+\subsection{RBF kernel (curvature-blind control on the same points)}
+\[
+K_{\mathrm{RBF}}(i,j)=\exp\!\left(-\lVert x_{i}-x_{j}\rVert_{2}^{2}/2\sigma^{2}\right),
+\qquad \sigma=\operatorname{median}_{i<j}\lVert x_{i}-x_{j}\rVert_{2}.
+\]
+The pair $\{K_{G},K_{\mathrm{RBF}}\}$ differs only in the metric (geodesic along
+the data vs.\ ambient Euclidean), so their comparison isolates the contribution
+of manifold curvature.
+
+\section{Three regression operators}
+\subsection{Kernel PLS (Rosipal--Trejo)}
+On $K\in\{K_{G},K_{\mathrm{RBF}}\}$: iteratively extract score vectors
+$t_{m}\propto Ku_{m}$ maximizing covariance with $y$, deflate $K$ and $y$, and
+regress $y$ on $(t_{1},\dots,t_{a})$; the number of components $a\in\{1,2,3,5\}$
+is chosen by validation. We write \emph{G-KPLS} for KPLS applied to $K_{G}$ and
+\emph{RBF-KPLS} for KPLS applied to $K_{\mathrm{RBF}}$.
+
+\subsection{Kernel ridge regression on $K_{G}$}
+\[
+\hat{f}(\cdot)=k(\cdot)^{\top}\left(K_{G}+\lambda I\right)^{-1}y,
+\qquad \lambda\in\{10^{-3},10^{-2},10^{-1}\},
+\]
+with the inverse taken on the truncated spectrum (eigenvalues
+$\lambda_{j}>10^{-8}\lambda_{\max}$): the clipped kernel is rank-deficient, and
+the naive solve amplifies its null space.
+\end{document}
