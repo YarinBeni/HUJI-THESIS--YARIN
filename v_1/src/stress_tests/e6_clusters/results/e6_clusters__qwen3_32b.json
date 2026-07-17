@@ -1,0 +1,271 @@
+{
+  "method": "qwen3_32b",
+  "protocol": "e6_cluster_metrics",
+  "canon8": [
+    "Ashurbanipal",
+    "Sennacherib",
+    "Esarhaddon",
+    "Sargon II",
+    "Nebuchadnezzar II",
+    "Tiglath-pileser III",
+    "Nabonidus",
+    "S\u00een-\u0161arru-i\u0161kun"
+  ],
+  "cleanings": {
+    "maximal": {
+      "best_layer": 6,
+      "k_curve": {
+        "2": {
+          "silhouette": 0.3595683189452644,
+          "davies_bouldin": 1.7432243566312928,
+          "calinski_harabasz": 274.0847168865658,
+          "inertia": 151.88756950432298
+        },
+        "3": {
+          "silhouette": 0.17104014034645684,
+          "davies_bouldin": 2.382384160749033,
+          "calinski_harabasz": 197.0636879630672,
+          "inertia": 140.42101653918934
+        },
+        "4": {
+          "silhouette": 0.1366456897023675,
+          "davies_bouldin": 2.5981566185527525,
+          "calinski_harabasz": 151.30705826970078,
+          "inertia": 135.31032214196298
+        },
+        "5": {
+          "silhouette": 0.15047932026996472,
+          "davies_bouldin": 2.20773576577977,
+          "calinski_harabasz": 126.20932471332755,
+          "inertia": 131.23193808222584
+        },
+        "6": {
+          "silhouette": 0.12556482675357253,
+          "davies_bouldin": 2.183702016806637,
+          "calinski_harabasz": 110.69884596292657,
+          "inertia": 127.55047941219803
+        },
+        "7": {
+          "silhouette": 0.1073944049064454,
+          "davies_bouldin": 2.4452378220793967,
+          "calinski_harabasz": 100.84493414182094,
+          "inertia": 123.86312609994094
+        },
+        "8": {
+          "silhouette": 0.06966398269503417,
+          "davies_bouldin": 2.5867906841209827,
+          "calinski_harabasz": 92.59889456758928,
+          "inertia": 120.92965200510734
+        },
+        "9": {
+          "silhouette": 0.06836074295459986,
+          "davies_bouldin": 2.5777273092870128,
+          "calinski_harabasz": 85.44279766179643,
+          "inertia": 118.61660685007719
+        },
+        "10": {
+          "silhouette": 0.06842405587763585,
+          "davies_bouldin": 2.5677460205442193,
+          "calinski_harabasz": 80.32324279350568,
+          "inertia": 116.1425890678218
+        },
+        "11": {
+          "silhouette": 0.08354986150544458,
+          "davies_bouldin": 2.3978519179187114,
+          "calinski_harabasz": 75.9359527616481,
+          "inertia": 113.93588113277329
+        },
+        "12": {
+          "silhouette": 0.07196095494310714,
+          "davies_bouldin": 2.5487752291335313,
+          "calinski_harabasz": 71.62110502428155,
+          "inertia": 112.2589454448877
+        },
+        "13": {
+          "silhouette": 0.05633614328224294,
+          "davies_bouldin": 2.580331218120074,
+          "calinski_harabasz": 68.06742183296484,
+          "inertia": 110.60014481595418
+        },
+        "14": {
+          "silhouette": 0.057631959272080154,
+          "davies_bouldin": 2.5995173555997835,
+          "calinski_harabasz": 64.31095298817901,
+          "inertia": 109.51163605263987
+        },
+        "15": {
+          "silhouette": 0.05958869409822572,
+          "davies_bouldin": 2.7210144078511194,
+          "calinski_harabasz": 61.05761915143164,
+          "inertia": 108.4674752085904
+        }
+      },
+      "best_k_full_silhouette": 2,
+      "kmeans8_vs_metadata": {
+        "ruler8": {
+          "ari": 0.07081329695800107,
+          "ami": 0.11876154388301258
+        },
+        "period": {
+          "ari": 0.07921280350336955,
+          "ami": 0.13000797797745622
+        },
+        "sub_genre": {
+          "ari": 0.06775580146267851,
+          "ami": 0.10270335830706546
+        },
+        "provenance": {
+          "ari": 0.1002561898832618,
+          "ami": 0.11027859198863992
+        },
+        "year_quartile": {
+          "ari": 0.06643227942702613,
+          "ami": 0.10216989992106133
+        }
+      },
+      "label_silhouettes": {
+        "ruler8": -0.029129016636154244,
+        "period": -0.15558074471363126,
+        "sub_genre": -0.04299518307232193,
+        "provenance": -0.020400122893671543
+      },
+      "mc": {
+        "ari_ruler_mean": 0.07278246110499925,
+        "ari_ruler_std": 0.025591684416608102,
+        "sil_k8_mean": 0.0783111416625078,
+        "best_k_counts": {
+          "2": 199,
+          "3": 1
+        },
+        "n_draws": 200
+      }
+    },
+    "engtier0": {
+      "best_layer": 60,
+      "k_curve": {
+        "2": {
+          "silhouette": 0.29618930878962163,
+          "davies_bouldin": 1.3594249382457986,
+          "calinski_harabasz": 497.46482347420186,
+          "inertia": 59.769547243443135
+        },
+        "3": {
+          "silhouette": 0.19450974199304336,
+          "davies_bouldin": 2.0103151732923497,
+          "calinski_harabasz": 344.80267620627774,
+          "inertia": 53.675669497562325
+        },
+        "4": {
+          "silhouette": 0.15266079019330653,
+          "davies_bouldin": 2.0679566203258926,
+          "calinski_harabasz": 277.29886037253607,
+          "inertia": 49.89791617775751
+        },
+        "5": {
+          "silhouette": 0.12607971157677078,
+          "davies_bouldin": 2.1457862999895476,
+          "calinski_harabasz": 233.01437043258494,
+          "inertia": 47.53420847922435
+        },
+        "6": {
+          "silhouette": 0.11248242962388018,
+          "davies_bouldin": 2.102216604102216,
+          "calinski_harabasz": 203.47313852695416,
+          "inertia": 45.68540810224234
+        },
+        "7": {
+          "silhouette": 0.12039557594962517,
+          "davies_bouldin": 2.1298216821899474,
+          "calinski_harabasz": 181.76410147534673,
+          "inertia": 44.20486876876756
+        },
+        "8": {
+          "silhouette": 0.10589372422196598,
+          "davies_bouldin": 2.1897529206355886,
+          "calinski_harabasz": 164.72401785840236,
+          "inertia": 43.01086081195082
+        },
+        "9": {
+          "silhouette": 0.1078414670963152,
+          "davies_bouldin": 2.189147664368194,
+          "calinski_harabasz": 149.95698472198694,
+          "inertia": 42.156030093796595
+        },
+        "10": {
+          "silhouette": 0.0903488145821441,
+          "davies_bouldin": 2.3210924772940977,
+          "calinski_harabasz": 139.58203036280122,
+          "inertia": 41.164427104519056
+        },
+        "11": {
+          "silhouette": 0.11178818910448632,
+          "davies_bouldin": 2.2269451576129455,
+          "calinski_harabasz": 129.33906340566574,
+          "inertia": 40.53137912398134
+        },
+        "12": {
+          "silhouette": 0.09393516538691252,
+          "davies_bouldin": 2.221134276593997,
+          "calinski_harabasz": 122.9980664136911,
+          "inertia": 39.56432282307526
+        },
+        "13": {
+          "silhouette": 0.09269646689732201,
+          "davies_bouldin": 2.2605088034845733,
+          "calinski_harabasz": 114.882305591019,
+          "inertia": 39.15219155428612
+        },
+        "14": {
+          "silhouette": 0.08681129104953728,
+          "davies_bouldin": 2.34942959919008,
+          "calinski_harabasz": 109.47014653622365,
+          "inertia": 38.467189678810826
+        },
+        "15": {
+          "silhouette": 0.07779779246084825,
+          "davies_bouldin": 2.398026500618464,
+          "calinski_harabasz": 103.9465207718519,
+          "inertia": 37.98184904555605
+        }
+      },
+      "best_k_full_silhouette": 2,
+      "kmeans8_vs_metadata": {
+        "ruler8": {
+          "ari": 0.04012844970541146,
+          "ami": 0.08025020823326885
+        },
+        "period": {
+          "ari": 0.008766323438558479,
+          "ami": 0.08245650307758033
+        },
+        "sub_genre": {
+          "ari": 0.044388554076004554,
+          "ami": 0.12708019585953056
+        },
+        "provenance": {
+          "ari": 0.03515181774095648,
+          "ami": 0.08568979495890172
+        },
+        "year_quartile": {
+          "ari": 0.03957930406799944,
+          "ami": 0.07792297877321333
+        }
+      },
+      "label_silhouettes": {
+        "ruler8": -0.03381930498353316,
+        "period": -0.13999148176582143,
+        "sub_genre": -0.03659264995894556,
+        "provenance": -0.07935705468738254
+      },
+      "mc": {
+        "ari_ruler_mean": 0.0838307986210183,
+        "ari_ruler_std": 0.025296613067767565,
+        "sil_k8_mean": 0.12087368925858202,
+        "best_k_counts": {
+          "2": 200
+        },
+        "n_draws": 200
+      }
+    }
+  }
+}
