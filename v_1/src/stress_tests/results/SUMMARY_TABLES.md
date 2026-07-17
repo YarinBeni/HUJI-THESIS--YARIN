@@ -59,3 +59,33 @@ clusters in 2-D.
   reference shows a year gradient, and even it cannot separate Esarhaddon from
   Sin-sarru-iskun. Conclusion: embeddings separate WHO (reign identity via
   style/formulae), never WHEN.
+
+
+## Table 3 — PLS k=3 3-D separability (supervised projection; MC = mean 5-NN-year over the 200 balanced draws)
+
+| Rank | Config | MC-kNN | full-kNN | ruler sil |
+|---|---|---|---|---|
+| 1 | **TF-IDF* maximal** | **0.707 +- .042** | 0.682 | -0.08 |
+| 2 | **TF-IDF* engtier0** | **0.694 +- .041** | 0.718 | -0.07 |
+| 3 | Thal-AKK eng-t0 L05 | 0.677 | 0.504 | -0.09 |
+| 4 | Qwen3-32B eng-t0 L60 | 0.671 | 0.512 | -0.07 |
+| 5 | **random* eng-t0 L36 (untrained)** | **0.651** | 0.648 | -0.07 |
+| 6 | cunei-400m eng-t0 L12 | 0.649 | 0.598 | -0.08 |
+| 7 | cunei-400m maximal L10 | 0.637 | 0.561 | -0.08 |
+| ... | best other Akk-max (gpt-oss L04) | 0.505 | 0.465 | -0.10 |
+
+Verdict: under the IDENTICAL supervised k=3 projection, TF-IDF character
+n-grams beat every trained model on both cleanings, and the untrained
+random-init ranks 5th overall — the models' activation spaces contain no
+year structure beyond what surface statistics provide, in 3-D exactly as in
+2-D, full-dim linear, kernel, and spectral probes. All ruler silhouettes
+remain negative.
+
+## Table 4 — E6 cluster structure (streaming in from J23)
+
+TF-IDF* baseline: MC ARI(ruler) = 0.106/0.107, k=8 optimal in only 17/200
+(maximal) and 7/200 (engtier0) draws, all label silhouettes ~0.
+cunei-400m: MC ARI 0.112 (max) / 0.146 (eng); best-k = 2 in 200/200 and
+195/200 draws; k8-clusters align better with PROVENANCE (0.140) than rulers
+(0.113) on maximal. Full table when J23 completes: results/csv + per-model
+JSONs in e6_clusters/results/.
