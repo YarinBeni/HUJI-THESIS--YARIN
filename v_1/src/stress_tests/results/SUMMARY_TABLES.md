@@ -81,11 +81,59 @@ year structure beyond what surface statistics provide, in 3-D exactly as in
 2-D, full-dim linear, kernel, and spectral probes. All ruler silhouettes
 remain negative.
 
-## Table 4 — E6 cluster structure (streaming in from J23)
+## Table 4 — E6 cluster structure (all 10 methods, complete)
 
-TF-IDF* baseline: MC ARI(ruler) = 0.106/0.107, k=8 optimal in only 17/200
-(maximal) and 7/200 (engtier0) draws, all label silhouettes ~0.
-cunei-400m: MC ARI 0.112 (max) / 0.146 (eng); best-k = 2 in 200/200 and
-195/200 draws; k8-clusters align better with PROVENANCE (0.140) than rulers
-(0.113) on maximal. Full table when J23 completes: results/csv + per-model
-JSONs in e6_clusters/results/.
+Full-corpus KMeans at k=8 aligned (ARI) against each metadata partition; MC =
+200 balanced draws (8 rulers x 21). best-k = silhouette-optimal cluster count.
+Per-model JSONs: e6_clusters/results/; internal indices: csv/e6_cluster_indices.csv;
+k-sweep figures: e6_clusters/figures/.
+
+| model | clean | best-k (mode over 200 draws) | MC ARI(ruler) | ARI ruler | ARI prov | ARI year | k8 aligns best with |
+|---|---|---|---|---|---|---|---|
+| cunei-400m | maximal | 2 (200/200) | 0.112 | 0.113 | 0.140 | 0.099 | **provenance** |
+| cunei-400m | engtier0 | 2 (195/200) | 0.146 | 0.123 | 0.108 | 0.103 | **ruler8** |
+| Qwen3-32B | maximal | 2 (199/200) | 0.073 | 0.071 | 0.100 | 0.066 | **provenance** |
+| Qwen3-32B | engtier0 | 2 (200/200) | 0.084 | 0.040 | 0.035 | 0.040 | **ruler8** |
+| Qwen3-8B | maximal | 2 (118/200) | 0.027 | 0.034 | 0.033 | 0.031 | ruler8 |
+| Qwen3-8B | engtier0 | 2 (200/200) | 0.051 | 0.030 | 0.019 | 0.017 | ruler8 |
+| Qwen3-1.7B | maximal | 2 (123/200) | 0.027 | 0.027 | 0.030 | 0.025 | provenance |
+| Qwen3-1.7B | engtier0 | 2 (200/200) | 0.046 | 0.022 | 0.022 | 0.016 | provenance |
+| gpt-oss-120B | maximal | 2 (189/200) | 0.038 | 0.037 | 0.059 | -0.001 | **provenance** |
+| gpt-oss-120B | engtier0 | 2 (200/200) | 0.017 | 0.019 | 0.029 | 0.011 | provenance |
+| Thal-AKK | maximal | 2 (197/200) | 0.042 | 0.027 | 0.049 | 0.015 | **provenance** |
+| Thal-AKK | engtier0 | 2 (200/200) | 0.016 | 0.015 | 0.005 | 0.007 | ruler8 |
+| uMT5 | maximal | 2 (188/200) | 0.031 | 0.018 | 0.057 | -0.011 | **provenance** |
+| uMT5 | engtier0 | 2 (197/200) | 0.036 | 0.045 | 0.031 | 0.024 | ruler8 |
+| MLM | maximal | 2 (200/200) | 0.060 | 0.065 | 0.081 | 0.063 | **provenance** |
+| random* | maximal | 12 (36/200) | 0.091 | 0.081 | 0.080 | 0.061 | ruler8 |
+| random* | engtier0 | 2 (105/200) | 0.062 | 0.062 | 0.065 | 0.025 | provenance |
+| TF-IDF* | maximal | 12 (66/200) | 0.106 | 0.077 | 0.105 | 0.057 | **provenance** |
+| TF-IDF* | engtier0 | 3 (69/200) | 0.107 | 0.085 | 0.051 | 0.074 | ruler8 |
+
+**Findings:**
+1. **k=8 is essentially never the natural cluster count.** Every trained model's
+   silhouette-optimal k is 2 (the Babylonian-vs-Assyrian era split) in ~190-200
+   of the 200 balanced draws, where 8 rulers x 21 is literally the ground truth.
+   Only the surface controls (TF-IDF, random) ever prefer higher k, and never 8.
+2. **No model clusters by ruler above the ~0.11 control level.** cunei-400m (the
+   deck's best probe) is the only model at/above TF-IDF's MC ARI; the big Qwen
+   LLMs sit at 0.03-0.08 — BELOW the character-n-gram control.
+3. **Where clusters align at all, it is PROVENANCE (find-spot), not ruler or
+   year** — true for cunei/Qwen3-32B/gpt-oss/Thal-AKK/uMT5/MLM/TF-IDF on Akkadian
+   maximal. The embeddings organize by where tablets were excavated.
+4. **Internal quality vs metadata alignment are ANTI-correlated** (see
+   csv/e6_cluster_indices.csv): Qwen3-8B/1.7B have the highest silhouette (0.30,
+   inertia ~2-4) yet the lowest ruler-ARI (0.027) — tight blobs of near-duplicate
+   texts, not authorship structure. cunei-400m is the reverse: low silhouette
+   (0.05-0.08), best metadata alignment.
+
+## Why the E6 "winners" differ from the deck (Table 1) winners
+
+Same ORCC data, same 200 balanced draws — DIFFERENT question. The deck probes
+ask "can a supervised probe READ the year?" (uses the labels); E6 silhouette
+asks "does KMeans find tight blobs?" (unsupervised, year never enters). A model
+can score high on one and low on the other: Qwen3-8B/1.7B cluster beautifully
+(silhouette 0.30) into duplicate-text blobs that carry no chronology (ruler-ARI
+0.027), while cunei-400m reads year best (deck rho 0.391) from a diffuse,
+low-silhouette space. Best-clusterer != best-year-decoder; internal cluster
+quality is a red herring for the world-model question.
