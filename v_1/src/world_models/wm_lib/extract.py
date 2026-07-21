@@ -59,32 +59,26 @@ def _snapshot_with_fallback(spec: dict) -> str:
         return _snapshot(fb, spec["arch"])
 
 
-def _load_tokenizer(path):
-    """Load a tokenizer, working around the transformers>=5 bug that mis-routes
-    Llama-2's SentencePiece tokenizer.model through the tiktoken BPE loader
-    ("Error parsing line b'\\x0e' in tokenizer.model"). Tries, in order: fast,
-    slow (needs sentencepiece), explicit LlamaTokenizerFast built from
-    tokenizer.model. Every failure is printed so the log names the real cause.
-    If the slow path fails only because sentencepiece is missing, install it in
-    the job env (the W sbatch files self-install it)."""
+def _load_tokenizer(path, tokenizer_hfid=None):
+    """Load a tokenizer. transformers>=5 cannot convert Llama-2's SentencePiece
+    tokenizer.model on ANY path (fast/slow/LlamaTokenizerFast all route through the
+    tiktoken loader and crash on "Error parsing line b'\\x0e'"), so the Llama arms
+    set tokenizer_hfid to a repo that ships a prebuilt tokenizer.json — tried FIRST,
+    loads with no conversion. Falls back to the model's own dir for everything else.
+    Every failure is printed so the log names the real cause."""
     from transformers import AutoTokenizer
     errs = []
-    try:
-        return AutoTokenizer.from_pretrained(path, use_fast=True)
-    except Exception as e:  # noqa: BLE001
-        errs.append(f"fast={type(e).__name__}: {e}")
-        print(f"[tok] use_fast=True failed -> {errs[-1]}", flush=True)
-    try:
-        return AutoTokenizer.from_pretrained(path, use_fast=False)
-    except Exception as e:  # noqa: BLE001
-        errs.append(f"slow={type(e).__name__}: {e}")
-        print(f"[tok] use_fast=False failed -> {errs[-1]}", flush=True)
-    try:  # build the fast tokenizer straight from tokenizer.model (tokenizers lib)
-        from transformers import LlamaTokenizerFast
-        return LlamaTokenizerFast.from_pretrained(path)
-    except Exception as e:  # noqa: BLE001
-        errs.append(f"LlamaTokenizerFast={type(e).__name__}: {e}")
-        print(f"[tok] LlamaTokenizerFast failed -> {errs[-1]}", flush=True)
+    sources = ([("tokenizer_hfid", tokenizer_hfid)] if tokenizer_hfid else []) + \
+              [("model_dir", path)]
+    for label, src in sources:
+        for fast in (True, False):
+            try:
+                return AutoTokenizer.from_pretrained(src, use_fast=fast)
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"{label}/{'fast' if fast else 'slow'}="
+                            f"{type(e).__name__}: {e}")
+                print(f"[tok] {label} use_fast={fast} failed -> {errs[-1]}",
+                      flush=True)
     raise RuntimeError("all tokenizer paths failed: " + " || ".join(errs))
 
 
@@ -97,7 +91,7 @@ def load_model(spec: dict, dtype: str = "bfloat16", seed: int = 42):
     os.environ.setdefault("HF_HUB_DOWNLOAD_TIMEOUT", "60")
     td = getattr(torch, dtype)
     path = _snapshot_with_fallback(spec)
-    tok = _load_tokenizer(path)
+    tok = _load_tokenizer(path, spec.get("tokenizer_hfid"))
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 

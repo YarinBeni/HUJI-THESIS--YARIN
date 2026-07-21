@@ -45,18 +45,19 @@ def main():
         model.save_pretrained(out_dir, safe_serialization=True, max_shard_size="5GB")
         print(f"[weights] saved to {out_dir}", flush=True)
 
-    # tokenizer: always ensure it's present. transformers>=5 mis-routes Llama-2's
-    # SentencePiece tokenizer.model through the tiktoken loader and crashes; fall
-    # back to the slow tokenizer, which reads tokenizer.model directly.
+    # tokenizer: BEST EFFORT only. transformers>=5 can't convert Llama-2's
+    # tokenizer.model, so this usually fails — that's fine: the llama2_70b_random
+    # registry entry sets tokenizer_hfid, so extraction loads the tokenizer from the
+    # prebuilt-json repo, never from this dir. Only the config + weights matter here.
     if not os.path.exists(os.path.join(out_dir, "tokenizer_config.json")):
-        try:
-            tk = AutoTokenizer.from_pretrained(path)
-        except Exception as e:  # noqa: BLE001
-            print(f"[tok] fast failed ({type(e).__name__}: {e}); use_fast=False",
-                  flush=True)
-            tk = AutoTokenizer.from_pretrained(path, use_fast=False)
-        tk.save_pretrained(out_dir)
-        print(f"[tokenizer] saved to {out_dir}", flush=True)
+        for kw in ({}, {"use_fast": False}):
+            try:
+                AutoTokenizer.from_pretrained(path, **kw).save_pretrained(out_dir)
+                print(f"[tokenizer] saved to {out_dir}", flush=True)
+                break
+            except Exception as e:  # noqa: BLE001
+                print(f"[tok] save {kw or 'fast'} failed ({type(e).__name__}); "
+                      f"extraction will use tokenizer_hfid override", flush=True)
     print(f"[done] {out_dir}", flush=True)
 
 

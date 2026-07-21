@@ -21,18 +21,27 @@ ARCH_ENCODER = "encoder"
 # official repos when you have access.
 _LLAMA_ORG = os.environ.get("WM_LLAMA_ORG", "NousResearch")
 
+# transformers>=5 cannot convert Llama-2's SentencePiece tokenizer.model (it forces
+# the tiktoken loader, which crashes on "Error parsing line b'\x0e'") on ANY path
+# (fast/slow/LlamaTokenizerFast). Load the Llama tokenizer from a repo that already
+# ships a prebuilt tokenizer.json instead: the standard ungated Llama tokenizer,
+# same 32k SentencePiece vocab as Llama-2 (token ids match the weights), loads with
+# zero conversion. Override with WM_LLAMA_TOK.
+_LLAMA_TOK = os.environ.get("WM_LLAMA_TOK", "hf-internal-testing/llama-tokenizer")
+
 # Cluster-local dir for materialized random checkpoints (llama2_70b_random, built by W0).
 WM_MODELS_DIR = os.environ.get(
     "WM_MODELS_DIR", os.path.expanduser("~/projects/wm_models"))
 
 
 def _m(hfid, arch, *, random=False, fallback=None, stride=1, gpus=1,
-       sites=None, random_of=None):
+       sites=None, random_of=None, tokenizer=None):
     return {
         "hfid": hfid,
         "arch": arch,
         "random": random,            # build from config (seed 42) instead of loading weights
         "fallback_hfid": fallback,   # tried when the primary load fails (gated repo etc.)
+        "tokenizer_hfid": tokenizer,  # load the tokenizer from here instead of the model dir
         "layer_stride": stride,
         "gpus": gpus,                # documentation only; sbatch files own the real values
         # default pooling sites: paper-faithful `last` for causal, both for encoders
@@ -55,18 +64,19 @@ MODELS = {
                               random_of="qwen3_8b"),
     # ---- Gurnee & Tegmark's models, trained ---------------------------------
     "llama2_7b":  _m(f"{_LLAMA_ORG}/Llama-2-7b-hf", ARCH_CAUSAL,
-                     fallback="NousResearch/Llama-2-7b-hf"),
+                     fallback="NousResearch/Llama-2-7b-hf", tokenizer=_LLAMA_TOK),
     "llama2_13b": _m(f"{_LLAMA_ORG}/Llama-2-13b-hf", ARCH_CAUSAL,
-                     fallback="NousResearch/Llama-2-13b-hf"),
+                     fallback="NousResearch/Llama-2-13b-hf", tokenizer=_LLAMA_TOK),
     "llama2_70b": _m(f"{_LLAMA_ORG}/Llama-2-70b-hf", ARCH_CAUSAL,
-                     fallback="NousResearch/Llama-2-70b-hf", stride=2, gpus=4),
+                     fallback="NousResearch/Llama-2-70b-hf", stride=2, gpus=4,
+                     tokenizer=_LLAMA_TOK),
     # ---- Gurnee & Tegmark's models, random-init (the control they never ran) -
     "llama2_7b_random":  _m(f"{_LLAMA_ORG}/Llama-2-7b-hf", ARCH_CAUSAL, random=True,
                             fallback="NousResearch/Llama-2-7b-hf",
-                            random_of="llama2_7b"),
+                            tokenizer=_LLAMA_TOK, random_of="llama2_7b"),
     "llama2_13b_random": _m(f"{_LLAMA_ORG}/Llama-2-13b-hf", ARCH_CAUSAL, random=True,
                             fallback="NousResearch/Llama-2-13b-hf",
-                            random_of="llama2_13b"),
+                            tokenizer=_LLAMA_TOK, random_of="llama2_13b"),
     # ---- debug arm (not in the ladder; excluded from aggregation tables) ----
     "pythia_70m_test": _m("EleutherAI/pythia-70m", ARCH_CAUSAL),
     # 70B random is materialized once by build_random_llama.py (W0) because
@@ -75,7 +85,7 @@ MODELS = {
     "llama2_70b_random": _m(os.path.join(WM_MODELS_DIR, "llama2_70b_random"),
                             ARCH_CAUSAL,
                             fallback=None, stride=2, gpus=4,
-                            random_of="llama2_70b"),
+                            tokenizer=_LLAMA_TOK, random_of="llama2_70b"),
 }
 
 RANDOM_SEED = 42
