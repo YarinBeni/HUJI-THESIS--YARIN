@@ -28,21 +28,36 @@ def main():
 
     src = MODELS[f"llama2_{args.size}"]  # trained spec: hfid + gated fallback
     out_dir = os.path.join(WM_MODELS_DIR, f"llama2_{args.size}_random")
-    if os.path.exists(os.path.join(out_dir, "config.json")):
-        print(f"[skip] {out_dir} already exists")
-        return
+    path = _snapshot_with_fallback(src)  # cached snapshot; config + tokenizer source
 
-    path = _snapshot_with_fallback(src)
-    cfg = AutoConfig.from_pretrained(path)
-    print(f"[build] random-init Llama-2-{args.size} from {path}, seed {RANDOM_SEED}",
-          flush=True)
-    torch.manual_seed(RANDOM_SEED)
-    model = AutoModelForCausalLM.from_config(
-        cfg, torch_dtype=getattr(torch, args.dtype))
-    os.makedirs(out_dir, exist_ok=True)
-    model.save_pretrained(out_dir, safe_serialization=True, max_shard_size="5GB")
-    AutoTokenizer.from_pretrained(path).save_pretrained(out_dir)
-    print(f"[done] saved to {out_dir}", flush=True)
+    # weights: skip the expensive 130GB rebuild if a prior run already wrote them
+    # (a run that died at the tokenizer step below left config.json + shards intact)
+    if os.path.exists(os.path.join(out_dir, "config.json")):
+        print(f"[skip] weights already present at {out_dir}")
+    else:
+        cfg = AutoConfig.from_pretrained(path)
+        print(f"[build] random-init Llama-2-{args.size} from {path}, seed {RANDOM_SEED}",
+              flush=True)
+        torch.manual_seed(RANDOM_SEED)
+        model = AutoModelForCausalLM.from_config(
+            cfg, torch_dtype=getattr(torch, args.dtype))
+        os.makedirs(out_dir, exist_ok=True)
+        model.save_pretrained(out_dir, safe_serialization=True, max_shard_size="5GB")
+        print(f"[weights] saved to {out_dir}", flush=True)
+
+    # tokenizer: always ensure it's present. transformers>=5 mis-routes Llama-2's
+    # SentencePiece tokenizer.model through the tiktoken loader and crashes; fall
+    # back to the slow tokenizer, which reads tokenizer.model directly.
+    if not os.path.exists(os.path.join(out_dir, "tokenizer_config.json")):
+        try:
+            tk = AutoTokenizer.from_pretrained(path)
+        except Exception as e:  # noqa: BLE001
+            print(f"[tok] fast failed ({type(e).__name__}: {e}); use_fast=False",
+                  flush=True)
+            tk = AutoTokenizer.from_pretrained(path, use_fast=False)
+        tk.save_pretrained(out_dir)
+        print(f"[tokenizer] saved to {out_dir}", flush=True)
+    print(f"[done] {out_dir}", flush=True)
 
 
 if __name__ == "__main__":

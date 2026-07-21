@@ -68,7 +68,16 @@ def load_model(spec: dict, dtype: str = "bfloat16", seed: int = 42):
     os.environ.setdefault("HF_HUB_DOWNLOAD_TIMEOUT", "60")
     td = getattr(torch, dtype)
     path = _snapshot_with_fallback(spec)
-    tok = AutoTokenizer.from_pretrained(path, use_fast=True)
+    try:
+        tok = AutoTokenizer.from_pretrained(path, use_fast=True)
+    except Exception as e:  # noqa: BLE001
+        # transformers>=5 mis-routes Llama-2's SentencePiece tokenizer.model
+        # through the tiktoken BPE loader and crashes ("Error parsing line ...
+        # in tokenizer.model"). The slow tokenizer reads tokenizer.model
+        # directly via sentencepiece (already used by the uMT5/Thalesian arms).
+        print(f"[load] fast tokenizer failed ({type(e).__name__}: {e}); "
+              f"retrying use_fast=False", flush=True)
+        tok = AutoTokenizer.from_pretrained(path, use_fast=False)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 
