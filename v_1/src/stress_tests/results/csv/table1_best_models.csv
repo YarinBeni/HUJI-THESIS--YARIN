@@ -1,0 +1,11 @@
+experiment,cleaning,metric,rank1_model,rank1_value,rank2_model,rank2_value,rank3_model,rank3_value,tfidf_control,random_control
+Year,Akk maximal,activation PLS Spearman (higher),cunei-400m,0.391,Qwen3-8B,0.339,Qwen3-1.7B,0.334,0.266 (Ridge),0.293
+Year,English tier0,activation PLS Spearman (higher),Qwen3-32B,0.437,Thal-AKK,0.429,Qwen3-8B,0.416,0.349 (Ridge),0.275
+Geo,Akk maximal,PLS great-circle km (lower),cunei-400m,205,gpt-oss,218,Qwen3-8B,221,254,229
+Geo,English tier0,PLS great-circle km (lower),cunei-400m,186,gpt-oss,196,Qwen3-32B,201,257,221
+T12 answers,Akk maximal,best-prompt Spearman (higher),Qwen3-8B (few-shot),0.374,Qwen3-32B (few-shot),0.304,gpt-oss (expert),0.299,0.266 (floor),0.292 (floor)
+T12 answers,English tier0,best-prompt Spearman (higher),Qwen3-32B (expert),0.615,gpt-oss (CoT),0.595,Qwen3-8B (CoT),0.572,0.349 (floor),0.292 (floor)
+P8 dial,Akk maximal,"best |rho(z1,year)| (higher)",cunei-400m (lam=.9),0.344,random (lam=1),0.305,TF-IDF (lam=.9),0.303,0.303,0.305
+P8 dial,English tier0,"best |rho(z1,year)| (higher)",Qwen3-32B (lam=.7),0.392,TF-IDF (lam=.9),0.389,cunei-400m (lam=1),0.376,0.389,0.370
+P9 RBF-KPLS,Akk maximal,Spearman (higher),cunei-400m,0.393,TF-IDF,0.313,Qwen3-32B,0.312,0.313,0.286
+P9 RBF-KPLS,English tier0,Spearman (higher),Qwen3-32B,0.406,cunei-400m,0.379,uMT5,0.378,0.354,0.243

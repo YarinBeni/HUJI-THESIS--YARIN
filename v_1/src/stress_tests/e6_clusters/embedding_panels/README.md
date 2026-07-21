@@ -31,3 +31,15 @@ Takeaway across all panels: every model's visible "year" structure is the
 Neo-Babylonian-vs-Neo-Assyrian era split; within-era year is never resolved,
 and where clusters exist they track provenance/sub-genre, not reign or year.
 tfidf and random controls look no worse than the trained models.
+
+## Which models to compare (the deck's top-3 + controls)
+
+`../../results/csv/table1_best_models.csv` lists, per deck experiment
+(year/geo/T12/P8/P9 x maximal/engtier0), the **top-3 models and the TF-IDF\* +
+random\* controls** with their scores. Use it to pick which `<model>.png`
+panels to line up: e.g. for *Year, Akk maximal* the top-3 are cunei-400m /
+Qwen3-8B / Qwen3-1.7B — open those three plus `tfidf.png` and `random.png` in
+the same `maximal/<reduction>/` folder to see whether the winners' maps look
+any different from the controls' (they mostly do not). Columns: experiment,
+cleaning, metric, rank1..3 model+value, tfidf_control, random_control.
+Rendered narrative: ../../results/SUMMARY_TABLES.md (Table 1).
