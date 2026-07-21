@@ -196,3 +196,18 @@ html = (html.replace("__DATA__", DATA).replace("__LABELS__", LABELS)
 out = ROOT / "index.html"
 out.write_text(html, encoding="utf-8")
 print(f"wrote {out}")
+
+# --- also emit a fully self-contained standalone.html (all PNGs base64-embedded) ---
+import base64
+emb = {}
+for p in sorted(ROOT.rglob("*.png")):
+    emb[p.relative_to(ROOT).as_posix()] = ("data:image/png;base64,"
+                                            + base64.b64encode(p.read_bytes()).decode())
+sa = html.replace("<script>\n", "<script>\nconst EMB=" + json.dumps(emb) + ";\n", 1)
+sa = sa.replace('img.src=cl+"/"+state.reduction+"/"+m+".png";',
+                'img.src=EMB[cl+"/"+state.reduction+"/"+m+".png"]||"";')
+sa = sa.replace("<title>Embedding panel viewer</title>",
+                "<title>Embedding panel viewer (standalone)</title>")
+sap = ROOT / "standalone.html"
+sap.write_text(sa, encoding="utf-8")
+print(f"wrote {sap}  ({sap.stat().st_size/1e6:.1f} MB, {len(emb)} images embedded, fully portable)")
