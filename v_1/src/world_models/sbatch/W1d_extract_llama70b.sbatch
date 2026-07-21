@@ -21,6 +21,9 @@ M="${METHODS[$SLURM_ARRAY_TASK_ID]}"
 echo "=== W1d extract ${M} === job ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
+# Llama-2's slow tokenizer needs sentencepiece (the fast conversion is broken in
+# transformers>=5); guarantee it at runtime on the compute node.
+python -c "import sentencepiece" 2>/dev/null || pip install -q sentencepiece
 export PYTORCH_ALLOC_CONF=expandable_segments:True
 cd ~/projects/HUJI-THESIS--YARIN
 source v_1/src/stress_tests/sbatch/_common.sh

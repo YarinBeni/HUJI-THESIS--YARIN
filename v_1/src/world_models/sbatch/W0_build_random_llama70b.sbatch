@@ -16,6 +16,8 @@ set -uo pipefail
 echo "=== W0 build random llama70b === job ${SLURM_JOB_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
+# Llama-2's slow tokenizer needs sentencepiece (fast conversion broken in transformers>=5)
+python -c "import sentencepiece" 2>/dev/null || pip install -q sentencepiece
 cd ~/projects/HUJI-THESIS--YARIN
 source v_1/src/stress_tests/sbatch/_common.sh
 sync_main

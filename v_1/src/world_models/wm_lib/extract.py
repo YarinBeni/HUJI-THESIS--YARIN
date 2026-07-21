@@ -59,6 +59,35 @@ def _snapshot_with_fallback(spec: dict) -> str:
         return _snapshot(fb, spec["arch"])
 
 
+def _load_tokenizer(path):
+    """Load a tokenizer, working around the transformers>=5 bug that mis-routes
+    Llama-2's SentencePiece tokenizer.model through the tiktoken BPE loader
+    ("Error parsing line b'\\x0e' in tokenizer.model"). Tries, in order: fast,
+    slow (needs sentencepiece), explicit LlamaTokenizerFast built from
+    tokenizer.model. Every failure is printed so the log names the real cause.
+    If the slow path fails only because sentencepiece is missing, install it in
+    the job env (the W sbatch files self-install it)."""
+    from transformers import AutoTokenizer
+    errs = []
+    try:
+        return AutoTokenizer.from_pretrained(path, use_fast=True)
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"fast={type(e).__name__}: {e}")
+        print(f"[tok] use_fast=True failed -> {errs[-1]}", flush=True)
+    try:
+        return AutoTokenizer.from_pretrained(path, use_fast=False)
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"slow={type(e).__name__}: {e}")
+        print(f"[tok] use_fast=False failed -> {errs[-1]}", flush=True)
+    try:  # build the fast tokenizer straight from tokenizer.model (tokenizers lib)
+        from transformers import LlamaTokenizerFast
+        return LlamaTokenizerFast.from_pretrained(path)
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"LlamaTokenizerFast={type(e).__name__}: {e}")
+        print(f"[tok] LlamaTokenizerFast failed -> {errs[-1]}", flush=True)
+    raise RuntimeError("all tokenizer paths failed: " + " || ".join(errs))
+
+
 def load_model(spec: dict, dtype: str = "bfloat16", seed: int = 42):
     """Returns (tokenizer, core_module). core(input_ids, attention_mask,
     output_hidden_states=True).hidden_states has n_layers+1 entries (0=embeddings)."""
@@ -68,16 +97,7 @@ def load_model(spec: dict, dtype: str = "bfloat16", seed: int = 42):
     os.environ.setdefault("HF_HUB_DOWNLOAD_TIMEOUT", "60")
     td = getattr(torch, dtype)
     path = _snapshot_with_fallback(spec)
-    try:
-        tok = AutoTokenizer.from_pretrained(path, use_fast=True)
-    except Exception as e:  # noqa: BLE001
-        # transformers>=5 mis-routes Llama-2's SentencePiece tokenizer.model
-        # through the tiktoken BPE loader and crashes ("Error parsing line ...
-        # in tokenizer.model"). The slow tokenizer reads tokenizer.model
-        # directly via sentencepiece (already used by the uMT5/Thalesian arms).
-        print(f"[load] fast tokenizer failed ({type(e).__name__}: {e}); "
-              f"retrying use_fast=False", flush=True)
-        tok = AutoTokenizer.from_pretrained(path, use_fast=False)
+    tok = _load_tokenizer(path)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 
