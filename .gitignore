@@ -43,3 +43,6 @@ v_1/src/viz/seal_eda_standalone.html
 # Cluster job logs — never commit (huge)
 *.out
 **/logs/
+
+# Portable panel viewer — 31MB base64 artifact, regenerate with make_panel_gallery.py
+v_1/src/stress_tests/e6_clusters/embedding_panels/standalone.html
