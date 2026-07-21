@@ -1,28 +1,90 @@
 <!doctype html><html><head><meta charset="utf-8">
-<title>Embedding panels gallery</title>
+<title>Embedding panel viewer</title>
 <style>
+ :root{--g:#0a7}
+ *{box-sizing:border-box}
  body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;margin:0;background:#f5f5f7;color:#1d1d1f}
- header{position:sticky;top:0;background:#fff;border-bottom:1px solid #ddd;padding:12px 20px;z-index:9}
- header h1{margin:0;font-size:18px}
- header p{margin:4px 0 0;font-size:13px;color:#666}
- section{padding:8px 20px 24px}
- h2{font-size:15px;border-left:4px solid #0a7;padding-left:8px}
- h2 .n{color:#999;font-weight:normal;font-size:12px}
- .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
- figure{margin:0;background:#fff;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden}
- figure img{width:100%;display:block;cursor:zoom-in}
- figcaption{font-size:12px;padding:6px 8px;color:#333;font-weight:600}
- dialog{border:none;background:transparent;max-width:96vw;max-height:96vh;padding:0}
- dialog img{max-width:96vw;max-height:96vh}
- dialog::backdrop{background:rgba(0,0,0,.85)}
+ header{position:sticky;top:0;background:#fff;border-bottom:1px solid #ddd;padding:14px 22px;z-index:9}
+ header h1{margin:0 0 3px;font-size:17px}
+ header .sub{font-size:12.5px;color:#666;margin-bottom:12px}
+ .bar{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end}
+ .ctl{display:flex;flex-direction:column;gap:4px}
+ .ctl label{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#888;font-weight:600}
+ select{font-size:14px;padding:7px 10px;border:1px solid #ccc;border-radius:7px;background:#fff;min-width:190px}
+ .seg{display:flex;border:1px solid #ccc;border-radius:7px;overflow:hidden}
+ .seg button{border:0;background:#fff;padding:8px 14px;font-size:13.5px;cursor:pointer;color:#333}
+ .seg button.on{background:var(--g);color:#fff}
+ .seg button+button{border-left:1px solid #ccc}
+ main{padding:18px 22px 40px;text-align:center}
+ #cap{font-size:14px;color:#444;margin:0 0 10px;font-weight:600}
+ #panel{max-width:100%;max-height:82vh;border:1px solid #e0e0e0;border-radius:10px;background:#fff}
+ #miss{display:none;color:#a00;padding:40px;font-size:15px}
+ .hint{font-size:12px;color:#888;margin-top:10px}
 </style></head><body>
-<header><h1>Embedding panels &mdash; six views of each map (year / ruler / period / sub-genre / provenance / length)</h1>
-<p>ORCC royal inscriptions &middot; grouped cleaning &middot; reduction &middot; click any panel to zoom. See table1_best_models.csv for the top-3 per experiment.</p></header>
-<section><h2>maximal &middot; TSNE <span class="n">(10 models)</span></h2><div class="grid"><figure><img loading="lazy" src="maximal/tsne/gpt_oss_120b.png" alt="gpt_oss_120b.png"><figcaption>gpt_oss_120b</figcaption></figure><figure><img loading="lazy" src="maximal/tsne/mlm.png" alt="mlm.png"><figcaption>mlm</figcaption></figure><figure><img loading="lazy" src="maximal/tsne/qwen3_1b7.png" alt="qwen3_1b7.png"><figcaption>qwen3_1b7</figcaption></figure><figure><img loading="lazy" src="maximal/tsne/qwen3_32b.png" alt="qwen3_32b.png"><figcaption>qwen3_32b</figcaption></figure><figure><img loading="lazy" src="maximal/tsne/qwen3_8b.png" alt="qwen3_8b.png"><figcaption>qwen3_8b</figcaption></figure><figure><img loading="lazy" src="maximal/tsne/random.png" alt="random.png"><figcaption>random</figcaption></figure><figure><img loading="lazy" src="maximal/tsne/tfidf.png" alt="tfidf.png"><figcaption>tfidf</figcaption></figure><figure><img loading="lazy" src="maximal/tsne/thalesian_akk300m.png" alt="thalesian_akk300m.png"><figcaption>thalesian_akk300m</figcaption></figure><figure><img loading="lazy" src="maximal/tsne/thalesian_cunei400m.png" alt="thalesian_cunei400m.png"><figcaption>thalesian_cunei400m</figcaption></figure><figure><img loading="lazy" src="maximal/tsne/umt5_base.png" alt="umt5_base.png"><figcaption>umt5_base</figcaption></figure></div></section><section><h2>maximal &middot; PCA <span class="n">(10 models)</span></h2><div class="grid"><figure><img loading="lazy" src="maximal/pca/gpt_oss_120b.png" alt="gpt_oss_120b.png"><figcaption>gpt_oss_120b</figcaption></figure><figure><img loading="lazy" src="maximal/pca/mlm.png" alt="mlm.png"><figcaption>mlm</figcaption></figure><figure><img loading="lazy" src="maximal/pca/qwen3_1b7.png" alt="qwen3_1b7.png"><figcaption>qwen3_1b7</figcaption></figure><figure><img loading="lazy" src="maximal/pca/qwen3_32b.png" alt="qwen3_32b.png"><figcaption>qwen3_32b</figcaption></figure><figure><img loading="lazy" src="maximal/pca/qwen3_8b.png" alt="qwen3_8b.png"><figcaption>qwen3_8b</figcaption></figure><figure><img loading="lazy" src="maximal/pca/random.png" alt="random.png"><figcaption>random</figcaption></figure><figure><img loading="lazy" src="maximal/pca/tfidf.png" alt="tfidf.png"><figcaption>tfidf</figcaption></figure><figure><img loading="lazy" src="maximal/pca/thalesian_akk300m.png" alt="thalesian_akk300m.png"><figcaption>thalesian_akk300m</figcaption></figure><figure><img loading="lazy" src="maximal/pca/thalesian_cunei400m.png" alt="thalesian_cunei400m.png"><figcaption>thalesian_cunei400m</figcaption></figure><figure><img loading="lazy" src="maximal/pca/umt5_base.png" alt="umt5_base.png"><figcaption>umt5_base</figcaption></figure></div></section><section><h2>maximal &middot; UMAP <span class="n">(9 models)</span></h2><div class="grid"><figure><img loading="lazy" src="maximal/umap/gpt_oss_120b.png" alt="gpt_oss_120b.png"><figcaption>gpt_oss_120b</figcaption></figure><figure><img loading="lazy" src="maximal/umap/mlm.png" alt="mlm.png"><figcaption>mlm</figcaption></figure><figure><img loading="lazy" src="maximal/umap/qwen3_1b7.png" alt="qwen3_1b7.png"><figcaption>qwen3_1b7</figcaption></figure><figure><img loading="lazy" src="maximal/umap/qwen3_32b.png" alt="qwen3_32b.png"><figcaption>qwen3_32b</figcaption></figure><figure><img loading="lazy" src="maximal/umap/qwen3_8b.png" alt="qwen3_8b.png"><figcaption>qwen3_8b</figcaption></figure><figure><img loading="lazy" src="maximal/umap/random.png" alt="random.png"><figcaption>random</figcaption></figure><figure><img loading="lazy" src="maximal/umap/thalesian_akk300m.png" alt="thalesian_akk300m.png"><figcaption>thalesian_akk300m</figcaption></figure><figure><img loading="lazy" src="maximal/umap/thalesian_cunei400m.png" alt="thalesian_cunei400m.png"><figcaption>thalesian_cunei400m</figcaption></figure><figure><img loading="lazy" src="maximal/umap/umt5_base.png" alt="umt5_base.png"><figcaption>umt5_base</figcaption></figure></div></section><section><h2>maximal &middot; PLS <span class="n">(10 models)</span></h2><div class="grid"><figure><img loading="lazy" src="maximal/pls/gpt_oss_120b.png" alt="gpt_oss_120b.png"><figcaption>gpt_oss_120b</figcaption></figure><figure><img loading="lazy" src="maximal/pls/mlm.png" alt="mlm.png"><figcaption>mlm</figcaption></figure><figure><img loading="lazy" src="maximal/pls/qwen3_1b7.png" alt="qwen3_1b7.png"><figcaption>qwen3_1b7</figcaption></figure><figure><img loading="lazy" src="maximal/pls/qwen3_32b.png" alt="qwen3_32b.png"><figcaption>qwen3_32b</figcaption></figure><figure><img loading="lazy" src="maximal/pls/qwen3_8b.png" alt="qwen3_8b.png"><figcaption>qwen3_8b</figcaption></figure><figure><img loading="lazy" src="maximal/pls/random.png" alt="random.png"><figcaption>random</figcaption></figure><figure><img loading="lazy" src="maximal/pls/tfidf.png" alt="tfidf.png"><figcaption>tfidf</figcaption></figure><figure><img loading="lazy" src="maximal/pls/thalesian_akk300m.png" alt="thalesian_akk300m.png"><figcaption>thalesian_akk300m</figcaption></figure><figure><img loading="lazy" src="maximal/pls/thalesian_cunei400m.png" alt="thalesian_cunei400m.png"><figcaption>thalesian_cunei400m</figcaption></figure><figure><img loading="lazy" src="maximal/pls/umt5_base.png" alt="umt5_base.png"><figcaption>umt5_base</figcaption></figure></div></section><section><h2>engtier0 &middot; TSNE <span class="n">(8 models)</span></h2><div class="grid"><figure><img loading="lazy" src="engtier0/tsne/gpt_oss_120b.png" alt="gpt_oss_120b.png"><figcaption>gpt_oss_120b</figcaption></figure><figure><img loading="lazy" src="engtier0/tsne/qwen3_1b7.png" alt="qwen3_1b7.png"><figcaption>qwen3_1b7</figcaption></figure><figure><img loading="lazy" src="engtier0/tsne/qwen3_32b.png" alt="qwen3_32b.png"><figcaption>qwen3_32b</figcaption></figure><figure><img loading="lazy" src="engtier0/tsne/qwen3_8b.png" alt="qwen3_8b.png"><figcaption>qwen3_8b</figcaption></figure><figure><img loading="lazy" src="engtier0/tsne/random.png" alt="random.png"><figcaption>random</figcaption></figure><figure><img loading="lazy" src="engtier0/tsne/thalesian_akk300m.png" alt="thalesian_akk300m.png"><figcaption>thalesian_akk300m</figcaption></figure><figure><img loading="lazy" src="engtier0/tsne/thalesian_cunei400m.png" alt="thalesian_cunei400m.png"><figcaption>thalesian_cunei400m</figcaption></figure><figure><img loading="lazy" src="engtier0/tsne/umt5_base.png" alt="umt5_base.png"><figcaption>umt5_base</figcaption></figure></div></section><section><h2>engtier0 &middot; PCA <span class="n">(8 models)</span></h2><div class="grid"><figure><img loading="lazy" src="engtier0/pca/gpt_oss_120b.png" alt="gpt_oss_120b.png"><figcaption>gpt_oss_120b</figcaption></figure><figure><img loading="lazy" src="engtier0/pca/qwen3_1b7.png" alt="qwen3_1b7.png"><figcaption>qwen3_1b7</figcaption></figure><figure><img loading="lazy" src="engtier0/pca/qwen3_32b.png" alt="qwen3_32b.png"><figcaption>qwen3_32b</figcaption></figure><figure><img loading="lazy" src="engtier0/pca/qwen3_8b.png" alt="qwen3_8b.png"><figcaption>qwen3_8b</figcaption></figure><figure><img loading="lazy" src="engtier0/pca/random.png" alt="random.png"><figcaption>random</figcaption></figure><figure><img loading="lazy" src="engtier0/pca/thalesian_akk300m.png" alt="thalesian_akk300m.png"><figcaption>thalesian_akk300m</figcaption></figure><figure><img loading="lazy" src="engtier0/pca/thalesian_cunei400m.png" alt="thalesian_cunei400m.png"><figcaption>thalesian_cunei400m</figcaption></figure><figure><img loading="lazy" src="engtier0/pca/umt5_base.png" alt="umt5_base.png"><figcaption>umt5_base</figcaption></figure></div></section><section><h2>engtier0 &middot; UMAP <span class="n">(8 models)</span></h2><div class="grid"><figure><img loading="lazy" src="engtier0/umap/gpt_oss_120b.png" alt="gpt_oss_120b.png"><figcaption>gpt_oss_120b</figcaption></figure><figure><img loading="lazy" src="engtier0/umap/qwen3_1b7.png" alt="qwen3_1b7.png"><figcaption>qwen3_1b7</figcaption></figure><figure><img loading="lazy" src="engtier0/umap/qwen3_32b.png" alt="qwen3_32b.png"><figcaption>qwen3_32b</figcaption></figure><figure><img loading="lazy" src="engtier0/umap/qwen3_8b.png" alt="qwen3_8b.png"><figcaption>qwen3_8b</figcaption></figure><figure><img loading="lazy" src="engtier0/umap/random.png" alt="random.png"><figcaption>random</figcaption></figure><figure><img loading="lazy" src="engtier0/umap/thalesian_akk300m.png" alt="thalesian_akk300m.png"><figcaption>thalesian_akk300m</figcaption></figure><figure><img loading="lazy" src="engtier0/umap/thalesian_cunei400m.png" alt="thalesian_cunei400m.png"><figcaption>thalesian_cunei400m</figcaption></figure><figure><img loading="lazy" src="engtier0/umap/umt5_base.png" alt="umt5_base.png"><figcaption>umt5_base</figcaption></figure></div></section><section><h2>engtier0 &middot; PLS <span class="n">(9 models)</span></h2><div class="grid"><figure><img loading="lazy" src="engtier0/pls/gpt_oss_120b.png" alt="gpt_oss_120b.png"><figcaption>gpt_oss_120b</figcaption></figure><figure><img loading="lazy" src="engtier0/pls/qwen3_1b7.png" alt="qwen3_1b7.png"><figcaption>qwen3_1b7</figcaption></figure><figure><img loading="lazy" src="engtier0/pls/qwen3_32b.png" alt="qwen3_32b.png"><figcaption>qwen3_32b</figcaption></figure><figure><img loading="lazy" src="engtier0/pls/qwen3_8b.png" alt="qwen3_8b.png"><figcaption>qwen3_8b</figcaption></figure><figure><img loading="lazy" src="engtier0/pls/random.png" alt="random.png"><figcaption>random</figcaption></figure><figure><img loading="lazy" src="engtier0/pls/tfidf.png" alt="tfidf.png"><figcaption>tfidf</figcaption></figure><figure><img loading="lazy" src="engtier0/pls/thalesian_akk300m.png" alt="thalesian_akk300m.png"><figcaption>thalesian_akk300m</figcaption></figure><figure><img loading="lazy" src="engtier0/pls/thalesian_cunei400m.png" alt="thalesian_cunei400m.png"><figcaption>thalesian_cunei400m</figcaption></figure><figure><img loading="lazy" src="engtier0/pls/umt5_base.png" alt="umt5_base.png"><figcaption>umt5_base</figcaption></figure></div></section>
-<dialog id="zoom"><img id="zi"></dialog>
+<header>
+ <h1>Embedding panel viewer &mdash; six views of each map (year / ruler / period / sub-genre / provenance / length)</h1>
+ <div class="sub">ORCC royal inscriptions &middot; pick a model, cleaning, and dimensionality reduction. Top-3 per experiment: results/csv/table1_best_models.csv</div>
+ <div class="bar">
+  <div class="ctl"><label>Model</label>
+   <select id="model"></select></div>
+  <div class="ctl"><label>Cleaning</label>
+   <div class="seg" id="cleaning"></div></div>
+  <div class="ctl"><label>Dim reduction</label>
+   <div class="seg" id="reduction"></div></div>
+ </div>
+</header>
+<main>
+ <p id="cap"></p>
+ <img id="panel" alt="panel">
+ <div id="miss"></div>
+ <p class="hint">Not every model has every cleaning (MLM = Akkadian only; some controls lack a projection). Missing combos are disabled.</p>
+</main>
 <script>
- const dlg=document.getElementById('zoom'),zi=document.getElementById('zi');
- document.querySelectorAll('.grid img').forEach(im=>im.onclick=()=>{zi.src=im.src;dlg.showModal();});
- dlg.onclick=()=>dlg.close();
+ const AVAIL={"maximal": {"tsne": ["thalesian_cunei400m", "qwen3_32b", "qwen3_8b", "qwen3_1b7", "gpt_oss_120b", "thalesian_akk300m", "umt5_base", "mlm", "tfidf", "random"], "pca": ["thalesian_cunei400m", "qwen3_32b", "qwen3_8b", "qwen3_1b7", "gpt_oss_120b", "thalesian_akk300m", "umt5_base", "mlm", "tfidf", "random"], "umap": ["thalesian_cunei400m", "qwen3_32b", "qwen3_8b", "qwen3_1b7", "gpt_oss_120b", "thalesian_akk300m", "umt5_base", "mlm", "random"], "pls": ["thalesian_cunei400m", "qwen3_32b", "qwen3_8b", "qwen3_1b7", "gpt_oss_120b", "thalesian_akk300m", "umt5_base", "mlm", "tfidf", "random"]}, "engtier0": {"tsne": ["thalesian_cunei400m", "qwen3_32b", "qwen3_8b", "qwen3_1b7", "gpt_oss_120b", "thalesian_akk300m", "umt5_base", "random"], "pca": ["thalesian_cunei400m", "qwen3_32b", "qwen3_8b", "qwen3_1b7", "gpt_oss_120b", "thalesian_akk300m", "umt5_base", "random"], "umap": ["thalesian_cunei400m", "qwen3_32b", "qwen3_8b", "qwen3_1b7", "gpt_oss_120b", "thalesian_akk300m", "umt5_base", "random"], "pls": ["thalesian_cunei400m", "qwen3_32b", "qwen3_8b", "qwen3_1b7", "gpt_oss_120b", "thalesian_akk300m", "umt5_base", "tfidf", "random"]}}, MLAB={"thalesian_cunei400m": "cunei-400m", "thalesian_akk300m": "Thal-AKK-300m", "qwen3_32b": "Qwen3-32B", "qwen3_8b": "Qwen3-8B", "qwen3_1b7": "Qwen3-1.7B", "gpt_oss_120b": "gpt-oss-120B", "umt5_base": "uMT5-base", "mlm": "MLM", "tfidf": "TF-IDF*", "random": "random*"}, RLAB={"tsne": "t-SNE", "pca": "PCA", "umap": "UMAP", "pls": "PLS (supervised)"}, CLAB={"maximal": "Akkadian maximal", "engtier0": "English tier0"};
+ const state={cleaning:"maximal", reduction:"tsne", model:null};
+
+ function modelsFor(cl,red){return (AVAIL[cl]&&AVAIL[cl][red])||[];}
+
+ function buildSeg(id, keys, labMap, cur){
+   const box=document.getElementById(id); box.innerHTML="";
+   keys.forEach(k=>{const b=document.createElement("button");
+     b.textContent=labMap[k]||k; b.dataset.k=k;
+     if(k===cur) b.classList.add("on");
+     b.onclick=()=>{state[id]=k; sync();}; box.appendChild(b);});
+ }
+ function syncSeg(id,cur){document.querySelectorAll("#"+id+" button").forEach(b=>
+   b.classList.toggle("on", b.dataset.k===cur));}
+
+ function refreshModels(){
+   const sel=document.getElementById("model");
+   const list=modelsFor(state.cleaning,state.reduction);
+   const prev=state.model;
+   sel.innerHTML="";
+   list.forEach(m=>{const o=document.createElement("option");
+     o.value=m; o.textContent=MLAB[m]||m; sel.appendChild(o);});
+   state.model = list.includes(prev)?prev:(list[0]||null);
+   sel.value=state.model||"";
+ }
+ function show(){
+   const img=document.getElementById("panel"), miss=document.getElementById("miss"),
+         cap=document.getElementById("cap");
+   const list=modelsFor(state.cleaning,state.reduction);
+   if(!state.model || !list.includes(state.model)){
+     img.style.display="none"; miss.style.display="block";
+     miss.textContent="No panel for "+(MLAB[state.model]||state.model)+" · "+CLAB[state.cleaning]+" · "+RLAB[state.reduction];
+     cap.textContent=""; return;
+   }
+   miss.style.display="none"; img.style.display="inline-block";
+   img.src=state.cleaning+"/"+state.reduction+"/"+state.model+".png";
+   cap.textContent=(MLAB[state.model]||state.model)+"  ·  "+CLAB[state.cleaning]+"  ·  "+RLAB[state.reduction];
+ }
+ function sync(){
+   syncSeg("cleaning",state.cleaning); syncSeg("reduction",state.reduction);
+   refreshModels(); show();
+ }
+ document.getElementById("model").onchange=e=>{state.model=e.target.value; show();};
+ buildSeg("cleaning",["maximal","engtier0"],CLAB,state.cleaning);
+ buildSeg("reduction",["tsne","pca","umap","pls"],RLAB,state.reduction);
+ sync();
 </script>
 </body></html>

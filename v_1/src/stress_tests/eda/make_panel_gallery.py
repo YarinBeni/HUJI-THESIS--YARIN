@@ -1,62 +1,134 @@
-"""make_panel_gallery.py — build a single self-contained index.html that shows
-every embedding panel, grouped cleaning -> reduction, with model tabs. No
+"""make_panel_gallery.py — build a self-contained index.html viewer for the
+embedding panels, in the style of the seal_eda GUI: dropdown selectors for
+MODEL / CLEANING / REDUCTION at the top, one large panel shown below. No
 dependencies, no server: open embedding_panels/index.html in any browser.
 
 Usage:  python v_1/src/stress_tests/eda/make_panel_gallery.py
 """
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1] / "e6_clusters" / "embedding_panels"
 CLEANINGS = ["maximal", "engtier0"]
 REDUCTIONS = ["tsne", "pca", "umap", "pls"]
+MODEL_LABEL = {
+    "thalesian_cunei400m": "cunei-400m", "thalesian_akk300m": "Thal-AKK-300m",
+    "qwen3_32b": "Qwen3-32B", "qwen3_8b": "Qwen3-8B", "qwen3_1b7": "Qwen3-1.7B",
+    "gpt_oss_120b": "gpt-oss-120B", "umt5_base": "uMT5-base", "mlm": "MLM",
+    "tfidf": "TF-IDF*", "random": "random*"}
+MODEL_ORDER = ["thalesian_cunei400m", "qwen3_32b", "qwen3_8b", "qwen3_1b7",
+               "gpt_oss_120b", "thalesian_akk300m", "umt5_base", "mlm",
+               "tfidf", "random"]
 
-cards = []
+# available[cleaning][reduction] = sorted list of model stems that have a png
+avail = {}
 for cl in CLEANINGS:
     for red in REDUCTIONS:
         d = ROOT / cl / red
         if not d.is_dir():
             continue
-        imgs = sorted(p.name for p in d.glob("*.png"))
-        if not imgs:
-            continue
-        thumbs = "".join(
-            f'<figure><img loading="lazy" src="{cl}/{red}/{n}" '
-            f'alt="{n}"><figcaption>{n[:-4]}</figcaption></figure>'
-            for n in imgs)
-        cards.append(
-            f'<section><h2>{cl} &middot; {red.upper()} '
-            f'<span class="n">({len(imgs)} models)</span></h2>'
-            f'<div class="grid">{thumbs}</div></section>')
+        models = [p.stem for p in d.glob("*.png")]
+        avail.setdefault(cl, {})[red] = sorted(
+            models, key=lambda m: MODEL_ORDER.index(m) if m in MODEL_ORDER else 99)
 
-html = f"""<!doctype html><html><head><meta charset="utf-8">
-<title>Embedding panels gallery</title>
+DATA = json.dumps(avail)
+LABELS = json.dumps(MODEL_LABEL)
+RLAB = json.dumps({"tsne": "t-SNE", "pca": "PCA", "umap": "UMAP", "pls": "PLS (supervised)"})
+CLAB = json.dumps({"maximal": "Akkadian maximal", "engtier0": "English tier0"})
+
+html = """<!doctype html><html><head><meta charset="utf-8">
+<title>Embedding panel viewer</title>
 <style>
- body{{font-family:-apple-system,Segoe UI,Roboto,sans-serif;margin:0;background:#f5f5f7;color:#1d1d1f}}
- header{{position:sticky;top:0;background:#fff;border-bottom:1px solid #ddd;padding:12px 20px;z-index:9}}
- header h1{{margin:0;font-size:18px}}
- header p{{margin:4px 0 0;font-size:13px;color:#666}}
- section{{padding:8px 20px 24px}}
- h2{{font-size:15px;border-left:4px solid #0a7;padding-left:8px}}
- h2 .n{{color:#999;font-weight:normal;font-size:12px}}
- .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}}
- figure{{margin:0;background:#fff;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden}}
- figure img{{width:100%;display:block;cursor:zoom-in}}
- figcaption{{font-size:12px;padding:6px 8px;color:#333;font-weight:600}}
- dialog{{border:none;background:transparent;max-width:96vw;max-height:96vh;padding:0}}
- dialog img{{max-width:96vw;max-height:96vh}}
- dialog::backdrop{{background:rgba(0,0,0,.85)}}
+ :root{--g:#0a7}
+ *{box-sizing:border-box}
+ body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;margin:0;background:#f5f5f7;color:#1d1d1f}
+ header{position:sticky;top:0;background:#fff;border-bottom:1px solid #ddd;padding:14px 22px;z-index:9}
+ header h1{margin:0 0 3px;font-size:17px}
+ header .sub{font-size:12.5px;color:#666;margin-bottom:12px}
+ .bar{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end}
+ .ctl{display:flex;flex-direction:column;gap:4px}
+ .ctl label{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#888;font-weight:600}
+ select{font-size:14px;padding:7px 10px;border:1px solid #ccc;border-radius:7px;background:#fff;min-width:190px}
+ .seg{display:flex;border:1px solid #ccc;border-radius:7px;overflow:hidden}
+ .seg button{border:0;background:#fff;padding:8px 14px;font-size:13.5px;cursor:pointer;color:#333}
+ .seg button.on{background:var(--g);color:#fff}
+ .seg button+button{border-left:1px solid #ccc}
+ main{padding:18px 22px 40px;text-align:center}
+ #cap{font-size:14px;color:#444;margin:0 0 10px;font-weight:600}
+ #panel{max-width:100%;max-height:82vh;border:1px solid #e0e0e0;border-radius:10px;background:#fff}
+ #miss{display:none;color:#a00;padding:40px;font-size:15px}
+ .hint{font-size:12px;color:#888;margin-top:10px}
 </style></head><body>
-<header><h1>Embedding panels &mdash; six views of each map (year / ruler / period / sub-genre / provenance / length)</h1>
-<p>ORCC royal inscriptions &middot; grouped cleaning &middot; reduction &middot; click any panel to zoom. See table1_best_models.csv for the top-3 per experiment.</p></header>
-{''.join(cards)}
-<dialog id="zoom"><img id="zi"></dialog>
+<header>
+ <h1>Embedding panel viewer &mdash; six views of each map (year / ruler / period / sub-genre / provenance / length)</h1>
+ <div class="sub">ORCC royal inscriptions &middot; pick a model, cleaning, and dimensionality reduction. Top-3 per experiment: results/csv/table1_best_models.csv</div>
+ <div class="bar">
+  <div class="ctl"><label>Model</label>
+   <select id="model"></select></div>
+  <div class="ctl"><label>Cleaning</label>
+   <div class="seg" id="cleaning"></div></div>
+  <div class="ctl"><label>Dim reduction</label>
+   <div class="seg" id="reduction"></div></div>
+ </div>
+</header>
+<main>
+ <p id="cap"></p>
+ <img id="panel" alt="panel">
+ <div id="miss"></div>
+ <p class="hint">Not every model has every cleaning (MLM = Akkadian only; some controls lack a projection). Missing combos are disabled.</p>
+</main>
 <script>
- const dlg=document.getElementById('zoom'),zi=document.getElementById('zi');
- document.querySelectorAll('.grid img').forEach(im=>im.onclick=()=>{{zi.src=im.src;dlg.showModal();}});
- dlg.onclick=()=>dlg.close();
+ const AVAIL=__DATA__, MLAB=__LABELS__, RLAB=__RLAB__, CLAB=__CLAB__;
+ const state={cleaning:"maximal", reduction:"tsne", model:null};
+
+ function modelsFor(cl,red){return (AVAIL[cl]&&AVAIL[cl][red])||[];}
+
+ function buildSeg(id, keys, labMap, cur){
+   const box=document.getElementById(id); box.innerHTML="";
+   keys.forEach(k=>{const b=document.createElement("button");
+     b.textContent=labMap[k]||k; b.dataset.k=k;
+     if(k===cur) b.classList.add("on");
+     b.onclick=()=>{state[id]=k; sync();}; box.appendChild(b);});
+ }
+ function syncSeg(id,cur){document.querySelectorAll("#"+id+" button").forEach(b=>
+   b.classList.toggle("on", b.dataset.k===cur));}
+
+ function refreshModels(){
+   const sel=document.getElementById("model");
+   const list=modelsFor(state.cleaning,state.reduction);
+   const prev=state.model;
+   sel.innerHTML="";
+   list.forEach(m=>{const o=document.createElement("option");
+     o.value=m; o.textContent=MLAB[m]||m; sel.appendChild(o);});
+   state.model = list.includes(prev)?prev:(list[0]||null);
+   sel.value=state.model||"";
+ }
+ function show(){
+   const img=document.getElementById("panel"), miss=document.getElementById("miss"),
+         cap=document.getElementById("cap");
+   const list=modelsFor(state.cleaning,state.reduction);
+   if(!state.model || !list.includes(state.model)){
+     img.style.display="none"; miss.style.display="block";
+     miss.textContent="No panel for "+(MLAB[state.model]||state.model)+" · "+CLAB[state.cleaning]+" · "+RLAB[state.reduction];
+     cap.textContent=""; return;
+   }
+   miss.style.display="none"; img.style.display="inline-block";
+   img.src=state.cleaning+"/"+state.reduction+"/"+state.model+".png";
+   cap.textContent=(MLAB[state.model]||state.model)+"  ·  "+CLAB[state.cleaning]+"  ·  "+RLAB[state.reduction];
+ }
+ function sync(){
+   syncSeg("cleaning",state.cleaning); syncSeg("reduction",state.reduction);
+   refreshModels(); show();
+ }
+ document.getElementById("model").onchange=e=>{state.model=e.target.value; show();};
+ buildSeg("cleaning",["maximal","engtier0"],CLAB,state.cleaning);
+ buildSeg("reduction",["tsne","pca","umap","pls"],RLAB,state.reduction);
+ sync();
 </script>
 </body></html>"""
 
+html = (html.replace("__DATA__", DATA).replace("__LABELS__", LABELS)
+        .replace("__RLAB__", RLAB).replace("__CLAB__", CLAB))
 out = ROOT / "index.html"
 out.write_text(html, encoding="utf-8")
-print(f"wrote {out}  ({len(cards)} groups)")
+print(f"wrote {out}")
