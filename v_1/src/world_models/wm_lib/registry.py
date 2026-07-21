@@ -15,7 +15,11 @@ import os
 ARCH_CAUSAL = "causal"
 ARCH_ENCODER = "encoder"
 
-_LLAMA_ORG = os.environ.get("WM_LLAMA_ORG", "meta-llama")
+# Default to the ungated NousResearch mirrors (identical Llama-2 weights): the
+# meta-llama repos are gated and fail with "Cannot access gated repo" unless the
+# HF_TOKEN account has been granted access. Set WM_LLAMA_ORG=meta-llama to use the
+# official repos when you have access.
+_LLAMA_ORG = os.environ.get("WM_LLAMA_ORG", "NousResearch")
 
 # Cluster-local dir for materialized random checkpoints (llama2_70b_random, built by W0).
 WM_MODELS_DIR = os.environ.get(
