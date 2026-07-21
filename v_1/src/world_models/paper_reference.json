@@ -1,0 +1,13 @@
+{
+  "_comment": "Best-layer held-out test R^2 reported by Gurnee & Tegmark (arXiv:2310.02207) for Llama-2-70B at ~60% depth, last-token activations, empty prompt, ridge probes. Used as the reference row in aggregate_results.py; our llama2_70b re-run should land near these.",
+  "source": "Gurnee & Tegmark 2023, Language Models Represent Space and Time",
+  "model": "Llama-2-70b (paper)",
+  "best_test_r2": {
+    "world_place": 0.911,
+    "us_place": 0.864,
+    "nyc_place": 0.359,
+    "historical_figure": 0.835,
+    "art": 0.885,
+    "headline": 0.746
+  }
+}

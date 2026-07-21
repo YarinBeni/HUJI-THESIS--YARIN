@@ -1,0 +1,44 @@
+{
+  "method": "tfidf",
+  "entity_type": "world_place",
+  "feature": "coords",
+  "site": "text",
+  "probe": "ridge",
+  "n": 39585,
+  "n_test": 7917,
+  "n_features": 77454,
+  "layers": {
+    "0": {
+      "train": {
+        "r2": 0.8485836033362375,
+        "lon_r2": 0.8660078229432878,
+        "lat_r2": 0.8311593837291893,
+        "mae": 13.328437764551333,
+        "lon_spearman": 0.9380759329353814,
+        "lat_spearman": 0.9004835326710519,
+        "lon_pearson": 0.9337297719773092,
+        "lat_pearson": 0.9174048219731109,
+        "haversine_mae": 2103.2604887133443,
+        "haversine_rmse": 3015.7804418766596,
+        "haversine_r2": 0.8608264111692436
+      },
+      "test": {
+        "r2": 0.6421097496244539,
+        "lon_r2": 0.6820170909877916,
+        "lat_r2": 0.6022024082611146,
+        "mae": 20.432114811843096,
+        "lon_spearman": 0.8157782376308259,
+        "lat_spearman": 0.7467104614720876,
+        "lon_pearson": 0.8261140840478618,
+        "lat_pearson": 0.7762153371655144,
+        "haversine_mae": 3194.393960787836,
+        "haversine_rmse": 4515.143759635865,
+        "haversine_r2": 0.6861701454158856
+      },
+      "alpha": 1.0
+    }
+  },
+  "best_layer": 0,
+  "best_test_r2": 0.6421097496244539,
+  "best_test_spearman": 0.7467104614720876
+}
