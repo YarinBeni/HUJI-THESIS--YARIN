@@ -35,12 +35,19 @@ def load_all():
         with open(path) as f:
             r = json.load(f)
         for li, sc in r["layers"].items():
+            t = sc["test"]
+            # ordering metric, comparable across domains: time -> spearman; geo ->
+            # mean of the latitude and longitude rank correlations (not just lat)
+            if "spearman" in t:
+                sp = t["spearman"]
+            else:
+                sp = (t.get("lat_spearman", float("nan"))
+                      + t.get("lon_spearman", float("nan"))) / 2
             rows.append({
                 "method": r["method"], "entity_type": r["entity_type"],
                 "site": r["site"], "probe": r["probe"], "layer": int(li),
-                "test_r2": sc["test"]["r2"],
-                "test_spearman": sc["test"].get(
-                    "spearman", sc["test"].get("lat_spearman")),
+                "test_r2": t["r2"],
+                "test_spearman": sp,
                 "train_r2": sc["train"]["r2"],
                 "is_best": int(li) == r["best_layer"],
             })
@@ -95,7 +102,7 @@ def main():
         "",
         r2_disp.round(3).to_markdown(),
         "",
-        "Best-layer test Spearman (places: latitude axis):",
+        "Best-layer test Spearman (places: mean of latitude & longitude axes):",
         "",
         sp.round(3).to_markdown(),
         "",

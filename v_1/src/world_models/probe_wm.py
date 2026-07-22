@@ -84,7 +84,9 @@ def probe_one(method, entity_type, site, args):
         "best_layer": bl,
         "best_test_r2": float(br2),
         "best_test_spearman": per_layer[bl]["test"].get(
-            "spearman", per_layer[bl]["test"].get("lat_spearman")),
+            "spearman",
+            (per_layer[bl]["test"].get("lat_spearman", float("nan"))
+             + per_layer[bl]["test"].get("lon_spearman", float("nan"))) / 2),
     }
     pdir = os.path.join(RESULTS_DIR, "probes", method)
     os.makedirs(pdir, exist_ok=True)
