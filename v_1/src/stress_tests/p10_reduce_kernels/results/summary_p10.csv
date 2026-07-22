@@ -1,0 +1,13 @@
+method,cleaning,reducer,norm,gkpls,rbfkpls,krr_geo,dial_pred
+tfidf,maximal,raw,none,0.276,0.3,0.158,0.244
+tfidf,maximal,raw,zscore,0.018,-0.08,-0.053,0.05
+tfidf,maximal,raw,l2,0.278,0.301,0.157,0.234
+tfidf,maximal,pca,none,0.27,0.277,0.222,0.248
+tfidf,maximal,pca,zscore,0.244,0.265,0.204,0.247
+tfidf,maximal,pca,l2,0.271,0.256,0.195,0.248
+tfidf,maximal,pls,none,0.239,0.252,0.207,0.255
+tfidf,maximal,pls,zscore,0.218,0.245,0.206,0.255
+tfidf,maximal,pls,l2,0.259,0.26,0.237,0.278
+tfidf,maximal,umap,none,0.299,0.283,0.21,0.234
+tfidf,maximal,umap,zscore,0.291,0.277,0.202,0.236
+tfidf,maximal,umap,l2,0.221,0.243,0.187,0.205
