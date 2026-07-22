@@ -5,29 +5,32 @@
   "target": "year",
   "site": "text",
   "n": 1187,
-  "n_test": 238,
+  "n_rulers": 40,
   "n_features": 14326,
-  "layers": {
-    "0": {
-      "train": {
-        "r2": 0.5880634970982235,
-        "mae": 32.59635594735051,
-        "rmse": 70.68812888548298,
-        "pearson": 0.8432059835125719,
-        "spearman": 0.8326863310539374,
-        "kendall": 0.6911894376117784
-      },
-      "test": {
-        "r2": 0.17081364521077658,
-        "mae": 52.658459850871786,
-        "rmse": 110.8578808443749,
-        "pearson": 0.41601182001302306,
-        "spearman": 0.5389479825851615,
-        "kendall": 0.4100223427229068
-      }
-    }
+  "holdout": {
+    "best_layer": 0,
+    "best_test_r2": 0.17081364521069364,
+    "best_test_spearman": 0.5389479825851615,
+    "n_test": 238
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 1,
+    "n_draws_used": 0,
+    "r2_mean": NaN,
+    "r2_std": NaN,
+    "spearman_mean": NaN,
+    "spearman_std": NaN,
+    "layer": 0
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 40,
+    "n_scored": 1187,
+    "r2": -0.009712695747487121,
+    "spearman": 0.17122145505869896
   },
   "best_layer": 0,
-  "best_test_r2": 0.17081364521077658,
+  "best_test_r2": 0.17081364521069364,
   "best_test_spearman": 0.5389479825851615
 }

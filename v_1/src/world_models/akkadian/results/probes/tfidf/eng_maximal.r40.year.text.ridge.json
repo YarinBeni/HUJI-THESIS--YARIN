@@ -5,29 +5,32 @@
   "target": "year",
   "site": "text",
   "n": 1187,
-  "n_test": 238,
+  "n_rulers": 40,
   "n_features": 15633,
-  "layers": {
-    "0": {
-      "train": {
-        "r2": 0.31342253547511556,
-        "mae": 43.1723990177521,
-        "rmse": 91.25908696737896,
-        "pearson": 0.6733933468528639,
-        "spearman": 0.7351379676059024,
-        "kendall": 0.5861890436924869
-      },
-      "test": {
-        "r2": 0.024394877458178033,
-        "mae": 55.59644362727147,
-        "rmse": 120.24790952459594,
-        "pearson": 0.1737466815440312,
-        "spearman": 0.42120354605738064,
-        "kendall": 0.3131756426540468
-      }
-    }
+  "holdout": {
+    "best_layer": 0,
+    "best_test_r2": 0.024394877458178144,
+    "best_test_spearman": 0.42120354605738064,
+    "n_test": 238
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 1,
+    "n_draws_used": 0,
+    "r2_mean": NaN,
+    "r2_std": NaN,
+    "spearman_mean": NaN,
+    "spearman_std": NaN,
+    "layer": 0
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 40,
+    "n_scored": 1187,
+    "r2": -0.03614415814740202,
+    "spearman": -0.09343772621724054
   },
   "best_layer": 0,
-  "best_test_r2": 0.024394877458178033,
+  "best_test_r2": 0.024394877458178144,
   "best_test_spearman": 0.42120354605738064
 }

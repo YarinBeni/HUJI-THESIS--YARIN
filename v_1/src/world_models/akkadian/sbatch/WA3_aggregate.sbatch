@@ -24,8 +24,6 @@ python -u v_1/src/world_models/akkadian/aggregate_akk.py \
     || { echo "FAILED aggregate"; exit 1; }
 commit_push "WA3: akk summary tables (job ${SLURM_JOB_ID})" \
     v_1/src/world_models/akkadian/results/RESULTS_akk.md \
-    v_1/src/world_models/akkadian/results/summary_year_best_test_r2.csv \
-    v_1/src/world_models/akkadian/results/summary_year_best_test_spearman.csv \
-    v_1/src/world_models/akkadian/results/summary_geo_best_test_r2.csv \
-    v_1/src/world_models/akkadian/results/summary_geo_best_test_spearman.csv
+    v_1/src/world_models/akkadian/results/summary_year_modes.csv \
+    v_1/src/world_models/akkadian/results/summary_geo_modes.csv
 echo "=== Done. $(date) ==="

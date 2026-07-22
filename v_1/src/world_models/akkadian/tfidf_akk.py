@@ -16,6 +16,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _HERE)
 sys.path.insert(0, os.path.dirname(_HERE))
 import akk_data as A               # noqa: E402
+import akk_modes as M              # noqa: E402
 from wm_lib import probing         # noqa: E402
 
 RESULTS_DIR = os.path.join(_HERE, "results")
@@ -61,17 +62,28 @@ def run(df, variant, ruler_set, target):
     bsp = sc["test"].get("spearman",
                          (sc["test"].get("lat_spearman", float("nan"))
                           + sc["test"].get("lon_spearman", float("nan"))) / 2)
+
+    # balanced-MC + leave-one-ruler-out on the same TF-IDF features (alpha = the
+    # holdout-selected value, since n_features ~1e5 makes the paper heuristic huge)
+    ruler = df.ruler.values[sel]
+    mc = M.mc_balanced(X, y, ruler, is_place, n_draws=200, alpha=best[0])
+    lo = M.loro(X, y, ruler, is_place, alpha=best[0])
+
     out = {"method": "tfidf", "variant": variant, "ruler_set": ruler_set,
            "target": target, "site": "text", "n": int(sel.sum()),
-           "n_test": int(is_test.sum()), "n_features": int(X.shape[1]),
-           "layers": {"0": sc}, "best_layer": 0,
-           "best_test_r2": sc["test"]["r2"], "best_test_spearman": float(bsp)}
+           "n_rulers": int(len(np.unique(ruler))), "n_features": int(X.shape[1]),
+           "holdout": {"best_layer": 0, "best_test_r2": sc["test"]["r2"],
+                       "best_test_spearman": float(bsp), "n_test": int(is_test.sum())},
+           "mc": {**mc, "layer": 0}, "loro": lo,
+           "best_layer": 0, "best_test_r2": sc["test"]["r2"],
+           "best_test_spearman": float(bsp)}
     pdir = os.path.join(RESULTS_DIR, "probes", "tfidf")
     os.makedirs(pdir, exist_ok=True)
     with open(os.path.join(pdir, f"{variant}.{ruler_set}.{target}.text.ridge.json"), "w") as f:
         json.dump(out, f, indent=2)
-    print(f"[tfidf/{variant}/{ruler_set}/{target}] test r2={sc['test']['r2']:.3f} "
-          f"rho={bsp:.3f}", flush=True)
+    print(f"[tfidf/{variant}/{ruler_set}/{target}] holdout r2={sc['test']['r2']:.3f}"
+          f" | mc rho={mc['spearman_mean']:.3f} | loro rho={lo.get('spearman',float('nan')):.3f}",
+          flush=True)
 
 
 if __name__ == "__main__":

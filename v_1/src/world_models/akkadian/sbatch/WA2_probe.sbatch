@@ -18,7 +18,8 @@
 set -uo pipefail
 METHODS=(qwen3_1b7 qwen3_8b qwen3_32b gpt_oss_120b random llama2_7b llama2_13b \
          llama2_70b llama2_7b_random llama2_13b_random llama2_70b_random)
-CLEAN=(0 0 0 0 1 0 0 0 1 1 1)
+# cleanup OFF: probe_akk runs 3 modes (holdout/mc/loro), keep npz for re-probing
+CLEAN=(0 0 0 0 0 0 0 0 0 0 0)
 M="${METHODS[$SLURM_ARRAY_TASK_ID]}"; C="${CLEAN[$SLURM_ARRAY_TASK_ID]}"
 echo "=== WA2 probe ${M} (cleanup=${C}) === job ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID} $(hostname) $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh

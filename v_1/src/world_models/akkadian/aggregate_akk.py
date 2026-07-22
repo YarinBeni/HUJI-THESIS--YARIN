@@ -1,8 +1,11 @@
-"""WA aggregation: collect probe JSONs into per-(target x ruler_set) tables.
+"""WA aggregation: per-target tables across the three modes.
 
-For each target (year, geo) x ruler_set (r8, r40) writes an R2 and a Spearman CSV
-with rows = method x text-variant, using the canonical `last` site for decoders and
-`text` for tfidf. Also writes RESULTS_akk.md.
+For each target (year, geo) writes an R²/ρ table with, per method×variant:
+  r8: holdout R² | balanced-MC ρ | leave-one-ruler-out ρ
+  r40: holdout R² | leave-one-ruler-out ρ   (balanced-MC N/A: min ruler count = 1)
+The three columns show the collapse: holdout (ruler-ID inflated) -> MC (balanced,
+in-distribution) -> LORO (unseen ruler, the real test). Reads both the multi-mode
+JSONs and the older holdout-only ones. Canonical site: last (decoders) / text (tfidf).
 
     python aggregate_akk.py
 """
@@ -24,48 +27,65 @@ METHOD_ORDER = ["llama2_70b", "llama2_13b", "llama2_7b", "gpt_oss_120b",
                 "random", "tfidf"]
 
 
-def load_all():
+def _get(d, *path, default=float("nan")):
+    for k in path:
+        if not isinstance(d, dict) or k not in d:
+            return default
+        d = d[k]
+    return d
+
+
+def load_rows():
     rows = []
     for path in glob.glob(os.path.join(RESULTS_DIR, "probes", "*", "*.json")):
-        with open(path) as f:
-            r = json.load(f)
-        rows.append({k: r[k] for k in ("method", "variant", "ruler_set", "target",
-                                       "site", "best_test_r2", "best_test_spearman")})
+        r = json.load(open(path))
+        if r.get("site") not in ("last", "text"):   # canonical site only
+            continue
+        rows.append({
+            "method": r["method"], "variant": r["variant"],
+            "ruler_set": r["ruler_set"], "target": r["target"],
+            "hold_r2": _get(r, "holdout", "best_test_r2",
+                            default=r.get("best_test_r2", float("nan"))),
+            "mc_rho": _get(r, "mc", "spearman_mean"),
+            "loro_rho": _get(r, "loro", "spearman"),
+        })
     return pd.DataFrame(rows)
 
 
 def main():
-    df = load_all()
+    df = load_rows()
     if df.empty:
         print("no akkadian probe results yet")
         return
-    # canonical site: last for models, text for tfidf
-    df = df[(df.site == "last") | (df.method == "tfidf")].copy()
     df["row"] = df.method + " · " + df.variant
-    lines = ["# WA results — Akkadian space & time, G&T protocol",
-             "",
-             "Best-layer held-out **test** scores. Entity = whole fragment (last-token "
-             "for decoders); target = year or find-spot (lon,lat); held-out-by-ruler "
-             "split. Encoders excluded (no causal last token).", ""]
-    order = [m for m in METHOD_ORDER]
+    df["__k"] = df.method.apply(lambda m: METHOD_ORDER.index(m)
+                                if m in METHOD_ORDER else 99)
 
-    def pivot(sub, val):
-        t = sub.pivot_table(index="row", columns="ruler_set", values=val,
-                            aggfunc="first")
-        t = t.reindex(columns=[c for c in ["r8", "r40"] if c in t.columns])
-        # sort by method order then variant
-        t["__k"] = [order.index(r.split(" · ")[0]) if r.split(" · ")[0] in order
-                    else 99 for r in t.index]
-        return t.sort_values("__k").drop(columns="__k")
+    lines = ["# WA results — Akkadian, three modes",
+             "",
+             "Per method×text-variant. **r8 holdout R²** (within-ruler split, inflated "
+             "by ruler identity) → **r8 MC ρ** (balanced, in-distribution, 200 draws) → "
+             "**r8 LORO ρ** (leave-one-ruler-out — the real 'place an unseen ruler' "
+             "test). r40 MC is N/A (min ruler count = 1). Decoders last-token; encoders "
+             "excluded.", ""]
 
     for target in A.TARGETS:
-        for metric, val in [("R²", "best_test_r2"), ("Spearman ρ", "best_test_spearman")]:
-            sub = df[df.target == target]
-            if sub.empty:
-                continue
-            t = pivot(sub, val)
-            t.to_csv(os.path.join(RESULTS_DIR, f"summary_{target}_{val}.csv"))
-            lines += [f"## {target} — {metric}", "", t.round(3).to_markdown(), ""]
+        sub = df[df.target == target].copy()
+        if sub.empty:
+            continue
+        piv = sub.pivot_table(index=["__k", "row"], columns="ruler_set",
+                              values=["hold_r2", "mc_rho", "loro_rho"], aggfunc="first")
+        # build a flat, ordered table
+        out = pd.DataFrame(index=piv.index)
+        out["r8 hold R²"] = piv[("hold_r2", "r8")] if ("hold_r2", "r8") in piv else float("nan")
+        out["r8 MC ρ"] = piv[("mc_rho", "r8")] if ("mc_rho", "r8") in piv else float("nan")
+        out["r8 LORO ρ"] = piv[("loro_rho", "r8")] if ("loro_rho", "r8") in piv else float("nan")
+        out["r40 hold R²"] = piv[("hold_r2", "r40")] if ("hold_r2", "r40") in piv else float("nan")
+        out["r40 LORO ρ"] = piv[("loro_rho", "r40")] if ("loro_rho", "r40") in piv else float("nan")
+        out = out.reset_index().drop(columns="__k").set_index("row")
+        out.round(3).to_csv(os.path.join(RESULTS_DIR, f"summary_{target}_modes.csv"))
+        lines += [f"## {target}", "", out.round(3).to_markdown(), ""]
+
     with open(os.path.join(RESULTS_DIR, "RESULTS_akk.md"), "w") as f:
         f.write("\n".join(lines) + "\n")
     print("\n".join(lines))

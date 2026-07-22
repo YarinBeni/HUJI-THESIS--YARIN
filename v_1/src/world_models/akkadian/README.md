@@ -23,9 +23,17 @@ analog). Reuses `../wm_lib` (registry, model loading, pooling, probing).
   token, so the G&T last-token protocol doesn't apply. Plus a TF-IDF text floor.
 - **Pooling:** `last` (paper-faithful) and `mean` (kept for reference); `last` is
   canonical in the tables.
-- **Probe:** per-layer RidgeCV, **held-out-by-ruler** split (seed 42, every ruler in
-  train & test), R² + Spearman, haversine for geo — identical scoring to the English
-  run, so the two are directly comparable.
+- **Three probe modes** (because ORCC `year` is constant per ruler → year probing ≈
+  ruler identification; see thesis `shared/mc_maxking.py`):
+  - **holdout** — within-ruler 80/20 split, per layer. G&T-comparable but inflated by
+    ruler identity (rulers seen in train & test).
+  - **mc** — balanced Monte-Carlo: cap = min ruler count (21 for r8), **200 draws**,
+    StratifiedKFold-by-ruler within each draw, at the holdout-best layer. Removes the
+    ruler-frequency imbalance; in-distribution. (r40 N/A: min count = 1.)
+  - **loro** — **leave-one-ruler-out** (train on 7, predict the held-out ruler; pool
+    OOF; swept over layers). The real "place an *unseen* ruler" test — the thesis's
+    `year_group`/GroupKFold-by-ruler analog. Spearman is the headline.
+  Ridge (alpha = n_features, paper heuristic), R² + Spearman, haversine for geo.
 
 Every (method × variant) is extracted once over all fragments; the probe then slices
 to r8/r40 and year/geo. So: **extract = methods × 2 variants; probe = × 2 ruler sets ×
