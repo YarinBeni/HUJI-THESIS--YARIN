@@ -17,9 +17,12 @@ Two ruler sets (both requested):
   * r8  — the 8 best-attested rulers (>=20 dated texts): the clean, dense subset.
   * r40 — all rulers with a year label (the full, sparser tail).
 
-Two text variants:
+Three text variants:
   * akk_maximal — the Akkadian text (text_maximal)
-  * eng_maximal — its English translation (eng_maximal)   [the translation probe]
+  * eng_maximal — the *cleaned* English translation (eng_maximal); the aggressive
+                  cleaning hallucinates, so this is kept only for comparison.
+  * eng_tier0   — the faithful literal word-by-word English gloss (eng_tier0); the
+                  translation probe we actually trust.
 """
 import os
 
@@ -32,7 +35,8 @@ CORPUS = os.path.join(_ROOT, "v_1/data/evaluation/corpora/orcc_corpus.parquet")
 TRANS = os.path.join(_ROOT, "v_1/src/stress_tests/translation/translations.parquet")
 GAZ = os.path.join(_ROOT, "v_1/src/stress_tests/shared/sites_gazetteer.csv")
 
-TEXT_VARIANTS = {"akk_maximal": "text_akk", "eng_maximal": "text_eng"}
+TEXT_VARIANTS = {"akk_maximal": "text_akk", "eng_maximal": "text_eng",
+                 "eng_tier0": "text_eng_tier0"}
 RULER_SETS = ["r8", "r40"]
 TARGETS = ["year", "geo"]          # geo = (lon, lat), like G&T world_place
 N_R8 = 8
@@ -41,11 +45,12 @@ SEED = 42
 
 
 def load_fragments() -> pd.DataFrame:
-    """One row per dated fragment with both text variants and, where known, coords.
-    Columns: fragment_id, ruler, year, lon, lat, has_geo, text_akk, text_eng."""
+    """One row per dated fragment with all text variants and, where known, coords.
+    Columns: fragment_id, ruler, year, lon, lat, has_geo, text_akk, text_eng,
+    text_eng_tier0."""
     df = pd.read_parquet(CORPUS)[
         ["fragment_id", "ruler", "year", "provenance", "text_maximal"]]
-    tr = pd.read_parquet(TRANS)[["fragment_id", "eng_maximal"]]
+    tr = pd.read_parquet(TRANS)[["fragment_id", "eng_maximal", "eng_tier0"]]
     gaz = pd.read_csv(GAZ)[["provenance", "lat", "lon"]]
 
     df = df[df.year.notna() & df.ruler.notna()].copy()
@@ -54,6 +59,7 @@ def load_fragments() -> pd.DataFrame:
 
     df["text_akk"] = df["text_maximal"].fillna("").astype(str)
     df["text_eng"] = df["eng_maximal"].fillna("").astype(str)
+    df["text_eng_tier0"] = df["eng_tier0"].fillna("").astype(str)
     df["year"] = df["year"].astype(float)
     df["has_geo"] = df["lat"].notna() & df["lon"].notna()
     # drop rows whose Akkadian text is empty (nothing to embed)

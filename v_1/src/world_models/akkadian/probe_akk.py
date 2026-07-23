@@ -111,11 +111,14 @@ def probe_one(method, variant, ruler_set, target, site, df, args):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--method", required=True)
+    ap.add_argument("--variant", default=None,
+                    help="probe only this text variant (default: all on disk)")
     ap.add_argument("--cleanup", action="store_true")
     args = ap.parse_args()
     df = A.load_fragments()
     variants = [v for v in A.TEXT_VARIANTS
-                if os.path.isdir(os.path.join(ACTS_DIR, args.method, v))]
+                if os.path.isdir(os.path.join(ACTS_DIR, args.method, v))
+                and (args.variant is None or v == args.variant)]
     ok = True
     for variant in variants:
         for ruler_set in A.RULER_SETS:
