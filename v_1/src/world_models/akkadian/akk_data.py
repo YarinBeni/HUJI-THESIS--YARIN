@@ -98,6 +98,30 @@ def target_values(df: pd.DataFrame, target: str):
     raise ValueError(f"unknown target {target!r}")
 
 
+def merged_site_labels(df: pd.DataFrame, round_deg: float = 0.1, min_count: int = 18):
+    """Per-row merged find-spot key for the by-site geo protocol (P2 mirror).
+
+    Fragments are grouped by their (lat, lon) rounded to `round_deg` (~11 km), so
+    "Kuyunjik (Nineveh)" and "Nineveh" collapse to one place; a held-out-site split
+    can't leak the same spot into train and test. Rows without coords, or in sites
+    with < `min_count` geocoded fragments, get None. Returns an object array of keys
+    ("lat,lon" strings) aligned to df."""
+    lab = np.array([None] * len(df), dtype=object)
+    has = df["has_geo"].values
+    lat = df["lat"].values
+    lon = df["lon"].values
+    keys = np.array([None] * len(df), dtype=object)
+    for i in np.flatnonzero(has):
+        keys[i] = f"{round(float(lat[i]) / round_deg) * round_deg:.1f}," \
+                  f"{round(float(lon[i]) / round_deg) * round_deg:.1f}"
+    vals, counts = np.unique([k for k in keys if k is not None], return_counts=True)
+    kept = set(vals[counts >= min_count])
+    for i in range(len(df)):
+        if keys[i] in kept:
+            lab[i] = keys[i]
+    return lab
+
+
 def is_test_split(df: pd.DataFrame, mask: np.ndarray) -> np.ndarray:
     """Stratified-by-ruler random hold-out (seed 42) over the selected fragments, so
     every ruler appears in train and test — the held-out-entity split, G&T-style.

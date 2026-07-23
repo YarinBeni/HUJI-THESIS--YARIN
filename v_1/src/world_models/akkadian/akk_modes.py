@@ -80,6 +80,51 @@ def mc_balanced(X, y, ruler, is_place, cap=None, n_draws=200, n_splits=5, seed=4
     }
 
 
+def mc_site(X, y, site, cap=None, n_draws=200, n_splits=5, seed=42, alpha=None):
+    """Balanced Monte-Carlo BY FIND-SPOT (the space analog of mc_balanced, exact
+    mirror of its ruler protocol): draws balanced across merged sites (cap per site),
+    StratifiedKFold-by-site within each draw so every site appears in train AND test —
+    in-distribution, site-imbalance removed, paper-comparable. y is (n,2) [lon,lat];
+    scores lon/lat R² + mean lat/lon Spearman. `site` is a per-row merged-site key;
+    rows with site None must be filtered by the caller. (For the harder "place an
+    UNSEEN find-spot" generalization, group-hold-out is a separate test.)"""
+    rng = np.random.RandomState(seed)
+    alpha = float(X.shape[1]) if alpha is None else float(alpha)
+    sites = np.unique(site)
+    per_site = {s: np.flatnonzero(site == s) for s in sites}
+    counts = {s: len(ix) for s, ix in per_site.items()}
+    if cap is None:
+        cap = min(counts.values())
+    r2s, sps = [], []
+    for d in range(n_draws):
+        rows = np.concatenate([
+            rng.choice(per_site[s], size=min(cap, counts[s]), replace=False)
+            for s in sites])
+        Xs, ys, gs = X[rows], y[rows], site[rows]
+        codes = np.unique(gs, return_inverse=True)[1]
+        ns = min(n_splits, int(np.bincount(codes).min()))
+        if ns < 2:
+            continue
+        skf = StratifiedKFold(n_splits=ns, shuffle=True, random_state=d)
+        oof = np.full(ys.shape, np.nan)
+        for tr, te in skf.split(Xs, codes):
+            oof[te] = _ridge_predict(Xs[tr], ys[tr], Xs[te], alpha)
+        sc = _score(ys, oof, True)
+        r2s.append(sc["r2"])
+        sps.append((sc.get("lat_spearman", np.nan)
+                    + sc.get("lon_spearman", np.nan)) / 2)
+    ok = lambda v: [x for x in v if x == x]  # noqa: E731
+    r2ok, spok = ok(r2s), ok(sps)
+    return {
+        "mode": "mc_site", "cap": int(cap), "n_sites": int(len(sites)),
+        "n_draws_used": len(r2ok),
+        "r2_mean": float(np.mean(r2ok)) if r2ok else float("nan"),
+        "r2_std": float(np.std(r2ok)) if r2ok else float("nan"),
+        "spearman_mean": float(np.mean(spok)) if spok else float("nan"),
+        "spearman_std": float(np.std(spok)) if spok else float("nan"),
+    }
+
+
 def loro(X, y, ruler, is_place, alpha=None):
     """Leave-one-ruler-out at ONE layer. Pools out-of-fold predictions over all
     rulers and scores once. Returns R² + Spearman on the pooled predictions."""
