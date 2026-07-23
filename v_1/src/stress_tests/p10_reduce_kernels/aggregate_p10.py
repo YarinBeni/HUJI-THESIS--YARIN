@@ -16,6 +16,20 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 RES = os.path.join(HERE, "results")
 
 
+def _to_md(df):
+    """Markdown table without the optional `tabulate` dependency."""
+    try:
+        return df.to_markdown()
+    except ImportError:
+        cols = [str(c) for c in df.columns]
+        head = "| " + (df.index.name or "") + " | " + " | ".join(cols) + " |"
+        sep = "|" + "---|" * (len(cols) + 1)
+        body = ["| " + str(i) + " | "
+                + " | ".join("" if v != v else str(v) for v in r) + " |"
+                for i, r in zip(df.index, df.values)]
+        return "\n".join([head, sep] + body)
+
+
 def main():
     rows = []
     for fp in sorted(glob.glob(os.path.join(RES, "p10__*.json"))):
@@ -58,7 +72,7 @@ def main():
         piv = g.pivot_table(index="reducer", columns="norm", values="gkpls")
         piv = piv.reindex(index=[r for r in ["raw", "pca", "pls", "umap"] if r in piv.index],
                           columns=[c for c in ["none", "zscore", "l2"] if c in piv.columns])
-        lines += ["", piv.round(3).to_markdown(), ""]
+        lines += ["", _to_md(piv.round(3)), ""]
     with open(os.path.join(RES, "RESULTS_p10.md"), "w") as f:
         f.write("\n".join(lines) + "\n")
     print("\n".join(lines[:40]))
