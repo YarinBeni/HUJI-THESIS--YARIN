@@ -7,6 +7,10 @@ tfidf,eng_maximal,r8,year,0.495,0.669,0.616,0.05,0.369,0.044,0.088
 tfidf,eng_maximal,r8,geo,0.102,0.428,0.393,0.064,0.192,0.256,0.051
 tfidf,eng_maximal,r40,year,0.024,0.421,nan,nan,nan,-0.093,-0.036
 tfidf,eng_maximal,r40,geo,0.269,0.505,nan,nan,nan,0.307,0.111
+tfidf,eng_tier0,r8,year,0.69,0.83,0.775,0.032,0.567,0.3,0.216
+tfidf,eng_tier0,r8,geo,0.236,0.544,0.475,0.055,0.249,0.406,0.199
+tfidf,eng_tier0,r40,year,0.106,0.599,nan,nan,nan,0.146,-0.001
+tfidf,eng_tier0,r40,geo,0.325,0.551,nan,nan,nan,0.463,0.24
 random,akk_maximal,r8,year,0.343,0.482,0.499,0.064,0.285,0.048,-0.211
 random,akk_maximal,r8,geo,0.095,0.28,0.263,0.069,0.081,0.2,0.029
 random,akk_maximal,r40,year,0.145,0.372,nan,nan,nan,0.164,-0.201
@@ -15,6 +19,10 @@ random,eng_maximal,r8,year,0.338,0.53,0.425,0.066,0.233,0.12,-0.116
 random,eng_maximal,r8,geo,0.089,0.324,0.252,0.07,0.074,0.236,-0.068
 random,eng_maximal,r40,year,0.085,0.31,nan,nan,nan,0.107,-0.312
 random,eng_maximal,r40,geo,0.229,0.353,nan,nan,nan,0.269,0.034
+random,eng_tier0,r8,year,0.514,0.649,0.532,0.058,0.335,0.285,0.11
+random,eng_tier0,r8,geo,0.134,0.406,0.287,0.072,0.071,0.28,-0.08
+random,eng_tier0,r40,year,0.192,0.426,nan,nan,nan,0.189,-0.258
+random,eng_tier0,r40,geo,0.224,0.409,nan,nan,nan,0.343,-0.011
 qwen3_1b7,akk_maximal,r8,year,0.339,0.459,0.37,0.068,0.151,0.055,-0.802
 qwen3_1b7,akk_maximal,r8,geo,0.139,0.385,0.215,0.069,0.041,0.194,-0.791
 qwen3_1b7,akk_maximal,r40,year,0.082,0.299,nan,nan,nan,0.075,-0.537
@@ -23,6 +31,10 @@ qwen3_1b7,eng_maximal,r8,year,0.26,0.464,0.369,0.075,0.14,0.059,-0.83
 qwen3_1b7,eng_maximal,r8,geo,0.123,0.406,0.215,0.079,0.027,0.202,0.008
 qwen3_1b7,eng_maximal,r40,year,0.057,0.311,nan,nan,nan,0.075,-1.272
 qwen3_1b7,eng_maximal,r40,geo,0.212,0.414,nan,nan,nan,0.245,0.071
+qwen3_1b7,eng_tier0,r8,year,0.377,0.613,0.474,0.067,0.219,0.146,-0.545
+qwen3_1b7,eng_tier0,r8,geo,0.062,0.235,0.143,0.081,-1.63,0.198,-1.325
+qwen3_1b7,eng_tier0,r40,year,0.028,0.228,nan,nan,nan,0.121,-13.153
+qwen3_1b7,eng_tier0,r40,geo,0.13,0.353,nan,nan,nan,0.247,0.045
 qwen3_8b,akk_maximal,r8,year,0.386,0.533,0.396,0.079,0.082,0.065,-0.266
 qwen3_8b,akk_maximal,r8,geo,0.175,0.425,0.262,0.072,-0.115,0.206,-0.46
 qwen3_8b,akk_maximal,r40,year,0.091,0.275,nan,nan,nan,0.102,-0.356
@@ -31,6 +43,10 @@ qwen3_8b,eng_maximal,r8,year,0.297,0.532,0.427,0.064,0.173,0.088,-0.31
 qwen3_8b,eng_maximal,r8,geo,0.147,0.435,0.223,0.07,0.041,0.208,0.017
 qwen3_8b,eng_maximal,r40,year,0.057,0.307,nan,nan,nan,0.04,-0.668
 qwen3_8b,eng_maximal,r40,geo,0.203,0.433,nan,nan,nan,0.241,0.066
+qwen3_8b,eng_tier0,r8,year,0.432,0.626,0.557,0.069,0.295,0.245,-0.181
+qwen3_8b,eng_tier0,r8,geo,0.102,0.343,0.223,0.083,0.043,0.246,0.027
+qwen3_8b,eng_tier0,r40,year,0.062,0.313,nan,nan,nan,0.133,-0.583
+qwen3_8b,eng_tier0,r40,geo,0.159,0.418,nan,nan,nan,0.319,0.097
 qwen3_32b,akk_maximal,r8,year,0.316,0.523,0.312,0.08,0.111,0.091,-0.315
 qwen3_32b,akk_maximal,r8,geo,0.123,0.368,0.159,0.087,-0.221,0.21,-0.323
 qwen3_32b,akk_maximal,r40,year,0.146,0.273,nan,nan,nan,0.151,-0.781
@@ -39,6 +55,10 @@ qwen3_32b,eng_maximal,r8,year,0.336,0.52,0.428,0.067,0.194,0.132,-0.232
 qwen3_32b,eng_maximal,r8,geo,0.103,0.363,0.201,0.078,-0.043,0.217,0.005
 qwen3_32b,eng_maximal,r40,year,0.081,0.251,nan,nan,nan,0.003,-0.373
 qwen3_32b,eng_maximal,r40,geo,0.202,0.39,nan,nan,nan,0.265,0.06
+qwen3_32b,eng_tier0,r8,year,0.503,0.685,0.533,0.061,0.287,0.305,-0.01
+qwen3_32b,eng_tier0,r8,geo,0.126,0.357,0.209,0.079,0.013,0.278,0.042
+qwen3_32b,eng_tier0,r40,year,0.115,0.287,nan,nan,nan,0.166,-1.086
+qwen3_32b,eng_tier0,r40,geo,0.168,0.426,nan,nan,nan,0.359,0.124
 llama2_7b,akk_maximal,r8,year,0.418,0.591,0.433,0.071,0.23,-0.067,-0.22
 llama2_7b,akk_maximal,r8,geo,0.179,0.435,0.301,0.07,0.08,0.296,0.045
 llama2_7b,akk_maximal,r40,year,0.122,0.312,nan,nan,nan,0.044,-0.142
@@ -47,6 +67,10 @@ llama2_7b,eng_maximal,r8,year,0.382,0.538,0.447,0.072,0.226,0.002,-0.158
 llama2_7b,eng_maximal,r8,geo,0.165,0.422,0.275,0.073,0.058,0.272,0.038
 llama2_7b,eng_maximal,r40,year,0.092,0.247,nan,nan,nan,-0.099,-0.196
 llama2_7b,eng_maximal,r40,geo,0.245,0.477,nan,nan,nan,0.328,0.114
+llama2_7b,eng_tier0,r8,year,0.458,0.633,0.54,0.058,0.262,0.21,0.017
+llama2_7b,eng_tier0,r8,geo,0.136,0.375,0.293,0.076,0.065,0.292,0.044
+llama2_7b,eng_tier0,r40,year,0.061,0.263,nan,nan,nan,0.05,-0.12
+llama2_7b,eng_tier0,r40,geo,0.17,0.409,nan,nan,nan,0.378,0.134
 llama2_7b_random,akk_maximal,r8,year,0.355,0.495,0.438,0.075,0.226,-0.015,-0.291
 llama2_7b_random,akk_maximal,r8,geo,0.096,0.284,0.285,0.073,0.089,0.188,-0.145
 llama2_7b_random,akk_maximal,r40,year,0.106,0.298,nan,nan,nan,0.024,-0.343
@@ -55,6 +79,10 @@ llama2_7b_random,eng_maximal,r8,year,0.351,0.503,0.376,0.073,0.187,0.102,-0.136
 llama2_7b_random,eng_maximal,r8,geo,0.08,0.268,0.245,0.072,0.069,0.149,-0.164
 llama2_7b_random,eng_maximal,r40,year,0.083,0.358,nan,nan,nan,0.111,-0.178
 llama2_7b_random,eng_maximal,r40,geo,0.186,0.29,nan,nan,nan,0.187,-0.123
+llama2_7b_random,eng_tier0,r8,year,0.343,0.446,0.439,0.062,0.241,0.135,-0.082
+llama2_7b_random,eng_tier0,r8,geo,0.121,0.31,0.272,0.075,0.085,0.229,-0.071
+llama2_7b_random,eng_tier0,r40,year,0.126,0.243,nan,nan,nan,0.098,-0.263
+llama2_7b_random,eng_tier0,r40,geo,0.169,0.386,nan,nan,nan,0.292,0.004
 llama2_13b,akk_maximal,r8,year,0.417,0.555,0.403,0.077,0.189,-0.056,-0.205
 llama2_13b,akk_maximal,r8,geo,0.156,0.411,0.255,0.075,0.019,0.231,-0.035
 llama2_13b,akk_maximal,r40,year,0.114,0.295,nan,nan,nan,0.126,-0.133
@@ -63,6 +91,10 @@ llama2_13b,eng_maximal,r8,year,0.411,0.562,0.378,0.067,0.139,0.053,-0.13
 llama2_13b,eng_maximal,r8,geo,0.155,0.46,0.234,0.079,0.048,0.229,-0.029
 llama2_13b,eng_maximal,r40,year,0.074,0.209,nan,nan,nan,-0.041,-0.233
 llama2_13b,eng_maximal,r40,geo,0.238,0.461,nan,nan,nan,0.27,0.037
+llama2_13b,eng_tier0,r8,year,0.478,0.635,0.518,0.056,0.233,0.222,0.007
+llama2_13b,eng_tier0,r8,geo,0.113,0.354,0.282,0.077,0.061,0.288,0.002
+llama2_13b,eng_tier0,r40,year,0.079,0.26,nan,nan,nan,0.074,-0.134
+llama2_13b,eng_tier0,r40,geo,0.145,0.399,nan,nan,nan,0.375,0.099
 llama2_13b_random,akk_maximal,r8,year,0.291,0.472,0.369,0.09,0.166,-0.022,-0.218
 llama2_13b_random,akk_maximal,r8,geo,0.087,0.224,0.194,0.082,0.024,0.118,-0.13
 llama2_13b_random,akk_maximal,r40,year,0.155,0.302,nan,nan,nan,0.079,-0.271
@@ -71,6 +103,10 @@ llama2_13b_random,eng_maximal,r8,year,0.256,0.447,0.389,0.079,0.174,0.028,-0.183
 llama2_13b_random,eng_maximal,r8,geo,0.049,0.249,0.2,0.074,0.047,0.13,-0.121
 llama2_13b_random,eng_maximal,r40,year,0.111,0.453,nan,nan,nan,0.088,-0.227
 llama2_13b_random,eng_maximal,r40,geo,0.177,0.304,nan,nan,nan,0.185,-0.044
+llama2_13b_random,eng_tier0,r8,year,0.309,0.459,0.374,0.08,0.172,0.072,-0.105
+llama2_13b_random,eng_tier0,r8,geo,0.056,0.249,0.212,0.077,0.051,0.193,-0.1
+llama2_13b_random,eng_tier0,r40,year,0.166,0.278,nan,nan,nan,0.066,-0.308
+llama2_13b_random,eng_tier0,r40,geo,0.15,0.421,nan,nan,nan,0.269,-0.025
 llama2_70b,akk_maximal,r8,year,0.428,0.596,0.331,0.08,0.116,0.024,-0.158
 llama2_70b,akk_maximal,r8,geo,0.148,0.39,0.269,0.074,0.001,0.241,-0.003
 llama2_70b,akk_maximal,r40,year,0.152,0.285,nan,nan,nan,0.108,-0.244
@@ -79,6 +115,10 @@ llama2_70b,eng_maximal,r8,year,0.407,0.577,0.428,0.071,0.209,0.064,-0.169
 llama2_70b,eng_maximal,r8,geo,0.176,0.416,0.299,0.077,0.041,0.259,0.041
 llama2_70b,eng_maximal,r40,year,0.068,0.188,nan,nan,nan,-0.01,-0.257
 llama2_70b,eng_maximal,r40,geo,0.241,0.418,nan,nan,nan,0.311,0.12
+llama2_70b,eng_tier0,r8,year,0.507,0.642,0.544,0.056,0.037,0.24,-0.538
+llama2_70b,eng_tier0,r8,geo,0.135,0.352,0.303,0.073,-0.141,0.276,0.044
+llama2_70b,eng_tier0,r40,year,0.082,0.358,nan,nan,nan,0.126,-1.22
+llama2_70b,eng_tier0,r40,geo,0.184,0.423,nan,nan,nan,0.375,0.129
 llama2_70b_random,akk_maximal,r8,year,0.224,0.409,0.305,0.089,0.118,-0.117,-0.305
 llama2_70b_random,akk_maximal,r8,geo,0.018,0.165,0.055,0.076,0.011,0.099,-0.082
 llama2_70b_random,akk_maximal,r40,year,0.046,0.248,nan,nan,nan,0.012,-0.284
@@ -87,3 +127,7 @@ llama2_70b_random,eng_maximal,r8,year,0.132,0.284,0.245,0.09,0.09,-0.092,-0.275
 llama2_70b_random,eng_maximal,r8,geo,-0.031,0.058,0.046,0.078,0.01,0.026,-0.115
 llama2_70b_random,eng_maximal,r40,year,0.052,0.183,nan,nan,nan,0.065,-0.793
 llama2_70b_random,eng_maximal,r40,geo,0.096,0.194,nan,nan,nan,0.117,-0.071
+llama2_70b_random,eng_tier0,r8,year,0.24,0.416,0.288,0.087,0.105,-0.084,-0.232
+llama2_70b_random,eng_tier0,r8,geo,-0.042,0.166,0.127,0.078,0.025,0.081,-0.107
+llama2_70b_random,eng_tier0,r40,year,0.098,0.157,nan,nan,nan,-0.018,-0.147
+llama2_70b_random,eng_tier0,r40,geo,0.071,0.264,nan,nan,nan,0.174,-0.058
