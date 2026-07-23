@@ -284,44 +284,84 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
   <p class="fig-note">YEAR: the controls bracket every probe (TF-IDF-Ridge 0.359/0.349, random-init 0.351/0.275 vs trained 0.31&ndash;0.44) &mdash; raw tier0 chronology is surface statistics, not learned knowledge. The LLMs&rsquo; ANSWERS fall far BELOW their probes on Akkadian (&le;0.24) but ABOVE them on English (0.44&ndash;0.62) &mdash; that gap is the king names. GEO: probes beat TF-IDF (246&ndash;257 km) but the untrained net already scores 217/221 km &mdash; toponym lexicon, not learned geography. TIMELINE (P3): one PLS axis orders the 8 ruler centroids (&rho; 0.56&ndash;0.67; random 0.51) but fragment-level placement fails (&rho; &le; 0.12) &mdash; no usable internal timeline. CSVs: tfidf_baseline + p1/p2/t12/p3. <em>* = control.</em></p>
 </section>
 <section class="slide slide-text" data-index="24">
-  <div class="eyebrow">External validation &middot; Gurnee &amp; Tegmark 2023</div>
-  <h2 class="sh">Our models <em>do</em> represent space &amp; time &mdash; on English</h2>
-  <div class="cfg"><div class="cfg-k">Setup</div><div class="cfg-v">the &ldquo;world models&rdquo; protocol on six English datasets (3 spatial &rarr; lat/lon, 3 temporal &rarr; year): each entity&rsquo;s <strong>last-token embedding</strong> per layer &rarr; ridge probe on held-out entities. Our ladder, plus the paper&rsquo;s Llama-2 and a <strong>random-init</strong> control the paper never ran.</div><div class="cfg-k">Metric</div><div class="cfg-v">best-layer held-out <strong>test R&sup2;</strong>. A score witnesses learning only if it beats BOTH the TF-IDF floor and its own random-init twin.</div></div>
-  <p class="tbl-cap">best-layer test R&sup2; &mdash; space | time</p>
-  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">World</th><th class="num">US</th><th class="num">NYC</th><th class="num">Figures</th><th class="num">Media</th><th class="num">Headlines</th></tr></thead><tbody>
-    <tr><td><span class="mdl">Llama-2-70B</span> <em>(paper)</em></td><td class="num">.911</td><td class="num">.864</td><td class="num">.359</td><td class="num">.835</td><td class="num">.885</td><td class="num">.746</td></tr>
-    <tr><td><span class="mdl">Llama-2-70B</span> (ours)</td><td class="num">.905</td><td class="num">.846</td><td class="num">.363</td><td class="num">.833</td><td class="num">.860</td><td class="num">.757</td></tr>
-    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.883</td><td class="num">.808</td><td class="num">.272</td><td class="num">.802</td><td class="num">.780</td><td class="num">.663</td></tr>
-    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.859</td><td class="num">.788</td><td class="num">.249</td><td class="num">.784</td><td class="num">.770</td><td class="num">.592</td></tr>
-    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.838</td><td class="num">.702</td><td class="num">.187</td><td class="num">.806</td><td class="num">.727</td><td class="num">.605</td></tr>
-    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.797</td><td class="num">.634</td><td class="num">.117</td><td class="num">.774</td><td class="num">.658</td><td class="num">.557</td></tr>
-    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.655</td><td class="num">.450</td><td class="num">.080</td><td class="num">.693</td><td class="num">.449</td><td class="num">.476</td></tr>
-    <tr><td><span class="mdl">cuneiform-400M</span></td><td class="num">.399</td><td class="num">.344</td><td class="num">.114</td><td class="num">.460</td><td class="num">.126</td><td class="num">.343</td></tr>
-    <tr><td><span class="mdl">AKK-300M</span></td><td class="num">.381</td><td class="num">.312</td><td class="num">.120</td><td class="num">.448</td><td class="num">.123</td><td class="num">.300</td></tr>
-    <tr class="rand"><td><span class="mdl">TF-IDF*</span> (floor)</td><td class="num">.642</td><td class="num">.536</td><td class="num">.389</td><td class="num">.645</td><td class="num">.116</td><td class="num">.448</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-13B random*</span></td><td class="num">.282</td><td class="num">.290</td><td class="num">.044</td><td class="num">.284</td><td class="num">.038</td><td class="num">.267</td></tr>
-    <tr class="rand"><td><span class="mdl">random Qwen3-8B*</span></td><td class="num">.327</td><td class="num">.379</td><td class="num">.059</td><td class="num">.276</td><td class="num">.055</td><td class="num">.196</td></tr>
+  <div class="eyebrow">Experiment 1 &middot; English tier-0 gloss &middot; balanced Monte-Carlo</div>
+  <h2 class="sh">Year (time) &mdash; can the date be read from the faithful English gloss?</h2>
+  <div class="cfg"><div class="cfg-k">Setup</div><div class="cfg-v">entity = a whole fragment&rsquo;s <strong>faithful literal English gloss</strong> (tier-0, no hallucinating cleaner &mdash; the aggressive <em>eng-maximal</em> clean is dropped); last-token embedding &rarr; ridge probe for <strong>year</strong>.</div><div class="cfg-k">Metric</div><div class="cfg-v"><strong>balanced Monte-Carlo</strong> on the 8 dense rulers (r8): cap per ruler, 200 draws, stratified-by-ruler CV &mdash; removes the year&asymp;ruler-identity confound. Reported: MC <strong>test R&sup2;</strong> and <strong>Spearman &rho;</strong> (mean over draws). Real learning must beat the TF-IDF floor <em>and</em> the arm&rsquo;s own random twin.</div></div>
+  <p class="tbl-cap">balanced-MC (r8) &mdash; test R&sup2; | Spearman &rho;</p>
+  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">MC R&sup2;</th><th class="num">MC &rho;</th></tr></thead><tbody>
+    <tr class="rand"><td><span class="mdl">TF-IDF*</span> (floor)</td><td class="num">.567</td><td class="num">.775</td></tr>
+    <tr><td><span class="mdl">Llama-2-70B</span></td><td class="num">.037</td><td class="num">.544</td></tr>
+    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.233</td><td class="num">.518</td></tr>
+    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.262</td><td class="num">.540</td></tr>
+    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.287</td><td class="num">.533</td></tr>
+    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.295</td><td class="num">.557</td></tr>
+    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.219</td><td class="num">.474</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-70B random</span>*</td><td class="num">.105</td><td class="num">.288</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-13B random</span>*</td><td class="num">.172</td><td class="num">.374</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-7B random</span>*</td><td class="num">.241</td><td class="num">.439</td></tr>
+    <tr class="rand"><td><span class="mdl">random Qwen3-8B</span>*</td><td class="num">.335</td><td class="num">.532</td></tr>
   </tbody></table>
-  <p class="fig-note">Our Llama-2-70B <strong>reproduces the paper within ~0.02</strong> on every dataset (peak layer 53) &mdash; the harness is validated. Both ladders scale with size. The <strong>random-init twins collapse in BOTH space and time</strong> (13B .883&rarr;.282 world, .780&rarr;.038 media) &mdash; the geometry is learned, not architectural. TF-IDF is a real floor (.642 world; it even wins NYC): trained models clear it, random arms fall below. The small translation encoders (cunei / AKK-300M) sit near the floor on English. <em>* = control.</em></p>
+  <p class="fig-note">Even the trustworthy gloss can&rsquo;t rescue the models: <strong>TF-IDF (R&sup2; .567, &rho; .775) beats every embedding arm</strong>. The best trained model (Qwen3-8B &rho; .557) barely clears its random twins (&rho; .29&ndash;.53), and the plain <em>random Qwen3-8B</em> control scores &rho; .532 &mdash; as high as any 70B. Chronology here is surface n-gram statistics, not a learned timeline. <em>* = control.</em></p>
 </section>
 <section class="slide slide-text" data-index="25">
-  <div class="eyebrow">The mirror test &middot; same protocol, our corpus</div>
-  <h2 class="sh">&hellip; but <em>not</em> on Akkadian &mdash; the inversion</h2>
-  <div class="cfg"><div class="cfg-k">Setup</div><div class="cfg-v">the identical protocol on our fragments: entity = a whole text (maximal <strong>Akkadian</strong>, or its English translation), last-token embedding &rarr; ridge probe for <strong>year</strong> and find-spot (lon,lat). Two ruler sets &mdash; <strong>r8</strong> (8 dense rulers, ~1071 texts) and <strong>r40</strong> (all 40, sparse tail); held-out-by-ruler. Decoder LLMs only &mdash; encoders have no causal last token, excluded by design.</div><div class="cfg-k">Result</div><div class="cfg-v">the English ordering <strong>flips</strong>: TF-IDF beats every model and trained &asymp; random.</div></div>
-  <p class="tbl-cap">YEAR (Akkadian text) &mdash; best-layer test</p>
-  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">r8 R&sup2;</th><th class="num">r8 &rho;</th><th class="num">r40 R&sup2;</th></tr></thead><tbody>
-    <tr class="rand"><td><span class="mdl">TF-IDF*</span> (floor)</td><td class="num">.634</td><td class="num">.793</td><td class="num">.171</td></tr>
-    <tr><td><span class="mdl">Llama-2-70B</span></td><td class="num">.428</td><td class="num">.596</td><td class="num">.152</td></tr>
-    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.417</td><td class="num">.555</td><td class="num">.114</td></tr>
-    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.418</td><td class="num">.591</td><td class="num">.122</td></tr>
-    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.316</td><td class="num">.523</td><td class="num">.146</td></tr>
-    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.386</td><td class="num">.533</td><td class="num">.091</td></tr>
-    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.339</td><td class="num">.459</td><td class="num">.082</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-13B random*</span></td><td class="num">.291</td><td class="num">.472</td><td class="num">.155</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-7B random*</span></td><td class="num">.355</td><td class="num">.495</td><td class="num">.106</td></tr>
-    <tr class="rand"><td><span class="mdl">random Qwen3-8B*</span></td><td class="num">.343</td><td class="num">.482</td><td class="num">.145</td></tr>
+  <div class="eyebrow">Experiment 1 &middot; English tier-0 gloss &middot; balanced Monte-Carlo</div>
+  <h2 class="sh">Geo (space) &mdash; can the find-spot be read from the faithful English gloss?</h2>
+  <div class="cfg"><div class="cfg-k">Setup</div><div class="cfg-v">same tier-0 English gloss and last-token embedding, probing the fragment&rsquo;s find-spot <strong>(lon, lat)</strong>; haversine-scored ridge.</div><div class="cfg-k">Metric</div><div class="cfg-v">identical <strong>balanced-MC / r8</strong> protocol. MC <strong>test R&sup2;</strong> and <strong>Spearman &rho;</strong> (mean over draws). Controls in grey.</div></div>
+  <p class="tbl-cap">balanced-MC (r8) &mdash; test R&sup2; | Spearman &rho;</p>
+  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">MC R&sup2;</th><th class="num">MC &rho;</th></tr></thead><tbody>
+    <tr class="rand"><td><span class="mdl">TF-IDF*</span> (floor)</td><td class="num">.249</td><td class="num">.475</td></tr>
+    <tr><td><span class="mdl">Llama-2-70B</span></td><td class="num">&minus;.141</td><td class="num">.303</td></tr>
+    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.061</td><td class="num">.282</td></tr>
+    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.065</td><td class="num">.293</td></tr>
+    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.013</td><td class="num">.209</td></tr>
+    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.043</td><td class="num">.223</td></tr>
+    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">&minus;1.630</td><td class="num">.143</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-70B random</span>*</td><td class="num">.025</td><td class="num">.127</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-13B random</span>*</td><td class="num">.051</td><td class="num">.212</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-7B random</span>*</td><td class="num">.085</td><td class="num">.272</td></tr>
+    <tr class="rand"><td><span class="mdl">random Qwen3-8B</span>*</td><td class="num">.071</td><td class="num">.287</td></tr>
   </tbody></table>
-  <p class="fig-note">Same probes, <strong>inverted result</strong>: on Akkadian year (r8) TF-IDF (.634) beats <em>every</em> embedding arm, and trained models (.32&ndash;.43) barely edge their own random-init twins (.29&ndash;.35) &mdash; the ~0.6 R&sup2; train-vs-random gap from English shrinks to <strong>~0.04</strong>. Geo is weak for all (r8 R&sup2; ~0.10&ndash;0.18). The big multilingual LLMs hold almost no <em>learned</em> Akkadian chronology; the signal is surface form (Akkadian text &gt; translation, .634 vs .495). <strong>The internal &ldquo;world model&rdquo; is specific to the languages a model was trained on, not a property of scale</strong> &mdash; the small translation encoder (excluded here, mean-pooled) is the thesis&rsquo;s success case. r40 = sparse 40-ruler tail under hold-one-ruler-out. <em>* = control.</em></p>
+  <p class="fig-note">Space is weaker than time for everyone (&rho; .13&ndash;.48). <strong>TF-IDF again leads</strong> (R&sup2; .249, &rho; .475); trained arms cluster at &rho; .21&ndash;.30, indistinguishable from their random twins. Several LLM R&sup2; go <em>negative</em> (Qwen3-1.7B &minus;1.63, Llama-2-70B &minus;.141) &mdash; the embedding carries no reliable find-spot signal the linear probe can use. <em>* = control.</em></p>
+</section>
+<section class="slide slide-text" data-index="26">
+  <div class="eyebrow">Experiment 2 &middot; Akkadian (maximal) &middot; balanced Monte-Carlo</div>
+  <h2 class="sh">Year (time) &mdash; can the date be read from the raw Akkadian?</h2>
+  <div class="cfg"><div class="cfg-k">Setup</div><div class="cfg-v">entity = the whole fragment&rsquo;s <strong>maximal Akkadian text</strong> (no translation); last-token embedding &rarr; ridge probe for <strong>year</strong>.</div><div class="cfg-k">Metric</div><div class="cfg-v"><strong>balanced Monte-Carlo</strong>, r8 (8 dense rulers): cap per ruler, 200 draws, stratified-by-ruler CV. MC <strong>test R&sup2;</strong> and <strong>Spearman &rho;</strong> (mean over draws). Real learning must beat the TF-IDF floor <em>and</em> the random twin.</div></div>
+  <p class="tbl-cap">balanced-MC (r8) &mdash; test R&sup2; | Spearman &rho;</p>
+  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">MC R&sup2;</th><th class="num">MC &rho;</th></tr></thead><tbody>
+    <tr class="rand"><td><span class="mdl">TF-IDF*</span> (floor)</td><td class="num">.503</td><td class="num">.707</td></tr>
+    <tr><td><span class="mdl">Llama-2-70B</span></td><td class="num">.116</td><td class="num">.331</td></tr>
+    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.189</td><td class="num">.403</td></tr>
+    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.230</td><td class="num">.433</td></tr>
+    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.111</td><td class="num">.312</td></tr>
+    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.082</td><td class="num">.396</td></tr>
+    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.151</td><td class="num">.370</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-70B random</span>*</td><td class="num">.118</td><td class="num">.305</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-13B random</span>*</td><td class="num">.166</td><td class="num">.369</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-7B random</span>*</td><td class="num">.226</td><td class="num">.438</td></tr>
+    <tr class="rand"><td><span class="mdl">random Qwen3-8B</span>*</td><td class="num">.285</td><td class="num">.499</td></tr>
+  </tbody></table>
+  <p class="fig-note">The inversion is sharpest here: <strong>TF-IDF (R&sup2; .503, &rho; .707) dominates</strong>, and every trained LLM (&rho; .31&ndash;.44) sits <em>at or below</em> its random-init twin (e.g. Llama-2-7B .433 vs its random .438). The ~0.6 R&sup2; train-vs-random gap seen on English collapses to &asymp;0. Multilingual scale buys no learned Akkadian chronology &mdash; the signal is the surface king-name string. <em>* = control.</em></p>
+</section>
+<section class="slide slide-text" data-index="27">
+  <div class="eyebrow">Experiment 2 &middot; Akkadian (maximal) &middot; balanced Monte-Carlo</div>
+  <h2 class="sh">Geo (space) &mdash; can the find-spot be read from the raw Akkadian?</h2>
+  <div class="cfg"><div class="cfg-k">Setup</div><div class="cfg-v">same maximal Akkadian text and last-token embedding, probing the find-spot <strong>(lon, lat)</strong>.</div><div class="cfg-k">Metric</div><div class="cfg-v">identical <strong>balanced-MC / r8</strong> protocol. MC <strong>test R&sup2;</strong> and <strong>Spearman &rho;</strong> (mean over draws). Controls in grey.</div></div>
+  <p class="tbl-cap">balanced-MC (r8) &mdash; test R&sup2; | Spearman &rho;</p>
+  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">MC R&sup2;</th><th class="num">MC &rho;</th></tr></thead><tbody>
+    <tr class="rand"><td><span class="mdl">TF-IDF*</span> (floor)</td><td class="num">.211</td><td class="num">.413</td></tr>
+    <tr><td><span class="mdl">Llama-2-70B</span></td><td class="num">.001</td><td class="num">.269</td></tr>
+    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.019</td><td class="num">.255</td></tr>
+    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.080</td><td class="num">.301</td></tr>
+    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">&minus;.221</td><td class="num">.159</td></tr>
+    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">&minus;.115</td><td class="num">.262</td></tr>
+    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.041</td><td class="num">.215</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-70B random</span>*</td><td class="num">.011</td><td class="num">.055</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-13B random</span>*</td><td class="num">.024</td><td class="num">.194</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-7B random</span>*</td><td class="num">.089</td><td class="num">.285</td></tr>
+    <tr class="rand"><td><span class="mdl">random Qwen3-8B</span>*</td><td class="num">.081</td><td class="num">.263</td></tr>
+  </tbody></table>
+  <p class="fig-note">Same pattern, weaker overall: <strong>TF-IDF leads</strong> (R&sup2; .211, &rho; .413); trained arms &rho; .16&ndash;.30 with negative R&sup2; for the largest Qwen models (Qwen3-32B &minus;.221, Qwen3-8B &minus;.115). Find-spot is barely linearly recoverable from the Akkadian embedding, and never better than the n-gram floor. <em>* = control.</em></p>
 </section>
 </div>
 <div id="chrome">
@@ -330,8 +370,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 </div>
 <div id="hint">← → navigate &nbsp;·&nbsp; F fullscreen</div>
 <script>
-const TOTAL = 26;
-const TITLES = ["Diachronic Interpretable Dating of Low-Resource Ancient Akkadian", "The thesis: a 400M translation model beats the 120B LLM \u2014 and we explain why", "Maximal \u00b7 mean-pool \u00b7 balanced \u00b7 PLS \u00b7 Spearman", "The experimental journey \u2014 what each phase contributed", "PLS vs Ridge across all models \u2014 the 400M translation encoder wins", "Thalesian's signal deepens with layer; LLMs peak mid-network then decay", "k = 3\u20135 PLS components capture it; Ridge (dashed) confirms PLS is not cherry-picking", "Scale and next-token finetuning both do nothing", "Thalesian wins despite the least efficient Akkadian tokenizer", "The translation finetune alone builds a deep diachronic representation", "Chronology is entangled in Qwen's embedding space, not laid out on a clean axis", "What we contribute, and what is missing to wrap it into a thesis", "Stress-testing the \u201cLLMs build a linear timeline\u201d claim on Akkadian", "T9 \u2014 do the models know the dates? (free-text generation)", "P2 \u2014 decode the find-spot (lat/lon) from the whole-text embedding", "P1 \u2014 is the year recoverable? whole-text mean vs the king-name token", "T10 \u2014 does prompting make the date more recoverable for the LLM?", "Translation probe \u2014 does translating to English surface the Year signal?", "Translation probe \u2014 does translating to English surface the geo signal?", "E5 \u2014 shuffle the words: does the embedding signal care?", "P9 \u2014 geodesic kernel PLS: does the manifold's curvature help?", "P8 \u2014 the supervision dial: how much supervision does chronology need?", "T12 \u2014 ask the LLM: the answer replaces the activation probe", "The tier0 baseline \u2014 raw scores vs dumb controls", "World models on English \u2014 reproducing Gurnee & Tegmark on our ladder", "\u2026 but not on Akkadian \u2014 the inversion"];
+const TOTAL = 28;
+const TITLES = ["Diachronic Interpretable Dating of Low-Resource Ancient Akkadian", "The thesis: a 400M translation model beats the 120B LLM \u2014 and we explain why", "Maximal \u00b7 mean-pool \u00b7 balanced \u00b7 PLS \u00b7 Spearman", "The experimental journey \u2014 what each phase contributed", "PLS vs Ridge across all models \u2014 the 400M translation encoder wins", "Thalesian's signal deepens with layer; LLMs peak mid-network then decay", "k = 3\u20135 PLS components capture it; Ridge (dashed) confirms PLS is not cherry-picking", "Scale and next-token finetuning both do nothing", "Thalesian wins despite the least efficient Akkadian tokenizer", "The translation finetune alone builds a deep diachronic representation", "Chronology is entangled in Qwen's embedding space, not laid out on a clean axis", "What we contribute, and what is missing to wrap it into a thesis", "Stress-testing the \u201cLLMs build a linear timeline\u201d claim on Akkadian", "T9 \u2014 do the models know the dates? (free-text generation)", "P2 \u2014 decode the find-spot (lat/lon) from the whole-text embedding", "P1 \u2014 is the year recoverable? whole-text mean vs the king-name token", "T10 \u2014 does prompting make the date more recoverable for the LLM?", "Translation probe \u2014 does translating to English surface the Year signal?", "Translation probe \u2014 does translating to English surface the geo signal?", "E5 \u2014 shuffle the words: does the embedding signal care?", "P9 \u2014 geodesic kernel PLS: does the manifold's curvature help?", "P8 \u2014 the supervision dial: how much supervision does chronology need?", "T12 \u2014 ask the LLM: the answer replaces the activation probe", "The tier0 baseline \u2014 raw scores vs dumb controls", "Exp 1 · English tier-0 gloss — Year (balanced-MC, r8)", "Exp 1 · English tier-0 gloss — Geo (balanced-MC, r8)", "Exp 2 · Akkadian maximal — Year (balanced-MC, r8)", "Exp 2 · Akkadian maximal — Geo (balanced-MC, r8)"];
 let cur = 0;
 const slides = Array.from(document.querySelectorAll('.slide'));
 slides.forEach((s,i) => s.setAttribute('data-num', (i+1)+'/'+TOTAL));
