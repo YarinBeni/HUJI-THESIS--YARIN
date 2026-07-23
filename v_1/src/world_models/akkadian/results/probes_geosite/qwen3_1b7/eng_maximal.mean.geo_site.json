@@ -1,0 +1,23 @@
+{
+  "method": "qwen3_1b7",
+  "variant": "eng_maximal",
+  "pool": "mean",
+  "target": "geo",
+  "protocol": "by_site",
+  "n": 1068,
+  "holdout": {
+    "best_layer": 4,
+    "best_test_r2": 0.5405017865299799
+  },
+  "mc_site": {
+    "mode": "mc_site",
+    "cap": 21,
+    "n_sites": 10,
+    "n_draws_used": 200,
+    "r2_mean": 0.16880311485550478,
+    "r2_std": 0.02378313432440023,
+    "spearman_mean": 0.3628631424917698,
+    "spearman_std": 0.03411721435688831,
+    "layer": 4
+  }
+}
