@@ -25,17 +25,21 @@ from wm_lib import extract as ex                        # noqa: E402
 from wm_lib.tokenize_lib import encode_all              # noqa: E402
 
 ACTS_DIR = os.path.join(_HERE, "activations")
-# decoder-only arms (encoders excluded by design: no causal last token)
+# decoder arms + the thesis encoders (added for the layer/PLS comparison; encoders
+# have no causal last token, so only their `mean` pooling is meaningful downstream —
+# the probe scripts skip the `last` site when it is absent/degenerate).
 DECODER_METHODS = [
     "qwen3_1b7", "qwen3_8b", "qwen3_32b", "gpt_oss_120b", "random",
     "llama2_7b", "llama2_13b", "llama2_70b",
     "llama2_7b_random", "llama2_13b_random", "llama2_70b_random",
 ]
+ENCODER_METHODS = ["thalesian_akk300m", "thalesian_cunei400m", "umt5_base"]
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--method", required=True, choices=DECODER_METHODS)
+    ap.add_argument("--method", required=True,
+                    choices=DECODER_METHODS + ENCODER_METHODS)
     ap.add_argument("--variant", required=True, choices=list(A.TEXT_VARIANTS))
     ap.add_argument("--max-tokens", type=int, default=256,
                     help="fragments are longer than G&T names; 256 covers most")
