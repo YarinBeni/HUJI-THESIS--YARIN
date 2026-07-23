@@ -1,6 +1,6 @@
 {
   "method": "llama2_7b_random",
-  "hfid": "meta-llama/Llama-2-7b-hf",
+  "hfid": "NousResearch/Llama-2-7b-hf",
   "entity_type": "headline",
   "prompt": "empty",
   "n_rows": 28389,
@@ -41,11 +41,12 @@
   ],
   "layer_stride": 1,
   "sites": [
-    "last"
+    "last",
+    "mean"
   ],
   "max_tokens": 96,
   "n_truncated": 0,
   "random_init": true,
   "seed": 42,
-  "elapsed_s": 940.6
+  "elapsed_s": 1836.0
 }
