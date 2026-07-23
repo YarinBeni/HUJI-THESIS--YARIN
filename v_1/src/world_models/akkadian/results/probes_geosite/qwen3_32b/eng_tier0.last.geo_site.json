@@ -1,0 +1,23 @@
+{
+  "method": "qwen3_32b",
+  "variant": "eng_tier0",
+  "pool": "last",
+  "target": "geo",
+  "protocol": "by_site",
+  "n": 1068,
+  "holdout": {
+    "best_layer": 64,
+    "best_test_r2": 0.435571779630381
+  },
+  "mc_site": {
+    "mode": "mc_site",
+    "cap": 21,
+    "n_sites": 10,
+    "n_draws_used": 200,
+    "r2_mean": 0.2546840722964305,
+    "r2_std": 0.036524217834855335,
+    "spearman_mean": 0.43210338659787895,
+    "spearman_std": 0.040857389642677766,
+    "layer": 64
+  }
+}
