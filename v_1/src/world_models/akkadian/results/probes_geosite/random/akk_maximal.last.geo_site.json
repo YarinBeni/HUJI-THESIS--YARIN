@@ -1,0 +1,23 @@
+{
+  "method": "random",
+  "variant": "akk_maximal",
+  "pool": "last",
+  "target": "geo",
+  "protocol": "by_site",
+  "n": 1068,
+  "holdout": {
+    "best_layer": 3,
+    "best_test_r2": 0.4232344591199933
+  },
+  "mc_site": {
+    "mode": "mc_site",
+    "cap": 21,
+    "n_sites": 10,
+    "n_draws_used": 200,
+    "r2_mean": 0.3509424303278122,
+    "r2_std": 0.043633997314627575,
+    "spearman_mean": 0.4545318326299054,
+    "spearman_std": 0.050338928527401364,
+    "layer": 3
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "method": "random",
+  "variant": "eng_tier0",
+  "pool": "mean",
+  "target": "geo",
+  "protocol": "by_site",
+  "n": 1068,
+  "holdout": {
+    "best_layer": 4,
+    "best_test_r2": 0.6375324869549757
+  },
+  "mc_site": {
+    "mode": "mc_site",
+    "cap": 21,
+    "n_sites": 10,
+    "n_draws_used": 200,
+    "r2_mean": 0.44995651849713736,
+    "r2_std": 0.03905588074278048,
+    "spearman_mean": 0.58712622854933,
+    "spearman_std": 0.03613905860698795,
+    "layer": 4
+  }
+}
