@@ -1,0 +1,36 @@
+{
+  "method": "random",
+  "variant": "eng_tier0",
+  "ruler_set": "r8",
+  "target": "year",
+  "site": "last",
+  "n": 1071,
+  "n_rulers": 8,
+  "holdout": {
+    "best_layer": 2,
+    "best_test_r2": 0.5137649767216166,
+    "best_test_spearman": 0.6485072905075558,
+    "n_test": 214
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 21,
+    "n_draws_used": 200,
+    "r2_mean": 0.3345634944277823,
+    "r2_std": 0.05871906771047313,
+    "spearman_mean": 0.53187054128782,
+    "spearman_std": 0.05758056098811908,
+    "layer": 2
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 8,
+    "n_scored": 1071,
+    "r2": 0.10983006393608108,
+    "spearman": 0.2854071340156988,
+    "layer": 3
+  },
+  "best_layer": 2,
+  "best_test_r2": 0.5137649767216166,
+  "best_test_spearman": 0.6485072905075558
+}
