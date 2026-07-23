@@ -1,0 +1,23 @@
+{
+  "method": "llama2_7b",
+  "variant": "eng_maximal",
+  "pool": "mean",
+  "target": "geo",
+  "protocol": "by_site",
+  "n": 1068,
+  "holdout": {
+    "best_layer": 6,
+    "best_test_r2": 0.5437379215761113
+  },
+  "mc_site": {
+    "mode": "mc_site",
+    "cap": 21,
+    "n_sites": 10,
+    "n_draws_used": 200,
+    "r2_mean": -0.0012883174100266146,
+    "r2_std": 0.032682465554963375,
+    "spearman_mean": 0.24814939499829586,
+    "spearman_std": 0.035071113975505275,
+    "layer": 6
+  }
+}
