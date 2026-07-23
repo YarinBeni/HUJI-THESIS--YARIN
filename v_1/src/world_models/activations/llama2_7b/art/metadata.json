@@ -1,6 +1,6 @@
 {
   "method": "llama2_7b",
-  "hfid": "meta-llama/Llama-2-7b-hf",
+  "hfid": "NousResearch/Llama-2-7b-hf",
   "entity_type": "art",
   "prompt": "empty",
   "n_rows": 31321,
@@ -41,11 +41,12 @@
   ],
   "layer_stride": 1,
   "sites": [
-    "last"
+    "last",
+    "mean"
   ],
   "max_tokens": 96,
   "n_truncated": 0,
   "random_init": false,
   "seed": null,
-  "elapsed_s": 1048.6
+  "elapsed_s": 1979.1
 }
