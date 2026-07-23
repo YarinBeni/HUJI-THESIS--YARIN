@@ -1,0 +1,36 @@
+{
+  "method": "llama2_70b_random",
+  "variant": "eng_tier0",
+  "ruler_set": "r8",
+  "target": "geo",
+  "site": "last",
+  "n": 1052,
+  "n_rulers": 8,
+  "holdout": {
+    "best_layer": 3,
+    "best_test_r2": -0.04213241453599681,
+    "best_test_spearman": 0.16610415319584937,
+    "n_test": 210
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 21,
+    "n_draws_used": 200,
+    "r2_mean": 0.025092224430840103,
+    "r2_std": 0.04793754890013784,
+    "spearman_mean": 0.1271441832559545,
+    "spearman_std": 0.07830031666052462,
+    "layer": 3
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 8,
+    "n_scored": 1052,
+    "r2": -0.10691402612334822,
+    "spearman": 0.08141304398662638,
+    "layer": 1
+  },
+  "best_layer": 3,
+  "best_test_r2": -0.04213241453599681,
+  "best_test_spearman": 0.16610415319584937
+}
