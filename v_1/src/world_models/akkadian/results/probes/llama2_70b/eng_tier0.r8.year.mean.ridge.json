@@ -1,0 +1,36 @@
+{
+  "method": "llama2_70b",
+  "variant": "eng_tier0",
+  "ruler_set": "r8",
+  "target": "year",
+  "site": "mean",
+  "n": 1071,
+  "n_rulers": 8,
+  "holdout": {
+    "best_layer": 77,
+    "best_test_r2": 0.6516769880350204,
+    "best_test_spearman": 0.7838480398603959,
+    "n_test": 214
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 21,
+    "n_draws_used": 200,
+    "r2_mean": 0.5582789972531339,
+    "r2_std": 0.046055316045611944,
+    "spearman_mean": 0.7227695530243541,
+    "spearman_std": 0.035865558581422555,
+    "layer": 77
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 8,
+    "n_scored": 1071,
+    "r2": 0.23689934416170333,
+    "spearman": 0.4006819950425418,
+    "layer": 77
+  },
+  "best_layer": 77,
+  "best_test_r2": 0.6516769880350204,
+  "best_test_spearman": 0.7838480398603959
+}
