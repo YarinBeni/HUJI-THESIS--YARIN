@@ -67,7 +67,8 @@ def probe_one(method, entity_type, site):
         per_layer, best = [], (None, -np.inf)
         for li in lids:
             X = np.load(files[li])["acts"][:n][valid]
-            if np.isnan(X).any():
+            X, bad = probing.sanitize(X)
+            if bad > 0.01:
                 continue
             sc, _, _ = probing.run_probe(X, target[valid], is_test[valid], is_place)
             per_layer.append({"layer": li, "test_r2": float(sc["test"]["r2"]),
@@ -79,7 +80,9 @@ def probe_one(method, entity_type, site):
             return None
     for r in per_layer:
         r["nd"] = round((r["layer"] - lids[0]) / max(1, lids[-1] - lids[0]), 4)
-    Xbl = np.load(files[bl])["acts"][:n][valid]
+    Xbl, bad_bl = probing.sanitize(np.load(files[bl])["acts"][:n][valid])
+    if bad_bl:
+        print(f"[warn] best layer {bl}: {bad_bl:.1%} non-finite, clamped", flush=True)
     layers = {bl: Xbl}
     pls = {}
     for k in KS:

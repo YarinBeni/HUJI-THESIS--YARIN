@@ -52,8 +52,9 @@ def probe_one(method, entity_type, site, args):
     for path in layer_files:
         li = int(re.search(r"layer(\d+)\.npz$", path).group(1))
         X = np.load(path)["acts"][:n_rows][valid]
-        if np.isnan(X).any():
-            print(f"[warn] NaN activations, skipping layer {li}")
+        X, bad = probing.sanitize(X)
+        if bad > 0.01:
+            print(f"[warn] layer {li}: {bad:.1%} non-finite, skipping")
             continue
         if args.probe == "pls":
             scores, probe, proj = probing.run_pls_probe(

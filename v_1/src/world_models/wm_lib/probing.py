@@ -19,6 +19,25 @@ ALPHAS = np.logspace(-1, 5, 13)
 
 # ---- distances / scores (verbatim ports unless noted) -----------------------
 
+
+FP16_MAX = 65504.0
+
+
+def sanitize(X):
+    """Activations are stored as fp16, whose range is +/-65504. Models with very large
+    outlier activations (gpt-oss-120B especially) overflow that range and land on disk
+    as +/-inf, which sklearn rejects. Clamp non-finite entries back to the representable
+    bound and report how much was affected so the caller can drop a badly corrupt layer.
+
+    Returns (X_clean float32, fraction_non_finite)."""
+    X = np.asarray(X)
+    bad = ~np.isfinite(X)
+    frac = float(bad.mean()) if bad.size else 0.0
+    if frac:
+        X = np.nan_to_num(np.asarray(X, dtype=np.float32), nan=0.0,
+                          posinf=FP16_MAX, neginf=-FP16_MAX)
+    return X, frac
+
 def haversine_distance(true_latlon, pred_latlon):
     """(n,2) arrays in (lat, lon) order -> km."""
     R = 6371.0

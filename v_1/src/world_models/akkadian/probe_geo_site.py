@@ -40,8 +40,11 @@ def _load_layers(act_dir, site, sel):
     for path in files:
         li = int(re.search(r"layer(\d+)\.npz$", path).group(1))
         X = np.load(path)["acts"][sel].astype(np.float32)
-        if not np.isnan(X).any():
+        X, bad = probing.sanitize(X)
+        if bad <= 0.01:
             layers[li] = X
+        else:
+            print(f"[warn] layer {li}: {bad:.1%} non-finite, skipped", flush=True)
     return layers
 
 
