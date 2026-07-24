@@ -1,0 +1,23 @@
+{
+  "method": "gpt_oss_120b",
+  "variant": "eng_tier0",
+  "pool": "mean",
+  "target": "geo",
+  "protocol": "by_site",
+  "n": 1068,
+  "holdout": {
+    "best_layer": 11,
+    "best_test_r2": 0.622343123593331
+  },
+  "mc_site": {
+    "mode": "mc_site",
+    "cap": 21,
+    "n_sites": 10,
+    "n_draws_used": 200,
+    "r2_mean": 0.37958782908007976,
+    "r2_std": 0.07436047837802333,
+    "spearman_mean": 0.5930027241808793,
+    "spearman_std": 0.043881328516653134,
+    "layer": 11
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "method": "gpt_oss_120b",
+  "variant": "akk_maximal",
+  "ruler_set": "r40",
+  "target": "year",
+  "site": "mean",
+  "n": 1187,
+  "n_rulers": 40,
+  "holdout": {
+    "best_layer": 36,
+    "best_test_r2": 0.13499548344069612,
+    "best_test_spearman": 0.44319441997894554,
+    "n_test": 238
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 1,
+    "n_draws_used": 0,
+    "r2_mean": NaN,
+    "r2_std": NaN,
+    "spearman_mean": NaN,
+    "spearman_std": NaN,
+    "layer": 36
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 40,
+    "n_scored": 1187,
+    "r2": -0.3088154131170171,
+    "spearman": 0.2394576382947068,
+    "layer": 11
+  },
+  "best_layer": 36,
+  "best_test_r2": 0.13499548344069612,
+  "best_test_spearman": 0.44319441997894554
+}
