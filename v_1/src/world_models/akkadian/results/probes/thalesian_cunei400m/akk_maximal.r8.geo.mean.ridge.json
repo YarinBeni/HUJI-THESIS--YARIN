@@ -1,0 +1,36 @@
+{
+  "method": "thalesian_cunei400m",
+  "variant": "akk_maximal",
+  "ruler_set": "r8",
+  "target": "geo",
+  "site": "mean",
+  "n": 1052,
+  "n_rulers": 8,
+  "holdout": {
+    "best_layer": 10,
+    "best_test_r2": 0.29600410251326015,
+    "best_test_spearman": 0.5275262055446579,
+    "n_test": 210
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 21,
+    "n_draws_used": 200,
+    "r2_mean": 0.1222358003263198,
+    "r2_std": 0.10134627516794313,
+    "spearman_mean": 0.44160138937640653,
+    "spearman_std": 0.06008308321334042,
+    "layer": 10
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 8,
+    "n_scored": 1052,
+    "r2": 0.1403725318407053,
+    "spearman": 0.4499853783940668,
+    "layer": 6
+  },
+  "best_layer": 10,
+  "best_test_r2": 0.29600410251326015,
+  "best_test_spearman": 0.5275262055446579
+}

@@ -1,0 +1,36 @@
+{
+  "method": "thalesian_cunei400m",
+  "variant": "akk_maximal",
+  "ruler_set": "r40",
+  "target": "geo",
+  "site": "mean",
+  "n": 1167,
+  "n_rulers": 40,
+  "holdout": {
+    "best_layer": 11,
+    "best_test_r2": 0.3455099465540351,
+    "best_test_spearman": 0.5465901111691682,
+    "n_test": 234
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 1,
+    "n_draws_used": 0,
+    "r2_mean": NaN,
+    "r2_std": NaN,
+    "spearman_mean": NaN,
+    "spearman_std": NaN,
+    "layer": 11
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 40,
+    "n_scored": 1167,
+    "r2": 0.23185371616422235,
+    "spearman": 0.47141025066259956,
+    "layer": 5
+  },
+  "best_layer": 11,
+  "best_test_r2": 0.3455099465540351,
+  "best_test_spearman": 0.5465901111691682
+}
