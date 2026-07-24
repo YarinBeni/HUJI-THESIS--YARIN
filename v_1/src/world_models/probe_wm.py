@@ -124,9 +124,13 @@ def main():
     ap.add_argument("--entity-type", default="all",
                     choices=["all"] + entity_data.ENTITY_TYPES)
     ap.add_argument("--probe", default="ridge", choices=["ridge", "pls"])
+    ap.add_argument("--sites", default=None,
+                    help="comma list to restrict pooling sites (e.g. 'mean' to skip "
+                         "re-probing an already-done 'last')")
     ap.add_argument("--cleanup", action="store_true",
                     help="delete the method's npz activations after all probes succeed")
     args = ap.parse_args()
+    only = set(args.sites.split(",")) if args.sites else None
 
     ets = entity_data.ENTITY_TYPES if args.entity_type == "all" else [args.entity_type]
     all_ok = True
@@ -135,7 +139,10 @@ def main():
         act_dir = os.path.join(ACTS_DIR, args.method, et)
         found_sites = {re.match(r"(\w+)\.layer", os.path.basename(p)).group(1)
                        for p in glob.glob(os.path.join(act_dir, "*.layer*.npz"))}
-        for site in sorted(set(sites) | found_sites):
+        run_sites = sorted(set(sites) | found_sites)
+        if only:
+            run_sites = [s for s in run_sites if s in only]
+        for site in run_sites:
             ok = probe_one(args.method, et, site, args)
             all_ok = all_ok and (ok is not None)
 

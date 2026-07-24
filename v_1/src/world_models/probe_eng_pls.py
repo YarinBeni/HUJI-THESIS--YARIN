@@ -32,10 +32,16 @@ def _sp(sc):
                                + sc.get("lon_spearman", np.nan)) / 2)
 
 
+def _ridge_json(method, entity_type, site):
+    fp = os.path.join(RESULTS_DIR, "probes", method,
+                      f"{entity_type}.{site}.ridge.json")
+    return json.load(open(fp)) if os.path.exists(fp) else None
+
+
 def probe_one(method, entity_type, site):
     act_dir = os.path.join(ACTS_DIR, method, entity_type)
-    files = sorted(glob.glob(os.path.join(act_dir, f"{site}.layer*.npz")),
-                   key=lambda p: int(re.search(r"layer(\d+)\.npz$", p).group(1)))
+    files = {int(re.search(r"layer(\d+)\.npz$", p).group(1)): p
+             for p in glob.glob(os.path.join(act_dir, f"{site}.layer*.npz"))}
     if not files:
         return None
     df = entity_data.load_entity_df(entity_type)
@@ -46,23 +52,34 @@ def probe_one(method, entity_type, site):
     n = meta["n_rows"]
     target, valid, is_test = target[:n], valid[:n], is_test[:n]
 
-    layers, per_layer, best = {}, [], (None, -np.inf)
-    for p in files:
-        li = int(re.search(r"layer(\d+)\.npz$", p).group(1))
-        X = np.load(p)["acts"][:n][valid]
-        if np.isnan(X).any():
-            continue
-        layers[li] = X
-        sc, _, _ = probing.run_probe(X, target[valid], is_test[valid], is_place)
-        per_layer.append({"layer": li, "test_r2": float(sc["test"]["r2"]),
-                          "test_spearman": float(_sp(sc["test"]))})
-        if sc["test"]["r2"] > best[1]:
-            best = (li, sc["test"]["r2"])
-    if not layers:
-        return None
-    lids = sorted(layers); bl = best[0]
+    lids = sorted(files)
+    # reuse the committed ridge sweep for best-layer + the per-layer curve (fast path);
+    # only fall back to a full re-sweep if the ridge json is absent.
+    rj = _ridge_json(method, entity_type, site)
+    if rj and isinstance(rj.get("layers"), dict) and rj.get("best_layer") in files:
+        bl = int(rj["best_layer"])
+        per_layer = [{"layer": int(li),
+                      "test_r2": float(v["test"]["r2"]),
+                      "test_spearman": float(_sp(v["test"]))}
+                     for li, v in sorted(rj["layers"].items(), key=lambda kv: int(kv[0]))]
+    else:
+        per_layer, best = [], (None, -np.inf)
+        for li in lids:
+            X = np.load(files[li])["acts"][:n][valid]
+            if np.isnan(X).any():
+                continue
+            sc, _, _ = probing.run_probe(X, target[valid], is_test[valid], is_place)
+            per_layer.append({"layer": li, "test_r2": float(sc["test"]["r2"]),
+                              "test_spearman": float(_sp(sc["test"]))})
+            if sc["test"]["r2"] > best[1]:
+                best = (li, sc["test"]["r2"])
+        bl = best[0]
+        if bl is None:
+            return None
     for r in per_layer:
         r["nd"] = round((r["layer"] - lids[0]) / max(1, lids[-1] - lids[0]), 4)
+    Xbl = np.load(files[bl])["acts"][:n][valid]
+    layers = {bl: Xbl}
     pls = {}
     for k in KS:
         try:
