@@ -1,0 +1,36 @@
+{
+  "method": "thalesian_akk300m",
+  "variant": "akk_maximal",
+  "ruler_set": "r8",
+  "target": "geo",
+  "site": "last",
+  "n": 1052,
+  "n_rulers": 8,
+  "holdout": {
+    "best_layer": 7,
+    "best_test_r2": 0.08770854086561314,
+    "best_test_spearman": 0.25684298272098105,
+    "n_test": 210
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 21,
+    "n_draws_used": 200,
+    "r2_mean": -0.41772753150220493,
+    "r2_std": 0.18738760895733722,
+    "spearman_mean": 0.17711293976603695,
+    "spearman_std": 0.07937584144800858,
+    "layer": 7
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 8,
+    "n_scored": 1052,
+    "r2": -0.4844389204141558,
+    "spearman": 0.16044354770068137,
+    "layer": 6
+  },
+  "best_layer": 7,
+  "best_test_r2": 0.08770854086561314,
+  "best_test_spearman": 0.25684298272098105
+}
