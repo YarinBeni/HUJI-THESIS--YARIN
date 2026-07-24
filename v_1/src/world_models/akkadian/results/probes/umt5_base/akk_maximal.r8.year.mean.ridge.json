@@ -1,0 +1,36 @@
+{
+  "method": "umt5_base",
+  "variant": "akk_maximal",
+  "ruler_set": "r8",
+  "target": "year",
+  "site": "mean",
+  "n": 1071,
+  "n_rulers": 8,
+  "holdout": {
+    "best_layer": 8,
+    "best_test_r2": 0.3978879505033699,
+    "best_test_spearman": 0.5570604974968789,
+    "n_test": 214
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 21,
+    "n_draws_used": 200,
+    "r2_mean": -0.183656619503925,
+    "r2_std": 0.24070980333432473,
+    "spearman_mean": 0.48841340044699505,
+    "spearman_std": 0.0700262291092855,
+    "layer": 8
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 8,
+    "n_scored": 1071,
+    "r2": -1.9848577468130264,
+    "spearman": 0.22326976697857978,
+    "layer": 10
+  },
+  "best_layer": 8,
+  "best_test_r2": 0.3978879505033699,
+  "best_test_spearman": 0.5570604974968789
+}

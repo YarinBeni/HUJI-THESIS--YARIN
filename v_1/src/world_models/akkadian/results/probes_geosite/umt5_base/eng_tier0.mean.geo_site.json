@@ -1,0 +1,23 @@
+{
+  "method": "umt5_base",
+  "variant": "eng_tier0",
+  "pool": "mean",
+  "target": "geo",
+  "protocol": "by_site",
+  "n": 1068,
+  "holdout": {
+    "best_layer": 3,
+    "best_test_r2": 0.5121260830027803
+  },
+  "mc_site": {
+    "mode": "mc_site",
+    "cap": 21,
+    "n_sites": 10,
+    "n_draws_used": 200,
+    "r2_mean": 0.13028776104864911,
+    "r2_std": 0.10808379515166697,
+    "spearman_mean": 0.5275524753243351,
+    "spearman_std": 0.04748013906073899,
+    "layer": 3
+  }
+}

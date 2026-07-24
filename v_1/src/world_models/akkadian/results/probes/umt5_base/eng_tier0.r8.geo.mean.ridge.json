@@ -1,0 +1,36 @@
+{
+  "method": "umt5_base",
+  "variant": "eng_tier0",
+  "ruler_set": "r8",
+  "target": "geo",
+  "site": "mean",
+  "n": 1052,
+  "n_rulers": 8,
+  "holdout": {
+    "best_layer": 7,
+    "best_test_r2": 0.2020190936071931,
+    "best_test_spearman": 0.4699217627873006,
+    "n_test": 210
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 21,
+    "n_draws_used": 200,
+    "r2_mean": -0.43708020476147896,
+    "r2_std": 0.24552525467130254,
+    "spearman_mean": 0.3159700214504444,
+    "spearman_std": 0.07064733759191394,
+    "layer": 7
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 8,
+    "n_scored": 1052,
+    "r2": -0.08090766133037397,
+    "spearman": 0.32905668663510157,
+    "layer": 1
+  },
+  "best_layer": 7,
+  "best_test_r2": 0.2020190936071931,
+  "best_test_spearman": 0.4699217627873006
+}
