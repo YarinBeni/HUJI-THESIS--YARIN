@@ -62,6 +62,7 @@ def probe_one(method, entity_type, site):
                       "test_r2": float(v["test"]["r2"]),
                       "test_spearman": float(_sp(v["test"]))}
                      for li, v in sorted(rj["layers"].items(), key=lambda kv: int(kv[0]))]
+        best_r2 = float(rj.get("best_test_r2", float("nan")))
     else:
         per_layer, best = [], (None, -np.inf)
         for li in lids:
@@ -73,7 +74,7 @@ def probe_one(method, entity_type, site):
                               "test_spearman": float(_sp(sc["test"]))})
             if sc["test"]["r2"] > best[1]:
                 best = (li, sc["test"]["r2"])
-        bl = best[0]
+        bl, best_r2 = best[0], float(best[1])
         if bl is None:
             return None
     for r in per_layer:
@@ -93,13 +94,13 @@ def probe_one(method, entity_type, site):
              key=lambda k: pls[k]["test_r2"], default=None)
     out = {"method": method, "entity_type": entity_type, "site": site,
            "is_place": bool(is_place), "best_layer": bl,
-           "best_k": int(bk) if bk else None,
+           "best_layer_r2": best_r2, "best_k": int(bk) if bk else None,
            "per_layer": per_layer, "pls_at_best_layer": pls}
     pdir = os.path.join(RESULTS_DIR, "eng_pls", method)
     os.makedirs(pdir, exist_ok=True)
     with open(os.path.join(pdir, f"{entity_type}.{site}.json"), "w") as f:
         json.dump(out, f, indent=2)
-    print(f"[{method}/{entity_type}/{site}] best L{bl} r2={best[1]:.3f} best_k={bk}",
+    print(f"[{method}/{entity_type}/{site}] best L{bl} r2={best_r2:.3f} best_k={bk}",
           flush=True)
     return out
 
@@ -116,7 +117,13 @@ def main():
         sites = {re.match(r"(\w+)\.layer", os.path.basename(p)).group(1)
                  for p in glob.glob(os.path.join(act_dir, "*.layer*.npz"))}
         for site in sorted(sites):
-            probe_one(args.method, et, site)
+            # one bad cell must not discard the arm's other results (the job only
+            # commits on a zero exit)
+            try:
+                probe_one(args.method, et, site)
+            except Exception as e:                                # noqa: BLE001
+                print(f"[error] {args.method}/{et}/{site}: "
+                      f"{type(e).__name__}: {e}", flush=True)
 
 
 if __name__ == "__main__":
