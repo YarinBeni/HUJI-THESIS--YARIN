@@ -78,3 +78,30 @@ the trained models beat the surface-form floor?
   differently than a global map; several sites also cluster by province.
 - **TF-IDF floor already run** (`python tfidf_akk.py`): akk r8/year R² .634, r40/year
   .171; akk r8/geo .163, r40/geo .317. Embedding arms must clear these.
+
+## Cell B — the entity-level runs (WB jobs)
+
+The `WA*` jobs above probe **whole fragments**. The `WB*` jobs add the missing
+rung of the ladder: the paper's own *entity-level* protocol applied to **our**
+obscure entities, written in English. That isolates entity salience (cell A -> B)
+before the fragment-span and language changes are introduced.
+
+| Piece | Path |
+|---|---|
+| dataset builder | `build_entity_datasets.py` -> `data/entity_datasets/{assyrian_ruler,mesopotamian_place}.csv` |
+| extraction | `extract_entity.py` (span-aware; 4 pooling sites) |
+| probing | `probe_entity.py` (entity-level MC, ridge + PLS-5, `--tfidf` floor) |
+| aggregation | `aggregate_entity.py` -> `results/summary_entity_*.csv`, `RESULTS_entity.md` |
+| results | `results/probes_entity/{arm}/{dataset}.{site}.json` |
+
+**Pooling sites.** `ent_last` = last token of the entity span (G&T's protocol),
+`ent_mean` = mean over the span, `last` = last token of the whole string (their
+`headline` protocol), `mean` = mean over the whole string. On the `bare` template
+the span *is* the string, so `ent_last == last` there by construction.
+
+**Run order:** `WB0` (build + floor) -> `WB1`/`WB1b`/`WB1c`/`WB1d` (extract) ->
+`WB2` (probe) -> `WB3` (aggregate).
+
+**Read the numbers with the sample size in mind:** 34 rulers and 25 places, so a
+20% split is 6-7 held-out entities. That is why every number is a 200-draw
+entity-level Monte-Carlo with its spread reported, and why the spread is wide.
