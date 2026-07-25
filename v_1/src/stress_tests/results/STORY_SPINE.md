@@ -1,71 +1,70 @@
-# Story spine v2 — "The ladder" (Option 1 + matrix as the map)
+# Story spine v3 — "The ladder" (Option 1 + matrix as the map)
 
-Agreed narrative for `thesis_story_9.html`, replacing the chronological three-era order.
-Framing: *a researcher's follow-up to Gurnee & Tegmark (2023), ICLR-style.*
-We reproduce the paper, then climb away from its comfort zone one factor at a time
-(famous→obscure entities, entity→fragment, English→Akkadian), using the 2×2 matrix
-{salient, obscure} × {high, low resource} as the recurring visual map. We close by
-stating the conditions a temporal/spatial world model needs to emerge, and show that a
-translation objective supplies them where pretraining scale cannot.
+Agreed narrative for `thesis_story_9.html`. Framing: *a researcher's follow-up to
+Gurnee & Tegmark (2023), ICLR-style.* We reproduce the paper, then climb away from its
+comfort zone one factor at a time, using the 2×2 matrix {salient, obscure} × {high, low
+resource} as the recurring map. Within each cell we move entity → fragment, mirroring the
+paper's entity probes before generalising. Controls (random twins, TF-IDF) are **rows in
+every results table, never dedicated slides**. Metrics: R² like the paper (+ Spearman for
+year). The km read-out is dropped.
 
-Slide counter: **29 slides** (new indices 0–28). Cut: old 3, 6, 10, 12, 18 (see bottom).
+~28 slides. v3 changes vs v2: Act 2/3 split entity-first-then-fragment; controls slide cut;
+old 17 cut (pipeline-duplicate of the world-models B result); km slide cut; confounder
+slide added; ruler≠chronology slide added; T12+T10 merged; finetune null moved to rescue
+act; Act-5 objective slide now uMT5 vs AKK-300M vs cunei-400M.
 
 ## Master mapping — new order
 
-| New | Old | Act | Experiment | Exact config | Data source | Status |
+| New | Old | Act | Content | Config / evidence | Data | Status |
 |---|---|---|---|---|---|---|
-| 0 | 0 | 0 Motivation | — | title | — | retitle to follow-up framing |
-| 1 | 1 | 0 | — | motivation: world models → archaeology; teaser of inversion | — | **rewrite** |
-| 2 | new (from 12) | 0 | — | G&T claim + their single-cell setting (salient · English · last · ridge · R²) | paper | **new** |
-| 3 | new | 0 | — | the 2×2 matrix as climbing map; D empty; recurring progress marker | — | **new** |
-| 4 | 2 | 1 Cell A | — | protocol & controls: ladder, random twins, TF-IDF floor, reading rule | — | **rework** (must cover BOTH protocol families, see issue #1) |
-| 5 | 24 | 1 | G&T replication | 6 datasets · last · ridge · R² · random twins · gpt-oss | `world_models/results/summary_best_layer_r2.csv` | keep |
-| 6 | 29 | 1 | English layer sweep | last+mean · ridge · per-layer | `summary_layerwise.csv` | keep |
-| 7 | 30 | 1 | English PLS-k | best layer · k=1..64 | `results/eng_pls/` | keep |
-| 8 | 25 | 2 Cell B | Akk year, English gloss | eng_tier0 · r8 · balanced-MC · last · ridge · R²+ρ | `akkadian/results/probes/*/eng_tier0.r8.year.last.*` | keep; add matrix marker → B |
-| 9 | 26 | 2 | Akk geo, English gloss | eng_tier0 · by-site MC · last+mean · ridge · R² | `akkadian/results/probes_geosite/*/eng_tier0.*` | keep |
-| 10 | 23 | 2 | tier0 vs dumb controls | eng_tier0 · mean · ridge vs TF-IDF/random | `results/csv/tfidf_baseline.csv` | keep |
-| 11 | 17 | 2 | translation probe · year | eng_tier0 · holdout · mean · PLS+ridge · ρ | `results/csv/translation_mc.csv` | demote to "supporting"; reconcile protocol wording vs new 8 |
-| 12 | 27 | 3 Cell C | Akk year, raw Akkadian | akk_maximal · r8 · balanced-MC · last · ridge · R²+ρ | `akkadian/results/probes/*/akk_maximal.r8.year.last.*` | keep; matrix marker → C |
-| 13 | 28 | 3 | Akk geo, raw Akkadian | akk_maximal · by-site MC · last+mean · ridge · R² | `akkadian/results/probes_geosite/*/akk_maximal.*` | keep |
-| 14 | 14 | 3 | P2 find-spot in km | akk_maximal · mean · PLS+ridge · great-circle km | `results/csv/p2_geo_mc.csv` | keep as interpretable-km companion of new 13 |
-| 15 | 31 | 3 | Akkadian layer sweep | both variants · last+mean · ridge · per-layer | `akkadian/results/layers_pls/` | keep |
-| 16 | 32 | 3 | Akkadian PLS-k | best layer · k=1..64 | `akkadian/results/layers_pls/` | keep (supersedes old 6) |
-| 17 | 15 | 3 | P1 pooling/LORO | whole-text mean vs king-token · ridge · ρ · LORO | `results/csv/p1_maxking.csv` | keep; leads into rescue-attempts act |
-| 18 | 13 | 4 Rescue | T9 knowledge | free-text generation | `results/csv/t9_knowledge.csv` | keep |
-| 19 | 22 | 4 | T12 forced dating | forced behavioral answer | `results/csv/t12_forced_dating.csv` | keep |
-| 20 | 16 | 4 | T10 prompting | prompt styles · MC | `results/csv/t10_mc.csv` | keep |
-| 21 | 19 | 4 | E5 shuffle | word-order scramble · mean · ridge · ρ | `results/csv/e5_shuffle.csv` | keep |
-| 22 | 21 | 4 | P8 supervision dial | λ dial | `results/csv/p8_lambda.csv` | keep |
-| 23 | 20 | 4 | P9 geodesic KPLS | kernel PLS | `results/csv/p9_gkpls.csv` | keep |
-| 24 | new | 5 Conditions | — | synthesis: conditions for a world model (language resource + salience; not scale/prompting/probe power) | acts 1–4 | **new** |
-| 25 | 4 | 5 | thesis headline | akk_maximal · mean · balanced · PLS+ridge · ρ | `results/csv/table1_best_models.csv` | keep |
-| 26 | 5+9+7 | 5 | why translation works | layer profile Thalesian vs uMT5 vs Qwen; scale/NTP-finetune null | `results/csv/p1_year_mc.csv`, `table1_best_models.csv` | **merge 3→1..2 slides** |
-| 27 | 8 | 5 | tokenizer autopsy | tok/word stats | eda | keep |
-| 28 | 11 | 5 | contributions | — | — | **rework** to follow-up-paper framing |
+| 0 | 0 | 0 | Title | — | — | retitle |
+| 1 | 1 | 0 | Motivation: world models → archaeology; extending G&T's *headlines* experiment (their only fragment-like dataset) to obscure entities, a low-resource language, and mean pooling. Teaser of the inversion. | — | — | **rewrite** |
+| 2 | new(12) | 0 | The paper: G&T claim + their single cell (salient · English · entity string · last token · ridge · R²) | — | paper | **new** |
+| 3 | new | 0 | The matrix — climbing map; D empty; returns as progress marker | — | — | **new** |
+| 4 | 2 | 1 | Protocol: ladder, both pipelines, reading rule (beat TF-IDF *and* your random twin) | — | — | **rework** |
+| 5 | 24 | 1 | Cell A repro: paper reproduces on our ladder; random twins flat; gpt-oss mid-pack | 6 datasets · last · ridge · R² | `world_models/results/summary_best_layer_r2.csv` | keep |
+| 6 | 29 | 1 | A: layer sweep | last+mean · ridge | `summary_layerwise.csv` | keep |
+| 7 | 30 | 1 | A: PLS-k | best layer · k≤64 | `results/eng_pls/` | keep |
+| 8 | — | 2 | **B-entity: obscure entities, paper pooling.** Ruler names written in English, last token, year. Strict A→B step: only salience changes. | entity string · last · ridge | **MISSING RUN** | **placeholder — needs small cluster job** (geo target at entity level undefined; year only unless decided otherwise) |
+| 9 | 25 | 2 | B-fragment: year from English gloss, last **and** mean | eng_tier0 · r8 · MC · ridge · R²+ρ | `akkadian/results/probes/*/eng_tier0.r8.year.*` | keep; show both poolings |
+| 10 | 26 | 2 | B-fragment: geo from English gloss | eng_tier0 · by-site MC · last+mean · R² | `akkadian/results/probes_geosite/*/eng_tier0.*` | keep |
+| 11 | new | 3 | **The confounder control** (Act-3 opener): maximal cleaning + balanced MC. Without them TF-IDF wins by majority-guessing king-name surface strings — label leakage, not language understanding. | protocol rationale + before/after numbers | `tfidf_baseline.csv`, `summary_ALL_modes_full.csv` (hold vs mc) | **new** |
+| 12 | 15 | 3 | C-entity: king-name token in the Akkadian text (paper-style entity probe, our language) | king_last vs king_mean vs whole-text mean | `results/csv/p1_maxking.csv` | rework framing |
+| 13 | 27 | 3 | C-fragment: year from raw Akkadian — trained ≈ random twin | akk_maximal · r8 · MC · last+mean · R²+ρ | `akkadian/results/probes/*/akk_maximal.r8.year.*` | keep |
+| 14 | 28 | 3 | C-fragment: geo from raw Akkadian — space partially survives | akk_maximal · by-site MC · last+mean · R² | `akkadian/results/probes_geosite/*/akk_maximal.*` | keep |
+| 15 | 31 | 3 | C: layer sweep mirror | last+mean · ridge | `akkadian/results/layers_pls/` | keep |
+| 16 | 32 | 3 | C: PLS-k mirror | best layer · k≤64 | `akkadian/results/layers_pls/` | keep |
+| 17 | new | 3 | **Ruler ≠ chronology**: king_last ruler-F1 .98, stratified ρ .98, but group-level ρ ≈ 0; LORO collapses to ≈0 | maxking + LORO | `p1_maxking.csv`, `summary_ALL_modes_full.csv` (loro) | **new** (assembled from existing data) |
+| 18 | 13 | 4 | Rescue 1 — T9: does it *know* the dates? (free text) | generation | `t9_knowledge.csv` | keep |
+| 19 | 22+16 | 4 | Rescue 2 — ask it directly: T12 forced dating + T10 prompting, **one table** | generation + prompt styles | `t12_forced_dating.csv`, `t10_mc.csv` | **merge** |
+| 20 | 7 | 4 | Rescue 3 — scale & NTP finetuning on all our Akkadian: null at every scale | +NTP bars | `table1_best_models.csv` | move here from old thesis block |
+| 21 | 19 | 4 | Rescue 4 — E5 shuffle: is it word order? | scramble · mean · ridge | `e5_shuffle.csv` | keep |
+| 22 | 20 | 4 | Rescue 5 — non-linear probes: P9 geodesic kernels | kernel PLS | `p9_gkpls.csv` | keep (merge with 23 in step 3 if tables are small) |
+| 23 | 21 | 4 | Rescue 6 — P8 supervision dial | λ dial | `p8_lambda.csv` | keep |
+| 24 | new | 5 | **Conditions for a world model** (synthesis): high-resource language + salient entities; scale, prompting, supervision, probe power don't substitute | acts 1–4 | — | **new** |
+| 25 | 4 | 5 | What does work: 400M translation encoder beats the 120B LLM | akk_maximal · mean · MC · PLS+ridge · ρ | `table1_best_models.csv` | keep |
+| 26 | 9(+5) | 5 | Why: the translation objective. uMT5-base (vanilla) vs AKK-300M (Akkadian-only) vs cunei-400M (multilingual cuneiform) — multilingual translation finetune builds the deep signal | layer profiles, same-size comparison | `akkadian/results/layers_pls/{umt5_base,thalesian_akk300m,thalesian_cunei400m}` | **rebuild with better plot (step 3)** |
+| 27 | 8 | 5 | Despite the worst tokenizer | tok/word | eda | keep |
+| 28 | 11 | 5 | Contributions & conclusion, follow-up-paper framing | — | — | **rework** |
 
 ## Cut / appendix
 
 | Old | Fate | Reason |
 |---|---|---|
 | 3 (journey) | appendix | process, not argument |
-| 6 (k≤5 PLS) | cut | superseded by old 32 (new 16) |
-| 10 (geometry viz) | appendix | weakest link in ladder arc; PCA/UMAP caveats |
-| 12 (stress-test intro) | absorbed into new 2–3 | framing now global |
-| 18 (translation geo) | cut | duplicate of old 14 protocol |
+| 6 (k≤5 PLS) | cut | superseded by new 16 |
+| 10 (geometry viz) | appendix | weakest link in ladder arc |
+| 12 (stress intro) | absorbed | framing now global (new 2–3) |
+| 14 (P2 km) | cut | metric standardised to R²/ρ like the paper |
+| 17 (translation-probe year) | appendix | pipeline-duplicate of new 9 (holdout+PLS+mean vs MC+ridge+last answers the same question with different numbers) |
+| 18 (translation-probe geo) | cut | duplicate of old 14's protocol |
+| 23 (tier0 baseline) | cut | controls are rows in every table, not a slide |
 
-## Open issues found in step 2
+## Open items
 
-1. **Two protocol families coexist and the protocol slide describes only one.**
-   Old-thesis slides (25–27 new) use *maximal · mean · balanced-MC · PLS · Spearman*;
-   world-models slides (5–16 new) use *last (year) / last+mean (geo) · ridge · R²+ρ ·
-   balanced-MC r8 / by-site MC*. New slide 4 must present both and say why they differ
-   (paper-faithful protocol vs honest-corpus protocol), or numbers will look contradictory.
-2. **Layer-story duplication risk:** new 26 (p1_year_mc PLS·mean layer curves) vs new 15
-   (layers_pls ridge·last/mean). Same question, different pipelines. Keep both but the
-   takeaways must cite their own configs explicitly.
-3. **17-vs-25 (old) reconciled** by demoting old 17 to "supporting" in Act 2 (new 11).
-4. **P10 (reduce-then-kernel)** still has no slide; candidate for Act 4 as a 7th rescue
-   attempt or appendix. Undecided.
-5. New builds required: matrix map (new 3), conditions synthesis (new 24), paper-intro
-   (new 2), plus rewrites of motivation (1), protocol (4), contributions (28).
+1. **B-entity English run missing** (new 8): small cluster job — build ruler-name entity
+   CSV (English spellings + reign midpoint year), reuse `extract_acts.py`/`probe_wm.py`.
+   Until then the slide is an explicit placeholder. Geo target at entity level undefined.
+2. P10 (reduce-then-kernel) still slide-less; candidate extra rescue slide or appendix.
+3. Step 3 will replace table slides with plots where a figure tells it better; slide 26
+   explicitly flagged for a better plot.
