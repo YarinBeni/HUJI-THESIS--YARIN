@@ -17,9 +17,17 @@ the result, which is the invariant the audit doc warns about.
 import argparse
 import os
 import re
+import subprocess
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DECK = os.path.join(HERE, "thesis_story_9.html")
+
+# The reusable slide bodies come from the *pre-reorder* 33-slide deck, not from the
+# current file — otherwise a second run would try to reuse indices the first run
+# already removed. Git blob SHAs are immutable and survive rebases, so pinning the
+# blob keeps this script re-runnable forever (e.g. to refresh a slide when new
+# results land) without committing a second 4 MB copy of the deck.
+SOURCE_BLOB = "538265f1af40652a0cee88d9862766d62576b2d0"   # thesis_story_9.html @ 4177af08
 
 # ---------------------------------------------------------------- the spine ----
 # (kind, ref, title-for-the-nav-strip)
@@ -32,7 +40,7 @@ SPINE = [
     ("old", 24, "Cell A — the paper reproduces on our ladder (and the control it never ran)"),
     ("old", 29, "Cell A — where in the network do space & time live?"),
     ("old", 30, "Cell A — how many PLS components does the world model need?"),
-    ("new", "b_entity", "Step 1 — same language, obscure entities (the paper's own protocol)"),
+    ("new", "b_entity", "Step 1 — same language, obscure entities: time survives, space does not"),
     ("old", 25, "Step 2 — English gloss, whole fragments: Year"),
     ("old", 26, "Step 2 — English gloss, whole fragments: Geo"),
     ("new", "confounder", "Before cell C: the confounder controls, and what they cost"),
@@ -116,13 +124,26 @@ NEW_SLIDES = {
     <div class="cfg-k">Pooling</div><div class="cfg-v">four sites, so the paper's protocol and ours are both visible: <strong>ent_last</strong> (last token of the ruler/place name &mdash; theirs), <strong>ent_mean</strong>, <strong>last</strong> (last token of the whole sentence &mdash; their <em>headline</em> protocol) and <strong>mean</strong>. On the bare rows the entity <em>is</em> the string, so ent_last = last by construction.</div>
     <div class="cfg-k">Metric</div><div class="cfg-v">ridge and PLS-5, <strong>R&sup2;</strong> and <strong>&rho;</strong>, over a <strong>200-draw Monte-Carlo of entity-level splits</strong> (20% of entities held out per draw; all six templates of an entity always move together, so no template can leak its target).</div>
   </div>
-  <div class="fig-wrap"><div class="placeholder-box">
-    <div class="ph-icon">&#9203;</div>
-    <div class="ph-hint">Awaiting the WB jobs</div>
-    <div class="ph-slot">world_models/akkadian/results/RESULTS_entity.md</div>
-    <div class="ph-sub">WB0 build &rarr; WB1 extract &rarr; WB2 probe &rarr; WB3 aggregate &mdash; then rerun build_story_deck.py</div>
-  </div></div>
-  <p class="fig-note"><strong>Read this slide with its sample size in view.</strong> 34 rulers and 25 places, against the paper's thousands of entities, so a 20% split holds out 6&ndash;7 entities: point R&sup2; values will be unstable and the Monte-Carlo spread will be wide. The claim this slide can support is about the <strong>ordering of arms</strong> against the TF-IDF floor and the random twins &mdash; not about a precise R&sup2;.</p>
+  <p class="tbl-cap">bare entity string &mdash; year &rho; (34 rulers) &middot; geo &rho; (25 find-spots), MC mean</p>
+  <table class="rtbl compact"><thead><tr><th rowspan="2">model</th><th colspan="2" class="num">YEAR &mdash; ruler names</th><th class="num">GEO</th></tr><tr><th class="num">entity-last (theirs)</th><th class="num">mean (ours)</th><th class="num">entity-last</th></tr></thead><tbody>
+    <tr><td><span class="mdl">Llama-2-70B</span></td><td class="num"><strong>.701</strong></td><td class="num">.463</td><td class="num">.429</td></tr>
+    <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">.663</td><td class="num">.438</td><td class="num">.413</td></tr>
+    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.627</td><td class="num">.436</td><td class="num">.458</td></tr>
+    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.618</td><td class="num">.483</td><td class="num">.441</td></tr>
+    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.596</td><td class="num">.500</td><td class="num">.344</td></tr>
+    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.527</td><td class="num">.477</td><td class="num">.384</td></tr>
+    <tr><td><span class="mdl">cuneiform-400M</span></td><td class="num">.456</td><td class="num">.509</td><td class="num">.398</td></tr>
+    <tr><td><span class="mdl">AKK-300M</span></td><td class="num">.488</td><td class="num">.567</td><td class="num">.315</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-70B random</span>*</td><td class="num">.457</td><td class="num">.314</td><td class="num">.459</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-7B random</span>*</td><td class="num">.473</td><td class="num">.311</td><td class="num">.278</td></tr>
+    <tr class="rand"><td><span class="mdl">random Qwen3-8B</span>*</td><td class="num">.171</td><td class="num">&minus;.038</td><td class="num">.321</td></tr>
+    <tr class="rand"><td><span class="mdl">TF-IDF</span> (floor)</td><td class="num">.344</td><td class="num">.344</td><td class="num">.296</td></tr>
+  </tbody></table>
+  <div class="text-points" style="margin-top:9px">
+    <div class="tp"><div class="tp-h">Time survives obscurity &mdash; but only at the top of the ladder, and only with their pooling</div><div class="tp-b">Llama-2-70B (&rho; <strong>.701</strong>) clears both gates: its own random twin (.457) and the floor (.344), and the ladder orders monotonically (70B &gt; 13B &gt; 7B, 32B &gt; 8B &gt; 1.7B). But the margin is <strong>&asymp;.24</strong> where cell A's was <strong>&asymp;.74</strong> in R&sup2;, and by Llama-2-7B (.527 vs its twin .473) the gap is inside the spread. <strong>Mean pooling erases the effect entirely</strong> &mdash; every decoder falls to &asymp;.44&ndash;.50 and the ordering inverts, with AKK-300M on top. On a bare name the paper's entity-last-token choice is doing real work.</div></div>
+    <div class="tp"><div class="tp-h">Space does not survive at all</div><div class="tp-b">No arm beats its twin on find-spots: the best score in the whole geo column belongs to <strong>random-init Llama-2-70B (.459)</strong>, and R&sup2; is negative for every arm including TF-IDF. Recovering coordinates for Nineveh or Borsippa from the name alone is simply not something these models do &mdash; which makes the fragment-level geo result two slides on (where trained arms <em>do</em> clear the floor) the more surprising of the two.</div></div>
+  </div>
+  <p class="fig-note">34 rulers and 25 find-spots against the paper's thousands, so a 20% split holds out 6&ndash;7 entities and the MC spread is wide (&plusmn;.21&ndash;.39 on &rho;). Read the <strong>ordering against the two controls</strong>, not the third decimal. Splits are by entity, so all six templates of a ruler always move together. <em>* = control.</em></p>
 </section>""",
 
 "confounder": """<section class="slide slide-text">
@@ -295,18 +316,29 @@ def check(html):
     return ok
 
 
+def read_source(path=None):
+    """The 33-slide deck the spine refers to: a file if given, else the pinned blob."""
+    if path:
+        with open(path) as f:
+            return f.read()
+    return subprocess.run(["git", "cat-file", "blob", SOURCE_BLOB],
+                          cwd=HERE, capture_output=True, text=True,
+                          check=True).stdout
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=DECK)
+    ap.add_argument("--source", default=None,
+                    help="33-slide source deck (default: the pinned git blob)")
     ap.add_argument("--check", action="store_true", help="only verify the current deck")
     args = ap.parse_args()
 
-    with open(DECK) as f:
-        html = f.read()
     if args.check:
-        raise SystemExit(0 if check(html) else 1)
+        with open(DECK) as f:
+            raise SystemExit(0 if check(f.read()) else 1)
 
-    new = build(html)
+    new = build(read_source(args.source))
     with open(args.out, "w") as f:
         f.write(new)
     print(f"[write] {args.out}  ({len(new)/1e6:.2f} MB, {len(SPINE)} slides)")
