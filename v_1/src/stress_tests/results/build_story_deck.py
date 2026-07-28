@@ -32,7 +32,7 @@ SOURCE_BLOB = "538265f1af40652a0cee88d9862766d62576b2d0"   # thesis_story_9.html
 # ---------------------------------------------------------------- the spine ----
 # (kind, ref, title-for-the-nav-strip)
 SPINE = [
-    ("new", "title", "Boundary Conditions of Linear Space and Time Representations"),
+    ("new", "title", "When Are Space and Time Linearly Represented in Language Models?"),
     ("new", "motivation", "Why we care: a world model you could point at an excavation"),
     ("new", "paper", "Gurnee & Tegmark: a strong claim, tested in one cell"),
     ("new", "matrix", "The climbing map: entity salience x language resource"),
@@ -63,14 +63,19 @@ SPINE = [
     ("new", "contributions", "Contributions, and what this says about world-model claims"),
 ]
 
+# which matrix cell each slide sits in (spine position -> cell); "" = show the map
+# with nothing active yet, as orientation.
+CELLMAP_AT = {4: "", 5: "A", 6: "A", 7: "A", 8: "B", 9: "B", 10: "B",
+              11: "C", 12: "C", 13: "C", 14: "C", 15: "C", 16: "C", 17: "C"}
+
 # --------------------------------------------------------- newly authored ------
 NEW_SLIDES = {
 
 "title": """<section class="slide slide-title">
   <div class="title-inner">
     <div class="title-kicker">M.Sc. Thesis &middot; Advisor Meeting &middot; 2026</div>
-    <h1 class="title-h1">Boundary Conditions of Linear Space and Time Representations in Language Models</h1>
-    <div class="title-sub">From salient English entities to obscure entities, a low-resource language, and whole fragments</div>
+    <h1 class="title-h1">When Are Space and Time Linearly Represented in Language Models?</h1>
+    <div class="title-sub">Entity salience, language resource, and pooling</div>
     <div class="title-meta">M.Sc. Thesis &middot; Yarin Beer &middot; Computer Science, HUJI<br>Advisors: Prof. Gabriel Stanovsky &nbsp;&middot;&nbsp; Dr. Barak Sober</div>
   </div>
 </section>""",
@@ -130,27 +135,11 @@ NEW_SLIDES = {
   <h2 class="sh">The paper reproduces on our models, and the controls it never ran hold up</h2>
   <div class="cfg tight">
     <div class="cfg-k">Setup</div><div class="cfg-v">the paper's six English datasets (World, USA, NYC &rarr; <strong>latitude/longitude</strong>; Figures, Art, Headlines &rarr; <strong>year</strong>). Each entity's last-token embedding, every layer, probed on held-out entities. We reproduce it with <strong>our extended set of models</strong> (both decoder families, gpt-oss-120B, three translation encoders) and with the <strong>controls the paper never ran</strong>.</div>
-    <div class="cfg-k">Metric</div><div class="cfg-v">best-layer held-out test <strong>R&sup2;</strong> for all six datasets, as in the paper. Each cell is <strong>Ridge | PLS</strong>, PLS taken at its best k &le; 64 at that same layer.</div>
+    <div class="cfg-k">Metrics</div><div class="cfg-v">best-layer held-out <strong>R&sup2;</strong> (the paper's headline) and <strong>Spearman &rho;</strong> (which the paper also reports), for all six datasets. Every cell shows <strong>Ridge</strong> then <strong>PLS</strong>, PLS taken at its best k &le; 64 on the same layer.</div>
   </div>
-  <p class="tbl-cap">best-layer held-out test R&sup2; &nbsp;&middot;&nbsp; space | time &nbsp;&middot;&nbsp; each cell = Ridge | PLS</p>
-  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">World</th><th class="num">USA</th><th class="num">NYC</th><th class="num">Figures</th><th class="num">Art</th><th class="num">Headlines</th></tr></thead><tbody>
-    <tr><td><span class="mdl">Llama-2-70B</span> (paper)</td><td class="num">.911</td><td class="num">.864</td><td class="num">.359</td><td class="num">.835</td><td class="num">.885</td><td class="num">.746</td></tr>
-    <tr><td><span class="mdl">Llama-2-70B</span> (ours)</td><td class="num">.905|.903</td><td class="num">.846|.831</td><td class="num">.363|.326</td><td class="num">.833|.827</td><td class="num">.860|.853</td><td class="num">.757|.748</td></tr>
-    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.883|.880</td><td class="num">.808|.793</td><td class="num">.272|.240</td><td class="num">.802|.799</td><td class="num">.780|.770</td><td class="num">.663|.652</td></tr>
-    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.859|.857</td><td class="num">.788|.775</td><td class="num">.249|.205</td><td class="num">.784|.778</td><td class="num">.770|.756</td><td class="num">.592|.582</td></tr>
-    <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">.807|.806</td><td class="num">.656|.658</td><td class="num">.112|.079</td><td class="num">.803|.803</td><td class="num">.739|.748</td><td class="num">.510|.500</td></tr>
-    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.838|.839</td><td class="num">.702|.691</td><td class="num">.187|.147</td><td class="num">.806|.800</td><td class="num">.727|.718</td><td class="num">.605|.598</td></tr>
-    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.797|.793</td><td class="num">.634|.617</td><td class="num">.117|.075</td><td class="num">.774|.768</td><td class="num">.658|.649</td><td class="num">.557|.548</td></tr>
-    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.655|.660</td><td class="num">.450|.440</td><td class="num">.080|.050</td><td class="num">.693|.691</td><td class="num">.449|.437</td><td class="num">.476|.465</td></tr>
-    <tr><td><span class="mdl">uMT5-base</span></td><td class="num">.438|.284</td><td class="num">.325|.264</td><td class="num">.133|.044</td><td class="num">.494|.401</td><td class="num">.153|.096</td><td class="num">.349|.234</td></tr>
-    <tr><td><span class="mdl">cuneiform-400M</span></td><td class="num">.399|.279</td><td class="num">.344|.297</td><td class="num">.114|.045</td><td class="num">.460|.401</td><td class="num">.126|.084</td><td class="num">.343|.295</td></tr>
-    <tr><td><span class="mdl">AKK-300M</span></td><td class="num">.381|.249</td><td class="num">.312|.274</td><td class="num">.120|.036</td><td class="num">.448|.358</td><td class="num">.123|.099</td><td class="num">.300|.213</td></tr>
-    <tr class="rand"><td><span class="mdl">TF-IDF</span> (floor)</td><td class="num">.642</td><td class="num">.536</td><td class="num">.389</td><td class="num">.645</td><td class="num">.116</td><td class="num">.448</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-70B random</span>*</td><td class="num">.170</td><td class="num">.240</td><td class="num">.014</td><td class="num">.198</td><td class="num">.029</td><td class="num">.148</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-13B random</span>*</td><td class="num">.282|.269</td><td class="num">.290|.277</td><td class="num">.044|.025</td><td class="num">.284|.267</td><td class="num">.038|.058</td><td class="num">.267|.265</td></tr>
-    <tr class="rand"><td><span class="mdl">random Qwen3-8B</span>*</td><td class="num">.327|.311</td><td class="num">.379|.370</td><td class="num">.059|.018</td><td class="num">.276|.264</td><td class="num">.055|.080</td><td class="num">.196|.174</td></tr>
-  </tbody></table>
-  <p class="fig-note"><strong>On English the published result holds, and it holds against controls the paper never ran.</strong> Our Llama-2-70B lands within .02 of every published number, and the effect extends to a second family: Qwen3 scales 1.7B &rarr; 8B &rarr; 32B exactly as the paper's scaling claim predicts. The gap to the controls is large in <em>both</em> space and time (Llama-2-70B World .905 against its random twin .170; Art .860 against .029), so the geometry is learned rather than architectural, and TF-IDF is a genuine floor that trained models clear and random ones fall below. The three <strong>translation models</strong> (uMT5-base, cuneiform-400M, AKK-300M) sit <em>above</em> the random twins but <em>below</em> TF-IDF on English: they are not generically good probes, which matters when they win on Akkadian later. <strong>PLS tracks Ridge closely</strong> for every decoder, so the signal is genuinely low-rank rather than spread thinly over all dimensions. <em>* = control.</em></p>
+  <p class="tbl-cap">best-layer held-out test score &middot; each cell = <strong>Ridge</strong>|<span style="color:#6b7484">PLS</span> &middot; PLS at its best k &le; 64 on the same layer</p>
+  {{TABLE:cellA}}
+  <p class="fig-note"><strong>On English the published result holds, and it holds against controls the paper never ran.</strong> Our Llama-2-70B lands within .02 of every published number, and the effect extends to a second family: Qwen3 scales 1.7B &rarr; 8B &rarr; 32B exactly as the paper's scaling claim predicts. The gap to the controls is large in <em>both</em> space and time (Llama-2-70B World .905 against its random twin .170; Art .860 against .029), so the geometry is learned rather than architectural, and TF-IDF is a genuine floor that trained models clear and random ones fall below. The three <strong>translation models</strong> (uMT5-base, cuneiform-400M, AKK-300M) sit <em>above</em> the random twins but <em>below</em> TF-IDF on English: they are not generically good probes. <strong>PLS tracks Ridge closely</strong> for every decoder. <em>* = control.</em></p>
 </section>""",
 
 "cellA_layers": """<section class="slide slide-figure fig-major">
@@ -158,9 +147,9 @@ NEW_SLIDES = {
   <h2 class="sh">Where in the network space and time live</h2>
   <div class="cfg tight">
     <div class="cfg-k">Setup</div><div class="cfg-v">per-layer <strong>ridge</strong> probe (no PLS on this slide), all six English datasets pooled into two groups: <strong>SPACE</strong> = World, USA, NYC (predicting latitude/longitude) and <strong>TIME</strong> = Figures, Art, Headlines (predicting year). Plotted against <strong>normalised depth</strong> (layer / total layers) so models of different depth, 28 to 41 layers, are directly comparable, as in the paper's Figure 2.</div>
-    <div class="cfg-k">Reading</div><div class="cfg-v">left = last token (the paper's read-out), right = mean pool (new). TIME = Spearman &rho;, SPACE = R&sup2; on a <strong>symlog</strong> axis, meaning linear near zero and logarithmic further out, so the deep negative scores of the failing arms fit on the page without squashing the 0 to 1 band where everything interesting happens. Dashed = random-init controls; &#9733; = each arm's best layer.</div>
+    <div class="cfg-k">Reading</div><div class="cfg-v">rows = SPACE then TIME; columns = <strong>last token</strong> (the paper's read-out) then <strong>mean pool</strong> (new), each shown under <strong>both metrics</strong>, so nothing here departs from the paper: we only add the read-outs it also reports. R&sup2; uses a <strong>symlog</strong> axis, linear near zero and logarithmic further out, so the deep negative scores of the failing arms fit on the page without squashing the 0 to 1 band. Dashed = random-init controls; &#9733; = each arm's best layer.</div>
   </div>
-  <div class="fig-wrap">{{IMG:29}}</div>
+  <div class="fig-wrap">{{FIG:fig_cellA_layers.png}}</div>
   <div class="takeaway tight"><span class="tk-label">Key takeaway</span>The Qwen and Llama families sit clearly above both the random controls and the encoder-decoder translation models. <strong>Where each arm peaks is as informative as how high it peaks:</strong> for the weakest arms the best layer is at the very start of the network, which is what "no signal was built" looks like, whereas every arm that beats its controls peaks in the <strong>middle-to-late</strong> layers, reproducing the paper's depth profile for time under both poolings. In space the best layers are spread more evenly across depth and sit less often at the very start. Two arms are the exception worth watching in the space panels: they track near the bottom for most of the network under both poolings and then <strong>rise sharply in the last few layers</strong>.</div>
 </section>""",
 
@@ -169,9 +158,9 @@ NEW_SLIDES = {
   <h2 class="sh">How many PLS directions the world model needs</h2>
   <div class="cfg tight">
     <div class="cfg-k">Setup</div><div class="cfg-v">at each arm's <strong>best ridge layer</strong> from the previous slide, refit with <strong>PLS</strong> using k = 1 to 64 components. Same six English datasets in the same two groups: <strong>SPACE</strong> = World, USA, NYC (latitude/longitude), <strong>TIME</strong> = Figures, Art, Headlines (year).</div>
-    <div class="cfg-k">Reading</div><div class="cfg-v">TIME = Spearman &rho;, SPACE = R&sup2;; both poolings shown; dashed = random-init controls; &#9733; = the k that maximises the score.</div>
+    <div class="cfg-k">Reading</div><div class="cfg-v">rows = SPACE then TIME; columns = <strong>last token</strong> then <strong>mean pool</strong>, each under <strong>both metrics</strong>. Dashed = random-init controls; &#9733; = the k that maximises the score; the dash-dot vertical line marks k = 16.</div>
   </div>
-  <div class="fig-wrap">{{IMG:30}}</div>
+  <div class="fig-wrap">{{FIG:fig_cellA_plsk.png}}</div>
   <div class="takeaway tight"><span class="tk-label">Key takeaway</span>Most arms settle at around <strong>k &asymp; 16</strong> components. Year is the more concentrated of the two, space is more spread out, but both converge near 16. That is intuitively what the strong scores require: with only a handful of directions there would be no room for a meaningful subspace, and we would expect the weak results the <strong>random-init controls</strong> show, which saturate by k &asymp; 3 to 5 and gain nothing after that. The learned representation is genuinely multi-dimensional rather than one strong axis, a distinction that a single best-layer R&sup2; table hides completely.</div>
 </section>""",
 
@@ -316,6 +305,10 @@ EYEBROW_PATCHES = {
 
 EXTRA_CSS = """
 /* --- added by build_story_deck.py --- */
+.rtbl.compact.wide{font-size:9.5px;}
+.rtbl.compact.wide th,.rtbl.compact.wide td{padding:1.5px 3px;}
+.rtbl.compact.wide td i{font-style:normal;color:var(--ink-light);}
+.rtbl.compact.wide thead tr:first-child th{border-bottom:none;padding-bottom:0;}
 .rtbl.matrix{font-size:15px;margin-top:6px;}
 .rtbl.matrix th,.rtbl.matrix td{padding:13px 18px;vertical-align:top;line-height:1.45;}
 .rtbl.matrix thead th{font-size:12px;letter-spacing:.05em;}
@@ -327,11 +320,130 @@ EXTRA_CSS = """
 .slide.fig-major .sh{font-size:23px;margin-bottom:9px;}
 .slide.fig-major .eyebrow{margin-bottom:6px;}
 .slide.fig-major .fig-wrap{margin:0 0 8px;}
+.cellmap{position:absolute;top:15px;right:18px;display:grid;
+         grid-template-columns:auto 34px 34px;grid-auto-rows:auto;gap:2px;
+         font-family:var(--sans);z-index:5;}
+.cm-h{font-size:7.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--ink-light);text-align:center;padding-bottom:1px;}
+.cm-r{font-size:7.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--ink-light);text-align:right;padding-right:3px;align-self:center;}
+.cm-c{width:34px;height:22px;border:1px solid var(--border);border-radius:3px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:11px;font-weight:800;color:var(--ink-light);background:#fbfcfd;}
+.cm-c.on{background:var(--green);border-color:var(--green);color:#fff;
+         box-shadow:0 1px 5px rgba(26,92,58,.35);}
+.cm-c.done{background:var(--green-bg);border-color:var(--green-mid);color:var(--green);}
+.cm-c.na{background:#f4f4f6;color:#c3c7d0;border-style:dashed;}
 </style>"""
+
+
+WM = os.path.abspath(os.path.join(HERE, "..", "..", "world_models"))
+DATASETS = [("world_place", "World"), ("us_place", "USA"), ("nyc_place", "NYC"),
+            ("historical_figure", "Figures"), ("art", "Art"), ("headline", "Headlines")]
+TABLE_ROWS = [
+    ("llama2_70b", "Llama-2-70B", False), ("llama2_13b", "Llama-2-13B", False),
+    ("llama2_7b", "Llama-2-7B", False), ("gpt_oss_120b", "gpt-oss-120B", False),
+    ("qwen3_32b", "Qwen3-32B", False), ("qwen3_8b", "Qwen3-8B", False),
+    ("qwen3_1b7", "Qwen3-1.7B", False), ("umt5_base", "uMT5-base", False),
+    ("thalesian_cunei400m", "cuneiform-400M", False),
+    ("thalesian_akk300m", "AKK-300M", False),
+    ("tfidf", "TF-IDF (floor)", True),
+    ("llama2_70b_random", "Llama-2-70B random*", True),
+    ("llama2_13b_random", "Llama-2-13B random*", True),
+    ("llama2_7b_random", "Llama-2-7B random*", True),
+    ("random", "random Qwen3-8B*", True),
+]
+
+
+def _fmt(v):
+    if v is None or v != v:
+        return "&ndash;"
+    t = f"{v:.3f}"
+    return t.lstrip("0") if t.startswith("0.") else t
+
+
+def cellA_table():
+    """Best-layer English results: every dataset x {R2, Spearman} x {Ridge | PLS}.
+    Built from the committed CSV/JSON so the slide cannot drift from the results."""
+    import csv
+    import json as _json
+
+    def load(name):
+        with open(os.path.join(WM, "results", name)) as f:
+            return {r["method"]: r for r in csv.DictReader(f)}
+    r2, rho = load("summary_best_layer_r2.csv"), load("summary_best_layer_spearman.csv")
+
+    pls = {}
+    pls_dir = os.path.join(WM, "results", "eng_pls")
+    for arm in os.listdir(pls_dir) if os.path.isdir(pls_dir) else []:
+        pls[arm] = {}
+        for ds, _ in DATASETS:
+            f = os.path.join(pls_dir, arm, f"{ds}.last.json")
+            if not os.path.exists(f):
+                continue
+            at = _json.load(open(f))["pls_at_best_layer"]
+            pls[arm][ds] = (max(v["test_r2"] for v in at.values()),
+                            max(v["test_spearman"] for v in at.values()))
+
+    head = ('<table class="rtbl compact wide"><thead><tr><th rowspan="2">model</th>'
+            + "".join(f'<th colspan="2" class="num">{lab}</th>' for _, lab in DATASETS)
+            + '</tr><tr>'
+            + "".join('<th class="num">R&sup2;</th><th class="num">&rho;</th>'
+                      for _ in DATASETS) + '</tr></thead><tbody>')
+    body = []
+    for arm, label, ctrl in TABLE_ROWS:
+        cells = []
+        for ds, _ in DATASETS:
+            gr = float(r2[arm][ds]) if arm in r2 else None
+            gs = float(rho[arm][ds]) if arm in rho else None
+            pr, ps = pls.get(arm, {}).get(ds, (None, None))
+            cells.append(f'<td class="num">{_fmt(gr)}<i>|{_fmt(pr)}</i></td>'
+                         f'<td class="num">{_fmt(gs)}<i>|{_fmt(ps)}</i></td>')
+        tr = '<tr class="rand">' if ctrl else '<tr>'
+        body.append(tr + f'<td><span class="mdl">{label}</span></td>'
+                    + "".join(cells) + '</tr>')
+    paper = ('<tr><td><span class="mdl">Llama-2-70B (paper)</span></td>'
+             + "".join(f'<td class="num">{v}</td><td class="num">&ndash;</td>'
+                       for v in [".911", ".864", ".359", ".835", ".885", ".746"])
+             + '</tr>')
+    return head + paper + "".join(body) + "</tbody></table>"
+
+
+CELL_ORDER = ["A", "B", "C"]
+
+
+def cellmap(active):
+    """Small 2x2 position marker: green = the cell this slide is in, pale green =
+    cells already covered, dashed grey = D, which has no honest filler."""
+    done = set(CELL_ORDER[:CELL_ORDER.index(active)]) if active in CELL_ORDER else set()
+
+    def cls(c):
+        if c == "D":
+            return "cm-c na"
+        if c == active:
+            return "cm-c on"
+        return "cm-c done" if c in done else "cm-c"
+    return (
+        '<div class="cellmap">'
+        '<div></div><div class="cm-h">Eng</div><div class="cm-h">Akk</div>'
+        f'<div class="cm-r">salient</div><div class="{cls("A")}">A</div>'
+        f'<div class="{cls("D")}">&#10005;</div>'
+        f'<div class="cm-r">obscure</div><div class="{cls("B")}">B</div>'
+        f'<div class="{cls("C")}">C</div>'
+        '</div>')
 
 
 def inject_css(head):
     return head.replace("</style>", EXTRA_CSS, 1)
+
+
+def figure_tag(name, alt=""):
+    """Inline a freshly rendered figure from world_models/results/figs as base64."""
+    import base64
+    path = os.path.join(WM, "results", "figs", name)
+    with open(path, "rb") as f:
+        b64 = base64.b64encode(f.read()).decode()
+    return f'<img alt="{alt}" src="data:image/png;base64,{b64}">'
 
 
 def image_of(source_slides, idx, alt=None):
@@ -376,12 +488,19 @@ def build(html):
     bodies, titles = [], []
     for i, (kind, ref, title) in enumerate(SPINE):
         sec = strip_index(old[ref]) if kind == "old" else NEW_SLIDES[ref]
+        for fig in set(re.findall(r'\{\{FIG:([^}]+)\}\}', sec)):
+            sec = sec.replace("{{FIG:%s}}" % fig, figure_tag(fig, alt=title))
+        if "{{TABLE:cellA}}" in sec:
+            sec = sec.replace("{{TABLE:cellA}}", cellA_table())
         for tok in set(re.findall(r'\{\{IMG:(\d+)\}\}', sec)):
             sec = sec.replace("{{IMG:%s}}" % tok, image_of(old, int(tok), alt=title))
         if kind == "old" and ref in EYEBROW_PATCHES:
             sec = set_eyebrow(sec, EYEBROW_PATCHES[ref])
         sec = re.sub(r'(<section class="slide[^"]*)"',
                      rf'\1" data-index="{i}"', sec, count=1)
+        if i in CELLMAP_AT:
+            sec = re.sub(r'(<section[^>]*>)', r'\1\n  ' + cellmap(CELLMAP_AT[i]),
+                         sec, count=1)
         bodies.append(sec)
         titles.append(title)
 
