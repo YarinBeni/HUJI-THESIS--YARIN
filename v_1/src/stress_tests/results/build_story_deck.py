@@ -54,14 +54,86 @@ SPINE = [
     ("new", "ask_directly", "Asking the model directly, and prompting it hard, changes nothing"),
     ("new", "ntp_finetune", "Training the LLMs further on our own Akkadian moves nothing"),
     ("new", "shuffle", "Scrambling the word order costs almost nothing, so the probe reads a bag of words"),
-    ("old", 20, "Rescue 5 — is the probe family too weak? (P9 geodesic kernels)"),
-    ("old", 21, "Rescue 6 — how much supervision would it take? (P8 dial)"),
+    ("old", 20, "Curved and kernel probes do no better than the straight line"),
+    ("old", 21, "Turning the supervision dial: the year is not lying in the cloud's shape"),
     ("new", "conditions", "What a linear temporal world model needs in order to exist"),
-    ("old", 4,  "What does work: the 400M translation encoder beats the 120B LLM"),
-    ("old", 9,  "Why: the translation objective, not the language or the size"),
-    ("old", 8,  "Ruling out the tokenizer"),
+    ("new", "winner", "What does work: the 400M translation encoder beats every LLM"),
+    ("new", "translation_line", "Why it works: translation finetuning, and multilingual translation most of all"),
+    ("new", "tokenizer", "It is not the tokenizer: the winner has the worst one"),
+    ("new", "explorer_eng", "Inside the winner's embedding space: English"),
+    ("new", "explorer_akk", "Inside the winner's embedding space: Akkadian"),
     ("new", "contributions", "Contributions, and what this says about world-model claims"),
 ]
+
+def _std_takeaway(sec):
+    """Convert a trailing fig-note into the standard takeaway box."""
+    sec = sec.replace('<p class="fig-note">',
+                      '<div class="takeaway tight"><span class="tk-label">Key takeaway</span>')
+    i = sec.rfind('</p>\n</section>')
+    if i == -1:
+        i = sec.rfind('</p></section>')
+        if i != -1:
+            sec = sec[:i] + '</div></section>' + sec[i+len('</p></section>'):]
+    else:
+        sec = sec[:i] + '</div>\n</section>' + sec[i+len('</p>\n</section>'):]
+    return sec
+
+
+def _fix_p9(sec):
+    sec = sec.replace(
+        '<div class="eyebrow">Stress test &middot; geometry-aware probes (working note &sect;2)</div>',
+        '<div class="eyebrow">Rescue 5 &middot; a stronger probe family</div>')
+    sec = sec.replace(
+        '<h2 class="sh">P9 &mdash; geodesic kernel PLS: does the manifold&rsquo;s curvature help?</h2>',
+        '<h2 class="sh">Curved and kernel probes do no better than the straight line</h2>')
+    sec = sec.replace('>maximal</th>', '>cleaned Akkadian</th>')
+    sec = sec.replace('Akkadian maximal + English tier0 (other cleanings in the CSV)',
+                      'cleaned Akkadian and the English translation')
+    sec = sec.replace(' &mdash; isolates curvature vs kernel', ': isolates curvature against kernel')
+    sec = sec.replace(' &mdash; isolates PLS vs kernel', ': isolates PLS against kernel')
+    sec = sec.replace('{.001, .01, .1} &mdash; it picked', '{.001, .01, .1}; it picked')
+    return _std_takeaway(sec)
+
+
+def _fix_p8(sec):
+    sec = sec.replace(
+        '<div class="eyebrow">Stress test &middot; geometry-aware probes (working note &sect;4)</div>',
+        '<div class="eyebrow">Rescue 6 &middot; how much supervision it takes</div>')
+    sec = sec.replace(
+        '<h2 class="sh">P8 &mdash; the supervision dial: how much supervision does chronology need?</h2>',
+        '<h2 class="sh">Turning the supervision dial: the year is not lying in the cloud&rsquo;s shape</h2>')
+    sec = sec.replace('same 200 balanced draws, train/test split by ruler &mdash; the probe',
+                      'same 200 balanced draws, train/test split by ruler, so the probe')
+    sec = sec.replace('Laplacian eigenmaps). In-between', 'Laplacian eigenmaps). An in-between')
+    sec = sec.replace('on PCA-100 features; test fragments are projected linearly &mdash; no leakage',
+                      'on PCA-100 features; test fragments are projected linearly, with no leakage')
+    sec = sec.replace('NOT the KPLS family: no components &ldquo;a&rdquo; and no kernel choice here &mdash; the only',
+                      'NOT the KPLS family: no components and no kernel choice here; the only')
+    sec = sec.replace('Akkadian shown name-stripped (maximal); tier0/maxking in the CSV.',
+                      'Akkadian shown with names stripped; the uncleaned variants are in the CSV.')
+    sec = sec.replace('Akkadian maximal &mdash; &lambda; (0 = supervised &rarr; 1 = geometry)',
+                      'cleaned Akkadian &middot; &lambda; (0 = supervised &rarr; 1 = geometry)')
+    sec = sec.replace('English tier0 &mdash; &lambda;', 'English translation &middot; &lambda;')
+    return _std_takeaway(sec)
+
+
+def _sweep(sec):
+    """Residual jargon and dash cleanup for reused slides (tables keep numeric
+    em-dash placeholders, which read as blanks and stay)."""
+    sec = sec.replace('&mdash;&mdash;', '&ndash;&ndash;')
+    sec = sec.replace('0.199&mdash;', '0.199&ndash;')
+    sec = sec.replace(' &mdash; ', '; ')
+    sec = sec.replace('tier0, the only valid translation (eng_maximal broken; hallucinated names); Akkadian = name-stripped maximal',
+                      'the English translation and the name-stripped Akkadian')
+    sec = sec.replace('English = tier0 (eng_maximal broken; hallucinated names); tier0/maxking + the full',
+                      'English = the translation; the uncleaned variants and the full')
+    sec = sec.replace('name-stripped maximal; tier0/maxking in the CSV.', 'name-stripped Akkadian; other variants in the CSV.')
+    sec = sec.replace('tier0/maxking', 'the uncleaned variants')
+    sec = sec.replace('&mdash;', '&ndash;')   # any residue is a table blank
+    return sec
+
+
+SLIDE_TRANSFORMS = {20: lambda s_: _sweep(_fix_p9(s_)), 21: lambda s_: _sweep(_fix_p8(s_))}
 
 # which matrix cell each slide sits in (spine position -> cell); "" = show the map
 # with nothing active yet, as orientation.
@@ -401,24 +473,74 @@ NEW_SLIDES = {
 "conditions": """<section class="slide slide-text">
   <div class="eyebrow">Synthesis</div>
   <h2 class="sh">What a linear temporal world model needs in order to exist</h2>
-  <div class="exp-config">Reading the ladder back down, the collapse is attributable, and the failed rescues say what is <em>not</em> responsible.</div>
+  <div class="exp-config">Reading the ladder back down, the collapse is attributable, and the failed rescues say what is <em>not</em> responsible for it.</div>
   <div class="text-points">
-    <div class="tp"><div class="tp-h">Condition 1 &mdash; the language must be well represented in training</div><div class="tp-b">This is the load-bearing factor. Holding the entities fixed and moving English &rarr; Akkadian (B &rarr; C) drops the trained arms <strong>onto their own random twins</strong>, while a character n-gram floor beats all of them. The geometry the paper found does not transfer to a language the model barely saw.</div></div>
-    <div class="tp"><div class="tp-h">Condition 2 &mdash; the entities must be salient enough to have been written about</div><div class="tp-b">A &rarr; B weakens the signal before any language change, and the n-gram floor starts to lead on time. A linear timeline needs entities the model has read <em>about</em>, repeatedly, in dated context &mdash; not merely entities it can spell.</div></div>
-    <div class="tp"><div class="tp-h">What does <em>not</em> substitute for either condition</div><div class="tp-b"><strong>Scale</strong> (gpt-oss-120B lands mid-pack on English and near-random on Akkadian; the ladder is flat from 1.7B to 120B) &middot; <strong>prompting</strong> (four styles, no movement) &middot; <strong>asking directly</strong> &middot; <strong>more Akkadian via next-token finetuning</strong> (&Delta;&rho; &asymp; 0 at every scale and unfreezing depth) &middot; <strong>a stronger probe</strong> (kernel and geodesic PLS, and the supervision dial, buy nothing).</div></div>
-    <div class="tp"><div class="tp-h">And what the &ldquo;signal&rdquo; in cell C actually was</div><div class="tp-b">Ruler-identity memorisation from surface spelling: near-perfect at naming the king, <strong>zero once ruler identity is held constant</strong>, and matched by an untrained network. Any world-model claim on a corpus like this must report a within-entity read-out; a pooled correlation does not distinguish a timeline from a lookup table.</div></div>
+    <div class="tp"><div class="tp-h">Condition 1: the language must be well represented in training</div><div class="tp-b">This is the load-bearing factor. Holding the entities fixed and moving from English to Akkadian drops every trained model <strong>onto its own untrained twin</strong>, while a character n-gram baseline beats them all. The geometry the paper found does not transfer to a language the model barely saw.</div></div>
+    <div class="tp"><div class="tp-h">Condition 2: the entities must be salient enough to have been written about</div><div class="tp-b">Moving from famous names to obscure ones weakens the signal before any language change, and the n-gram baseline starts to lead on time. A linear timeline needs entities the model has read <em>about</em>, repeatedly and in dated context, not merely names it can spell.</div></div>
+    <div class="tp"><div class="tp-h">Condition 3: the read-out must sit where the information is</div><div class="tp-b">Pooling was never a side detail. On bare names the paper's entity-last-token choice carries the result and averaging destroys it; on whole fragments the relation flips and averaging is worth about +.20. A claim about what a model represents is inseparable from where you read it.</div></div>
+    <div class="tp"><div class="tp-h">What does not substitute for any of them</div><div class="tp-b"><strong>Scale</strong> (flat from 1.7B to 120B on Akkadian, and gpt-oss-120B lands mid-pack even on English) &middot; <strong>declarative knowledge</strong> (the models recite these kings' reigns in English) &middot; <strong>prompting</strong>, <strong>asking directly</strong>, <strong>continued pretraining on all the Akkadian there is</strong>, <strong>word order</strong>, <strong>curved and kernel probes</strong>, <strong>unsupervised geometry</strong>. Every rescue leaves the numbers where they were.</div></div>
   </div>
+</section>""",
+
+"winner": """<section class="slide slide-figure fig-major">
+  <div class="eyebrow">The positive result</div>
+  <h2 class="sh">What does work: the 400M translation encoder beats every LLM at dating Akkadian</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">the full model set under the honest protocol: cleaned Akkadian, average pooling, 200 balanced draws, <strong>PLS</strong> with <span style="color:#6b7484">Ridge</span> alongside as the check. Year Spearman &rho;, best layer per arm.</div>
+  </div>
+  <div class="fig-wrap">{{IMG:4}}</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>cuneiform-400M ends the deck where the probes kept pointing:</strong> the highest balanced year score of every source, above all the Qwen scales, the 120B model, our own Akkadian-only MLM, and the n-gram baseline, and it is the <strong>only arm that clears both of its controls</strong> on this task. PLS and Ridge agree on the ordering, so the win is not an artifact of the dimensionality reduction. A 400M translation encoder, not a 120B language model, is the system that actually dates Akkadian.</div>
+</section>""",
+
+"translation_line": """<section class="slide slide-figure fig-major">
+  <div class="eyebrow">Mechanism &middot; the objective, isolated</div>
+  <h2 class="sh">Why it works: translation finetuning, and multilingual translation most of all</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">the three encoders of the same family, layer by layer, so the objective is the only thing that varies: <strong>uMT5-base</strong> (multilingual pretraining, no translation finetune), <strong>AKK-300M</strong> (translation finetuned on Akkadian alone) and <strong>cuneiform-400M</strong> (translation finetuned on the multilingual cuneiform family). The dashed line is the untrained Qwen3-8B, the smallest untrained control we have (no 1.7B-scale random twin exists). Rows: cleaned Akkadian, then the English translation. YEAR = Spearman, PLACE = R&sup2;, both poolings.</div>
+  </div>
+  <div class="fig-wrap">{{FIG:fig_encoders_translation.png}}</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span>The ordering is the argument: <strong>no translation finetune &lt; Akkadian-only translation &lt; multilingual translation</strong>, on year and on place, most clearly under average pooling on the Akkadian text, where cuneiform-400M rises with depth to its late-layer peak while uMT5 decays and the untrained control stays flat. Training a model to map a low-resource language onto meaning is what builds the recoverable structure, and training it across a <em>family</em> of related low-resource languages helps beyond Akkadian exposure alone, consistent with <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=iw&amp;user=2dBD8o8AAAAJ&amp;citation_for_view=2dBD8o8AAAAJ:d1gkVwhDpl0C">Stanovsky et al. (2022)</a> on multilingual transfer for low-resource ancient languages.</div>
+</section>""",
+
+"tokenizer": """<section class="slide slide-figure fig-major">
+  <div class="eyebrow">Mechanism &middot; ruling out the tokenizer</div>
+  <h2 class="sh">It is not the tokenizer: the winner has the worst one</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">tokens per Akkadian word for every model's tokenizer, over our corpora. If tokenizer fit drove dating performance, the most efficient tokenizer should win.</div>
+  </div>
+  <div class="fig-wrap">{{IMG:8}}</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span>The ranking runs the wrong way for the tokenizer story: <strong>cuneiform-400M splits Akkadian into more pieces than any other model</strong> (6.22 tokens per word, the least efficient of all) and wins anyway, while gpt-oss-120B has the most efficient tokenizer (4.43) and sits mid-pack. Whatever the encoder learned, it learned it <em>through</em> a poor segmentation of the text, which rules the tokenizer out as the cause and leaves the training objective as the live explanation.</div>
+</section>""",
+
+"explorer_eng": """<section class="slide slide-figure fig-major">
+  <div class="eyebrow">Looking inside &middot; the embedding space</div>
+  <h2 class="sh">Inside the best English-side embedding: the year gradient is visible, and so are its confounds</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">the 1,202 fragments of the corpus, embedded by the best English-side model (<strong>Qwen3-32B</strong> on the English translation, year &rho; .437, rank 1 of 9) and projected to 2-D with <strong>supervised PLS</strong>; we also built t-SNE, UMAP and PCA views of every arm. The same map is drawn six times, coloured by our metadata: year, ruler, period, sub-genre, find-spot, and text length.</div>
+  </div>
+  <div class="fig-wrap">{{FIG:e6_clusters/embedding_panels/engtier0/pls/qwen3_32b.png}}</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span>The six colourings of one map are the whole story of this deck in one picture: the <strong>year panel shows a real gradient</strong>, but the ruler and period panels show the same regions, the find-spot panel shows them again, and the <strong>length panel shows a gradient of its own</strong>. Date, king, place, genre and preservation are woven together in this corpus, which is exactly why every number in this deck had to be balanced, name-stripped and length-controlled before it could be believed. An interactive explorer with every model, reduction and colouring ships with the repo at <span class="ph-slot" style="display:inline;padding:2px 7px">v_1/src/stress_tests/e6_clusters/embedding_panels/index.html</span> (open next to this deck; interactive.html is the self-contained viewer).</div>
+</section>""",
+
+"explorer_akk": """<section class="slide slide-figure fig-major">
+  <div class="eyebrow">Looking inside &middot; the embedding space</div>
+  <h2 class="sh">Inside the winner's Akkadian embedding: the same gradient, from the raw language</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">the same six-way view for the best Akkadian-side model: <strong>cuneiform-400M</strong> on the cleaned, name-stripped Akkadian (year &rho; .391, rank 1 of 10), supervised PLS projection at its best layer.</div>
+  </div>
+  <div class="fig-wrap">{{FIG:e6_clusters/embedding_panels/maximal/pls/thalesian_cunei400m.png}}</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span>This is what the one surviving arm's space looks like on the raw language, with the names stripped: a coarser but <strong>still-visible year gradient</strong> (Neo-Babylonian mass separating from the Neo-Assyrian core), organised less by ruler identity than the English map and with the length gradient weakened by the truncation. Read against the untrained and n-gram panels in the same folder, this is the difference between an embedding that merely <em>sorts surface form</em> and one that has begun to order the language in time. It is a beginning, not a solved problem, and that is the honest place to end.</div>
 </section>""",
 
 "contributions": """<section class="slide slide-text">
   <div class="eyebrow">Contributions and discussion</div>
   <h2 class="sh">What we contribute, and what it says about world-model claims</h2>
   <div class="text-points">
-    <div class="tp"><div class="tp-h">1 &mdash; A decomposition of a general claim</div><div class="tp-b">The salience &times; language-resource matrix turns &ldquo;LLMs represent space and time&rdquo; into a testable, attributable statement. Cell B is the control that makes the attribution possible, and cell D's emptiness is itself a finding about what can be asked of an ancient corpus.</div></div>
-    <div class="tp"><div class="tp-h">2 &mdash; The controls the original setting lacked</div><div class="tp-b">Random-initialised twins and an n-gram floor, applied to every arm in every cell. On English they confirm the paper (trained .905 vs random .170 on world places); on Akkadian they overturn the apparent signal. The same probe, the same corpus &mdash; only the control tells them apart.</div></div>
-    <div class="tp"><div class="tp-h">3 &mdash; A confounder-controlled benchmark for Akkadian chronology</div><div class="tp-b">Maximal cleaning, balanced Monte-Carlo, by-site geo splits and leave-one-ruler-out, on a cleaned royal-inscription corpus we intend to release &mdash; along with the finding that without those devices a bag of character n-grams looks like a world model.</div></div>
-    <div class="tp"><div class="tp-h">4 &mdash; A positive result, and the mechanism behind it</div><div class="tp-b">A <strong>400M multilingual translation encoder</strong> outperforms every LLM up to 120B at dating Akkadian, and the same-size ablations locate the cause in the <strong>translation objective</strong> rather than size, tokenizer, or Akkadian exposure. Where pretraining scale cannot build the map, learning to map a language onto meaning apparently can.</div></div>
-    <div class="tp"><div class="tp-h">Open</div><div class="tp-b">Does the encoder's advantage survive leave-one-ruler-out, or is it the same lookup table in a smaller package? That is the experiment that decides whether this is a dating system or a second cautionary tale.</div></div>
+    <div class="tp"><div class="tp-h">1. A general claim, decomposed into testable conditions</div><div class="tp-b">The salience &times; language matrix, with pooling as the third axis, turns &ldquo;language models represent space and time&rdquo; into an attributable statement: we can now say <em>which</em> ingredient the map needs, because each was removed on its own. Cell D staying empty is itself a finding about what an ancient corpus can and cannot ask.</div></div>
+    <div class="tp"><div class="tp-h">2. The controls the original setting lacked</div><div class="tp-b">Untrained twins and an n-gram baseline, run in every cell. On English they <em>strengthen</em> the paper (the gap to the twin is huge); on Akkadian they overturn what looked like signal. Same probe, same corpus; only the control tells the two apart. We would argue no probing result should ship without them.</div></div>
+    <div class="tp"><div class="tp-h">3. A confounder-controlled benchmark for Akkadian chronology</div><div class="tp-b">Balanced draws over rulers and sites, name-stripping, length control, and held-out-ruler evaluation, on a cleaned royal-inscription corpus we intend to release, together with the measured demonstration that without these devices a bag of character n-grams passes for a world model.</div></div>
+    <div class="tp"><div class="tp-h">4. A positive result with a located mechanism</div><div class="tp-b">A <strong>400M translation encoder</strong> outperforms every LLM up to 120B at dating raw Akkadian, and the same-family comparison locates the cause: translation finetuning builds the structure, multilingual translation builds more of it, and tokenizer quality, scale, prompting and continued pretraining are all ruled out. Where scale cannot buy the map, learning to translate a language family apparently can.</div></div>
+    <div class="tp"><div class="tp-h">Open</div><div class="tp-b">Whether the encoder's edge survives fully held-out rulers, and whether the entity-level result at 34 rulers replicates on a larger obscure-entity set, are the two experiments between this deck and a paper.</div></div>
   </div>
 </section>""",
 }
@@ -724,9 +846,14 @@ def inject_css(head):
 
 
 def figure_tag(name, alt=""):
-    """Inline a freshly rendered figure from world_models/results/figs as base64."""
+    """Inline a figure as base64: plain names come from world_models/results/figs,
+    names containing '/' resolve from the stress_tests directory (e.g. the
+    embedding-panel PNGs)."""
     import base64
-    path = os.path.join(WM, "results", "figs", name)
+    if "/" in name:
+        path = os.path.join(os.path.dirname(HERE), name)
+    else:
+        path = os.path.join(WM, "results", "figs", name)
     with open(path, "rb") as f:
         b64 = base64.b64encode(f.read()).decode()
     return f'<img alt="{alt}" src="data:image/png;base64,{b64}">'
@@ -786,6 +913,8 @@ def build(html):
             sec = sec.replace("{{IMG:%s}}" % tok, image_of(old, int(tok), alt=title))
         if kind == "old" and ref in EYEBROW_PATCHES:
             sec = set_eyebrow(sec, EYEBROW_PATCHES[ref])
+        if kind == "old" and ref in SLIDE_TRANSFORMS:
+            sec = SLIDE_TRANSFORMS[ref](sec)
         sec = re.sub(r'(<section class="slide[^"]*)"',
                      rf'\1" data-index="{i}"', sec, count=1)
         if i in CELLMAP_AT:
