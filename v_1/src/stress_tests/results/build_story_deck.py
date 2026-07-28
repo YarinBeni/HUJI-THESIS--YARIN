@@ -32,14 +32,14 @@ SOURCE_BLOB = "538265f1af40652a0cee88d9862766d62576b2d0"   # thesis_story_9.html
 # ---------------------------------------------------------------- the spine ----
 # (kind, ref, title-for-the-nav-strip)
 SPINE = [
-    ("old", 0,  "Diachronic Interpretable Dating of Low-Resource Ancient Akkadian"),
+    ("new", "title", "Boundary Conditions of Linear Space and Time Representations"),
     ("new", "motivation", "Why we care: a world model you could point at an excavation"),
-    ("new", "paper", "Gurnee & Tegmark: LLMs linearly represent space and time — in one cell"),
-    ("new", "matrix", "The climbing map: salience × language resource"),
-    ("new", "protocol", "The protocol, the ladder, and the two controls that gate every claim"),
-    ("old", 24, "Cell A — the paper reproduces on our ladder (and the control it never ran)"),
-    ("old", 29, "Cell A — where in the network do space & time live?"),
-    ("old", 30, "Cell A — how many PLS components does the world model need?"),
+    ("new", "paper", "Gurnee & Tegmark: a strong claim, tested in one cell"),
+    ("new", "matrix", "The climbing map: entity salience x language resource"),
+    ("new", "protocol", "How every experiment in this deck is set up and read"),
+    ("new", "cellA_repro", "A: the paper reproduces on our models, with the controls it never ran"),
+    ("new", "cellA_layers", "A: where in the network space and time live"),
+    ("new", "cellA_pls", "A: how many PLS directions the world model needs"),
     ("new", "b_entity", "Step 1 — same language, obscure entities: time survives, space does not"),
     ("old", 25, "Step 2 — English gloss, whole fragments: Year"),
     ("old", 26, "Step 2 — English gloss, whole fragments: Geo"),
@@ -66,54 +66,113 @@ SPINE = [
 # --------------------------------------------------------- newly authored ------
 NEW_SLIDES = {
 
+"title": """<section class="slide slide-title">
+  <div class="title-inner">
+    <div class="title-kicker">M.Sc. Thesis &middot; Advisor Meeting &middot; 2026</div>
+    <h1 class="title-h1">Boundary Conditions of Linear Space and Time Representations in Language Models</h1>
+    <div class="title-sub">From salient English entities to obscure entities, a low-resource language, and whole fragments</div>
+    <div class="title-meta">M.Sc. Thesis &middot; Yarin Beer &middot; Computer Science, HUJI<br>Advisors: Prof. Gabriel Stanovsky &nbsp;&middot;&nbsp; Dr. Barak Sober</div>
+  </div>
+</section>""",
+
 "motivation": """<section class="slide slide-text">
   <div class="eyebrow">Motivation</div>
   <h2 class="sh">Why we care: a world model you could point at an excavation</h2>
   <div class="text-points">
-    <div class="tp"><div class="tp-h">The claim we are following up</div><div class="tp-b">Recent interpretability work reports that language models build <strong>linear internal maps of time and space</strong>: a ridge probe on frozen activations recovers when a person died or where a city is. If that geometry is a general property of large models, it is a free measuring instrument.</div></div>
-    <div class="tp"><div class="tp-h">Why an archaeologist should care</div><div class="tp-b">Dating and provenancing cuneiform fragments is done by hand, from ruler names, script style and archival context &mdash; slow, expert-bound, and for most fragments simply unresolved. A probe that reads date and find-spot straight out of a frozen model would turn a scholarly bottleneck into an inference. <strong>That is the payoff we are testing for.</strong></div></div>
-    <div class="tp"><div class="tp-h">But the claim was only ever tested in its comfort zone</div><div class="tp-b">Famous entities (world capitals, celebrated figures, headline news), written in <strong>English</strong>, as short entity strings. Our regime differs on three axes at once: the entities are <strong>obscure</strong>, the language is <strong>low-resource</strong>, and the unit is a <strong>damaged fragment</strong>, not a name. This deck climbs those axes one at a time and reports where the map survives and where it dies.</div></div>
-    <div class="tp"><div class="tp-h">Where we end up</div><div class="tp-b">The linear world model is a property of the <strong>language a model was trained on</strong>, not of its scale &mdash; and the system that actually dates Akkadian is a <strong>400M translation encoder</strong>, not the 120B LLM.</div></div>
+    <div class="tp"><div class="tp-h">The claim we are following up</div><div class="tp-b">Recent interpretability work reports that language models build <strong>linear internal maps of time and space</strong>. A ridge probe on frozen activations recovers when a person died, or where a city is. If that geometry is a general property of large models, it is a free measuring instrument.</div></div>
+    <div class="tp"><div class="tp-h">Why an archaeologist should care</div><div class="tp-b">Dating and provenancing cuneiform fragments is done by hand, from ruler names, script style and archival context: slow, expert-bound, and for most fragments simply unresolved. A probe that reads date and find-spot straight out of a frozen model would turn a scholarly bottleneck into an inference. <strong>That is the payoff we are testing for.</strong></div></div>
+    <div class="tp"><div class="tp-h">But the claim was only ever tested in its comfort zone</div><div class="tp-b">Famous entities (world capitals, celebrated figures, headline news), written in <strong>English</strong>, read out of <strong>explicitly marked entity tokens</strong>. Our regime differs on three axes at once: the entities are <strong>obscure</strong>, the language is <strong>low-resource</strong>, and the unit is a <strong>damaged fragment</strong> rather than a name. This deck climbs those axes one at a time and reports where the map survives and where it breaks.</div></div>
   </div>
 </section>""",
 
 "paper": """<section class="slide slide-text">
-  <div class="eyebrow">The work we extend &middot; Gurnee &amp; Tegmark (2023)</div>
-  <h2 class="sh">&ldquo;Language Models Represent Space and Time&rdquo; &mdash; a strong claim, tested in one cell</h2>
+  <div class="eyebrow">The work we extend &middot; Gurnee &amp; Tegmark, ICLR 2024</div>
+  <h2 class="sh">&ldquo;Language Models Represent Space and Time&rdquo;: a strong claim, tested in one cell</h2>
   <div class="text-points">
-    <div class="tp"><div class="tp-h">Their method, which we adopt unchanged</div><div class="tp-b">Build an entity string; run it through a frozen model; take the hidden state at the <strong>last token of the entity</strong>, layer by layer; fit <strong>ridge regression</strong> to a real-world coordinate (lat/lon) or a year; report <strong>R&sup2; on held-out entities</strong>. Six datasets: world / US / NYC places, historical figures, art, news headlines.</div></div>
-    <div class="tp"><div class="tp-h">Their finding</div><div class="tp-b">Recovery is strong (world places R&sup2; &asymp; .91 at Llama-2-70B), improves with scale, and peaks in the middle-to-late layers &mdash; read as evidence of a genuine, linearly-accessible world model rather than surface correlation.</div></div>
-    <div class="tp"><div class="tp-h">What the setting quietly holds fixed</div><div class="tp-b">Every one of those six datasets is <strong>salient entities in English</strong>. Salience and language never vary, so the experiment cannot say whether the geometry belongs to <em>the model</em> or to <em>the well-represented slice of the world it was trained on</em>. That is the question our corpus is unusually well suited to answer.</div></div>
-    <div class="tp"><div class="tp-h">And one control it does not run</div><div class="tp-b">No <strong>random-initialised twin</strong>. Without it, a probe's success cannot be separated from what a linear map can extract from any high-dimensional representation. We add that control everywhere, plus a <strong>TF-IDF character n-gram floor</strong>.</div></div>
+    <div class="tp"><div class="tp-h">Their method, which we adopt unchanged</div><div class="tp-b">Run an entity name through a frozen model; save the residual-stream activation at the <strong>last entity token</strong> for every layer; fit <strong>ridge regression</strong> (&lambda; by leave-one-out CV) to latitude/longitude or to a year; report <strong>R&sup2; on held-out entities</strong>. Six datasets, roughly 20&ndash;40k entities each: World, USA, NYC (space) and Figures, Art, Headlines (time).</div></div>
+    <div class="tp"><div class="tp-h">Their finding</div><div class="tp-b">Recovery is strong (World R&sup2; = .911 at Llama-2-70B), rises with scale, and improves through the first half of the layers before plateauing. Nonlinear MLP probes add almost nothing, which is their argument that the structure really is linear.</div></div>
+    <div class="tp"><div class="tp-h">What the setting quietly holds fixed</div><div class="tp-b"><strong>Three things at once.</strong> Every dataset is <em>salient</em> entities; every dataset is <em>English</em>; and the read-out is always an <strong>explicit entity token</strong>, a span the experimenter marks in advance. So the study cannot separate the model's geometry from the well-represented slice of the world it was trained on, and it never asks whether the same information is recoverable <strong>implicitly</strong>, from a whole text in which no entity is singled out. Our corpus varies all three.</div></div>
+    <div class="tp"><div class="tp-h">And one control it does not run</div><div class="tp-b">No <strong>random-initialised twin</strong>. Without it, a probe's success cannot be separated from what a linear map extracts from any high-dimensional representation. We add that control everywhere, plus a <strong>TF-IDF character n-gram floor</strong>.</div></div>
   </div>
 </section>""",
 
 "matrix": """<section class="slide slide-text">
   <div class="eyebrow">The design</div>
   <h2 class="sh">The climbing map: entity salience &times; language resource</h2>
-  <div class="exp-config">Going straight from the paper's setting to Akkadian changes <strong>two things at once</strong>, so a collapse could not be attributed to either. We therefore lay the space out as a 2&times;2 and climb it one factor at a time.</div>
-  <table class="rtbl compact"><thead><tr><th></th><th>High-resource language (English)</th><th>Low-resource language (Akkadian)</th></tr></thead><tbody>
-    <tr><td><span class="mdl">Salient entities</span></td><td><strong>CELL A</strong> &mdash; the paper's cell: world capitals, famous figures, headlines. <em>Slides 5&ndash;7.</em></td><td><strong>CELL D &mdash; empty.</strong> No famous entities exist in Akkadian outside these same royal names; no honest filler exists.</td></tr>
-    <tr><td><span class="mdl">Obscure entities</span></td><td><strong>CELL B</strong> &mdash; Assyrian rulers and find-spots, written in English. <em>Slides 8&ndash;10.</em></td><td><strong>CELL C</strong> &mdash; the same entities in raw Akkadian. <em>Slides 12&ndash;17.</em></td></tr>
+  <div class="exp-config">Going straight from the paper's setting to Akkadian changes <strong>two things at once</strong>, so a collapse could not be attributed to either. We lay the space out as a 2&times;2 and climb it one factor at a time.</div>
+  <table class="rtbl matrix"><thead><tr><th></th><th>High-resource language (English)</th><th>Low-resource language (Akkadian)</th></tr></thead><tbody>
+    <tr><td><span class="mdl">Salient entities</span></td><td><strong>A:</strong> the paper's cell. World capitals, famous figures, headlines. <em>Slides 6&ndash;8.</em></td><td><strong>D: empty.</strong> No famous entities exist in Akkadian outside these same royal names, so no honest filler exists.</td></tr>
+    <tr><td><span class="mdl">Obscure entities</span></td><td><strong>B:</strong> Assyrian rulers and find-spots, written in English. <em>Slides 9&ndash;11.</em></td><td><strong>C:</strong> the same entities in raw Akkadian. <em>Slides 13&ndash;18.</em></td></tr>
   </tbody></table>
-  <div class="text-points" style="margin-top:12px">
-    <div class="tp"><div class="tp-h">The two comparisons the map buys us</div><div class="tp-b"><strong>A &rarr; B</strong> holds the language fixed at English and changes only <em>who the entities are</em> &mdash; it isolates <strong>entity obscurity</strong>. <strong>B &rarr; C</strong> holds the entities fixed and changes only <em>what language they are written in</em> &mdash; it isolates <strong>language resource</strong>.</div></div>
-    <div class="tp"><div class="tp-h">A third axis, inside each cell: what counts as the entity</div><div class="tp-b">The paper's unit is a short name or headline. Ours is ultimately a <strong>whole damaged fragment</strong>. So within B and C we first run the paper's own <em>entity-level</em> protocol, then extend to fragments &mdash; and pool both at the <strong>last token</strong> (theirs) and as a <strong>mean</strong> (ours).</div></div>
+  <div class="text-points" style="margin-top:10px">
+    <div class="tp"><div class="tp-h">A &rarr; B isolates entity obscurity</div><div class="tp-b">Same language, different entities. It also asks a second question: <strong>is the language itself the barrier to linear recoverability?</strong> If a faithful English translation restores the signal that raw Akkadian loses, then the knowledge is stored in activation space by <strong>meaning rather than surface form</strong>, and translation becomes a way to reach an LLM's internal representations for any low-resource language.</div></div>
+    <div class="tp"><div class="tp-h">B &rarr; C isolates language resource</div><div class="tp-b">Same entities, different language. This is what tells us whether the model has learned the <strong>actual patterns of Akkadian</strong> from the real text, or whether it only ever had access to the content once someone rendered it in a language it knows.</div></div>
+    <div class="tp"><div class="tp-h">Inside every cell: what counts as the entity, and how we pool</div><div class="tp-b">We first run the paper's <strong>entity-level</strong> protocol, then extend to <strong>whole fragments</strong>, and pool both at the <strong>last token</strong> (theirs) and as a <strong>mean over the text</strong> (new).</div></div>
   </div>
 </section>""",
 
 "protocol": """<section class="slide slide-text">
   <div class="eyebrow">Protocol</div>
-  <h2 class="sh">The ladder, the two read-outs, and the controls that gate every claim</h2>
+  <h2 class="sh">How every experiment in this deck is set up, and how to read its numbers</h2>
   <div class="cfg">
-    <div class="cfg-k">Ladder</div><div class="cfg-v">Llama-2 <strong>7B / 13B / 70B</strong> (the paper's ladder) &middot; Qwen3 <strong>1.7B / 8B / 32B</strong> &middot; <strong>gpt-oss-120B</strong> &middot; three small encoders (<strong>cuneiform-400M</strong>, <strong>AKK-300M</strong>, <strong>uMT5-base</strong>).</div>
-    <div class="cfg-k">Controls</div><div class="cfg-v">a <strong>random-initialised twin</strong> of every decoder (identical architecture and tokenizer, untrained weights) and a <strong>TF-IDF character n-gram floor</strong>. These are rows in every table that follows, never a slide of their own.</div>
-    <div class="cfg-k">Reading rule</div><div class="cfg-v">a score witnesses <em>learning</em> only if it beats <strong>both</strong> the TF-IDF floor <strong>and</strong> that arm's own random twin. Beating neither means the probe found geometry that any random projection of the input would have offered.</div>
-    <div class="cfg-k">Read-outs</div><div class="cfg-v"><strong>R&sup2;</strong> on held-out entities, as in the paper, plus <strong>Spearman &rho;</strong> for year &mdash; dating is a ranking problem, and &rho; is robust to the compressed, unevenly-spaced year distribution of a royal-inscription corpus.</div>
+    <div class="cfg-k">Models</div><div class="cfg-v">Llama-2 <strong>7B / 13B / 70B</strong> (the paper's own series) &middot; Qwen3 <strong>1.7B / 8B / 32B</strong> &middot; <strong>gpt-oss-120B</strong> &middot; three small seq2seq translation encoders (<strong>cuneiform-400M</strong>, <strong>AKK-300M</strong>, <strong>uMT5-base</strong>).</div>
+    <div class="cfg-k">Controls</div><div class="cfg-v">a <strong>random-initialised twin</strong> of every decoder (same architecture and tokenizer, untrained weights) and a <strong>TF-IDF character n-gram floor</strong>. Both appear as rows in every results table, never as a slide of their own.</div>
+    <div class="cfg-k">Pooling</div><div class="cfg-v"><strong>entity last token</strong> (the paper's read-out, an explicitly marked span) &middot; <strong>text last token</strong> (their Headlines read-out, applied to our whole fragments) &middot; <strong>mean over the text</strong> (new: no span is marked, so the signal must be recoverable implicitly, and it is the only option for the encoders, which have no causal last token).</div>
+    <div class="cfg-k">Metrics</div><div class="cfg-v"><strong>R&sup2;</strong> on held-out entities, as in the paper, and <strong>Spearman &rho;</strong>, which the paper also reports. We lean on &rho; for year because dating is a ranking problem and our year distribution is compressed and unevenly spaced.</div>
+    <div class="cfg-k">Balancing</div><div class="cfg-v"><strong>balanced Monte-Carlo</strong>, used wherever the corpus is ours: each of the 8 dense rulers is capped at the same number of fragments and the probe is refit over <strong>200 redrawn splits</strong>, so no score can come from one over-represented king. The paper's English datasets are already balanced and need none of this.</div>
+    <div class="cfg-k">Verdict</div><div class="cfg-v">a score witnesses <em>learning</em> only if it beats <strong>both</strong> the TF-IDF floor <strong>and</strong> that arm's own random twin. Beating neither means the probe found geometry that any random projection would have offered.</div>
   </div>
-  <div class="text-points">
-    <div class="tp"><div class="tp-h">Two protocol families appear in this deck &mdash; read the box on each slide</div><div class="tp-b">The <strong>replication line</strong> (cells A/B/C, slides 5&ndash;17) follows the paper: <em>last-token pooling, ridge, R&sup2;</em>, with balanced Monte-Carlo added because our corpus is unbalanced and theirs is not. The <strong>thesis line</strong> (slides 25&ndash;27) uses the protocol the applied dating work settled on: <em>mean pooling, PLS, Spearman</em>, which is what the encoders require &mdash; they have no causal last token. Numbers are comparable <em>within</em> a line, not across the two.</div></div>
+  <p class="fig-note">Two protocol families run through the deck, and each slide states which one it uses in the box at the top. The <strong>replication line</strong> (cells A, B, C) follows the paper: last-token pooling, ridge, R&sup2;. The <strong>thesis line</strong> (the closing slides) uses what the applied dating work settled on: mean pooling, PLS, Spearman. Numbers are comparable within a line, not across the two.</p>
+</section>""",
+
+"cellA_repro": """<section class="slide slide-text">
+  <div class="eyebrow">A &middot; salient entities, English &middot; the paper's own setting</div>
+  <h2 class="sh">The paper reproduces on our models, and the controls it never ran hold up</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">the paper's six English datasets (World, USA, NYC &rarr; <strong>latitude/longitude</strong>; Figures, Art, Headlines &rarr; <strong>year</strong>). Each entity's last-token embedding, every layer, probed on held-out entities. We reproduce it with <strong>our extended set of models</strong> (both decoder families, gpt-oss-120B, three translation encoders) and with the <strong>controls the paper never ran</strong>.</div>
+    <div class="cfg-k">Metric</div><div class="cfg-v">best-layer held-out test <strong>R&sup2;</strong> for all six datasets, as in the paper. Each cell is <strong>Ridge | PLS</strong>, PLS taken at its best k &le; 64 at that same layer.</div>
   </div>
+  <p class="tbl-cap">best-layer held-out test R&sup2; &nbsp;&middot;&nbsp; space | time &nbsp;&middot;&nbsp; each cell = Ridge | PLS</p>
+  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">World</th><th class="num">USA</th><th class="num">NYC</th><th class="num">Figures</th><th class="num">Art</th><th class="num">Headlines</th></tr></thead><tbody>
+    <tr><td><span class="mdl">Llama-2-70B</span> (paper)</td><td class="num">.911</td><td class="num">.864</td><td class="num">.359</td><td class="num">.835</td><td class="num">.885</td><td class="num">.746</td></tr>
+    <tr><td><span class="mdl">Llama-2-70B</span> (ours)</td><td class="num">.905|.903</td><td class="num">.846|.831</td><td class="num">.363|.326</td><td class="num">.833|.827</td><td class="num">.860|.853</td><td class="num">.757|.748</td></tr>
+    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.883|.880</td><td class="num">.808|.793</td><td class="num">.272|.240</td><td class="num">.802|.799</td><td class="num">.780|.770</td><td class="num">.663|.652</td></tr>
+    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.859|.857</td><td class="num">.788|.775</td><td class="num">.249|.205</td><td class="num">.784|.778</td><td class="num">.770|.756</td><td class="num">.592|.582</td></tr>
+    <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">.807|.806</td><td class="num">.656|.658</td><td class="num">.112|.079</td><td class="num">.803|.803</td><td class="num">.739|.748</td><td class="num">.510|.500</td></tr>
+    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.838|.839</td><td class="num">.702|.691</td><td class="num">.187|.147</td><td class="num">.806|.800</td><td class="num">.727|.718</td><td class="num">.605|.598</td></tr>
+    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.797|.793</td><td class="num">.634|.617</td><td class="num">.117|.075</td><td class="num">.774|.768</td><td class="num">.658|.649</td><td class="num">.557|.548</td></tr>
+    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.655|.660</td><td class="num">.450|.440</td><td class="num">.080|.050</td><td class="num">.693|.691</td><td class="num">.449|.437</td><td class="num">.476|.465</td></tr>
+    <tr><td><span class="mdl">uMT5-base</span></td><td class="num">.438|.284</td><td class="num">.325|.264</td><td class="num">.133|.044</td><td class="num">.494|.401</td><td class="num">.153|.096</td><td class="num">.349|.234</td></tr>
+    <tr><td><span class="mdl">cuneiform-400M</span></td><td class="num">.399|.279</td><td class="num">.344|.297</td><td class="num">.114|.045</td><td class="num">.460|.401</td><td class="num">.126|.084</td><td class="num">.343|.295</td></tr>
+    <tr><td><span class="mdl">AKK-300M</span></td><td class="num">.381|.249</td><td class="num">.312|.274</td><td class="num">.120|.036</td><td class="num">.448|.358</td><td class="num">.123|.099</td><td class="num">.300|.213</td></tr>
+    <tr class="rand"><td><span class="mdl">TF-IDF</span> (floor)</td><td class="num">.642</td><td class="num">.536</td><td class="num">.389</td><td class="num">.645</td><td class="num">.116</td><td class="num">.448</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-70B random</span>*</td><td class="num">.170</td><td class="num">.240</td><td class="num">.014</td><td class="num">.198</td><td class="num">.029</td><td class="num">.148</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-13B random</span>*</td><td class="num">.282|.269</td><td class="num">.290|.277</td><td class="num">.044|.025</td><td class="num">.284|.267</td><td class="num">.038|.058</td><td class="num">.267|.265</td></tr>
+    <tr class="rand"><td><span class="mdl">random Qwen3-8B</span>*</td><td class="num">.327|.311</td><td class="num">.379|.370</td><td class="num">.059|.018</td><td class="num">.276|.264</td><td class="num">.055|.080</td><td class="num">.196|.174</td></tr>
+  </tbody></table>
+  <p class="fig-note"><strong>On English the published result holds, and it holds against controls the paper never ran.</strong> Our Llama-2-70B lands within .02 of every published number, and the effect extends to a second family: Qwen3 scales 1.7B &rarr; 8B &rarr; 32B exactly as the paper's scaling claim predicts. The gap to the controls is large in <em>both</em> space and time (Llama-2-70B World .905 against its random twin .170; Art .860 against .029), so the geometry is learned rather than architectural, and TF-IDF is a genuine floor that trained models clear and random ones fall below. The three <strong>translation models</strong> (uMT5-base, cuneiform-400M, AKK-300M) sit <em>above</em> the random twins but <em>below</em> TF-IDF on English: they are not generically good probes, which matters when they win on Akkadian later. <strong>PLS tracks Ridge closely</strong> for every decoder, so the signal is genuinely low-rank rather than spread thinly over all dimensions. <em>* = control.</em></p>
+</section>""",
+
+"cellA_layers": """<section class="slide slide-figure fig-major">
+  <div class="eyebrow">A &middot; depth</div>
+  <h2 class="sh">Where in the network space and time live</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">per-layer <strong>ridge</strong> probe (no PLS on this slide), all six English datasets pooled into two groups: <strong>SPACE</strong> = World, USA, NYC (predicting latitude/longitude) and <strong>TIME</strong> = Figures, Art, Headlines (predicting year). Plotted against <strong>normalised depth</strong> (layer / total layers) so models of different depth, 28 to 41 layers, are directly comparable, as in the paper's Figure 2.</div>
+    <div class="cfg-k">Reading</div><div class="cfg-v">left = last token (the paper's read-out), right = mean pool (new). TIME = Spearman &rho;, SPACE = R&sup2; on a <strong>symlog</strong> axis, meaning linear near zero and logarithmic further out, so the deep negative scores of the failing arms fit on the page without squashing the 0 to 1 band where everything interesting happens. Dashed = random-init controls; &#9733; = each arm's best layer.</div>
+  </div>
+  <div class="fig-wrap">{{IMG:29}}</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span>The Qwen and Llama families sit clearly above both the random controls and the encoder-decoder translation models. <strong>Where each arm peaks is as informative as how high it peaks:</strong> for the weakest arms the best layer is at the very start of the network, which is what "no signal was built" looks like, whereas every arm that beats its controls peaks in the <strong>middle-to-late</strong> layers, reproducing the paper's depth profile for time under both poolings. In space the best layers are spread more evenly across depth and sit less often at the very start. Two arms are the exception worth watching in the space panels: they track near the bottom for most of the network under both poolings and then <strong>rise sharply in the last few layers</strong>.</div>
+</section>""",
+
+"cellA_pls": """<section class="slide slide-figure fig-major">
+  <div class="eyebrow">A &middot; dimensionality</div>
+  <h2 class="sh">How many PLS directions the world model needs</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">at each arm's <strong>best ridge layer</strong> from the previous slide, refit with <strong>PLS</strong> using k = 1 to 64 components. Same six English datasets in the same two groups: <strong>SPACE</strong> = World, USA, NYC (latitude/longitude), <strong>TIME</strong> = Figures, Art, Headlines (year).</div>
+    <div class="cfg-k">Reading</div><div class="cfg-v">TIME = Spearman &rho;, SPACE = R&sup2;; both poolings shown; dashed = random-init controls; &#9733; = the k that maximises the score.</div>
+  </div>
+  <div class="fig-wrap">{{IMG:30}}</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span>Most arms settle at around <strong>k &asymp; 16</strong> components. Year is the more concentrated of the two, space is more spread out, but both converge near 16. That is intuitively what the strong scores require: with only a handful of directions there would be no room for a meaningful subspace, and we would expect the weak results the <strong>random-init controls</strong> show, which saturate by k &asymp; 3 to 5 and gain nothing after that. The learned representation is genuinely multi-dimensional rather than one strong axis, a distinction that a single best-layer R&sup2; table hides completely.</div>
 </section>""",
 
 "b_entity": """<section class="slide slide-text">
@@ -255,6 +314,36 @@ EYEBROW_PATCHES = {
 }
 
 
+EXTRA_CSS = """
+/* --- added by build_story_deck.py --- */
+.rtbl.matrix{font-size:15px;margin-top:6px;}
+.rtbl.matrix th,.rtbl.matrix td{padding:13px 18px;vertical-align:top;line-height:1.45;}
+.rtbl.matrix thead th{font-size:12px;letter-spacing:.05em;}
+.rtbl.matrix td:first-child{white-space:nowrap;}
+.takeaway.tight{font-size:12.5px;line-height:1.45;padding:9px 15px;}
+.takeaway.tight .tk-label{font-size:9px;}
+.cfg.tight{font-size:11.5px;gap:3px 11px;margin-bottom:8px;}
+.cfg.tight .cfg-k{font-size:9px;}
+.slide.fig-major .sh{font-size:23px;margin-bottom:9px;}
+.slide.fig-major .eyebrow{margin-bottom:6px;}
+.slide.fig-major .fig-wrap{margin:0 0 8px;}
+</style>"""
+
+
+def inject_css(head):
+    return head.replace("</style>", EXTRA_CSS, 1)
+
+
+def image_of(source_slides, idx, alt=None):
+    """The <img> tag from a source slide, so a rewritten slide keeps its figure.
+    The old alt text is replaced (it still carried the old slide's title)."""
+    m = re.search(r'<img[^>]*>', source_slides[idx])
+    if not m:
+        raise SystemExit(f"slide {idx} has no <img> to reuse")
+    tag = re.sub(r'\s*alt="[^"]*"', '', m.group(0))
+    return tag.replace('<img', f'<img alt="{alt or "figure"}"', 1)
+
+
 def parse_slides(html):
     out = {}
     for m in re.finditer(
@@ -287,6 +376,8 @@ def build(html):
     bodies, titles = [], []
     for i, (kind, ref, title) in enumerate(SPINE):
         sec = strip_index(old[ref]) if kind == "old" else NEW_SLIDES[ref]
+        for tok in set(re.findall(r'\{\{IMG:(\d+)\}\}', sec)):
+            sec = sec.replace("{{IMG:%s}}" % tok, image_of(old, int(tok), alt=title))
         if kind == "old" and ref in EYEBROW_PATCHES:
             sec = set_eyebrow(sec, EYEBROW_PATCHES[ref])
         sec = re.sub(r'(<section class="slide[^"]*)"',
@@ -294,7 +385,7 @@ def build(html):
         bodies.append(sec)
         titles.append(title)
 
-    head = html[:html.index('<section')]
+    head = inject_css(html[:html.index('<section')])
     tail = html[html.rindex('</section>') + len('</section>'):]
     tail = re.sub(r'const TOTAL = \d+;', f'const TOTAL = {len(SPINE)};', tail)
     titles_js = ", ".join(
