@@ -45,15 +45,15 @@ SPINE = [
     ("new", "b_frag_geo", "Whole fragments in English: place is no better than an untrained network"),
     ("new", "mlm_model", "Our own Akkadian model: a small masked language model trained on the corpus"),
     ("new", "c_kingtoken", "Raw Akkadian: the king's name is readable, the chronology is not"),
-    ("old", 27, "Step 3b — raw Akkadian, whole fragments: Year"),
-    ("old", 28, "Step 3b — raw Akkadian, whole fragments: Geo"),
-    ("old", 31, "Cell C — layer sweep on the Akkadian mirror"),
-    ("old", 32, "Cell C — PLS components at the best layer"),
-    ("new", "ruler_not_chrono", "What the king-name probe actually learns: identity, not chronology"),
-    ("old", 13, "Rescue 1 — do the models simply know the dates? (T9)"),
-    ("new", "ask_directly", "Rescue 2 — ask the model instead of probing it (T12 + T10)"),
-    ("old", 7,  "Rescue 3 — scale and next-token finetuning on our own Akkadian"),
-    ("old", 19, "Rescue 4 — is it word order? (E5 shuffle)"),
+    ("new", "ruler_not_chrono", "The name token identifies the king, and an untrained network does it too"),
+    ("new", "c_frag_year", "Raw Akkadian, whole fragments: every model falls to its untrained twin"),
+    ("new", "c_frag_geo", "Raw Akkadian, whole fragments: the find-spot survives where the date does not"),
+    ("new", "c_layers", "Raw Akkadian, layer by layer: the translation encoder is the only arm that builds depth"),
+    ("new", "c_plsk", "Raw Akkadian: the signal saturates far earlier than it does in English"),
+    ("new", "t9_knowledge", "The models do know these kings and their dates when simply asked"),
+    ("new", "ask_directly", "Asking the model directly, and prompting it hard, changes nothing"),
+    ("new", "ntp_finetune", "Training the LLMs further on our own Akkadian moves nothing"),
+    ("new", "shuffle", "Scrambling the word order costs almost nothing, so the probe reads a bag of words"),
     ("old", 20, "Rescue 5 — is the probe family too weak? (P9 geodesic kernels)"),
     ("old", 21, "Rescue 6 — how much supervision would it take? (P8 dial)"),
     ("new", "conditions", "What a linear temporal world model needs in order to exist"),
@@ -205,12 +205,32 @@ NEW_SLIDES = {
 
 "mlm_model": """<section class="slide slide-text">
   <div class="eyebrow">C &middot; the model we built for this language</div>
-  <h2 class="sh">Before testing on Akkadian: we trained our own small model on the corpus</h2>
-  <div class="text-points">
-    <div class="tp"><div class="tp-h">Why an extra model at all</div><div class="tp-b">Every arm so far was trained by someone else, on text that is overwhelmingly English. To ask whether Akkadian itself can support a linear timeline, we need at least one model whose entire experience <em>is</em> Akkadian. It also gives the comparison a floor from the other direction: if a model trained only on this language cannot find the signal either, the problem is not simply that the big models never saw enough Akkadian.</div></div>
-    <div class="tp"><div class="tp-h">The objective, and where it comes from</div><div class="tp-b"><strong>Masked language modelling</strong>, not next-token prediction, following <em>Filling the Gaps in Ancient Akkadian Texts</em> (Fetaya et al., EMNLP 2021), which showed that restoring a damaged tablet <em>is</em> the masked-token task and that bidirectional context matters when the neighbouring signs are broken too. The same instinct drives <em>Ithaca</em> and its successor in Nature (2025) for Greek and Latin: read the whole context, then fill the gap.</div></div>
-    <div class="tp"><div class="tp-h">What we trained</div><div class="tp-b">A <strong>37M-parameter encoder</strong> (16 layers, d = 384, RoPE, RMSNorm pre-norm), masked at 15&#37;, on <strong>2.45M words / 4.9M signs</strong> pooled from ORACC, eBL and Archibab, split by fragment so no tablet crosses train and test. Text is tokenised at the <strong>sign level</strong>, following the EvaCun 2025 shared task on lemmatisation and token prediction for cuneiform, which keeps our units comparable to the current benchmark for this language.</div></div>
-    <div class="tp"><div class="tp-h">How to read it in the tables that follow</div><div class="tp-b">It appears as <strong>MLM</strong>. It is small, it is the only arm that is Akkadian all the way down, and it is <em>not</em> a translation model, which makes it the right comparison for the cuneiform and AKK encoders later: those two also see Akkadian, but through a translation objective.</div></div>
+  <h2 class="sh">Before testing on Akkadian, we trained our own small model on the corpus</h2>
+  <div class="two-col">
+    <div>
+      <div class="text-points">
+        <div class="tp"><div class="tp-h">Why an Akkadian-only arm is needed</div><div class="tp-b">Every model so far was trained by someone else on text that is overwhelmingly English. If none of them finds a timeline in Akkadian, we cannot tell whether the language cannot support one or whether they simply never saw enough of it. A model whose entire experience <em>is</em> Akkadian separates those two explanations.</div></div>
+        <div class="tp"><div class="tp-h">The objective, and where it comes from</div><div class="tp-b"><strong>Masked language modelling</strong> rather than next-token prediction, following <a href="https://arxiv.org/abs/2109.04513"><em>Filling the Gaps in Ancient Akkadian Texts</em></a> (Stanovsky et al., EMNLP 2021), which showed that restoring a broken tablet <em>is</em> the masked-token task and that bidirectional context matters when the neighbouring signs are damaged too. The same instinct runs through <a href="https://www.nature.com/articles/s41586-022-04448-z">Ithaca</a> (Assael et al., Nature 2022) and <a href="https://www.nature.com/articles/s41586-025-09292-5">Aeneas</a> (Assael et al., Nature 2025) for Greek and Latin.</div></div>
+        <div class="tp"><div class="tp-h">Architecture: a simplified Ithaca</div><div class="tp-b">Ithaca reads a damaged inscription at <strong>character and word level</strong>, passes it through a shared transformer torso, and hangs <strong>three task heads</strong> off it: restoration, region, and date. We keep the torso and the restoration head and drop the other two, because our date and place come from a probe on the frozen representation rather than from a trained head. Concretely: <strong>37M parameters, 16 layers, d = 384, feed-forward 1536, 8 heads, RoPE positions, pre-norm RMSNorm</strong>, masked at 15&#37; with the usual 80/10/10 corruption.</div></div>
+        <div class="tp"><div class="tp-h">Data</div><div class="tp-b"><strong>2.45M words / 4.9M signs</strong> from ORACC, eBL and Archibab, split by fragment so no tablet crosses train and test, tokenised at the <strong>sign level</strong> following the <a href="https://aclanthology.org/2025.alp-1.33/">EvaCun 2025 shared task</a> on lemmatisation and token prediction for Akkadian and Sumerian. It appears as <strong>MLM</strong> below: small, Akkadian all the way down, and the only arm that is <em>not</em> a translation model.</div></div>
+      </div>
+    </div>
+    <div class="arch">
+      <div class="arch-cap">Ithaca (Nature 2022)</div>
+      <div class="arch-row"><span class="ab in">characters + words</span></div>
+      <div class="arch-ar">&darr;</div>
+      <div class="arch-row"><span class="ab torso">transformer torso</span></div>
+      <div class="arch-ar">&darr;</div>
+      <div class="arch-row"><span class="ab head">restoration</span><span class="ab head off">region</span><span class="ab head off">date</span></div>
+      <div class="arch-cap" style="margin-top:14px">ours (37M)</div>
+      <div class="arch-row"><span class="ab in">signs</span></div>
+      <div class="arch-ar">&darr;</div>
+      <div class="arch-row"><span class="ab torso">16 &times; (attention &rarr; add &amp; norm &rarr; feed-forward &rarr; add &amp; norm)<br><span class="ab-sub">d = 384 &middot; ff 1536 &middot; 8 heads &middot; RoPE</span></span></div>
+      <div class="arch-ar">&darr;</div>
+      <div class="arch-row"><span class="ab head">masked sign</span></div>
+      <div class="arch-ar">&darr;</div>
+      <div class="arch-row"><span class="ab probe">frozen activations &rarr; our linear probe for year and place</span></div>
+    </div>
   </div>
 </section>""",
 
@@ -220,7 +240,8 @@ NEW_SLIDES = {
   <div class="cfg tight">
     <div class="cfg-k">The step</div><div class="cfg-v">we now change the <strong>language</strong>, holding the entities fixed: the same royal inscriptions, read in <strong>Akkadian</strong> rather than in translation. Two read-outs, mirroring the two we have used throughout: the <strong>ruler's name token</strong>, which is the closest thing this corpus has to the paper's marked entity, and the <strong>average over the whole fragment</strong>, where nothing is marked and the date must be recoverable from the passage as a whole.</div>
     <div class="cfg-k">Cleaning</div><div class="cfg-v">the fragment column uses our <strong>maximal</strong> regime, an eleven-filter pipeline plus truncation to 30 words. It strips digits, logograms (all-capital tokens), determinatives, case endings and plural markers, normalises long vowels, and lowercases everything. The reason is measured, not stylistic: without it a bag of character n-grams reaches 99&#37; accuracy by reading <em>document length and royal-name spellings</em>, because well-preserved eras leave long inscriptions and poorly-preserved ones leave scraps. Truncation removes the length crutch, the filters remove the name crutch. The name column deliberately keeps the names, since that is what it is measuring.</div>
-    <div class="cfg-k">Metric</div><div class="cfg-v">Spearman &rho; over 200 balanced draws (8 rulers, 21 fragments each, grouped by ruler within every draw). Each cell is <strong>PLS</strong>|<span style="color:#6b7484">Ridge</span>. A shuffled-label null sits at about 0.01.</div>
+    <div class="cfg-k">Target</div><div class="cfg-v"><strong>the year the fragment was written.</strong> Place is not on this slide: a find-spot is never written in the text, so there is no entity token to point at, and the coordinate experiments run on whole fragments only.</div>
+    <div class="cfg-k">Metric</div><div class="cfg-v"><strong>Spearman &rho;</strong>, because with 8 rulers the target takes only 8 distinct values and dating is a ranking problem; R&sup2; is unstable at that granularity and is reported for the whole-fragment tables instead. Averaged over <strong>200 balanced draws</strong> of 8 rulers x 21 fragments, grouped by ruler inside every draw. Each cell is <strong>PLS</strong>|<span style="color:#6b7484">Ridge</span>; a shuffled-label null sits at about 0.01.</div>
   </div>
   <table class="rtbl compact"><thead><tr><th>model</th><th class="num">whole fragment, average &nbsp;(names stripped)</th><th class="num">the ruler's name token &nbsp;(names kept)</th></tr></thead><tbody>
     <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">.316<i>|.273</i></td><td class="num">.645<i>|.153</i></td></tr>
@@ -238,45 +259,143 @@ NEW_SLIDES = {
 </section>""",
 
 "ruler_not_chrono": """<section class="slide slide-text">
-  <div class="eyebrow">Cell C &middot; what the entity-token probe actually learns</div>
-  <h2 class="sh">The king-name token is nearly perfect at identity &mdash; and useless for chronology</h2>
-  <div class="exp-config">Slide 12 showed the king-name token scoring far above whole-fragment pooling. This slide asks what that score <em>is</em>. Three read-outs on the same probe: can it name the ruler, can it order years <em>across</em> rulers, and can it order years <em>within</em> a ruler's own fragments.</div>
-  <p class="tbl-cap">king-name last token &mdash; ruler macro-F1 (chance .20) &middot; year &rho; pooled &middot; year &rho; within ruler</p>
-  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">ruler F1</th><th class="num">year &rho; (pooled)</th><th class="num">year &rho; (within-ruler)</th></tr></thead><tbody>
-    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.989</td><td class="num">.974</td><td class="num">&minus;.055</td></tr>
-    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.982</td><td class="num">.977</td><td class="num">&minus;.190</td></tr>
-    <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">.982</td><td class="num">.967</td><td class="num">&minus;.550</td></tr>
-    <tr><td><span class="mdl">cuneiform-400M</span></td><td class="num">.943</td><td class="num">.957</td><td class="num">&minus;.148</td></tr>
-    <tr class="rand"><td><span class="mdl">random Qwen3-8B</span>*</td><td class="num">.946</td><td class="num">.926</td><td class="num">.195</td></tr>
-  </tbody></table>
-  <div class="text-points" style="margin-top:10px">
-    <div class="tp"><div class="tp-h">The control settles it</div><div class="tp-b">The <strong>random-initialised</strong> Qwen3-8B reaches ruler F1 <strong>.946</strong> and pooled year &rho; <strong>.926</strong> &mdash; matching every trained model, including the 120B. Distinguishing eight fixed spellings needs no learned chronology at all; an untrained projection of the token identity suffices.</div></div>
-    <div class="tp"><div class="tp-h">And the third column is the one that matters</div><div class="tp-b">Once ruler identity is held constant, the correlation is <strong>zero or negative for every arm</strong> (&minus;.55 to +.20). The probe has learned <em>which king</em>, and the year comes along for free because each king has one year. That is a lookup table, not a temporal representation &mdash; and it is exactly why LORO (previous slide) goes to zero.</div></div>
+  <div class="eyebrow">C &middot; what the name token is really measuring</div>
+  <h2 class="sh">The name token identifies the king, and an untrained network does it just as well</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">The question</div><div class="cfg-v">the previous slide showed the ruler's name token scoring far above the whole fragment. Before reading that as chronology, we ask what the probe is actually doing there. Same activations, same draws, two read-outs: <strong>can it name the ruler</strong>, and <strong>can it order the years</strong>.</div>
+    <div class="cfg-k">Metrics</div><div class="cfg-v"><strong>Ruler identification</strong> is macro-F1 over the 8 rulers, where chance is .20. <strong>Year ordering</strong> is Spearman &rho; against the true years. Both on the raw Akkadian, names left in, since the name is the thing being read.</div>
   </div>
+  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">identifies the ruler (macro-F1, chance .20)</th><th class="num">orders the years (&rho;)</th></tr></thead><tbody>
+    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.989</td><td class="num">.974</td></tr>
+    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.982</td><td class="num">.977</td></tr>
+    <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">.982</td><td class="num">.967</td></tr>
+    <tr><td><span class="mdl">AKK-300M</span></td><td class="num">.975</td><td class="num">.962</td></tr>
+    <tr><td><span class="mdl">cuneiform-400M</span></td><td class="num">.943</td><td class="num">.957</td></tr>
+    <tr><td><span class="mdl">MLM</span> (ours)</td><td class="num">.970</td><td class="num">.977</td></tr>
+    <tr class="rand"><td><span class="mdl">random Qwen3-8B</span></td><td class="num">.946</td><td class="num">.926</td></tr>
+  </tbody></table>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>An untrained network scores .946 and .926.</strong> A randomly initialised Qwen3-8B identifies the eight kings almost perfectly and orders their years almost perfectly, matching every trained model in the table and beating several of them. Telling eight fixed spellings apart requires no learned history at all, and once you know which king wrote a text you know its year for free, because in this corpus each ruler carries a single date. So the name column is a <strong>lookup table, not a timeline</strong>: it measures whether the tokenizer preserved the name, and nothing else. Averaging over the name's tokens rather than taking the last one collapses to near zero for every arm, which is the same thing seen from the other side. <strong>This is why the rest of the deck reads the whole fragment with the names stripped</strong>, and it is the read-out under which the models stop separating from their controls.</div>
 </section>""",
 
 "ask_directly": """<section class="slide slide-text">
-  <div class="eyebrow">Rescue 2 &middot; behavioural, not activation-based</div>
-  <h2 class="sh">Ask the model instead of probing it &mdash; and prompt it as hard as you like</h2>
+  <div class="eyebrow">Rescue 2 &middot; remove the probe, or help it</div>
+  <h2 class="sh">Asking the model directly, and prompting it as hard as we can, changes nothing</h2>
   <div class="cfg">
-    <div class="cfg-k">Setup</div><div class="cfg-v">Two ways of removing the probe from the loop. <strong>T12</strong>: show the fragment to a chat model under four prompt styles (bare / expert framing / few-shot k=5 / chain-of-thought) and take its <strong>generated answer</strong> (ruler + year BCE, forced single guess) as the prediction. <strong>T10</strong>: keep the probe but read activations from inside those same four prompts.</div>
-    <div class="cfg-k">Metric</div><div class="cfg-v">Spearman(prediction, true) on the same 200 balanced draws, maximal cleaning throughout.</div>
+    <div class="cfg-k">Why this slide</div><div class="cfg-v">the previous slide showed the models know these rulers in English, so perhaps the failure is the probe: maybe the date is present but a linear read-out cannot reach it. Two ways to find out, both predicting <strong>the year of a cleaned Akkadian fragment</strong>.</div>
+    <div class="cfg-k">Ask it</div><div class="cfg-v">show the fragment to a chat model and take <strong>its written answer</strong> as the prediction, a forced single guess of ruler and year, with no probe anywhere in the loop.</div>
+    <div class="cfg-k">Prompt it</div><div class="cfg-v">keep the probe, but read the activations from <em>inside</em> the prompt, so the model has been told what we are looking for before we look. Four styles in both cases: plain, expert framing, five worked examples, and chain-of-thought.</div>
+    <div class="cfg-k">Metric</div><div class="cfg-v">Spearman &rho; against the true year on the same <strong>200 balanced draws</strong> over the 8 rulers used everywhere else, so these numbers sit on the same scale as the probe tables.</div>
   </div>
-  <p class="tbl-cap">T12 &mdash; the generated answer as the prediction (&rho;)</p>
+  <p class="tbl-cap">the written answer, used as the prediction (&rho;)</p>
   <table class="rtbl compact"><thead><tr><th>model</th><th class="num">bare</th><th class="num">expert</th><th class="num">few-shot</th><th class="num">CoT</th></tr></thead><tbody>
     <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.010</td><td class="num">.123</td><td class="num">.009</td><td class="num">&minus;.074</td></tr>
     <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.173</td><td class="num">.029</td><td class="num">.374</td><td class="num">.125</td></tr>
     <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">&minus;.045</td><td class="num">.159</td><td class="num">.304</td><td class="num">.216</td></tr>
     <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">.168</td><td class="num">.299</td><td class="num">.239</td><td class="num">.217</td></tr>
   </tbody></table>
-  <p class="tbl-cap" style="margin-top:8px">T10 &mdash; probing the prompted activations (&rho;, PLS best-k)</p>
+  <p class="tbl-cap" style="margin-top:8px">the probe, reading activations from inside the prompt (&rho;)</p>
   <table class="rtbl compact"><thead><tr><th>model</th><th class="num">bare</th><th class="num">expert</th><th class="num">few-shot</th><th class="num">CoT</th></tr></thead><tbody>
     <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.313</td><td class="num">.313</td><td class="num">.287</td><td class="num">.314</td></tr>
     <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.284</td><td class="num">.283</td><td class="num">.285</td><td class="num">.285</td></tr>
     <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.310</td><td class="num">.328</td><td class="num">.332</td><td class="num">.327</td></tr>
     <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">.310</td><td class="num">.318</td><td class="num">.333</td><td class="num">.320</td></tr>
   </tbody></table>
-  <p class="fig-note">Neither escape route works. <strong>Generated answers are far worse than the probe</strong> (&rho; &le; .37 against the probe's &asymp; .33 baseline, and often near zero or negative) &mdash; the models will name Assyrian kings fluently in conversation, but cannot convert a stripped fragment into a date. And <strong>prompting moves nothing</strong>: across four styles and four scales the probed values sit within &asymp;.05 of bare, with no ordering by model size. The signal is not being hidden by a bad read-out; it is not there.</p>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Neither escape route works.</strong> Letting the model answer in its own words is <em>worse</em> than the probe: &rho; reaches .37 at best and is often near zero or negative, against the probe's own baseline of about .33. The models will name Assyrian kings fluently in conversation, as the previous slide showed, and still cannot turn a stripped Akkadian fragment into a date. And prompting moves nothing: across four styles and four scales the probed values sit within about .05 of the plain prompt, with no ordering by model size. The signal is not being hidden by a weak read-out or a badly posed question. It is not there.</div>
+</section>""",
+
+"c_frag_year": """<section class="slide slide-text">
+  <div class="eyebrow">C &middot; raw Akkadian &middot; whole fragments</div>
+  <h2 class="sh">Reading the date off a whole Akkadian fragment: every model falls to its untrained twin</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Task</div><div class="cfg-v">predict <strong>the year a fragment was written</strong>, exactly as two slides ago, but from the <strong>Akkadian text itself</strong> rather than from its English translation. Nothing else changes, so the gap between this table and that one is the cost of the language alone.</div>
+    <div class="cfg-k">Text</div><div class="cfg-v">cleaned, with royal names and other surface giveaways stripped and every fragment cut to the same length, so a score cannot come from spotting a king's name or from the fact that well-preserved periods leave longer texts.</div>
+    <div class="cfg-k">Data</div><div class="cfg-v">the same <strong>8 best-attested rulers</strong> as the English slides, capped equally, with <strong>200 redrawn balanced splits</strong> grouped by ruler so no king appears in both halves of a draw.</div>
+    <div class="cfg-k">Pooling</div><div class="cfg-v"><strong>text, last token</strong> and <strong>text, average</strong>, the same two read-outs used throughout.</div>
+  </div>
+  {{TABLE:frag:akk_maximal:year}}
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>This is where the claim breaks.</strong> Averaging over the fragment, the best trained arm is cuneiform-400M at &rho; .699, but an <em>untrained</em> Llama-2-70B reaches .588 and an untrained Qwen3-8B .544, and on last-token pooling the untrained Qwen3-8B (.499) beats <em>every</em> trained model in the table. The n-gram baseline sits at .707, above all of them. Compared with the English translation of the very same fragments, every arm loses roughly .15 to .20 &rho;, so what the models had was access to English, not to the content. <strong>Only cuneiform-400M, a multilingual translation encoder, stays clearly above its controls</strong>, which is the one positive signal in this table and the thread the last part of the deck picks up.</div>
+</section>""",
+
+"c_frag_geo": """<section class="slide slide-text">
+  <div class="eyebrow">C &middot; raw Akkadian &middot; whole fragments</div>
+  <h2 class="sh">Reading the find-spot off a whole Akkadian fragment: place survives where the date does not</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Task</div><div class="cfg-v">predict <strong>latitude and longitude of the excavation site</strong> from the same cleaned Akkadian fragments. The site is never named in the text, so there is no name to recognise; whatever the probe finds has to come from how the fragment is written.</div>
+    <div class="cfg-k">Data</div><div class="cfg-v">1068 fragments with a known find-spot, grouped into the <strong>10 sites</strong> with enough material, capped equally over <strong>200 draws that hold out whole sites</strong>, so a probe cannot win by memorising which dig a fragment came from.</div>
+    <div class="cfg-k">Pooling</div><div class="cfg-v">the same <strong>last token</strong> and <strong>average</strong> read-outs. Note that place has no entity-token variant at fragment level: a find-spot is not a word in the text, so there is no span to point at, which is why only the two whole-text poolings appear here and on the English geo slide.</div>
+  </div>
+  {{TABLE:frag:akk_maximal:geo}}
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Place behaves differently from date.</strong> Under last-token pooling several trained arms clear the n-gram baseline decisively on R&sup2; (Llama-2-13B and Llama-2-7B at .326 against TF-IDF's .019), which never happens for the year. But the controls climb with them: an untrained Qwen3-8B reaches .351, the best number in that column. Averaging again favours cuneiform-400M (&rho; .612, R&sup2; .430), and again its untrained neighbours are close behind. So the honest reading is that <strong>coordinates are partially recoverable from the writing itself while the date is not</strong>, and that most of what makes place recoverable is available to an untrained network as well.</div>
+</section>""",
+
+"c_layers": """<section class="slide slide-figure fig-major">
+  <div class="eyebrow">C &middot; depth</div>
+  <h2 class="sh">Layer by layer on Akkadian: only the translation encoder builds depth</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">the same per-layer ridge probe as slide 7, now on the <strong>cleaned raw Akkadian fragments</strong>, plotted against normalised depth so models of different sizes are comparable. Four panels: <strong>year</strong> (Spearman, the ranking read-out dating needs) and <strong>place</strong> (R&sup2;, the paper's read-out for coordinates), each under <strong>last token</strong> and <strong>average</strong> pooling. Dashed = untrained controls, &#9733; = each arm's best layer. The English-translation panels are not repeated here; they are the cell B slides.</div>
+  </div>
+  <div class="fig-wrap">{{FIG:fig_cellC_layers.png}}</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span>On the cleaned, balanced Akkadian text with average pooling, <strong>cuneiform-400M is the best arm by a clear margin on both year and place</strong>, and it is a <em>multilingual</em> translation model rather than an Akkadian-only one. Its best layers sit <strong>late</strong> in the network, whereas most other arms peak in the <strong>first few layers</strong>, which is what a representation that never deepens looks like: the probe is reading the input surface, not something the network built. The encoders have no true causal last token and unsurprisingly do worse in the last-token panels. <strong>gpt-oss-120B is the odd one out</strong>: it collapses through the middle of the network and then climbs steeply over the final layers, a shape no other arm shows and a hint that it organises this input differently.</div>
+</section>""",
+
+"c_plsk": """<section class="slide slide-figure fig-major">
+  <div class="eyebrow">C &middot; dimensionality</div>
+  <h2 class="sh">How many directions the Akkadian signal needs: far fewer than English, and it decays after</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">at each arm's best layer from the previous slide, refit with <strong>PLS using k = 1 to 64 components</strong>. Same four panels, same colours, same controls. The dash-dot line marks k = 16, which is where the English curves plateaued.</div>
+  </div>
+  <div class="fig-wrap">{{FIG:fig_cellC_plsk.png}}</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>The signal is exhausted much sooner here than in English.</strong> Almost every arm peaks between <strong>k = 5 and k = 16</strong> and then <em>declines</em>, sharply so by k = 32 and 64, where the place panels fall below zero. On English the same probes kept gaining to k = 16 and held their value afterwards. A representation that cannot use more than a handful of directions, and that is actively hurt by being given more, is not a rich geometry: it is a thin surface feature. That is the dimensionality counterpart of the flat layer curves on the previous slide, and it is what a low-resource, obscure-entity regime looks like from the inside.</div>
+</section>""",
+
+"t9_knowledge": """<section class="slide slide-text">
+  <div class="eyebrow">Rescue 1 &middot; is the knowledge simply absent?</div>
+  <h2 class="sh">The models do know these kings and their dates, when you simply ask them in English</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Why this slide</div><div class="cfg-v">everything so far says the probe cannot read a date out of Akkadian. That has two possible explanations: the model never learned these rulers at all, or it knows them but the knowledge is not linearly available in the representation the probe reads. This slide rules out the first.</div>
+    <div class="cfg-k">Setup</div><div class="cfg-v">no probe and no Akkadian. We ask the chat models two plain English questions: <em>&ldquo;When did {ruler} reign?&rdquo;</em> for each of the 8 rulers, answered as a start and end year, and <em>&ldquo;list the rulers of this period&rdquo;</em>. Names are matched ignoring diacritics.</div>
+    <div class="cfg-k">Metric</div><div class="cfg-v"><strong>reign accuracy</strong>: the answered window, widened by 10 years, must contain a true reign year. <strong>Recall</strong>: the share of the period's rulers the model names. Accuracy is identical at 50, 30 and 10 year tolerances, so the strictest is shown.</div>
+  </div>
+  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">reign dates correct</th><th class="num">rulers recalled</th></tr></thead><tbody>
+    <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">8 / 8</td><td class="num">1.00</td></tr>
+    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">6 / 8</td><td class="num">1.00</td></tr>
+    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">8 / 8</td><td class="num">0.75</td></tr>
+    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">7 / 8</td><td class="num">0.50</td></tr>
+  </tbody></table>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>The knowledge is there.</strong> gpt-oss-120B and Qwen3-8B date all eight rulers correctly to within ten years and the larger models name every ruler of the period. So when the probe finds nothing in the Akkadian representation, it is not because the model has never heard of Ashurbanipal. Declarative knowledge that a model can state in English is simply <em>not the same thing</em> as a linearly decodable axis in its activations over Akkadian text, and this deck is measuring the second.</div>
+</section>""",
+
+"ntp_finetune": """<section class="slide slide-figure fig-major">
+  <div class="eyebrow">Rescue 3 &middot; more Akkadian</div>
+  <h2 class="sh">Training the LLMs further on our own Akkadian moves nothing at all</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">we continued pretraining <strong>Qwen3-1.7B, Qwen3-8B, Qwen3-32B and gpt-oss-120B</strong> on our Akkadian fragments with ordinary <strong>next-token prediction</strong>, the objective they were built with, using the training split of the same corpus the MLM was trained on (the test fragments are never touched). Each model was fine-tuned at <strong>four unfreezing depths</strong>, from the whole network down to only the top tenth, so the update could be placed where the probe actually reads. The tokenizer was left alone: the tokens worth adding are royal and divine names, which is exactly the leakage channel the cleaning removes.</div>
+    <div class="cfg-k">Metric</div><div class="cfg-v">year Spearman &rho; on the cleaned Akkadian text, 200 balanced draws, re-probing every checkpoint with the identical protocol. Solid bar = base model, hatched = after fine-tuning, dotted line = the base level.</div>
+  </div>
+  <div class="fig-wrap">{{FIG:fig_finetune_ntp.png}}</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Nothing moves.</strong> Across four models and four unfreezing depths the change is between &minus;.013 and +.002 &rho;, far inside the spread of the draws, and for the two largest models several arms are numerically identical to base because the layers the probe reads were frozen. More exposure to Akkadian, delivered through the objective these models were built with, does not create a temporal axis. The honest caveat is <strong>scale of data</strong>: our corpus is about 2.5M words, which is all the published Akkadian there is, but it is four orders of magnitude below these models' pretraining. So the fair claim is not that more Akkadian could never help; it is that <em>all the Akkadian that exists</em>, used this way, does not.</div>
+</section>""",
+
+"shuffle": """<section class="slide slide-text">
+  <div class="eyebrow">Rescue 4 &middot; word order</div>
+  <h2 class="sh">Scrambling the word order costs almost nothing, so the probe is reading a bag of words</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Idea</div><div class="cfg-v">if a probe is reading grammar, syntax or anything about how a sentence is built, destroying the word order should destroy the score. If it is reading which words are present, shuffling should change nothing. This is a direct test of what kind of signal the earlier tables actually contain.</div>
+    <div class="cfg-k">Setup</div><div class="cfg-v">every fragment gets an <strong>exact twin with its words randomly permuted</strong>, one twin per fragment, same words and same length. Both are embedded with identical settings and probed identically. We run it on the <strong>cleaned Akkadian</strong> and on the <strong>English translation</strong> so the answer is not specific to one language.</div>
+    <div class="cfg-k">Target &amp; metric</div><div class="cfg-v"><strong>year</strong>, Spearman &rho;, average pooling, 200 balanced draws over the 8 rulers, best layer per arm, <strong>PLS</strong> (Ridge agrees and is in the CSV).</div>
+  </div>
+  <table class="rtbl compact"><thead><tr><th rowspan="2">model</th><th colspan="3" class="num">cleaned Akkadian</th><th colspan="3" class="num">English translation</th></tr><tr><th class="num">in order</th><th class="num">shuffled</th><th class="num">cost</th><th class="num">in order</th><th class="num">shuffled</th><th class="num">cost</th></tr></thead><tbody>
+    <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">.316</td><td class="num">.297</td><td class="num">.018</td><td class="num">.411</td><td class="num">.365</td><td class="num">.045</td></tr>
+    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.332</td><td class="num">.295</td><td class="num">.037</td><td class="num">.420</td><td class="num">.411</td><td class="num">.009</td></tr>
+    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.339</td><td class="num">.277</td><td class="num">.062</td><td class="num">.397</td><td class="num">.384</td><td class="num">.013</td></tr>
+    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.336</td><td class="num">.292</td><td class="num">.044</td><td class="num">.355</td><td class="num">.350</td><td class="num">.004</td></tr>
+    <tr><td><span class="mdl">cuneiform-400M</span></td><td class="num">.390</td><td class="num">.396</td><td class="num">&minus;.006</td><td class="num">.388</td><td class="num">.361</td><td class="num">.027</td></tr>
+    <tr><td><span class="mdl">AKK-300M</span></td><td class="num">.300</td><td class="num">.273</td><td class="num">.027</td><td class="num">.400</td><td class="num">.381</td><td class="num">.018</td></tr>
+    <tr><td><span class="mdl">uMT5-base</span></td><td class="num">.278</td><td class="num">.278</td><td class="num">.000</td><td class="num">.343</td><td class="num">.335</td><td class="num">.009</td></tr>
+    <tr><td><span class="mdl">MLM</span> (ours)</td><td class="num">.285</td><td class="num">.285</td><td class="num">.001</td><td class="num">&ndash;</td><td class="num">&ndash;</td><td class="num">&ndash;</td></tr>
+    <tr class="rand"><td><span class="mdl">TF-IDF</span></td><td class="num">.266</td><td class="num">.266</td><td class="num">.000</td><td class="num">&ndash;</td><td class="num">&ndash;</td><td class="num">&ndash;</td></tr>
+  </tbody></table>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Word order carries almost none of it.</strong> Destroying the order of every word costs between .00 and .06 &rho;, in both languages and at every scale, and for cuneiform-400M on Akkadian the shuffled text scores <em>marginally higher</em>. TF-IDF is order-blind by construction and loses exactly nothing, which is the point of the comparison: these models are behaving like a bag of words for this task. Whatever chronological signal exists is carried by <em>which</em> words appear, not by how they are arranged, which is why the probe cannot be reading grammatical change over time.</div>
 </section>""",
 
 "conditions": """<section class="slide slide-text">
@@ -329,6 +448,23 @@ EYEBROW_PATCHES = {
 
 EXTRA_CSS = """
 /* --- added by build_story_deck.py --- */
+.two-col{display:grid;grid-template-columns:1.55fr 1fr;gap:20px;flex:1;min-height:0;overflow:hidden;}
+.two-col .text-points{gap:11px;}
+.arch{border-left:1px solid var(--border);padding-left:18px;font-size:10.5px;
+      display:flex;flex-direction:column;justify-content:center;}
+.arch-cap{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+          color:var(--green);margin-bottom:5px;}
+.arch-row{display:flex;gap:5px;justify-content:center;margin:1px 0;}
+.arch-ar{text-align:center;color:var(--ink-light);font-size:11px;line-height:1;}
+.ab{border:1px solid var(--border);border-radius:5px;padding:4px 8px;text-align:center;
+    background:#fbfcfd;color:var(--ink-mid);line-height:1.3;}
+.ab.in{background:#eef1f6;}
+.ab.torso{background:var(--green-bg);border-color:var(--green-mid);color:var(--green);
+          font-weight:700;flex:1;}
+.ab.head{background:#fff;border-color:var(--green-mid);color:var(--green);font-weight:700;}
+.ab.head.off{opacity:.35;text-decoration:line-through;font-weight:400;}
+.ab.probe{background:#fdfaf0;border-color:#e3d7a8;color:#7c5e00;font-weight:700;flex:1;}
+.ab-sub{font-weight:400;font-size:9px;color:var(--ink-light);}
 .rtbl.compact.wide{font-size:9.5px;}
 .rtbl.compact.wide th,.rtbl.compact.wide td{padding:1.5px 3px;}
 .rtbl.compact.wide td i{font-style:normal;color:var(--ink-light);}
