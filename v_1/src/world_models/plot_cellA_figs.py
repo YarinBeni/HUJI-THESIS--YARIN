@@ -30,16 +30,22 @@ TIME = ["historical_figure", "art", "headline"]
 GROUPS = [("SPACE", SPACE, "World / USA / NYC → latitude, longitude"),
           ("TIME", TIME, "Figures / Art / Headlines → year")]
 
-# family colours, matching the deck's convention: Llama purples, Qwen blues,
-# translation encoders orange/green, controls grey. Darker = larger.
+# One hue per model family, lightness by size, so a curve's family is readable at a
+# glance and its scale is readable within the family:
+#   Qwen3 + gpt-oss = BLUES, Llama-2 = GREENS, translation encoders = WARM,
+#   controls (random twins + TF-IDF) = PURPLE/BLACK, always dashed or dotted.
 COLORS = {
-    "llama2_70b": "#4a148c", "llama2_13b": "#7b1fa2", "llama2_7b": "#ba68c8",
-    "gpt_oss_120b": "#0d1b57", "qwen3_32b": "#0d47a1", "qwen3_8b": "#1976d2",
-    "qwen3_1b7": "#64b5f6",
-    "umt5_base": "#2e7d32", "thalesian_cunei400m": "#e65100",
-    "thalesian_akk300m": "#f9a825",
-    "random": "#9e9e9e", "llama2_7b_random": "#bdbdbd",
-    "llama2_13b_random": "#8d8d8d", "llama2_70b_random": "#5f5f5f",
+    # blues: decoder family 1, light -> dark with size
+    "qwen3_1b7": "#7cc0f8", "qwen3_8b": "#2b8ae8", "qwen3_32b": "#1252b3",
+    "gpt_oss_120b": "#0a2a5e",
+    # greens: decoder family 2
+    "llama2_7b": "#7fd39b", "llama2_13b": "#25a35c", "llama2_70b": "#0a5c31",
+    # warm: the three translation encoders
+    "umt5_base": "#f0b429", "thalesian_akk300m": "#f2711c",
+    "thalesian_cunei400m": "#a03706",
+    # purples + black: controls
+    "llama2_7b_random": "#c9b6f2", "llama2_13b_random": "#9670e0",
+    "llama2_70b_random": "#6b32c9", "random": "#3f1a78",
     "tfidf": "#000000",
 }
 LABEL = {
@@ -61,8 +67,8 @@ IS_CTRL = {"random", "tfidf", "llama2_7b_random", "llama2_13b_random",
 plt.rcParams.update({
     "font.family": "sans-serif",
     "font.sans-serif": ["DejaVu Sans"],
-    "font.size": 13, "axes.labelsize": 14, "axes.titlesize": 15,
-    "xtick.labelsize": 12, "ytick.labelsize": 12, "legend.fontsize": 12,
+    "font.size": 14, "axes.labelsize": 15, "axes.titlesize": 16.5,
+    "xtick.labelsize": 13, "ytick.labelsize": 13, "legend.fontsize": 13.5,
     "axes.linewidth": 0.9, "lines.linewidth": 2.0,
     "axes.spines.top": False, "axes.spines.right": False,
     "figure.dpi": 130, "savefig.dpi": 130, "savefig.bbox": "tight",
@@ -83,7 +89,7 @@ def _style(ax, metric, xlabel, title, sub=None):
         ax.set_yticklabels(["-10", "-1", "0", ".25", ".5", ".75", "1"])
         # a couple of arms dive far below zero in the earliest layers; clip the
         # view so that excursion stays visible without owning the panel.
-        ax.set_ylim(-3, 1.25)
+        ax.set_ylim(-1.8, 1.25)
     else:
         ax.set_ylim(-0.15, 1.02)
 
@@ -99,25 +105,32 @@ def _legend(fig, axes):
                  key=lambda i: ORDER.index(
                      next((k for k, v in LABEL.items() if v == labels[i]), "random")))
     fig.legend([handles[i] for i in idx], [labels[i] for i in idx],
-               loc="outside lower center", ncol=8, frameon=False)
+               loc="outside lower center", ncol=8, frameon=False,
+               handlelength=2.6, columnspacing=1.5)
 
 
 def fig_layers():
     df = pd.read_csv(os.path.join(RESULTS, "summary_layerwise.csv"))
-    fig, axes = plt.subplots(2, 4, figsize=(21, 9.8), layout="constrained")
+    fig, axes = plt.subplots(2, 4, figsize=(23, 10.6), layout="constrained")
     for r, (gname, datasets, gsub) in enumerate(GROUPS):
         for c, (site, metric) in enumerate([("last", "r2"), ("last", "spearman"),
                                             ("mean", "r2"), ("mean", "spearman")]):
             ax = axes[r, c]
             col = "test_r2" if metric == "r2" else "test_spearman"
-            sub = df[(df.entity_type.isin(datasets)) & (df.site == site)]
+            in_group = df.entity_type.isin(datasets)
+            sub = df[in_group & (df.site == site)]
+            # TF-IDF has no layers and is stored under site="text"; draw its
+            # best-per-dataset score as the floor line in every panel.
+            floor = df[in_group & (df.method == "tfidf")]
+            if not floor.empty:
+                ax.axhline(floor.groupby("entity_type")[col].max().mean(),
+                           color="k", lw=1.8, ls=(0, (1, 1.6)),
+                           label=LABEL["tfidf"], zorder=4)
             for method in ORDER:
+                if method == "tfidf":
+                    continue
                 g = sub[sub.method == method]
                 if g.empty:
-                    continue
-                if method == "tfidf":
-                    ax.axhline(g[col].mean(), color="k", lw=1.3, ls=":",
-                               label=LABEL[method], zorder=1)
                     continue
                 curve = g.groupby("layer")[col].mean().sort_index()
                 if len(curve) < 2:
@@ -125,11 +138,13 @@ def fig_layers():
                 x = curve.index / curve.index.max()
                 ctrl = method in IS_CTRL
                 ax.plot(x, curve.values, color=COLORS[method],
-                        ls="--" if ctrl else "-", lw=1.5 if ctrl else 2.1,
-                        alpha=0.85 if ctrl else 1.0, label=LABEL[method], zorder=2)
+                        ls=(0, (5, 2)) if ctrl else "-", lw=1.6 if ctrl else 2.6,
+                        alpha=0.75 if ctrl else 1.0, label=LABEL[method],
+                        zorder=2 if ctrl else 3)
                 b = curve.values.argmax()
-                ax.plot(x[b], curve.values[b], marker="*", ms=13,
-                        color=COLORS[method], mec="white", mew=0.8, zorder=3)
+                ax.plot(x[b], curve.values[b], marker="*", ms=21 if not ctrl else 15,
+                        color=COLORS[method], mec="#111", mew=1.3,
+                        zorder=7 if not ctrl else 5, clip_on=False)
             pool = "last token" if site == "last" else "mean pool"
             met = "R$^2$" if metric == "r2" else "Spearman $\\rho$"
             _style(ax, metric, "depth (layer / total layers)",
@@ -159,13 +174,25 @@ def fig_plsk():
                              "k": int(k), "test_r2": sc["test_r2"],
                              "test_spearman": sc["test_spearman"]})
     df = pd.DataFrame(recs)
-    fig, axes = plt.subplots(2, 4, figsize=(21, 9.8), layout="constrained")
+    # the n-gram floor has no PLS sweep; take it from the committed best-layer
+    # summaries so the reading rule is visible on this figure too.
+    floors = {}
+    for metric, name in [("r2", "summary_best_layer_r2.csv"),
+                         ("spearman", "summary_best_layer_spearman.csv")]:
+        t = pd.read_csv(os.path.join(RESULTS, name)).set_index("method")
+        if "tfidf" in t.index:
+            for gname, datasets, _ in GROUPS:
+                floors[(gname, metric)] = float(t.loc["tfidf", datasets].mean())
+    fig, axes = plt.subplots(2, 4, figsize=(23, 10.6), layout="constrained")
     for r, (gname, datasets, gsub) in enumerate(GROUPS):
         for c, (site, metric) in enumerate([("last", "r2"), ("last", "spearman"),
                                             ("mean", "r2"), ("mean", "spearman")]):
             ax = axes[r, c]
             col = "test_r2" if metric == "r2" else "test_spearman"
             sub = df[(df.entity_type.isin(datasets)) & (df.site == site)]
+            if (gname, metric) in floors:
+                ax.axhline(floors[(gname, metric)], color="k", lw=1.8,
+                           ls=(0, (1, 1.6)), label=LABEL["tfidf"], zorder=4)
             for method in ORDER:
                 g = sub[sub.method == method]
                 if g.empty:
@@ -175,12 +202,14 @@ def fig_plsk():
                     continue
                 ctrl = method in IS_CTRL
                 ax.plot(curve.index, curve.values, color=COLORS[method],
-                        marker="o", ms=4, ls="--" if ctrl else "-",
-                        lw=1.5 if ctrl else 2.1, alpha=0.85 if ctrl else 1.0,
-                        label=LABEL[method], zorder=2)
+                        marker="o", ms=4.5, ls=(0, (5, 2)) if ctrl else "-",
+                        lw=1.6 if ctrl else 2.6, alpha=0.75 if ctrl else 1.0,
+                        label=LABEL[method], zorder=2 if ctrl else 3)
                 b = curve.values.argmax()
-                ax.plot(curve.index[b], curve.values[b], marker="*", ms=13,
-                        color=COLORS[method], mec="white", mew=0.8, zorder=3)
+                ax.plot(curve.index[b], curve.values[b], marker="*",
+                        ms=21 if not ctrl else 15, color=COLORS[method],
+                        mec="#111", mew=1.3, zorder=7 if not ctrl else 5,
+                        clip_on=False)
             ax.set_xscale("log", base=2)
             ax.set_xticks([1, 2, 4, 8, 16, 32, 64])
             ax.set_xticklabels([1, 2, 4, 8, 16, 32, 64])

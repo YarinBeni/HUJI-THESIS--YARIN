@@ -317,9 +317,16 @@ EXTRA_CSS = """
 .takeaway.tight .tk-label{font-size:9px;}
 .cfg.tight{font-size:11.5px;gap:3px 11px;margin-bottom:8px;}
 .cfg.tight .cfg-k{font-size:9px;}
-.slide.fig-major .sh{font-size:23px;margin-bottom:9px;}
-.slide.fig-major .eyebrow{margin-bottom:6px;}
-.slide.fig-major .fig-wrap{margin:0 0 8px;}
+/* figure-first slides: shrink every non-figure block so the plot gets the page */
+.slide.fig-major{padding:26px 30px 30px;}
+.slide.fig-major .sh{font-size:19.5px;line-height:1.15;margin-bottom:5px;}
+.slide.fig-major .eyebrow{font-size:9.5px;margin-bottom:4px;}
+.slide.fig-major .cfg.tight{font-size:10px;line-height:1.35;gap:2px 9px;margin-bottom:5px;}
+.slide.fig-major .cfg.tight .cfg-k{font-size:8px;}
+.slide.fig-major .fig-wrap{margin:0 0 5px;}
+.slide.fig-major .fig-wrap img{max-height:100%;width:auto;border:none;}
+.slide.fig-major .takeaway.tight{font-size:10.5px;line-height:1.38;padding:6px 12px;}
+.slide.fig-major .takeaway.tight .tk-label{font-size:8px;margin-right:7px;}
 .cellmap{position:absolute;top:15px;right:18px;display:grid;
          grid-template-columns:auto 34px 34px;grid-auto-rows:auto;gap:2px;
          font-family:var(--sans);z-index:5;}
