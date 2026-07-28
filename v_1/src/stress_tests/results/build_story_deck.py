@@ -40,9 +40,9 @@ SPINE = [
     ("new", "cellA_repro", "A: the paper reproduces on our models, with the controls it never ran"),
     ("new", "cellA_layers", "A: where in the network space and time live"),
     ("new", "cellA_pls", "A: how many PLS directions the world model needs"),
-    ("new", "b_entity", "Step 1 — same language, obscure entities: time survives, space does not"),
-    ("old", 25, "Step 2 — English gloss, whole fragments: Year"),
-    ("old", 26, "Step 2 — English gloss, whole fragments: Geo"),
+    ("new", "b_entity", "Obscure entities in English: the date survives, the place does not"),
+    ("new", "b_frag_year", "Whole fragments in English: a bag of character n-grams dates them best"),
+    ("new", "b_frag_geo", "Whole fragments in English: place is no better than an untrained network"),
     ("new", "confounder", "Before cell C: the confounder controls, and what they cost"),
     ("old", 15, "Step 3a — the king-name token in raw Akkadian"),
     ("old", 27, "Step 3b — raw Akkadian, whole fragments: Year"),
@@ -165,33 +165,40 @@ NEW_SLIDES = {
 </section>""",
 
 "b_entity": """<section class="slide slide-text">
-  <div class="eyebrow">Cell B &middot; entity level &middot; the paper's own protocol</div>
-  <h2 class="sh">Step 1 &mdash; hold the language fixed, swap famous entities for obscure ones</h2>
-  <div class="cfg">
-    <div class="cfg-k">Setup</div><div class="cfg-v">two datasets built to mirror theirs exactly: <strong>assyrian_ruler</strong> (34 rulers &rarr; year) mirrors <em>historical_figure</em>, and <strong>mesopotamian_place</strong> (25 find-spots &rarr; lon/lat) mirrors <em>world_place</em>. Each entity appears once <strong>bare</strong> (the paper-faithful row) and inside five neutral carrier sentences that never mention a date or region.</div>
-    <div class="cfg-k">Pooling</div><div class="cfg-v">four sites, so the paper's protocol and ours are both visible: <strong>ent_last</strong> (last token of the ruler/place name &mdash; theirs), <strong>ent_mean</strong>, <strong>last</strong> (last token of the whole sentence &mdash; their <em>headline</em> protocol) and <strong>mean</strong>. On the bare rows the entity <em>is</em> the string, so ent_last = last by construction.</div>
-    <div class="cfg-k">Metric</div><div class="cfg-v">ridge and PLS-5, <strong>R&sup2;</strong> and <strong>&rho;</strong>, over a <strong>200-draw Monte-Carlo of entity-level splits</strong> (20% of entities held out per draw; all six templates of an entity always move together, so no template can leak its target).</div>
+  <div class="eyebrow">B &middot; the same test as the paper, on our entities</div>
+  <h2 class="sh">Obscure entities in English: the date survives, the place does not</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">we repeat the paper's own two experiments and change <strong>only who the entities are</strong>. For time, in place of its famous historical figures (slide 6) we use the <strong>34 Assyrian and Babylonian rulers</strong> attested in our corpus, spanning <strong>1132 to 261 BC</strong> (Ashurbanipal, Sennacherib, Sargon II), and predict each ruler's year. For space, in place of its world places we use the <strong>25 excavation sites</strong> our fragments come from (Nineveh, Babylon, Assur, Kalhu) and predict latitude and longitude.</div>
+    <div class="cfg-k">Input</div><div class="cfg-v">every name is probed <strong>on its own</strong>, exactly as the paper does (<em>&ldquo;Ashurbanipal&rdquo;</em>), and also inside five short sentences that never mention a date or a region (<em>&ldquo;This tablet dates to the reign of Ashurbanipal.&rdquo;</em>). That mirrors the paper's own robustness check, where the same entity is probed under several surrounding prompts. The table reports the name-alone rows; adding the sentences moves the top scores by less than 0.01.</div>
+    <div class="cfg-k">Pooling</div><div class="cfg-v"><strong>name, last token</strong>: the activation at the final token of the name, which is the paper's read-out. <strong>name, average</strong>: the activation averaged over all the name's tokens, which is our addition and the only option for the translation encoders, since they have no causal last token.</div>
+    <div class="cfg-k">Metric</div><div class="cfg-v">Spearman &rho;, averaged over <strong>200 redrawn splits</strong> that hold out 20&#37; of the entities each time. Every cell is <strong>Ridge</strong>|<span style="color:#6b7484">PLS</span>.</div>
   </div>
-  <p class="tbl-cap">bare entity string &mdash; year &rho; (34 rulers) &middot; geo &rho; (25 find-spots), MC mean</p>
-  <table class="rtbl compact"><thead><tr><th rowspan="2">model</th><th colspan="2" class="num">YEAR &mdash; ruler names</th><th class="num">GEO</th></tr><tr><th class="num">entity-last (theirs)</th><th class="num">mean (ours)</th><th class="num">entity-last</th></tr></thead><tbody>
-    <tr><td><span class="mdl">Llama-2-70B</span></td><td class="num"><strong>.701</strong></td><td class="num">.463</td><td class="num">.429</td></tr>
-    <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">.663</td><td class="num">.438</td><td class="num">.413</td></tr>
-    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.627</td><td class="num">.436</td><td class="num">.458</td></tr>
-    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.618</td><td class="num">.483</td><td class="num">.441</td></tr>
-    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.596</td><td class="num">.500</td><td class="num">.344</td></tr>
-    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.527</td><td class="num">.477</td><td class="num">.384</td></tr>
-    <tr><td><span class="mdl">cuneiform-400M</span></td><td class="num">.456</td><td class="num">.509</td><td class="num">.398</td></tr>
-    <tr><td><span class="mdl">AKK-300M</span></td><td class="num">.488</td><td class="num">.567</td><td class="num">.315</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-70B random</span>*</td><td class="num">.457</td><td class="num">.314</td><td class="num">.459</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-7B random</span>*</td><td class="num">.473</td><td class="num">.311</td><td class="num">.278</td></tr>
-    <tr class="rand"><td><span class="mdl">random Qwen3-8B</span>*</td><td class="num">.171</td><td class="num">&minus;.038</td><td class="num">.321</td></tr>
-    <tr class="rand"><td><span class="mdl">TF-IDF</span> (floor)</td><td class="num">.344</td><td class="num">.344</td><td class="num">.296</td></tr>
-  </tbody></table>
-  <div class="text-points" style="margin-top:9px">
-    <div class="tp"><div class="tp-h">Time survives obscurity &mdash; but only at the top of the ladder, and only with their pooling</div><div class="tp-b">Llama-2-70B (&rho; <strong>.701</strong>) clears both gates: its own random twin (.457) and the floor (.344), and the ladder orders monotonically (70B &gt; 13B &gt; 7B, 32B &gt; 8B &gt; 1.7B). But the margin is <strong>&asymp;.24</strong> where cell A's was <strong>&asymp;.74</strong> in R&sup2;, and by Llama-2-7B (.527 vs its twin .473) the gap is inside the spread. <strong>Mean pooling erases the effect entirely</strong> &mdash; every decoder falls to &asymp;.44&ndash;.50 and the ordering inverts, with AKK-300M on top. On a bare name the paper's entity-last-token choice is doing real work.</div></div>
-    <div class="tp"><div class="tp-h">Space does not survive at all</div><div class="tp-b">No arm beats its twin on find-spots: the best score in the whole geo column belongs to <strong>random-init Llama-2-70B (.459)</strong>, and R&sup2; is negative for every arm including TF-IDF. Recovering coordinates for Nineveh or Borsippa from the name alone is simply not something these models do &mdash; which makes the fragment-level geo result two slides on (where trained arms <em>do</em> clear the floor) the more surprising of the two.</div></div>
+  {{TABLE:entity}}
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Time holds up, and the scaling law with it:</strong> reading the last token of the name, Llama-2-70B leads at &rho; .701, both families order by size, and the top arms clear their own random twin (.457) and the n-gram baseline (.344). But the margin is roughly a quarter of what it was on famous entities, and by Llama-2-7B (.527 against its twin .473) it is inside the noise. <strong>Averaging over the name destroys it</strong>: every model lands between .40 and .57 and the ordering inverts, so the paper's pooling choice is doing real work. <strong>Space fails outright</strong>: the best number in either place column belongs to an <em>untrained</em> Llama-2-70B (.459), so no model beats its control. 34 rulers and 25 sites means 6 to 7 held-out entities per draw, so read the ordering, not the third decimal.</div>
+</section>""",
+
+"b_frag_year": """<section class="slide slide-text">
+  <div class="eyebrow">B &middot; from names to whole fragments</div>
+  <h2 class="sh">Whole fragments in English: a bag of character n-grams dates them best</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">the entity is no longer a name but a <strong>whole tablet fragment</strong>, read in its faithful English translation, and we predict the year it was written. This is the paper's <em>news headlines</em> experiment carried over to our corpus: a full passage rather than a short name, with no entity marked anywhere in it. A fragment reads like <em>&ldquo;&hellip; the palace of my lordship which is in Nineveh I rebuilt and completed &hellip;&rdquo;</em>.</div>
+    <div class="cfg-k">Pooling</div><div class="cfg-v"><strong>text, last token</strong>: the activation at the final token of the passage, which is what the paper uses for headlines. <strong>text, average</strong>: averaged over the whole passage. Nothing points the model at a date, so the signal has to be recoverable from the passage as a whole.</div>
+    <div class="cfg-k">Metric</div><div class="cfg-v">Spearman &rho; and R&sup2;, averaged over <strong>200 balanced draws</strong> that cap each of the 8 best-attested rulers at the same number of fragments, so no single king can carry the score.</div>
   </div>
-  <p class="fig-note">34 rulers and 25 find-spots against the paper's thousands, so a 20% split holds out 6&ndash;7 entities and the MC spread is wide (&plusmn;.21&ndash;.39 on &rho;). Read the <strong>ordering against the two controls</strong>, not the third decimal. Splits are by entity, so all six templates of a ruler always move together. <em>* = control.</em></p>
+  {{TABLE:frag:eng_tier0:year}}
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>The n-gram baseline wins outright</strong> (&rho; .775), ahead of every embedding in the table. Pooling matters more than the model does: averaging over the passage adds about <strong>+.20 &rho;</strong> to almost every arm, which is the opposite of what we saw on bare names, because a date leaves its trace across the whole passage rather than at one token. But the arms that gain the most from it gain nothing <em>over their controls</em>: at the top, AKK-300M (.740) and Qwen3-8B (.737) sit barely above an <strong>untrained</strong> Llama-2-70B (.661) and an untrained Qwen3-8B (.636). Moving from famous names to obscure passages, the scaling law is gone and the models no longer separate from noise.</div>
+</section>""",
+
+"b_frag_geo": """<section class="slide slide-text">
+  <div class="eyebrow">B &middot; from names to whole fragments</div>
+  <h2 class="sh">Whole fragments in English: place is no better than an untrained network</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Setup</div><div class="cfg-v">same fragments and same English translations as the previous slide, but now we predict <strong>where the tablet was dug up</strong>, its latitude and longitude. This is the paper's world-place experiment moved to whole passages: the find-spot is <em>never named in the text</em>, so unlike a city name there is nothing to look up, and the coordinates have to come from whatever the passage implies.</div>
+    <div class="cfg-k">Pooling</div><div class="cfg-v">the same two read-outs: <strong>text, last token</strong> and <strong>text, average</strong>.</div>
+    <div class="cfg-k">Metric</div><div class="cfg-v">Spearman &rho; and R&sup2; over <strong>200 draws that hold out whole find-spots</strong>, capping each of the 10 merged sites equally, so a probe cannot succeed by memorising which site a fragment came from.</div>
+  </div>
+  {{TABLE:frag:eng_tier0:geo}}
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Every trained model is matched by its own untrained twin.</strong> Averaging over the passage, the best arm is cuneiform-400M (&rho; .640, R&sup2; .445), but an <em>untrained</em> Llama-2-7B reaches .606 / .463 and an untrained Qwen3-8B .587 / .450, so the reading rule is not satisfied anywhere in this table. As with the year, averaging beats last-token pooling for nearly every arm, and again the gain is shared with the controls rather than earned by training. The n-gram baseline is the interesting exception: it ranks well on &rho; (.535) yet collapses on R&sup2; (.022), meaning it orders sites roughly but cannot place them.</div>
 </section>""",
 
 "confounder": """<section class="slide slide-text">
@@ -200,7 +207,7 @@ NEW_SLIDES = {
   <div class="exp-config">Our year label is almost a ruler label: <strong>eight rulers account for most dated fragments</strong>, and every fragment of a ruler shares one year. A probe can therefore score well by recognising a king's name &mdash; a spelling-recognition task, not a chronology. Three devices separate the two, and each one costs signal.</div>
   <p class="tbl-cap">Akkadian maximal &middot; r8 &middot; year &mdash; the same arms under three protocols (&rho;)</p>
   <table class="rtbl compact"><thead><tr><th>arm</th><th class="num">hold-out &rho;</th><th class="num">balanced MC &rho;</th><th class="num">leave-one-ruler-out &rho;</th></tr></thead><tbody>
-    <tr class="rand"><td><span class="mdl">TF-IDF</span> (floor)</td><td class="num">.793</td><td class="num">.707</td><td class="num">.129</td></tr>
+    <tr class="rand"><td><span class="mdl">TF-IDF</span></td><td class="num">.793</td><td class="num">.707</td><td class="num">.129</td></tr>
     <tr><td><span class="mdl">Llama-2-70B</span></td><td class="num">.596</td><td class="num">.331</td><td class="num">.024</td></tr>
     <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.591</td><td class="num">.433</td><td class="num">&minus;.067</td></tr>
     <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.533</td><td class="num">.396</td><td class="num">.065</td></tr>
@@ -354,7 +361,7 @@ TABLE_ROWS = [
     ("qwen3_1b7", "Qwen3-1.7B", False), ("umt5_base", "uMT5-base", False),
     ("thalesian_cunei400m", "cuneiform-400M", False),
     ("thalesian_akk300m", "AKK-300M", False),
-    ("tfidf", "TF-IDF (floor)", True),
+    ("tfidf", "TF-IDF", True),
     ("llama2_70b_random", "Llama-2-70B random*", True),
     ("llama2_13b_random", "Llama-2-13B random*", True),
     ("llama2_7b_random", "Llama-2-7B random*", True),
@@ -414,6 +421,127 @@ def cellA_table():
                        for v in [".911", ".864", ".359", ".835", ".885", ".746"])
              + '</tr>')
     return head + paper + "".join(body) + "</tbody></table>"
+
+
+
+AKK = os.path.join(WM, "akkadian", "results")
+ROWS_B = [
+    ("llama2_70b", "Llama-2-70B", False), ("llama2_13b", "Llama-2-13B", False),
+    ("llama2_7b", "Llama-2-7B", False), ("gpt_oss_120b", "gpt-oss-120B", False),
+    ("qwen3_32b", "Qwen3-32B", False), ("qwen3_8b", "Qwen3-8B", False),
+    ("qwen3_1b7", "Qwen3-1.7B", False), ("umt5_base", "uMT5-base", False),
+    ("thalesian_cunei400m", "cuneiform-400M", False),
+    ("thalesian_akk300m", "AKK-300M", False),
+    ("tfidf", "TF-IDF", True),
+    ("llama2_70b_random", "Llama-2-70B random", True),
+    ("llama2_13b_random", "Llama-2-13B random", True),
+    ("llama2_7b_random", "Llama-2-7B random", True),
+    ("random", "random Qwen3-8B", True),
+]
+
+
+def _rp(ridge, pls):
+    """One cell: ridge value, then the PLS value in grey."""
+    return f'<td class="num">{_fmt(ridge)}<i>|{_fmt(pls)}</i></td>'
+
+
+def entity_table():
+    """Cell B, entity level: rulers -> year and find-spots -> lat/lon, two poolings."""
+    import csv
+    rows = {}
+    with open(os.path.join(AKK, "summary_entity_best.csv")) as f:
+        for r in csv.DictReader(f):
+            rows[(r["arm"], r["entity_type"], r["site"], r["rows"])] = r
+
+    def cell(arm, et, site):
+        site = "text" if arm == "tfidf" else site
+        r = rows.get((arm, et, site, "bare"))
+        if not r:
+            return None, None
+        return float(r["ridge_mc_rho"]), float(r["pls5_mc_rho"])
+
+    head = ('<table class="rtbl compact wide"><thead>'
+            '<tr><th rowspan="2">model</th>'
+            '<th colspan="3" class="num">YEAR &nbsp;(34 rulers &rarr; year)</th>'
+            '<th colspan="2" class="num">PLACE &nbsp;(25 find-spots &rarr; lat/lon)</th></tr>'
+            '<tr><th class="num">name, last token</th><th class="num">name, average</th>'
+            '<th class="num">difference</th>'
+            '<th class="num">name, last token</th><th class="num">name, average</th>'
+            '</tr></thead><tbody>')
+    body = []
+    for arm, label, ctrl in ROWS_B:
+        yl, ylp = cell(arm, "assyrian_ruler", "ent_last")
+        ym, ymp = cell(arm, "assyrian_ruler", "mean")
+        gl, glp = cell(arm, "mesopotamian_place", "ent_last")
+        gm, gmp = cell(arm, "mesopotamian_place", "mean")
+        diff = (yl - ym) if (yl is not None and ym is not None) else None
+        dtxt = f'{"+" if diff and diff > 0 else ""}{_fmt(diff)}' if diff is not None else "&ndash;"
+        tr = '<tr class="rand">' if ctrl else '<tr>'
+        body.append(tr + f'<td><span class="mdl">{label}</span></td>'
+                    + _rp(yl, ylp) + _rp(ym, ymp)
+                    + f'<td class="num">{dtxt}</td>'
+                    + _rp(gl, glp) + _rp(gm, gmp) + '</tr>')
+    return head + "".join(body) + "</tbody></table>"
+
+
+def frag_table(variant, target):
+    """Cell B/C, fragment level: both poolings x {Spearman, R2}, balanced draws."""
+    import json as _json
+
+    def read(arm, site):
+        if target == "year":
+            p = os.path.join(AKK, "probes", arm, f"{variant}.r8.year.{site}.ridge.json")
+            key = "mc"
+        else:
+            p = os.path.join(AKK, "probes_geosite", arm,
+                             f"{variant}.{site}.geo_site.json")
+            key = "mc_site"
+        if not os.path.exists(p):
+            return None, None
+        m = _json.load(open(p))[key]
+        return m.get("spearman_mean"), m.get("r2_mean")
+
+    def tfidf_year():
+        import csv
+        with open(os.path.join(AKK, "summary_ALL_modes_full.csv")) as f:
+            for r in csv.DictReader(f):
+                if (r["arm"] == "tfidf" and r["variant"] == variant
+                        and r["rulers"] == "r8" and r["target"] == "year"):
+                    return float(r["mc_rho"]), float(r["mc_r2"])
+        return None, None
+
+    head = ('<table class="rtbl compact"><thead>'
+            '<tr><th rowspan="2">model</th>'
+            '<th colspan="2" class="num">Spearman &rho;</th>'
+            '<th colspan="2" class="num">R&sup2;</th>'
+            '<th rowspan="2" class="num">&rho; difference</th></tr>'
+            '<tr><th class="num">text, last token</th><th class="num">text, average</th>'
+            '<th class="num">text, last token</th><th class="num">text, average</th>'
+            '</tr></thead><tbody>')
+    body = []
+    for arm, label, ctrl in ROWS_B:
+        if arm == "tfidf":
+            if target == "year":
+                rho, r2 = tfidf_year()
+            else:
+                rho, r2 = read("tfidf", "text")
+            tr = '<tr class="rand">'
+            body.append(
+                tr + f'<td><span class="mdl">{label}</span></td>'
+                f'<td class="num" colspan="2">{_fmt(rho)}</td>'
+                f'<td class="num" colspan="2">{_fmt(r2)}</td>'
+                '<td class="num">&ndash;</td></tr>')
+            continue
+        rl, r2l = read(arm, "last")
+        rm, r2m = read(arm, "mean")
+        diff = (rm - rl) if (rl is not None and rm is not None) else None
+        dtxt = f'{"+" if diff and diff > 0 else ""}{_fmt(diff)}' if diff is not None else "&ndash;"
+        tr = '<tr class="rand">' if ctrl else '<tr>'
+        body.append(tr + f'<td><span class="mdl">{label}</span></td>'
+                    f'<td class="num">{_fmt(rl)}</td><td class="num">{_fmt(rm)}</td>'
+                    f'<td class="num">{_fmt(r2l)}</td><td class="num">{_fmt(r2m)}</td>'
+                    f'<td class="num">{dtxt}</td></tr>')
+    return head + "".join(body) + "</tbody></table>"
 
 
 CELL_ORDER = ["A", "B", "C"]
@@ -499,6 +627,10 @@ def build(html):
             sec = sec.replace("{{FIG:%s}}" % fig, figure_tag(fig, alt=title))
         if "{{TABLE:cellA}}" in sec:
             sec = sec.replace("{{TABLE:cellA}}", cellA_table())
+        if "{{TABLE:entity}}" in sec:
+            sec = sec.replace("{{TABLE:entity}}", entity_table())
+        for m in set(re.findall(r'\{\{TABLE:frag:([a-z0-9_]+):([a-z]+)\}\}', sec)):
+            sec = sec.replace("{{TABLE:frag:%s:%s}}" % m, frag_table(*m))
         for tok in set(re.findall(r'\{\{IMG:(\d+)\}\}', sec)):
             sec = sec.replace("{{IMG:%s}}" % tok, image_of(old, int(tok), alt=title))
         if kind == "old" and ref in EYEBROW_PATCHES:
