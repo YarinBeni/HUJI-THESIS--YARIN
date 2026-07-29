@@ -283,29 +283,11 @@ NEW_SLIDES = {
       <div class="text-points">
         <div class="tp"><div class="tp-h">Why an Akkadian-only arm is needed</div><div class="tp-b">Every model so far was trained by someone else on text that is overwhelmingly English. If none of them finds a timeline in Akkadian, we cannot tell whether the language cannot support one or whether they simply never saw enough of it. A model whose entire experience <em>is</em> Akkadian separates those two explanations.</div></div>
         <div class="tp"><div class="tp-h">The objective, and where it comes from</div><div class="tp-b"><strong>Masked language modelling</strong> rather than next-token prediction, following <a href="https://arxiv.org/abs/2109.04513"><em>Filling the Gaps in Ancient Akkadian Texts</em></a> (Stanovsky et al., EMNLP 2021), which showed that restoring a broken tablet <em>is</em> the masked-token task and that bidirectional context matters when the neighbouring signs are damaged too. The same instinct runs through <a href="https://www.nature.com/articles/s41586-022-04448-z">Ithaca</a> (Assael et al., Nature 2022) and <a href="https://www.nature.com/articles/s41586-025-09292-5">Aeneas</a> (Assael et al., Nature 2025) for Greek and Latin.</div></div>
-        <div class="tp"><div class="tp-h">Architecture</div><div class="tp-b">A <strong>16-layer pre-norm transformer encoder</strong>, 37M parameters: hidden size d = 384, feed-forward 1536, 8 attention heads (d<sub>head</sub> = 48), rotary position encoding, RMSNorm before each sub-layer, and a masked-language-modelling head over the sign vocabulary (15&#37; masking, 80/10/10 corruption). Trained 10 epochs, batch 8; validation loss falls from 4.55 to 3.24. The full block structure is on the right; the probe reads the frozen hidden states of every layer, exactly as for every other model in the deck.</div></div>
+        <div class="tp"><div class="tp-h">Architecture</div><div class="tp-b">A <strong>16-layer pre-norm transformer encoder</strong>, 37M parameters: hidden size d = 384, feed-forward 1536, 8 attention heads (d<sub>head</sub> = 48), rotary position encoding, RMSNorm before each sub-layer, and a masked-language-modelling head over the sign vocabulary (15&#37; masking, 80/10/10 corruption). Trained 10 epochs, batch 8; validation loss falls from 4.55 to 3.24. The figure on the right shows the full flow. Two deliberate differences from the Ithaca design it follows: the input is a single <strong>sign-level</strong> row (no parallel word row), and there is a <strong>single restoration head</strong>; the region and date heads are replaced by linear probes reading the frozen per-layer activations, exactly as for every other model in the deck.</div></div>
         <div class="tp"><div class="tp-h">Data</div><div class="tp-b"><strong>2.45M words / 4.9M signs</strong> from ORACC, eBL and Archibab, split by fragment so no tablet crosses train and test, tokenised at the <strong>sign level</strong> following the <a href="https://aclanthology.org/2025.alp-1.33/">EvaCun 2025 shared task</a> on lemmatisation and token prediction for Akkadian and Sumerian. It appears as <strong>MLM</strong> below: small, Akkadian all the way down, and the only arm that is <em>not</em> a translation model.</div></div>
       </div>
     </div>
-    <div class="arch">
-      <div class="arch-cap">Model architecture (37M parameters)</div>
-      <div class="arch-row"><span class="ab in">input: transliterated signs<br><span class="ab-sub">sign-level tokens &middot; 15&#37; masked (80/10/10)</span></span></div>
-      <div class="arch-ar">&darr;</div>
-      <div class="arch-row"><span class="ab in">token embedding, d = 384<br><span class="ab-sub">rotary position encoding (RoPE)</span></span></div>
-      <div class="arch-ar">&darr;</div>
-      <div class="arch-row"><span class="ab torso">transformer encoder block &times; 16<div class="arch-inner">
-        <span class="ab sub-b">RMSNorm (pre-norm)</span>
-        <span class="ab sub-b">multi-head self-attention &middot; 8 heads &middot; d<sub>head</sub> = 48</span>
-        <span class="ab sub-b">residual add</span>
-        <span class="ab sub-b">RMSNorm (pre-norm)</span>
-        <span class="ab sub-b">feed-forward 384 &rarr; 1536 &rarr; 384</span>
-        <span class="ab sub-b">residual add</span>
-      </div></span></div>
-      <div class="arch-ar">&darr;</div>
-      <div class="arch-row"><span class="ab head">MLM head: linear &rarr; sign vocabulary<br><span class="ab-sub">cross-entropy on the masked signs</span></span></div>
-      <div class="arch-ar">&darr;</div>
-      <div class="arch-row"><span class="ab probe">frozen per-layer hidden states &rarr; linear probe (year, place)</span></div>
-    </div>
+    <div class="fig-wrap" style="min-height:0">{{FIG:fig_mlm_arch.png}}</div>
   </div>
 </section>""",
 
@@ -574,7 +556,7 @@ EYEBROW_PATCHES = {
 
 EXTRA_CSS = """
 /* --- added by build_story_deck.py --- */
-.two-col{display:grid;grid-template-columns:1.55fr 1fr;gap:20px;flex:1;min-height:0;overflow:hidden;}
+.two-col{display:grid;grid-template-columns:1fr 1.2fr;gap:18px;flex:1;min-height:0;overflow:hidden;}
 .two-col .text-points{gap:11px;}
 .arch{border-left:1px solid var(--border);padding-left:18px;font-size:10.5px;
       display:flex;flex-direction:column;justify-content:center;}
