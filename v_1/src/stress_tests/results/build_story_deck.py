@@ -43,6 +43,7 @@ SPINE = [
     ("new", "b_entity", "Obscure entities in English: the date survives, the place does not"),
     ("new", "b_frag_year", "Whole fragments in English: a bag of character n-grams dates them best"),
     ("new", "b_frag_geo", "Whole fragments in English: place is no better than an untrained network"),
+    ("new", "explorer_eng", "Inside the best English-side embedding: the year gradient and its confounds"),
     ("new", "mlm_model", "Our own Akkadian model: a small masked language model trained on the corpus"),
     ("new", "c_kingtoken", "Raw Akkadian: the king's name is readable, the chronology is not"),
     ("new", "ruler_not_chrono", "The name token identifies the king, and an untrained network does it too"),
@@ -50,6 +51,7 @@ SPINE = [
     ("new", "c_frag_geo", "Raw Akkadian, whole fragments: the find-spot survives where the date does not"),
     ("new", "c_layers", "Raw Akkadian, layer by layer: the translation encoder is the only arm that builds depth"),
     ("new", "c_plsk", "Raw Akkadian: the signal saturates far earlier than it does in English"),
+    ("new", "explorer_akk", "Inside the winner's Akkadian embedding: the same gradient, from the raw language"),
     ("new", "t9_knowledge", "The models do know these kings and their dates when simply asked"),
     ("new", "ask_directly", "Asking the model directly, and prompting it hard, changes nothing"),
     ("new", "ntp_finetune", "Training the LLMs further on our own Akkadian moves nothing"),
@@ -60,8 +62,6 @@ SPINE = [
     ("new", "winner", "What does work: the 400M translation encoder beats every LLM"),
     ("new", "translation_line", "Why it works: translation finetuning, and multilingual translation most of all"),
     ("new", "tokenizer", "It is not the tokenizer: the winner has the worst one"),
-    ("new", "explorer_eng", "Inside the winner's embedding space: English"),
-    ("new", "explorer_akk", "Inside the winner's embedding space: Akkadian"),
     ("new", "contributions", "The boundary condition: where the linear world model ends"),
 ]
 
@@ -137,8 +137,8 @@ SLIDE_TRANSFORMS = {20: lambda s_: _sweep(_fix_p9(s_)), 21: lambda s_: _sweep(_f
 
 # which matrix cell each slide sits in (spine position -> cell); "" = show the map
 # with nothing active yet, as orientation.
-CELLMAP_AT = {4: "", 5: "A", 6: "A", 7: "A", 8: "B", 9: "B", 10: "B",
-              12: "C", 13: "C", 14: "C", 15: "C", 16: "C", 17: "C"}
+CELLMAP_AT = {4: "", 5: "A", 6: "A", 7: "A", 8: "B", 9: "B", 10: "B", 11: "B",
+              13: "C", 14: "C", 15: "C", 16: "C", 17: "C", 18: "C", 19: "C"}
 
 # --------------------------------------------------------- newly authored ------
 NEW_SLIDES = {
@@ -283,25 +283,28 @@ NEW_SLIDES = {
       <div class="text-points">
         <div class="tp"><div class="tp-h">Why an Akkadian-only arm is needed</div><div class="tp-b">Every model so far was trained by someone else on text that is overwhelmingly English. If none of them finds a timeline in Akkadian, we cannot tell whether the language cannot support one or whether they simply never saw enough of it. A model whose entire experience <em>is</em> Akkadian separates those two explanations.</div></div>
         <div class="tp"><div class="tp-h">The objective, and where it comes from</div><div class="tp-b"><strong>Masked language modelling</strong> rather than next-token prediction, following <a href="https://arxiv.org/abs/2109.04513"><em>Filling the Gaps in Ancient Akkadian Texts</em></a> (Stanovsky et al., EMNLP 2021), which showed that restoring a broken tablet <em>is</em> the masked-token task and that bidirectional context matters when the neighbouring signs are damaged too. The same instinct runs through <a href="https://www.nature.com/articles/s41586-022-04448-z">Ithaca</a> (Assael et al., Nature 2022) and <a href="https://www.nature.com/articles/s41586-025-09292-5">Aeneas</a> (Assael et al., Nature 2025) for Greek and Latin.</div></div>
-        <div class="tp"><div class="tp-h">Architecture: a simplified Ithaca</div><div class="tp-b">Ithaca reads a damaged inscription at <strong>character and word level</strong>, passes it through a shared transformer torso, and hangs <strong>three task heads</strong> off it: restoration, region, and date. We keep the torso and the restoration head and drop the other two, because our date and place come from a probe on the frozen representation rather than from a trained head. Concretely: <strong>37M parameters, 16 layers, d = 384, feed-forward 1536, 8 heads, RoPE positions, pre-norm RMSNorm</strong>, masked at 15&#37; with the usual 80/10/10 corruption.</div></div>
+        <div class="tp"><div class="tp-h">Architecture</div><div class="tp-b">A <strong>16-layer pre-norm transformer encoder</strong>, 37M parameters: hidden size d = 384, feed-forward 1536, 8 attention heads (d<sub>head</sub> = 48), rotary position encoding, RMSNorm before each sub-layer, and a masked-language-modelling head over the sign vocabulary (15&#37; masking, 80/10/10 corruption). Trained 10 epochs, batch 8; validation loss falls from 4.55 to 3.24. The full block structure is on the right; the probe reads the frozen hidden states of every layer, exactly as for every other model in the deck.</div></div>
         <div class="tp"><div class="tp-h">Data</div><div class="tp-b"><strong>2.45M words / 4.9M signs</strong> from ORACC, eBL and Archibab, split by fragment so no tablet crosses train and test, tokenised at the <strong>sign level</strong> following the <a href="https://aclanthology.org/2025.alp-1.33/">EvaCun 2025 shared task</a> on lemmatisation and token prediction for Akkadian and Sumerian. It appears as <strong>MLM</strong> below: small, Akkadian all the way down, and the only arm that is <em>not</em> a translation model.</div></div>
       </div>
     </div>
     <div class="arch">
-      <div class="arch-cap">Ithaca (Nature 2022)</div>
-      <div class="arch-row"><span class="ab in">characters + words</span></div>
+      <div class="arch-cap">Model architecture (37M parameters)</div>
+      <div class="arch-row"><span class="ab in">input: transliterated signs<br><span class="ab-sub">sign-level tokens &middot; 15&#37; masked (80/10/10)</span></span></div>
       <div class="arch-ar">&darr;</div>
-      <div class="arch-row"><span class="ab torso">transformer torso</span></div>
+      <div class="arch-row"><span class="ab in">token embedding, d = 384<br><span class="ab-sub">rotary position encoding (RoPE)</span></span></div>
       <div class="arch-ar">&darr;</div>
-      <div class="arch-row"><span class="ab head">restoration</span><span class="ab head off">region</span><span class="ab head off">date</span></div>
-      <div class="arch-cap" style="margin-top:14px">ours (37M)</div>
-      <div class="arch-row"><span class="ab in">signs</span></div>
+      <div class="arch-row"><span class="ab torso">transformer encoder block &times; 16<div class="arch-inner">
+        <span class="ab sub-b">RMSNorm (pre-norm)</span>
+        <span class="ab sub-b">multi-head self-attention &middot; 8 heads &middot; d<sub>head</sub> = 48</span>
+        <span class="ab sub-b">residual add</span>
+        <span class="ab sub-b">RMSNorm (pre-norm)</span>
+        <span class="ab sub-b">feed-forward 384 &rarr; 1536 &rarr; 384</span>
+        <span class="ab sub-b">residual add</span>
+      </div></span></div>
       <div class="arch-ar">&darr;</div>
-      <div class="arch-row"><span class="ab torso">16 &times; (attention &rarr; add &amp; norm &rarr; feed-forward &rarr; add &amp; norm)<br><span class="ab-sub">d = 384 &middot; ff 1536 &middot; 8 heads &middot; RoPE</span></span></div>
+      <div class="arch-row"><span class="ab head">MLM head: linear &rarr; sign vocabulary<br><span class="ab-sub">cross-entropy on the masked signs</span></span></div>
       <div class="arch-ar">&darr;</div>
-      <div class="arch-row"><span class="ab head">masked sign</span></div>
-      <div class="arch-ar">&darr;</div>
-      <div class="arch-row"><span class="ab probe">frozen activations &rarr; our linear probe for year and place</span></div>
+      <div class="arch-row"><span class="ab probe">frozen per-layer hidden states &rarr; linear probe (year, place)</span></div>
     </div>
   </div>
 </section>""",
@@ -513,7 +516,7 @@ NEW_SLIDES = {
 </section>""",
 
 "explorer_eng": """<section class="slide slide-figure fig-major">
-  <div class="eyebrow">Looking inside &middot; the embedding space</div>
+  <div class="eyebrow">B &middot; looking inside the embedding space</div>
   <h2 class="sh">Inside the best English-side embedding: the year gradient is visible, and so are its confounds</h2>
   <div class="cfg tight">
     <div class="cfg-k">Setup</div><div class="cfg-v">the 1,202 fragments of the corpus, embedded by the best English-side model (<strong>Qwen3-32B</strong> on the English translation, year &rho; .437, rank 1 of 9) and projected to 2-D with <strong>supervised PLS</strong>; we also built t-SNE, UMAP and PCA views of every arm. The same map is drawn six times, coloured by our metadata: year, ruler, period, sub-genre, find-spot, and text length.</div>
@@ -523,7 +526,7 @@ NEW_SLIDES = {
 </section>""",
 
 "explorer_akk": """<section class="slide slide-figure fig-major">
-  <div class="eyebrow">Looking inside &middot; the embedding space</div>
+  <div class="eyebrow">C &middot; looking inside the embedding space</div>
   <h2 class="sh">Inside the winner's Akkadian embedding: the same gradient, from the raw language</h2>
   <div class="cfg tight">
     <div class="cfg-k">Setup</div><div class="cfg-v">the same six-way view for the best Akkadian-side model: <strong>cuneiform-400M</strong> on the cleaned, name-stripped Akkadian (year &rho; .391, rank 1 of 10), supervised PLS projection at its best layer.</div>
@@ -542,7 +545,7 @@ NEW_SLIDES = {
     <div class="tp"><div class="tp-h">3. The models genuinely know the facts, but the knowledge is name-gated, not document-structured</div><div class="tp-b" style="font-size:13.5px">Asked in English they state reign windows exactly, and dating from translations beats every activation probe; the access route runs through restored surface forms, not through temporal structure built from the document.</div></div>
     <div class="tp"><div class="tp-h">4. What helps is how the model was trained, not how big it is or how you use it</div><div class="tp-b" style="font-size:13.5px">Scale, prompting, direct questioning and continued pretraining on all the published Akkadian all leave trained models at their controls. A 400M model with <strong>multilingual translation supervision</strong> is the one exception, and the ablation triangle (Akkadian-only translation fails, untranslated multilingual base fails) isolates the combination as the cause; consistent with <a href="https://arxiv.org/pdf/2205.04086">Malkin et al. (NAACL 2022)</a> on configuration over multilinguality in cross-lingual transfer.</div></div>
   </div>
-  <div class="takeaway tight" style="margin-top:8px"><span class="tk-label">Bottom line</span>A probe score is not a world model. Without an untrained twin and an n-gram floor beside it, the celebrated geometry and its surface-statistics imitation are indistinguishable, and in the regime where archaeology actually needs the map, everything except a translation-trained encoder fails the comparison.</div>
+
 </section>""",
 }
 
@@ -588,6 +591,9 @@ EXTRA_CSS = """
 .ab.head.off{opacity:.35;text-decoration:line-through;font-weight:400;}
 .ab.probe{background:#fdfaf0;border-color:#e3d7a8;color:#7c5e00;font-weight:700;flex:1;}
 .ab-sub{font-weight:400;font-size:9px;color:var(--ink-light);}
+.arch-inner{display:flex;flex-direction:column;gap:3px;margin-top:6px;}
+.ab.sub-b{background:#fff;border-color:var(--border);color:var(--ink-mid);
+          font-weight:500;font-size:9.5px;padding:3px 6px;}
 .rtbl.compact.wide{font-size:9.5px;}
 .rtbl.compact.wide th,.rtbl.compact.wide td{padding:1.5px 3px;}
 .rtbl.compact.wide td i{font-style:normal;color:var(--ink-light);}
