@@ -281,10 +281,10 @@ NEW_SLIDES = {
   <div class="two-col">
     <div>
       <div class="text-points">
-        <div class="tp"><div class="tp-h">Why an Akkadian-only arm is needed</div><div class="tp-b">Every model so far was trained by someone else on text that is overwhelmingly English. If none of them finds a timeline in Akkadian, we cannot tell whether the language cannot support one or whether they simply never saw enough of it. A model whose entire experience <em>is</em> Akkadian separates those two explanations.</div></div>
-        <div class="tp"><div class="tp-h">The objective, and where it comes from</div><div class="tp-b"><strong>Masked language modelling</strong> rather than next-token prediction, following <a href="https://arxiv.org/abs/2109.04513"><em>Filling the Gaps in Ancient Akkadian Texts</em></a> (Stanovsky et al., EMNLP 2021), which showed that restoring a broken tablet <em>is</em> the masked-token task and that bidirectional context matters when the neighbouring signs are damaged too. The same instinct runs through <a href="https://www.nature.com/articles/s41586-022-04448-z">Ithaca</a> (Assael et al., Nature 2022) and <a href="https://www.nature.com/articles/s41586-025-09292-5">Aeneas</a> (Assael et al., Nature 2025) for Greek and Latin.</div></div>
-        <div class="tp"><div class="tp-h">Architecture</div><div class="tp-b">A <strong>16-layer pre-norm transformer encoder</strong>, 37M parameters: hidden size d = 384, feed-forward 1536, 8 attention heads (d<sub>head</sub> = 48), rotary position encoding, RMSNorm before each sub-layer, and a masked-language-modelling head over the sign vocabulary (15&#37; masking, 80/10/10 corruption). Trained 10 epochs, batch 8; validation loss falls from 4.55 to 3.24. The figure on the right shows the full flow. Two deliberate differences from the Ithaca design it follows: the input is a single <strong>sign-level</strong> row (no parallel word row), and there is a <strong>single restoration head</strong>; the region and date heads are replaced by linear probes reading the frozen per-layer activations, exactly as for every other model in the deck.</div></div>
-        <div class="tp"><div class="tp-h">Data</div><div class="tp-b"><strong>2.45M words / 4.9M signs</strong> from ORACC, eBL and Archibab, split by fragment so no tablet crosses train and test, tokenised at the <strong>sign level</strong> following the <a href="https://aclanthology.org/2025.alp-1.33/">EvaCun 2025 shared task</a> on lemmatisation and token prediction for Akkadian and Sumerian. It appears as <strong>MLM</strong> below: small, Akkadian all the way down, and the only arm that is <em>not</em> a translation model.</div></div>
+        <div class="tp"><div class="tp-h">Why an Akkadian-only arm is needed</div><div class="tp-b">Every model so far was trained on text that is overwhelmingly English. A model whose entire experience <em>is</em> Akkadian separates &ldquo;the language cannot support a timeline&rdquo; from &ldquo;the models never saw enough of it&rdquo;.</div></div>
+        <div class="tp"><div class="tp-h">The objective, and where it comes from</div><div class="tp-b"><strong>Masked language modelling</strong> rather than next-token prediction, following <a href="https://arxiv.org/abs/2109.04513"><em>Filling the Gaps in Ancient Akkadian Texts</em></a> (Stanovsky et al., EMNLP 2021), which showed that restoring a broken tablet <em>is</em> the masked-token task and that bidirectional context matters when neighbouring signs are damaged. The same instinct runs through <a href="https://www.nature.com/articles/s41586-022-04448-z">Ithaca</a> (Assael et al., Nature 2022) and <a href="https://www.nature.com/articles/s41586-025-09292-5">Aeneas</a> (Assael et al., Nature 2025) for Greek and Latin.</div></div>
+        <div class="tp"><div class="tp-h">Architecture</div><div class="tp-b">A <strong>16-layer pre-norm transformer encoder</strong>, 37M parameters: d = 384, feed-forward 1536, 8 heads, RoPE positions, RMSNorm, MLM head over the sign vocabulary (15&#37; masking, 80/10/10). Trained 10 epochs; validation loss 4.55 &rarr; 3.24. The figure shows the full flow, with two deliberate differences from the Ithaca design it follows: a single <strong>sign-level</strong> input row (no word row), and a <strong>single restoration head</strong>, the region and date heads being replaced by linear probes on the frozen per-layer activations.</div></div>
+        <div class="tp"><div class="tp-h">Data</div><div class="tp-b"><strong>2.45M words / 4.9M signs</strong> from ORACC, eBL and Archibab, split by fragment, tokenised at the <strong>sign level</strong> following the <a href="https://aclanthology.org/2025.alp-1.33/">EvaCun 2025 shared task</a>. It appears as <strong>MLM</strong> below: Akkadian all the way down, and the only arm that is <em>not</em> a translation model.</div></div>
       </div>
     </div>
     <div class="fig-wrap" style="min-height:0">{{FIG:fig_mlm_arch.png}}</div>
@@ -556,8 +556,12 @@ EYEBROW_PATCHES = {
 
 EXTRA_CSS = """
 /* --- added by build_story_deck.py --- */
-.two-col{display:grid;grid-template-columns:1fr 1.2fr;gap:18px;flex:1;min-height:0;overflow:hidden;}
-.two-col .text-points{gap:11px;}
+.two-col{display:grid;grid-template-columns:1fr 1.15fr;gap:16px;flex:1;min-height:0;overflow:hidden;}
+.two-col .text-points{gap:8px;overflow:auto;padding-right:4px;}
+.two-col .tp-h{font-size:13.5px;margin-bottom:2px;}
+.two-col .tp-b{font-size:12.5px;line-height:1.42;}
+.two-col .fig-wrap{min-height:0;height:100%;margin:0;}
+.two-col .fig-wrap img{max-width:100%;max-height:100%;object-fit:contain;border:none;}
 .arch{border-left:1px solid var(--border);padding-left:18px;font-size:10.5px;
       display:flex;flex-direction:column;justify-content:center;}
 .arch-cap{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
