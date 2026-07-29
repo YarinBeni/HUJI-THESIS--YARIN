@@ -28,7 +28,7 @@ AKK = os.path.join(HERE, "akkadian", "results", "layers_pls")
 FIGS = os.path.join(HERE, "results", "figs")
 
 ARMS = ["umt5_base", "thalesian_akk300m", "thalesian_cunei400m", "random"]
-ROWS = [("akk_maximal", "cleaned Akkadian"), ("eng_tier0", "English translation")]
+ROWS = [("akk_maximal", "cleaned Akkadian")]
 COLS = [("year", "last", "test_spearman", "YEAR · last token · $\\rho$"),
         ("year", "mean", "test_spearman", "YEAR · average · $\\rho$"),
         ("geo", "last", "test_r2", "PLACE · last token · R$^2$"),
@@ -36,18 +36,18 @@ COLS = [("year", "last", "test_spearman", "YEAR · last token · $\\rho$"),
 
 plt.rcParams.update({
     "font.family": "sans-serif", "font.sans-serif": ["DejaVu Sans"],
-    "font.size": 14, "axes.labelsize": 15, "axes.titlesize": 16,
-    "xtick.labelsize": 13, "ytick.labelsize": 13, "legend.fontsize": 14,
+    "font.size": 16, "axes.labelsize": 17, "axes.titlesize": 18.5,
+    "xtick.labelsize": 15, "ytick.labelsize": 15, "legend.fontsize": 16,
     "axes.spines.top": False, "axes.spines.right": False,
     "figure.dpi": 130, "savefig.dpi": 130, "savefig.bbox": "tight",
 })
 
 
 def main():
-    fig, axes = plt.subplots(2, 4, figsize=(22, 9.6), layout="constrained")
+    fig, axes = plt.subplots(1, 4, figsize=(24, 6.8), layout="constrained")
     for r, (variant, vlabel) in enumerate(ROWS):
         for c, (target, site, metric, title) in enumerate(COLS):
-            ax = axes[r, c]
+            ax = axes[c]
             for arm in ARMS:
                 p = os.path.join(AKK, arm, f"{variant}.{target}.{site}.json")
                 if not os.path.exists(p):
@@ -68,7 +68,7 @@ def main():
                 ax.plot(xs[b], ys[b], marker="*", ms=23 if not ctrl else 16,
                         color=COLORS[arm], mec="#111", mew=1.3,
                         zorder=7 if not ctrl else 5, clip_on=False)
-            ax.set_title(f"{vlabel}\n{title}", pad=8, fontweight="bold")
+            ax.set_title(title, pad=9, fontweight="bold")
             ax.set_xlabel("depth (layer / total layers)")
             ax.grid(alpha=0.22, lw=0.7)
             ax.axhline(0, color="#999", lw=0.8, zorder=0)
@@ -78,13 +78,13 @@ def main():
             else:
                 ax.set_ylabel("test Spearman $\\rho$")
                 ax.set_ylim(-0.05, 0.8)
-    handles, labels = axes[0, 0].get_legend_handles_labels()
+    handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="outside lower center", ncol=4,
                frameon=False, handlelength=2.8)
-    fig.suptitle("The translation line, isolated: no finetune (uMT5) vs Akkadian-only "
-                 "translation (AKK-300M) vs multilingual cuneiform translation "
-                 "(cuneiform-400M), against an untrained control",
-                 fontsize=17, fontweight="bold")
+    fig.suptitle("The translation line on cleaned Akkadian: no finetune (uMT5) vs "
+                 "Akkadian-only translation (AKK-300M) vs multilingual cuneiform "
+                 "translation (cuneiform-400M), against an untrained control",
+                 fontsize=19, fontweight="bold")
     out = os.path.join(FIGS, "fig_encoders_translation.png")
     fig.savefig(out, facecolor="white")
     print(f"[write] {out}")
