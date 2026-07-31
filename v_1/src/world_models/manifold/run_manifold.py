@@ -49,6 +49,30 @@ PCA_K = 8
 MAX_N = 4000            # cap for the O(n^2) distance work
 
 
+# columns used as the six colourings of the embedding figures (Fig 7.1 style)
+FACETS = {
+    "world_place":        ["latitude", "longitude", "country", "entity_subtype",
+                           "page_views", "population"],
+    "us_place":           ["latitude", "longitude", "state_name", "entity_subtype",
+                           "page_views", "population"],
+    "nyc_place":          ["latitude", "longitude", "borough_name", "facility_t_name"],
+    "historical_figure":  ["death_year", "death_century", "country", "occupation",
+                           "gender", "age"],
+    "art":                ["release_date", "decade", "entity_type", "creator",
+                           "page_views", "length"],
+    "headline":           ["pub_date", "year", "section", "news_desk", "word_count"],
+    "assyrian_ruler":     ["death_year", "name", "template", "n_texts"],
+    "mesopotamian_place": ["longitude", "latitude", "region", "name", "template",
+                           "n_texts"],
+}
+
+
+def _facet_frame(df, et):
+    import pandas as pd
+    cols = [c for c in FACETS.get(et, []) if c in df.columns]
+    return df[cols].copy() if cols else None
+
+
 def _layer_files(act_dir, site):
     return {int(re.search(r"layer(\d+)\.npz$", p).group(1)): p
             for p in glob.glob(os.path.join(act_dir, f"{site}.layer*.npz"))}
@@ -70,7 +94,19 @@ def _umap(X, k=3):
         return None
 
 
-def analyse(tag, X_by_layer, best_layer, y, target, meta, args):
+def _pls2(X, y, k=2):
+    """Supervised 2-D PLS coordinates — the projection used for the six-panel
+    embedding figures (separation is partly baked in; read against the random arms)."""
+    from sklearn.cross_decomposition import PLSRegression
+    Y = y.reshape(-1, 1) if y.ndim == 1 else y
+    try:
+        return PLSRegression(n_components=k).fit_transform(X, Y)[0]
+    except Exception as e:                                    # noqa: BLE001
+        print(f"    [pls skipped] {type(e).__name__}: {e}", flush=True)
+        return None
+
+
+def analyse(tag, X_by_layer, best_layer, y, target, meta, args, facets=None):
     """Run the 3 phases for one surface and dump one JSON."""
     if best_layer not in X_by_layer:
         best_layer = sorted(X_by_layer)[len(X_by_layer) // 2]
@@ -91,6 +127,7 @@ def analyse(tag, X_by_layer, best_layer, y, target, meta, args):
     # ---------------- phase 1: embeddings ----------------
     P, evr = _pca(Xn, PCA_K)
     U = _umap(Xn, 3) if args.umap else None
+    W = _pls2(Xn, yb, 2)                     # supervised 2-D, for the 6-panel figures
 
     # ---------------- phase 2: isometry ------------------
     if is_geo:
@@ -135,7 +172,13 @@ def analyse(tag, X_by_layer, best_layer, y, target, meta, args):
                         pca=P.astype(np.float32),
                         umap=(np.array(U, dtype=np.float32) if U is not None
                               else np.zeros((0, 3), dtype=np.float32)),
+                        pls=(np.asarray(W, dtype=np.float32) if W is not None
+                             else np.zeros((0, 2), dtype=np.float32)),
                         y=yb.astype(np.float32))
+    if facets is not None:
+        f2 = facets.iloc[idx][keep] if hasattr(facets, "iloc") else None
+        if f2 is not None:
+            f2.to_csv(os.path.join(OUT, f"{tag}.facets.csv.gz"), index=False)
     b = iso.get("haversine" if is_geo else "abs", {})
     print(f"  [{tag}] L{best_layer} n={len(yb)} "
           f"xi={b.get('xi_cos', float('nan')):.3f} rho={b.get('rho_geodesic', float('nan')):.3f}",
@@ -207,23 +250,63 @@ def run_eng(args):
             analyse(f"eng__{args.method}__{et}__{site}", Xs, bl, tgt[valid],
                     "geo" if is_place else "year",
                     {"method": args.method, "entity_type": et, "site": site,
-                     "level": "entity"}, args)
+                     "level": "entity"}, args,
+                    facets=_facet_frame(df.iloc[:n][valid].reset_index(drop=True), et))
+
+
+
+def run_ent(args):
+    """Cell B at ENTITY level: Assyrian rulers / Mesopotamian places written in English,
+    in the paper's short-entity format plus carrier sentences. Four pooling sites, of
+    which `ent_last` is the paper-faithful 'last token of the entity name'."""
+    import pandas as pd
+    sys.path.insert(0, os.path.join(_WM, "akkadian"))
+    import probe_entity as PE
+    for et, (feat, is_place) in PE.ENTITY_TYPES.items():
+        act_dir = os.path.join(PE.ACTS_DIR, args.method, et)
+        if not os.path.isdir(act_dir):
+            continue
+        df = PE.load_df(et)
+        y, _ = PE.targets(et, df)
+        for site in PE.SITES:
+            files = _layer_files(act_dir, site)
+            if not files:
+                continue
+            bl = None
+            bp = os.path.join(PE.RESULTS_DIR, "probes_entity", args.method,
+                              f"{et}.{site}.json")
+            if os.path.exists(bp):
+                bl = json.load(open(bp)).get("best_layer")
+            Xs = {}
+            for li, p in files.items():
+                X = np.load(p)["acts"].astype(np.float32)
+                X, bad = probing.sanitize(X)
+                if bad <= 0.01:
+                    Xs[li] = X
+            if not Xs:
+                continue
+            analyse(f"ent__{args.method}__{et}__{site}", Xs, bl, y,
+                    "geo" if is_place else "year",
+                    {"method": args.method, "entity_type": et, "site": site,
+                     "level": "entity_cellB"}, args, facets=_facet_frame(df, et))
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--method", required=True)
-    ap.add_argument("--surface", default="akk", choices=["akk", "eng", "both"])
+    ap.add_argument("--surface", default="akk", choices=["akk", "eng", "ent", "all"])
     ap.add_argument("--knn", type=int, default=KNN_K)
     ap.add_argument("--eps", type=float, default=0.1)
     ap.add_argument("--radius", type=float, default=0.0)
     ap.add_argument("--umap", action="store_true", default=True)
     ap.add_argument("--no-umap", dest="umap", action="store_false")
     args = ap.parse_args()
-    if args.surface in ("akk", "both"):
+    if args.surface in ("akk", "all"):
         run_akk(args)
-    if args.surface in ("eng", "both"):
+    if args.surface in ("eng", "all"):
         run_eng(args)
+    if args.surface in ("ent", "all"):
+        run_ent(args)
 
 
 if __name__ == "__main__":

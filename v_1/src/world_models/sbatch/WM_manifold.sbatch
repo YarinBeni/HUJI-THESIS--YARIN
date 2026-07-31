@@ -31,7 +31,7 @@ source v_1/src/stress_tests/sbatch/_common.sh
 sync_main
 mkdir -p v_1/src/world_models/logs v_1/src/world_models/manifold/results
 export OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 OPENBLAS_NUM_THREADS=8
-python -u v_1/src/world_models/manifold/run_manifold.py --method "$M" --surface both \
+python -u v_1/src/world_models/manifold/run_manifold.py --method "$M" --surface all \
     || { echo "FAILED manifold ${M}"; exit 1; }
 commit_push "WM_manifold: 3-phase manifold analysis ${M} (job ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID})" \
     v_1/src/world_models/manifold/results
