@@ -76,6 +76,7 @@ def probe_one(method, et, site, args):
                                                   n_draws=args.n_draws, k=k)
             except Exception as e:                              # noqa: BLE001
                 res[str(k)] = {"error": f"{type(e).__name__}: {e}"[:100]}
+        res = {k: v for k, v in res.items() if isinstance(v, dict)}
         ok = {k: v for k, v in res.items() if "mc_rho" in v}
         bk = max(ok, key=lambda k: ok[k]["mc_rho"], default=None)
         out["rows"][tag] = {"pls_by_k": res, "best_k": int(bk) if bk else None,
@@ -89,11 +90,54 @@ def probe_one(method, et, site, args):
     return out
 
 
+
+def run_tfidf(args):
+    """The n-gram floor on the same entity-level MC splits, swept over k."""
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    for et in PE.ENTITY_TYPES:
+        df = PE.load_df(et)
+        y, is_place = PE.targets(et, df)
+        ent_ix = df["entity_ix"].values
+        vec = TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 4),
+                              min_df=1, max_features=20000)
+        X = vec.fit_transform(df.entity_string.astype(str)).toarray().astype(np.float32)
+        out = {"method": "tfidf", "entity_type": et, "site": "text", "best_layer": 0,
+               "n_entities": int(df.entity_ix.nunique()), "ks": KS, "rows": {}}
+        for tag in ("bare", "all"):
+            m = (df["template"].values == "bare") if tag == "bare" else np.ones(len(df), bool)
+            if m.sum() < 10:
+                continue
+            res = {}
+            for k in KS:
+                if k >= min(m.sum(), X.shape[1]):
+                    continue
+                try:
+                    res[str(k)] = PE.mc_entity_scores(X[m], y[m], ent_ix[m], is_place,
+                                                      n_draws=args.n_draws, k=k)
+                except Exception as e:                          # noqa: BLE001
+                    res[str(k)] = {"error": f"{type(e).__name__}: {e}"[:100]}
+            res = {k: v for k, v in res.items() if isinstance(v, dict)}
+            ok = {k: v for k, v in res.items() if "mc_rho" in v}
+            bk = max(ok, key=lambda k: ok[k]["mc_rho"], default=None)
+            out["rows"][tag] = {"pls_by_k": res, "best_k": int(bk) if bk else None,
+                                "n": int(m.sum())}
+        d = os.path.join(OUT, "tfidf")
+        os.makedirs(d, exist_ok=True)
+        with open(os.path.join(d, f"{et}.text.json"), "w") as f:
+            json.dump(out, f, indent=2)
+        print(f"[tfidf/{et}] best_k(bare)="
+              f"{out['rows'].get('bare', {}).get('best_k')}", flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--method", required=True)
+    ap.add_argument("--method", default=None)
+    ap.add_argument("--tfidf", action="store_true")
     ap.add_argument("--n-draws", type=int, default=100)
     args = ap.parse_args()
+    if args.tfidf:
+        run_tfidf(args)
+        return
     for et in PE.ENTITY_TYPES:
         for site in PE.SITES:
             try:
