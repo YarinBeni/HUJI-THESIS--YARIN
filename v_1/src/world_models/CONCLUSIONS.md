@@ -104,14 +104,18 @@ Figures: `01_cross_levels.png`, `02–08` (layer sweeps and PLS curves per cell)
   fits the residual orthographic signal; the low-rank PLS projection does not. The deck
   reports PLS, so deck-facing figures use PLS — but the divergence is real and is
   documented rather than hidden (`figures/README_READOUTS.md`).
-- **PLS `k` was never fitted.** The grid `{1,2,3,5}` was inherited from
-  `../stress_tests/shared/mc_probe.py`, and 18 of 58 fragment cells came back pinned at k=5 — the grid,
-  not the data, was choosing k. `WAk_pls_ksweep` / `WBk_entity_ksweep` re-run with k
-  spanning 1–64. **Numbers in this document predate that sweep and may move.**
-- **`pls_best_k` is selected on the outer test folds**, which is what the deck does and
-  is optimistic — more so as the grid widens. `mc_group` now also reports
-  `pls_nested_spearman_mean`, with k chosen inside the training rulers. Quote the nested
-  value once WAk lands.
+- **The PLS `k` grid was truncated, but it did not matter.** The inherited
+  `{1,2,3,5}` left 18 of 58 cells pinned at k=5, so the grid rather than the data was
+  choosing k. Re-run over 1–64 (`WAk_pls_ksweep`): across 51 re-scored cells the
+  **median gain is +0.000 and the maximum is +0.024**; only 6 cells now pick k>5 and
+  exactly 1 reaches the k=64 edge. `kprofile.png` shows why — the curves are flat past
+  k≈5, not still climbing. The concern was legitimate and the answer is that the
+  ordering does not depend on it.
+- **The real bias was selecting k on the test folds.** `pls_best_k` is chosen on the
+  outer folds, which is what the deck does. Against the nested estimate (k chosen on an
+  inner split of the *training* rulers only), the test-selected number is optimistic by
+  a **median of 0.029** — an order of magnitude larger than the grid-width effect.
+  **Quote `pls_nested_spearman_mean`.**
 - **n is small where it matters.** 8 rulers, ~1,070 fragments, 204 ruler-name rows.
 
 ---
