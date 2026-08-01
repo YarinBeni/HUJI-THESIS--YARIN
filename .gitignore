@@ -46,3 +46,9 @@ v_1/src/viz/seal_eda_standalone.html
 
 # Portable panel viewer — 31MB base64 artifact, regenerate with make_panel_gallery.py
 v_1/src/stress_tests/e6_clusters/embedding_panels/standalone.html
+
+# chronorank autopsy per-draw intermediates: mc_balanced writes one JSON per Monte-Carlo
+# draw (…__drawNNN.json, ~200 per arm) and then reduces them into __summary.json, which
+# IS tracked. The per-draw files are scratch, but they were leaving the cluster checkout
+# permanently dirty and blocking `git pull` before sbatch jobs could start.
+v_1/src/chronorank/autopsy/results/probes/*__draw[0-9][0-9][0-9].json
