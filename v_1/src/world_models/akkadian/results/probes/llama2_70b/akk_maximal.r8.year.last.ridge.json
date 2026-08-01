@@ -32,5 +32,36 @@
   },
   "best_layer": 80,
   "best_test_r2": 0.4275927119244657,
-  "best_test_spearman": 0.5961354421057886
+  "best_test_spearman": 0.5961354421057886,
+  "mc_group": {
+    "mode": "mc_group",
+    "splitter": "GroupKFold-by-ruler",
+    "cap": 21,
+    "n_draws_used": 200,
+    "spearman_mean": 0.08374466115980245,
+    "spearman_std": 0.0796834348964867,
+    "r2_mean": -0.22123111250839084,
+    "r2_std": 0.001519515321948008,
+    "pls_per_k": {
+      "1": {
+        "spearman_mean": 0.1439773368509462,
+        "spearman_std": 0.08605148599963856
+      },
+      "2": {
+        "spearman_mean": 0.14079129071860466,
+        "spearman_std": 0.0852803509421414
+      },
+      "3": {
+        "spearman_mean": 0.15910598636849924,
+        "spearman_std": 0.08891335344532174
+      },
+      "5": {
+        "spearman_mean": 0.16499660025046825,
+        "spearman_std": 0.0923540579832639
+      }
+    },
+    "pls_best_k": 5,
+    "pls_spearman_mean": 0.16499660025046825,
+    "layer": 80
+  }
 }
