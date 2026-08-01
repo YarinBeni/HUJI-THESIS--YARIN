@@ -107,7 +107,11 @@ plt.rcParams.update({"font.family": "DejaVu Sans", "axes.linewidth": 0.8,
 fig = plt.figure(figsize=(13.4, 9.3), dpi=110)
 ax = fig.add_axes([0.058, 0.335, 0.922, 0.565])
 
-YLO, YHI = -0.175, 0.525
+# The y-window is derived from the data, not hard-coded: under the deck/PLS read-outs
+# the entity-level lines run higher and TF-IDF runs much lower than under ridge, and a
+# fixed window clipped both ends. Pad enough for the marker radius and the top labels.
+_vals = [best[m][s][0] for m in best for s in S]
+YLO, YHI = min(_vals) - 0.055, max(_vals) + 0.075
 ax.set_xlim(-0.45, 4.62)
 ax.set_ylim(YLO, YHI)
 
@@ -121,8 +125,12 @@ for xe in (1.38, 1.62):
     ax.axvline(xe, color="#ffffff", lw=1.2, zorder=1)
 
 # recessive grid + stage rules (kept out of the label gutter)
+# Ticks follow the same data-derived window as the axis, so a read-out that pushes
+# TF-IDF to -0.30 still gets labelled gridlines all the way down.
+YTICKS = np.arange(np.floor(YLO * 10) / 10, np.ceil(YHI * 10) / 10 + 1e-9, 0.1)
+YTICKS = YTICKS[(YTICKS >= YLO) & (YTICKS <= YHI)]
 GXR = 3.32
-for gy in np.arange(-0.1, 0.5, 0.1):
+for gy in YTICKS:
     ax.plot([-0.45, GXR], [gy, gy], color="#000000", alpha=0.06, lw=0.7, zorder=1)
 for xs in X:
     ax.axvline(xs, color="#000000", alpha=0.08, lw=0.9, zorder=1)
@@ -131,9 +139,9 @@ ax.text(-0.41, -0.012, "Δρ = 0  ·  random-init Qwen3-8B, matched config",
         fontsize=8.2, color="#4d4d4d", va="top", ha="left", zorder=2)
 
 ax.set_xticks([])
-ax.set_yticks(np.arange(-0.1, 0.5, 0.1))
+ax.set_yticks(YTICKS)
 ax.set_yticklabels([f"{v:+.1f}".replace("-", "−") if abs(v) > 1e-9 else "0"
-                    for v in np.arange(-0.1, 0.5, 0.1)], fontsize=9, color=MUT)
+                    for v in YTICKS], fontsize=9, color=MUT)
 ax.set_ylabel("Δ Spearman ρ   (arm − random-init control, same configuration)",
               fontsize=10.5, color=INK, labelpad=6)
 for sp in ("top", "right", "bottom"):
