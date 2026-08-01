@@ -177,3 +177,13 @@ Each of the six designs renders in three read-outs: `*.png` (ridge everywhere),
    the *seen-site* protocol — deliberately, as the space analog of the paper's setup.
    It is not the grouped protocol used for year, and the deck should say so where the
    two sit on adjacent slides.
+
+---
+
+## 7. Figure output format
+
+Every figure is written by `figures/lib/_save.py` as a **300 dpi PNG** (for the HTML
+deck) and a **vector PDF** (for the thesis). Use the PDF in LaTeX. Earlier renders were
+120–220 dpi and are not usable in a talk or a paper; nothing at that resolution remains.
+
+    FIG_DPI=450 python3 <script>.py    # poster resolution

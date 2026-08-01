@@ -35,6 +35,11 @@ _PROBE_PHRASE_CAP = _PROBE_PHRASE[0].upper() + _PROBE_PHRASE[1:]
 from matplotlib.patches import FancyBboxPatch
 from matplotlib.cm import ScalarMappable
 from matplotlib.colors import Normalize
+# Resolution/format policy lives in figures/lib/_save.py (300 dpi PNG + vector PDF)
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', 'lib'))
+from _save import save as _save_fig  # noqa: E402
+
 
 # ---------------------------------------------------------------- paths + data
 ROOT = "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models"
@@ -234,5 +239,5 @@ fig.text(0.060, 0.086, foot, fontsize=7.3, color="#555555", va="top",
          linespacing=1.6)
 
 OUT = os.path.dirname(os.path.abspath(__file__)) + f"/geometry{_TAG}.png"
-fig.savefig(OUT, dpi=200, facecolor="white")
+_save_fig(fig, OUT)
 print("saved", OUT)

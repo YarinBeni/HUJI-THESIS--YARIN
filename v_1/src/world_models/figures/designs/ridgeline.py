@@ -22,6 +22,11 @@ import matplotlib.patheffects as pe
 SCRATCH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib')
 sys.path.insert(0, SCRATCH)
 from _style import COL, LAB, isr  # noqa: E402
+# Resolution/format policy lives in figures/lib/_save.py (300 dpi PNG + vector PDF)
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', 'lib'))
+from _save import save as _save_fig  # noqa: E402
+
 
 # The TIDY table and the output suffix are overridable so the same code renders
 # both read-outs (raw = ridge everywhere; deck = the per-cell probe the thesis
@@ -270,5 +275,5 @@ fig.text(0.042, 0.016,
          "(no LLM); * = untrained baseline.",
          fontsize=6.6, color="#777777", ha="left")
 
-fig.savefig(OUT, dpi=220)
+_save_fig(fig, OUT)
 print("wrote", OUT)

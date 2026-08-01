@@ -32,6 +32,11 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.lines import Line2D
+# Resolution/format policy lives in figures/lib/_save.py (300 dpi PNG + vector PDF)
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', 'figures', 'lib'))
+from _save import save as _save_fig  # noqa: E402
+
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 FIGS = os.path.join(_HERE, "figs")
@@ -158,7 +163,7 @@ def main():
              "the shape of the activation cloud, not learned chronology.",
              fontsize=8.2, color="#666666", ha="left", va="top")
     fig.subplots_adjust(left=0.055, right=0.975, top=0.775, bottom=0.30, wspace=0.16)
-    fig.savefig(OUT, dpi=200)
+    _save_fig(fig, OUT)
     print("wrote", OUT)
 
 

@@ -1,4 +1,9 @@
 import numpy as np, pandas as pd, os, matplotlib
+# Resolution/format policy lives in figures/lib/_save.py (300 dpi PNG + vector PDF)
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '.'))
+from _save import save as _save_fig  # noqa: E402
+
 matplotlib.use("Agg"); import matplotlib.pyplot as plt
 R="v_1/src/world_models/manifold/results"
 
@@ -35,5 +40,5 @@ def six_panel(tag, proj, title, outfile, max_cats=8):
         ax.set_title(c,fontsize=10); ax.set_xticks([]); ax.set_yticks([])
     for ax in axes.ravel()[n:]: ax.axis("off")
     fig.suptitle(title,fontweight="bold")
-    fig.tight_layout(); fig.savefig(outfile,dpi=120); plt.close(fig)
+    fig.tight_layout(); _save_fig(fig, outfile); plt.close(fig)
     print("saved",outfile); return True

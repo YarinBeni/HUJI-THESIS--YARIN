@@ -31,6 +31,11 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _WM = os.path.dirname(_HERE)
 sys.path.insert(0, os.path.join(_HERE, "lib"))
 from _style import COL, LAB, ENC, ORDER, isr, sty, star   # noqa: E402
+# Resolution/format policy lives in figures/lib/_save.py (300 dpi PNG + vector PDF)
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), 'lib'))
+from _save import save as _save_fig  # noqa: E402
+
 
 KS = [1, 2, 3, 5, 8, 16, 32, 64]
 SPACE = ["world_place", "us_place", "nyc_place"]
@@ -67,7 +72,7 @@ def cell_a(out):
     axes[0, 0].legend(fontsize=6.5, ncol=2, loc="lower center")
     fig.suptitle("ENGLISH (Gurnee & Tegmark redo) — TIME=Spearman, SPACE=R² · "
                  "last | mean pooling · ★=max", fontweight="bold")
-    fig.tight_layout(); fig.savefig(f"{out}/02_cellA_layers.png", dpi=120); plt.close(fig)
+    fig.tight_layout(); _save_fig(fig, f"{out}/02_cellA_layers.png"); plt.close(fig)
 
     P = os.path.join(_WM, "results", "eng_pls")
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
@@ -98,7 +103,7 @@ def cell_a(out):
     axes[0, 0].legend(fontsize=6.5, ncol=2, loc="lower right")
     fig.suptitle("ENGLISH best-layer PLS — TIME=Spearman, SPACE=R² vs k (1…64) · ★=best k",
                  fontweight="bold")
-    fig.tight_layout(); fig.savefig(f"{out}/03_cellA_pls.png", dpi=120); plt.close(fig)
+    fig.tight_layout(); _save_fig(fig, f"{out}/03_cellA_pls.png"); plt.close(fig)
 
 
 # --------------------------------------------- fragment cells (akk_maximal / eng_tier0)
@@ -147,8 +152,7 @@ def fragment(out):
         fig.suptitle(f"{ttl} — YEAR=Spearman, GEO=R² (symlog) · last | mean · "
                      f"encoders in mean · ★=max", fontweight="bold")
         fig.tight_layout()
-        fig.savefig(f"{out}/{'07_fragment_layers' if kind=='layers' else '08_fragment_pls'}.png",
-                    dpi=120)
+        _save_fig(fig, f"{out}/{'07_fragment_layers' if kind=='layers' else '08_fragment_pls'}.png")
         plt.close(fig)
 
 
@@ -196,7 +200,7 @@ def cell_b(out):
     axes[0, 1].legend(fontsize=6, ncol=2, loc="lower right")
     fig.suptitle("Cell B at ENTITY level (34 rulers / 25 places, English) — per-layer "
                  "entity-MC probe, `bare` rows · ★=best layer", fontweight="bold")
-    fig.tight_layout(); fig.savefig(f"{out}/04_cellB_entity_layers.png", dpi=120)
+    fig.tight_layout(); _save_fig(fig, f"{out}/04_cellB_entity_layers.png")
     plt.close(fig)
 
     for tag, fn in (("bare", "05_cellB_entity_pls_bare"), ("all", "06_cellB_entity_pls_all")):
@@ -232,7 +236,7 @@ def cell_b(out):
         axes[0, 1].legend(fontsize=6, ncol=2, loc="lower right")
         fig.suptitle(f"Cell B at ENTITY level — best-layer PLS, k = 1…64 · rows='{tag}' "
                      f"(entity-MC) · ★=best k", fontweight="bold")
-        fig.tight_layout(); fig.savefig(f"{out}/{fn}.png", dpi=120); plt.close(fig)
+        fig.tight_layout(); _save_fig(fig, f"{out}/{fn}.png"); plt.close(fig)
 
 
 def main():

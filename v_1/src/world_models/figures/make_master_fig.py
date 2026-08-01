@@ -4,6 +4,11 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib'))
 from _style import COL, LAB
+# Resolution/format policy lives in figures/lib/_save.py (300 dpi PNG + vector PDF)
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), 'lib'))
+from _save import save as _save_fig  # noqa: E402
+
 
 ARMS=["llama2_70b","gpt_oss_120b","llama2_13b","qwen3_32b","llama2_7b","qwen3_8b","qwen3_1b7",
       "thalesian_cunei400m","thalesian_akk300m","umt5_base",
@@ -112,5 +117,5 @@ def build(csv, outfile):
                  "target = YEAR · metric = Spearman ρ at each arm's best layer · ridge probe · "
                  "hatched = random-init controls · dotted = TF-IDF floor",
                  fontsize=11.5,fontweight="bold",y=.962)
-    fig.savefig(outfile,dpi=145,bbox_inches="tight"); plt.close(fig)
+    _save_fig(fig, outfile); plt.close(fig)
     print("saved",outfile)

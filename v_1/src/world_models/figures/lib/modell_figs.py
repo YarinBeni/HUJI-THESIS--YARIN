@@ -2,6 +2,11 @@ import numpy as np, os, sys, matplotlib
 matplotlib.use("Agg"); import matplotlib.pyplot as plt
 sys.path.insert(0,"v_1/src/world_models/manifold")
 import manifold_lib as ML
+# Resolution/format policy lives in figures/lib/_save.py (300 dpi PNG + vector PDF)
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '.'))
+from _save import save as _save_fig  # noqa: E402
+
 R="v_1/src/world_models/manifold/results"
 
 def get(tag):
@@ -27,7 +32,7 @@ def pc_grid(tags_titles, outfile, pairs=((0,1),(1,2),(2,3),(3,4)), cmap="viridis
             if ci==len(pairs)-1: plt.colorbar(s,ax=ax,fraction=.046)
     fig.suptitle("Where does the chronology curve live? PCA axis pairs coloured by year "
                  "(Engels et al.: the years arc appears in PC3–PC4, not PC1–PC2)",fontweight="bold")
-    fig.tight_layout(); fig.savefig(outfile,dpi=125); plt.close(fig); print("saved",outfile)
+    fig.tight_layout(); _save_fig(fig, outfile); plt.close(fig); print("saved",outfile)
 
 def distance_figs(tags_titles, outfile, k=10, rank=4, cap=700):
     """Modell et al.'s two diagnostics, drawn as THEY draw them:
@@ -72,4 +77,4 @@ def distance_figs(tags_titles, outfile, k=10, rank=4, cap=700):
                 fontsize=11,bbox=dict(fc="w",ec="k"))
     fig.suptitle("Modell et al. representation-manifold diagnostics on our data "
                  f"(top-{rank} PCA directions, re-normalised; k={k} graph)",fontweight="bold")
-    fig.tight_layout(); fig.savefig(outfile,dpi=125); plt.close(fig); print("saved",outfile)
+    fig.tight_layout(); _save_fig(fig, outfile); plt.close(fig); print("saved",outfile)

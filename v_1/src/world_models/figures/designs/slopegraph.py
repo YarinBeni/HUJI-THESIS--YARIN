@@ -20,6 +20,11 @@ from matplotlib.lines import Line2D
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib'))
 from _style import COL, LAB, isr
+# Resolution/format policy lives in figures/lib/_save.py (300 dpi PNG + vector PDF)
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', 'lib'))
+from _save import save as _save_fig  # noqa: E402
+
 
 # The TIDY table and the output suffix are overridable so the same code renders
 # both read-outs (raw = ridge everywhere; deck = the per-cell probe the thesis
@@ -313,7 +318,7 @@ fig.text(0.058, 0.932,
          "entities to Neo-Assyrian documents",
          fontsize=10.2, ha="left", va="baseline", color=MUT)
 
-fig.savefig(OUT, dpi=200, facecolor="white")
+_save_fig(fig, OUT)
 print("saved", OUT)
 
 # console audit of every plotted number

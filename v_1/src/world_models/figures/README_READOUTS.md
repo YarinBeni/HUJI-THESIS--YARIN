@@ -70,3 +70,18 @@ Every design script honours two env vars:
 
 `heatmap.py` is the exception: it shows a RIDGE panel and a PLS panel side by side by
 construction, so it reads the raw table only and has no `__deck` variant.
+
+## Resolution and format
+
+All figure scripts write through `lib/_save.py`, so output quality is decided in one
+place instead of per-script. Every figure is emitted twice:
+
+- **PNG at 300 dpi** — for the HTML deck. The designs now come out 2,700–4,500 px wide.
+- **PDF, vector** — for the thesis. Text stays sharp at any zoom; embed this one in
+  LaTeX, not the PNG.
+
+Earlier renders were 120–220 dpi, which is legible on screen and falls apart when
+projected or printed — an 8 pt footnote at 120 dpi is about 13 px tall.
+
+    FIG_DPI=450 python3 slopegraph.py    # poster
+    FIG_PDF=0   python3 slopegraph.py    # PNG only
