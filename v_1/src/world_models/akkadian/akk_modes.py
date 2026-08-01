@@ -80,8 +80,15 @@ def mc_balanced(X, y, ruler, is_place, cap=None, n_draws=200, n_splits=5, seed=4
     }
 
 
+#: PLS latent-dimension grid. The thesis deck swept only {1,2,3,5}
+#: (stress_tests/shared/mc_probe.py PLS_KS) and 18 of our 58 fragment cells came back
+#: pinned at that ceiling — i.e. the grid, not the data, was choosing k. Extended
+#: log-spaced to 64; the upper end is guarded per-fold by `k < min(len(train), D)`.
+PLS_KS = (1, 2, 3, 5, 8, 12, 16, 24, 32, 48, 64)
+
+
 def mc_group(X, y, ruler, cap=None, n_draws=200, n_splits=5, seed=42, alpha=None,
-             pls_ks=(1, 2, 3, 5)):
+             pls_ks=PLS_KS, nested_every=4):
     """Balanced Monte-Carlo with GroupKFold-BY-RULER — the thesis deck's protocol.
 
     Mirrors stress_tests/shared/mc_probe.py, the engine behind the headline table
@@ -114,6 +121,7 @@ def mc_group(X, y, ruler, cap=None, n_draws=200, n_splits=5, seed=42, alpha=None
 
     ridge_sp, ridge_r2 = [], []
     pls_sp = {k: [] for k in pls_ks}
+    nested_sp, nested_ks = [], []
     for d in range(n_draws):
         rows = np.concatenate([
             rng.choice(per_ruler[r], size=min(cap, counts[r]), replace=False)
@@ -140,6 +148,45 @@ def mc_group(X, y, ruler, cap=None, n_draws=200, n_splits=5, seed=42, alpha=None
                                               False)["spearman"])
                 except Exception:                                    # noqa: BLE001
                     pass
+            # Nested k: pick k on an inner GroupKFold over the TRAINING rulers only,
+            # then refit on the full train fold. `pls_best_k` below is selected on the
+            # outer test folds (that is what the deck does, so it stays for
+            # comparability) — but that biases the headline upward, and the bias grows
+            # with the size of the grid. This is the unbiased counterpart.
+            if d % nested_every == 0:
+                gtr = gs[tr]
+                if len(np.unique(gtr)) >= 3:
+                    inner = {}
+                    for itr, ite in GroupKFold(
+                            n_splits=min(3, len(np.unique(gtr)))).split(
+                            Xs[tr], ys[tr], groups=gtr):
+                        if len(np.unique(ys[tr][ite])) < 2:
+                            continue
+                        for k in pls_ks:
+                            if k >= min(len(itr), Xs.shape[1]):
+                                continue
+                            try:
+                                p = PLSRegression(n_components=k).fit(
+                                    Xs[tr][itr], ys[tr][itr].reshape(-1, 1))
+                                s = _score(ys[tr][ite],
+                                           p.predict(Xs[tr][ite]).ravel(),
+                                           False)["spearman"]
+                                if s == s:
+                                    inner.setdefault(k, []).append(s)
+                            except Exception:                        # noqa: BLE001
+                                pass
+                    if inner:
+                        kbest = max(inner, key=lambda k: np.mean(inner[k]))
+                        try:
+                            p = PLSRegression(n_components=kbest).fit(
+                                Xs[tr], ys[tr].reshape(-1, 1))
+                            s = _score(ys[te], p.predict(Xs[te]).ravel(),
+                                       False)["spearman"]
+                            if s == s:
+                                nested_sp.append(float(s))
+                                nested_ks.append(int(kbest))
+                        except Exception:                            # noqa: BLE001
+                            pass
         ok = lambda v: [x for x in v if x == x]                      # noqa: E731
         if ok(fold_sp):
             ridge_sp.append(float(np.mean(ok(fold_sp))))
@@ -163,6 +210,13 @@ def mc_group(X, y, ruler, cap=None, n_draws=200, n_splits=5, seed=42, alpha=None
         "r2_mean": r2_m, "r2_std": r2_s,
         "pls_per_k": per_k, "pls_best_k": (int(best_k) if best_k else None),
         "pls_spearman_mean": (agg(pls_sp[best_k])[0] if best_k else float("nan")),
+        "pls_ks": list(pls_ks),
+        "pls_k_at_grid_ceiling": bool(best_k == max(pls_ks)),
+        # nested = k chosen inside the training rulers, so not selected on test
+        "pls_nested_spearman_mean": agg(nested_sp)[0],
+        "pls_nested_spearman_std": agg(nested_sp)[1],
+        "pls_nested_k_median": (float(np.median(nested_ks)) if nested_ks else float("nan")),
+        "pls_nested_n_folds": len(nested_sp),
     }
 
 

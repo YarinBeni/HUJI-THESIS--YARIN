@@ -22,6 +22,12 @@ import os
 import re
 import sys
 
+import warnings
+
+# PLS at high k legitimately exhausts the y-residual ("y residual is constant at
+# iteration ..."); sklearn warns once per fit, which buries the real log.
+warnings.filterwarnings("ignore", message="y residual is constant")
+
 import numpy as np
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -83,8 +89,10 @@ def one(method, variant, site, df, args):
         prev.get("holdout", {}).get("best_layer", 0))
     _merge(path, blk)
     print(f"[{method}/{variant}/{site}] mc_group rho={blk['spearman_mean']:.3f}"
-          f"±{blk['spearman_std']:.3f} | PLS k={blk['pls_best_k']} "
-          f"rho={blk['pls_spearman_mean']:.3f}  (mc was "
+          f"±{blk['spearman_std']:.3f} | PLS k={blk['pls_best_k']}"
+          f"{' (CEILING)' if blk['pls_k_at_grid_ceiling'] else ''} "
+          f"rho={blk['pls_spearman_mean']:.3f} | nested k~{blk['pls_nested_k_median']:.0f} "
+          f"rho={blk['pls_nested_spearman_mean']:.3f}  (mc was "
           f"{prev.get('mc',{}).get('spearman_mean',float('nan')):.3f})", flush=True)
     return blk
 

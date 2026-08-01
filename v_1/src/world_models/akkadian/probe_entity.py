@@ -93,8 +93,15 @@ def mc_entity_scores(X, y, ent_ix, is_place, n_draws=N_DRAWS, k=None):
             "n_draws": len(r2s)}
 
 
+#: Same reasoning as akk_modes.PLS_KS — k=5 was an inherited default, not a fitted
+#: choice, so sweep it and record the whole curve. `pls5_mc` is kept unchanged for
+#: comparability with everything already published off these files.
+PLS_KS = (1, 2, 3, 5, 8, 12, 16, 24, 32, 48, 64)
+
+
 def score_matrix(X, df, entity_type, tag):
-    """All read-outs for one feature matrix: MC ridge, MC PLS-5, fixed holdout."""
+    """All read-outs for one feature matrix: MC ridge, the MC PLS-k sweep (with PLS-5
+    retained under its old key), and the fixed holdout."""
     y, is_place = targets(entity_type, df)
     ent_ix = df.entity_ix.values
     is_test = df.is_test.values.astype(bool)
@@ -103,9 +110,21 @@ def score_matrix(X, df, entity_type, tag):
     mc = mc_entity_scores(X, y, ent_ix, is_place)
     if mc:
         out["ridge_mc"] = mc
-    mc5 = mc_entity_scores(X, y, ent_ix, is_place, k=5)
-    if mc5:
-        out["pls5_mc"] = mc5
+    per_k = {}
+    for k in PLS_KS:
+        if k >= min(X.shape):
+            continue
+        s = mc_entity_scores(X, y, ent_ix, is_place, k=k)
+        if s:
+            per_k[str(k)] = s
+    if per_k:
+        out["pls_per_k"] = per_k
+        bk = max(per_k, key=lambda kk: per_k[kk]["mc_rho"])
+        out["pls_best_k"] = int(bk)
+        out["pls_best_mc"] = per_k[bk]
+        out["pls_k_at_grid_ceiling"] = int(bk) == max(PLS_KS)
+    if "5" in per_k:
+        out["pls5_mc"] = per_k["5"]
     if is_test.any() and (~is_test).any():
         sc, _, _ = probing.run_probe(X, y, is_test, is_place)
         out["ridge_holdout"] = {"r2": sc["test"]["r2"], "rho": _rho(sc["test"])}

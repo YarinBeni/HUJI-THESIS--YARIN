@@ -2,7 +2,7 @@
 """DESIGN 1 -- 'The collapse ridgeline'.
 
 One ridge per canonical configuration (10 total, entity -> fragment, top -> bottom).
-x = year-decoding Spearman rho (ridge probe). Each ridge is a Gaussian KDE over the
+x = year-decoding Spearman rho. Each ridge is a discrete 0.05-bin histogram over the
 14 model arms' scores; per-arm markers sit on the baseline; TF-IDF is a black diamond.
 Hard hue switch (teal -> warm) at the entity/document boundary, with a labeled divider.
 All numbers come from the committed TIDY table -- nothing is fabricated.
@@ -32,8 +32,10 @@ _TAG = os.environ.get("FIG_TAG", "")
 # Captions must not hard-code "ridge": under FIG_TAG=__deck the numbers are the
 # per-cell probe the thesis reports (PLS at fragment level, PLS-5 for obscure
 # entities, ridge for cell A), so the phrase changes with the table.
-_PROBE_PHRASE = ("thesis read-out (PLS · fragments / PLS-5 · obscure entities / ridge · A)"
-                 if _TAG else "ridge probe")
+_PROBE_PHRASE = {"": "ridge probe",
+                 "__deck": "thesis read-out (PLS · fragments / PLS-5 · obscure entities / ridge · A)",
+                 "__pls": "best-k PLS probe (ridge only where no PLS sweep exists)",
+                 }.get(_TAG, "ridge probe")
 _PROBE_PHRASE_CAP = _PROBE_PHRASE[0].upper() + _PROBE_PHRASE[1:]
 
 
@@ -75,22 +77,30 @@ DATA = [pull(l, s, c, p) for l, s, c, p, _, _ in CFGS]
 for (arms, tf), cfg in zip(DATA, CFGS):
     assert len(arms) == 14 and tf is not None, (cfg, len(arms), tf)
 
-# ----------------------------------------------------------------------------- kde
-def kde(vals, grid):
-    v = np.asarray(vals, float)
-    n = v.size
-    sd = v.std(ddof=1)
-    iqr = np.subtract(*np.percentile(v, [75, 25]))
-    bw = 0.9 * min(sd, iqr / 1.34) * n ** (-1 / 5)
-    bw = max(bw, 0.028)
-    return np.exp(-0.5 * ((grid[:, None] - v[None, :]) / bw) ** 2).sum(1) / (n * bw * np.sqrt(2 * np.pi))
+# ------------------------------------------------------------------------ histogram
+# Each ridge summarises exactly 14 arms. A Gaussian KDE over 14 points invents a smooth
+# density that the data does not support — it implies mass between arms and hides how
+# few there are. These are discrete counts in fixed 0.05-wide bins, drawn as stairs, so
+# one bar of height 1 is literally one model arm.
+BIN_W = 0.05
+BIN_EDGES = np.arange(-0.10, 1.0001 + BIN_W, BIN_W)
+
+
+def hist_steps(vals):
+    """-> (x, y) tracing the top of the bars, closed to the baseline at both ends."""
+    counts, _ = np.histogram(np.asarray(vals, float), bins=BIN_EDGES)
+    x = np.repeat(BIN_EDGES, 2)
+    y = np.concatenate([[0.0], np.repeat(counts.astype(float), 2), [0.0]])
+    return x, y
+
 
 GRID = np.linspace(-0.18, 1.18, 900)
 
 # ----------------------------------------------------------------------------- layout
 S = 1.0            # baseline spacing within a regime
 CLIFF_GAP = 3.3    # extra-wide gap at the entity/document boundary
-PEAK = 1.55        # every ridge's KDE peak is scaled to this height (see footnote)
+PEAK = 1.55        # vertical budget reserved above each baseline
+COUNT_H = 0.22     # height of ONE arm; bar heights are counts, comparable across ridges
 
 ys, y = [], 0.0
 for i in range(len(CFGS)):
@@ -137,14 +147,24 @@ ax.plot(tfx, ys, color="#000000", lw=1.0, ls=(0, (1.5, 2.2)), alpha=0.55, zorder
 # ---- ridges, painted top -> bottom so lower ridges sit in front (joyplot order)
 for i, ((arms, tf), (lvl, sal, clean, pool, cell, label)) in enumerate(zip(DATA, CFGS)):
     vals = np.array(list(arms.values()))
-    dens = kde(vals, GRID)
-    h = dens / dens.max() * PEAK
+    hx, hy = hist_steps(vals)
+    # one arm = COUNT_H, so bar height is comparable across ridges (a 4-high bar is
+    # 4 arms wherever it appears); PEAK stays the layout budget for the tallest bar.
+    h = hy * COUNT_H
     face = ridge_face(i)
     edge = darken(face)
     z = 2 + i
-    ax.fill_between(GRID, ys[i], ys[i] + h, facecolor=face, edgecolor="none", zorder=z)
-    ax.plot(GRID, ys[i] + h, color=edge, lw=1.4, zorder=z + 0.1)
+    ax.fill_between(hx, ys[i], ys[i] + h, step=None, facecolor=face, edgecolor="none",
+                    zorder=z)
+    ax.plot(hx, ys[i] + h, color=edge, lw=1.2, zorder=z + 0.1,
+            solid_joinstyle="miter")
     ax.plot([XL, XR], [ys[i], ys[i]], color=edge, lw=0.9, zorder=z + 0.1)
+    # faint interior bin separators so the discreteness is unmistakable
+    for e in BIN_EDGES[1:-1]:
+        c = hy[np.searchsorted(hx, e, side="right") - 1]
+        if c > 0:
+            ax.plot([e, e], [ys[i], ys[i] + c * COUNT_H], color="white", lw=0.6,
+                    alpha=0.55, zorder=z + 0.05)
 
     # left-hand terse label
     ax.text(XL - 0.014, ys[i] + 0.06, label, ha="right", va="bottom", fontsize=8.6,
@@ -221,7 +241,7 @@ fig.text(0.042, 0.968, "Linear world-models of time collapse at the entity → d
          fontsize=14.5, fontweight="bold", color="#1a1a1a", ha="left")
 fig.text(0.042, 0.947,
          "Year decoding (Spearman ρ) · 10 configurations × 14 model arms (dots) + char-n-gram "
-         "TF-IDF floor (♦) · ridge = KDE over the 14 arms",
+         "TF-IDF floor (♦) · ridges are discrete histograms (bin = 0.05)",
          fontsize=8.7, color="#555555", ha="left")
 
 # ---- legend
@@ -241,13 +261,13 @@ fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.047), nco
 
 # ---- footnote (two lines so nothing runs off the canvas)
 fig.text(0.042, 0.030,
-         f"{_PROBE_PHRASE_CAP}, target = year, Spearman ρ.  Protocols differ by level and are not pooled: "
-         "A = i.i.d. holdout · B (entity) = entity-level Monte-Carlo splits · B′/C (fragments) = "
-         "ruler-grouped MC (r = 8).",
+         f"{_PROBE_PHRASE_CAP}, target = year.  Protocols differ by level, not pooled: "
+         "A = i.i.d. holdout · B = entity-level MC · B′/C = ruler-grouped MC (r = 8).",
          fontsize=6.6, color="#777777", ha="left")
 fig.text(0.042, 0.016,
-         "KDE per ridge is peak-normalised (shape, not absolute density).  Open markers = "
-         "random-init controls; ♦ = char-n-gram TF-IDF (no LLM); * = untrained / no-LLM baseline.",
+         "Bars are counts in 0.05-wide bins — one bar-step = one arm, so heights compare "
+         "across ridges.  Open markers = random-init controls; ♦ = char-n-gram TF-IDF "
+         "(no LLM); * = untrained baseline.",
          fontsize=6.6, color="#777777", ha="left")
 
 fig.savefig(OUT, dpi=220)

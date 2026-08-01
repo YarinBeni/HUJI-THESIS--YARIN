@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import glob
 import json
 import os
 
@@ -72,12 +73,18 @@ def rows_fragment(mode):
                 # read-out ("activation PLS Spearman", slide 2: k about 3-5), and it
                 # separates the encoders from the n-gram floor far more sharply than
                 # ridge does, so it must be available to the figures.
-                pv = d.get("pls_spearman_mean")
-                if pv is not None and pv == pv:
-                    out.append(dict(level="fragment", language=lang, salience="obscure",
-                                    cleaning=clean, pooling=pool, probe="pls",
-                                    protocol=proto, metric="spearman", target="year",
-                                    arm=m, value=round(float(pv), 4)))
+                # `pls` = best k selected on the outer test folds (what the deck does).
+                # `pls_nested` = k selected on an inner split of the TRAINING rulers,
+                # so it is not selected on test. Once WAk has run, quote the nested one.
+                for probe, key in (("pls", "pls_spearman_mean"),
+                                   ("pls_nested", "pls_nested_spearman_mean")):
+                    pv = d.get(key)
+                    if pv is not None and pv == pv:
+                        out.append(dict(level="fragment", language=lang,
+                                        salience="obscure", cleaning=clean,
+                                        pooling=pool, probe=probe, protocol=proto,
+                                        metric="spearman", target="year", arm=m,
+                                        value=round(float(pv), 4)))
     return out
 
 
@@ -96,7 +103,8 @@ def rows_entity_b():
                 e = blk.get(tag)
                 if not e:
                     continue
-                for probe, pk in (("ridge", "ridge_mc"), ("pls5", "pls5_mc")):
+                for probe, pk in (("ridge", "ridge_mc"), ("pls5", "pls5_mc"),
+                                  ("pls", "pls_best_mc")):
                     s = e.get(pk)
                     if not s:
                         continue
@@ -141,22 +149,36 @@ def rows_entity_a():
 #                                           which is where slide 4's .391 comes from
 # `--readout deck` emits exactly that selection and relabels the winner `ridge` so the
 # figure scripts need no per-cell probe logic. `--readout raw` keeps every probe row.
-DECK_PROBE = {("fragment", "obscure"): "pls",
-              ("entity", "obscure"): "pls5",
-              ("entity", "salient"): "ridge"}
+#
+# `--readout pls` is the all-PLS counterpart: the best-k PLS everywhere it exists.
+# Cell A has no PLS sweep committed, so it falls back to ridge and is marked as such.
+READOUTS = {
+    "deck": {("fragment", "obscure"): ["pls"],
+             ("entity", "obscure"): ["pls5"],
+             ("entity", "salient"): ["ridge"]},
+    "pls":  {("fragment", "obscure"): ["pls_nested", "pls"],
+             ("entity", "obscure"): ["pls", "pls5"],
+             ("entity", "salient"): ["ridge"]},
+}
 
 
-def apply_readout(rows):
+def apply_readout(rows, which="deck"):
     """Keep one probe per cell. PLS reports no R², so for the `r2` metric fall back to
     the ridge row of the same cell rather than dropping the cell from R² figures."""
+    pref = READOUTS[which]
     out, have = [], set()
-    for r in rows:
-        want = DECK_PROBE.get((r["level"], r["salience"]))
-        if want is None or r["probe"] != want:
-            continue
-        out.append({**r, "probe": "ridge", "readout": want})
-        have.add((r["level"], r["salience"], r["cleaning"], r["pooling"], r["arm"],
-                  r["metric"]))
+    # preference order per cell: take the first probe that exists for that cell
+    for rank in range(max(len(v) for v in pref.values())):
+        for r in rows:
+            want = pref.get((r["level"], r["salience"]), [])
+            if rank >= len(want) or r["probe"] != want[rank]:
+                continue
+            key = (r["level"], r["salience"], r["cleaning"], r["pooling"], r["arm"],
+                   r["metric"])
+            if key in have:
+                continue
+            out.append({**r, "probe": "ridge", "readout": want[rank]})
+            have.add(key)
     for r in rows:
         key = (r["level"], r["salience"], r["cleaning"], r["pooling"], r["arm"],
                r["metric"])
@@ -166,21 +188,43 @@ def apply_readout(rows):
     return out
 
 
+def check_ceilings():
+    """Warn if any committed cell still has its PLS k pinned at the grid ceiling —
+    that means the grid, not the data, chose k."""
+    hits = []
+    for f in glob.glob(os.path.join(_WM, "akkadian", "results", "probes", "*",
+                                    "*.r8.year.*.ridge.json")):
+        d = json.load(open(f)).get("mc_group")
+        if not isinstance(d, dict):
+            continue
+        # legacy files predate the flag; their grid topped out at 5
+        pinned = d.get("pls_k_at_grid_ceiling",
+                       d.get("pls_best_k") == max(d.get("pls_ks") or [5]))
+        if pinned:
+            hits.append(f"{os.path.basename(os.path.dirname(f))}/"
+                        f"{os.path.basename(f)} k={d.get('pls_best_k')}")
+    if hits:
+        print(f"  ! {len(hits)} cell(s) pinned at the PLS k ceiling — widen PLS_KS:")
+        for h in hits[:6]:
+            print(f"      {h}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", default="mc_group", choices=list(KEYS),
                     help="fragment-cell protocol block; mc_group matches the thesis deck")
-    ap.add_argument("--readout", default="raw", choices=("raw", "deck"),
-                    help="'deck' selects the per-cell probe the thesis actually reports")
+    ap.add_argument("--readout", default="raw", choices=("raw", "deck", "pls"),
+                    help="'deck' = the per-cell probe the thesis reports; "
+                         "'pls' = best-k PLS everywhere it exists; 'raw' = every row")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
     rows = rows_fragment(args.mode) + rows_entity_b() + rows_entity_a()
-    if args.readout == "deck":
-        rows = apply_readout(rows)
+    if args.readout != "raw":
+        rows = apply_readout(rows, args.readout)
     if not rows:
         print("no rows — has the mc_group job run yet?")
         return
-    suffix = args.mode + ("__deck" if args.readout == "deck" else "")
+    suffix = args.mode + ("" if args.readout == "raw" else f"__{args.readout}")
     out = args.out or os.path.join(_HERE, f"TIDY_all_year_results__{suffix}.csv")
     with open(out, "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
@@ -188,6 +232,7 @@ def main():
         w.writerows(rows)
     nfrag = sum(1 for r in rows if r["level"] == "fragment")
     print(f"wrote {out}\n  {len(rows)} rows ({nfrag} fragment rows under '{args.mode}')")
+    check_ceilings()
 
 
 if __name__ == "__main__":

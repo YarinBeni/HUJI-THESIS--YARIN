@@ -305,24 +305,28 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
   <p class="fig-note">Our Llama-2-70B <strong>reproduces the paper within ~0.02</strong> on every dataset (peak layer 53) &mdash; the harness is validated. Both ladders scale with size. The <strong>random-init twins collapse in BOTH space and time</strong> (13B .883&rarr;.282 world, .780&rarr;.038 media) &mdash; the geometry is learned, not architectural. TF-IDF is a real floor (.642 world; it even wins NYC): trained models clear it, random arms fall below. The small translation encoders (cunei / AKK-300M) sit near the floor on English. <em>* = control.</em></p>
 </section>
 <section class="slide slide-text" data-index="25">
-  <div class="eyebrow">Experiment 1 &middot; English tier-0 gloss &middot; balanced Monte-Carlo</div>
+  <div class="eyebrow">Experiment 1 &middot; English tier-0 gloss &middot; grouped Monte-Carlo</div>
   <h2 class="sh">Year (time) &mdash; can the date be read from the faithful English gloss?</h2>
-  <div class="cfg"><div class="cfg-k">Setup</div><div class="cfg-v">entity = a whole fragment&rsquo;s <strong>faithful literal English gloss</strong> (tier-0, no hallucinating cleaner &mdash; the aggressive <em>eng-maximal</em> clean is dropped); last-token embedding &rarr; ridge probe for <strong>year</strong>.</div><div class="cfg-k">Metric</div><div class="cfg-v"><strong>balanced Monte-Carlo</strong> on the 8 dense rulers (r8): cap per ruler, 200 draws, stratified-by-ruler CV &mdash; removes the year&asymp;ruler-identity confound. Reported: MC <strong>test R&sup2;</strong> and <strong>Spearman &rho;</strong> (mean over draws). Real learning must beat the TF-IDF floor <em>and</em> the arm&rsquo;s own random twin.</div></div>
-  <p class="tbl-cap">balanced-MC (r8) &mdash; test R&sup2; | Spearman &rho;</p>
-  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">MC R&sup2;</th><th class="num">MC &rho;</th></tr></thead><tbody>
-    <tr class="rand"><td><span class="mdl">TF-IDF*</span> (floor)</td><td class="num">.567</td><td class="num">.775</td></tr>
-    <tr><td><span class="mdl">Llama-2-70B</span></td><td class="num">.037</td><td class="num">.544</td></tr>
-    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.233</td><td class="num">.518</td></tr>
-    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.262</td><td class="num">.540</td></tr>
-    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.287</td><td class="num">.533</td></tr>
-    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.295</td><td class="num">.557</td></tr>
-    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.219</td><td class="num">.474</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-70B random</span>*</td><td class="num">.105</td><td class="num">.288</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-13B random</span>*</td><td class="num">.172</td><td class="num">.374</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-7B random</span>*</td><td class="num">.241</td><td class="num">.439</td></tr>
-    <tr class="rand"><td><span class="mdl">random Qwen3-8B</span>*</td><td class="num">.335</td><td class="num">.532</td></tr>
+  <div class="cfg"><div class="cfg-k">Setup</div><div class="cfg-v">entity = a whole fragment&rsquo;s <strong>faithful literal English gloss</strong> (tier-0, no hallucinating cleaner &mdash; the aggressive <em>eng-maximal</em> clean is dropped); whole-fragment embedding at the hold-out-best layer &rarr; ridge probe and a PLS sweep for <strong>year</strong>.</div><div class="cfg-k">Metric</div><div class="cfg-v"><strong>balanced Monte-Carlo</strong> on the 8 dense rulers (r8): cap 21 per ruler, 200 draws, <strong>GroupKFold&nbsp;<em>by ruler</em></strong> &mdash; a ruler is wholly in train or wholly in test, so the probe cannot re-identify a scribe and read the date off the identity. Reported: <strong>Spearman &rho;</strong> (mean over draws) for ridge and best-<em>k</em> PLS, at both poolings. <strong>R&sup2; is not reported</strong>: a grouped test fold is essentially one ruler, so its year variance is ~0 and R&sup2; degenerates to &minus;0.22 for every arm, floor included. Real learning must beat the TF-IDF floor <em>and</em> the arm&rsquo;s own random twin.</div></div>
+  <p class="tbl-cap">grouped-MC (r8) &mdash; Spearman &rho;, ridge and PLS, both poolings</p>
+  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">ridge &rho;<br><small>last</small></th><th class="num">PLS &rho;<br><small>last</small></th><th class="num">ridge &rho;<br><small>mean</small></th><th class="num">PLS &rho;<br><small>mean</small></th></tr></thead><tbody>
+    <tr class="rand"><td><span class="mdl">TF-IDF*</span></td><td class="num">.408</td><td class="num">.066</td><td class="num">&ndash;</td><td class="num">&ndash;</td></tr>
+    <tr><td><span class="mdl">Llama-2-70B</span></td><td class="num">.188</td><td class="num">.218</td><td class="num">.327</td><td class="num">.352</td></tr>
+    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.141</td><td class="num">.257</td><td class="num">.207</td><td class="num">.359</td></tr>
+    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.194</td><td class="num">.244</td><td class="num">.323</td><td class="num">.345</td></tr>
+    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.064</td><td class="num">.276</td><td class="num">.322</td><td class="num">.381</td></tr>
+    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.150</td><td class="num">.250</td><td class="num">.240</td><td class="num">.383</td></tr>
+    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.076</td><td class="num">.197</td><td class="num">.204</td><td class="num">.298</td></tr>
+    <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">.073</td><td class="num">.123</td><td class="num">.204</td><td class="num">.345</td></tr>
+    <tr><td><span class="mdl">cuneiform-400M</span></td><td class="num">.184</td><td class="num">.256</td><td class="num">.307</td><td class="num">.331</td></tr>
+    <tr><td><span class="mdl">AKK-300M</span></td><td class="num">.160</td><td class="num">.215</td><td class="num">.400</td><td class="num">.422</td></tr>
+    <tr><td><span class="mdl">uMT5-base</span></td><td class="num">.089</td><td class="num">.102</td><td class="num">.284</td><td class="num">.351</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-70B random*</span></td><td class="num">.113</td><td class="num">.115</td><td class="num">.268</td><td class="num">.281</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-13B random*</span></td><td class="num">.147</td><td class="num">.150</td><td class="num">.204</td><td class="num">.260</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-7B random*</span></td><td class="num">.180</td><td class="num">.183</td><td class="num">.180</td><td class="num">.232</td></tr>
+    <tr class="rand"><td><span class="mdl">random Qwen3-8B*</span></td><td class="num">.227</td><td class="num">.229</td><td class="num">.251</td><td class="num">.255</td></tr>
   </tbody></table>
-  <p class="fig-note">Even the trustworthy gloss can&rsquo;t rescue the models: <strong>TF-IDF (R&sup2; .567, &rho; .775) beats every embedding arm</strong>. The best trained model (Qwen3-8B &rho; .557) barely clears its random twins (&rho; .29&ndash;.53), and the plain <em>random Qwen3-8B</em> control scores &rho; .532 &mdash; as high as any 70B. Chronology here is surface n-gram statistics, not a learned timeline. <em>* = control.</em></p>
+  <p class="fig-note">Under the non-leaky protocol the gloss result <strong>inverts the earlier slide</strong>. The char-n-gram floor collapses from &rho;&nbsp;.775 to <strong>.066</strong> (PLS) &mdash; almost all of its apparent skill was ruler re-identification. Meanwhile the trained arms hold up on <code>mean</code> pooling: <strong>AKK-300M .422</strong>, Qwen3-8B .383, Qwen3-32B .381, Llama-2-13B .359, against random twins at .23&ndash;.28. So the date <em>is</em> linearly recoverable from a faithful English gloss of an unseen ruler&rsquo;s tablets, and the signal is learned rather than architectural. Note <code>last</code> pooling is much weaker than <code>mean</code> here &mdash; a fragment&rsquo;s final token is a poor summary of a document. <em>* = control.</em></p>
 </section>
 <section class="slide slide-text" data-index="26">
   <div class="eyebrow">Experiment 1 &middot; English tier-0 gloss &middot; by-site geo (R&sup2;)</div>
@@ -345,24 +349,28 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
   <p class="fig-note">Space does <strong>not</strong> invert like time: on <code>last</code> pooling the trained models (R&sup2; .25&ndash;.34) clearly <strong>beat the TF-IDF floor</strong> (R&sup2; .022, &rho; .535) &mdash; geography <em>is</em> linearly recoverable from the gloss embedding. But <code>mean</code> pooling is unreliable: trained arms swing while <em>random</em> twins score highest (random Qwen &rho; .59) &mdash; mean-pool leaks a non-semantic site-frequency signal, so read <code>last</code>. <em>* = control.</em></p>
 </section>
 <section class="slide slide-text" data-index="27">
-  <div class="eyebrow">Experiment 2 &middot; Akkadian (maximal) &middot; balanced Monte-Carlo</div>
+  <div class="eyebrow">Experiment 2 &middot; Akkadian (maximal) &middot; grouped Monte-Carlo</div>
   <h2 class="sh">Year (time) &mdash; can the date be read from the raw Akkadian?</h2>
-  <div class="cfg"><div class="cfg-k">Setup</div><div class="cfg-v">entity = the whole fragment&rsquo;s <strong>maximal Akkadian text</strong> (no translation); last-token embedding &rarr; ridge probe for <strong>year</strong>.</div><div class="cfg-k">Metric</div><div class="cfg-v"><strong>balanced Monte-Carlo</strong>, r8 (8 dense rulers): cap per ruler, 200 draws, stratified-by-ruler CV. MC <strong>test R&sup2;</strong> and <strong>Spearman &rho;</strong> (mean over draws). Real learning must beat the TF-IDF floor <em>and</em> the random twin.</div></div>
-  <p class="tbl-cap">balanced-MC (r8) &mdash; test R&sup2; | Spearman &rho;</p>
-  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">MC R&sup2;</th><th class="num">MC &rho;</th></tr></thead><tbody>
-    <tr class="rand"><td><span class="mdl">TF-IDF*</span> (floor)</td><td class="num">.503</td><td class="num">.707</td></tr>
-    <tr><td><span class="mdl">Llama-2-70B</span></td><td class="num">.116</td><td class="num">.331</td></tr>
-    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.189</td><td class="num">.403</td></tr>
-    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.230</td><td class="num">.433</td></tr>
-    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.111</td><td class="num">.312</td></tr>
-    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.082</td><td class="num">.396</td></tr>
-    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.151</td><td class="num">.370</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-70B random</span>*</td><td class="num">.118</td><td class="num">.305</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-13B random</span>*</td><td class="num">.166</td><td class="num">.369</td></tr>
-    <tr class="rand"><td><span class="mdl">Llama-2-7B random</span>*</td><td class="num">.226</td><td class="num">.438</td></tr>
-    <tr class="rand"><td><span class="mdl">random Qwen3-8B</span>*</td><td class="num">.285</td><td class="num">.499</td></tr>
+  <div class="cfg"><div class="cfg-k">Setup</div><div class="cfg-v">entity = the whole fragment&rsquo;s <strong>maximal Akkadian text</strong> (no translation, ruler names stripped); whole-fragment embedding at the hold-out-best layer &rarr; ridge probe and a PLS sweep for <strong>year</strong>.</div><div class="cfg-k">Metric</div><div class="cfg-v"><strong>balanced Monte-Carlo</strong> on the 8 dense rulers (r8): cap 21 per ruler, 200 draws, <strong>GroupKFold&nbsp;<em>by ruler</em></strong> &mdash; a ruler is wholly in train or wholly in test, so the probe cannot re-identify a scribe and read the date off the identity. Reported: <strong>Spearman &rho;</strong> (mean over draws) for ridge and best-<em>k</em> PLS, at both poolings. <strong>R&sup2; is not reported</strong>: a grouped test fold is essentially one ruler, so its year variance is ~0 and R&sup2; degenerates to &minus;0.22 for every arm, floor included. Real learning must beat the TF-IDF floor <em>and</em> the arm&rsquo;s own random twin.</div></div>
+  <p class="tbl-cap">grouped-MC (r8) &mdash; Spearman &rho;, ridge and PLS, both poolings</p>
+  <table class="rtbl compact"><thead><tr><th>model</th><th class="num">ridge &rho;<br><small>last</small></th><th class="num">PLS &rho;<br><small>last</small></th><th class="num">ridge &rho;<br><small>mean</small></th><th class="num">PLS &rho;<br><small>mean</small></th></tr></thead><tbody>
+    <tr class="rand"><td><span class="mdl">TF-IDF*</span></td><td class="num">.330</td><td class="num">&minus;.016</td><td class="num">&ndash;</td><td class="num">&ndash;</td></tr>
+    <tr><td><span class="mdl">Llama-2-70B</span></td><td class="num">.084</td><td class="num">.165</td><td class="num">.201</td><td class="num">.311</td></tr>
+    <tr><td><span class="mdl">Llama-2-13B</span></td><td class="num">.109</td><td class="num">.118</td><td class="num">.213</td><td class="num">.245</td></tr>
+    <tr><td><span class="mdl">Llama-2-7B</span></td><td class="num">.121</td><td class="num">.136</td><td class="num">.207</td><td class="num">.224</td></tr>
+    <tr><td><span class="mdl">Qwen3-32B</span></td><td class="num">.022</td><td class="num">.119</td><td class="num">.154</td><td class="num">.248</td></tr>
+    <tr><td><span class="mdl">Qwen3-8B</span></td><td class="num">.143</td><td class="num">.155</td><td class="num">.273</td><td class="num">.286</td></tr>
+    <tr><td><span class="mdl">Qwen3-1.7B</span></td><td class="num">.061</td><td class="num">.221</td><td class="num">.193</td><td class="num">.237</td></tr>
+    <tr><td><span class="mdl">gpt-oss-120B</span></td><td class="num">.094</td><td class="num">.155</td><td class="num">.193</td><td class="num">.248</td></tr>
+    <tr><td><span class="mdl">cuneiform-400M</span></td><td class="num">.124</td><td class="num">.187</td><td class="num">.329</td><td class="num">.349</td></tr>
+    <tr><td><span class="mdl">AKK-300M</span></td><td class="num">.135</td><td class="num">.173</td><td class="num">.288</td><td class="num">.292</td></tr>
+    <tr><td><span class="mdl">uMT5-base</span></td><td class="num">.047</td><td class="num">.052</td><td class="num">.166</td><td class="num">.200</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-70B random*</span></td><td class="num">.086</td><td class="num">.109</td><td class="num">.322</td><td class="num">.322</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-13B random*</span></td><td class="num">.144</td><td class="num">.142</td><td class="num">.273</td><td class="num">.272</td></tr>
+    <tr class="rand"><td><span class="mdl">Llama-2-7B random*</span></td><td class="num">.147</td><td class="num">.151</td><td class="num">.274</td><td class="num">.280</td></tr>
+    <tr class="rand"><td><span class="mdl">random Qwen3-8B*</span></td><td class="num">.234</td><td class="num">.234</td><td class="num">.280</td><td class="num">.280</td></tr>
   </tbody></table>
-  <p class="fig-note">The inversion is sharpest here: <strong>TF-IDF (R&sup2; .503, &rho; .707) dominates</strong>, and every trained LLM (&rho; .31&ndash;.44) sits <em>at or below</em> its random-init twin (e.g. Llama-2-7B .433 vs its random .438). The ~0.6 R&sup2; train-vs-random gap seen on English collapses to &asymp;0. Multilingual scale buys no learned Akkadian chronology &mdash; the signal is the surface king-name string. <em>* = control.</em></p>
+  <p class="fig-note">On raw Akkadian the floor goes to <strong>&minus;.016</strong> &mdash; a char-n-gram model has <em>no</em> transferable date signal once the ruler it memorised is held out. The ordering at the top reproduces the deck&rsquo;s headline: <strong>cuneiform-400M .349</strong>, Llama-2-70B .311, AKK-300M .292. But the honest caveat is the control column: <strong>Llama-2-70B-random scores .322</strong>, third overall, and random Qwen .280. With only 8 held-out rulers the trained/random margin is inside the noise for every arm except cuneiform-400M, so this cell should be read as <em>weak, not clean</em> evidence of a learned chronology &mdash; unlike the English gloss in Exp&nbsp;1. <em>* = control.</em></p>
 </section>
 <section class="slide slide-text" data-index="28">
   <div class="eyebrow">Experiment 2 &middot; Akkadian (maximal) &middot; by-site geo (R&sup2;)</div>

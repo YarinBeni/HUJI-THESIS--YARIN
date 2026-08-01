@@ -30,8 +30,10 @@ _TAG = os.environ.get("FIG_TAG", "")
 # Captions must not hard-code "ridge": under FIG_TAG=__deck the numbers are the
 # per-cell probe the thesis reports (PLS at fragment level, PLS-5 for obscure
 # entities, ridge for cell A), so the phrase changes with the table.
-_PROBE_PHRASE = ("thesis read-out (PLS · fragments / PLS-5 · obscure entities / ridge · A)"
-                 if _TAG else "ridge probe")
+_PROBE_PHRASE = {"": "ridge probe",
+                 "__deck": "thesis read-out (PLS · fragments / PLS-5 · obscure entities / ridge · A)",
+                 "__pls": "best-k PLS probe (ridge only where no PLS sweep exists)",
+                 }.get(_TAG, "ridge probe")
 _PROBE_PHRASE_CAP = _PROBE_PHRASE[0].upper() + _PROBE_PHRASE[1:]
 
 
