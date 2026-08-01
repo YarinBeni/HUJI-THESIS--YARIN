@@ -8,7 +8,7 @@ Entity configs get a teal regime tint, fragment configs a warm tint; TF-IDF is
 a dotted vertical line per config group. All numbers come from the committed
 TIDY table -- nothing fabricated.
 """
-import sys
+import os, sys
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -18,7 +18,7 @@ import pandas as pd
 
 SCRATCH = "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad"
 sys.path.insert(0, SCRATCH)
-from style import COL  # per-arm hex colors (Qwen blues, Llama greens)
+from _style import COL  # per-arm hex colors (Qwen blues, Llama greens)
 
 CSV = "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv"
 OUT = f"{SCRATCH}/viz/dumbbell.png"

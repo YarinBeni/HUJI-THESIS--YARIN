@@ -8,7 +8,7 @@ Entity cards live in a teal regime, document cards in a warm regime.
 All numbers are read from committed result files -- nothing fabricated.
 """
 import json
-import sys
+import os, sys
 
 import matplotlib
 
@@ -19,8 +19,8 @@ import pandas as pd
 from matplotlib.lines import Line2D
 from matplotlib.patches import FancyArrowPatch, Patch, Rectangle
 
-sys.path.insert(0, "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad")
-from style import COL, LAB, isr  # noqa: E402
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib'))
+from _style import COL, LAB, isr  # noqa: E402
 
 ROOT = "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models"
 OUT = "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad/viz/anatomy.png"

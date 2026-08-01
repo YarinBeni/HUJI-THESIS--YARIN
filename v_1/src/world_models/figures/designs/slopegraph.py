@@ -9,7 +9,7 @@ fragment stages tinted warm; the regime switch is an annotated CLIFF band.
 All numbers come straight from the committed TIDY table -- nothing fabricated.
 """
 import csv
-import sys
+import os, sys
 from collections import defaultdict
 
 import numpy as np
@@ -18,8 +18,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
-sys.path.insert(0, "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad")
-from style import COL, LAB, isr
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib'))
+from _style import COL, LAB, isr
 
 TIDY = "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv"
 OUT = "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad/viz/slopegraph.png"

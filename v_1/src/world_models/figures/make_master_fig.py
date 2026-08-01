@@ -2,8 +2,8 @@ import pandas as pd, numpy as np, sys, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-sys.path.insert(0,"/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad")
-from style import COL, LAB
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib'))
+from _style import COL, LAB
 
 ARMS=["llama2_70b","gpt_oss_120b","llama2_13b","qwen3_32b","llama2_7b","qwen3_8b","qwen3_1b7",
       "thalesian_cunei400m","thalesian_akk300m","umt5_base",

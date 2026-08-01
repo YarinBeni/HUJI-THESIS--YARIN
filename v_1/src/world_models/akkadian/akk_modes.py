@@ -80,6 +80,92 @@ def mc_balanced(X, y, ruler, is_place, cap=None, n_draws=200, n_splits=5, seed=4
     }
 
 
+def mc_group(X, y, ruler, cap=None, n_draws=200, n_splits=5, seed=42, alpha=None,
+             pls_ks=(1, 2, 3, 5)):
+    """Balanced Monte-Carlo with GroupKFold-BY-RULER — the thesis deck's protocol.
+
+    Mirrors stress_tests/shared/mc_probe.py, the engine behind the headline table
+    (p1_year_mc.csv; deck slide 2: "200 Monte-Carlo draws over 8 balanced rulers,
+    GroupKFold by ruler. Closes: ... ruler leakage").
+
+    The difference from `mc_balanced` is the only thing that matters here: a ruler is
+    wholly in train OR wholly in test, so the probe cannot re-identify a ruler's scribal
+    style and read the year off it. Since r8 `year` has just 17 distinct values across 8
+    rulers, that leak is worth ~0.4 Spearman for a pure n-gram baseline.
+
+    Per mc_probe: rows are L2-normalised inside each draw; each fold is scored separately
+    and the folds are averaged (NaN folds — a test fold holding a single ruler has
+    constant y, so Spearman is undefined — are dropped); draws are then averaged.
+    Reports ridge plus a PLS sweep over `pls_ks`.
+    """
+    from sklearn.model_selection import GroupKFold
+    from sklearn.cross_decomposition import PLSRegression
+    rng = np.random.RandomState(seed)
+    alpha = float(X.shape[1]) if alpha is None else float(alpha)
+    rulers = np.unique(ruler)
+    per_ruler = {r: np.flatnonzero(ruler == r) for r in rulers}
+    counts = {r: len(ix) for r, ix in per_ruler.items()}
+    if cap is None:
+        cap = min(counts.values())
+
+    def _l2(A):
+        n = np.linalg.norm(A, axis=1, keepdims=True)
+        return A / np.where(n == 0, 1.0, n)
+
+    ridge_sp, ridge_r2 = [], []
+    pls_sp = {k: [] for k in pls_ks}
+    for d in range(n_draws):
+        rows = np.concatenate([
+            rng.choice(per_ruler[r], size=min(cap, counts[r]), replace=False)
+            for r in rulers])
+        Xs, ys, gs = _l2(X[rows].astype(np.float64)), y[rows], ruler[rows]
+        nr = len(np.unique(gs))
+        if len(Xs) < 10 or nr < 2:
+            continue
+        ns = min(n_splits, nr)
+        fold_sp, fold_r2 = [], []
+        fold_pls = {k: [] for k in pls_ks}
+        for tr, te in GroupKFold(n_splits=ns).split(Xs, ys, groups=gs):
+            if len(np.unique(ys[te])) < 2:      # single-ruler fold -> rho undefined
+                continue
+            pred = _ridge_predict(Xs[tr], ys[tr], Xs[te], alpha)
+            sc = _score(ys[te], pred, False)
+            fold_sp.append(sc["spearman"]); fold_r2.append(sc["r2"])
+            for k in pls_ks:
+                if k >= min(len(tr), Xs.shape[1]):
+                    continue
+                try:
+                    p = PLSRegression(n_components=k).fit(Xs[tr], ys[tr].reshape(-1, 1))
+                    fold_pls[k].append(_score(ys[te], p.predict(Xs[te]).ravel(),
+                                              False)["spearman"])
+                except Exception:                                    # noqa: BLE001
+                    pass
+        ok = lambda v: [x for x in v if x == x]                      # noqa: E731
+        if ok(fold_sp):
+            ridge_sp.append(float(np.mean(ok(fold_sp))))
+            ridge_r2.append(float(np.mean(ok(fold_r2))))
+        for k in pls_ks:
+            if ok(fold_pls[k]):
+                pls_sp[k].append(float(np.mean(ok(fold_pls[k]))))
+
+    def agg(v):
+        return (float(np.mean(v)), float(np.std(v))) if v else (float("nan"), float("nan"))
+    sp_m, sp_s = agg(ridge_sp)
+    r2_m, r2_s = agg(ridge_r2)
+    per_k = {str(k): {"spearman_mean": agg(pls_sp[k])[0],
+                      "spearman_std": agg(pls_sp[k])[1]} for k in pls_ks}
+    best_k = max((k for k in pls_ks if pls_sp[k]),
+                 key=lambda k: np.mean(pls_sp[k]), default=None)
+    return {
+        "mode": "mc_group", "splitter": "GroupKFold-by-ruler", "cap": int(cap),
+        "n_draws_used": len(ridge_sp),
+        "spearman_mean": sp_m, "spearman_std": sp_s,
+        "r2_mean": r2_m, "r2_std": r2_s,
+        "pls_per_k": per_k, "pls_best_k": (int(best_k) if best_k else None),
+        "pls_spearman_mean": (agg(pls_sp[best_k])[0] if best_k else float("nan")),
+    }
+
+
 def mc_site(X, y, site, cap=None, n_draws=200, n_splits=5, seed=42, alpha=None):
     """Balanced Monte-Carlo BY FIND-SPOT (the space analog of mc_balanced, exact
     mirror of its ruler protocol): draws balanced across merged sites (cap per site),

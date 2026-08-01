@@ -16,8 +16,8 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from matplotlib.colors import TwoSlopeNorm
 
-sys.path.insert(0, "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad")
-from style import COL, LAB
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib'))
+from _style import COL, LAB
 
 ROOT = "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models"
 OUT = "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad/viz/heatmap.png"
