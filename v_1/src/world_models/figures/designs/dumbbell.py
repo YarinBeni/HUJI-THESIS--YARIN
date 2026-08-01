@@ -16,12 +16,26 @@ from matplotlib.lines import Line2D
 import matplotlib.transforms as mtransforms
 import pandas as pd
 
-SCRATCH = "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad"
+SCRATCH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib')
 sys.path.insert(0, SCRATCH)
 from _style import COL  # per-arm hex colors (Qwen blues, Llama greens)
 
-CSV = "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv"
-OUT = f"{SCRATCH}/viz/dumbbell.png"
+# The TIDY table and the output suffix are overridable so the same code renders
+# both read-outs (raw = ridge everywhere; deck = the per-cell probe the thesis
+# reports — PLS at fragment level, PLS-5 for obscure entities, ridge for cell A).
+TIDY_CSV = os.environ.get("TIDY_CSV", "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv")
+_TAG = os.environ.get("FIG_TAG", "")
+
+# Captions must not hard-code "ridge": under FIG_TAG=__deck the numbers are the
+# per-cell probe the thesis reports (PLS at fragment level, PLS-5 for obscure
+# entities, ridge for cell A), so the phrase changes with the table.
+_PROBE_PHRASE = ("thesis read-out (PLS · fragments / PLS-5 · obscure entities / ridge · A)"
+                 if _TAG else "ridge probe")
+_PROBE_PHRASE_CAP = _PROBE_PHRASE[0].upper() + _PROBE_PHRASE[1:]
+
+
+CSV = TIDY_CSV
+OUT = f"{os.path.dirname(os.path.abspath(__file__))}/dumbbell{_TAG}.png"
 
 # ----------------------------------------------------------------- data ----
 df = pd.read_csv(CSV)
@@ -179,7 +193,7 @@ ax.tick_params(axis="y", length=0, pad=4)
 ax.tick_params(axis="x", labelsize=8.5, colors="#444444",
                top=True, labeltop=True)
 ax.set_xticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
-ax.set_xlabel("Spearman ρ (held-out year decoding, ridge probe)",
+ax.set_xlabel(f"Spearman ρ (held-out year decoding, {_PROBE_PHRASE})",
               fontsize=9.5, color="#222222", labelpad=4)
 for s in ("left", "right"):
     ax.spines[s].set_visible(False)
@@ -197,7 +211,7 @@ fig.text(0.5, 0.9895,
          ha="center", va="top", fontsize=12.5, fontweight="bold",
          color="#111111")
 fig.text(0.5, 0.9745,
-         "Year decoding from frozen activations — ridge probe, Spearman ρ on held-out data; "
+         f"Year decoding from frozen activations — {_PROBE_PHRASE}, Spearman ρ on held-out data; "
          "each row pairs a trained model with its own random-init twin.",
          ha="center", va="top", fontsize=8.8, color="#444444")
 

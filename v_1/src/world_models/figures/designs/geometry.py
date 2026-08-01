@@ -14,6 +14,22 @@ import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
+import os
+
+# The TIDY table and the output suffix are overridable so the same code renders
+# both read-outs (raw = ridge everywhere; deck = the per-cell probe the thesis
+# reports — PLS at fragment level, PLS-5 for obscure entities, ridge for cell A).
+TIDY_CSV = os.environ.get("TIDY_CSV", "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv")
+_TAG = os.environ.get("FIG_TAG", "")
+
+# Captions must not hard-code "ridge": under FIG_TAG=__deck the numbers are the
+# per-cell probe the thesis reports (PLS at fragment level, PLS-5 for obscure
+# entities, ridge for cell A), so the phrase changes with the table.
+_PROBE_PHRASE = ("thesis read-out (PLS · fragments / PLS-5 · obscure entities / ridge · A)"
+                 if _TAG else "ridge probe")
+_PROBE_PHRASE_CAP = _PROBE_PHRASE[0].upper() + _PROBE_PHRASE[1:]
+
 from matplotlib.patches import FancyBboxPatch
 from matplotlib.cm import ScalarMappable
 from matplotlib.colors import Normalize
@@ -21,7 +37,7 @@ from matplotlib.colors import Normalize
 # ---------------------------------------------------------------- paths + data
 ROOT = "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models"
 MAN = f"{ROOT}/manifold/results"
-TIDY = pd.read_csv(f"{ROOT}/figures/TIDY_all_year_results.csv")
+TIDY = pd.read_csv(TIDY_CSV)
 TIDY = TIDY[(TIDY.metric == "spearman") & (TIDY.target == "year")]
 
 
@@ -206,7 +222,7 @@ cb.set_label("chronological rank within panel", fontsize=8.5, labelpad=5)
 # -------------------------------------------------------------------- footnote
 foot = (
     "Colour: percentile of the year target within each panel — A: death year, 935 BCE–2021 CE;  B–C: attested year of ruler / fragment, ≈ 1132–261 BCE.\n"
-    "ρ: Spearman of a ridge probe on full-dimension activations at the best layer, year target; pooling matches the embedding site shown (last / ent-last).  "
+    f"ρ: Spearman of a {_PROBE_PHRASE} on full-dimension activations at the best layer, year target; pooling matches the embedding site shown (last / ent-last).  "
     "TF-IDF = char-n-gram on the raw text (surface floor).\n"
     "Protocols differ by level (not directly comparable): A = i.i.d. holdout;  B = leave-entities-out (entity MC);  B′, C = leave-rulers-out (ruler MC, r8).  "
     "† random = random-init twin (A: random-init Qwen3-8B).\n"
@@ -215,6 +231,6 @@ foot = (
 fig.text(0.060, 0.086, foot, fontsize=7.3, color="#555555", va="top",
          linespacing=1.6)
 
-OUT = "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad/viz/geometry.png"
+OUT = os.path.dirname(os.path.abspath(__file__)) + f"/geometry{_TAG}.png"
 fig.savefig(OUT, dpi=200, facecolor="white")
 print("saved", OUT)

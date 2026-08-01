@@ -19,12 +19,26 @@ from matplotlib.lines import Line2D
 import matplotlib.transforms as mtransforms
 import matplotlib.patheffects as pe
 
-SCRATCH = "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad"
+SCRATCH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib')
 sys.path.insert(0, SCRATCH)
 from _style import COL, LAB, isr  # noqa: E402
 
-TIDY = "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv"
-OUT = f"{SCRATCH}/viz/ridgeline.png"
+# The TIDY table and the output suffix are overridable so the same code renders
+# both read-outs (raw = ridge everywhere; deck = the per-cell probe the thesis
+# reports — PLS at fragment level, PLS-5 for obscure entities, ridge for cell A).
+TIDY_CSV = os.environ.get("TIDY_CSV", "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv")
+_TAG = os.environ.get("FIG_TAG", "")
+
+# Captions must not hard-code "ridge": under FIG_TAG=__deck the numbers are the
+# per-cell probe the thesis reports (PLS at fragment level, PLS-5 for obscure
+# entities, ridge for cell A), so the phrase changes with the table.
+_PROBE_PHRASE = ("thesis read-out (PLS · fragments / PLS-5 · obscure entities / ridge · A)"
+                 if _TAG else "ridge probe")
+_PROBE_PHRASE_CAP = _PROBE_PHRASE[0].upper() + _PROBE_PHRASE[1:]
+
+
+TIDY = TIDY_CSV
+OUT = f"{os.path.dirname(os.path.abspath(__file__))}/ridgeline{_TAG}.png"
 
 # ----------------------------------------------------------------------------- data
 rows = list(csv.DictReader(open(TIDY)))
@@ -173,7 +187,9 @@ ax.text((XL + XR) / 2, DIV_Y + 0.14, "THE  ENTITY → DOCUMENT  CLIFF",
         zorder=41, path_effects=[pe.withStroke(linewidth=3.0, foreground="white")])
 ax.text((XL + XR) / 2, DIV_Y - 0.18,
         "below this line, trained LLMs fall to — or under — their random-init twins; "
-        "only TF-IDF and the cuneiform encoders stay ahead",
+        + ("the char-n-gram floor drops out entirely and only the cuneiform encoders "
+           "stay ahead" if _TAG else
+           "only TF-IDF and the cuneiform encoders stay ahead"),
         ha="center", va="top", fontsize=7.4, style="italic", color="#555555", zorder=41,
         path_effects=[pe.withStroke(linewidth=2.6, foreground="white")])
 
@@ -225,7 +241,7 @@ fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.047), nco
 
 # ---- footnote (two lines so nothing runs off the canvas)
 fig.text(0.042, 0.030,
-         "Ridge probe, target = year, Spearman ρ.  Protocols differ by level and are not pooled: "
+         f"{_PROBE_PHRASE_CAP}, target = year, Spearman ρ.  Protocols differ by level and are not pooled: "
          "A = i.i.d. holdout · B (entity) = entity-level Monte-Carlo splits · B′/C (fragments) = "
          "ruler-grouped MC (r = 8).",
          fontsize=6.6, color="#777777", ha="left")

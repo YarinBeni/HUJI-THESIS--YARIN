@@ -19,11 +19,18 @@ from matplotlib.colors import TwoSlopeNorm
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib'))
 from _style import COL, LAB
 
+# The TIDY table and the output suffix are overridable so the same code renders
+# both read-outs (raw = ridge everywhere; deck = the per-cell probe the thesis
+# reports — PLS at fragment level, PLS-5 for obscure entities, ridge for cell A).
+TIDY_CSV = os.environ.get("TIDY_CSV", "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv")
+_TAG = os.environ.get("FIG_TAG", "")
+
+
 ROOT = "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models"
-OUT = "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad/viz/heatmap.png"
+OUT = os.path.dirname(os.path.abspath(__file__)) + f"/heatmap{_TAG}.png"
 
 # ------------------------------------------------------------------ data ----
-TIDY = list(csv.DictReader(open(f"{ROOT}/figures/TIDY_all_year_results.csv")))
+TIDY = list(csv.DictReader(open(TIDY_CSV)))
 
 ARMS = ["llama2_70b", "llama2_13b", "llama2_7b", "gpt_oss_120b",
         "qwen3_32b", "qwen3_8b", "qwen3_1b7",

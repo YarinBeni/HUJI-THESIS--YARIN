@@ -68,6 +68,16 @@ def rows_fragment(mode):
                                     cleaning=clean, pooling=pool, probe="ridge",
                                     protocol=proto, metric=metric, target="year",
                                     arm=m, value=round(float(v), 4)))
+                # mc_group also carries the PLS sweep — this is the deck's headline
+                # read-out ("activation PLS Spearman", slide 2: k about 3-5), and it
+                # separates the encoders from the n-gram floor far more sharply than
+                # ridge does, so it must be available to the figures.
+                pv = d.get("pls_spearman_mean")
+                if pv is not None and pv == pv:
+                    out.append(dict(level="fragment", language=lang, salience="obscure",
+                                    cleaning=clean, pooling=pool, probe="pls",
+                                    protocol=proto, metric="spearman", target="year",
+                                    arm=m, value=round(float(pv), 4)))
     return out
 
 
@@ -123,17 +133,55 @@ def rows_entity_a():
     return out
 
 
+# --------------------------------------------------------------------- read-out
+# The deck does not use one probe everywhere, and neither should the figures:
+#   cell A (salient entities)  ridge      — Gurnee & Tegmark's own probe
+#   cell B (obscure entities)  pls5       — the k=5 PLS column of the entity MC
+#   fragments                  pls        — p1_year_mc.csv's `pls_spearman_mean`,
+#                                           which is where slide 4's .391 comes from
+# `--readout deck` emits exactly that selection and relabels the winner `ridge` so the
+# figure scripts need no per-cell probe logic. `--readout raw` keeps every probe row.
+DECK_PROBE = {("fragment", "obscure"): "pls",
+              ("entity", "obscure"): "pls5",
+              ("entity", "salient"): "ridge"}
+
+
+def apply_readout(rows):
+    """Keep one probe per cell. PLS reports no R², so for the `r2` metric fall back to
+    the ridge row of the same cell rather than dropping the cell from R² figures."""
+    out, have = [], set()
+    for r in rows:
+        want = DECK_PROBE.get((r["level"], r["salience"]))
+        if want is None or r["probe"] != want:
+            continue
+        out.append({**r, "probe": "ridge", "readout": want})
+        have.add((r["level"], r["salience"], r["cleaning"], r["pooling"], r["arm"],
+                  r["metric"]))
+    for r in rows:
+        key = (r["level"], r["salience"], r["cleaning"], r["pooling"], r["arm"],
+               r["metric"])
+        if r["metric"] == "r2" and r["probe"] == "ridge" and key not in have:
+            out.append({**r, "readout": "ridge (PLS has no R²)"})
+            have.add(key)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", default="mc_group", choices=list(KEYS),
                     help="fragment-cell protocol block; mc_group matches the thesis deck")
+    ap.add_argument("--readout", default="raw", choices=("raw", "deck"),
+                    help="'deck' selects the per-cell probe the thesis actually reports")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
     rows = rows_fragment(args.mode) + rows_entity_b() + rows_entity_a()
+    if args.readout == "deck":
+        rows = apply_readout(rows)
     if not rows:
         print("no rows — has the mc_group job run yet?")
         return
-    out = args.out or os.path.join(_HERE, f"TIDY_all_year_results__{args.mode}.csv")
+    suffix = args.mode + ("__deck" if args.readout == "deck" else "")
+    out = args.out or os.path.join(_HERE, f"TIDY_all_year_results__{suffix}.csv")
     with open(out, "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
         w.writeheader()

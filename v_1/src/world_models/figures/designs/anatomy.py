@@ -22,8 +22,22 @@ from matplotlib.patches import FancyArrowPatch, Patch, Rectangle
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib'))
 from _style import COL, LAB, isr  # noqa: E402
 
+# The TIDY table and the output suffix are overridable so the same code renders
+# both read-outs (raw = ridge everywhere; deck = the per-cell probe the thesis
+# reports — PLS at fragment level, PLS-5 for obscure entities, ridge for cell A).
+TIDY_CSV = os.environ.get("TIDY_CSV", "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv")
+_TAG = os.environ.get("FIG_TAG", "")
+
+# Captions must not hard-code "ridge": under FIG_TAG=__deck the numbers are the
+# per-cell probe the thesis reports (PLS at fragment level, PLS-5 for obscure
+# entities, ridge for cell A), so the phrase changes with the table.
+_PROBE_PHRASE = ("thesis read-out (PLS · fragments / PLS-5 · obscure entities / ridge · A)"
+                 if _TAG else "ridge probe")
+_PROBE_PHRASE_CAP = _PROBE_PHRASE[0].upper() + _PROBE_PHRASE[1:]
+
+
 ROOT = "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models"
-OUT = "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad/viz/anatomy.png"
+OUT = os.path.dirname(os.path.abspath(__file__)) + f"/anatomy{_TAG}.png"
 
 # ----------------------------------------------------------------- regimes
 TEAL = "#0e7c6b"      # entity regime accent
@@ -48,7 +62,7 @@ plt.rcParams.update({
 MONO = "DejaVu Sans Mono"
 
 # ----------------------------------------------------------------- tidy table
-df = pd.read_csv(f"{ROOT}/figures/TIDY_all_year_results.csv")
+df = pd.read_csv(TIDY_CSV)
 df = df[(df.metric == "spearman") & (df.target == "year") & (df.probe == "ridge")]
 
 
@@ -398,7 +412,7 @@ fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.052),
            columnspacing=1.5, handletextpad=0.6)
 
 fig.text(0.062, 0.040,
-         "Metric: Spearman ρ, ridge probe, target = year; bars use each card’s best layer at the featured pooling; top-7 arms by ρ plus controls. "
+         f"Metric: Spearman ρ, {_PROBE_PHRASE}, target = year; bars use each card’s best layer at the featured pooling; top-7 arms by ρ plus controls. "
          "Protocols differ by level — A: held-out entities; B: entity Monte-Carlo (entity_MC); B′/C: ruler-blocked Monte-Carlo (ruler_MC_r8) — compare within, not across, cards.",
          ha="left", va="top", fontsize=7.2, color=MUT)
 fig.text(0.062, 0.022,

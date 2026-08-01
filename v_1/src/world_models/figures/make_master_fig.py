@@ -1,8 +1,8 @@
-import pandas as pd, numpy as np, sys, matplotlib
+import os, pandas as pd, numpy as np, sys, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib'))
 from _style import COL, LAB
 
 ARMS=["llama2_70b","gpt_oss_120b","llama2_13b","qwen3_32b","llama2_7b","qwen3_8b","qwen3_1b7",

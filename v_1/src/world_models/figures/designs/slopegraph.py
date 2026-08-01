@@ -21,8 +21,22 @@ from matplotlib.lines import Line2D
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib'))
 from _style import COL, LAB, isr
 
-TIDY = "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv"
-OUT = "/tmp/claude-0/-home-user-HUJI-THESIS--YARIN/c76dd482-0f95-59a6-8588-5dc18a42def3/scratchpad/viz/slopegraph.png"
+# The TIDY table and the output suffix are overridable so the same code renders
+# both read-outs (raw = ridge everywhere; deck = the per-cell probe the thesis
+# reports — PLS at fragment level, PLS-5 for obscure entities, ridge for cell A).
+TIDY_CSV = os.environ.get("TIDY_CSV", "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv")
+_TAG = os.environ.get("FIG_TAG", "")
+
+# Captions must not hard-code "ridge": under FIG_TAG=__deck the numbers are the
+# per-cell probe the thesis reports (PLS at fragment level, PLS-5 for obscure
+# entities, ridge for cell A), so the phrase changes with the table.
+_PROBE_PHRASE = ("thesis read-out (PLS · fragments / PLS-5 · obscure entities / ridge · A)"
+                 if _TAG else "ridge probe")
+_PROBE_PHRASE_CAP = _PROBE_PHRASE[0].upper() + _PROBE_PHRASE[1:]
+
+
+TIDY = TIDY_CSV
+OUT = os.path.dirname(os.path.abspath(__file__)) + f"/slopegraph{_TAG}.png"
 
 # ---------------------------------------------------------------- data ------
 rows = list(csv.DictReader(open(TIDY)))
@@ -274,7 +288,7 @@ fig.text(kx, 0.150,
          "underline = span the probe pools",
          fontsize=8.4, color="#4a4a4a", ha="left", va="baseline")
 fig.text(kx, 0.124,
-         "Ridge probes on hidden states · target = year · Spearman ρ.   "
+         f"{_PROBE_PHRASE_CAP} on hidden states · target = year · Spearman ρ.   "
          "Δρ = arm − random-init Qwen3-8B in the identical configuration; each "
          "arm is drawn at its best-scoring pooling per stage (marker shape).\n"
          "TF-IDF (char n-grams, no pooling) is referenced against random’s "
