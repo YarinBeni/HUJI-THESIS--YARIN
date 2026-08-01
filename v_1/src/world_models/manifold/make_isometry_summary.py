@@ -36,6 +36,7 @@ from matplotlib.lines import Line2D
 import sys as _sys, os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '..', 'figures', 'lib'))
 from _save import save as _save_fig  # noqa: E402
+from _style import rc as _rc  # noqa: E402
 
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -91,8 +92,8 @@ def best_for(S, surface, dataset, arm, which):
 
 def main():
     S = load()
-    fig, axes = plt.subplots(1, 2, figsize=(14.6, 7.4))
-    plt.rcParams.update({"font.family": "DejaVu Sans"})
+    fig, axes = plt.subplots(1, 2, figsize=(17.5, 9.0))
+    _rc()
 
     for ax, (wi, name, blurb) in zip(axes, [
             (1, r"$\rho$  —  geodesic isometry",
@@ -121,7 +122,7 @@ def main():
                             alpha=.55, zorder=2)
                 if drawn == 0:
                     ax.annotate(LAB.get(a, a), (x, v), textcoords="offset points",
-                                xytext=(0, 9), ha="center", fontsize=7.4,
+                                xytext=(0, 9), ha="center", fontsize=11.5,
                                 color=CELL_COL[cell])
                 drawn += 1
                 if drawn == 4:
@@ -130,38 +131,38 @@ def main():
 
         ax.axhline(0, color="#999999", lw=0.9)
         ax.set_xticks(xt)
-        ax.set_xticklabels(labels, fontsize=7.6, linespacing=1.45)
+        ax.set_xticklabels(labels, fontsize=12, linespacing=1.5)
         for t, c in zip(ax.get_xticklabels(), colors):
             t.set_color(c)
-        ax.set_title(name, fontsize=12.5, fontweight="bold", pad=10)
-        ax.set_xlabel(blurb, fontsize=8.4, color="#666666", labelpad=10)
+        ax.set_title(name, fontsize=17, fontweight="bold", pad=12)
+        ax.set_xlabel(blurb, fontsize=12.5, color="#666666", labelpad=10)
         ax.grid(axis="y", color="#e4e4e4", lw=0.7)
         ax.set_axisbelow(True)
         for s in ("top", "right"):
             ax.spines[s].set_visible(False)
 
-    handles = [Line2D([], [], marker="o", ls="", mfc="#444444", mec="white", ms=8,
+    handles = [Line2D([], [], marker="o", ls="", mfc="#444444", mec="white", ms=11,
                       label="trained arm (best pooling / metric)"),
                Line2D([], [], marker="o", ls="", mfc="white", mec="#444444", mew=1.6,
-                      ms=8, label="its matched random-init twin")]
+                      ms=11, label="its matched random-init twin")]
     fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.155),
-               ncol=2, frameon=False, fontsize=8.6)
+               ncol=2, frameon=False, fontsize=13)
 
     fig.suptitle("Does the representation form a manifold of the feature — "
                  "and does training make it one?",
-                 fontsize=15, fontweight="bold", x=0.055, ha="left", y=0.975)
+                 fontsize=20, fontweight="bold", x=0.055, ha="left", y=0.975)
     fig.text(0.055, 0.925,
              "Modell et al. isometry diagnostics on FULL activations — 332 runs, rank-4 "
              "uncentered SVD, k = 10 graph.\nEach filled point is an arm's best cell; the "
              "open marker is the same architecture with random weights.",
-             fontsize=8.8, wrap=True, color="#555555", ha="left", va="top")
+             fontsize=13, wrap=True, color="#555555", ha="left", va="top")
     fig.text(0.055, 0.105,
              "Read the gap, not the height. ρ behaves like a world-model measure: on "
              "salient English entities the trained model separates cleanly from its twin\n"
              "(world places .29 vs .10). ξ does not — at fragment level an untrained "
              "network reaches .46–.53 against .56 for Llama-2-70B,\nso ξ there is measuring "
              "the shape of the activation cloud, not learned chronology.",
-             fontsize=8.2, color="#666666", ha="left", va="top")
+             fontsize=12, color="#666666", ha="left", va="top")
     fig.subplots_adjust(left=0.055, right=0.975, top=0.775, bottom=0.30, wspace=0.16)
     _save_fig(fig, OUT)
     print("wrote", OUT)

@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "lib"))
-from _style import COL, LAB, isr                                    # noqa: E402
+from _style import COL, LAB, isr, rc                                # noqa: E402
 from _save import save as _save_fig                                 # noqa: E402
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -64,8 +64,8 @@ def curves(variant, pool):
     return out
 
 
-fig, axes = plt.subplots(1, len(CELLS), figsize=(4.55 * len(CELLS), 5.0), sharey=True)
-plt.rcParams.update({"font.family": "DejaVu Sans"})
+fig, axes = plt.subplots(1, len(CELLS), figsize=(5.6 * len(CELLS), 6.2), sharey=True)
+rc()
 
 kmax_seen = OLD_CEILING
 for ax, (variant, pool, title) in zip(axes, CELLS):
@@ -88,29 +88,29 @@ for ax, (variant, pool, title) in zip(axes, CELLS):
     ax.set_xscale("log", base=2)
     ticks = [k for k in (1, 2, 3, 5, 8, 12, 16, 24, 32, 48, 64) if k <= kmax_seen]
     ax.set_xticks(ticks)
-    ax.set_xticklabels([str(k) for k in ticks], fontsize=9)
+    ax.set_xticklabels([str(k) for k in ticks], fontsize=13)
     ax.minorticks_off()
-    ax.set_xlabel("PLS latent dimensions  k", fontsize=9.5, color=MUT)
-    ax.set_title(title, fontsize=10.2, color=INK, fontweight="bold", pad=8)
+    ax.set_xlabel("PLS latent dimensions  k", fontsize=15, color=MUT)
+    ax.set_title(title, fontsize=16.5, color=INK, fontweight="bold", pad=8)
     ax.axhline(0, color="#9a9a9a", lw=0.9)
     ax.grid(color="#ececec", lw=0.7)
     ax.set_axisbelow(True)
     for s in ("top", "right"):
         ax.spines[s].set_visible(False)
 
-axes[0].set_ylabel("Spearman ρ   (grouped MC, r = 8)", fontsize=10, color=INK)
+axes[0].set_ylabel("Spearman ρ   (grouped MC, r = 8)", fontsize=15, color=INK)
 axes[0].annotate("old grid ceiling", xy=(OLD_CEILING, axes[0].get_ylim()[1]),
                  xytext=(-4, -12), textcoords="offset points", ha="right",
-                 fontsize=8.2, color=WARM, rotation=90, va="top")
+                 fontsize=12, color=WARM, rotation=90, va="top")
 
 swept = kmax_seen > OLD_CEILING
 fig.suptitle("How many latent dimensions does the date live in?",
-             fontsize=15, fontweight="bold", x=0.045, ha="left", y=0.985)
+             fontsize=20, fontweight="bold", x=0.045, ha="left", y=0.985)
 fig.text(0.045, 0.925,
          "Grouped-MC Spearman ρ as a function of the PLS rank k, one line per arm; the "
          "ring marks the k that was selected. Dashed vertical = the k = 5 ceiling "
          "inherited from shared/mc_probe.py.",
-         fontsize=9.0, color="#555555", ha="left", va="top")
+         fontsize=13, color="#555555", ha="left", va="top")
 fig.text(0.045, 0.035,
          ("Curves extend past the old ceiling, so k is now chosen by the data rather "
           "than by the grid. Where a curve is still rising at the right-hand edge, the "
@@ -119,6 +119,6 @@ fig.text(0.045, 0.035,
           "Every curve stops at k = 5 because that is where the inherited grid stopped "
           "— 18 of 58 cells selected exactly k = 5, which is the signature of a grid "
           "that is binding. WAk_pls_ksweep extends this to k = 64."),
-         fontsize=8.4, color=("#555555" if swept else WARM), ha="left", va="top")
+         fontsize=12, color=("#555555" if swept else WARM), ha="left", va="top")
 fig.subplots_adjust(left=0.055, right=0.985, top=0.775, bottom=0.155, wspace=0.08)
 _save_fig(fig, OUT)
