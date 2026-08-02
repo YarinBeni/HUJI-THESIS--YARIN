@@ -85,8 +85,15 @@ def _style(ax, metric, xlabel, title):
         ax.set_ylim(-0.1, 0.95)
 
 
-def _draw(ax, curves, floor, metric, xlabel, title, logx=False):
-    if floor is not None:
+def _draw(ax, curves, floor, metric, xlabel, title, logx=False, floor_curve=None):
+    # On the k panels the floor is itself a function of k, so draw it as a curve;
+    # a flat line there would compare every arm's swept best against the floor's
+    # single fixed-k score, which is not the same quantity.
+    if floor_curve is not None:
+        fx, fy = floor_curve
+        ax.plot(fx, fy, color="k", lw=2.0, ls=(0, (1, 1.6)), marker="o", ms=4.0,
+                label=LABEL["tfidf"], zorder=4)
+    elif floor is not None:
         ax.axhline(floor, color="k", lw=1.8, ls=(0, (1, 1.6)),
                    label=LABEL["tfidf"], zorder=4)
     for arm, xs, ys in curves:
@@ -101,8 +108,16 @@ def _draw(ax, curves, floor, metric, xlabel, title, logx=False):
                 zorder=7 if not ctrl else 5, clip_on=False)
     if logx:
         ax.set_xscale("log", base=2)
-        ax.set_xticks([1, 2, 4, 8, 16, 32, 64])
-        ax.set_xticklabels([1, 2, 4, 8, 16, 32, 64])
+        # The grid is 1..64, but PLS needs k < min(n_samples, n_features) and cell B
+        # holds only a few dozen entities, so the high ks are never fitted. Stop the
+        # axis at the largest k anyone actually reached — an axis running to 64 with
+        # empty space past 24 reads as missing runs rather than as a hard limit.
+        kmax = max([x for _, xs, _ in curves for x in xs] +
+                   ([] if floor_curve is None else list(floor_curve[0])) or [1])
+        ticks = [k for k in (1, 2, 4, 8, 16, 32, 64) if k <= max(kmax, 2)]
+        ax.set_xticks(ticks)
+        ax.set_xticklabels(ticks)
+        ax.set_xlim(0.85, kmax * 1.12)
     _style(ax, metric, xlabel, title)
 
 
@@ -163,12 +178,19 @@ def fig_plsk():
                 continue
             ks = sorted(int(k) for k in by_k)
             curves.append((arm, ks, [by_k[str(k)][metric] for k in ks]))
+        fby_k = _ksweep("tfidf", et, "text")
+        fcurve = None
+        if fby_k:
+            fks = sorted(int(k) for k in fby_k)
+            fcurve = (fks, [fby_k[str(k)][metric] for k in fks])
+        else:
+            missing.add("tfidf")
         _draw(ax, curves, floors.get((et, metric)), metric,
-              "PLS components k", title, logx=True)
+              "PLS components k", title, logx=True, floor_curve=fcurve)
         ax.axvline(5, color="#c62828", lw=1.2, ls="-.", alpha=0.5, zorder=1)
     _legend(fig, axes)
-    fig.suptitle("Obscure entities (cell B): how many PLS directions the signal "
-                 "needs, k = 1 to 64 at each arm's best layer",
+    fig.suptitle("Obscure entities (cell B): how many PLS directions the signal needs "
+                 "— grid k = 1..64, capped by sample size — at each arm's best layer",
                  fontsize=20, fontweight="bold")
     out = os.path.join(FIGS, "fig_cellB_plsk.png")
     fig.savefig(out, facecolor="white")
