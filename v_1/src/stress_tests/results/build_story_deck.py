@@ -813,6 +813,8 @@ def frag_table(variant, target):
             if a is None or b is None:
                 return "&ndash;"
             v = b - a
+            if abs(v) < 0.0005:
+                return ".000"
             return f'{"+" if v > 0 else ""}{_fmt(v)}'
         tr = '<tr class="rand">' if ctrl else '<tr>'
         row = (tr + f'<td><span class="mdl">{label}</span></td>'
