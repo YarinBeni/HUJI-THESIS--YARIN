@@ -222,9 +222,13 @@ def run_tfidf(args):
         out = {"method": "tfidf", "entity_type": et, "site": "text",
                "protocol": f"entity-level MC ({N_DRAWS} draws, {TEST_RATIO:.0%})",
                "n_entities": int(df.entity_ix.nunique()),
-               "layers": {"0": {"all": score_matrix(X, df, et, "all")}}}
+               # sweep_k here too: the TF-IDF floor must get the same k treatment as
+               # the models, or the comparison is unequal. Cheap — one "layer", and the
+               # feature matrix is entity strings, not activations.
+               "layers": {"0": {"all": score_matrix(X, df, et, "all", sweep_k=True)}}}
         if bare.sum() >= 8:
-            out["layers"]["0"]["bare"] = score_matrix(X[bare], df[bare], et, "bare")
+            out["layers"]["0"]["bare"] = score_matrix(X[bare], df[bare], et, "bare",
+                                                      sweep_k=True)
         out["best_layer"] = 0
         out["best_mc_r2"] = out["layers"]["0"]["all"].get(
             "ridge_mc", {}).get("mc_r2", float("nan"))
