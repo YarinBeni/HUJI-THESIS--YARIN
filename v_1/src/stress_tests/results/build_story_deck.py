@@ -48,7 +48,7 @@ SPINE = [
     ("new", "c_kingtoken", "Raw Akkadian: the king's name is readable, the chronology is not"),
     ("new", "ruler_not_chrono", "The name token identifies the king, and an untrained network does it too"),
     ("new", "c_frag_year", "Raw Akkadian, whole fragments: every model falls to its untrained twin"),
-    ("new", "c_frag_geo", "Raw Akkadian, whole fragments: the find-spot survives where the date does not"),
+    ("new", "c_frag_geo", "Raw Akkadian, whole fragments: known find-spots are matchable, even by untrained networks"),
     ("new", "c_layers", "Raw Akkadian, layer by layer: the translation encoder is the only arm that builds depth"),
     ("new", "c_plsk", "Raw Akkadian: the signal saturates far earlier than it does in English"),
     ("new", "explorer_akk", "Inside the winner's Akkadian embedding: the same gradient, from the raw language"),
@@ -256,10 +256,10 @@ NEW_SLIDES = {
     <div class="cfg-k">Task</div><div class="cfg-v">predict <strong>the year a fragment was written</strong>. The entity is no longer a name but a <strong>whole tablet fragment</strong>, read in its English translation, so this is the paper's <em>news headlines</em> experiment carried over to our corpus: a full passage rather than a short name, with no entity marked anywhere in it. A fragment reads like <em>&ldquo;&hellip; the palace of my lordship which is in Nineveh I rebuilt and completed &hellip;&rdquo;</em>.</div>
     <div class="cfg-k">Data</div><div class="cfg-v">the corpus names <strong>40 rulers across 1193 dated fragments</strong>, but it is severely unbalanced: Ashurbanipal alone accounts for 268 and eighteen rulers have three fragments or fewer. We therefore restrict to the <strong>8 best-attested rulers</strong>, which is the panel an Assyriologist would actually trust and which still covers most of the corpus. Every ruler is then capped at the same number of fragments so frequency cannot stand in for chronology.</div>
     <div class="cfg-k">Pooling</div><div class="cfg-v"><strong>text, last token</strong>: the activation at the final token of the passage, which is what the paper uses for headlines. <strong>text, average</strong>: averaged over the whole passage. Nothing points the model at a date, so the signal has to be recoverable from the passage as a whole.</div>
-    <div class="cfg-k">Metric</div><div class="cfg-v">Spearman &rho; and R&sup2;, averaged over <strong>200 balanced draws</strong> that cap each of the 8 best-attested rulers at the same number of fragments, so no single king can carry the score.</div>
+    <div class="cfg-k">Metric</div><div class="cfg-v">Spearman &rho;, averaged over <strong>200 balanced draws</strong> that cap each of the 8 best-attested rulers at the same number of fragments, with the split inside every draw <strong>grouped by ruler</strong>: the kings being tested never appear in training, so the probe cannot succeed by recognising a king it already saw. R&sup2; is not shown at fragment level: with the kings held out, every arm's prediction collapses toward the panel average and R&sup2; lands on the same constant (about &minus;.22) for all of them, so only the ranking read-out carries information.</div>
   </div>
   {{TABLE:frag:eng_tier0:year}}
-  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>The n-gram baseline wins outright</strong> (&rho; .775), ahead of every embedding in the table. Pooling matters more than the model does: averaging over the passage adds about <strong>+.20 &rho;</strong> to almost every arm, which is the opposite of what we saw on bare names, because a date leaves its trace across the whole passage rather than at one token. But the arms that gain the most from it gain nothing <em>over their controls</em>: at the top, AKK-300M (.740) and Qwen3-8B (.737) sit barely above an <strong>untrained</strong> Llama-2-70B (.661) and an untrained Qwen3-8B (.636). Moving from famous names to obscure passages, the scaling law is gone and the models no longer separate from noise.</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>The n-gram baseline still wins</strong> (&rho; .408), with the best trained arm, AKK-300M (.400), just under it and every other embedding below both. Averaging over the passage beats the last token for every trained arm, the opposite of what we saw on bare names, because whatever dates a passage is spread across it rather than parked at one token. But nothing separates convincingly from the controls: the untrained twins reach .27, so the best trained margin over them is about .13 and most arms are inside it. Held-out kings compress everything: on unseen kings the models can only read period style, not identity, and period style is worth about &rho; .2 to .4 here. Moving from famous names to obscure passages, the scaling law is gone.</div>
 </section>""",
 
 "b_frag_geo": """<section class="slide slide-text">
@@ -267,12 +267,12 @@ NEW_SLIDES = {
   <h2 class="sh">Whole fragments in English: place is no better than an untrained network</h2>
   <div class="cfg tight">
     <div class="cfg-k">Task</div><div class="cfg-v">predict <strong>where the tablet was dug up</strong>, its latitude and longitude, from the same fragments and the same English translations as the previous slide. This is the paper's world-place experiment moved to whole passages: the find-spot is <em>never named in the text</em>, so unlike a city name there is nothing to look up and the coordinates have to come from whatever the passage implies.</div>
-    <div class="cfg-k">Data</div><div class="cfg-v">1068 fragments whose find-spot is known, grouped into the <strong>10 excavation sites</strong> with enough material to hold one out, again capped equally so that a large site cannot carry the score. The year slide restricts by ruler; this one restricts by site, because the confound here is which dig a fragment came from rather than which king wrote it.</div>
+    <div class="cfg-k">Data</div><div class="cfg-v">1068 fragments whose find-spot is known, grouped into the <strong>10 excavation sites</strong> with enough material to balance, again capped equally so that a large site cannot carry the score. The year slide restricts by ruler; this one restricts by site, because the confound here is which dig a fragment came from rather than which king wrote it.</div>
     <div class="cfg-k">Pooling</div><div class="cfg-v">the same two read-outs: <strong>text, last token</strong> and <strong>text, average</strong>.</div>
-    <div class="cfg-k">Metric</div><div class="cfg-v">Spearman &rho; and R&sup2; over <strong>200 draws that hold out whole find-spots</strong>, capping each of the 10 merged sites equally, so a probe cannot succeed by memorising which site a fragment came from.</div>
+    <div class="cfg-k">Metric</div><div class="cfg-v">Spearman &rho; and R&sup2; over <strong>200 balanced draws</strong>, capping each of the 10 merged sites equally. Unlike the year slide, the sites themselves appear on <strong>both sides of every split</strong>: the corpus has only 10 sites, so holding whole sites out leaves nothing stable to score. This table therefore measures whether a probe can <strong>match a fragment to a known dig site</strong>, an easier, in-distribution question, and the honest comparison is against the untrained twins, which are allowed to do exactly the same matching.</div>
   </div>
   {{TABLE:frag:eng_tier0:geo}}
-  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Every trained model is matched by its own untrained twin.</strong> Averaging over the passage, the best arm is cuneiform-400M (&rho; .640, R&sup2; .445), but an <em>untrained</em> Llama-2-7B reaches .606 / .463 and an untrained Qwen3-8B .587 / .450, so the reading rule is not satisfied anywhere in this table. As with the year, averaging beats last-token pooling for nearly every arm, and again the gain is shared with the controls rather than earned by training. The n-gram baseline is the interesting exception: it ranks well on &rho; (.535) yet collapses on R&sup2; (.022), meaning it orders sites roughly but cannot place them.</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Every trained model is matched by its own untrained twin.</strong> Averaging over the passage, the best arm is cuneiform-400M (&rho; .640, R&sup2; .445), but an <em>untrained</em> Llama-2-7B reaches .606 / .463 and an untrained Qwen3-8B .587 / .450, so the reading rule is not satisfied anywhere in this table. As with the year, averaging beats last-token pooling for nearly every arm, and again the gain is shared with the controls rather than earned by training. Note what the untrained scores mean here: since known sites sit on both sides of the split, a probe wins by recognising <em>which site a fragment sounds like</em> and answering with that site's coordinates, and random weights preserve enough surface texture to do that. The n-gram baseline makes the same point: it ranks sites (&rho; .535) yet collapses on R&sup2; (.022), ordering without placing.</div>
 </section>""",
 
 "mlm_model": """<section class="slide slide-text">
@@ -366,23 +366,23 @@ NEW_SLIDES = {
   <div class="cfg tight">
     <div class="cfg-k">Task</div><div class="cfg-v">predict <strong>the year a fragment was written</strong>, exactly as two slides ago, but from the <strong>Akkadian text itself</strong> rather than from its English translation. Nothing else changes, so the gap between this table and that one is the cost of the language alone.</div>
     <div class="cfg-k">Text</div><div class="cfg-v">cleaned, with royal names and other surface giveaways stripped and every fragment cut to the same length, so a score cannot come from spotting a king's name or from the fact that well-preserved periods leave longer texts.</div>
-    <div class="cfg-k">Data</div><div class="cfg-v">the same <strong>8 best-attested rulers</strong> as the English slides, capped equally, with <strong>200 redrawn balanced splits</strong> grouped by ruler so no king appears in both halves of a draw.</div>
+    <div class="cfg-k">Data</div><div class="cfg-v">the same <strong>8 best-attested rulers</strong> as the English slides, capped equally, with <strong>200 redrawn balanced splits</strong> grouped by ruler so no king appears in both halves of a draw. As on the English fragment slide, R&sup2; is not shown: with the kings held out it collapses to the same constant for every arm, and only the ranking read-out carries information.</div>
     <div class="cfg-k">Pooling</div><div class="cfg-v"><strong>text, last token</strong> and <strong>text, average</strong>, the same two read-outs used throughout.</div>
   </div>
   {{TABLE:frag:akk_maximal:year}}
-  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>This is where the claim breaks.</strong> Averaging over the fragment, the best trained arm is cuneiform-400M at &rho; .699, but an <em>untrained</em> Llama-2-70B reaches .588 and an untrained Qwen3-8B .544, and on last-token pooling the untrained Qwen3-8B (.499) beats <em>every</em> trained model in the table. The n-gram baseline sits at .707, above all of them. Compared with the English translation of the very same fragments, every arm loses roughly .15 to .20 &rho;, so what the models had was access to English, not to the content. <strong>Only cuneiform-400M, a multilingual translation encoder, stays clearly above its controls</strong>, which is the one positive signal in this table and the thread the last part of the deck picks up.</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>This is where the claim breaks.</strong> Averaging over the fragment, the best trained arm is cuneiform-400M at &rho; .329, and it sits exactly on the n-gram baseline (.330) and a hair above an <em>untrained</em> Llama-2-70B (.322). On last-token pooling it is worse: the untrained Qwen3-8B (.234) beats <em>every</em> trained model in the table. No arm passes the reading rule on unseen kings. Against the English translations of the very same fragments, the arms that had any edge lose it (Llama-2-70B .327 &rarr; .201, AKK-300M .400 &rarr; .288) and the whole table converges to the untrained band, while <strong>cuneiform-400M is the one arm that scores better on the raw Akkadian (.329) than on the English (.307)</strong>, the thin but consistent thread the last part of the deck picks up.</div>
 </section>""",
 
 "c_frag_geo": """<section class="slide slide-text">
   <div class="eyebrow">C &middot; raw Akkadian &middot; whole fragments</div>
-  <h2 class="sh">Reading the find-spot off a whole Akkadian fragment: place survives where the date does not</h2>
+  <h2 class="sh">Reading the find-spot off a whole Akkadian fragment: known sites are matchable, even by untrained networks</h2>
   <div class="cfg tight">
     <div class="cfg-k">Task</div><div class="cfg-v">predict <strong>latitude and longitude of the excavation site</strong> from the same cleaned Akkadian fragments. The site is never named in the text, so there is no name to recognise; whatever the probe finds has to come from how the fragment is written.</div>
-    <div class="cfg-k">Data</div><div class="cfg-v">1068 fragments with a known find-spot, grouped into the <strong>10 sites</strong> with enough material, capped equally over <strong>200 draws that hold out whole sites</strong>, so a probe cannot win by memorising which dig a fragment came from.</div>
+    <div class="cfg-k">Data</div><div class="cfg-v">1068 fragments with a known find-spot, grouped into the <strong>10 sites</strong> with enough material, capped equally over <strong>200 balanced draws</strong>. As on the English geo slide, the sites appear on <strong>both sides of every split</strong>, only 10 exist, so this measures matching a fragment to a <strong>known</strong> dig site, not placing an unseen one, and the yardstick is the untrained twins, which may do the same matching.</div>
     <div class="cfg-k">Pooling</div><div class="cfg-v">the same <strong>last token</strong> and <strong>average</strong> read-outs. Note that place has no entity-token variant at fragment level: a find-spot is not a word in the text, so there is no span to point at, which is why only the two whole-text poolings appear here and on the English geo slide.</div>
   </div>
   {{TABLE:frag:akk_maximal:geo}}
-  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Place behaves differently from date.</strong> Under last-token pooling several trained arms clear the n-gram baseline decisively on R&sup2; (Llama-2-13B and Llama-2-7B at .326 against TF-IDF's .019), which never happens for the year. But the controls climb with them: an untrained Qwen3-8B reaches .351, the best number in that column. Averaging again favours cuneiform-400M (&rho; .612, R&sup2; .430), and again its untrained neighbours are close behind. So the honest reading is that <strong>coordinates are partially recoverable from the writing itself while the date is not</strong>, and that most of what makes place recoverable is available to an untrained network as well.</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Place behaves differently from date, but not because of training.</strong> Under last-token pooling several trained arms clear the n-gram baseline decisively on R&sup2; (Llama-2-13B and Llama-2-7B at .326 against TF-IDF's .019), which never happens for the year. But the controls climb with them: an untrained Qwen3-8B reaches .351, the best number in that column. Averaging again favours cuneiform-400M (&rho; .612, R&sup2; .430), and again its untrained neighbours are close behind. The honest reading: a fragment's writing carries enough <strong>site texture</strong> to match it to a known dig even through random weights, and that in-distribution matching, not a learned map, is what these scores measure.</div>
 </section>""",
 
 "c_layers": """<section class="slide slide-figure fig-major">
@@ -460,7 +460,7 @@ NEW_SLIDES = {
   <h2 class="sh">What a linear temporal world model needs in order to exist</h2>
   <div class="exp-config">Reading the ladder back down, the collapse is attributable, and the failed rescues say what is <em>not</em> responsible for it.</div>
   <div class="text-points">
-    <div class="tp"><div class="tp-h">Condition 1: the language must be well represented in training</div><div class="tp-b">This is the load-bearing factor. Holding the entities fixed and moving from English to Akkadian drops every trained model <strong>onto its own untrained twin</strong>, while a character n-gram baseline beats them all. The geometry the paper found does not transfer to a language the model barely saw.</div></div>
+    <div class="tp"><div class="tp-h">Condition 1: the language must be well represented in training</div><div class="tp-b">This is the load-bearing factor. Holding the entities fixed and moving from English to Akkadian drops every trained model <strong>onto its own untrained twin</strong>, while a character n-gram baseline matches the best of them. The geometry the paper found does not transfer to a language the model barely saw.</div></div>
     <div class="tp"><div class="tp-h">Condition 2: the entities must be salient enough to have been written about</div><div class="tp-b">Moving from famous names to obscure ones weakens the signal before any language change, and the n-gram baseline starts to lead on time. A linear timeline needs entities the model has read <em>about</em>, repeatedly and in dated context, not merely names it can spell.</div></div>
     <div class="tp"><div class="tp-h">Condition 3: the read-out must sit where the information is</div><div class="tp-b">Pooling was never a side detail. On bare names the paper's entity-last-token choice carries the result and averaging destroys it; on whole fragments the relation flips and averaging is worth about +.20. A claim about what a model represents is inseparable from where you read it.</div></div>
     <div class="tp"><div class="tp-h">What does not substitute for any of them</div><div class="tp-b"><strong>Scale</strong> (flat from 1.7B to 120B on Akkadian, and gpt-oss-120B lands mid-pack even on English) &middot; <strong>declarative knowledge</strong> (the models recite these kings' reigns in English) &middot; <strong>prompting</strong>, <strong>asking directly</strong>, <strong>continued pretraining on all the Akkadian there is</strong>, <strong>word order</strong>, <strong>curved and kernel probes</strong>, <strong>unsupervised geometry</strong>. Every rescue leaves the numbers where they were.</div></div>
@@ -745,13 +745,25 @@ def entity_table():
 
 
 def frag_table(variant, target):
-    """Cell B/C, fragment level: both poolings x {Spearman, R2}, balanced draws."""
+    """Cell B/C, fragment level, balanced draws.
+
+    Year uses `mc_group` (GroupKFold-by-ruler INSIDE the 200 balanced draws: the
+    tested kings never appear in training). The sibling `mc` key is
+    StratifiedKFold-by-ruler; because r8 year is essentially a ruler label, that
+    variant leaks ruler identity and inflates every arm (TF-IDF reaches .707 on
+    name-stripped text), so it is never shown. Year is Spearman-only: under
+    held-out kings the ridge prediction collapses toward the panel mean and R2
+    lands on the same constant (about -0.22) for every arm, so only the ranking
+    read-out is informative.
+
+    Geo uses `mc_site`, which is stratified BY SITE (every site appears in train
+    and test): an in-distribution read-out, and the slide text must say so."""
     import json as _json
 
     def read(arm, site):
         if target == "year":
             p = os.path.join(AKK, "probes", arm, f"{variant}.r8.year.{site}.ridge.json")
-            key = "mc"
+            key = "mc_group"
         else:
             p = os.path.join(AKK, "probes_geosite", arm,
                              f"{variant}.{site}.geo_site.json")
@@ -761,37 +773,38 @@ def frag_table(variant, target):
         m = _json.load(open(p))[key]
         return m.get("spearman_mean"), m.get("r2_mean")
 
-    def tfidf_year():
-        import csv
-        with open(os.path.join(AKK, "summary_ALL_modes_full.csv")) as f:
-            for r in csv.DictReader(f):
-                if (r["arm"] == "tfidf" and r["variant"] == variant
-                        and r["rulers"] == "r8" and r["target"] == "year"):
-                    return float(r["mc_rho"]), float(r["mc_r2"])
-        return None, None
-
-    head = ('<table class="rtbl compact"><thead>'
-            '<tr><th rowspan="2">model</th>'
-            '<th colspan="3" class="num">Spearman &rho;</th>'
-            '<th colspan="3" class="num">R&sup2;</th></tr>'
-            '<tr><th class="num">last token</th><th class="num">average</th>'
-            '<th class="num">difference</th>'
-            '<th class="num">last token</th><th class="num">average</th>'
-            '<th class="num">difference</th></tr></thead><tbody>')
+    if target == "year":
+        head = ('<table class="rtbl compact"><thead>'
+                '<tr><th>model</th>'
+                '<th class="num">Spearman &rho; &middot; last token</th>'
+                '<th class="num">Spearman &rho; &middot; average</th>'
+                '<th class="num">difference</th></tr></thead><tbody>')
+    else:
+        head = ('<table class="rtbl compact"><thead>'
+                '<tr><th rowspan="2">model</th>'
+                '<th colspan="3" class="num">Spearman &rho;</th>'
+                '<th colspan="3" class="num">R&sup2;</th></tr>'
+                '<tr><th class="num">last token</th><th class="num">average</th>'
+                '<th class="num">difference</th>'
+                '<th class="num">last token</th><th class="num">average</th>'
+                '<th class="num">difference</th></tr></thead><tbody>')
     body = []
     for arm, label, ctrl in ROWS_B:
         if arm == "tfidf":
-            if target == "year":
-                rho, r2 = tfidf_year()
-            else:
-                rho, r2 = read("tfidf", "text")
+            rho, r2 = read("tfidf", "text")
             tr = '<tr class="rand">'
-            body.append(
-                tr + f'<td><span class="mdl">{label}</span></td>'
-                f'<td class="num" colspan="2">{_fmt(rho)}</td>'
-                '<td class="num">&ndash;</td>'
-                f'<td class="num" colspan="2">{_fmt(r2)}</td>'
-                '<td class="num">&ndash;</td></tr>')
+            if target == "year":
+                body.append(
+                    tr + f'<td><span class="mdl">{label}</span></td>'
+                    f'<td class="num" colspan="2">{_fmt(rho)}</td>'
+                    '<td class="num">&ndash;</td></tr>')
+            else:
+                body.append(
+                    tr + f'<td><span class="mdl">{label}</span></td>'
+                    f'<td class="num" colspan="2">{_fmt(rho)}</td>'
+                    '<td class="num">&ndash;</td>'
+                    f'<td class="num" colspan="2">{_fmt(r2)}</td>'
+                    '<td class="num">&ndash;</td></tr>')
             continue
         rl, r2l = read(arm, "last")
         rm, r2m = read(arm, "mean")
@@ -802,11 +815,13 @@ def frag_table(variant, target):
             v = b - a
             return f'{"+" if v > 0 else ""}{_fmt(v)}'
         tr = '<tr class="rand">' if ctrl else '<tr>'
-        body.append(tr + f'<td><span class="mdl">{label}</span></td>'
-                    f'<td class="num">{_fmt(rl)}</td><td class="num">{_fmt(rm)}</td>'
-                    f'<td class="num">{d(rl, rm)}</td>'
-                    f'<td class="num">{_fmt(r2l)}</td><td class="num">{_fmt(r2m)}</td>'
-                    f'<td class="num">{d(r2l, r2m)}</td></tr>')
+        row = (tr + f'<td><span class="mdl">{label}</span></td>'
+               f'<td class="num">{_fmt(rl)}</td><td class="num">{_fmt(rm)}</td>'
+               f'<td class="num">{d(rl, rm)}</td>')
+        if target != "year":
+            row += (f'<td class="num">{_fmt(r2l)}</td><td class="num">{_fmt(r2m)}</td>'
+                    f'<td class="num">{d(r2l, r2m)}</td>')
+        body.append(row + '</tr>')
     return head + "".join(body) + "</tbody></table>"
 
 
