@@ -27,18 +27,24 @@ Exit code 0 = safe to proceed to step 2. Non-zero = stop, do not book GPU time.
 from __future__ import annotations
 
 import argparse
+import csv
 import os
 import sys
-
-import pandas as pd
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _WM = os.path.join(os.path.dirname(_HERE), "world_models")
 sys.path.insert(0, _WM)
 sys.path.insert(0, os.path.join(_WM, "akkadian"))
 
-from wm_lib.registry import MODELS                     # noqa: E402
-import extract_entity as EE                            # noqa: E402
+# This has to import the REAL span logic — testing a copy would prove nothing — and
+# extract_entity pulls numpy/pandas, so the conda env must be active. Fail with the
+# fix rather than a bare ModuleNotFoundError.
+try:
+    from wm_lib.registry import MODELS                 # noqa: E402
+    import extract_entity as EE                        # noqa: E402
+except ModuleNotFoundError as _e:                      # noqa: BLE001
+    sys.exit(f"missing dependency ({_e.name}) — activate the env first:\n"
+             "    source ~/miniconda3/etc/profile.d/conda.sh && conda activate thesis")
 
 DATA = os.path.join(_WM, "data", "entity_datasets")
 ENTITY_TYPES = ["assyrian_ruler", "mesopotamian_place"]
@@ -72,14 +78,17 @@ def check(model_key, n_per_type, max_tokens):
         if not os.path.exists(path):
             print(f"  [skip] no dataset at {path}")
             continue
-        df = pd.read_csv(path)
+        # stdlib csv, not pandas: this runs before any GPU is booked and should work
+        # on a bare login node without the conda env activated.
+        rows_csv = list(csv.DictReader(open(path)))
+        bare_rows = [r for r in rows_csv if r["template"] == "bare"][:n_per_type]
+        sent_rows = [r for r in rows_csv if r["template"] != "bare"][:n_per_type]
         # cover both the bare name and a carrier sentence — the carrier is where span
         # location can realistically go wrong
-        sub = pd.concat([df[df.template == "bare"].head(n_per_type),
-                         df[df.template != "bare"].head(n_per_type)])
-        strings = sub.entity_string.astype(str).tolist()
-        spans = list(zip(sub.ent_start.astype(int), sub.ent_end.astype(int)))
-        names = sub.name.astype(str).tolist()
+        sub = bare_rows + sent_rows
+        strings = [str(r["entity_string"]) for r in sub]
+        spans = [(int(r["ent_start"]), int(r["ent_end"])) for r in sub]
+        names = [str(r["name"]) for r in sub]
 
         try:
             # returns (all_ids, ent_t0, ent_t1, n_truncated); t1 is INCLUSIVE
