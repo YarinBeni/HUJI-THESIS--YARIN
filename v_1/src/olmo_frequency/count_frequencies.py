@@ -63,10 +63,20 @@ FIELDS = ["entity_type", "name", "query", "count", "approx", "index_used",
 
 # --------------------------------------------------------------------------- API
 
+# urllib's default User-Agent is "Python-urllib/3.x", which edge protection in front of
+# public APIs routinely blocks once a client starts issuing requests quickly. The run
+# that failed sailed through ~100 queries and was then 403'd on every one after, which
+# is what a WAF ban looks like — not what a quota looks like. Identify honestly instead.
+UA = ("huji-thesis-olmo-frequency/1.0 (academic research; "
+      "counting entity frequencies in olmo-mix-1124)")
+
+
 def api(payload, timeout=30):
     req = urllib.request.Request(
         API, data=json.dumps(payload).encode(),
-        headers={"Content-Type": "application/json"})
+        headers={"Content-Type": "application/json",
+                 "Accept": "application/json",
+                 "User-Agent": UA})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return json.load(r)
 
@@ -124,7 +134,12 @@ def count_one(index, query, retries=8, pace=None):
         try:
             r = api({"index": index, "query_type": "count", "query": query})
         except urllib.error.HTTPError as e:
-            if e.code in (429, 500, 502, 503, 504):
+            # 403 belongs in this set. It was treated as a permanent per-query verdict,
+            # so each entity failed instantly and the run burned 6800 rows into error
+            # records in a couple of minutes. A 403 that appears only after a burst of
+            # successful calls is a temporary block on the CLIENT, not a judgement about
+            # the query, and the right response is to wait.
+            if e.code in (403, 429, 500, 502, 503, 504):
                 if pace is not None:
                     pace.slower()
                 time.sleep(min(delay, 60))
@@ -246,6 +261,9 @@ def main():
     ap.add_argument("--sleep", type=float, default=0.4,
                     help="starting seconds between calls; adapts up on throttling "
                          "and back down when clear, so this is a hint not a fixed rate")
+    ap.add_argument("--give-up-after", type=int, default=25,
+                    help="consecutive failures before stopping rather than filling the "
+                         "output with error rows")
     ap.add_argument("--list-indexes", action="store_true")
     args = ap.parse_args()
 
@@ -278,14 +296,17 @@ def main():
             w.writeheader()
         t0, n_err, seen_err = time.time(), 0, {}
         pace = Pace(args.sleep)
+        streak = 0
         for i, r in enumerate(todo, 1):
             c, approx, err = count_one(index, r["query"], pace=pace)
             if err:
                 n_err += 1
+                streak += 1
                 # keep one example of each distinct failure: "errors=298" on its own
                 # says nothing about whether to wait, fix a query, or stop
                 seen_err.setdefault(err.split(":")[0][:60], (r["name"], err))
             else:
+                streak = 0
                 pace.faster()
             w.writerow({**r, "count": "" if c is None else c,
                         "approx": "" if approx is None else int(approx),
@@ -300,6 +321,18 @@ def main():
                 for kind, (nm, msg) in list(seen_err.items())[:3]:
                     print(f"      e.g. {nm!r}: {msg}", flush=True)
                 seen_err.clear()
+            # Circuit breaker. Once the API is refusing everything, continuing does not
+            # collect data — it just converts the remaining work list into error rows at
+            # full speed, which is exactly what happened on the 403 run. Stop while the
+            # todo list is still intact, since resume only skips SUCCESSES.
+            if streak >= args.give_up_after:
+                print(f"\n[stop] {streak} failures in a row — the API is refusing this "
+                      f"client, not these queries.\n"
+                      f"       {n_err} errors so far; everything counted successfully "
+                      f"is kept.\n"
+                      f"       Wait for the block to lapse and re-run: resume picks up "
+                      f"where the good rows end.", flush=True)
+                break
             pace.wait()
 
     print(f"[write] {OUT}  ({n_err} errors)")
