@@ -105,25 +105,63 @@ def pick_index(requested, strict):
              "and check this host actually has outbound HTTPS.")
 
 
-def count_one(index, query, retries=4):
-    """One count, with backoff. Returns (count, approx, error-or-None)."""
+def count_one(index, query, retries=8, pace=None):
+    """One count, with backoff. Returns (count, approx, error-or-None).
+
+    The first run of this script sailed through ~100 queries and then failed on
+    essentially every one after — the signature of a server-side rate limit, not of
+    bad queries. Two changes follow from that:
+
+      * a 429 (or a transport error, which is how a throttling proxy often shows up)
+        waits and RETRIES the same query rather than burning one of a handful of
+        attempts, with the wait capped so a long stall cannot run away.
+      * `pace`, if given, is nudged upward on every throttle, so the run self-corrects
+        to whatever rate the API will actually accept instead of hammering it at a
+        fixed interval that has already been rejected.
+    """
+    delay = 2.0
     for i in range(retries):
         try:
             r = api({"index": index, "query_type": "count", "query": query})
         except urllib.error.HTTPError as e:
-            if e.code == 429:                       # rate limited: wait longer
-                time.sleep(2 ** (i + 2))
+            if e.code in (429, 500, 502, 503, 504):
+                if pace is not None:
+                    pace.slower()
+                time.sleep(min(delay, 60))
+                delay *= 2
                 continue
             return None, None, f"HTTP {e.code}"
         except Exception as e:                                       # noqa: BLE001
-            time.sleep(2 ** i)
+            if pace is not None:
+                pace.slower()
+            time.sleep(min(delay, 60))
+            delay *= 2
             if i == retries - 1:
                 return None, None, f"{type(e).__name__}: {e}"
             continue
         if "error" in r:
-            return None, None, str(r["error"])[:120]
+            return None, None, str(r["error"])[:160]
         return int(r.get("count", 0)), bool(r.get("approx", False)), None
-    return None, None, "retries exhausted"
+    return None, None, f"rate-limited, {retries} attempts exhausted"
+
+
+class Pace:
+    """Adaptive delay between calls: back off hard on a throttle, creep back down
+    while things are going well. Keeps a long run near the fastest rate the API
+    tolerates without needing the right --sleep guessed up front."""
+
+    def __init__(self, start, cap=8.0):
+        self.d, self.cap, self.hits = start, cap, 0
+
+    def slower(self):
+        self.hits += 1
+        self.d = min(self.cap, max(0.2, self.d * 2))
+
+    def faster(self):
+        self.d = max(0.05, self.d * 0.97)
+
+    def wait(self):
+        time.sleep(self.d)
 
 
 # ------------------------------------------------------------------------ inputs
@@ -205,8 +243,9 @@ def main():
     ap.add_argument("--n-sample", type=int, default=0,
                     help="historical figures to sample (0 = every held-out row, ~7.5k)")
     ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--sleep", type=float, default=0.12,
-                    help="seconds between calls; raise if the API rate-limits")
+    ap.add_argument("--sleep", type=float, default=0.4,
+                    help="starting seconds between calls; adapts up on throttling "
+                         "and back down when clear, so this is a hint not a fixed rate")
     ap.add_argument("--list-indexes", action="store_true")
     args = ap.parse_args()
 
@@ -237,10 +276,17 @@ def main():
         w = csv.DictWriter(f, fieldnames=FIELDS)
         if new:
             w.writeheader()
-        t0, n_err = time.time(), 0
+        t0, n_err, seen_err = time.time(), 0, {}
+        pace = Pace(args.sleep)
         for i, r in enumerate(todo, 1):
-            c, approx, err = count_one(index, r["query"])
-            n_err += bool(err)
+            c, approx, err = count_one(index, r["query"], pace=pace)
+            if err:
+                n_err += 1
+                # keep one example of each distinct failure: "errors=298" on its own
+                # says nothing about whether to wait, fix a query, or stop
+                seen_err.setdefault(err.split(":")[0][:60], (r["name"], err))
+            else:
+                pace.faster()
             w.writerow({**r, "count": "" if c is None else c,
                         "approx": "" if approx is None else int(approx),
                         "index_used": index, "error": err or ""})
@@ -248,9 +294,13 @@ def main():
             if i % 100 == 0 or i == len(todo):
                 rate = i / max(1e-9, time.time() - t0)
                 print(f"  {i}/{len(todo)}  {rate:.1f}/s  errors={n_err}  "
+                      f"delay={pace.d:.2f}s  throttles={pace.hits}  "
                       f"eta={(len(todo) - i) / max(rate, 1e-9) / 60:.1f} min",
                       flush=True)
-            time.sleep(args.sleep)
+                for kind, (nm, msg) in list(seen_err.items())[:3]:
+                    print(f"      e.g. {nm!r}: {msg}", flush=True)
+                seen_err.clear()
+            pace.wait()
 
     print(f"[write] {OUT}  ({n_err} errors)")
     if n_err:
