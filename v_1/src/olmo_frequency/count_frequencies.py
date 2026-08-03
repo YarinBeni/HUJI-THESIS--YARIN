@@ -274,13 +274,32 @@ def main():
     index = pick_index(args.index, args.strict)
     os.makedirs(RESULTS, exist_ok=True)
 
-    # resume: anything already counted (successfully) is not re-queried
-    done = set()
+    # resume: anything already counted (successfully) is not re-queried. Failed rows are
+    # dropped from the file rather than left in place — they are about to be retried, and
+    # keeping them would append a second row per entity on every attempt, so a few
+    # blocked runs would leave more error rows than entities.
+    done, keep = set(), []
     if os.path.exists(OUT):
+        n_before = 0
         for r in csv.DictReader(open(OUT)):
-            if not r.get("error"):
-                done.add((r["entity_type"], r["name"]))
-        print(f"[resume] {len(done)} rows already counted in {OUT}")
+            n_before += 1
+            if r.get("error"):
+                continue
+            if (r["entity_type"], r["name"]) in done:
+                continue
+            done.add((r["entity_type"], r["name"]))
+            keep.append(r)
+        print(f"[resume] {len(done)} counted, dropping {n_before - len(keep)} "
+              f"failed/duplicate rows from {OUT}")
+        tmp = OUT + ".tmp"
+        with open(tmp, "w", newline="") as f:
+            wr = csv.DictWriter(f, fieldnames=FIELDS)
+            wr.writeheader()
+            for r in keep:
+                wr.writerow({k: r.get(k, "") for k in FIELDS})
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, OUT)
 
     work = rows_assyrian() + rows_historical(args.n_sample, args.seed)
     todo = [r for r in work if (r["entity_type"], r["name"]) not in done]
