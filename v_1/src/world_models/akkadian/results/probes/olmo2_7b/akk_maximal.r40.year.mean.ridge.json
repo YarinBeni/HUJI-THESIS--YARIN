@@ -1,0 +1,36 @@
+{
+  "method": "olmo2_7b",
+  "variant": "akk_maximal",
+  "ruler_set": "r40",
+  "target": "year",
+  "site": "mean",
+  "n": 1187,
+  "n_rulers": 40,
+  "holdout": {
+    "best_layer": 3,
+    "best_test_r2": 0.1581066252682548,
+    "best_test_spearman": 0.42471693423643725,
+    "n_test": 238
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 1,
+    "n_draws_used": 0,
+    "r2_mean": NaN,
+    "r2_std": NaN,
+    "spearman_mean": NaN,
+    "spearman_std": NaN,
+    "layer": 3
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 40,
+    "n_scored": 1187,
+    "r2": -0.007589276863325667,
+    "spearman": 0.09179410054357953,
+    "layer": 32
+  },
+  "best_layer": 3,
+  "best_test_r2": 0.1581066252682548,
+  "best_test_spearman": 0.42471693423643725
+}
