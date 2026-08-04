@@ -1,7 +1,8 @@
 # OLMo frequency experiment — results
 
-**Short version: the dose-response we went looking for is not there. A different
-finding, which we were not looking for, is, and it matters more.**
+**Short version: the dose-response is weak across the bulk of the data and clear only
+at the extremes — 34 years between never-seen and most-seen. And the salience axis the
+thesis assumed does not exist in the corpus.**
 
 Counts: `v4_olmo-mix-1124_llama` — OLMo-2-1124-7B's **own** pretraining mix, not a
 Dolma stand-in. No substitution, no caveat about corpus mismatch. 7,541/7,541 entities
@@ -66,22 +67,85 @@ small-but-real rather than dismissed as noise.
 It also means the trained-minus-twin gap (−0.222 overall) mostly measures *the twin's
 artefact vanishing*, not a dose-response appearing. Do not quote the gap as the result.
 
-## 3. The finding we were not looking for: "obscure" was the wrong label
+## 2b. At the extremes the effect is real — the overall ρ was diluted
+
+ρ over all 7,192 entities is a single number describing a relationship that is not
+linear in log-count. Splitting the tails says more:
+
+| | never seen (count = 0, n = 583) | top 5% (≥ 40,272, n = 360) | difference |
+|---|---|---|---|
+| **trained OLMo** | 122.4 yr | **88.5 yr** | **−33.9 yr** |
+| random twin | 189.7 yr | 343.2 yr | +153.5 yr |
+
+Between the extremes of a 40,000-fold exposure range the trained model is **34 years
+more accurate**, and the twin moves 154 years in the opposite direction. So exposure is
+not irrelevant — it is weak across the bulk of the distribution and visible at the ends.
+ρ = −0.04 understates this because most entities sit in a middle where the count barely
+moves the error.
+
+The more striking half of that table is the left column: on 583 people whose full name
+**never appears once** in the training data, the probe still recovers the year to within
+122 years — better than the twin manages on the people it saw most.
+
+**One caveat that limits how far this goes.** A count of zero is zero for the *exact
+full string*. "Franz Xaver Feuchtmayer" can score zero while "Feuchtmayer" appears
+often, so these are not entities the model provably never encountered — they are
+entities whose full name form is absent. A stronger version of this test would count
+surname forms too.
+
+## 3. The salience axis: an anecdote that survives normalisation
 
 | entity set | median count in OLMo's training data |
 |---|---|
 | Assyrian rulers (our "obscure" cell B) | **1,494** |
 | historical figures (our "salient" cell A) | **230** |
 
-The Assyrian rulers are **6.5× more common** in the training corpus than the median
+Taken flat, the Assyrian rulers are **6.5× more common** than the median
 famous-Western-person we called salient. Sennacherib appears 449,892 times;
 Ashurbanipal 160,086.
 
-This is a direct problem for how the thesis frames the A → B → B′ → C ladder. The
-salience axis was a judgement call — "everyone knows George Washington, nobody knows
-Tiglath-pileser" — and the corpus says that judgement is wrong, at least in the sense
-of raw exposure. Whatever makes cell B harder than cell A, **it is not that the model
-saw those entities less.**
+**That ratio is partly an artefact of name length, and the correction is worth stating
+rather than hiding.** An exact-string count falls by roughly 5× per extra word:
+
+| words in name | historical figures | median count |
+|---|---|---|
+| 1 | 250 | 4,078 |
+| 2 | 3,355 | 877 |
+| 3 | 2,109 | 151 |
+| 4 | 976 | 43 |
+
+The rulers are 25 one-word and 9 two-word names; the historical figures are mostly two
+to four words. The one-word figures are also polluted by common English words — "John"
+returns 416,569,300 — which inflates their end of the comparison.
+
+Comparing each ruler only against figures with the **same number of words**, the median
+ruler lands at the **42nd percentile**: 15 of 34 above the median figure, 19 below.
+
+So the honest statement is not "the rulers are 6.5× more common". It is the weaker and
+more robust one:
+
+> **The two sets are drawn from the same exposure distribution. Normalising for name
+> length does not open a gap in either direction.**
+
+Which is the point that matters. The salience axis was a judgement call — "everyone
+knows George Washington, nobody knows Tiglath-pileser" — and after controlling for the
+one confound that could have manufactured the result, there is still no exposure gap to
+explain why cell B is harder than cell A.
+
+**The rulers are also not a homogeneous set**, which the "obscure" label implied. Their
+counts span 0 to 449,892:
+
+| ruler | count | percentile vs same-length figures |
+|---|---|---|
+| Sargon II | 89,026 | 94 |
+| Sennacherib | 449,892 | 76 |
+| Ashurbanipal | 160,086 | 70 |
+| Ninurta-nadin-šumi | 1 | 14 |
+| Nabû-šumu-libur | **0** | 0 |
+| Kaššû-nadin-ahhe | **0** | 0 |
+
+Two rulers do not appear in the training corpus at all. Treating these 34 names as one
+salience level is the part of the framing that does not survive.
 
 Combined with §2, the same conclusion arrives twice from different directions: exposure
 is not the variable. The remaining candidates are what the text *says* — a Wikipedia
@@ -111,7 +175,7 @@ corpus, entity exposure has at most a marginal relationship to how well a probe 
 an entity's date, and the entities the thesis calls obscure are in fact *more* frequent
 than the ones it calls salient.
 
-**Cannot be said:** that frequency is irrelevant in general. This is one model, one
+**Cannot be said:** that frequency is irrelevant — §2b shows a 34-year gap between the tails. This is one model, one
 corpus, one target (death year), and a string-count proxy that cannot distinguish "the
 person" from "the name". A count of 230 for a Wikidata-obscure person is already far
 above zero — there may be no genuinely unseen entities in this sample, and a real
