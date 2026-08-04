@@ -29,7 +29,16 @@ from _save import save as _save_fig  # noqa: E402
 # The TIDY table and the output suffix are overridable so the same code renders
 # both read-outs (raw = ridge everywhere; deck = the per-cell probe the thesis
 # reports — PLS at fragment level, PLS-5 for obscure entities, ridge for cell A).
-TIDY_CSV = os.environ.get("TIDY_CSV", "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv")
+# The table defaults to the mc_group family and follows FIG_TAG, so `FIG_TAG=__deck`
+# reads the deck table without a second environment variable. It used to default to
+# TIDY_all_year_results.csv, which is the pre-mc_group (StratifiedKFold) build: running
+# a design script the obvious way silently rendered leaky numbers under a caption
+# claiming GroupKFold, and a newly added arm was simply absent. TIDY_CSV still
+# overrides for one-offs.
+_FIGDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TIDY_CSV = os.environ.get(
+    "TIDY_CSV",
+    os.path.join(_FIGDIR, f"TIDY_all_year_results__mc_group{os.environ.get('FIG_TAG', '')}.csv"))
 _TAG = os.environ.get("FIG_TAG", "")
 
 # Captions must not hard-code "ridge": under FIG_TAG=__deck the numbers are the
@@ -71,16 +80,26 @@ TFIDF_CFG = {  # pooling='text' rows per stage
     "B'": [("fragment", "obscure", "tier0", "text")],
     "C": [("fragment", "obscure", "maximal", "text")],
 }
+# Each design keeps its own arm list, so a new arm has to be added in each of them;
+# OLMo goes next to Llama-2-7B, the arm it was added to be compared against.
 ARMS = ["qwen3_1b7", "qwen3_8b", "qwen3_32b", "gpt_oss_120b",
-        "llama2_7b", "llama2_13b", "llama2_70b",
+        "llama2_7b", "llama2_13b", "llama2_70b", "olmo2_7b",
         "thalesian_akk300m", "thalesian_cunei400m", "umt5_base",
-        "llama2_7b_random", "llama2_13b_random", "llama2_70b_random"]
+        "llama2_7b_random", "llama2_13b_random", "llama2_70b_random",
+        "olmo2_7b_random"]
 
 best = defaultdict(dict)   # arm -> stage -> (delta, raw, cfg)
 for s, cfgs in STAGES:
     for m in ARMS:
         cands = [(V[c + (m,)], c) for c in cfgs if c + (m,) in V]
-        assert len(cands) == len(cfgs), (s, m)
+        # Not every arm has every pooling site: OLMo's cell A was extracted at `last`
+        # only, while Llama and Qwen also have `mean`. Requiring the full set dropped
+        # the whole figure rather than the one missing cell, so the rule is now
+        # best-of-available with the shortfall named — an arm choosing from fewer
+        # configs is mildly disadvantaged, and that has to be visible, not silent.
+        assert cands, (s, m)
+        if len(cands) < len(cfgs):
+            print(f"  [partial] {m} stage {s}: {len(cands)}/{len(cfgs)} configs present")
         raw, cfg = max(cands, key=lambda t: t[0])
         ref = V[cfg + ("random",)]
         best[m][s] = (raw - ref, raw, cfg)
@@ -97,8 +116,13 @@ X = np.arange(4.0)
 TEAL, TEAL_D = "#0f766e", "#0b5d57"      # entity regime
 WARM, WARM_D = "#c2601a", "#9a3412"      # fragment regime
 INK, MUT, FAINT = "#1c1c1c", "#6d6d6d", "#9a9a9a"
+# The random twins are drawn in grey here rather than in the deck's control purple,
+# because this figure already spends colour on the four-stage trajectory. A twin
+# missing from this map used to be a KeyError mid-render, so the lookup falls back to
+# a neutral grey and any new control still draws.
 GRAYS = {"llama2_7b_random": "#b0b0b0", "llama2_13b_random": "#909090",
-         "llama2_70b_random": "#6f6f6f"}
+         "llama2_70b_random": "#6f6f6f", "olmo2_7b_random": "#8a8a8a"}
+_GREY_FALLBACK = "#9a9a9a"
 P2M = {"last": "o", "mean": "s", "ent_last": "^", "ent_mean": "D"}
 
 # ------------------------------------------------------------- figure -------
@@ -159,7 +183,8 @@ for m in ARMS + ["tfidf"]:
                 solid_capstyle="round")
         continue
     if isr(m):
-        ax.plot(X, y, color=GRAYS[m], lw=1.3, ls=(0, (5, 3)), zorder=3)
+        ax.plot(X, y, color=GRAYS.get(m, _GREY_FALLBACK), lw=1.3,
+                ls=(0, (5, 3)), zorder=3)
     else:
         ax.plot(X, y, color=COL[m], lw=2.1, alpha=0.95, zorder=4)
     for xi, s in zip(X, S):

@@ -31,7 +31,16 @@ from _save import save as _save_fig  # noqa: E402
 # The TIDY table and the output suffix are overridable so the same code renders
 # both read-outs (raw = ridge everywhere; deck = the per-cell probe the thesis
 # reports — PLS at fragment level, PLS-5 for obscure entities, ridge for cell A).
-TIDY_CSV = os.environ.get("TIDY_CSV", "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv")
+# The table defaults to the mc_group family and follows FIG_TAG, so `FIG_TAG=__deck`
+# reads the deck table without a second environment variable. It used to default to
+# TIDY_all_year_results.csv, which is the pre-mc_group (StratifiedKFold) build: running
+# a design script the obvious way silently rendered leaky numbers under a caption
+# claiming GroupKFold, and a newly added arm was simply absent. TIDY_CSV still
+# overrides for one-offs.
+_FIGDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TIDY_CSV = os.environ.get(
+    "TIDY_CSV",
+    os.path.join(_FIGDIR, f"TIDY_all_year_results__mc_group{os.environ.get('FIG_TAG', '')}.csv"))
 _TAG = os.environ.get("FIG_TAG", "")
 
 # Captions must not hard-code "ridge": under FIG_TAG=__deck the numbers are the
@@ -80,7 +89,10 @@ def pull(level, sal, clean, pool):
 
 DATA = [pull(l, s, c, p) for l, s, c, p, _, _ in CFGS]
 for (arms, tf), cfg in zip(DATA, CFGS):
-    assert len(arms) == 14 and tf is not None, (cfg, len(arms), tf)
+    # was `== 14`, a literal that encoded the arm count at the time of writing; adding
+    # OLMo made every cell 16 and the figure refused to render. What actually matters
+    # is that the cell is populated and has its floor, not that the roster never grows.
+    assert len(arms) >= 10 and tf is not None, (cfg, len(arms), tf)
 
 # ------------------------------------------------------------------------ histogram
 # Each ridge summarises exactly 14 arms. A Gaussian KDE over 14 points invents a smooth

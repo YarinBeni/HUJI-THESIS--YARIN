@@ -28,7 +28,16 @@ from _save import save as _save_fig  # noqa: E402
 # The TIDY table and the output suffix are overridable so the same code renders
 # both read-outs (raw = ridge everywhere; deck = the per-cell probe the thesis
 # reports — PLS at fragment level, PLS-5 for obscure entities, ridge for cell A).
-TIDY_CSV = os.environ.get("TIDY_CSV", "/home/user/HUJI-THESIS--YARIN/v_1/src/world_models/figures/TIDY_all_year_results.csv")
+# The table defaults to the mc_group family and follows FIG_TAG, so `FIG_TAG=__deck`
+# reads the deck table without a second environment variable. It used to default to
+# TIDY_all_year_results.csv, which is the pre-mc_group (StratifiedKFold) build: running
+# a design script the obvious way silently rendered leaky numbers under a caption
+# claiming GroupKFold, and a newly added arm was simply absent. TIDY_CSV still
+# overrides for one-offs.
+_FIGDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TIDY_CSV = os.environ.get(
+    "TIDY_CSV",
+    os.path.join(_FIGDIR, f"TIDY_all_year_results__mc_group{os.environ.get('FIG_TAG', '')}.csv"))
 _TAG = os.environ.get("FIG_TAG", "")
 
 # Captions must not hard-code "ridge": under FIG_TAG=__deck the numbers are the

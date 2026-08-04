@@ -19,6 +19,10 @@ fragment,AKK,obscure,maximal,last,ridge,ruler_MC_r8_group,spearman,year,llama2_7
 fragment,AKK,obscure,maximal,mean,ridge,ruler_MC_r8_group,spearman,year,llama2_7b,0.1598,pls_nested
 fragment,EN,obscure,tier0,last,ridge,ruler_MC_r8_group,spearman,year,llama2_7b,0.2222,pls_nested
 fragment,EN,obscure,tier0,mean,ridge,ruler_MC_r8_group,spearman,year,llama2_7b,0.3229,pls_nested
+fragment,AKK,obscure,maximal,last,ridge,ruler_MC_r8_group,spearman,year,olmo2_7b,0.1592,pls_nested
+fragment,AKK,obscure,maximal,mean,ridge,ruler_MC_r8_group,spearman,year,olmo2_7b,0.2252,pls_nested
+fragment,EN,obscure,tier0,last,ridge,ruler_MC_r8_group,spearman,year,olmo2_7b,0.2851,pls_nested
+fragment,EN,obscure,tier0,mean,ridge,ruler_MC_r8_group,spearman,year,olmo2_7b,0.3557,pls_nested
 fragment,AKK,obscure,maximal,last,ridge,ruler_MC_r8_group,spearman,year,qwen3_8b,0.1464,pls_nested
 fragment,AKK,obscure,maximal,mean,ridge,ruler_MC_r8_group,spearman,year,qwen3_8b,0.2379,pls_nested
 fragment,EN,obscure,tier0,last,ridge,ruler_MC_r8_group,spearman,year,qwen3_8b,0.2373,pls_nested
@@ -55,6 +59,10 @@ fragment,AKK,obscure,maximal,last,ridge,ruler_MC_r8_group,spearman,year,llama2_7
 fragment,AKK,obscure,maximal,mean,ridge,ruler_MC_r8_group,spearman,year,llama2_70b_random,0.2431,pls_nested
 fragment,EN,obscure,tier0,last,ridge,ruler_MC_r8_group,spearman,year,llama2_70b_random,0.1144,pls_nested
 fragment,EN,obscure,tier0,mean,ridge,ruler_MC_r8_group,spearman,year,llama2_70b_random,0.2461,pls_nested
+fragment,AKK,obscure,maximal,last,ridge,ruler_MC_r8_group,spearman,year,olmo2_7b_random,0.2283,pls_nested
+fragment,AKK,obscure,maximal,mean,ridge,ruler_MC_r8_group,spearman,year,olmo2_7b_random,0.1649,pls_nested
+fragment,EN,obscure,tier0,last,ridge,ruler_MC_r8_group,spearman,year,olmo2_7b_random,0.1801,pls_nested
+fragment,EN,obscure,tier0,mean,ridge,ruler_MC_r8_group,spearman,year,olmo2_7b_random,0.1723,pls_nested
 fragment,AKK,obscure,maximal,text,ridge,ruler_MC_r8_group,spearman,year,tfidf,-0.0082,pls_nested
 fragment,EN,obscure,tier0,text,ridge,ruler_MC_r8_group,spearman,year,tfidf,0.0687,pls_nested
 entity,EN,obscure,rows_bare,ent_last,ridge,entity_MC_heldout_entities,spearman,year,llama2_70b,0.6954,pls
@@ -523,6 +531,10 @@ fragment,AKK,obscure,maximal,last,ridge,ruler_MC_r8_group,r2,year,llama2_7b,-0.2
 fragment,AKK,obscure,maximal,mean,ridge,ruler_MC_r8_group,r2,year,llama2_7b,-0.221,ridge (PLS has no R²)
 fragment,EN,obscure,tier0,last,ridge,ruler_MC_r8_group,r2,year,llama2_7b,-0.2211,ridge (PLS has no R²)
 fragment,EN,obscure,tier0,mean,ridge,ruler_MC_r8_group,r2,year,llama2_7b,-0.2208,ridge (PLS has no R²)
+fragment,AKK,obscure,maximal,last,ridge,ruler_MC_r8_group,r2,year,olmo2_7b,-0.2212,ridge (PLS has no R²)
+fragment,AKK,obscure,maximal,mean,ridge,ruler_MC_r8_group,r2,year,olmo2_7b,-0.2211,ridge (PLS has no R²)
+fragment,EN,obscure,tier0,last,ridge,ruler_MC_r8_group,r2,year,olmo2_7b,-0.2211,ridge (PLS has no R²)
+fragment,EN,obscure,tier0,mean,ridge,ruler_MC_r8_group,r2,year,olmo2_7b,-0.2208,ridge (PLS has no R²)
 fragment,AKK,obscure,maximal,last,ridge,ruler_MC_r8_group,r2,year,qwen3_8b,-0.2212,ridge (PLS has no R²)
 fragment,AKK,obscure,maximal,mean,ridge,ruler_MC_r8_group,r2,year,qwen3_8b,-0.2211,ridge (PLS has no R²)
 fragment,EN,obscure,tier0,last,ridge,ruler_MC_r8_group,r2,year,qwen3_8b,-0.2213,ridge (PLS has no R²)
@@ -559,5 +571,9 @@ fragment,AKK,obscure,maximal,last,ridge,ruler_MC_r8_group,r2,year,llama2_70b_ran
 fragment,AKK,obscure,maximal,mean,ridge,ruler_MC_r8_group,r2,year,llama2_70b_random,-0.2208,ridge (PLS has no R²)
 fragment,EN,obscure,tier0,last,ridge,ruler_MC_r8_group,r2,year,llama2_70b_random,-0.2213,ridge (PLS has no R²)
 fragment,EN,obscure,tier0,mean,ridge,ruler_MC_r8_group,r2,year,llama2_70b_random,-0.2209,ridge (PLS has no R²)
+fragment,AKK,obscure,maximal,last,ridge,ruler_MC_r8_group,r2,year,olmo2_7b_random,-0.2206,ridge (PLS has no R²)
+fragment,AKK,obscure,maximal,mean,ridge,ruler_MC_r8_group,r2,year,olmo2_7b_random,-0.2204,ridge (PLS has no R²)
+fragment,EN,obscure,tier0,last,ridge,ruler_MC_r8_group,r2,year,olmo2_7b_random,-0.221,ridge (PLS has no R²)
+fragment,EN,obscure,tier0,mean,ridge,ruler_MC_r8_group,r2,year,olmo2_7b_random,-0.221,ridge (PLS has no R²)
 fragment,AKK,obscure,maximal,text,ridge,ruler_MC_r8_group,r2,year,tfidf,-0.2103,ridge (PLS has no R²)
 fragment,EN,obscure,tier0,text,ridge,ruler_MC_r8_group,r2,year,tfidf,-0.2021,ridge (PLS has no R²)
