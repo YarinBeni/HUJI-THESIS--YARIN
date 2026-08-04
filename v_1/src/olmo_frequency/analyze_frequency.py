@@ -81,6 +81,14 @@ def load_errors(arm):
     names = pd.read_csv(os.path.join(DATA, f"{ET}.csv"))["name"]
     pr["name"] = names.iloc[pr["row"].values].values
     pr["abs_err"] = (pr["pred"] - pr["true"]).abs()
+    # 37 held-out names belong to two different people (two Adalberts, six centuries
+    # apart). One string count cannot be attributed to either, and joining on the name
+    # would pair one count with two different errors — so they are dropped, not doubled.
+    dup = pr["name"].duplicated(keep=False)
+    if dup.any():
+        print(f"  [{arm}] dropping {int(dup.sum())} rows on {pr.loc[dup, 'name'].nunique()}"
+              " ambiguous names shared by more than one person")
+        pr = pr[~dup]
     return pr[["name", "abs_err", "true"]], os.path.basename(p)
 
 

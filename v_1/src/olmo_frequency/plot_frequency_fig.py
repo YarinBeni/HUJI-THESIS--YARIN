@@ -127,7 +127,10 @@ def main():
                  f"bins with n $\\geq$ {st.get('min_bin', 30)}", pad=10,
                  fontweight="bold")
     ax.grid(axis="x", alpha=0.22, lw=0.7)
-    ax.legend(loc="lower left", frameon=False, fontsize=12)
+    # upper-left: the deep-negative bars live at the bottom of this panel, so a
+    # lower-left legend sits on top of the data it is labelling
+    ax.legend(loc="upper left", frameon=True, framealpha=0.9, edgecolor="none",
+              fontsize=12)
 
     fig.suptitle("Does the probe date an entity better when OLMo saw it more often?"
                  f"   ·   counts from {st.get('index_used', '?')}"
