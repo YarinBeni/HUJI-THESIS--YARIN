@@ -21,10 +21,11 @@ RESULTS_DIR = os.path.join(HERE, "results")
 
 # display order: paper anchor first, then trained arms big->small, randoms, floor
 METHOD_ORDER = [
-    "llama2_70b", "llama2_13b", "llama2_7b",
+    "llama2_70b", "llama2_13b", "llama2_7b", "olmo2_7b",
     "gpt_oss_120b", "qwen3_32b", "qwen3_8b", "qwen3_1b7",
     "umt5_base", "thalesian_cunei400m", "thalesian_akk300m",
-    "llama2_70b_random", "llama2_13b_random", "llama2_7b_random", "random",
+    "llama2_70b_random", "llama2_13b_random", "llama2_7b_random",
+    "olmo2_7b_random", "random",
     "tfidf",
 ]
 

@@ -39,9 +39,14 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _WM = os.path.dirname(_HERE)
 
 ENC = {"thalesian_akk300m", "thalesian_cunei400m", "umt5_base"}
-ARMS = ["llama2_70b", "gpt_oss_120b", "llama2_13b", "qwen3_32b", "llama2_7b", "qwen3_8b",
+# OLMo sits next to Llama-2-7B: same size, and the arm exists precisely to be
+# comparable to it. An arm missing from this list is silently absent from every
+# figure even once its result files land, so it is added here at the same time.
+ARMS = ["llama2_70b", "gpt_oss_120b", "llama2_13b", "qwen3_32b", "llama2_7b",
+        "olmo2_7b", "qwen3_8b",
         "qwen3_1b7", "thalesian_cunei400m", "thalesian_akk300m", "umt5_base",
-        "random", "llama2_7b_random", "llama2_13b_random", "llama2_70b_random", "tfidf"]
+        "random", "llama2_7b_random", "llama2_13b_random", "llama2_70b_random",
+        "olmo2_7b_random", "tfidf"]
 KEYS = {"mc": ("mc", "spearman_mean", "r2_mean", "ruler_MC_r8_stratified"),
         "mc_group": ("mc_group", "spearman_mean", "r2_mean", "ruler_MC_r8_group"),
         "loro": ("loro", "spearman", "r2", "leave_one_ruler_out")}
