@@ -36,10 +36,27 @@ sync_main
 mkdir -p v_1/src/world_models/akkadian/logs
 export OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 OPENBLAS_NUM_THREADS=8
 
+# STEP 1 — the base probes (WA2's job). probe_akk_group.py does not create result
+# files; it opens {variant}.r8.year.{site}.ridge.json and adds an `mc_group` block to
+# it. With no base file it returns None for every cell and exits 0, which is exactly
+# what happened on the first attempt: the job reported "Done", committed nothing, and
+# left zero result files behind. The base pass has to run first.
+echo "--- base probes (holdout / mc / loro) ---"
+python -u v_1/src/world_models/akkadian/probe_akk.py --method "$M" \
+    || { echo "FAILED base probe ${M}"; exit 1; }
+
+echo "--- mc_group (GroupKFold-by-ruler, the deck protocol) ---"
 python -u v_1/src/world_models/akkadian/probe_akk_group.py --method "$M" \
     --n-draws 200 --force \
     || { echo "FAILED mc_group ${M}"; exit 1; }
 
-commit_push "O5: fragment mc_group (GroupKFold-by-ruler) ${M} (job ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID})" \
+# Fail loudly if the arm still has no results. A silent zero here is the failure mode
+# that cost a whole cycle: SLURM said Done, git said "Everything up-to-date", and
+# nothing anywhere said the numbers do not exist.
+N=$(ls v_1/src/world_models/akkadian/results/probes/${M}/*.json 2>/dev/null | wc -l)
+echo "[check] ${M}: ${N} result files (a complete arm has 24)"
+[ "$N" -gt 0 ] || { echo "FAILED: ${M} produced no result files"; exit 1; }
+
+commit_push "O5: fragment probes + mc_group (GroupKFold-by-ruler) ${M} (job ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID})" \
     v_1/src/world_models/akkadian/results/probes/${M}
 echo "=== Done ${M}. $(date) ==="
