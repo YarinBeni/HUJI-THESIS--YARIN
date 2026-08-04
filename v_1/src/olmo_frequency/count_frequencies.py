@@ -165,15 +165,21 @@ class Pace:
     while things are going well. Keeps a long run near the fastest rate the API
     tolerates without needing the right --sleep guessed up front."""
 
-    def __init__(self, start, cap=8.0):
+    def __init__(self, start, cap=30.0):
         self.d, self.cap, self.hits = start, cap, 0
+        # The floor is a fraction of the requested --sleep, not a fixed 0.05s. With a
+        # flat floor the decay reached it inside ~100 successes (0.97^100 = 0.05), so
+        # --sleep 1.0 meant "1 second for the first minute, then as fast as possible" —
+        # which is the burst that draws the block in the first place. Asking for a
+        # slower run now actually produces one.
+        self.floor = max(0.05, start * 0.25)
 
     def slower(self):
         self.hits += 1
-        self.d = min(self.cap, max(0.2, self.d * 2))
+        self.d = min(self.cap, max(self.floor * 2, self.d * 2))
 
     def faster(self):
-        self.d = max(0.05, self.d * 0.97)
+        self.d = max(self.floor, self.d * 0.99)
 
     def wait(self):
         time.sleep(self.d)
