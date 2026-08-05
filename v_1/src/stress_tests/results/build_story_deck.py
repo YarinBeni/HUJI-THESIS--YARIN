@@ -246,7 +246,7 @@ NEW_SLIDES = {
     <div class="cfg-k">Metric</div><div class="cfg-v">Spearman &rho;, averaged over <strong>200 redrawn splits</strong> that hold out 20&#37; of the entities each time. Every cell is <strong>Ridge</strong>|<span style="color:#6b7484">PLS</span>.</div>
   </div>
   {{TABLE:entity}}
-  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Time holds up, and the scaling law with it:</strong> reading the last token of the name, Llama-2-70B leads at &rho; .701, both families order by size, and the top arms clear their own random twin (.457) and the n-gram baseline (.344). But the margin is roughly a quarter of what it was on famous entities, and by Llama-2-7B (.527 against its twin .473) it is inside the noise. We also tried a second read-out, <strong>averaging the activation over all of the name's tokens</strong>, which the paper never uses: it lands every model between .40 and .57 on year and never separates from the random controls on either target, so it is left out of the table. <strong>Space fails outright</strong>: the best number in either place column belongs to an <em>untrained</em> Llama-2-70B (.459), so no model beats its control. 34 rulers and 25 sites means 6 to 7 held-out entities per draw, so read the ordering, not the third decimal.</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Time holds up, and the scaling law with it:</strong> reading the last token of the name, Llama-2-70B leads at &rho; .701, both families order by size, and the top arms clear their own random twin (.457) and the n-gram baseline (.344). But the margin is roughly a quarter of what it was on famous entities, and by Llama-2-7B (.527 against its twin .473) it is inside the noise. We also tried a second read-out, <strong>averaging the activation over all of the name's tokens</strong>, which the paper never uses: it lands every model between .40 and .57 on year and never separates from the random controls on either target, so it is left out of the table. <strong>Space still fails, with one number worth a caveat</strong>: OLMo-2-7B posts the best place &rho; (.494 against its twin's .192), but that value carries a &plusmn;.28 spread over the 200 draws and a negative R&sup2; (&minus;.36) — it orders sites in some draws and cannot place them in any, the same shape as the n-gram floor. The next-best place number belongs to an <em>untrained</em> Llama-2-70B (.459), and no other model beats its control. 34 rulers and 25 sites means 6 to 7 held-out entities per draw, so read the ordering, not the third decimal.</div>
 </section>""",
 
 "b_frag_year": """<section class="slide slide-text">
@@ -580,6 +580,10 @@ EXTRA_CSS = """
 .arch-inner{display:flex;flex-direction:column;gap:3px;margin-top:6px;}
 .ab.sub-b{background:#fff;border-color:var(--border);color:var(--ink-mid);
           font-weight:500;font-size:9.5px;padding:3px 6px;}
+/* dense: the generated entity/fragment tables, which grew to 17 rows when the OLMo
+   arm and its twin joined; at the compact size the takeaway fell off the slide. */
+.rtbl.compact.dense{font-size:9.8px;}
+.rtbl.compact.dense th,.rtbl.compact.dense td{padding:1.4px 7px;}
 .rtbl.compact.wide{font-size:9.5px;}
 .rtbl.compact.wide th,.rtbl.compact.wide td{padding:1.5px 3px;}
 .rtbl.compact.wide td i{font-style:normal;color:var(--ink-light);}
@@ -734,7 +738,7 @@ def entity_table():
             return None, None
         return float(r["ridge_mc_rho"]), float(r["pls5_mc_rho"])
 
-    head = ('<table class="rtbl compact"><thead>'
+    head = ('<table class="rtbl compact dense"><thead>'
             '<tr><th>model</th>'
             '<th class="num">YEAR &nbsp;&middot;&nbsp; 34 rulers &rarr; year</th>'
             '<th class="num">PLACE &nbsp;&middot;&nbsp; 25 find-spots &rarr; latitude, longitude</th>'
@@ -774,7 +778,7 @@ def frag_table(variant, target):
                     return float(r["mc_rho"]), float(r["mc_r2"])
         return None, None
 
-    head = ('<table class="rtbl compact"><thead>'
+    head = ('<table class="rtbl compact dense"><thead>'
             '<tr><th rowspan="2">model</th>'
             '<th colspan="3" class="num">Spearman &rho;</th>'
             '<th colspan="3" class="num">R&sup2;</th></tr>'
