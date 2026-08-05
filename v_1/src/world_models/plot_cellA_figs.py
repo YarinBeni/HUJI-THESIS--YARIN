@@ -40,29 +40,33 @@ COLORS = {
     "gpt_oss_120b": "#0a2a5e",
     # greens: decoder family 2
     "llama2_7b": "#7fd39b", "llama2_13b": "#25a35c", "llama2_70b": "#0a5c31",
+    # teal: OLMo, a family of one — unused by the other families so it reads as new
+    "olmo2_7b": "#0f8b8d",
     # warm: the three translation encoders
     "umt5_base": "#f0b429", "thalesian_akk300m": "#f2711c",
     "thalesian_cunei400m": "#a03706",
     # purples + black: controls
     "llama2_7b_random": "#c9b6f2", "llama2_13b_random": "#9670e0",
     "llama2_70b_random": "#6b32c9", "random": "#3f1a78",
+    "olmo2_7b_random": "#b06ab3",
     "tfidf": "#000000",
 }
 LABEL = {
     "llama2_70b": "Llama-2-70B", "llama2_13b": "Llama-2-13B",
     "llama2_7b": "Llama-2-7B", "gpt_oss_120b": "gpt-oss-120B",
+    "olmo2_7b": "OLMo-2-7B", "olmo2_7b_random": "OLMo-2-7B rand",
     "qwen3_32b": "Qwen3-32B", "qwen3_8b": "Qwen3-8B", "qwen3_1b7": "Qwen3-1.7B",
     "umt5_base": "uMT5-base", "thalesian_cunei400m": "cuneiform-400M",
     "thalesian_akk300m": "AKK-300M", "random": "random Qwen3-8B",
     "llama2_7b_random": "Llama-2-7B rand", "llama2_13b_random": "Llama-2-13B rand",
     "llama2_70b_random": "Llama-2-70B rand", "tfidf": "TF-IDF floor",
 }
-ORDER = ["llama2_70b", "llama2_13b", "llama2_7b", "gpt_oss_120b", "qwen3_32b",
+ORDER = ["llama2_70b", "llama2_13b", "llama2_7b", "olmo2_7b", "gpt_oss_120b", "qwen3_32b",
          "qwen3_8b", "qwen3_1b7", "umt5_base", "thalesian_cunei400m",
          "thalesian_akk300m", "tfidf", "llama2_70b_random", "llama2_13b_random",
-         "llama2_7b_random", "random"]
+         "llama2_7b_random", "olmo2_7b_random", "random"]
 IS_CTRL = {"random", "tfidf", "llama2_7b_random", "llama2_13b_random",
-           "llama2_70b_random"}
+           "llama2_70b_random", "olmo2_7b_random"}
 
 plt.rcParams.update({
     "font.family": "sans-serif",
