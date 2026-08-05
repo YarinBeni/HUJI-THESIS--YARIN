@@ -74,9 +74,11 @@ def main():
     st = json.load(open(st_path))
 
     _style.rc()
-    fig = plt.figure(figsize=(17, 6.6), layout="constrained")
-    gs = fig.add_gridspec(1, 3, width_ratios=[1, 1, 0.92])
-    axes = [fig.add_subplot(gs[0, i]) for i in range(3)]
+    # Four panels: the two scatters that carry the comparison, then the two checks —
+    # the same trained data on a LINEAR x, and the per-century control.
+    fig = plt.figure(figsize=(22, 6.5), layout="constrained")
+    gs = fig.add_gridspec(1, 4, width_ratios=[1, 1, 1, 0.88])
+    axes = [fig.add_subplot(gs[0, i]) for i in range(4)]
 
     frames = {a: pd.read_csv(os.path.join(RESULTS, f"joined_{a}.csv"))
               for a in (TRAINED, TWIN)}
@@ -100,8 +102,7 @@ def main():
                 f"within-century {s['within_century_rho']:+.3f}   ·   n = {s['n']}",
                 transform=ax.transAxes, ha="center", va="bottom", fontsize=12.5,
                 color="#333")
-        ax.set_xlabel("times the name appears in OLMo's training data\n"
-                      "$\\log_{10}(\\mathrm{count}+1)$")
+        ax.set_xlabel("times seen in training\n$\\log_{10}(\\mathrm{count}+1)$")
         ax.set_ylim(0, ymax)
         ax.grid(alpha=0.22, lw=0.7)
         ax.legend(loc="upper right", frameon=False)
@@ -109,8 +110,54 @@ def main():
     axes[1].sharey(axes[0])
     axes[1].tick_params(labelleft=False)
 
-    # --- panel 3: the age confound, bin by bin ------------------------------------
+    # --- panel 3: the same trained data, x NOT logged ------------------------------
+    # The log axis is a modelling choice, and a reader is entitled to ask whether it
+    # manufactures the flat line. It does not — but a raw count axis cannot show it,
+    # because counts run 0 to 8.6M while the median entity sits at 214: 99.6% of the
+    # points fall in the first 1% of a full-range axis. The window is therefore cut at
+    # the 95th percentile, which is stated on the panel rather than left implicit, and
+    # the bins are the same equal-count bins as the log panels, only positioned by raw
+    # count. The line is flat here too.
     ax = axes[2]
+    d = frames[TRAINED]
+    xr = 10 ** d["logc"].values - 1.0
+    y = d["abs_err"].values
+    xcut = float(np.quantile(xr, 0.95))
+    keep = xr <= xcut
+    ax.scatter(xr[keep], y[keep], s=9, alpha=0.16, color=C_TRAINED,
+               edgecolors="none", zorder=2)
+    # Bin in the axis's OWN units. Re-using the log panels' equal-count bins would
+    # place every marker in the left tenth of a linear axis — the bins would still be
+    # log-spaced, just drawn linearly, which is the transform this panel exists to
+    # avoid. Equal-width bins across the window put a marker where the eye expects one.
+    edges = np.linspace(0, xcut, 11)
+    bxr, byr = [], []
+    for i in range(len(edges) - 1):
+        m = (xr >= edges[i]) & (xr < edges[i + 1] if i < len(edges) - 2 else xr <= edges[i + 1])
+        if m.sum() >= 20:
+            bxr.append(float(np.mean(edges[i:i + 2])))
+            byr.append(float(np.median(y[m])))
+    if bxr:
+        ax.plot(bxr, byr, color=C_TRAINED, lw=3.0, marker="o", ms=8, mec="white",
+                mew=1.4, zorder=5, label="median error per equal-width bin")
+    ax.axhline(float(np.median(y)), color="#555", lw=1.2, ls=(0, (4, 3)), zorder=4,
+               label=f"overall median, {np.median(y):.0f} yr")
+    ax.set_title("OLMo-2-7B  ·  raw count, no log", pad=26, fontweight="bold")
+    ax.text(0.5, 1.012,
+            f"window: 0 – {xcut:,.0f}   ·   95% of entities   ·   "
+            f"{100 * keep.mean():.1f}% of points shown",
+            transform=ax.transAxes, ha="center", va="bottom", fontsize=12.5,
+            color="#333")
+    ax.set_xlabel("times seen in training\nraw count (the last 5% run out to 8.6M)")
+    ax.set_ylim(0, ymax)
+    ax.grid(alpha=0.22, lw=0.7)
+    ax.legend(loc="upper right", frameon=False, fontsize=12)
+    ax.ticklabel_format(axis="x", style="plain")
+    ax.tick_params(labelleft=False)
+    ax.sharey(axes[0])
+
+    # --- panel 4: the age confound, bin by bin ------------------------------------
+    ax = axes[3]
     cents = sorted(set(st[TRAINED]["bins"]) | set(st[TWIN]["bins"]), key=int)
     ypos = np.arange(len(cents))
     h = 0.38
