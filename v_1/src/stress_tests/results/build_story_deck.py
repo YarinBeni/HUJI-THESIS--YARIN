@@ -62,6 +62,7 @@ SPINE = [
     ("new", "winner", "What does work: the 400M translation encoder beats every LLM"),
     ("new", "translation_line", "Why it works: translation finetuning, and multilingual translation most of all"),
     ("new", "tokenizer", "It is not the tokenizer: the winner has the worst one"),
+    ("new", "olmo_freq", "Counting the training data: exposure is not the wall the probes hit"),
     ("new", "contributions", "The boundary condition: where the linear world model ends"),
 ]
 
@@ -515,6 +516,17 @@ NEW_SLIDES = {
   </div>
   <div class="fig-wrap">{{FIG:e6_clusters/embedding_panels/maximal/pls/thalesian_cunei400m.png}}</div>
   <div class="takeaway tight"><span class="tk-label">Key takeaway</span>This is what the one surviving arm's space looks like on the raw language, with the names stripped: a coarser but <strong>still-visible year gradient</strong> (Neo-Babylonian mass separating from the Neo-Assyrian core), organised less by ruler identity than the English map and with the length gradient weakened by the truncation. Read against the untrained and n-gram panels in the same folder, this is the difference between an embedding that merely <em>sorts surface form</em> and one that has begun to order the language in time. It is a beginning, not a solved problem, and that is the honest place to end.</div>
+</section>""",
+
+"olmo_freq": """<section class="slide fig-major">
+  <div class="eyebrow">One more control &middot; the training data itself</div>
+  <h2 class="sh">Counting the training data: how often a model saw an entity is not what breaks at the document boundary</h2>
+  <div class="cfg tight">
+    <div class="cfg-k">Why OLMo</div><div class="cfg-v">every arm so far can be probed but not audited: nobody publishes Llama's or Qwen's training data, so "salient" vs "obscure" stayed a judgement call. <strong>OLMo-2-7B</strong> (Ai2 / Allen Institute for AI) ships open weights <em>and</em> its full pretraining corpus (<strong>olmo-mix-1124</strong>), so the judgement can be replaced by a count. OLMo first had to behave like a normal member of the ladder, and it does: &rho; .879 on cell A against .566 for its random twin, directly on top of Llama-2-7B, with the same A &rarr; C collapse as every other arm.</div>
+    <div class="cfg-k">Setup</div><div class="cfg-v">one exact-string count per entity against olmo-mix-1124 via the <strong>infini-gram</strong> API &mdash; all 7,541 held-out entities (7,507 historical figures + our 34 rulers). x&nbsp;=&nbsp;how often the name appears in training, y&nbsp;=&nbsp;how far off the probe's year estimate is; the untrained twin is the control that separates <em>learned exposure</em> from <em>properties of the name string</em>.</div>
+  </div>
+  <div class="fig-wrap">{{FIG:../olmo_frequency/results/figs/fig_frequency_doseresponse.png}}</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Exposure is not the variable.</strong> Across a 40,000-fold range of training frequency the overall correlation with dating error is &rho;&nbsp;&minus;.04 (&minus;.10 within century); only the extremes separate, by ~34 years on a ~105-year task. Even people whose name <em>never appears once</em> are dated to ~122 years &mdash; and counting surnames too, which dissolves 86&#37; of that group, the 51 who remain at zero under both forms are still dated ~94 years better than the twin manages on anyone. The counts also overturn the salience axis itself: the "obscure" Assyrian rulers are <strong>as frequent in the corpus as the "salient" figures</strong> (median 1,494 vs 230 raw; 42nd percentile once name length is controlled), with Sennacherib at 449,892 occurrences. So the cell-A &rarr; cell-C collapse cannot be about how much the models saw of these entities &mdash; it tracks the <strong>form of the input</strong>: the step from an entity's name to a whole document is where the linear read-out dies, in both languages.</div>
 </section>""",
 
 "contributions": """<section class="slide slide-text">
