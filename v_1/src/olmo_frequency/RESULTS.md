@@ -87,11 +87,24 @@ The more striking half of that table is the left column: on 583 people whose ful
 **never appears once** in the training data, the probe still recovers the year to within
 122 years — better than the twin manages on the people it saw most.
 
-**One caveat that limits how far this goes.** A count of zero is zero for the *exact
-full string*. "Franz Xaver Feuchtmayer" can score zero while "Feuchtmayer" appears
-often, so these are not entities the model provably never encountered — they are
-entities whose full name form is absent. A stronger version of this test would count
-surname forms too.
+**The caveat, and its resolution.** A count of zero is zero for the *exact full
+string* — "Franz Xaver Feuchtmayer" can score zero while "Feuchtmayer" appears often.
+So the surnames were counted too (`count_surnames.py`), and exposure re-read as
+max(full name, surname) — a deliberately generous upper bound.
+
+The sceptics were mostly right about the group: **86% of the "never seen" evaporate**
+(median surname count among them: 5,597). But the claim survives on what remains:
+
+| exposure = max(full, surname) | n | trained OLMo | random twin |
+|---|---|---|---|
+| zero under BOTH forms | **51** | **151.8 yr** | 245.4 yr |
+| top 5% | 163 | 107.8 yr | 268.6 yr |
+
+Fifty-one people neither of whose name forms appears once are still dated ~94 years
+better than the twin manages on them, and the never-seen → most-seen gap *widens* to
+44 years under the stricter accounting. The claim stands, at a fifth of its original
+sample size and with the honest label: these are the entities for which no string
+evidence of exposure exists, not entities provably absent from the corpus.
 
 ## 3. The salience axis: an anecdote that survives normalisation
 
