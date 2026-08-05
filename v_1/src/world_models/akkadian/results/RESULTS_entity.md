@@ -24,6 +24,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | ent_last | 1 | 0.012 | 0.810 | 0.473 | 0.290 |
 | *llama2_13b_random* | ent_last | 1 | -0.108 | 1.055 | 0.389 | 0.317 |
 | *llama2_70b_random* | ent_last | 1 | -0.054 | 0.944 | 0.457 | 0.329 |
+| olmo2_7b | ent_last | 22 | 0.050 | 0.785 | 0.526 | 0.306 |
+| olmo2_7b_random | ent_last | 3 | -0.148 | 0.994 | 0.381 | 0.346 |
 | llama2_70b | ent_mean | 29 | -0.047 | 1.005 | 0.463 | 0.349 |
 | llama2_13b | ent_mean | 8 | -0.064 | 1.174 | 0.483 | 0.355 |
 | llama2_7b | ent_mean | 8 | -0.101 | 1.139 | 0.477 | 0.307 |
@@ -38,6 +40,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | ent_mean | 7 | -0.383 | 1.449 | 0.311 | 0.360 |
 | *llama2_13b_random* | ent_mean | 10 | -0.346 | 1.478 | 0.301 | 0.361 |
 | *llama2_70b_random* | ent_mean | 1 | -0.351 | 1.564 | 0.314 | 0.374 |
+| olmo2_7b | ent_mean | 12 | -0.055 | 1.017 | 0.517 | 0.305 |
+| olmo2_7b_random | ent_mean | 26 | -0.462 | 1.561 | 0.269 | 0.362 |
 | llama2_70b | last | 45 | 0.388 | 0.556 | 0.701 | 0.215 |
 | llama2_13b | last | 21 | 0.178 | 0.646 | 0.618 | 0.253 |
 | llama2_7b | last | 22 | 0.075 | 0.934 | 0.527 | 0.274 |
@@ -52,6 +56,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | last | 1 | 0.012 | 0.810 | 0.473 | 0.290 |
 | *llama2_13b_random* | last | 1 | -0.108 | 1.055 | 0.389 | 0.317 |
 | *llama2_70b_random* | last | 1 | -0.054 | 0.944 | 0.457 | 0.329 |
+| olmo2_7b | last | 22 | 0.050 | 0.785 | 0.526 | 0.306 |
+| olmo2_7b_random | last | 3 | -0.148 | 0.994 | 0.381 | 0.346 |
 | llama2_70b | mean | 29 | -0.047 | 1.005 | 0.463 | 0.349 |
 | llama2_13b | mean | 8 | -0.064 | 1.174 | 0.483 | 0.355 |
 | llama2_7b | mean | 8 | -0.101 | 1.139 | 0.477 | 0.307 |
@@ -66,6 +72,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | mean | 7 | -0.383 | 1.449 | 0.311 | 0.360 |
 | *llama2_13b_random* | mean | 10 | -0.346 | 1.478 | 0.301 | 0.361 |
 | *llama2_70b_random* | mean | 1 | -0.351 | 1.564 | 0.314 | 0.374 |
+| olmo2_7b | mean | 12 | -0.055 | 1.017 | 0.517 | 0.305 |
+| olmo2_7b_random | mean | 26 | -0.462 | 1.561 | 0.269 | 0.362 |
 | *tfidf* | text | 0 | -0.345 | 1.461 | 0.344 | 0.388 |
 
 ## assyrian_ruler — rows=all
@@ -86,6 +94,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | ent_last | 1 | 0.089 | 0.696 | 0.489 | 0.248 |
 | *llama2_13b_random* | ent_last | 3 | -0.019 | 0.849 | 0.481 | 0.229 |
 | *llama2_70b_random* | ent_last | 1 | -0.002 | 0.779 | 0.468 | 0.287 |
+| olmo2_7b | ent_last | 9 | -0.003 | 1.028 | 0.481 | 0.297 |
+| olmo2_7b_random | ent_last | 2 | -0.037 | 0.872 | 0.398 | 0.306 |
 | llama2_70b | ent_mean | 77 | -0.258 | 1.607 | 0.423 | 0.352 |
 | llama2_13b | ent_mean | 13 | -0.260 | 1.820 | 0.422 | 0.345 |
 | llama2_7b | ent_mean | 31 | -0.356 | 1.777 | 0.391 | 0.344 |
@@ -100,6 +110,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | ent_mean | 7 | -0.358 | 1.689 | 0.319 | 0.304 |
 | *llama2_13b_random* | ent_mean | 2 | -0.339 | 1.702 | 0.329 | 0.316 |
 | *llama2_70b_random* | ent_mean | 1 | -0.376 | 1.681 | 0.274 | 0.339 |
+| olmo2_7b | ent_mean | 8 | -0.479 | 2.079 | 0.343 | 0.365 |
+| olmo2_7b_random | ent_mean | 18 | -0.424 | 1.620 | 0.310 | 0.317 |
 | llama2_70b | last | 39 | 0.371 | 0.591 | 0.678 | 0.177 |
 | llama2_13b | last | 20 | 0.114 | 0.807 | 0.562 | 0.237 |
 | llama2_7b | last | 1 | 0.021 | 0.740 | 0.486 | 0.226 |
@@ -114,6 +126,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | last | 1 | -0.129 | 1.451 | 0.445 | 0.291 |
 | *llama2_13b_random* | last | 7 | -0.143 | 1.234 | 0.371 | 0.282 |
 | *llama2_70b_random* | last | 9 | -0.074 | 1.187 | 0.444 | 0.268 |
+| olmo2_7b | last | 1 | -0.206 | 1.036 | 0.398 | 0.280 |
+| olmo2_7b_random | last | 2 | -0.094 | 1.293 | 0.426 | 0.326 |
 | llama2_70b | mean | 33 | -0.055 | 1.174 | 0.476 | 0.302 |
 | llama2_13b | mean | 14 | -0.083 | 1.350 | 0.481 | 0.319 |
 | llama2_7b | mean | 1 | -0.122 | 1.285 | 0.467 | 0.300 |
@@ -128,6 +142,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | mean | 1 | -0.182 | 1.360 | 0.386 | 0.327 |
 | *llama2_13b_random* | mean | 2 | -0.172 | 1.351 | 0.414 | 0.306 |
 | *llama2_70b_random* | mean | 5 | -0.247 | 1.505 | 0.384 | 0.325 |
+| olmo2_7b | mean | 8 | -0.200 | 1.753 | 0.474 | 0.320 |
+| olmo2_7b_random | mean | 18 | -0.316 | 1.543 | 0.363 | 0.302 |
 | *tfidf* | text | 0 | -0.293 | 1.478 | 0.340 | 0.374 |
 
 ## mesopotamian_place — rows=bare
@@ -148,6 +164,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | ent_last | 2 | -0.582 | 1.504 | 0.278 | 0.367 |
 | *llama2_13b_random* | ent_last | 18 | -0.589 | 1.378 | 0.227 | 0.336 |
 | *llama2_70b_random* | ent_last | 5 | -0.467 | 1.269 | 0.459 | 0.320 |
+| olmo2_7b | ent_last | 26 | -0.355 | 1.356 | 0.494 | 0.281 |
+| olmo2_7b_random | ent_last | 1 | -0.589 | 1.285 | 0.192 | 0.399 |
 | llama2_70b | ent_mean | 3 | -0.527 | 1.195 | 0.253 | 0.333 |
 | llama2_13b | ent_mean | 23 | -0.549 | 1.312 | 0.247 | 0.304 |
 | llama2_7b | ent_mean | 10 | -0.443 | 1.108 | 0.353 | 0.313 |
@@ -162,6 +180,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | ent_mean | 1 | -0.487 | 1.340 | 0.299 | 0.341 |
 | *llama2_13b_random* | ent_mean | 22 | -0.693 | 1.574 | -0.009 | 0.337 |
 | *llama2_70b_random* | ent_mean | 1 | -0.582 | 1.497 | 0.224 | 0.370 |
+| olmo2_7b | ent_mean | 31 | -0.369 | 0.990 | 0.345 | 0.316 |
+| olmo2_7b_random | ent_mean | 31 | -0.560 | 1.244 | 0.242 | 0.361 |
 | llama2_70b | last | 3 | -0.417 | 1.214 | 0.429 | 0.336 |
 | llama2_13b | last | 15 | -0.343 | 1.286 | 0.441 | 0.308 |
 | llama2_7b | last | 5 | -0.458 | 1.342 | 0.384 | 0.328 |
@@ -176,6 +196,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | last | 2 | -0.582 | 1.504 | 0.278 | 0.367 |
 | *llama2_13b_random* | last | 18 | -0.589 | 1.378 | 0.227 | 0.336 |
 | *llama2_70b_random* | last | 5 | -0.467 | 1.269 | 0.459 | 0.320 |
+| olmo2_7b | last | 26 | -0.355 | 1.356 | 0.494 | 0.281 |
+| olmo2_7b_random | last | 1 | -0.589 | 1.285 | 0.192 | 0.399 |
 | llama2_70b | mean | 3 | -0.527 | 1.195 | 0.253 | 0.333 |
 | llama2_13b | mean | 23 | -0.549 | 1.312 | 0.247 | 0.304 |
 | llama2_7b | mean | 10 | -0.443 | 1.108 | 0.353 | 0.313 |
@@ -190,6 +212,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | mean | 1 | -0.487 | 1.340 | 0.299 | 0.341 |
 | *llama2_13b_random* | mean | 22 | -0.693 | 1.574 | -0.009 | 0.337 |
 | *llama2_70b_random* | mean | 1 | -0.582 | 1.497 | 0.224 | 0.370 |
+| olmo2_7b | mean | 31 | -0.369 | 0.990 | 0.345 | 0.316 |
+| olmo2_7b_random | mean | 31 | -0.560 | 1.244 | 0.242 | 0.361 |
 | *tfidf* | text | 0 | -0.620 | 1.399 | 0.296 | 0.304 |
 
 ## mesopotamian_place — rows=all
@@ -210,6 +234,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | ent_last | 4 | -0.662 | 1.660 | 0.202 | 0.299 |
 | *llama2_13b_random* | ent_last | 10 | -0.592 | 1.506 | 0.213 | 0.272 |
 | *llama2_70b_random* | ent_last | 15 | -0.495 | 1.315 | 0.331 | 0.212 |
+| olmo2_7b | ent_last | 26 | -0.399 | 1.276 | 0.457 | 0.246 |
+| olmo2_7b_random | ent_last | 19 | -0.717 | 1.733 | 0.268 | 0.257 |
 | llama2_70b | ent_mean | 39 | -0.385 | 1.046 | 0.359 | 0.291 |
 | llama2_13b | ent_mean | 10 | -0.403 | 1.174 | 0.374 | 0.290 |
 | llama2_7b | ent_mean | 10 | -0.454 | 1.027 | 0.340 | 0.275 |
@@ -224,6 +250,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | ent_mean | 2 | -0.672 | 1.519 | 0.167 | 0.255 |
 | *llama2_13b_random* | ent_mean | 11 | -0.655 | 1.515 | 0.096 | 0.235 |
 | *llama2_70b_random* | ent_mean | 1 | -0.498 | 1.306 | 0.287 | 0.255 |
+| olmo2_7b | ent_mean | 9 | -0.456 | 1.163 | 0.340 | 0.289 |
+| olmo2_7b_random | ent_mean | 1 | -0.738 | 1.649 | 0.164 | 0.271 |
 | llama2_70b | last | 57 | -0.055 | 0.720 | 0.525 | 0.218 |
 | llama2_13b | last | 39 | -0.229 | 0.954 | 0.473 | 0.215 |
 | llama2_7b | last | 26 | -0.543 | 1.247 | 0.341 | 0.269 |
@@ -238,6 +266,8 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | last | 5 | -0.689 | 1.562 | 0.193 | 0.258 |
 | *llama2_13b_random* | last | 18 | -0.739 | 1.594 | 0.044 | 0.192 |
 | *llama2_70b_random* | last | 9 | -0.619 | 1.429 | 0.177 | 0.262 |
+| olmo2_7b | last | 30 | -0.428 | 1.093 | 0.333 | 0.313 |
+| olmo2_7b_random | last | 1 | -0.667 | 1.362 | 0.185 | 0.306 |
 | llama2_70b | mean | 49 | -0.194 | 0.826 | 0.499 | 0.211 |
 | llama2_13b | mean | 25 | -0.297 | 0.986 | 0.431 | 0.232 |
 | llama2_7b | mean | 23 | -0.482 | 1.194 | 0.314 | 0.274 |
@@ -252,4 +282,6 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | *llama2_7b_random* | mean | 1 | -0.582 | 1.348 | 0.221 | 0.287 |
 | *llama2_13b_random* | mean | 1 | -0.735 | 1.487 | 0.014 | 0.306 |
 | *llama2_70b_random* | mean | 9 | -0.511 | 1.381 | 0.316 | 0.215 |
+| olmo2_7b | mean | 27 | -0.361 | 0.969 | 0.365 | 0.254 |
+| olmo2_7b_random | mean | 1 | -0.806 | 1.789 | 0.200 | 0.256 |
 | *tfidf* | text | 0 | -0.531 | 0.945 | 0.257 | 0.285 |

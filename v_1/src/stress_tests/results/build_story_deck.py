@@ -624,7 +624,8 @@ DATASETS = [("world_place", "World"), ("us_place", "USA"), ("nyc_place", "NYC"),
             ("historical_figure", "Figures"), ("art", "Art"), ("headline", "Headlines")]
 TABLE_ROWS = [
     ("llama2_70b", "Llama-2-70B", False), ("llama2_13b", "Llama-2-13B", False),
-    ("llama2_7b", "Llama-2-7B", False), ("gpt_oss_120b", "gpt-oss-120B", False),
+    ("llama2_7b", "Llama-2-7B", False), ("olmo2_7b", "OLMo-2-7B", False),
+    ("gpt_oss_120b", "gpt-oss-120B", False),
     ("qwen3_32b", "Qwen3-32B", False), ("qwen3_8b", "Qwen3-8B", False),
     ("qwen3_1b7", "Qwen3-1.7B", False), ("umt5_base", "uMT5-base", False),
     ("thalesian_cunei400m", "cuneiform-400M", False),
@@ -633,6 +634,7 @@ TABLE_ROWS = [
     ("llama2_70b_random", "Llama-2-70B random*", True),
     ("llama2_13b_random", "Llama-2-13B random*", True),
     ("llama2_7b_random", "Llama-2-7B random*", True),
+    ("olmo2_7b_random", "OLMo-2-7B random*", True),
     ("random", "random Qwen3-8B*", True),
 ]
 
@@ -695,7 +697,8 @@ def cellA_table():
 AKK = os.path.join(WM, "akkadian", "results")
 ROWS_B = [
     ("llama2_70b", "Llama-2-70B", False), ("llama2_13b", "Llama-2-13B", False),
-    ("llama2_7b", "Llama-2-7B", False), ("gpt_oss_120b", "gpt-oss-120B", False),
+    ("llama2_7b", "Llama-2-7B", False), ("olmo2_7b", "OLMo-2-7B", False),
+    ("gpt_oss_120b", "gpt-oss-120B", False),
     ("qwen3_32b", "Qwen3-32B", False), ("qwen3_8b", "Qwen3-8B", False),
     ("qwen3_1b7", "Qwen3-1.7B", False), ("umt5_base", "uMT5-base", False),
     ("thalesian_cunei400m", "cuneiform-400M", False),
@@ -704,6 +707,7 @@ ROWS_B = [
     ("llama2_70b_random", "Llama-2-70B random", True),
     ("llama2_13b_random", "Llama-2-13B random", True),
     ("llama2_7b_random", "Llama-2-7B random", True),
+    ("olmo2_7b_random", "OLMo-2-7B random", True),
     ("random", "random Qwen3-8B", True),
 ]
 
