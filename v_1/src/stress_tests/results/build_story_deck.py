@@ -59,7 +59,7 @@ SPINE = [
     ("old", 20, "Curved and kernel probes do no better than the straight line"),
     ("old", 21, "Turning the supervision dial: the year is not lying in the cloud's shape"),
     ("new", "conditions", "What a linear temporal world model needs in order to exist"),
-    ("new", "winner", "What does work: the 400M translation encoder beats every LLM"),
+    ("new", "winner", "The one arm that separates from noise, and only under the PLS read-out"),
     ("new", "translation_line", "Why it works: translation finetuning, and multilingual translation most of all"),
     ("new", "tokenizer", "It is not the tokenizer: the winner has the worst one"),
     ("new", "olmo_freq", "Counting the training data: exposure is not the wall the probes hit"),
@@ -260,7 +260,7 @@ NEW_SLIDES = {
     <div class="cfg-k">Metric</div><div class="cfg-v">Spearman &rho; and R&sup2;, averaged over <strong>200 balanced draws</strong> that cap each of the 8 best-attested rulers at the same number of fragments, so no single king can carry the score.</div>
   </div>
   {{TABLE:frag:eng_tier0:year}}
-  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>The n-gram baseline wins outright</strong> (&rho; .775), ahead of every embedding in the table. Pooling matters more than the model does: averaging over the passage adds about <strong>+.20 &rho;</strong> to almost every arm, which is the opposite of what we saw on bare names, because a date leaves its trace across the whole passage rather than at one token. But the arms that gain the most from it gain nothing <em>over their controls</em>: at the top, AKK-300M (.740) and Qwen3-8B (.737) sit barely above an <strong>untrained</strong> Llama-2-70B (.661) and an untrained Qwen3-8B (.636). Moving from famous names to obscure passages, the scaling law is gone and the models no longer separate from noise.</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>The n-gram baseline wins outright</strong> (&rho; .408), ahead of every embedding in the table. These are ruler-grouped numbers, so a king is wholly in train or wholly in test; ungrouped, the same rows read .74 to .78 and the ordering flatters the models, because with 17 distinct years across 8 kings identifying the scribe is most of the way to the date. Pooling still matters more than the model does: averaging over the passage adds about <strong>+.12 &rho;</strong> to almost every arm, the opposite of what we saw on bare names, because a date leaves its trace across the whole passage rather than at one token. But the arms that gain the most gain little <em>over their controls</em>: AKK-300M leads at .400 and OLMo-2-7B follows at .333, against an <strong>untrained</strong> Llama-2-70B at .268 &mdash; a real margin, but one that still leaves every trained arm below a bag of character n-grams. Moving from famous names to obscure passages, the scaling law is gone.</div>
 </section>""",
 
 "b_frag_geo": """<section class="slide slide-text">
@@ -371,7 +371,7 @@ NEW_SLIDES = {
     <div class="cfg-k">Pooling</div><div class="cfg-v"><strong>text, last token</strong> and <strong>text, average</strong>, the same two read-outs used throughout.</div>
   </div>
   {{TABLE:frag:akk_maximal:year}}
-  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>This is where the claim breaks.</strong> Averaging over the fragment, the best trained arm is cuneiform-400M at &rho; .699, but an <em>untrained</em> Llama-2-70B reaches .588 and an untrained Qwen3-8B .544, and on last-token pooling the untrained Qwen3-8B (.499) beats <em>every</em> trained model in the table. The n-gram baseline sits at .707, above all of them. Compared with the English translation of the very same fragments, every arm loses roughly .15 to .20 &rho;, so what the models had was access to English, not to the content. <strong>Only cuneiform-400M, a multilingual translation encoder, stays clearly above its controls</strong>, which is the one positive signal in this table and the thread the last part of the deck picks up.</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>This is where the claim breaks.</strong> These are ruler-grouped numbers, so no king appears in both halves of a draw. The whole field collapses into a band of about .20 to .33, and the top of it is the <strong>n-gram baseline at .330</strong> &mdash; ahead of every embedding. cuneiform-400M is next at .329, but an <em>untrained</em> Llama-2-70B reaches .322 and an untrained OLMo .315: a margin of <strong>.007</strong> against a draw-to-draw spread of about &plusmn;.07, which is a tenth of the noise. Several trained arms sit <em>below</em> their own twins (Llama-2-70B .201 against .322). Read against the ungrouped protocol, where cuneiform shows .699 and the floor .707, the whole apparent separation was ruler leakage: with 17 distinct years across 8 kings, knowing whose scribe wrote a text is knowing its date. Under ridge, <strong>nothing in this table beats a bag of character n-grams</strong>.</div>
 </section>""",
 
 "c_frag_geo": """<section class="slide slide-text">
@@ -470,12 +470,12 @@ NEW_SLIDES = {
 
 "winner": """<section class="slide slide-figure fig-major">
   <div class="eyebrow">The positive result</div>
-  <h2 class="sh">What does work: the 400M translation encoder beats every LLM at dating Akkadian</h2>
+  <h2 class="sh">The one arm that separates from noise &mdash; and only under the PLS read-out</h2>
   <div class="cfg tight">
     <div class="cfg-k">Setup</div><div class="cfg-v">the full model set under the honest protocol: cleaned Akkadian, average pooling, 200 balanced draws, <strong>PLS</strong> with <span style="color:#6b7484">Ridge</span> alongside as the check. Year Spearman &rho;, best layer per arm.</div>
   </div>
   <div class="fig-wrap">{{IMG:4}}</div>
-  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>cuneiform-400M ends the deck where the probes kept pointing:</strong> the highest balanced year score of every source, above all the Qwen scales, the 120B model, our own Akkadian-only MLM, and the n-gram baseline, and it is the <strong>only arm that clears both of its controls</strong> on this task. PLS and Ridge agree on the ordering, so the win is not an artifact of the dimensionality reduction. A 400M translation encoder, not a 120B language model, is the system that actually dates Akkadian.</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>cuneiform-400M is the only arm worth this much attention, and it is worth stating exactly why.</strong> Under ridge on ruler-grouped folds it leads at &rho; .329 &mdash; but an untrained Llama-2-70B reaches .322, a margin of <strong>.007 against a draw-to-draw spread of &plusmn;.07</strong>, and the n-gram floor (.330) is above both. On that read-out there is no winner and no reason to look closer. The reason to look closer is the <strong>PLS read-out with nested k selection</strong>, where k is chosen on training rulers only: there cuneiform-400M holds .336 while the best untrained arm falls to .243 and the Qwen control to .214 &mdash; a margin of <strong>.093, more than a full standard deviation</strong>, and the only place in cell C where any arm separates from noise at all. So the claim of the next two slides is narrow on purpose: not "a 400M encoder dates Akkadian", but "under the one read-out that separates anything, the arms with translation supervision are the ones that separate" &mdash; and the next slide asks whether that pattern holds across the whole translation family or is one model getting lucky.</div>
 </section>""",
 
 "translation_line": """<section class="slide slide-figure fig-major">
@@ -768,36 +768,55 @@ def frag_table(variant, target):
     """Cell B/C, fragment level: both poolings x {Spearman, R2}, balanced draws."""
     import json as _json
 
+    # PROTOCOL. The year columns read `mc_group` — GroupKFold by ruler — not `mc`.
+    # They used to read `mc`, whose splitter is None: a ruler sat in train and test at
+    # once, and with only 17 distinct years across 8 rulers the label is close to the
+    # ruler's identity. The slide text has always promised grouping, so the numbers now
+    # match the promise. It is not a cosmetic difference — cuneiform-400M reads .699
+    # under `mc` and .329 under `mc_group`, and the TF-IDF floor falls from .707 to
+    # .330, which is the leak made visible.
+    #
+    # The place columns already hold out whole find-spots (`mc_site`, protocol
+    # "by_site"), which is the same guarantee one confound over, so they are unchanged.
     def read(arm, site):
         if target == "year":
             p = os.path.join(AKK, "probes", arm, f"{variant}.r8.year.{site}.ridge.json")
-            key = "mc"
+            key = "mc_group"
         else:
             p = os.path.join(AKK, "probes_geosite", arm,
                              f"{variant}.{site}.geo_site.json")
             key = "mc_site"
         if not os.path.exists(p):
             return None, None
-        m = _json.load(open(p))[key]
+        m = _json.load(open(p)).get(key)
+        if not m:
+            return None, None
         return m.get("spearman_mean"), m.get("r2_mean")
 
     def tfidf_year():
-        import csv
-        with open(os.path.join(AKK, "summary_ALL_modes_full.csv")) as f:
-            for r in csv.DictReader(f):
-                if (r["arm"] == "tfidf" and r["variant"] == variant
-                        and r["rulers"] == "r8" and r["target"] == "year"):
-                    return float(r["mc_rho"]), float(r["mc_r2"])
-        return None, None
+        # read the same block from the same kind of file as every other arm, rather
+        # than from summary_ALL_modes_full.csv, whose mc_rho column is the ungrouped one
+        p = os.path.join(AKK, "probes", "tfidf", f"{variant}.r8.year.text.ridge.json")
+        if not os.path.exists(p):
+            return None, None
+        m = _json.load(open(p)).get("mc_group")
+        return (m.get("spearman_mean"), m.get("r2_mean")) if m else (None, None)
 
+    # R2 is dropped for the YEAR tables. Under GroupKFold a test fold holds one ruler,
+    # so y is constant inside it and R2 is not defined against a constant target: every
+    # arm returns the same -0.22 and every difference is +.000. Printing a column that
+    # cannot separate anything invites the reader to compare it. Place keeps R2, where
+    # the by-site protocol leaves several sites per fold and the number is real.
+    show_r2 = target != "year"
     head = ('<table class="rtbl compact dense"><thead>'
             '<tr><th rowspan="2">model</th>'
             '<th colspan="3" class="num">Spearman &rho;</th>'
-            '<th colspan="3" class="num">R&sup2;</th></tr>'
-            '<tr><th class="num">last token</th><th class="num">average</th>'
+            + ('<th colspan="3" class="num">R&sup2;</th>' if show_r2 else '')
+            + '</tr><tr><th class="num">last token</th><th class="num">average</th>'
             '<th class="num">difference</th>'
-            '<th class="num">last token</th><th class="num">average</th>'
-            '<th class="num">difference</th></tr></thead><tbody>')
+            + ('<th class="num">last token</th><th class="num">average</th>'
+               '<th class="num">difference</th>' if show_r2 else '')
+            + '</tr></thead><tbody>')
     body = []
     for arm, label, ctrl in ROWS_B:
         if arm == "tfidf":
@@ -810,8 +829,9 @@ def frag_table(variant, target):
                 tr + f'<td><span class="mdl">{label}</span></td>'
                 f'<td class="num" colspan="2">{_fmt(rho)}</td>'
                 '<td class="num">&ndash;</td>'
-                f'<td class="num" colspan="2">{_fmt(r2)}</td>'
-                '<td class="num">&ndash;</td></tr>')
+                + (f'<td class="num" colspan="2">{_fmt(r2)}</td>'
+                   '<td class="num">&ndash;</td>' if show_r2 else '')
+                + '</tr>')
             continue
         rl, r2l = read(arm, "last")
         rm, r2m = read(arm, "mean")
@@ -825,8 +845,10 @@ def frag_table(variant, target):
         body.append(tr + f'<td><span class="mdl">{label}</span></td>'
                     f'<td class="num">{_fmt(rl)}</td><td class="num">{_fmt(rm)}</td>'
                     f'<td class="num">{d(rl, rm)}</td>'
-                    f'<td class="num">{_fmt(r2l)}</td><td class="num">{_fmt(r2m)}</td>'
-                    f'<td class="num">{d(r2l, r2m)}</td></tr>')
+                    + (f'<td class="num">{_fmt(r2l)}</td>'
+                       f'<td class="num">{_fmt(r2m)}</td>'
+                       f'<td class="num">{d(r2l, r2m)}</td>' if show_r2 else '')
+                    + '</tr>')
     return head + "".join(body) + "</tbody></table>"
 
 
