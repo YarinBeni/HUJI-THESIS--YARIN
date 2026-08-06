@@ -106,6 +106,29 @@ better than the twin manages on them, and the never-seen → most-seen gap *wide
 sample size and with the honest label: these are the entities for which no string
 evidence of exposure exists, not entities provably absent from the corpus.
 
+## 2c. The same question under the PLS read-out
+
+The deck reports ridge for cell A and PLS for the fragment cells, so a frequency claim
+read only under ridge is a claim about one of the two read-outs the thesis uses. With
+per-entity PLS predictions now written (`probe_eng_pls.py`, best k = 16 for the trained
+arm), the whole analysis re-runs on them:
+
+| | ridge | PLS (best k) |
+|---|---|---|
+| overall ρ, trained | −0.040 | **−0.031** |
+| within century, trained | −0.102 | **−0.085** |
+| twin, overall | +0.181 | +0.172 |
+| never-seen → top 5%, trained | 122.4 → 88.5 yr (−34) | 127.0 → 99.4 yr (−28) |
+| never-seen → top 5%, twin | 189.7 → 343.2 yr (+154) | 193.4 → 348.2 yr (+155) |
+
+Every number moves by less than .01 in ρ and by a few years at the tails, and nothing
+changes sign. The read-out is not carrying the result: the flat middle, the modest
+separation at the extremes, and the twin's age artefact are all properties of the data
+rather than of the probe.
+
+Figure: `results/figs/fig_frequency_doseresponse_pls.png`, which names its probe in the
+title, as does the ridge version.
+
 ## 3. The salience axis: an anecdote that survives normalisation
 
 | entity set | median count in OLMo's training data |
