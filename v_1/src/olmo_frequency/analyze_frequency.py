@@ -65,12 +65,23 @@ def load_counts():
     return df
 
 
-def load_errors(arm):
-    """Per-entity absolute year error at the arm's best layer, held-out rows only."""
-    g = sorted(glob.glob(os.path.join(PROJ, arm, f"{ET}.*.layer*.csv.gz")))
+def load_errors(arm, probe="ridge"):
+    """Per-entity absolute year error at the arm's best layer, held-out rows only.
+
+    `probe` picks which read-out's predictions to read. Ridge is what probe_wm.py
+    writes; PLS comes from probe_eng_pls.py, which is the read-out the deck reports for
+    the fragment cells, so the frequency question deserves to be askable under both.
+    """
+    root = PROJ if probe == "ridge" else PROJ + "_pls"
+    g = sorted(glob.glob(os.path.join(root, arm, f"{ET}.*.layer*.csv.gz")))
     if not g:
+        if probe != "ridge":
+            sys.exit(f"no PLS projections for {arm} under {root}/{arm}.\n"
+                     "Run probe_eng_pls.py for this arm (sbatch "
+                     "v_1/src/olmo_frequency/sbatch/O8_pls_projections.sbatch),\n"
+                     "or drop --probe pls to use the ridge read-out.")
         sys.exit(
-            f"no projections for {arm} under {PROJ}/{arm}.\n"
+            f"no projections for {arm} under {root}/{arm}.\n"
             "probe_wm.py writes them during O2, but O2's commit_push did not include\n"
             "results/projections. On the cluster:\n"
             f"    git add -f v_1/src/world_models/results/projections/{arm} && \\\n"
@@ -99,8 +110,8 @@ def spearman(x, y):
     return float(r.statistic), float(r.pvalue), len(x)
 
 
-def analyse(arm, counts, min_bin, drop_short):
-    err, src = load_errors(arm)
+def analyse(arm, counts, min_bin, drop_short, probe="ridge"):
+    err, src = load_errors(arm, probe)
     df = counts[counts.entity_type == ET].merge(err, on="name", how="inner")
     if drop_short:
         df = df[df.short_name == 0]
@@ -134,6 +145,8 @@ def main():
                     help="smallest century bin worth a correlation")
     ap.add_argument("--drop-short-names", action="store_true",
                     help="exclude single-token names, whose counts collide with words")
+    ap.add_argument("--probe", default="ridge", choices=["ridge", "pls"],
+                    help="which read-out's per-entity predictions to correlate")
     args = ap.parse_args()
 
     counts = load_counts()
@@ -142,7 +155,7 @@ def main():
 
     stats_out, frames = {}, {}
     for arm in ARMS:
-        s, df = analyse(arm, counts, args.min_bin, args.drop_short_names)
+        s, df = analyse(arm, counts, args.min_bin, args.drop_short_names, args.probe)
         stats_out[arm] = s
         frames[arm] = df
         print(f"\n=== {arm}  (n={s['n']}, {s['projection']})")
@@ -166,10 +179,14 @@ def main():
     print("  (negative rho = more frequent entities are dated better)")
 
     os.makedirs(RESULTS, exist_ok=True)
-    with open(os.path.join(RESULTS, "frequency_stats.json"), "w") as f:
+    stats_out["probe"] = args.probe
+    # suffix the PLS outputs: two read-outs writing one filename would leave the figure
+    # showing whichever ran last, with nothing on its face to say which
+    sfx = "" if args.probe == "ridge" else "_pls"
+    with open(os.path.join(RESULTS, f"frequency_stats{sfx}.json"), "w") as f:
         json.dump(stats_out, f, indent=2)
     for arm, df in frames.items():
-        df.to_csv(os.path.join(RESULTS, f"joined_{arm}.csv"), index=False)
+        df.to_csv(os.path.join(RESULTS, f"joined_{arm}{sfx}.csv"), index=False)
     print(f"\n[write] {RESULTS}/frequency_stats.json + joined_*.csv")
 
     # the assyrian rulers are not in the cell-A projections; report them as the

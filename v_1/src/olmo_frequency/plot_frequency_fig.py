@@ -39,7 +39,7 @@ from lib import _save, _style                                        # noqa: E40
 
 RESULTS = os.path.join(HERE, "results")
 FIGS = os.path.join(RESULTS, "figs")
-OUT = os.path.join(FIGS, "fig_frequency_doseresponse.png")
+OUT = os.path.join(FIGS, "fig_frequency_doseresponse.png")   # _pls suffix when FREQ_PROBE=pls
 
 TRAINED, TWIN = "olmo2_7b", "olmo2_7b_random"
 # teal: unused by the deck's blue/green/warm families, so it reads as "a new arm"
@@ -68,9 +68,14 @@ def binned_median(x, y, nbins=12):
 def main():
     import matplotlib.pyplot as plt
 
-    st_path = os.path.join(RESULTS, "frequency_stats.json")
+    # follow whichever read-out analyze_frequency.py last produced, and say so on the
+    # figure: a dose-response plot that does not name its probe is not reproducible
+    probe = os.environ.get("FREQ_PROBE", "ridge")
+    sfx = "" if probe == "ridge" else "_pls"
+    st_path = os.path.join(RESULTS, f"frequency_stats{sfx}.json")
     if not os.path.exists(st_path):
-        sys.exit(f"no {st_path} — run analyze_frequency.py first.")
+        sys.exit(f"no {st_path} — run analyze_frequency.py"
+                 f"{' --probe pls' if probe != 'ridge' else ''} first.")
     st = json.load(open(st_path))
 
     _style.rc()
@@ -80,7 +85,7 @@ def main():
     gs = fig.add_gridspec(1, 4, width_ratios=[1, 1, 1, 0.88])
     axes = [fig.add_subplot(gs[0, i]) for i in range(4)]
 
-    frames = {a: pd.read_csv(os.path.join(RESULTS, f"joined_{a}.csv"))
+    frames = {a: pd.read_csv(os.path.join(RESULTS, f"joined_{a}{sfx}.csv"))
               for a in (TRAINED, TWIN)}
     ymax = float(np.quantile(pd.concat(frames.values())["abs_err"], 0.99))
 
@@ -180,11 +185,12 @@ def main():
               fontsize=12)
 
     fig.suptitle("Does the probe date an entity better when OLMo saw it more often?"
+                 f"   ·   {'ridge' if probe == 'ridge' else 'PLS (best k)'} probe"
                  f"   ·   counts from {st.get('index_used', '?')}"
                  "   ·   negative $\\rho$ = more frequent, better dated",
                  fontsize=17.5, fontweight="bold")
     os.makedirs(FIGS, exist_ok=True)
-    _save.save(fig, OUT)
+    _save.save(fig, OUT.replace(".png", f"{sfx}.png"))
     plt.close(fig)
     return 0
 

@@ -472,9 +472,9 @@ NEW_SLIDES = {
   <div class="eyebrow">The positive result</div>
   <h2 class="sh">The one arm that separates from noise &mdash; and only under the PLS read-out</h2>
   <div class="cfg tight">
-    <div class="cfg-k">Setup</div><div class="cfg-v">the full model set under the honest protocol: cleaned Akkadian, average pooling, 200 balanced draws, <strong>PLS</strong> with <span style="color:#6b7484">Ridge</span> alongside as the check. Year Spearman &rho;, best layer per arm.</div>
+    <div class="cfg-k">Setup</div><div class="cfg-v">the same four-cell trajectory as slide 4, read under <strong>PLS with nested k selection</strong> (k chosen on training rulers only) rather than ridge. Each arm is plotted as &Delta;&rho; against the matched random-init control in the identical configuration, so the y axis is "what training bought", not raw score. Ruler-grouped Monte-Carlo throughout.</div>
   </div>
-  <div class="fig-wrap">{{IMG:4}}</div>
+  <div class="fig-wrap">{{FIG:../world_models/figures/designs/slopegraph__pls.png}}</div>
   <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>cuneiform-400M is the only arm worth this much attention, and it is worth stating exactly why.</strong> Under ridge on ruler-grouped folds it leads at &rho; .329 &mdash; but an untrained Llama-2-70B reaches .322, a margin of <strong>.007 against a draw-to-draw spread of &plusmn;.07</strong>, and the n-gram floor (.330) is above both. On that read-out there is no winner and no reason to look closer. The reason to look closer is the <strong>PLS read-out with nested k selection</strong>, where k is chosen on training rulers only: there cuneiform-400M holds .336 while the best untrained arm falls to .243 and the Qwen control to .214 &mdash; a margin of <strong>.093, more than a full standard deviation</strong>, and the only place in cell C where any arm separates from noise at all. So the claim of the next two slides is narrow on purpose: not "a 400M encoder dates Akkadian", but "under the one read-out that separates anything, the arms with translation supervision are the ones that separate" &mdash; and the next slide asks whether that pattern holds across the whole translation family or is one model getting lucky.</div>
 </section>""",
 

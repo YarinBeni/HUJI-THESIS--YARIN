@@ -84,17 +84,34 @@ def probe_one(method, entity_type, site):
     if bad_bl:
         print(f"[warn] best layer {bl}: {bad_bl:.1%} non-finite, clamped", flush=True)
     layers = {bl: Xbl}
-    pls = {}
+    pls, projs = {}, {}
     for k in KS:
         try:
-            sc, _, _ = probing.run_pls_probe(layers[bl], target[valid],
-                                             is_test[valid], is_place, k=k)
+            sc, _, proj = probing.run_pls_probe(layers[bl], target[valid],
+                                                is_test[valid], is_place, k=k)
             pls[str(k)] = {"test_r2": float(sc["test"]["r2"]),
                            "test_spearman": float(_sp(sc["test"]))}
+            projs[str(k)] = proj
         except Exception as e:                                    # noqa: BLE001
             pls[str(k)] = {"error": str(e)[:80]}
     bk = max((k for k in pls if "test_r2" in pls[k]),
              key=lambda k: pls[k]["test_r2"], default=None)
+
+    # Per-entity predictions at the best k, mirroring what probe_wm.py already writes
+    # for ridge. Without them a downstream question about individual entities — the
+    # frequency dose-response is the one that prompted this — can only ever be asked
+    # of the ridge probe, because the aggregate r2/spearman recorded above cannot be
+    # decomposed back to entities. Places have two columns, times one.
+    if bk is not None and not is_place and str(bk) in projs:
+        import pandas as pd
+        jdir = os.path.join(RESULTS_DIR, "projections_pls", method)
+        os.makedirs(jdir, exist_ok=True)
+        pd.DataFrame({"is_test": is_test[valid],
+                      "pred": projs[str(bk)],
+                      "true": target[valid]},
+                     index=np.arange(len(df))[valid]).to_csv(
+            os.path.join(jdir, f"{entity_type}.{site}.layer{bl}.k{bk}.csv.gz"),
+            index_label="row")
     out = {"method": method, "entity_type": entity_type, "site": site,
            "is_place": bool(is_place), "best_layer": bl,
            "best_layer_r2": best_r2, "best_k": int(bk) if bk else None,
