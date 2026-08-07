@@ -77,6 +77,19 @@ MODELS = {
     "llama2_13b_random": _m(f"{_LLAMA_ORG}/Llama-2-13b-hf", ARCH_CAUSAL, random=True,
                             fallback="NousResearch/Llama-2-13b-hf",
                             tokenizer=_LLAMA_TOK, random_of="llama2_13b"),
+    # ---- OLMo: the one arm whose TRAINING CORPUS is public ------------------
+    # Every other arm here can be probed but not audited — we cannot count how often
+    # an entity appeared in Llama's or Qwen's training data, because that data is not
+    # published. OLMo 2 ships open weights AND the open olmo-mix/Dolma corpus, which
+    # is what makes the frequency dose-response experiment possible at all
+    # (v_1/src/olmo_frequency/). Needs transformers >= 4.47.
+    # sites: both, not the causal default of `last` alone. Llama and Qwen have cell-A
+    # `mean` from a second extraction pass, and an arm added for comparability that
+    # can only offer half the poolings is choosing its best from a smaller menu.
+    "olmo2_7b":        _m("allenai/OLMo-2-1124-7B", ARCH_CAUSAL,
+                          sites=["last", "mean"]),
+    "olmo2_7b_random": _m("allenai/OLMo-2-1124-7B", ARCH_CAUSAL, random=True,
+                          random_of="olmo2_7b", sites=["last", "mean"]),
     # ---- debug arm (not in the ladder; excluded from aggregation tables) ----
     "pythia_70m_test": _m("EleutherAI/pythia-70m", ARCH_CAUSAL),
     # 70B random is materialized once by build_random_llama.py (W0) because

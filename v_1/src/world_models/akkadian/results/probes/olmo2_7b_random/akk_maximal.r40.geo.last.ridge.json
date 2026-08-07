@@ -1,0 +1,36 @@
+{
+  "method": "olmo2_7b_random",
+  "variant": "akk_maximal",
+  "ruler_set": "r40",
+  "target": "geo",
+  "site": "last",
+  "n": 1167,
+  "n_rulers": 40,
+  "holdout": {
+    "best_layer": 17,
+    "best_test_r2": 0.2585678949583802,
+    "best_test_spearman": 0.4433368627897549,
+    "n_test": 234
+  },
+  "mc": {
+    "mode": "mc_balanced",
+    "cap": 1,
+    "n_draws_used": 0,
+    "r2_mean": NaN,
+    "r2_std": NaN,
+    "spearman_mean": NaN,
+    "spearman_std": NaN,
+    "layer": 17
+  },
+  "loro": {
+    "mode": "loro",
+    "n_rulers": 40,
+    "n_scored": 1167,
+    "r2": 0.16388337386439017,
+    "spearman": 0.36390000925679905,
+    "layer": 32
+  },
+  "best_layer": 17,
+  "best_test_r2": 0.2585678949583802,
+  "best_test_spearman": 0.4433368627897549
+}

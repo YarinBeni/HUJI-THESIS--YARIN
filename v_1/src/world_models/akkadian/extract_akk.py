@@ -28,12 +28,16 @@ ACTS_DIR = os.path.join(_HERE, "activations")
 # decoder arms + the thesis encoders (added for the layer/PLS comparison; encoders
 # have no causal last token, so only their `mean` pooling is meaningful downstream —
 # the probe scripts skip the `last` site when it is absent/degenerate).
-DECODER_METHODS = [
-    "qwen3_1b7", "qwen3_8b", "qwen3_32b", "gpt_oss_120b", "random",
-    "llama2_7b", "llama2_13b", "llama2_70b",
-    "llama2_7b_random", "llama2_13b_random", "llama2_70b_random",
-]
-ENCODER_METHODS = ["thalesian_akk300m", "thalesian_cunei400m", "umt5_base"]
+#
+# Derived from the registry rather than written out by hand. The hand-written list
+# silently predated the OLMo arm, so `--method olmo2_7b` was rejected by argparse and
+# a six-task extraction array died in seconds — a model registered everywhere else in
+# the repo was unusable here for no reason but a stale literal. A new arm should now
+# work the moment it is added to wm_lib/registry.py.
+_DEBUG_ONLY = {"pythia_70m_test"}          # not part of the ladder; excluded on purpose
+DECODER_METHODS = [m for m, s in MODELS.items()
+                   if s["arch"] == "causal" and m not in _DEBUG_ONLY]
+ENCODER_METHODS = [m for m, s in MODELS.items() if s["arch"] == "encoder"]
 
 
 def main():

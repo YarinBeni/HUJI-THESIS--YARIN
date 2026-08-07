@@ -45,10 +45,27 @@ MC_DRAWS = 200
 
 
 def _merge(path, block):
+    """Merge `block` into the JSON at `path` ATOMICALLY.
+
+    This used to open `path` for writing and dump into it. If the process died
+    part-way through that dump — a SLURM time limit, an OOM kill — the file was left
+    truncated mid-object AND the good previous content was already gone. The WAk
+    k-sweep hit exactly this: five arms came back with a truncated
+    `eng_tier0.…mean.ridge.json`, which is the last cell each job writes, and the
+    corruption was committed and pushed before anyone noticed.
+
+    Writing to a sibling temp file and renaming makes the replacement atomic, so a
+    kill at any point leaves the previous good file intact.
+    """
     d = json.load(open(path))
     d["mc_group"] = block
-    with open(path, "w") as f:
+    tmp = path + ".tmp"
+    with open(tmp, "w") as f:
         json.dump(d, f, indent=2)
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp, path)
+    json.load(open(path))          # refuse to leave anything unparseable behind
 
 
 def one(method, variant, site, df, args):

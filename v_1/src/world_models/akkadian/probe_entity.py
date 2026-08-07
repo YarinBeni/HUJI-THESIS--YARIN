@@ -99,9 +99,16 @@ def mc_entity_scores(X, y, ent_ix, is_place, n_draws=N_DRAWS, k=None):
 PLS_KS = (1, 2, 3, 5, 8, 12, 16, 24, 32, 48, 64)
 
 
-def score_matrix(X, df, entity_type, tag):
-    """All read-outs for one feature matrix: MC ridge, the MC PLS-k sweep (with PLS-5
-    retained under its old key), and the fixed holdout."""
+def score_matrix(X, df, entity_type, tag, sweep_k=False):
+    """All read-outs for one feature matrix: MC ridge, PLS-5, and the fixed holdout.
+
+    `sweep_k` adds the full PLS_KS sweep. It is OFF per layer and switched on only for
+    the best layer in a second pass, because the sweep is 11 extra 200-draw Monte-Carlo
+    runs and this function is called once per (layer x site x dataset). Running it
+    everywhere multiplies the job by ~6x — for Llama-2-70B that is 80 layers x 4 sites x
+    2 datasets x 11 fits, which blows past the 16 h wall and loses the whole arm. The
+    per-k curve is only ever read at the best layer anyway.
+    """
     y, is_place = targets(entity_type, df)
     ent_ix = df.entity_ix.values
     is_test = df.is_test.values.astype(bool)
@@ -110,14 +117,15 @@ def score_matrix(X, df, entity_type, tag):
     mc = mc_entity_scores(X, y, ent_ix, is_place)
     if mc:
         out["ridge_mc"] = mc
+    ks = PLS_KS if sweep_k else (5,)
     per_k = {}
-    for k in PLS_KS:
+    for k in ks:
         if k >= min(X.shape):
             continue
         s = mc_entity_scores(X, y, ent_ix, is_place, k=k)
         if s:
             per_k[str(k)] = s
-    if per_k:
+    if per_k and sweep_k:
         out["pls_per_k"] = per_k
         bk = max(per_k, key=lambda kk: per_k[kk]["mc_rho"])
         out["pls_best_k"] = int(bk)
@@ -165,6 +173,21 @@ def probe_one(method, entity_type, site, args):
 
     if not per_layer:
         return None
+
+    # Second pass: the full PLS_KS sweep, at the BEST layer only. One re-load and 11
+    # extra MC runs, instead of 11 on every layer.
+    bl = best[0]
+    bpath = next((p for p in files
+                  if int(re.search(r"layer(\d+)\.npz$", p).group(1)) == bl), None)
+    if bpath is not None:
+        Xb, _ = probing.sanitize(np.load(bpath)["acts"][:len(df)])
+        per_layer[bl]["all"] = score_matrix(Xb, df, entity_type, "all", sweep_k=True)
+        if bare.sum() >= 8:
+            per_layer[bl]["bare"] = score_matrix(Xb[bare], df[bare], entity_type,
+                                                 "bare", sweep_k=True)
+        print(f"[{method}/{entity_type}/{site}] k-sweep at best layer {bl}: "
+              f"k={per_layer[bl]['all'].get('pls_best_k')}", flush=True)
+
     out = {"method": method, "entity_type": entity_type, "site": site,
            "protocol": f"entity-level MC ({N_DRAWS} draws, {TEST_RATIO:.0%} of entities)",
            "n_entities": int(df.entity_ix.nunique()),
@@ -173,8 +196,17 @@ def probe_one(method, entity_type, site, args):
            "best_layer": best[0], "best_mc_r2": float(best[1])}
     pdir = os.path.join(RESULTS_DIR, "probes_entity", method)
     os.makedirs(pdir, exist_ok=True)
-    with open(os.path.join(pdir, f"{entity_type}.{site}.json"), "w") as f:
+    # Atomic write — same reason as probe_akk_group._merge: a kill part-way through an
+    # in-place dump leaves a truncated file AND destroys the previous good one, which
+    # is exactly what corrupted five arms in the WAk run.
+    dest = os.path.join(pdir, f"{entity_type}.{site}.json")
+    tmp = dest + ".tmp"
+    with open(tmp, "w") as f:
         json.dump(out, f, indent=2)
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp, dest)
+    json.load(open(dest))          # refuse to leave anything unparseable behind
     return out
 
 
@@ -190,9 +222,13 @@ def run_tfidf(args):
         out = {"method": "tfidf", "entity_type": et, "site": "text",
                "protocol": f"entity-level MC ({N_DRAWS} draws, {TEST_RATIO:.0%})",
                "n_entities": int(df.entity_ix.nunique()),
-               "layers": {"0": {"all": score_matrix(X, df, et, "all")}}}
+               # sweep_k here too: the TF-IDF floor must get the same k treatment as
+               # the models, or the comparison is unequal. Cheap — one "layer", and the
+               # feature matrix is entity strings, not activations.
+               "layers": {"0": {"all": score_matrix(X, df, et, "all", sweep_k=True)}}}
         if bare.sum() >= 8:
-            out["layers"]["0"]["bare"] = score_matrix(X[bare], df[bare], et, "bare")
+            out["layers"]["0"]["bare"] = score_matrix(X[bare], df[bare], et, "bare",
+                                                      sweep_k=True)
         out["best_layer"] = 0
         out["best_mc_r2"] = out["layers"]["0"]["all"].get(
             "ridge_mc", {}).get("mc_r2", float("nan"))
