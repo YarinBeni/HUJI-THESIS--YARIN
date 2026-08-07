@@ -81,6 +81,7 @@ the collapse is deeper than task format. The dyear-binned accuracies separate
 | `aggregate_pairs.py` | tidy CSVs from the result JSONs |
 | `sbatch/F1_pairs_probe.sbatch` | CPU array, 14 arms × {akk_maximal, eng_tier0} |
 | `sbatch/F2_pairs_behavioral.sbatch` | GPU array, qwen3 arms × {eng_tier0, akk_maximal} |
+| `sbatch/F3_pairs_robustness.sbatch` | CPU array, the `--m 100 --draws 10` pass on the headline arms (writes `*.m100.json`) |
 
 Results land in `results/probes/`, `results/directions/`, `results/behavioral/`,
 summarized by `aggregate_pairs.py` into `results/summary_*.csv`.
@@ -91,10 +92,11 @@ summarized by `aggregate_pairs.py` into `results/summary_*.csv`.
 - [x] `pairs_data.py` written; self-test passes (1,187 frags / 40 rulers / 777 ruler-pairs; per-ruler-pair weight sums verified = 1; label balance .49)
 - [x] `probe_pairs.py` written; local smoke on `tfidf_char` (2 draws): macro_acc ≈ .65 — the floor to beat
 - [x] `behavioral_pairs.py`, `aggregate_pairs.py`, F1/F2 sbatch written
-- [ ] Full local run of the `tfidf_char` floor (100 draws, both variants) — CPU, can run off-cluster
+- [x] Full local `tfidf_char` floor, akk_maximal (100 draws): **macro_acc = .658 ± .038**, auc .652 — the number to beat
+- [ ] Full local `tfidf_char` floor, eng_tier0 (running)
 - [ ] F1 submitted on cluster (needs the akkadian npz store)
 - [ ] F2 submitted on cluster (GPU)
-- [ ] Robustness pass: `--m 100 --draws 10` on the top arms
+- [ ] F3 robustness pass (`--m 100 --draws 10`) on cluster
 - [ ] Aggregate + write RESULTS.md (numbers vs the .65 floor; dyear bins; twins)
 - [ ] E3 hook: cosine(pairwise direction, frozen cell-A name direction)
 - [ ] E8 pass: ruler-level wild bootstrap over the per-ruler-pair scores

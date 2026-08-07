@@ -5,7 +5,7 @@
 #SBATCH --mem=64G
 #SBATCH --time=12:00:00
 #SBATCH --output=v_1/src/phase2/pairs/logs/F1_pairs_%A_%a.out
-#SBATCH --array=0-13
+#SBATCH --array=1-13
 # ===========================================================================
 # F1 — E1 representation-side pairwise probe ("which fragment is earlier?").
 #
@@ -14,7 +14,8 @@
 # (the same store probe_akk reads), so it needs the extractions to exist but
 # never touches a GPU.
 #
-#   0 tfidf_char        1 olmo2_7b            2 olmo2_7b_random
+#   0 tfidf_char (already run locally; re-enable with --array=0-13)
+#                       1 olmo2_7b            2 olmo2_7b_random
 #   3 llama2_7b         4 llama2_7b_random    5 llama2_13b
 #   6 llama2_13b_random 7 llama2_70b          8 llama2_70b_random
 #   9 qwen3_1b7        10 qwen3_8b           11 qwen3_32b

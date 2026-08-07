@@ -232,15 +232,18 @@ def main():
            "layer_selected_on_same_protocol": args.method != "tfidf_char",
            "full": full}
     os.makedirs(os.path.join(RESULTS, "probes"), exist_ok=True)
+    # a non-default m gets its own filename so a robustness run never overwrites
+    # the headline result
+    msfx = "" if args.m == P.M_DEFAULT else f".m{args.m}"
     pth = os.path.join(RESULTS, "probes",
-                       f"{args.method}.{args.variant}.{args.site}.json")
+                       f"{args.method}.{args.variant}.{args.site}{msfx}.json")
     with open(pth, "w") as f:
         json.dump(out, f, indent=2)
     if w is not None:
         os.makedirs(os.path.join(RESULTS, "directions"), exist_ok=True)
         np.savez_compressed(
             os.path.join(RESULTS, "directions",
-                         f"{args.method}.{args.variant}.{args.site}"
+                         f"{args.method}.{args.variant}.{args.site}{msfx}"
                          f".layer{best_layer}.npz"),
             w=w.astype(np.float32))
     print(f"[done] {args.method}/{args.variant}/{args.site} layer {best_layer}: "
