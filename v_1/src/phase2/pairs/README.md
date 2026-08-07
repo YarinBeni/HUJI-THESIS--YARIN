@@ -93,7 +93,7 @@ summarized by `aggregate_pairs.py` into `results/summary_*.csv`.
 - [x] `probe_pairs.py` written; local smoke on `tfidf_char` (2 draws): macro_acc ≈ .65 — the floor to beat
 - [x] `behavioral_pairs.py`, `aggregate_pairs.py`, F1/F2 sbatch written
 - [x] Full local `tfidf_char` floor, akk_maximal (100 draws): **macro_acc = .658 ± .038**, auc .652 — the number to beat
-- [ ] Full local `tfidf_char` floor, eng_tier0 (running)
+- [x] Full local `tfidf_char` floor, eng_tier0 (100 draws): macro_acc = .586 ± .038 — the floor is markedly LOWER on the English gloss than on raw Akkadian (.658), consistent with the deck's finding that Akkadian surface orthography itself carries period signal
 - [ ] F1 submitted on cluster (needs the akkadian npz store)
 - [ ] F2 submitted on cluster (GPU)
 - [ ] F3 robustness pass (`--m 100 --draws 10`) on cluster
