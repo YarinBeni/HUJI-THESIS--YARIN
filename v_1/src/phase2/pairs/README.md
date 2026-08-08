@@ -94,10 +94,11 @@ summarized by `aggregate_pairs.py` into `results/summary_*.csv`.
 - [x] `behavioral_pairs.py`, `aggregate_pairs.py`, F1/F2 sbatch written
 - [x] Full local `tfidf_char` floor, akk_maximal (100 draws): **macro_acc = .658 ± .038**, auc .652 — the number to beat
 - [x] Full local `tfidf_char` floor, eng_tier0 (100 draws): macro_acc = .586 ± .038 — the floor is markedly LOWER on the English gloss than on raw Akkadian (.658), consistent with the deck's finding that Akkadian surface orthography itself carries period signal
-- [ ] F1 submitted on cluster (needs the akkadian npz store)
-- [ ] F2 submitted on cluster (GPU)
-- [ ] F3 robustness pass (`--m 100 --draws 10`) on cluster
-- [ ] Aggregate + write RESULTS.md (numbers vs the .65 floor; dyear bins; twins)
+- [x] F1 on cluster (job 22587): 12/13 arms landed; llama2_70b eng_tier0 still pending
+- [x] F2 on cluster (job 22588): all 3 qwen3 arms — behavioural task is DEGENERATE (massive No-bias: yes_rate 0–.38, order-consistency 0–.54, macro ≈ chance); the probe is the informative read
+- [x] F3 robustness (job 22589): all 4 arms; m=100 gives the same picture, uniformly a touch lower
+- [x] First read of the probe table (see below) — headline: **akk_maximal replicates the collapse in pairwise form** (every arm within noise of the .658 floor, random twins interleaved with trained models at the top); **eng_tier0 shows real separation** (trained OLMo-2 .634 and Qwen3-8B .636 vs floor .586, with olmo2_7b_random at the BOTTOM, .553 — a ~.08 trained-vs-twin gap that raw Akkadian entirely lacks)
+- [ ] Write RESULTS.md (full numbers, dyear bins, m100 comparison) once llama2_70b eng lands
 - [ ] E3 hook: cosine(pairwise direction, frozen cell-A name direction)
 - [ ] E8 pass: ruler-level wild bootstrap over the per-ruler-pair scores
 - [ ] Esarhaddon within-ruler pairs (E6; needs a small `--within-ruler` extension of `pairs_data.draw_pairs`)
