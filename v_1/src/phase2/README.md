@@ -18,8 +18,8 @@ folder's README carries its own progress detail. This page is the wave tracker.
 **Wave 3 — traces (E4.4), SAE (E5), steering (E2)** — `traces/`, `sae/`, `steering/`
 submitted as one block by `submit_all.sh` (F8 chained afterok F7):
 - [x] F6 done, all 3 models — **cell-A year direction is genuinely temporal**: its early end reads BC/BCE/ancient/Athen (and in Qwen even 公元前 'BCE', 战国 'Warring States') in every model; OLMo's late end contains literal year fragments (187/188). **E1's pairwise document direction lenses to junk in all models** — no temporal vocab, no royal names: consistent with E3's orthogonality, the document axis is not a vocabulary-aligned time axis.
-- [ ] F7 SAE FVU gate: Qwen-Scope vs our acts, incl. Akkadian OOD (1 CPU task)
-- [ ] F8 SAE feature hunt at the gated layer (afterok F7)
+- [x] F7 done — **the gate passes wide open at layers 16–28** (FVU .08–.20; layer 8 fails at .82). Crucially Akkadian FVU (.11–.19) ≈ English: the representations are NOT broken by the script — **H-OOD killed at the reconstruction level**. Empirical layer offset = 1 (our file L+1 = SAE block L).
+- [x] F8 done (layer 24) — **the collapse reaches the feature basis**: feature 38678 fires on 62% of cell-A entities with ρ=.57 vs death year, but the top-50 year features have median firing 11.7% on entities vs 0.08% on ENGLISH glosses and ~0 on Akkadian (31/50 exactly zero). The time features are gated on entity-mention contexts — they never engage on document text even in English. cos(W_dec, ridge) ≤ .12: the ridge direction is distributed over many features.
 - [x] F9 done (3 tasks) — **null at the tested band**: flip rates ≈ random control, logit shifts ≈ 0 at α≤24, blocks 21–32. Caveat before concluding 'not causal': our ridge direction lives at LATE layers (26/29) while the NAACL effects concentrated in the FIRST half of the stack, and α may be small vs late-layer residual norms. A follow-up sweep (early-mid blocks, α scaled to residual norm) is the fair test; as run, no causal use detected.
 
 Deferred by design: cell-C steering (needs king-token span integration),
