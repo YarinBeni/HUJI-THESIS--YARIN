@@ -100,8 +100,8 @@ summarized by `aggregate_pairs.py` into `results/summary_*.csv`.
 - [x] First read of the probe table (see below) — headline: **akk_maximal replicates the collapse in pairwise form** (every arm within noise of the .658 floor, random twins interleaved with trained models at the top); **eng_tier0 shows real separation** (trained OLMo-2 .634 and Qwen3-8B .636 vs floor .586, with olmo2_7b_random at the BOTTOM, .553 — a ~.08 trained-vs-twin gap that raw Akkadian entirely lacks)
 - [x] RESULTS.md written — full tables, dyear bins (trained edge lives at 0–75 yr resolution in eng), m100 comparison, behavioural degeneracy
 - [x] `e8_inference.py` written (E8: dyadic ruler bootstrap on paired contrasts + ruler-permutation with refit); local smoke passes (perm null ≈ .49 vs obs .57 on the tfidf floor)
-- [ ] F4 submitted on cluster (2 tasks: eng_tier0 with contrasts+permutation, akk_maximal as the honest null check)
+- [x] F4 ran on cluster (job 22607, both tasks)
 - [x] F4 numbers folded into RESULTS.md §4 — quote the permutation dissociation, not the pairwise contrasts
-- [ ] E3 hook: cosine(pairwise direction, frozen cell-A name direction)
-- [ ] E8 pass: ruler-level wild bootstrap over the per-ruler-pair scores
+- [x] E3 hook done in F5: cosine(pairwise direction, cell-A name direction) ≈ .01 on every arm — chance-level orthogonality; the two time axes are different axes
+- [x] E8 pass done in F4 (dyadic ruler bootstrap + permutation-with-refit); tables in RESULTS.md §4
 - [ ] Esarhaddon within-ruler pairs (E6; needs a small `--within-ruler` extension of `pairs_data.draw_pairs`)
