@@ -111,11 +111,35 @@ resolution — and their random twins do not. And a pairwise probe learns this
 its source. The learned directions are saved (`results/directions/`) for the E3
 cosine comparison against the frozen cell-A name direction.
 
-**Cannot be said yet.** The eng gaps (~.05 vs floor, ~.07–.08 vs twin) are ~2
-draw-sd, but draws are resamples, not independent evidence — the honest
-uncertainty unit is the ruler(-pair), and the E8 ruler-level permutation /
-wild-cluster bootstrap is what turns this pattern into a p-value. Until then
-this is a consistent, protocol-clean pattern, not a significance claim.
+**The E8 inference (F4, jobs 22607), at ruler-level honesty (n = 40):**
+
+*Permutation with refit* ("is there chronological signal at all", null = ruler
+chronology shuffled, 150 perms — .0066 is the attainable floor):
+
+| | akk_maximal | eng_tier0 |
+|---|---|---|
+| tfidf_char floor | **p = .013** | p = .11 (ns) |
+| olmo2_7b | **p = .0066** | **p = .0066** |
+| qwen3_8b | — | **p = .0066** |
+
+*Dyadic ruler bootstrap on the paired contrasts* (95% CI, two-sided p):
+
+| contrast | eng_tier0 | akk_maximal |
+|---|---|---|
+| olmo2_7b − floor | +.035 [−.035, +.105], p=.34 | +.027 [−.031, +.083], p=.36 |
+| olmo2_7b − twin | +.074 [−.014, +.165], **p=.098** | −.002, p=.97 |
+| qwen3_8b − floor | +.048 [−.056, +.144], p=.33 | — |
+| qwen3_8b − twin | +.063 [−.009, +.133], **p=.082** | — |
+
+**The honest summary.** The qualitative dissociation is significant where it
+matters: on English glosses the trained models carry statistically real
+chronological signal (perm p=.007) while the n-gram floor does NOT reach
+significance (p=.11) — and on raw Akkadian the floor itself is significant
+(p=.013) with the trained model adding nothing (vs-floor p=.36, vs-twin p=.97).
+The direct arm-vs-arm gaps on English are positive but individually marginal
+(vs-twin p≈.08–.10): forty rulers buy exactly this much power, and the thesis
+should quote the permutation dissociation, not the pairwise contrasts, as the
+inferential result.
 
 ## 5. Reproducing
 

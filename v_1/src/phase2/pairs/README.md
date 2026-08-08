@@ -101,7 +101,7 @@ summarized by `aggregate_pairs.py` into `results/summary_*.csv`.
 - [x] RESULTS.md written — full tables, dyear bins (trained edge lives at 0–75 yr resolution in eng), m100 comparison, behavioural degeneracy
 - [x] `e8_inference.py` written (E8: dyadic ruler bootstrap on paired contrasts + ruler-permutation with refit); local smoke passes (perm null ≈ .49 vs obs .57 on the tfidf floor)
 - [ ] F4 submitted on cluster (2 tasks: eng_tier0 with contrasts+permutation, akk_maximal as the honest null check)
-- [ ] Fold F4 numbers into RESULTS.md §4 (replace the "cannot be said yet" caveat with the actual CIs/p-values)
+- [x] F4 numbers folded into RESULTS.md §4 — quote the permutation dissociation, not the pairwise contrasts
 - [ ] E3 hook: cosine(pairwise direction, frozen cell-A name direction)
 - [ ] E8 pass: ruler-level wild bootstrap over the per-ruler-pair scores
 - [ ] Esarhaddon within-ruler pairs (E6; needs a small `--within-ruler` extension of `pairs_data.draw_pairs`)
