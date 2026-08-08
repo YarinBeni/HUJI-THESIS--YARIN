@@ -80,7 +80,24 @@ def build_prompts(df, m, max_words, variant, seed):
     return pd.DataFrame(rows)
 
 
-def yes_no_scores(method, prompts, batch_size):
+def to_chat(tok, prompt):
+    """Wrap a raw prompt in the model's chat template (thinking disabled).
+
+    The v1 run queried instruct-tuned Qwen3 in raw completion mode and got a
+    massive No-bias — quite possibly a format artifact, which is exactly the
+    gap this flag closes. The final 'Answer:' cue is kept inside the user turn
+    so the single-token read-out stays comparable."""
+    msgs = [{"role": "user", "content": prompt}]
+    try:
+        return tok.apply_chat_template(msgs, tokenize=False,
+                                       add_generation_prompt=True,
+                                       enable_thinking=False)
+    except TypeError:                       # tokenizers without enable_thinking
+        return tok.apply_chat_template(msgs, tokenize=False,
+                                       add_generation_prompt=True)
+
+
+def yes_no_scores(method, prompts, batch_size, chat=False):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
     spec = registry.MODELS[method]
@@ -104,12 +121,16 @@ def yes_no_scores(method, prompts, batch_size):
     yes_ids, no_ids = ids_of(["Yes", "yes"]), ids_of(["No", "no"])
     assert yes_ids and no_ids, "tokenizer has no single-token Yes/No"
 
+    if chat:
+        prompts = [to_chat(tok, p) for p in prompts]
     scores = []
     with torch.no_grad():
         for i in range(0, len(prompts), batch_size):
             batch = prompts[i:i + batch_size]
+            # chat-templated text already carries its special tokens
             enc = tok(batch, return_tensors="pt", padding=True,
-                      truncation=True, max_length=1024).to(model.device)
+                      truncation=True, max_length=1024,
+                      add_special_tokens=not chat).to(model.device)
             logits = model(**enc).logits
             last = enc.attention_mask.sum(1) - 1
             lg = logits[torch.arange(len(batch)), last]
@@ -129,6 +150,9 @@ def main():
                     help="pairs per ruler-pair (each asked in both orders)")
     ap.add_argument("--max-words", type=int, default=120)
     ap.add_argument("--batch-size", type=int, default=8)
+    ap.add_argument("--chat", action="store_true",
+                    help="wrap prompts in the chat template (thinking off); "
+                         "results get a .chat suffix so v1 stays comparable")
     ap.add_argument("--seed", type=int, default=P.SEED)
     args = ap.parse_args()
 
@@ -138,7 +162,7 @@ def main():
           f"{prompts.rp.nunique()} ruler-pairs)", flush=True)
 
     prompts["score"] = yes_no_scores(args.method, prompts.prompt.tolist(),
-                                     args.batch_size)
+                                     args.batch_size, chat=args.chat)
     prompts["pred"] = (prompts.score > 0).astype(int)
     prompts["correct"] = (prompts.pred == prompts.label).astype(float)
 
@@ -166,8 +190,10 @@ def main():
                          if len(g) >= 20},
         "yes_rate": float(prompts.pred.mean()),   # a Yes-bias detector
     }
+    out["chat_template"] = bool(args.chat)
     os.makedirs(RESULTS, exist_ok=True)
-    pth = os.path.join(RESULTS, f"{args.method}.{args.variant}.json")
+    sfx = ".chat" if args.chat else ""
+    pth = os.path.join(RESULTS, f"{args.method}.{args.variant}{sfx}.json")
     with open(pth, "w") as f:
         json.dump(out, f, indent=2)
     print(f"[done] macro_acc={out['macro_acc']:.3f} "

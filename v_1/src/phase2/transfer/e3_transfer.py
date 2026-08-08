@@ -105,10 +105,48 @@ def leace_erase(X, rulers):
         sys.exit("pip install concept-erasure (and torch) for the mediation test,"
                  " or pass --skip-leace")
     codes = pd.Categorical(rulers).codes
-    Z = np.eye(codes.max() + 1, dtype=np.float32)[codes]
-    Xt = torch.from_numpy(np.ascontiguousarray(X))
+    Z = np.eye(codes.max() + 1, dtype=np.float64)[codes]
+    # float64: with d=4096 >> n=1187 the whitening is ill-conditioned in fp32 —
+    # the v1 run's 82% norm change on qwen3_8b was likely partly numeric
+    Xt = torch.from_numpy(np.ascontiguousarray(X.astype(np.float64)))
     eraser = LeaceEraser.fit(Xt, torch.from_numpy(Z))
-    return eraser(Xt).numpy()
+    return eraser(Xt).float().numpy()
+
+
+def ruler_probe_acc(X, rulers, seed=0):
+    """Held-out linear ruler-classification accuracy — the surgical check.
+    Before erasure it should be high; after a working erasure, near chance."""
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import StratifiedKFold, cross_val_score
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.pipeline import make_pipeline
+    y = pd.Categorical(rulers).codes
+    # keep classes with enough members for 3 folds
+    ok = pd.Series(y).groupby(y).transform("size").values >= 3
+    clf = make_pipeline(StandardScaler(),
+                        LogisticRegression(max_iter=1000, C=0.1))
+    cv = StratifiedKFold(3, shuffle=True, random_state=seed)
+    return float(cross_val_score(clf, X[ok], y[ok], cv=cv).mean())
+
+
+def cellA_positive_control(method, coef, LA, site_dir):
+    """Score the CELL-A entity activations with the very same frozen direction
+    through the very same code path. If this does not reproduce rho ~ .85+,
+    any 'transfer fails' claim is a pipeline bug, not a finding."""
+    ent_csv = os.path.join(_WM, "data", "entity_datasets",
+                           "historical_figure.csv")
+    acts = os.path.join(_WM, "activations", method, "historical_figure",
+                        f"{site_dir}.layer{LA}.npz")
+    if not (os.path.exists(ent_csv) and os.path.exists(acts)):
+        return {"skipped": f"missing {acts}"}
+    ent = pd.read_csv(ent_csv)
+    X = np.load(acts)["acts"].astype(np.float32)
+    if len(X) != len(ent):
+        return {"skipped": "row mismatch"}
+    y = ent["death_year"].values.astype(float)
+    te = ent["is_test"].astype(bool).values & np.isfinite(y)
+    s = X[te] @ coef
+    return {"spearman_heldout": spearman(s, y[te]), "n": int(te.sum())}
 
 
 def spearman(a, b):
@@ -151,6 +189,13 @@ def main():
            "cellA_direction": src, "cellA_layer": LA, "entity_set": ENTITY,
            "m": args.m, "draws": args.draws, "n_fragments": int(len(df))}
 
+    # positive control FIRST: the same direction on its home turf must work,
+    # or every downstream null is uninterpretable
+    out["positive_control_cellA"] = cellA_positive_control(
+        args.method, coef, LA, srcA_site)
+    print(f"  [control] cell-A held-out: {out['positive_control_cellA']}",
+          flush=True)
+
     # primary: the same residual depth the direction was fitted at
     if LA not in layers:
         near = min(layers, key=lambda L: abs(L - LA))
@@ -164,11 +209,16 @@ def main():
     if not args.skip_leace:
         Xe = leace_erase(X, df.ruler.values)
         out["frozen_after_leace_ruler"] = readout(Xe, f"LEACE(ruler) L{LA}")
-        # surgical control: erasure should barely move the vectors
+        # surgical controls: (a) the vectors should barely move; (b) a linear
+        # ruler probe must fall to ~chance AFTER while being high BEFORE —
+        # otherwise the erasure did not actually erase
         delta = float(np.linalg.norm(Xe - X) / np.linalg.norm(X))
         out["leace_relative_change"] = delta
-        print(f"  [leace] relative representation change {delta:.4f} "
-              "(rank<=39 nick out of d=%d)" % X.shape[1], flush=True)
+        out["ruler_probe_acc_before"] = ruler_probe_acc(X, df.ruler.values)
+        out["ruler_probe_acc_after"] = ruler_probe_acc(Xe, df.ruler.values)
+        print(f"  [leace] rel change {delta:.4f} | ruler-probe acc "
+              f"{out['ruler_probe_acc_before']:.3f} -> "
+              f"{out['ruler_probe_acc_after']:.3f}", flush=True)
 
     # exploratory: the frozen direction against every fragment layer
     out["layer_sweep"] = {int(L): spearman(Xl @ coef, year)

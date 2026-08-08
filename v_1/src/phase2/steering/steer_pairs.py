@@ -99,12 +99,29 @@ def main():
     ap.add_argument("--method", required=True)
     ap.add_argument("--cell", required=True, choices=["A", "B"])
     ap.add_argument("--n-pairs", type=int, default=100)
-    ap.add_argument("--alphas", type=float, nargs="+",
-                    default=[-24, -16, -8, 0, 8, 16, 24])
+    ap.add_argument("--alphas", type=float, nargs="+", default=None,
+                    help="defaults depend on --alpha-mode")
+    ap.add_argument("--alpha-mode", choices=["abs", "rel"], default="abs",
+                    help="abs: add alpha*w_hat (v1, the paper's raw recipe). "
+                         "rel: add alpha*||h_pos||*w_hat — scales the push to "
+                         "the residual norm at that position, which explodes "
+                         "in late layers (massive activations); the fix for "
+                         "the v1 null's 'alpha too small' confound")
+    ap.add_argument("--blocks", type=int, nargs="+", default=None,
+                    help="explicit block indices to steer at; overrides "
+                         "--layer-span. The NAACL effects lived in the FIRST "
+                         "half of the stack — v1 only tested late blocks")
     ap.add_argument("--layer-span", type=int, default=4,
-                    help="also steer at bestlayer +- this")
+                    help="also steer at bestlayer +- this (when --blocks unset)")
+    ap.add_argument("--chat", action="store_true",
+                    help="wrap prompts in the chat template (thinking off)")
+    ap.add_argument("--tag", default="",
+                    help="suffix for the results filename (e.g. v2early)")
     ap.add_argument("--seed", type=int, default=42)
     args = ap.parse_args()
+    if args.alphas is None:
+        args.alphas = ([-24, -16, -8, 0, 8, 16, 24] if args.alpha_mode == "abs"
+                       else [-0.5, -0.25, -0.1, 0, 0.1, 0.25, 0.5])
 
     w, LA, src = find_direction(args.method)
     pairs = sample_pairs(args.cell, args.n_pairs, args.seed)
@@ -128,11 +145,24 @@ def main():
         return sorted(out)
     yes_ids, no_ids = ids_of(["Yes", "yes"]), ids_of(["No", "no"])
 
+    def render(p):
+        if not args.chat:
+            return p
+        msgs = [{"role": "user", "content": p}]
+        try:
+            return tok.apply_chat_template(msgs, tokenize=False,
+                                           add_generation_prompt=True,
+                                           enable_thinking=False)
+        except TypeError:
+            return tok.apply_chat_template(msgs, tokenize=False,
+                                           add_generation_prompt=True)
+
     # prompts + the token position of the SECOND entity's last name token
     prompts, positions = [], []
     for r in pairs.itertuples():
-        p = PROMPT[args.cell].format(x=r.x, y=r.y)
-        enc = tok(p, return_offsets_mapping=True, add_special_tokens=True)
+        p = render(PROMPT[args.cell].format(x=r.x, y=r.y))
+        enc = tok(p, return_offsets_mapping=True,
+                  add_special_tokens=not args.chat)
         c0 = p.rfind(str(r.y))
         c1 = c0 + len(str(r.y))
         toks = [i for i, (a, b) in enumerate(enc.offset_mapping)
@@ -157,12 +187,15 @@ def main():
         for i in range(0, len(prompts), 16):
             bp = prompts[i:i + 16]
             bpos = positions[i:i + 16]
-            enc = tok(bp, return_tensors="pt", padding=True).to(model.device)
+            enc = tok(bp, return_tensors="pt", padding=True,
+                      add_special_tokens=not args.chat).to(model.device)
 
             def hook(mod, inp, out):
                 h = out[0] if isinstance(out, tuple) else out
                 for bi, pos in enumerate(bpos):
-                    h[bi, pos] = h[bi, pos] + alpha * vec_t
+                    scale = (alpha * h[bi, pos].norm()
+                             if args.alpha_mode == "rel" else alpha)
+                    h[bi, pos] = h[bi, pos] + scale * vec_t
                 return (h,) + out[1:] if isinstance(out, tuple) else h
             hd = (model.model.layers[layer_block].register_forward_hook(hook)
                   if alpha != 0 else None)
@@ -178,10 +211,14 @@ def main():
         return shifts
 
     # our file layers label hidden_states[1:]; block index = file layer - 1
-    blocks = sorted({max(0, min(n_blocks - 1, LA - 1 + d))
-                     for d in (-args.layer_span, 0, args.layer_span)})
+    if args.blocks:
+        blocks = sorted({max(0, min(n_blocks - 1, b)) for b in args.blocks})
+    else:
+        blocks = sorted({max(0, min(n_blocks - 1, LA - 1 + d))
+                         for d in (-args.layer_span, 0, args.layer_span)})
     out = {"method": args.method, "cell": args.cell, "direction": src,
            "cellA_layer": LA, "blocks": blocks, "alphas": args.alphas,
+           "alpha_mode": args.alpha_mode, "chat_template": bool(args.chat),
            "n_prompts": len(prompts), "runs": {}}
     for blk in blocks:
         base = run(blk, 0.0, w)
@@ -209,7 +246,8 @@ def main():
         out["runs"][str(blk)] = rec
 
     os.makedirs(RESULTS, exist_ok=True)
-    pth = os.path.join(RESULTS, f"{args.method}.cell{args.cell}.json")
+    tag = f".{args.tag}" if args.tag else ""
+    pth = os.path.join(RESULTS, f"{args.method}.cell{args.cell}{tag}.json")
     with open(pth, "w") as f:
         json.dump(out, f, indent=2)
     print(f"[done] -> {pth}", flush=True)

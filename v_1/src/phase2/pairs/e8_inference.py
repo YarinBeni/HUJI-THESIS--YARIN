@@ -103,7 +103,7 @@ def score_plans(df, get_feats, sparse, plans):
             transform = get_feats(tr_pos)
             Xtr = transform(tr.pos_a.values) - transform(tr.pos_b.values)
             Xte = transform(te.pos_a.values) - transform(te.pos_b.values)
-            clf = LogisticRegression(max_iter=2000, C=1.0,
+            clf = LogisticRegression(max_iter=2000, C=1.0, fit_intercept=False,
                                      solver="liblinear" if sparse else "lbfgs")
             clf.fit(Xtr, tr.label.values, sample_weight=tr.weight.values)
             correct = ((clf.decision_function(Xte) > 0).astype(int)

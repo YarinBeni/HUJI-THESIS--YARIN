@@ -106,7 +106,11 @@ def run_mc(df, get_feats, m, draws, seed0, rp, sparse=False):
             transform = get_feats(tr_pos)
             Xtr = transform(tr.pos_a.values) - transform(tr.pos_b.values)
             Xte = transform(te.pos_a.values) - transform(te.pos_b.values)
-            clf = LogisticRegression(max_iter=2000, C=1.0,
+            # fit_intercept=False: a Bradley-Terry scorer must be antisymmetric
+            # (P(a,b)+P(b,a)=1), which an intercept breaks. Presentation order is
+            # randomized so the practical effect is ~0, but the model class
+            # should match the claim.
+            clf = LogisticRegression(max_iter=2000, C=1.0, fit_intercept=False,
                                      solver="liblinear" if sparse else "lbfgs")
             clf.fit(Xtr, tr.label.values, sample_weight=tr.weight.values)
             s = clf.decision_function(Xte)
@@ -161,7 +165,7 @@ def fit_direction(df, get_feats, m, seed, rp):
     pairs = P.draw_pairs(df, m, rng, rp)
     transform = get_feats(df.pos.values)
     Xd = transform(pairs.pos_a.values) - transform(pairs.pos_b.values)
-    clf = LogisticRegression(max_iter=2000, C=1.0)
+    clf = LogisticRegression(max_iter=2000, C=1.0, fit_intercept=False)
     clf.fit(Xd, pairs.label.values, sample_weight=pairs.weight.values)
     return clf.coef_[0]
 

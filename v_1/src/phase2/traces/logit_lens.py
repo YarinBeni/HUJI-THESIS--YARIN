@@ -111,6 +111,17 @@ def main():
             w_raw, W_U, norm, tok, args.topk)
         print(f"[lens] pairwise direction {os.path.basename(p)}", flush=True)
 
+    # calibration: what do RANDOM directions lens to? Without this baseline,
+    # "the pairwise direction lenses to junk" is not interpretable — junk is
+    # exactly what a random direction produces, and the claim needs to be
+    # "cell-A looks temporal WHERE random looks like this".
+    rng = np.random.default_rng(0)
+    for i in range(3):
+        v = rng.standard_normal(W_U.shape[1]).astype(np.float32)
+        out["directions"][f"random_control_{i}"] = top_tokens(
+            v, W_U, norm, tok, args.topk)
+    print("[lens] 3 random-direction controls added", flush=True)
+
     if not out["directions"]:
         sys.exit("no directions found to lens")
     os.makedirs(RESULTS, exist_ok=True)
