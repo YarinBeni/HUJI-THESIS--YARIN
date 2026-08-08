@@ -1,0 +1,19 @@
+{
+  "method": "qwen3_1b7",
+  "variant": "eng_tier0",
+  "m": 3,
+  "max_words": 120,
+  "n_pairs": 1431,
+  "n_ruler_pairs": 777,
+  "macro_acc": 0.5,
+  "micro_acc": 0.5,
+  "order_consistency": 0.0,
+  "macro_acc_consistent_only": null,
+  "acc_by_dyear": {
+    "[0.0, 25.0)": 0.5,
+    "[25.0, 75.0)": 0.5,
+    "[75.0, 200.0)": 0.5,
+    "[200.0, inf)": 0.5
+  },
+  "yes_rate": 0.0
+}
