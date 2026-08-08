@@ -1,0 +1,436 @@
+<title>שלב 2 — מדריך הניסויים המלא</title>
+<style>
+  :root {
+    --bg: #f7f8f9; --bg2: #eef0f3; --card: #ffffff;
+    --ink: #20242e; --muted: #5b6270; --line: #d8dce2;
+    --acc: #2b4a8b; --acc-soft: #e6ebf5;
+    --copper: #a25e33; --copper-soft: #f6ede4;
+    --good: #2e6b4f; --bad: #8c3a3a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171d; --bg2: #1b1f27; --card: #1a1e25;
+      --ink: #e2e5eb; --muted: #9aa1ad; --line: #2c313b;
+      --acc: #8aa8e8; --acc-soft: #223050;
+      --copper: #d1915f; --copper-soft: #33261b;
+      --good: #7dbb9c; --bad: #d99090;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14171d; --bg2: #1b1f27; --card: #1a1e25;
+    --ink: #e2e5eb; --muted: #9aa1ad; --line: #2c313b;
+    --acc: #8aa8e8; --acc-soft: #223050;
+    --copper: #d1915f; --copper-soft: #33261b;
+    --good: #7dbb9c; --bad: #d99090;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", -apple-system, "Heebo", Roboto, "Noto Sans Hebrew", Arial, sans-serif;
+    line-height: 1.62; margin: 0; direction: rtl;
+  }
+  .wrap { max-width: 50rem; margin: 0 auto; padding: 2.2rem 1.1rem 4rem; }
+  header.top { border-bottom: 2px solid var(--acc); padding-bottom: 1.2rem; margin-bottom: 1.6rem; }
+  .kicker { color: var(--acc); font-size: .8rem; font-weight: 700; letter-spacing: .08em; }
+  h1 { font-size: 1.85rem; line-height: 1.25; margin: .3rem 0 .5rem; text-wrap: balance; }
+  .sub { color: var(--muted); font-size: .95rem; max-width: 42rem; }
+  nav.toc { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1.1rem 0 0; }
+  nav.toc a {
+    background: var(--bg2); border: 1px solid var(--line); color: var(--ink);
+    border-radius: 999px; padding: .18rem .7rem; font-size: .8rem; text-decoration: none;
+  }
+  nav.toc a:hover, nav.toc a:focus-visible { border-color: var(--acc); color: var(--acc); outline: none; }
+  section.exp { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 1.4rem 1.4rem 1.1rem; margin: 1.4rem 0; }
+  .eyebrow { color: var(--acc); font-size: .75rem; font-weight: 700; letter-spacing: .06em; }
+  h2 { font-size: 1.32rem; margin: .15rem 0 .6rem; line-height: 1.3; text-wrap: balance; }
+  h3 { font-size: 1.02rem; margin: 1.25rem 0 .4rem; color: var(--ink); }
+  p { margin: .55rem 0; max-width: 46rem; }
+  .lede { font-size: 1.02rem; }
+  .box { border-radius: 8px; padding: .75rem 1rem; margin: .9rem 0; }
+  .take { background: var(--acc-soft); border-right: 4px solid var(--acc); }
+  .take .t { font-weight: 700; color: var(--acc); font-size: .82rem; letter-spacing: .04em; }
+  .audit { background: var(--copper-soft); border-right: 4px solid var(--copper); }
+  .audit .t { font-weight: 700; color: var(--copper); font-size: .82rem; letter-spacing: .04em; }
+  .audit ul, .box ul { margin: .35rem 0 .1rem; padding-right: 1.1rem; }
+  .audit li, .box li { margin: .3rem 0; }
+  dl.spec { display: grid; grid-template-columns: max-content 1fr; gap: .18rem .9rem;
+    background: var(--bg2); border-radius: 8px; padding: .8rem 1rem; font-size: .88rem; margin: .8rem 0; }
+  dl.spec dt { color: var(--muted); font-weight: 600; }
+  dl.spec dd { margin: 0; }
+  .tblwrap { overflow-x: auto; margin: .7rem 0 1rem; }
+  table { border-collapse: collapse; font-size: .86rem; min-width: 100%; }
+  th, td { border-bottom: 1px solid var(--line); padding: .34rem .6rem; text-align: right; vertical-align: top; }
+  thead th { border-bottom: 2px solid var(--acc); font-size: .8rem; color: var(--muted); }
+  tbody tr:nth-child(even) { background: var(--bg2); }
+  td.n, th.n { direction: ltr; text-align: left; font-variant-numeric: tabular-nums;
+    font-family: "SF Mono", Consolas, "Segoe UI", monospace; font-size: .84rem; white-space: nowrap; }
+  .hl { background: var(--acc-soft); font-weight: 700; }
+  .win { color: var(--good); font-weight: 700; }
+  .lose { color: var(--bad); }
+  code, .f {
+    direction: ltr; unicode-bidi: isolate; display: inline-block;
+    font-family: "SF Mono", Consolas, monospace; font-size: .85em;
+    background: var(--bg2); border-radius: 4px; padding: 0 .3em;
+  }
+  .formula { direction: ltr; text-align: left; background: var(--bg2); border-radius: 8px;
+    padding: .6rem .9rem; font-family: "SF Mono", Consolas, monospace; font-size: .86rem;
+    overflow-x: auto; margin: .6rem 0; }
+  .muted { color: var(--muted); }
+  .small { font-size: .84rem; }
+  a { color: var(--acc); }
+  footer { color: var(--muted); font-size: .8rem; margin-top: 2.5rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="kicker">התזה · שלב 2 · מדריך לימוד מלא</div>
+  <h1>למה מודלים יודעים מתי אנשים חיו — אבל לא מתי טקסטים נכתבו?</h1>
+  <p class="sub">כל ניסוי: הרעיון, המאמר שממנו נלקחה השיטה, המפרט המדויק (מודל, דאטה, pooling, קלט/פלט), טבלאות התוצאות האמיתיות, המסקנה — <b>וההנחות הסמויות</b>. נכון ל-8.8.2026; כל 9 הג'ובים (F1–F9) הושלמו.</p>
+  <nav class="toc">
+    <a href="#bg">רקע והשערות</a><a href="#gloss">מילון</a><a href="#e1">E1 זוגות</a><a href="#f2">F2 התנהגותי</a><a href="#f4">E8 מובהקות</a><a href="#e3">E3 העברה</a><a href="#f6">E4.4 ‏lens</a><a href="#f7">E5 ‏SAE</a><a href="#f9">E2 ‏steering</a><a href="#todo">מה עוד לא רץ</a><a href="#synth">סינתזה</a><a href="#deck">קשר למצגת</a>
+  </nav>
+</header>
+
+<section class="exp" id="bg">
+  <div class="eyebrow">רקע — מה שלב 1 (המצגת) הראה, ומה נשאר פתוח</div>
+  <h2>הממצא, וההשערות שיצאנו לבדוק</h2>
+  <p class="lede">בשלב 1 בנינו סולם של ארבעה תאים: <b>A</b> — שמות ישויות מפורסמות באנגלית; <b>B</b> — שמות מלכים אשוריים באנגלית; <b>B′</b> — תיאורי פרגמנטים באנגלית; <b>C</b> — פרגמנטים אכדיים גולמיים. probe לינארי (Ridge) מנבא שנה מתוך האקטיבציות. התוצאה: בתא A זה עובד מצוין (ρ≈.88), ובתא C <b>אף מודל לא עובר רצפת n-grams של תווים</b> (.33 תחת GroupKFold לפי מלך). ניסוי התדירות (infini-gram על קורפוס האימון של OLMo) הראה שחשיפה היא לא ההסבר: ρ=−.04 בין תדירות לשגיאה.</p>
+  <p>אז <b>למה הקריסה במעבר ישות→מסמך?</b> מהסיעורים ומהמחקר יצאו שש השערות מתחרות — כל ניסוי בשלב 2 תוקף אחת או יותר מהן:</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>השערה</th><th>בפשטות</th><th>איזה ניסוי בודק</th></tr></thead>
+    <tbody>
+      <tr><td><b>H-artifact</b></td><td>הקריסה היא ארטיפקט של פורמט (רגרסיה אבסולוטית, כיול)</td><td>E1</td></tr>
+      <tr><td><b>H-label</b></td><td>התוויות מוטות/מעגליות ומזהמות את המדידה</td><td>E1 (סדר בלבד) + E8 (פרמוטציה)</td></tr>
+      <tr><td><b>H-dilute</b></td><td>אותו ציר זמן קיים במסמכים, רק חלש</td><td>E3</td></tr>
+      <tr><td><b>H-rotate</b></td><td>יש זמן במסמכים, אבל על ציר <i>אחר</i></td><td>E3 + E1 + lens</td></tr>
+      <tr><td><b>H-absent</b></td><td>אין ייצוג זמן ברמת מסמך בכלל</td><td>E1 + E8</td></tr>
+      <tr><td><b>H-OOD</b></td><td>אכדית רחוקה מדי מההתפלגות — הייצוגים "שבורים"</td><td>E5 (שער FVU)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="exp" id="gloss">
+  <div class="eyebrow">מילון — 10 מונחים שכל השאר נשען עליהם</div>
+  <h2>מונחי יסוד</h2>
+  <div class="tblwrap"><table>
+    <tbody>
+      <tr><td><b>אקטיבציה</b></td><td>הווקטור הפנימי (d=4096 ב-7B) שהמודל מחשב לכל טוקן בכל שכבה. הדאטה של כולנו.</td></tr>
+      <tr><td><b>pooling</b></td><td>איך הופכים טקסט שלם לווקטור אחד: <code>last</code> = הווקטור של הטוקן האחרון (state אמיתי); <code>mean</code> = ממוצע על כל הטוקנים.</td></tr>
+      <tr><td><b>probe</b></td><td>מודל לינארי קטן שמאומן לקרוא תכונה (שנה) מתוך האקטיבציות. Ridge = רגרסיה עם רגולריזציה; PLS = מוצא כיוונים משותפים ל-X ול-y.</td></tr>
+      <tr><td><b>תאום רנדומלי (twin)</b></td><td>אותה ארכיטקטורה עם משקלים אקראיים (לא אומנה). כל מה שהיא משיגה מגיע מהטוקניזציה/צורה — לא מלמידה. הביקורת המרכזית שלנו.</td></tr>
+      <tr><td><b>רצפת TF-IDF</b></td><td>n-grams של תווים (char_wb 2–5) + מודל לינארי. אם LLM לא עובר אותה — הוא לא מוסיף כלום מעבר לפני-השטח של הטקסט.</td></tr>
+      <tr><td><b>GroupKFold לפי מלך</b></td><td>חלוקת אימון/מבחן שבה כל המלך (כל הפרגמנטים שלו) בצד אחד. בלי זה — הprobe מזהה את המלך ולא את הזמן (הדליפה שתפסנו בשלב 1).</td></tr>
+      <tr><td><b>macro על זוגות-מלכים</b></td><td>מדד שמחושב לכל זוג-מלכים בנפרד ואז ממוצע — כך זוג ענק וזוג קטן שוקלים שווה.</td></tr>
+      <tr><td><b>Spearman ρ</b></td><td>קורלציית דירוג: האם הסדר נכון, בלי להתחייב לסקלה.</td></tr>
+      <tr><td><b>SAE</b></td><td>Sparse Autoencoder — רשת שמפרקת כל אקטיבציה לסכום דליל של "פיצ'רים" ממילון גדול (65,536), שחלקם ניתנים לפירוש.</td></tr>
+      <tr><td><b>FVU</b></td><td>Fraction of Variance Unexplained — כמה מהשונות ה-SAE <i>לא</i> משחזר. נמוך=טוב.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="exp" id="e1">
+  <div class="eyebrow">E1 · ג'ובים F1+F3 · קוד: <span class="f">phase2/pairs/probe_pairs.py</span></div>
+  <h2>ניסוי הזוגות: "איזה פרגמנט מוקדם יותר?"</h2>
+  <p class="lede"><b>הרעיון:</b> אולי המודלים נכשלו כי ביקשנו מהם דבר קשה מדי — לנבא <i>שנה מדויקת</i>. אם יש להם מושג זמן גס, הם אמורים לפחות לסדר: מבין שני פרגמנטים, מי קודם? זה גם מכפיל את הדאטה (628,454 זוגות סדורים מ-1,187 פרגמנטים) ומחזיר למשחק 33 מלכי-זנב שנזרקו מהעיצוב המאוזן, וגם עוקף את חשש התוויות — לומדים מ<b>סדר יחסי בלבד</b>, אף שנה אבסולוטית לא נכנסת לאימון.</p>
+  <p><b>מקור השיטה:</b> מודל Bradley–Terry (1952) בגרסה לינארית; פרוטוקול ההערכה ההתנהגותי (F2) עוקב אחרי El-Shangiti et al., <i>The Geometry of Numerical Reasoning</i>, NAACL 2025.</p>
+  <div class="formula">P(a earlier than b) = σ( w · (x_a − x_b) )     [pairwise logistic]</div>
+  <dl class="spec">
+    <dt>מודלים</dt><dd>OLMo-2-7B, Llama-2 7/13/70B (+תאומים רנדומליים לכולם), Qwen3 1.7/8/32B, gpt-oss-120b, random, ורצפת tfidf_char</dd>
+    <dt>קלט</dt><dd>1,187 פרגמנטים מתוארכים (40 מלכים) בשני ווריאנטים: <code>akk_maximal</code> (אכדית נקייה, בלי שמות מלכים) ו-<code>eng_tier0</code> (גלוסה אנגלית מילולית)</dd>
+    <dt>pooling / שכבות</dt><dd><code>mean</code>; סריקת שכבות זולה לבחירה, ואז Monte-Carlo מלא בשכבה הנבחרת</dd>
+    <dt>איזון</dt><dd>מכסה m=21 זוגות לכל זוג-מלכים בכל draw (מתוך 777 זוגות-מלכים), משקל אימון 1/m_ij, מדד macro; 100 draws</dd>
+    <dt>חלוקה</dt><dd>5 קיפולי מלכים מוגרלים כל draw; זוג נבחן רק אם <b>שני</b> המלכים שלו לא נראו באימון</dd>
+    <dt>פלט</dt><dd>דיוק macro ± sd, AUC, דיוק לפי מרחק-שנים; וגם כיוון-הזמן הנלמד w (נשמר להשוואות בהמשך)</dd>
+  </dl>
+
+  <h3>תוצאות — אכדית גולמית (הרצפה: .658)</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>זרוע</th><th class="n">macro acc</th><th>זרוע</th><th class="n">macro acc</th></tr></thead>
+    <tbody>
+      <tr><td>llama2_13b</td><td class="n">.673 ± .035</td><td>llama2_70b</td><td class="n">.655 ± .042</td></tr>
+      <tr><td class="lose">olmo2_7b_random (תאום!)</td><td class="n">.671 ± .039</td><td>qwen3_8b</td><td class="n">.649 ± .042</td></tr>
+      <tr><td class="lose">llama2_70b_random</td><td class="n">.664 ± .035</td><td>llama2_7b</td><td class="n">.649 ± .043</td></tr>
+      <tr><td class="lose">random (qwen-init)</td><td class="n">.662 ± .043</td><td>gpt_oss_120b</td><td class="n">.642 ± .045</td></tr>
+      <tr><td>olmo2_7b</td><td class="n">.661 ± .044</td><td>llama2_13b_random</td><td class="n">.640 ± .042</td></tr>
+      <tr><td>qwen3_1b7</td><td class="n">.660 ± .039</td><td>qwen3_32b</td><td class="n">.631 ± .042</td></tr>
+      <tr class="hl"><td>tfidf_char (רצפה)</td><td class="n">.658 ± .038</td><td></td><td class="n"></td></tr>
+    </tbody>
+  </table></div>
+  <p class="small muted">שים לב: שניים משלושת המקומות הראשונים הם רשתות <b>לא מאומנות</b>. הכל בתוך רעש של הרצפה.</p>
+
+  <h3>תוצאות — גלוסה אנגלית (הרצפה: .586)</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>זרוע</th><th class="n">macro acc</th><th>זרוע</th><th class="n">macro acc</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td class="win">qwen3_8b</td><td class="n">.636 ± .023</td><td>llama2_13b</td><td class="n">.586 ± .036</td></tr>
+      <tr class="hl"><td class="win">olmo2_7b</td><td class="n">.634 ± .035</td><td>llama2_7b</td><td class="n">.584 ± .037</td></tr>
+      <tr><td>qwen3_32b</td><td class="n">.610 ± .039</td><td>llama2_70b_random</td><td class="n">.577 ± .038</td></tr>
+      <tr><td>llama2_70b</td><td class="n">.601 ± .038</td><td>random (qwen-init)</td><td class="n">.571 ± .044</td></tr>
+      <tr><td>qwen3_1b7</td><td class="n">.590 ± .042</td><td>gpt_oss_120b</td><td class="n">.559 ± .037</td></tr>
+      <tr><td>tfidf_char (רצפה)</td><td class="n">.586 ± .038</td><td class="lose">olmo2_7b_random (תאום)</td><td class="n">.553 ± .044</td></tr>
+    </tbody>
+  </table></div>
+  <h3>איפה היתרון גר? לפי מרחק השנים בין הזוג (אנגלית)</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>|Δשנה|</th><th class="n">רצפה</th><th class="n">תאום OLMo</th><th class="n">OLMo</th><th class="n">Qwen3-8B</th></tr></thead>
+    <tbody>
+      <tr><td>0–25 שנה</td><td class="n">.48</td><td class="n">.50</td><td class="n win">.54</td><td class="n win">.53</td></tr>
+      <tr><td>25–75</td><td class="n">.51</td><td class="n">.49</td><td class="n win">.55</td><td class="n win">.56</td></tr>
+      <tr><td>75–200</td><td class="n">.58</td><td class="n">.53</td><td class="n win">.66</td><td class="n">.62</td></tr>
+      <tr><td>200+</td><td class="n">.61</td><td class="n">.59</td><td class="n">.61</td><td class="n">.62</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box take"><div class="t">מסקנה</div>
+    <p><b>H-artifact נהרגה:</b> גם כשמבקשים רק סדר, אף מודל לא מוסיף כלום על אכדית — הקריסה אינה עניין של פורמט. באנגלית לעומת זאת מופיעה הפרדה אמיתית (מודל מעל רצפה ומעל תאום), והיא מרוכזת דווקא בהבחנות <i>עדינות</i> (0–75 שנה) — לא ב"עתיק מול מודרני".</p></div>
+  <div class="box audit"><div class="t">הנחות סמויות ופערים</div>
+    <ul>
+      <li><b>הpooling הוא mean</b> — ממוצע על טוקנים הוא לא state שהמודל באמת חישב; ייתכן שקריאה טוקן-חכמה (attention pooling / max) הייתה מוצאת יותר.</li>
+      <li>השכבה נבחרה על אותו פרוטוקול של הדיווח (אופטימיות קלה; מסומן ב-JSON כ-<code>layer_selected_on_same_protocol</code>).</li>
+      <li>12 מלכים עם פרגמנט יחיד: כל הזוגות שלהם עוברים דרך אותו פרגמנט (pseudo-replication) — מטופל בדיווח (bootstrap ברמת מלך), לא בדגימה.</li>
+      <li>scorer לינארי בלבד; יחס לא-לינארי בין ייצוג לסדר לא ייתפס.</li>
+      <li>F3 (m=100, בדיקת עמידות) נתן אותה תמונה, מעט נמוך יותר — הבחירה m=21 לא מייצרת את התוצאה.</li>
+    </ul></div>
+</section>
+
+<section class="exp" id="f2">
+  <div class="eyebrow">F2 · קוד: <span class="f">phase2/pairs/behavioral_pairs.py</span> · פרוטוקול: El-Shangiti et al., NAACL 2025</div>
+  <h2>הגרסה ההתנהגותית: לשאול את המודל עצמו</h2>
+  <p><b>הרעיון:</b> ה-probe קורא את ה<i>ייצוג</i>. אבל האם המודל עצמו, כשמדברים איתו, יודע לענות "מי קודם"? שאלנו "?Was Text A composed earlier than Text B", קראנו את היחס logit(Yes)−logit(No) בטוקן הראשון, וכל זוג נשאל <b>בשני סדרי ההצגה</b> — מודל שבאמת יודע חייב להפוך את תשובתו כשהטקסטים מתחלפים (בדיקת העקביות מהמאמר).</p>
+  <dl class="spec">
+    <dt>מודלים</dt><dd>qwen3_1b7 / 8b / 32b (המסוגלים להוראות; Llama-2/OLMo הם מודלי בסיס)</dd>
+    <dt>קלט</dt><dd>אותם זוגות (m=3 לכל זוג-מלכים, 1,431 זוגות × 2 סדרים), טקסטים קטומים ל-120 מילים</dd>
+    <dt>פלט</dt><dd>דיוק macro, שיעור-Yes, עקביות-סדר</dd>
+  </dl>
+  <div class="tblwrap"><table>
+    <thead><tr><th>מודל</th><th>ווריאנט</th><th class="n">macro acc</th><th class="n">שיעור Yes</th><th class="n">עקביות סדר</th></tr></thead>
+    <tbody>
+      <tr><td>qwen3_1b7</td><td>שניהם</td><td class="n">.500</td><td class="n">.00</td><td class="n">.00</td></tr>
+      <tr><td>qwen3_32b</td><td>akk / eng</td><td class="n">.499 / .486</td><td class="n">.00 / .05</td><td class="n">.00 / .08</td></tr>
+      <tr><td>qwen3_8b</td><td>akk / eng</td><td class="n">.467 / .451</td><td class="n">.38 / .37</td><td class="n">.52 / .54</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box take"><div class="t">מסקנה</div>
+    <p>המשימה ההתנהגותית קרסה לחלוטין — המודלים עונים "No" כמעט על הכל, והתשובה בקושי מתהפכת כשהטקסטים מתחלפים. אבל דווקא זה מעניין: <b>ה-probe קורא .636 מאותם ייצוגים שהמודל עצמו לא מצליח לדבר מהם</b> — פער ייצוג↔התנהגות שמתחבר ישירות לסיפור "המנגנון שלא מופעל".</p></div>
+  <div class="box audit"><div class="t">הנחות סמויות ופערים</div>
+    <ul>
+      <li><b>לא הופעל chat template.</b> מודלי Qwen3 אומנו לפורמט שיחה, ואנחנו שאלנו במצב השלמה גולמית. ייתכן שהטיית ה-No היא ארטיפקט פורמט — כלומר ה-null ההתנהגותי הוא ראיה חלשה, לא חזקה. תיקון זול: לחזור עם template ו-few-shot.</li>
+      <li>קיטום ל-120 מילים זורק מידע; לא נבדקה רגישות לאורך.</li>
+    </ul></div>
+</section>
+
+<section class="exp" id="f4">
+  <div class="eyebrow">E8 · ג'וב F4 · קוד: <span class="f">phase2/pairs/e8_inference.py</span></div>
+  <h2>המובהקות: פרמוטציה ברמת מלך + bootstrap דיאדי</h2>
+  <p><b>הרעיון:</b> יש לנו 628 אלף זוגות אבל רק <b>40 מלכים עצמאיים</b> — כל מבחן שמתעלם מזה משקר. שני כלים: (1) <b>פרמוטציה עם אימון-מחדש</b> — מערבבים את שנות המלכים בין המלכים, מאמנים הכל מחדש, ושואלים איפה התוצאה האמיתית נופלת בהתפלגות הזו (Freedman–Lane ברוחו); (2) <b>bootstrap דיאדי</b> — דוגמים מלכים בהחזרה וזוג (i,j) נשקל לפי מכפלת ההופעות, השיטה הסטנדרטית לדאטה זוגי (Snijders & Borgatti 1999).</p>
+  <div class="formula">p = (1 + #{ T_perm ≥ T_obs }) / (B + 1),   B = 150  →  רצפת p = .0066</div>
+  <h3>פרמוטציה: "האם יש בכלל אות כרונולוגי?"</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>זרוע</th><th class="n">אכדית: macro (p)</th><th class="n">אנגלית: macro (p)</th></tr></thead>
+    <tbody>
+      <tr><td>tfidf_char (רצפה)</td><td class="n win">.657 (p=.013)</td><td class="n">.583 (p=.11 — לא מובהק!)</td></tr>
+      <tr><td>olmo2_7b</td><td class="n">.670 (p=.0066)</td><td class="n win">.622 (p=.0066)</td></tr>
+      <tr><td>qwen3_8b</td><td class="n">—</td><td class="n win">.628 (p=.0066)</td></tr>
+    </tbody>
+  </table></div>
+  <h3>קונטרסטים מזווגים (bootstrap דיאדי, CI 95%)</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>השוואה (אנגלית)</th><th class="n">Δ</th><th class="n">CI</th><th class="n">p</th></tr></thead>
+    <tbody>
+      <tr><td>olmo − רצפה</td><td class="n">+.035</td><td class="n">[−.035, +.105]</td><td class="n">.34</td></tr>
+      <tr><td>olmo − תאום</td><td class="n">+.074</td><td class="n">[−.014, +.165]</td><td class="n">.098</td></tr>
+      <tr><td>qwen3_8b − רצפה</td><td class="n">+.048</td><td class="n">[−.056, +.144]</td><td class="n">.33</td></tr>
+      <tr><td>qwen3_8b − תאום</td><td class="n">+.063</td><td class="n">[−.009, +.133]</td><td class="n">.082</td></tr>
+      <tr><td class="muted">אכדית: olmo − תאום</td><td class="n">−.002</td><td class="n">—</td><td class="n">.97</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box take"><div class="t">מסקנה</div>
+    <p>הציטוט לתזה הוא <b>הדיסוציאציה</b>: באנגלית המודלים המאומנים נושאים אות אמיתי (p=.0066) בעוד הרצפה לא מגיעה למובהקות (p=.11); באכדית — תמונת ראי (הרצפה מובהקת, המודל לא מוסיף, p=.97 מול התאום). הקונטרסטים הישירים באנגלית חיוביים אך שוליים (p=.08–.10) — עם 40 מלכים זה כל הכוח שיש, ואסור למכור אותם כמובהקים.</p></div>
+  <div class="box audit"><div class="t">הנחות סמויות ופערים</div>
+    <ul>
+      <li>150 פרמוטציות ⇒ p מינימלי .0066; "p=.0066" פירושו "הכי מובהק שהמבחן יכול לומר".</li>
+      <li>השכבה קובעה מראש מבחירת F1 (שנעשתה על התוויות האמיתיות) — אנטי-שמרני קלות; מוצהר בפלט.</li>
+      <li>הפרמוטציה ברמת מלך מוחקת את השונות בתוך אסרחדון (מכוון: הנולל הוא "כרונולוגיה בין-מלכית ניתנת להחלפה").</li>
+      <li>התאומים לא נבדקו בפרמוטציה (חיסכון חישוב) — הם משתתפים רק בקונטרסטים.</li>
+    </ul></div>
+</section>
+
+<section class="exp" id="e3">
+  <div class="eyebrow">E3 · ג'וב F5 · קוד: <span class="f">phase2/transfer/e3_transfer.py</span> · LEACE:‏ Belrose et al., NeurIPS 2023</div>
+  <h2>העברת הכיוון הקפוא: האם זה אותו ציר זמן?</h2>
+  <p class="lede"><b>הרעיון — ההכרעה בין H-dilute ל-H-rotate:</b> אם ציר-הזמן של המסמכים הוא <i>אותו</i> ציר כמו של הישויות רק חלש, אז הכיוון w_A שאומן על תא A (שמות באנגלית, ρ≈.88) אמור לסדר גם פרגמנטים — לפחות קצת. מקרינים: s(x)=w_A·x, <b>אפס אימון בצד המסמכים</b> (ולכן אפס דליפה). בנוסף: מוחקים זהות-מלך ב-LEACE (מחיקה לינארית מושלמת בנוסחה סגורה) לבדיקת תיווך, ומודדים את הזווית מול כיוון-הזמן-המסמכי ש-E1 למד.</p>
+  <dl class="spec">
+    <dt>מודלים</dt><dd>olmo2_7b (+תאום), llama2_7b, qwen3_8b</dd>
+    <dt>הכיוון המועבר</dt><dd>Ridge מ-probe_wm על ישויות historical_figure, בשכבה הטובה שלו (last-token של השם)</dd>
+    <dt>קלט</dt><dd>אקטיבציות הפרגמנטים (mean), שני הווריאנטים; ההקרנה באותה שכבה מספרית</dd>
+    <dt>פלט</dt><dd>Spearman(s, שנה); דיוק זוגי macro עם s כ-scorer; אותו דבר אחרי LEACE(מלך); cos מול כיוון E1</dd>
+  </dl>
+  <div class="tblwrap"><table>
+    <thead><tr><th>זרוע</th><th>ווריאנט</th><th class="n">ρ קפוא</th><th class="n">זוגי קפוא</th><th class="n">זוגי אחרי LEACE</th><th class="n">cos מול כיוון E1</th></tr></thead>
+    <tbody>
+      <tr><td>olmo2_7b</td><td>akk</td><td class="n">−.173</td><td class="n">.454</td><td class="n">.441</td><td class="n">.018</td></tr>
+      <tr><td>olmo2_7b</td><td>eng</td><td class="n">−.014</td><td class="n">.523</td><td class="n">.514</td><td class="n">−.018</td></tr>
+      <tr><td>olmo2_7b_random</td><td>eng</td><td class="n">−.105</td><td class="n">.543</td><td class="n">.511</td><td class="n">.006</td></tr>
+      <tr><td>llama2_7b</td><td>akk</td><td class="n">−.083</td><td class="n">.465</td><td class="n">.510</td><td class="n">.001</td></tr>
+      <tr><td>qwen3_8b</td><td>akk</td><td class="n">−.003</td><td class="n">.533</td><td class="n">.475</td><td class="n">.007</td></tr>
+      <tr><td>qwen3_8b</td><td>eng</td><td class="n">−.082</td><td class="n">.449</td><td class="n">.492</td><td class="n">.008</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box take"><div class="t">מסקנה</div>
+    <p><b>ההעברה נכשלת לגמרי</b> — ρ≈0 ודיוק זוגי ≈ מקרי בכל זרוע, והתאום נראה כמו המאומן. וההוכחה הישירה: <b>cos(ציר-שם, ציר-מסמכי) ≈ .01 — אורתוגונליות ברמת מקרה</b> (הרף האקראי ב-4096 ממדים: ‏1/√4096 ≈ .016). כלומר <b>H-dilute מתה; שני צירי הזמן הם צירים שונים</b>. LEACE לא שינה כלום — כי לא היה תיווך למחוק.</p></div>
+  <div class="box audit"><div class="t">הנחות סמויות ופערים</div>
+    <ul>
+      <li><b>פער pooling:</b> הכיוון אומן על <code>last</code> של טוקן-שם והוחל על <code>mean</code> של פרגמנט. חוזק ההעברה אולי נפגע מכך; ה-cosine (שלא תלוי בזה) מגבה את המסקנה, אבל ראוי לחזור עם last-על-last.</li>
+      <li>"אותה שכבה מספרית" בין שתי ריצות חילוץ שונות — הנחת יישור סבירה אך לא מוכחת.</li>
+      <li>LEACE שינה ב-qwen3_8b עד <b>82% מנורמת הייצוג</b> (לעומת 19–28% באחרים) — שם זה כבר לא "חיתוך עדין"; המסקנה לא נשענת על זה כי ה-null קיים כבר לפני המחיקה.</li>
+      <li>ה-cosine חושב בקואורדינטות מנורמלות (הכפלה ב-sd של הפרגמנטים) — בחירה מוצדקת אך יש לה חלופות.</li>
+    </ul></div>
+</section>
+
+<section class="exp" id="f6">
+  <div class="eyebrow">E4.4 · ג'וב F6 · קוד: <span class="f">phase2/traces/logit_lens.py</span> · בהשראת ConceptVectors (Hong et al., EMNLP 2025) + logit lens (nostalgebraist)</div>
+  <h2>‏logit-lens: לשאול את הכיוון עצמו "על מה אתה מצביע?"</h2>
+  <p><b>הרעיון:</b> כיוון במרחב הייצוג אפשר להקרין דרך מטריצת ה-unembedding אל אוצר המילים — ולראות אילו טוקנים חיים בקצוות שלו. אם ציר-"השנה" הוא בעצם זיהוי-שמות מוסווה, נראה שמות; אם הוא זמן אמיתי — נראה מילות זמן. <b>בלי לאמן שום דבר.</b></p>
+  <div class="formula">ℓ = W_U · ( γ ⊙ w / ‖w‖ )   ∈ ℝ^|V|     (γ = משקולות ה-RMSNorm הסופי)</div>
+  <div class="tblwrap"><table>
+    <thead><tr><th>כיוון</th><th>קצה "עתיק"</th><th>קצה "מאוחר"</th></tr></thead>
+    <tbody>
+      <tr><td>תא A · llama2_7b</td><td class="n">BC, ancient, Gree(k), cius</td><td class="n">former, Tur, dist…</td></tr>
+      <tr><td>תא A · olmo2_7b</td><td class="n">Ancient, BCE, ancient, BC, Anc</td><td class="n">187, 188, hailed…</td></tr>
+      <tr><td>תא A · qwen3_8b</td><td class="n">公元前 (לפנה"ס), 古代 (עתיק), Athen, Ancient, 战国 (המדינות הלוחמות)</td><td class="n">America, mont…</td></tr>
+      <tr><td>כיוון E1 המסמכי · כל השלושה</td><td colspan="2" class="muted">ג'יבריש בשני הקצוות — אין מילות זמן, אין שמות מלכים</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box take"><div class="t">מסקנה</div>
+    <p>ציר-הזמן של הישויות הוא <b>ציר סמנטי אמיתי</b> — הקצה העתיק שלו מילולית אומר BC/ancient בשלוש משפחות מודלים (ואצל Qwen גם בסינית!), וב-OLMo הקצה המאוחר מכיל שברי שנים (187→1870s). הוא <i>לא</i> lookup של שמות. הציר המסמכי לעומתו לא מוקרן לשום אוצר-מילים — עוד ראיה שמדובר בציר מסוג אחר (סגנוני/פיזורי).</p></div>
+  <div class="box audit"><div class="t">הנחות סמויות ופערים</div>
+    <ul>
+      <li><b>logit-lens אמין בעיקר קרוב לשכבות האחרונות.</b> כיוון תא-A יושב בשכבות 20–29 (מאוחר) — ההקרנה שלו כנה; כיוון E1 יושב באמצע (9–25), וייתכן שה"ג'יבריש" שלו הוא חלקית ארטיפקט עומק ולא רק "לא-סמנטי". חיזוק עתידי: tuned lens.</li>
+      <li>ההקרנה מדלגת על אי-הלינאריות של הנרמול (סטנדרטי בכלי הזה, אבל קירוב).</li>
+    </ul></div>
+</section>
+
+<section class="exp" id="f7">
+  <div class="eyebrow">E5 · ג'ובים F7+F8 · קוד: <span class="f">phase2/sae/fvu_gate.py, feature_hunt.py</span> · SAE:‏ Qwen-Scope (Qwen team, 2026) · משמעת ההתערבות: Feldman et al. 2026</div>
+  <h2>‏SAE: לפרק את הייצוג לפיצ'רים — ולראות איפה הזמן גר</h2>
+  <p class="lede"><b>הרעיון בשני שלבים:</b> (1) <b>שער איכות</b> — לפני שמפרשים פיצ'רים, לוודא שה-SAE בכלל מסוגל לייצג את האקטיבציות שלנו (הוא אומן על Qwen3-8B-<i>Base</i> ועל דאטה של Qwen — ואנחנו מזינים checkpoint אחר וטקסט אכדי). (2) <b>ציד</b> — אילו פיצ'רים מתואמים עם שנה על ישויות תא A, והאם הם נדלקים בכלל על מסמכים.</p>
+  <div class="formula">FVU = ‖x − x̂‖² / ‖x − x̄‖²,    x̂ = TopK-SAE(x),  k=100, מילון 65,536</div>
+  <dl class="spec">
+    <dt>SAE</dt><dd><code>Qwen/SAE-Res-Qwen3-8B-Base-W64K-L0_100</code> — ה-residual stream, כל 36 השכבות</dd>
+    <dt>קלט</dt><dd>אקטיבציות <code>last</code> שכבר שמורות: ישויות תא A, גלוסות אנגליות, אכדית</dd>
+    <dt>יישור שכבות</dt><dd>נקבע אמפירית: הקובץ שלנו L+1 ↔ בלוק SAE ‏L (נבחר לפי FVU)</dd>
+  </dl>
+  <h3>F7 — שער ה-FVU (נמוך = שחזור טוב)</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>שכבת SAE</th><th class="n">ישויות תא A</th><th class="n">גלוסות אנגליות</th><th class="n">אכדית</th></tr></thead>
+    <tbody>
+      <tr><td>8</td><td class="n lose">.82</td><td class="n lose">.83</td><td class="n lose">.82</td></tr>
+      <tr><td>16</td><td class="n">.198</td><td class="n">.169</td><td class="n">.194</td></tr>
+      <tr><td>20</td><td class="n">.166</td><td class="n">.127</td><td class="n">.156</td></tr>
+      <tr class="hl"><td>24</td><td class="n">.130</td><td class="n">.084</td><td class="n">.114</td></tr>
+      <tr><td>28</td><td class="n">.139</td><td class="n">.079</td><td class="n">.110</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small"><b>‏H-OOD נהרגה:</b> אכדית משוחזרת באותה איכות כמו אנגלית (.11–.19). הייצוגים לא "שבורים" מהכתב הזר.</p>
+  <h3>F8 — ציד הפיצ'רים (שכבה 24; 754 מועמדים, 50 המובילים)</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th class="n">פיצ'ר</th><th class="n">הצתה על ישויות</th><th class="n">ρ מול שנה</th><th class="n">הצתה על גלוסות</th><th class="n">הצתה על אכדית</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td class="n">38678</td><td class="n">61.6%</td><td class="n">+.568</td><td class="n">0.25%</td><td class="n">0%</td></tr>
+      <tr><td class="n">41906</td><td class="n">12.0%</td><td class="n">+.412</td><td class="n">0%</td><td class="n">0%</td></tr>
+      <tr><td class="n">35304</td><td class="n">41.9%</td><td class="n">+.397</td><td class="n">0.25%</td><td class="n">0.25%</td></tr>
+      <tr><td class="n">50840</td><td class="n">27.6%</td><td class="n">−.375</td><td class="n">0.17%</td><td class="n">0%</td></tr>
+      <tr><td colspan="5" class="muted">חציון על 50 המובילים: ישויות 11.7% · גלוסות 0.08% · אכדית ≈0 (‏31/50 אפס מוחלט)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box take"><div class="t">מסקנה</div>
+    <p>קיים פיצ'ר-זמן אמיתי (38678: נדלק על 62% מהישויות, ρ=.57 מול שנת המוות) — אבל <b>פיצ'רי-הזמן כמעט לא נדלקים על מסמכים, אפילו לא באנגלית פשוטה</b> (0.08% מול 11.7%). כלומר מנגנון-הזמן האנטיטי הוא <b>מותנה-הקשר</b>: הוא מופעל על אזכור-ישות, וכבוי על טקסט מסמכי. זו התמונה המכניסטית של הקריסה.</p></div>
+  <div class="box audit"><div class="t">הנחות סמויות ופערים</div>
+    <ul>
+      <li><b>ההסתייגות הכי חשובה בכל שלב 2:</b> "הצתה על מסמך" נמדדה רק בווקטור ה<b>טוקן האחרון</b> של הפרגמנט. ייתכן שהפיצ'רים כן נדלקים באמצע הטקסט (על מילת תאריך למשל) ופשוט לא שורדים עד הסוף. בדיקת המשך זולה: הצתה לאורך <i>כל</i> הטוקנים.</li>
+      <li>ה-SAE אומן על ה-Base ואנחנו מזינים את ה-post-trained — הפער נבלע ב-FVU (שהיה טוב), אבל זהות הפיצ'רים עלולה להיות מוסטת.</li>
+      <li>קורלציה ≠ סיבתיות: פיצ'ר 38678 מתואם עם שנה; מבחן דיכוי סיבתי (עם ביקורת אי-כירורגיות לפי Feldman et al.) עוד לא רץ.</li>
+      <li>cos(פיצ'ר, כיוון-Ridge) ≤ .12 — כיוון השנה מבוזר על הרבה פיצ'רים; אין "נוירון שנה" יחיד.</li>
+    </ul></div>
+</section>
+
+<section class="exp" id="f9">
+  <div class="eyebrow">E2 · ג'וב F9 · קוד: <span class="f">phase2/steering/steer_pairs.py</span> · מתכון: El-Shangiti et al., NAACL 2025</div>
+  <h2>‏Steering: לדחוף את הייצוג ולראות אם התשובה זזה</h2>
+  <p><b>הרעיון:</b> קורלציה זה נחמד; סיבתיות זה הוכחה. במאמר NAACL הוסיפו את כיוון-ה-PLS לאקטיבציה של טוקן-השם בשאלת "מי נולד קודם?" — והתשובות התהפכו. שחזרנו: מוסיפים α·w בטוקן האחרון של שם הישות השנייה, מודדים היפוכים ותזוזת logit(Yes)−logit(No), מול כיוון אקראי שווה-נורמה.</p>
+  <div class="formula">h_L ← h_L + (α/‖w‖)·w   at the last token of entity 2;  α ∈ {−24…+24}</div>
+  <dl class="spec">
+    <dt>זרועות</dt><dd>qwen3_8b תא A ("?Did X die before Y") ותא B (מלכים אשוריים); olmo2_7b תא A</dd>
+    <dt>שכבות</dt><dd>בלוקים 21–32 (סביב שכבת-הכיוון של כל מודל)</dd>
+    <dt>פלט</dt><dd>flip-rate ותזוזת-logit ממוצעת לכל (בלוק, α), steering מול ביקורת אקראית</dd>
+  </dl>
+  <div class="tblwrap"><table>
+    <thead><tr><th>זרוע</th><th class="n">דיוק בסיס (α=0)</th><th class="n">flip: steering</th><th class="n">flip: ביקורת</th><th class="n">Δlogit</th></tr></thead>
+    <tbody>
+      <tr><td>qwen3_8b · תא A</td><td class="n">.61</td><td class="n">.01–.04</td><td class="n">.01–.05</td><td class="n">≈0</td></tr>
+      <tr><td>qwen3_8b · תא B</td><td class="n">.50</td><td class="n">.01–.02</td><td class="n">.00–.02</td><td class="n">≈0</td></tr>
+      <tr><td>olmo2_7b · תא A</td><td class="n">.57</td><td class="n">.00</td><td class="n">.00</td><td class="n">≈0</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box take"><div class="t">מסקנה (זהירה)</div>
+    <p><b>null בתחום שנבדק:</b> הדחיפה לא עשתה כלום מעבר לביקורת. אבל זה עדיין לא "הכיוון לא סיבתי" — ראו הפערים למטה. כרגע: לא שוחזר האפקט של המאמר בתנאים שלנו.</p></div>
+  <div class="box audit"><div class="t">הנחות סמויות ופערים — כאן הן קריטיות</div>
+    <ul>
+      <li><b>שכבות:</b> במאמר האפקטים התרכזו ב<b>חצי הראשון</b> של הרשת; אנחנו דחפנו בבלוקים 21–32 (כי שם הכיוון שלנו אומן). סריקה מוקדמת היא הבדיקה ההוגנת.</li>
+      <li><b>עוצמה:</b> ‏α קבוע מול נורמות residual שמתנפחות בשכבות מאוחרות (massive activations) — ייתכן שהדחיפה זניחה יחסית; צריך α מנורמל ל-‖h‖.</li>
+      <li>השתמשנו בכיוון Ridge, לא ב-x_weights של PLS כמו במאמר (קרובים אך לא זהים).</li>
+      <li>שוב בלי chat template; ודיוק הבסיס של תא B הוא .50 עם הטיית-Yes ‏.86 — שם אין בכלל התנהגות לזוז ממנה.</li>
+    </ul></div>
+</section>
+
+<section class="exp" id="todo">
+  <div class="eyebrow">מה תוכנן ועוד לא רץ — בכוונה</div>
+  <h2>הניסויים שנשארו על השולחן</h2>
+  <div class="tblwrap"><table>
+    <thead><tr><th>ניסוי</th><th>מה זה</th><th>מה זה יכול לגלות</th></tr></thead>
+    <tbody>
+      <tr><td><b>E6 אסרחדון</b></td><td>המלך היחיד עם שונות שנים פנימית (176 פרגמנטים, 11 שנים). כל הניסויים בתוכו בלבד</td><td>המקום היחיד שבו "זמן מסמכי נקי מזהות" בכלל מוגדר; כל אות שם = ממצא חסין-זהות</td></tr>
+      <tr><td><b>E7 סריאציה ספקטרלית</b></td><td>סדר 1-ממדי שצץ מוקטור Fiedler של גרף שכנויות — <b>בלי תוויות בכלל</b> (Atkins et al. 1998)</td><td>אם הסדר הטבעי של הענן מתאים לכרונולוגיה — עדות חסינת-תוויות; אם לז'אנר — גם תשובה</td></tr>
+      <tr><td><b>E4 מחיקת confounders</b></td><td>LEACE על ז'אנר/אורך/אתר-חפירה + ביקורות כירורגיות + probes לא-לינאריים</td><td>האם פער ה-PLS (.336 מול .243) שורד ניקוי; כמה מהאות הוא register</td></tr>
+      <tr><td><b>steering בתא C</b></td><td>דחיפה בטוקני שם-המלך בתוך פרגמנט אכדי (דורש שילוב king_token)</td><td>המבחן הסיבתי הישיר של "העוגן שלא מופעל"</td></tr>
+      <tr><td><b>המשכי-חובה מהביקורות</b></td><td>‏(א) הצתת פיצ'רים לאורך כל הטוקנים; (ב) steering בשכבות מוקדמות + α מנורמל; (ג) F2 עם chat template; (ד) E3 עם last-על-last</td><td>סוגרים את ארבעת הפערים הגדולים שסומנו למעלה</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="exp" id="synth">
+  <div class="eyebrow">סינתזה</div>
+  <h2>מה למדנו — מיפוי תוצאות ↔ השערות</h2>
+  <div class="tblwrap"><table>
+    <thead><tr><th>השערה</th><th>גורל</th><th>הראיה</th></tr></thead>
+    <tbody>
+      <tr><td>H-artifact (פורמט)</td><td class="lose">נהרגה</td><td>E1: הקריסה שרדה מעבר לסידור יחסי</td></tr>
+      <tr><td>H-label (תוויות)</td><td class="lose">נוטרלה</td><td>E1 לומד מסדר בלבד; E8 מפרמט ברמת מלך</td></tr>
+      <tr><td>H-OOD (כתב זר)</td><td class="lose">נהרגה</td><td>F7: אכדית משוחזרת כמו אנגלית (FVU ‏.11)</td></tr>
+      <tr><td>H-dilute (אותו ציר, חלש)</td><td class="lose">נהרגה</td><td>E3: העברה קפואה נכשלת; cos≈.01</td></tr>
+      <tr><td><b>H-rotate (ציר אחר)</b></td><td class="win">נתמכת — באנגלית</td><td>E1+E8 (ציר מסמכי אמיתי, p=.0066) שהוא אורתוגונלי (E3) ולא-סמנטי (lens)</td></tr>
+      <tr><td>H-absent</td><td class="win">באכדית בלבד</td><td>E8: מעבר לפני-השטח אין כלום (מול תאום p=.97)</td></tr>
+      <tr><td>"עוגן שלא מופעל" (סיבתי)</td><td>פתוח</td><td>F8 בעדו (פיצ'רים כבויים על מסמכים); F9 null אך עם פערי שיטה</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box take"><div class="t">המשפט לתזה</div>
+    <p>המודל מחזיק <b>מנגנון זמן אנטיטי אמיתי</b> (פיצ'ר ρ=.57; ‏lens: ‏BC/ancient) ש<b>מופעל רק בהקשר של אזכור-ישות</b> (הצתה 11.7% על ישויות מול 0.08% על מסמכים), ולצדו <b>ציר זמן מסמכי-סגנוני נפרד</b> (מובהק באנגלית, p=.0066) ש<b>אורתוגונלי</b> לציר האנטיטי (cos≈.01) ולא מוקרן לשום אוצר-מילים. הקריסה ישות→מסמך היא לא היעדר ידע ולא דילול — היא <b>ניתוק בין שתי מפות זמן שאין ביניהן גשר</b>.</p></div>
+</section>
+
+<section class="exp" id="deck">
+  <div class="eyebrow">איפה זה פוגש את המצגת</div>
+  <h2>מיפוי לשקפים (שלב 2 עדיין לא במצגת — בכוונה, לפי בקשתך)</h2>
+  <div class="tblwrap"><table>
+    <thead><tr><th>שקף/ים במצגת</th><th>מה שם</th><th>איך שלב 2 מתייחס</th></tr></thead>
+    <tbody>
+      <tr><td class="n">9–11</td><td>טבלאות תא A/B (ρ≈.88, OLMo בפנים)</td><td>הצד ה"עובד" — הציר שאותו E3 ניסה להעביר, F6 הוכיח שהוא סמנטי, F8 מצא את הפיצ'רים שלו</td></tr>
+      <tr><td class="n">16–17</td><td>טבלאות השנה של הפרגמנטים (mc_group; הרצפה מנצחת)</td><td>E1 משחזר את זה בפורמט זוגי; E8 נותן לזה p-value ברמת מלך</td></tr>
+      <tr><td class="n">25</td><td>‏G-KPLS (הקרנל הגאודזי) — לא עוזר</td><td>ההצדקה לכך שסריאציה (E7) היא לא-מפוקחת ולכן שונה מהותית</td></tr>
+      <tr><td class="n">28–30</td><td>"הזרוע היחידה שנפרדת — רק תחת PLS" (.336 מול .243)</td><td>E4 (מחיקת confounders) הוא המבחן הבא של הפער הזה</td></tr>
+      <tr><td class="n">31</td><td>ניסוי התדירות של OLMo (חשיפה ≠ ההסבר)</td><td>אותה מתודולוגיית "הרוג את ההסבר הפשוט" שממשיכה כאן: פורמט, תוויות, כתב — כולם נפסלו</td></tr>
+    </tbody>
+  </table></div>
+  <footer>מסמך זה: ‏<span class="f">v_1/src/phase2/TEACHING_GUIDE_HE.html</span> · מקורות המספרים: ‏<span class="f">pairs/RESULTS.md</span>, ‏<span class="f">pairs/results/inference/*.json</span>, ‏<span class="f">transfer/results/*.json</span>, ‏<span class="f">traces/results/*.json</span>, ‏<span class="f">sae/results/*</span>, ‏<span class="f">steering/results/*.json</span> · מאמרים: El-Shangiti et al. NAACL'25 (2410.13194) · Belrose et al. NeurIPS'23 (2306.03819) · Hong et al. EMNLP'25 (2406.11614) · Qwen-Scope (2605.11887) · Feldman et al. (2602.15730) · Snijders &amp; Borgatti 1999</footer>
+</section>
+</div>
