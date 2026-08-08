@@ -1,0 +1,367 @@
+{
+  "method": "qwen3_8b",
+  "cell": "A",
+  "direction": "historical_figure.last.layer29.npz",
+  "cellA_layer": 29,
+  "blocks": [
+    4,
+    8,
+    12,
+    16,
+    20
+  ],
+  "alphas": [
+    -0.5,
+    -0.25,
+    -0.1,
+    0,
+    0.1,
+    0.25,
+    0.5
+  ],
+  "alpha_mode": "rel",
+  "chat_template": true,
+  "n_prompts": 100,
+  "runs": {
+    "4": {
+      "alpha0_acc": 0.6,
+      "alpha0_yes_rate": 0.57,
+      "steer": {
+        "-0.5": {
+          "flip_rate": 0.07,
+          "mean_logit_shift": -0.015,
+          "acc": 0.63
+        },
+        "-0.25": {
+          "flip_rate": 0.06,
+          "mean_logit_shift": 0.0675,
+          "acc": 0.58
+        },
+        "-0.1": {
+          "flip_rate": 0.01,
+          "mean_logit_shift": 0.0425,
+          "acc": 0.61
+        },
+        "0.1": {
+          "flip_rate": 0.02,
+          "mean_logit_shift": 0.0075,
+          "acc": 0.6
+        },
+        "0.25": {
+          "flip_rate": 0.05,
+          "mean_logit_shift": 0.0075,
+          "acc": 0.61
+        },
+        "0.5": {
+          "flip_rate": 0.12,
+          "mean_logit_shift": 0.035,
+          "acc": 0.62
+        }
+      },
+      "random_control": {
+        "-0.5": {
+          "flip_rate": 0.09,
+          "mean_logit_shift": 0.005,
+          "acc": 0.57
+        },
+        "-0.25": {
+          "flip_rate": 0.06,
+          "mean_logit_shift": 0.0825,
+          "acc": 0.58
+        },
+        "-0.1": {
+          "flip_rate": 0.02,
+          "mean_logit_shift": 0.0575,
+          "acc": 0.6
+        },
+        "0.1": {
+          "flip_rate": 0.01,
+          "mean_logit_shift": 0.03,
+          "acc": 0.61
+        },
+        "0.25": {
+          "flip_rate": 0.02,
+          "mean_logit_shift": -0.0175,
+          "acc": 0.6
+        },
+        "0.5": {
+          "flip_rate": 0.05,
+          "mean_logit_shift": 0.1275,
+          "acc": 0.59
+        }
+      }
+    },
+    "8": {
+      "alpha0_acc": 0.6,
+      "alpha0_yes_rate": 0.57,
+      "steer": {
+        "-0.5": {
+          "flip_rate": 0.11,
+          "mean_logit_shift": -0.095,
+          "acc": 0.55
+        },
+        "-0.25": {
+          "flip_rate": 0.08,
+          "mean_logit_shift": -0.005,
+          "acc": 0.54
+        },
+        "-0.1": {
+          "flip_rate": 0.01,
+          "mean_logit_shift": 0.05,
+          "acc": 0.61
+        },
+        "0.1": {
+          "flip_rate": 0.01,
+          "mean_logit_shift": 0.0075,
+          "acc": 0.59
+        },
+        "0.25": {
+          "flip_rate": 0.01,
+          "mean_logit_shift": -0.07,
+          "acc": 0.59
+        },
+        "0.5": {
+          "flip_rate": 0.06,
+          "mean_logit_shift": -0.2975,
+          "acc": 0.62
+        }
+      },
+      "random_control": {
+        "-0.5": {
+          "flip_rate": 0.06,
+          "mean_logit_shift": -0.1625,
+          "acc": 0.56
+        },
+        "-0.25": {
+          "flip_rate": 0.01,
+          "mean_logit_shift": 0.02,
+          "acc": 0.59
+        },
+        "-0.1": {
+          "flip_rate": 0.03,
+          "mean_logit_shift": 0.0275,
+          "acc": 0.59
+        },
+        "0.1": {
+          "flip_rate": 0.04,
+          "mean_logit_shift": -0.0075,
+          "acc": 0.58
+        },
+        "0.25": {
+          "flip_rate": 0.07,
+          "mean_logit_shift": -0.14,
+          "acc": 0.57
+        },
+        "0.5": {
+          "flip_rate": 0.08,
+          "mean_logit_shift": -0.325,
+          "acc": 0.58
+        }
+      }
+    },
+    "12": {
+      "alpha0_acc": 0.6,
+      "alpha0_yes_rate": 0.57,
+      "steer": {
+        "-0.5": {
+          "flip_rate": 0.1,
+          "mean_logit_shift": 0.335,
+          "acc": 0.56
+        },
+        "-0.25": {
+          "flip_rate": 0.1,
+          "mean_logit_shift": 0.26,
+          "acc": 0.54
+        },
+        "-0.1": {
+          "flip_rate": 0.04,
+          "mean_logit_shift": 0.13,
+          "acc": 0.58
+        },
+        "0.1": {
+          "flip_rate": 0.03,
+          "mean_logit_shift": -0.105,
+          "acc": 0.57
+        },
+        "0.25": {
+          "flip_rate": 0.04,
+          "mean_logit_shift": -0.29,
+          "acc": 0.62
+        },
+        "0.5": {
+          "flip_rate": 0.1,
+          "mean_logit_shift": -0.7175,
+          "acc": 0.62
+        }
+      },
+      "random_control": {
+        "-0.5": {
+          "flip_rate": 0.1,
+          "mean_logit_shift": -0.28,
+          "acc": 0.58
+        },
+        "-0.25": {
+          "flip_rate": 0.03,
+          "mean_logit_shift": -0.05,
+          "acc": 0.59
+        },
+        "-0.1": {
+          "flip_rate": 0.03,
+          "mean_logit_shift": 0.0225,
+          "acc": 0.59
+        },
+        "0.1": {
+          "flip_rate": 0.03,
+          "mean_logit_shift": 0.0,
+          "acc": 0.59
+        },
+        "0.25": {
+          "flip_rate": 0.06,
+          "mean_logit_shift": -0.015,
+          "acc": 0.56
+        },
+        "0.5": {
+          "flip_rate": 0.11,
+          "mean_logit_shift": -0.13,
+          "acc": 0.55
+        }
+      }
+    },
+    "16": {
+      "alpha0_acc": 0.6,
+      "alpha0_yes_rate": 0.57,
+      "steer": {
+        "-0.5": {
+          "flip_rate": 0.02,
+          "mean_logit_shift": 0.16,
+          "acc": 0.58
+        },
+        "-0.25": {
+          "flip_rate": 0.0,
+          "mean_logit_shift": 0.1075,
+          "acc": 0.6
+        },
+        "-0.1": {
+          "flip_rate": 0.0,
+          "mean_logit_shift": 0.0525,
+          "acc": 0.6
+        },
+        "0.1": {
+          "flip_rate": 0.01,
+          "mean_logit_shift": -0.0425,
+          "acc": 0.59
+        },
+        "0.25": {
+          "flip_rate": 0.05,
+          "mean_logit_shift": -0.0825,
+          "acc": 0.61
+        },
+        "0.5": {
+          "flip_rate": 0.12,
+          "mean_logit_shift": -0.1625,
+          "acc": 0.56
+        }
+      },
+      "random_control": {
+        "-0.5": {
+          "flip_rate": 0.07,
+          "mean_logit_shift": 0.43,
+          "acc": 0.53
+        },
+        "-0.25": {
+          "flip_rate": 0.04,
+          "mean_logit_shift": 0.2525,
+          "acc": 0.56
+        },
+        "-0.1": {
+          "flip_rate": 0.05,
+          "mean_logit_shift": 0.11,
+          "acc": 0.55
+        },
+        "0.1": {
+          "flip_rate": 0.01,
+          "mean_logit_shift": -0.065,
+          "acc": 0.61
+        },
+        "0.25": {
+          "flip_rate": 0.02,
+          "mean_logit_shift": -0.1675,
+          "acc": 0.62
+        },
+        "0.5": {
+          "flip_rate": 0.06,
+          "mean_logit_shift": -0.2825,
+          "acc": 0.6
+        }
+      }
+    },
+    "20": {
+      "alpha0_acc": 0.6,
+      "alpha0_yes_rate": 0.57,
+      "steer": {
+        "-0.5": {
+          "flip_rate": 0.05,
+          "mean_logit_shift": -0.23,
+          "acc": 0.59
+        },
+        "-0.25": {
+          "flip_rate": 0.03,
+          "mean_logit_shift": -0.145,
+          "acc": 0.59
+        },
+        "-0.1": {
+          "flip_rate": 0.02,
+          "mean_logit_shift": -0.025,
+          "acc": 0.6
+        },
+        "0.1": {
+          "flip_rate": 0.0,
+          "mean_logit_shift": 0.0725,
+          "acc": 0.6
+        },
+        "0.25": {
+          "flip_rate": 0.04,
+          "mean_logit_shift": 0.145,
+          "acc": 0.56
+        },
+        "0.5": {
+          "flip_rate": 0.04,
+          "mean_logit_shift": 0.2625,
+          "acc": 0.56
+        }
+      },
+      "random_control": {
+        "-0.5": {
+          "flip_rate": 0.04,
+          "mean_logit_shift": 0.2325,
+          "acc": 0.56
+        },
+        "-0.25": {
+          "flip_rate": 0.02,
+          "mean_logit_shift": 0.1625,
+          "acc": 0.58
+        },
+        "-0.1": {
+          "flip_rate": 0.01,
+          "mean_logit_shift": 0.0725,
+          "acc": 0.59
+        },
+        "0.1": {
+          "flip_rate": 0.03,
+          "mean_logit_shift": -0.0375,
+          "acc": 0.59
+        },
+        "0.25": {
+          "flip_rate": 0.04,
+          "mean_logit_shift": -0.0825,
+          "acc": 0.58
+        },
+        "0.5": {
+          "flip_rate": 0.05,
+          "mean_logit_shift": -0.1325,
+          "acc": 0.59
+        }
+      }
+    }
+  }
+}
