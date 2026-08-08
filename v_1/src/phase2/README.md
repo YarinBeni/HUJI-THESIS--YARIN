@@ -10,10 +10,10 @@ folder's README carries its own progress detail. This page is the wave tracker.
 - [x] F1 probe, 13 arms × 2 variants (job 22587) → `pairs/RESULTS.md`
 - [x] F2 behavioural Yes/No (22588) — degenerate No-bias, documented
 - [x] F3 robustness m=100 (22589) — picture unchanged
-- [ ] F4 E8 inference: dyadic bootstrap + ruler permutation (22607, running)
+- [x] F4 task 1 (akk): permutation says the ordering signal is REAL (floor p=.013, olmo p=.007 vs shuffled-chronology null ≈ .498) while the contrasts confirm NO separation (olmo−floor p=.36, olmo−twin p=.97) — orderable by surface features, LLM adds nothing. Task 0 (eng) still running
 
 **Wave 2 — transfer (E3)** — `transfer/`
-- [ ] F5 frozen cell-A direction → fragments, ± LEACE(ruler), cosines (22608, running)
+- [x] F5 done — TRANSFER FAILS; name-time and document-time are orthogonal axes (cos ≈ .01, chance level). See transfer/README.md
 
 **Wave 3 — traces (E4.4), SAE (E5), steering (E2)** — `traces/`, `sae/`, `steering/`
 submitted as one block by `submit_all.sh` (F8 chained afterok F7):

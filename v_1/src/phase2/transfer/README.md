@@ -44,6 +44,16 @@ Needs (cluster-local): the akkadian npz store + `world_models/results/directions
 
 - [x] `e3_transfer.py` written; synthetic smoke passes (planted direction: Spearman +.68, pairwise .93 — polarity verified; LEACE path importable-guarded)
 - [x] F5 sbatch written (direction auto-regeneration fallback included)
-- [ ] F5 submitted on cluster
-- [ ] Read + write results into this README (transfer table, mediation deltas, cosines)
-- [ ] If transfer works anywhere: feed the frozen direction into E2 steering as the read-out
+- [x] F5 ran (job 22608, all 4 arms × 2 variants)
+- [x] **Result: TRANSFER FAILS — bottom-left cell of the grid.** Frozen-direction
+  Spearman spans −.17..+.07 (≈0), pairwise macro .44–.54 (≈chance), and the
+  random twins are indistinguishable from the trained arms. LEACE moves nothing
+  because there is nothing to mediate. Decisively: **cosine between the cell-A
+  name direction and E1's pairwise document direction ≈ .01–.03 on every arm —
+  chance-level orthogonality in d=4096 (null ≈ 1/√4096 ≈ .016)**. The entity
+  time axis and the document time axis are DIFFERENT axes; the collapse is not
+  dilution of one shared direction. This is a headline phase-2 finding: it rules
+  out H-dilute and lands on H-rotate/H-absent.
+- [x] Consequence for E2: steering uses the cell-A direction on cell-A/B prompts
+  (still valid — same regime it was fitted in); using it as a document read-out
+  is now known to be pointless.
