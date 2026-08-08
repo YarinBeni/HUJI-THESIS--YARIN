@@ -1,0 +1,43 @@
+{
+  "repo": "Qwen/SAE-Res-Qwen3-8B-Base-W64K-L0_100",
+  "method": "qwen3_8b",
+  "k": 100,
+  "offset": 1,
+  "offset_probe": {
+    "0": 0.8214361407339205,
+    "1": 0.81954306738488
+  },
+  "fvu": {
+    "8": {
+      "cellA_entities": 0.8195,
+      "eng_tier0_frags": 0.8313,
+      "akk_maximal_frags": 0.8219
+    },
+    "16": {
+      "cellA_entities": 0.1978,
+      "eng_tier0_frags": 0.1692,
+      "akk_maximal_frags": 0.1936
+    },
+    "20": {
+      "cellA_entities": 0.1665,
+      "eng_tier0_frags": 0.1267,
+      "akk_maximal_frags": 0.1559
+    },
+    "24": {
+      "cellA_entities": 0.1302,
+      "eng_tier0_frags": 0.084,
+      "akk_maximal_frags": 0.1144
+    },
+    "28": {
+      "cellA_entities": 0.1393,
+      "eng_tier0_frags": 0.0792,
+      "akk_maximal_frags": 0.1099
+    }
+  },
+  "passing_layers": [
+    16,
+    20,
+    24,
+    28
+  ]
+}
