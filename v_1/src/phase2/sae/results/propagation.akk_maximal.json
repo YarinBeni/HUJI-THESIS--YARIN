@@ -1,0 +1,37 @@
+{
+  "variant": "akk_maximal",
+  "sae_block": 24,
+  "n_features": 762,
+  "pooling": "max-over-tokens",
+  "m": 21,
+  "draws": 60,
+  "full": {
+    "macro_acc_mean": 0.655676600191618,
+    "macro_acc_std": 0.03798856072318028,
+    "micro_acc_mean": 0.5940819016743075,
+    "micro_acc_std": 0.030560844648448812,
+    "auc_mean": 0.6284392560223382,
+    "auc_std": 0.03847951787303731,
+    "n_draws": 60,
+    "n_test_pairs_mean": 442.68333333333334,
+    "n_ruler_pairs_mean": 139.51666666666668,
+    "acc_by_dyear": {
+      "[0.0, 25.0)": {
+        "mean": 0.4920103547503225,
+        "n_draws": 53
+      },
+      "[200.0, inf)": {
+        "mean": 0.643042792313572,
+        "n_draws": 60
+      },
+      "[25.0, 75.0)": {
+        "mean": 0.5438796782788589,
+        "n_draws": 60
+      },
+      "[75.0, 200.0)": {
+        "mean": 0.5945049034347707,
+        "n_draws": 60
+      }
+    }
+  }
+}
