@@ -68,27 +68,41 @@ def main():
     os.makedirs(RESULTS, exist_ok=True)
     out = {}
 
-    # ---- step 0: discover + layer + offset -------------------------------
+    # ---- step 0: discover, then FVU-SCAN every (layer, file, offset) -----
+    # The first run taught us the repo has many configs per layer; the gate
+    # itself now selects the instrument: every candidate is scored on cell-A
+    # activations and the global best (layer, file, offset) wins.
     repo, layers_avail, notes = K.discover()
-    L = min(layers_avail, key=lambda l: abs(l - args.target_layer))
-    sae = K.load(repo, layers_avail[L])
-    out["step0"] = {"repo": repo, "layers_available": sorted(layers_avail),
-                    "layer_used": L, "sae_mode": sae["mode"],
-                    "d_sae": sae["d_sae"], "notes": notes}
-    print(f"[step0] {repo} layers={sorted(layers_avail)} -> L={L} "
-          f"mode={sae['mode']} d_sae={sae['d_sae']}", flush=True)
-    # empirical offset: our file L+off <-> SAE block L
-    offs = {}
-    for off in (0, 1):
-        X = load_layer_acts(POPULATIONS["cellA_entities"], L + off)
-        if X is not None:
-            offs[off] = round(K.fvu(X, sae), 4)
-    if not offs:
-        sys.exit(f"no cell-A acts near layer {L}")
-    off = min(offs, key=offs.get)
-    out["step0"]["offset_probe"] = offs
-    out["step0"]["offset"] = off
-    print(f"[step0] offset {off} (fvu {offs})", flush=True)
+    scan, best = [], None
+    for L in sorted(layers_avail):
+        for fn in layers_avail[L]:
+            try:
+                cand = K.load(repo, fn)
+            except SystemExit:
+                scan.append({"layer": L, "file": fn, "error": "keys"})
+                continue
+            for off in (0, 1):
+                X = load_layer_acts(POPULATIONS["cellA_entities"], L + off)
+                if X is None:
+                    continue
+                v = round(K.fvu(X, cand), 4)
+                scan.append({"layer": L, "file": fn, "offset": off,
+                             "d_sae": cand["d_sae"], "mode": cand["mode"],
+                             "fvu_cellA": v})
+                print(f"  scan L{L} off{off} {fn}: d_sae={cand['d_sae']} "
+                      f"fvu={v}", flush=True)
+                if best is None or v < best[0]:
+                    best = (v, L, fn, off, cand)
+    if best is None:
+        sys.exit("no candidate SAE could be scored")
+    _, L, fn, off, sae = best
+    out["step0"] = {"repo": repo,
+                    "layers_available": sorted(layers_avail),
+                    "layer_used": L, "file_used": fn, "offset": off,
+                    "sae_mode": sae["mode"], "d_sae": sae["d_sae"],
+                    "scan": scan, "notes": notes}
+    print(f"[step0] BEST: L{L} off{off} {fn} d_sae={sae['d_sae']} "
+          f"fvu={best[0]}", flush=True)
 
     # ---- step 1: FVU gate, four populations ------------------------------
     if 1 in args.steps:

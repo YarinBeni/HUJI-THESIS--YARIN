@@ -85,8 +85,7 @@ def main():
     pipe = json.load(open(os.path.join(RESULTS, "pipeline.json")))
     repo, L = pipe["step0"]["repo"], pipe["step0"]["layer_used"]
     off = pipe["step0"]["offset"]
-    _, files, _ = K.discover()
-    sae = K.load(repo, files[L])
+    sae = K.load(repo, pipe["step0"]["file_used"])
     tab = pd.read_csv(sorted(glob.glob(os.path.join(
         RESULTS, "feature_hunt2.layer*.csv")))[-1])
     treat, ctrl = pick_features(tab, args.n_feats)

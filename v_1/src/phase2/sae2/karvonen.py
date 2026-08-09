@@ -31,7 +31,13 @@ PREFERRED_LAYERS = list(range(28, 12, -1))     # closest-to-24 first-ish; sorted
 
 
 def discover():
-    """Find the release; return (repo, {layer: filename}, notes)."""
+    """Find the release; return (repo, {layer: [filenames]}, notes).
+
+    LESSON FROM THE FIRST F22 RUN: the repo carries SEVERAL configs per layer
+    (38 files / 3 layers — different widths and L0s), and grabbing the first
+    match landed on a 16k dictionary that failed the FVU gate at .82. All
+    candidate files per layer are returned; the pipeline FVU-tests every one
+    and keeps the best — the gate picks the config, not a filename heuristic."""
     from huggingface_hub import HfApi
     api = HfApi()
     tried = []
@@ -45,7 +51,7 @@ def discover():
         for f in files:
             m = re.search(r"(?:layer[_-]?|blocks[._])(\d+)", f)
             if m and f.endswith((".pt", ".safetensors", ".npz")):
-                layers.setdefault(int(m.group(1)), f)
+                layers.setdefault(int(m.group(1)), []).append(f)
         if layers:
             return repo, layers, {"tried": tried, "n_files": len(files)}
         tried.append(f"{repo}: no layer-pattern files")

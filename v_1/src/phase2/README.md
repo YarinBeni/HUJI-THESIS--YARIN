@@ -49,7 +49,7 @@ way they were trained to be addressed?):
 - [x] F20 done — **THE DECK STANDS.** qwen3_8b_chat (template + dating question): eng mean .593 / last .605 vs bare .636; akk mean .642 vs bare .649 — chat-wrapping is the same or slightly WORSE. Probing chat models on bare text did not understate them; the deck's probing tables need no flags.
 
 **Wave 7 — SAE2: the labeled dictionary** (`sae2/`, user's handoff plan; F15-name in the plan re-numbered F22/F23):
-- [ ] F22 pipeline: discover Karvonen release (BLOCKING step 0) → FVU gate ×4 populations (cell B added) → feature hunt → token-level firing with position profiles → Neuronpedia labels. Replication verdicts vs F8/F11 pre-registered.
+- [~] F22 first run (23753): step 0 FOUND the release (adamkarvonen/qwen3-8b-saes, layers 9/18/27, 38 files) but the FVU gate CORRECTLY failed (.82 on cell A) — discovery had grabbed an arbitrary 16k config among several per layer. Fixed: step 0 now FVU-scans every (layer, file, offset) candidate and the gate itself picks the instrument. **Resubmit F22 (then F23 afterok).**
 - [ ] F23 interventions (afterok F22): amplify/ablate with rate-matched random controls + THE BRIDGE (clamp temporal features mid-text on eng — does the signal reach the last token?). F12-null caution attached: null-with-control is the publishable outcome.
 
 ## Submitting
