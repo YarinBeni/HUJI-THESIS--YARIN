@@ -7,10 +7,51 @@
       27
     ],
     "layer_used": 9,
-    "file_used": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_9/trainer_1/ae.pt",
+    "file_used": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_9/trainer_2/ae.pt",
     "offset": 1,
     "sae_mode": "threshold",
-    "d_sae": 16384,
+    "d_sae": 65536,
+    "fvu_best_raw": {
+      "layer": 9,
+      "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_9/trainer_1/ae.pt",
+      "offset": 1,
+      "d_sae": 16384,
+      "mode": "threshold",
+      "fvu_cellA": 0.0171
+    },
+    "labeled_width_preferred": true,
+    "trainer_config": {
+      "trainer": {
+        "trainer_class": "BatchTopKTrainer",
+        "dict_class": "BatchTopKSAE",
+        "lr": 5e-05,
+        "steps": 244140,
+        "auxk_alpha": 0.03125,
+        "warmup_steps": 1000,
+        "decay_start": 195312,
+        "threshold_beta": 0.999,
+        "threshold_start_step": 1000,
+        "top_k_aux": 2048,
+        "seed": 0,
+        "activation_dim": 4096,
+        "dict_size": 65536,
+        "k": 80,
+        "device": "cuda:0",
+        "layer": 9,
+        "lm_name": "Qwen/Qwen3-8B",
+        "wandb_name": "BatchTopKTrainer-Qwen/Qwen3-8B-resid_post_layer_9_trainer_2",
+        "submodule_name": "resid_post_layer_9"
+      },
+      "buffer": {
+        "d_submodule": 4096,
+        "io": "out",
+        "n_ctxs": 122,
+        "ctx_len": 2048,
+        "refresh_batch_size": 16,
+        "out_batch_size": 2048,
+        "device": "cuda:0"
+      }
+    },
     "scan": [
       {
         "layer": 9,
@@ -211,57 +252,57 @@
     }
   },
   "step1_fvu": {
-    "cellA_entities": 0.0171,
-    "cellB_rulers": 1.3896,
-    "eng_tier0_frags": 0.011,
-    "akk_maximal_frags": 0.0077
+    "cellA_entities": 0.0179,
+    "cellB_rulers": 1.387,
+    "eng_tier0_frags": 0.0106,
+    "akk_maximal_frags": 0.0075
   },
   "step2": {
-    "n_candidates": 2615,
-    "top_abs_rho": 0.4438661530985723,
-    "max_cos_ridge": 0.10449395328760147,
+    "n_candidates": 776,
+    "top_abs_rho": 0.42135188872432067,
+    "max_cos_ridge": 0.07920794934034348,
     "median_fire": {
-      "cellA": 0.27667510323697886,
-      "cellB_rulers": 0.03676470588235294,
-      "eng_tier0_frags": 0.02948609941027801,
-      "akk_maximal_frags": 0.005897219882055603
+      "cellA": 0.07639536432662847,
+      "cellB_rulers": 0.004901960784313725,
+      "eng_tier0_frags": 0.005897219882055603,
+      "akk_maximal_frags": 0.0
     },
     "table": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/phase2/sae2/results/feature_hunt2.layer9.csv"
   },
   "step4": {
     "cellA_entities": {
       "n_texts": 400,
-      "median_fired_anywhere": 0.63625,
-      "median_fire_fraction": 0.20001190900802612,
+      "median_fired_anywhere": 0.2075,
+      "median_fire_fraction": 0.049696147441864014,
       "position_thirds": [
-        0.309,
-        0.335,
-        0.356
+        0.272,
+        0.327,
+        0.402
       ]
     },
     "eng_tier0_frags": {
       "n_texts": 1187,
-      "median_fired_anywhere": 0.8534119629317607,
-      "median_fire_fraction": 0.029030844569206238,
+      "median_fired_anywhere": 0.35467565290648695,
+      "median_fire_fraction": 0.003907218109816313,
       "position_thirds": [
-        0.389,
-        0.323,
-        0.288
+        0.343,
+        0.335,
+        0.322
       ]
     },
     "akk_maximal_frags": {
       "n_texts": 1187,
-      "median_fired_anywhere": 0.44102780117944396,
-      "median_fire_fraction": 0.012977587059140205,
+      "median_fired_anywhere": 0.019797809604043808,
+      "median_fire_fraction": 0.00027908856282010674,
       "position_thirds": [
-        0.354,
-        0.327,
-        0.319
+        0.379,
+        0.324,
+        0.296
       ]
     }
   },
   "replication_verdicts": {
     "eng_midtext_firing_replicates": true,
-    "akk_non_engagement_replicates": false
+    "akk_non_engagement_replicates": true
   }
 }

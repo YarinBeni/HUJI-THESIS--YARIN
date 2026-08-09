@@ -1,39 +1,96 @@
 {
-  "source": "9-resid-batchtopk-65k",
   "layer": 9,
-  "category_counts": {
-    "other": 50
-  },
-  "top5": [
+  "error": "no working (model, source) found on Neuronpedia",
+  "tried": [
     {
-      "feature": 10641,
-      "rho_year": -0.4438661530985723,
-      "np_category": "other",
-      "np_label": "HTTPError: HTTP Error 404: Not Found"
+      "model": "qwen3-8b",
+      "source": "9-resid-batchtopk-65k",
+      "ok": false
     },
     {
-      "feature": 4116,
-      "rho_year": 0.4422176797062406,
-      "np_category": "other",
-      "np_label": "HTTPError: HTTP Error 404: Not Found"
+      "model": "qwen3-8b",
+      "source": "9-resid_post-batchtopk-65k",
+      "ok": false
     },
     {
-      "feature": 545,
-      "rho_year": 0.3997708808724595,
-      "np_category": "other",
-      "np_label": "HTTPError: HTTP Error 404: Not Found"
+      "model": "qwen3-8b",
+      "source": "9-resid-post-batchtopk-65k",
+      "ok": false
     },
     {
-      "feature": 14701,
-      "rho_year": 0.3864314007885425,
-      "np_category": "other",
-      "np_label": "HTTPError: HTTP Error 404: Not Found"
+      "model": "qwen3-8b",
+      "source": "9-res-batchtopk-65k",
+      "ok": false
     },
     {
-      "feature": 7404,
-      "rho_year": 0.3654105043525596,
-      "np_category": "other",
-      "np_label": "HTTPError: HTTP Error 404: Not Found"
+      "model": "qwen3-8b",
+      "source": "9-resid-batchtopk-65k__l0-80",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b",
+      "source": "9-batchtopk-65k",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b-base",
+      "source": "9-resid-batchtopk-65k",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b-base",
+      "source": "9-resid_post-batchtopk-65k",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b-base",
+      "source": "9-resid-post-batchtopk-65k",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b-base",
+      "source": "9-res-batchtopk-65k",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b-base",
+      "source": "9-resid-batchtopk-65k__l0-80",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b-base",
+      "source": "9-batchtopk-65k",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b-it",
+      "source": "9-resid-batchtopk-65k",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b-it",
+      "source": "9-resid_post-batchtopk-65k",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b-it",
+      "source": "9-resid-post-batchtopk-65k",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b-it",
+      "source": "9-res-batchtopk-65k",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b-it",
+      "source": "9-resid-batchtopk-65k__l0-80",
+      "ok": false
+    },
+    {
+      "model": "qwen3-8b-it",
+      "source": "9-batchtopk-65k",
+      "ok": false
     }
   ]
 }
