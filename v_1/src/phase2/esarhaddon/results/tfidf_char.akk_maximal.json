@@ -1,0 +1,22 @@
+{
+  "method": "tfidf_char",
+  "variant": "akk_maximal",
+  "site": "mean",
+  "ruler": "Esarhaddon",
+  "n_fragments": 176,
+  "n_years": 11,
+  "probe": {
+    "best_layer": -1,
+    "oof_spearman": -0.048812892148051144,
+    "p": 0.2857142857142857,
+    "null": "max-over-layers (selection included)"
+  },
+  "pairwise_layer_from_probe_selection": true,
+  "pairwise": {
+    "acc": 0.5768388930184923,
+    "sd": 0.032515578384076683,
+    "draws": 30,
+    "p": 0.1568627450980392
+  },
+  "tfidf_vectorizer_in_subset": true
+}
