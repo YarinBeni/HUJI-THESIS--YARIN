@@ -44,6 +44,8 @@ Cell-C steering SKIPPED per F12's pre-registered rule.
 **Wave 6 — the chat-mode audit** (user's question: were chat models probed the
 way they were trained to be addressed?):
 - [x] Extraction-chain audit: padding/last-token/mean-mask logic VERIFIED correct in wm_lib, extract_akk and stress_tests extract_lib; T11/T12 generation experiments already used apply_chat_template + enable_thinking=False. Base-model arms (Llama-2, OLMo-2, twins, encoders) are correctly probed on bare text — that IS their training-time operation.
+- [ ] F21 lens spectroscopy (E4.4b, user-proposed): whole-vocabulary rank-decile composition with per-bucket random-direction nulls + the year-token order test rho(year value, l_t) + cosine de-confounding of loud unembedding rows. Selftest passes (planted year axis: rho=1.00, year-bucket z=17). Decision rules: cellA monotone gradient + ordered year tokens → "semantic axis" upgrades to "calibrated axis"; any doc-direction bucket z-significant → first positive evidence it means something; flat → "indistinguishable from random" now spectrum-wide, with the one-directional-instrument caveat attached verbatim.
+- [ ] F15 rerun with length controls (the Esarhaddon structural-vs-chronological decider) — pending submission.
 - [x] F20 done — **THE DECK STANDS.** qwen3_8b_chat (template + dating question): eng mean .593 / last .605 vs bare .636; akk mean .642 vs bare .649 — chat-wrapping is the same or slightly WORSE. Probing chat models on bare text did not understate them; the deck's probing tables need no flags.
 
 ## Submitting
