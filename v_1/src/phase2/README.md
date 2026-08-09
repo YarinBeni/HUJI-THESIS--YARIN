@@ -33,7 +33,7 @@ decision rules pre-registered in GAPS_AND_WAVE5.md §2):
 **Wave 5 — the remaining decided experiments** (`submit_wave5.sh`; audited
 before submission — 6 bugs found and fixed in review+smoke, see the wave-5
 section of GAPS_AND_WAVE5.md):
-- [x] F15 done — significant identity-free signal inside Esarhaddon (LLM arms ρ=.28–.42, pairs .70–.81; floor null) BUT the random twin matches the trained arms and ρ(year,length)=.38 inside his reign → reads as STRUCTURAL (length/form), not learned chronology. Length controls added to e6; **rerun pending** to decide.
+- [x] F15 done + rerun with length controls — **VERDICT: STRUCTURAL.** The length-only baseline (ρ=.355) equals or exceeds every arm's raw probe (.28–.42); partialling length out collapses everything to .03–.22 with the twin (.11/.19) indistinguishable from the trained arms. The within-Esarhaddon 'identity-free chronology' is length encoding, full stop — no residual learned-chronology signal survives the control.
 - [x] F16 done — the cloud's natural 1-D order tracks LENGTH (ρ up to .94) and provenance, not year: third independent confirmation that the dominant document axis is stylistic. Within-Esarhaddon year matches co-occur with huge length correlations.
 - [x] F17 done — **much of the eng document-time signal rides on provenance+length**: after LEACE, olmo eng pairwise .623→.558 and qwen .628→.582 vs the erased floor .533 (residual gaps +.025/+.049, sharply reduced); grouped ridge goes ≤0. Provenance probes .58–.66→.18–.27 (erasure verified). Genre constant — not a confounder at all.
 - [x] F18 done — **the F11 mid-text firings are temporal NOISE, not recoverable chronology**: max-pooled year-features score .562 on eng, BELOW the .586 floor (rule: no propagation-failure claim; the entity time features do not compute document dates anywhere). On akk they merely match the surface floor (.656 ≈ .658).
@@ -45,7 +45,7 @@ Cell-C steering SKIPPED per F12's pre-registered rule.
 way they were trained to be addressed?):
 - [x] Extraction-chain audit: padding/last-token/mean-mask logic VERIFIED correct in wm_lib, extract_akk and stress_tests extract_lib; T11/T12 generation experiments already used apply_chat_template + enable_thinking=False. Base-model arms (Llama-2, OLMo-2, twins, encoders) are correctly probed on bare text — that IS their training-time operation.
 - [ ] F21 lens spectroscopy (E4.4b, user-proposed): whole-vocabulary rank-decile composition with per-bucket random-direction nulls + the year-token order test rho(year value, l_t) + cosine de-confounding of loud unembedding rows. Selftest passes (planted year axis: rho=1.00, year-bucket z=17). Decision rules: cellA monotone gradient + ordered year tokens → "semantic axis" upgrades to "calibrated axis"; any doc-direction bucket z-significant → first positive evidence it means something; flat → "indistinguishable from random" now spectrum-wide, with the one-directional-instrument caveat attached verbatim.
-- [ ] F15 rerun with length controls (the Esarhaddon structural-vs-chronological decider) — pending submission.
+- [x] F15 rerun landed (23722) — verdict folded into the wave-5 F15 line: STRUCTURAL.
 - [x] F20 done — **THE DECK STANDS.** qwen3_8b_chat (template + dating question): eng mean .593 / last .605 vs bare .636; akk mean .642 vs bare .649 — chat-wrapping is the same or slightly WORSE. Probing chat models on bare text did not understate them; the deck's probing tables need no flags.
 
 **Wave 7 — SAE2: the labeled dictionary** (`sae2/`, user's handoff plan; F15-name in the plan re-numbered F22/F23):
