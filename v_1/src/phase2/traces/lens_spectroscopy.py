@@ -68,7 +68,7 @@ def classify(token: str) -> str:
     low = t.lower()
     if not t or not any(c.isalnum() for c in t):
         return "junk"
-    if t.isdigit():
+    if t.isdecimal():        # NOT isdigit(): '²' passes isdigit but breaks int()
         v = int(t)
         if 500 <= v <= 2029 and len(t) in (3, 4):
             return "year_numeral"
@@ -162,7 +162,7 @@ def main():
     yvals = np.full(len(tokens), np.nan)
     for i, t in enumerate(tokens):
         s = t.replace("Ġ", "").replace("▁", "").strip()
-        if s.isdigit() and len(s) == 4 and 1000 <= int(s) <= 2029:
+        if s.isdecimal() and len(s) == 4 and 1000 <= int(s) <= 2029:
             yvals[i] = int(s)
     ymask = np.isfinite(yvals)
     u_norms = np.linalg.norm(W_U * norm, axis=1) + 1e-8
