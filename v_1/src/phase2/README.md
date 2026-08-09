@@ -30,8 +30,16 @@ decision rules pre-registered in GAPS_AND_WAVE5.md §2):
 - [x] F10 behavioral+chat: yes-rates moved (0 → .10–.76) but order-consistency stays ≤ .43 and macro ≤ chance → **the representation↔behaviour dissociation is genuine**, tested under both formats.
 - [x] F14: stride-1 leaves llama eng ≈ unchanged (7B .584→.584, 13B .586→.606 [+0.5 sd], 70B best-layer noise) → **the "Llama flat on English" anomaly is real**, not a sweep artifact. Lens random-controls lens to junk — so cell-A's temporal tokens are meaningful, and the honest phrasing for the pairwise direction is "indistinguishable from a random direction's projection".
 
-Deferred by design: E6 Esarhaddon micro-study, E7 seriation, E4
-confounder-erasure suite (wave 5); cell-C steering now SKIPPED per F12's rule.
+**Wave 5 — the remaining decided experiments** (`submit_wave5.sh`; audited
+before submission — 6 bugs found and fixed in review+smoke, see the wave-5
+section of GAPS_AND_WAVE5.md):
+- [ ] F15 E6 Esarhaddon micro-study (CPU ×5) — probe + within-ruler pairs inside the one identity-free ruler; max-over-layers permutation null
+- [ ] F16 E7 spectral seriation (CPU ×5) — label-free Fiedler ordering, full corpus + within-Esarhaddon; post-hoc match vs year/ruler/provenance/length
+- [ ] F17 E4 confounder erasure (CPU ×3) — LEACE(provenance+length) per fold; NOTE: genre is CONSTANT (all dated fragments are Royal Inscription) — discovered in the audit, worth a thesis sentence
+- [ ] F18 E-prop (GPU ×1) — max-pooled SAE year-features → E1 protocol; the F11 follow-up (propagation vs noise)
+- [ ] F19 site=last probes + specification curve (CPU ×1)
+
+Cell-C steering SKIPPED per F12's pre-registered rule.
 
 ## Submitting
 

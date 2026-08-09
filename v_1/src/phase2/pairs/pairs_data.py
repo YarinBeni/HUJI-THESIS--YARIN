@@ -114,6 +114,26 @@ def draw_pairs(df: pd.DataFrame, m: int, rng: np.random.Generator,
     return pd.concat(rows, ignore_index=True)
 
 
+def draw_within_ruler(df: pd.DataFrame, ruler: str, n_pairs: int,
+                      rng: np.random.Generator) -> pd.DataFrame:
+    """Ordered pairs INSIDE one ruler (E6): both fragments share the ruler, so
+    any order signal is identity-free by construction. Only rulers with
+    within-ruler year variance produce anything (Esarhaddon: 176 frags, 11 yrs).
+    Same output columns as draw_pairs."""
+    g = df[df.ruler == ruler]
+    ia = rng.integers(0, len(g), n_pairs * 3)
+    ib = rng.integers(0, len(g), n_pairs * 3)
+    ya, yb = g.year.values[ia], g.year.values[ib]
+    keep = ya != yb
+    ia, ib, ya, yb = ia[keep][:n_pairs], ib[keep][:n_pairs], \
+        ya[keep][:n_pairs], yb[keep][:n_pairs]
+    return pd.DataFrame({
+        "pos_a": g.pos.values[ia], "pos_b": g.pos.values[ib],
+        "year_a": ya, "year_b": yb, "ruler_a": ruler, "ruler_b": ruler,
+        "label": (ya < yb).astype(int), "weight": 1.0,
+        "dyear": np.abs(ya - yb)})
+
+
 def ruler_folds(rulers: list[str], rng: np.random.Generator,
                 n_folds: int = N_FOLDS) -> dict[str, int]:
     """Random ruler -> fold assignment, reshuffled per draw.
