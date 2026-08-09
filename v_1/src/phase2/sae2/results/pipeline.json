@@ -6,24 +6,262 @@
       18,
       27
     ],
-    "layer_used": 27,
+    "layer_used": 9,
+    "file_used": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_9/trainer_1/ae.pt",
+    "offset": 1,
     "sae_mode": "threshold",
     "d_sae": 16384,
+    "scan": [
+      {
+        "layer": 9,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_9/trainer_0/ae.pt",
+        "offset": 0,
+        "d_sae": 16384,
+        "mode": "threshold",
+        "fvu_cellA": 0.023
+      },
+      {
+        "layer": 9,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_9/trainer_0/ae.pt",
+        "offset": 1,
+        "d_sae": 16384,
+        "mode": "threshold",
+        "fvu_cellA": 0.0197
+      },
+      {
+        "layer": 9,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_9/trainer_1/ae.pt",
+        "offset": 0,
+        "d_sae": 16384,
+        "mode": "threshold",
+        "fvu_cellA": 0.0201
+      },
+      {
+        "layer": 9,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_9/trainer_1/ae.pt",
+        "offset": 1,
+        "d_sae": 16384,
+        "mode": "threshold",
+        "fvu_cellA": 0.0171
+      },
+      {
+        "layer": 9,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_9/trainer_2/ae.pt",
+        "offset": 0,
+        "d_sae": 65536,
+        "mode": "threshold",
+        "fvu_cellA": 0.0215
+      },
+      {
+        "layer": 9,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_9/trainer_2/ae.pt",
+        "offset": 1,
+        "d_sae": 65536,
+        "mode": "threshold",
+        "fvu_cellA": 0.0179
+      },
+      {
+        "layer": 9,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_9/trainer_3/ae.pt",
+        "offset": 0,
+        "d_sae": 65536,
+        "mode": "threshold",
+        "fvu_cellA": 0.0216
+      },
+      {
+        "layer": 9,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_9/trainer_3/ae.pt",
+        "offset": 1,
+        "d_sae": 65536,
+        "mode": "threshold",
+        "fvu_cellA": 0.0185
+      },
+      {
+        "layer": 18,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_18/trainer_0/ae.pt",
+        "offset": 0,
+        "d_sae": 16384,
+        "mode": "threshold",
+        "fvu_cellA": 3.6836
+      },
+      {
+        "layer": 18,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_18/trainer_0/ae.pt",
+        "offset": 1,
+        "d_sae": 16384,
+        "mode": "threshold",
+        "fvu_cellA": 3.6773
+      },
+      {
+        "layer": 18,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_18/trainer_1/ae.pt",
+        "offset": 0,
+        "d_sae": 16384,
+        "mode": "threshold",
+        "fvu_cellA": 0.5637
+      },
+      {
+        "layer": 18,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_18/trainer_1/ae.pt",
+        "offset": 1,
+        "d_sae": 16384,
+        "mode": "threshold",
+        "fvu_cellA": 0.5608
+      },
+      {
+        "layer": 18,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_18/trainer_2/ae.pt",
+        "offset": 0,
+        "d_sae": 65536,
+        "mode": "threshold",
+        "fvu_cellA": 127.2182
+      },
+      {
+        "layer": 18,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_18/trainer_2/ae.pt",
+        "offset": 1,
+        "d_sae": 65536,
+        "mode": "threshold",
+        "fvu_cellA": 127.0333
+      },
+      {
+        "layer": 18,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_18/trainer_3/ae.pt",
+        "offset": 0,
+        "d_sae": 65536,
+        "mode": "threshold",
+        "fvu_cellA": 24.8232
+      },
+      {
+        "layer": 18,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_18/trainer_3/ae.pt",
+        "offset": 1,
+        "d_sae": 65536,
+        "mode": "threshold",
+        "fvu_cellA": 24.7699
+      },
+      {
+        "layer": 27,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_27/trainer_0/ae.pt",
+        "offset": 0,
+        "d_sae": 16384,
+        "mode": "threshold",
+        "fvu_cellA": 0.8669
+      },
+      {
+        "layer": 27,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_27/trainer_0/ae.pt",
+        "offset": 1,
+        "d_sae": 16384,
+        "mode": "threshold",
+        "fvu_cellA": 0.8207
+      },
+      {
+        "layer": 27,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_27/trainer_1/ae.pt",
+        "offset": 0,
+        "d_sae": 16384,
+        "mode": "threshold",
+        "fvu_cellA": 0.5218
+      },
+      {
+        "layer": 27,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_27/trainer_1/ae.pt",
+        "offset": 1,
+        "d_sae": 16384,
+        "mode": "threshold",
+        "fvu_cellA": 0.5
+      },
+      {
+        "layer": 27,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_27/trainer_2/ae.pt",
+        "offset": 0,
+        "d_sae": 65536,
+        "mode": "threshold",
+        "fvu_cellA": 8.8917
+      },
+      {
+        "layer": 27,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_27/trainer_2/ae.pt",
+        "offset": 1,
+        "d_sae": 65536,
+        "mode": "threshold",
+        "fvu_cellA": 8.3644
+      },
+      {
+        "layer": 27,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_27/trainer_3/ae.pt",
+        "offset": 0,
+        "d_sae": 65536,
+        "mode": "threshold",
+        "fvu_cellA": 3.7413
+      },
+      {
+        "layer": 27,
+        "file": "saes_Qwen_Qwen3-8B_batch_top_k/resid_post_layer_27/trainer_3/ae.pt",
+        "offset": 1,
+        "d_sae": 65536,
+        "mode": "threshold",
+        "fvu_cellA": 3.5248
+      }
+    ],
     "notes": {
       "tried": [],
       "n_files": 38
-    },
-    "offset_probe": {
-      "0": 0.8669,
-      "1": 0.8207
-    },
-    "offset": 1
+    }
   },
   "step1_fvu": {
-    "cellA_entities": 0.8207,
-    "cellB_rulers": 2.9775,
-    "eng_tier0_frags": 0.6679,
-    "akk_maximal_frags": 0.764
+    "cellA_entities": 0.0171,
+    "cellB_rulers": 1.3896,
+    "eng_tier0_frags": 0.011,
+    "akk_maximal_frags": 0.0077
   },
-  "step1_verdict": "GATE FAILED \u2014 do not interpret features"
+  "step2": {
+    "n_candidates": 2615,
+    "top_abs_rho": 0.4438661530985723,
+    "max_cos_ridge": 0.10449395328760147,
+    "median_fire": {
+      "cellA": 0.27667510323697886,
+      "cellB_rulers": 0.03676470588235294,
+      "eng_tier0_frags": 0.02948609941027801,
+      "akk_maximal_frags": 0.005897219882055603
+    },
+    "table": "/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/phase2/sae2/results/feature_hunt2.layer9.csv"
+  },
+  "step4": {
+    "cellA_entities": {
+      "n_texts": 400,
+      "median_fired_anywhere": 0.63625,
+      "median_fire_fraction": 0.20001190900802612,
+      "position_thirds": [
+        0.309,
+        0.335,
+        0.356
+      ]
+    },
+    "eng_tier0_frags": {
+      "n_texts": 1187,
+      "median_fired_anywhere": 0.8534119629317607,
+      "median_fire_fraction": 0.029030844569206238,
+      "position_thirds": [
+        0.389,
+        0.323,
+        0.288
+      ]
+    },
+    "akk_maximal_frags": {
+      "n_texts": 1187,
+      "median_fired_anywhere": 0.44102780117944396,
+      "median_fire_fraction": 0.012977587059140205,
+      "position_thirds": [
+        0.354,
+        0.327,
+        0.319
+      ]
+    }
+  },
+  "replication_verdicts": {
+    "eng_midtext_firing_replicates": true,
+    "akk_non_engagement_replicates": false
+  }
 }
