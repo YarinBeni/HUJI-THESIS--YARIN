@@ -1,0 +1,22 @@
+{
+  "method": "qwen3_8b",
+  "variant": "eng_tier0",
+  "site": "mean",
+  "ruler": "Esarhaddon",
+  "n_fragments": 176,
+  "n_years": 11,
+  "probe": {
+    "best_layer": 35,
+    "oof_spearman": 0.36942943022203073,
+    "p": 0.015873015873015872,
+    "null": "max-over-layers (selection included)"
+  },
+  "pairwise_layer_from_probe_selection": true,
+  "pairwise": {
+    "acc": 0.7937963443130364,
+    "sd": 0.027598895733876062,
+    "draws": 30,
+    "p": 0.0196078431372549
+  },
+  "tfidf_vectorizer_in_subset": false
+}
