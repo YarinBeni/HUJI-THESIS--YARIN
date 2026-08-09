@@ -1,0 +1,22 @@
+{
+  "method": "olmo2_7b",
+  "variant": "eng_tier0",
+  "site": "mean",
+  "ruler": "Esarhaddon",
+  "n_fragments": 176,
+  "n_years": 11,
+  "probe": {
+    "best_layer": 13,
+    "oof_spearman": 0.3979418500464128,
+    "p": 0.015873015873015872,
+    "null": "max-over-layers (selection included)"
+  },
+  "pairwise_layer_from_probe_selection": true,
+  "pairwise": {
+    "acc": 0.8061791451240503,
+    "sd": 0.024698588593567217,
+    "draws": 30,
+    "p": 0.0196078431372549
+  },
+  "tfidf_vectorizer_in_subset": false
+}
