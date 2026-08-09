@@ -33,18 +33,18 @@ decision rules pre-registered in GAPS_AND_WAVE5.md §2):
 **Wave 5 — the remaining decided experiments** (`submit_wave5.sh`; audited
 before submission — 6 bugs found and fixed in review+smoke, see the wave-5
 section of GAPS_AND_WAVE5.md):
-- [ ] F15 E6 Esarhaddon micro-study (CPU ×5) — probe + within-ruler pairs inside the one identity-free ruler; max-over-layers permutation null
-- [ ] F16 E7 spectral seriation (CPU ×5) — label-free Fiedler ordering, full corpus + within-Esarhaddon; post-hoc match vs year/ruler/provenance/length
-- [ ] F17 E4 confounder erasure (CPU ×3) — LEACE(provenance+length) per fold; NOTE: genre is CONSTANT (all dated fragments are Royal Inscription) — discovered in the audit, worth a thesis sentence
-- [ ] F18 E-prop (GPU ×1) — max-pooled SAE year-features → E1 protocol; the F11 follow-up (propagation vs noise)
-- [ ] F19 site=last probes + specification curve (CPU ×1)
+- [x] F15 done — significant identity-free signal inside Esarhaddon (LLM arms ρ=.28–.42, pairs .70–.81; floor null) BUT the random twin matches the trained arms and ρ(year,length)=.38 inside his reign → reads as STRUCTURAL (length/form), not learned chronology. Length controls added to e6; **rerun pending** to decide.
+- [x] F16 done — the cloud's natural 1-D order tracks LENGTH (ρ up to .94) and provenance, not year: third independent confirmation that the dominant document axis is stylistic. Within-Esarhaddon year matches co-occur with huge length correlations.
+- [x] F17 done — **much of the eng document-time signal rides on provenance+length**: after LEACE, olmo eng pairwise .623→.558 and qwen .628→.582 vs the erased floor .533 (residual gaps +.025/+.049, sharply reduced); grouped ridge goes ≤0. Provenance probes .58–.66→.18–.27 (erasure verified). Genre constant — not a confounder at all.
+- [x] F18 done — **the F11 mid-text firings are temporal NOISE, not recoverable chronology**: max-pooled year-features score .562 on eng, BELOW the .586 floor (rule: no propagation-failure claim; the entity time features do not compute document dates anywhere). On akk they merely match the surface floor (.656 ≈ .658).
+- [x] F19 done — **the specification curve catches a real sensitivity**: at site=last on eng the RANDOM TWIN reaches .623, erasing the trained-vs-twin gap that exists at mean (.615 vs .553). The eng "trained models beat twins" claim is pooling-dependent and must be reported as such.
 
 Cell-C steering SKIPPED per F12's pre-registered rule.
 
 **Wave 6 — the chat-mode audit** (user's question: were chat models probed the
 way they were trained to be addressed?):
 - [x] Extraction-chain audit: padding/last-token/mean-mask logic VERIFIED correct in wm_lib, extract_akk and stress_tests extract_lib; T11/T12 generation experiments already used apply_chat_template + enable_thinking=False. Base-model arms (Llama-2, OLMo-2, twins, encoders) are correctly probed on bare text — that IS their training-time operation.
-- [ ] F20 (GPU): new arm `qwen3_8b_chat` — fragments wrapped in the chat template + dating question, mean pooled over fragment tokens only, last = the pre-answer state; then the standard E1 probe. Decision rule: chat beats bare by >1 sd → deck's chat-model rows understated and get flagged/rerun; within 1 sd → the deck stands.
+- [x] F20 done — **THE DECK STANDS.** qwen3_8b_chat (template + dating question): eng mean .593 / last .605 vs bare .636; akk mean .642 vs bare .649 — chat-wrapping is the same or slightly WORSE. Probing chat models on bare text did not understate them; the deck's probing tables need no flags.
 
 ## Submitting
 
