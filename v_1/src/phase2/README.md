@@ -22,8 +22,16 @@ submitted as one block by `submit_all.sh` (F8 chained afterok F7):
 - [x] F8 done (layer 24) — **the collapse reaches the feature basis**: feature 38678 fires on 62% of cell-A entities with ρ=.57 vs death year, but the top-50 year features have median firing 11.7% on entities vs 0.08% on ENGLISH glosses and ~0 on Akkadian (31/50 exactly zero). The time features are gated on entity-mention contexts — they never engage on document text even in English. cos(W_dec, ridge) ≤ .12: the ridge direction is distributed over many features.
 - [x] F9 done (3 tasks) — **null at the tested band**: flip rates ≈ random control, logit shifts ≈ 0 at α≤24, blocks 21–32. Caveat before concluding 'not causal': our ridge direction lives at LATE layers (26/29) while the NAACL effects concentrated in the FIRST half of the stack, and α may be small vs late-layer residual norms. A follow-up sweep (early-mid blocks, α scaled to residual norm) is the fair test; as run, no causal use detected.
 
-Deferred by design: cell-C steering (needs king-token span integration),
-E6 Esarhaddon micro-study, E7 seriation, E4 confounder-erasure suite.
+**Wave 4 — the gap-fix wave** (`submit_wave4.sh`, jobs 22908–22912, all landed;
+decision rules pre-registered in GAPS_AND_WAVE5.md §2):
+- [x] F13 e3 last-on-last: **positive control PASSES** (same code path reproduces cell-A ρ=.87–.89, twin .57) and transfer is STILL null (ρ −.14..−.01, pairwise ≈ chance) → **"different axes" is sealed**. LEACE surgical check now verified (ruler-probe .41–.59 → .07–.14 ≈ chance) and fp64 fixed the qwen numeric anomaly (rel-change .82 → .46/.09).
+- [x] F11 token firing: **THE ONE STORY CHANGE.** Median fired-anywhere: entities 17.9%, **English gloss docs 14.9%** (≥10% rule → reframe), Akkadian 1.0% (<2% rule → survives). New two-part mechanism: on English documents the year features DO fire mid-text but the signal **does not propagate** to the document-level readout; on Akkadian they **never engage at all**.
+- [x] F12 steering v2 (blocks 4–20, rel-α, chat): **still null** — flips/Δlogit ≈ random control everywhere. Per the rule: "no causal use detected under both the paper's recipe and the norm-matched variant"; **wave-5 cell-C steering is skipped**.
+- [x] F10 behavioral+chat: yes-rates moved (0 → .10–.76) but order-consistency stays ≤ .43 and macro ≤ chance → **the representation↔behaviour dissociation is genuine**, tested under both formats.
+- [x] F14: stride-1 leaves llama eng ≈ unchanged (7B .584→.584, 13B .586→.606 [+0.5 sd], 70B best-layer noise) → **the "Llama flat on English" anomaly is real**, not a sweep artifact. Lens random-controls lens to junk — so cell-A's temporal tokens are meaningful, and the honest phrasing for the pairwise direction is "indistinguishable from a random direction's projection".
+
+Deferred by design: E6 Esarhaddon micro-study, E7 seriation, E4
+confounder-erasure suite (wave 5); cell-C steering now SKIPPED per F12's rule.
 
 ## Submitting
 
