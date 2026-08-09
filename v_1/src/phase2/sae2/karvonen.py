@@ -61,6 +61,18 @@ def discover():
              "resid-batchtopk-65k__l0-80) and add it to CANDIDATE_REPOS.")
 
 
+def trainer_config(repo, filename):
+    """The trainer's config.json (k/l0, width, hook point) if shipped next to
+    the weights — lets a human match the trainer to a Neuronpedia source id."""
+    from huggingface_hub import hf_hub_download
+    cfg = os.path.join(os.path.dirname(filename), "config.json")
+    try:
+        with open(hf_hub_download(repo, cfg)) as f:
+            return json.load(f)
+    except Exception:                                             # noqa: BLE001
+        return None
+
+
 def load(repo, filename):
     """Load one layer's SAE; normalize names; detect the inference rule."""
     import torch

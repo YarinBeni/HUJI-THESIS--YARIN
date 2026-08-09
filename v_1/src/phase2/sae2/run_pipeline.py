@@ -73,7 +73,7 @@ def main():
     # itself now selects the instrument: every candidate is scored on cell-A
     # activations and the global best (layer, file, offset) wins.
     repo, layers_avail, notes = K.discover()
-    scan, best = [], None
+    scan = []
     for L in sorted(layers_avail):
         for fn in layers_avail[L]:
             try:
@@ -91,18 +91,33 @@ def main():
                              "fvu_cellA": v})
                 print(f"  scan L{L} off{off} {fn}: d_sae={cand['d_sae']} "
                       f"fvu={v}", flush=True)
-                if best is None or v < best[0]:
-                    best = (v, L, fn, off, cand)
-    if best is None:
+            del cand
+    scored = [r for r in scan if "fvu_cellA" in r]
+    if not scored:
         sys.exit("no candidate SAE could be scored")
-    _, L, fn, off, sae = best
+    scored.sort(key=lambda r: r["fvu_cellA"])
+    best_raw = scored[0]
+    # LESSON FROM THE SECOND F22 RUN (23760): the global-min FVU landed on a
+    # 16k trainer whose feature indices Neuronpedia does not label — the whole
+    # point of this dictionary. Among near-ties (within FVU_TOL of the best)
+    # prefer the 65k width, which is the Neuronpedia-covered release.
+    FVU_TOL = 0.02
+    labeled = [r for r in scored if r["d_sae"] == 65536
+               and r["fvu_cellA"] <= best_raw["fvu_cellA"] + FVU_TOL]
+    pick = labeled[0] if labeled else best_raw
+    L, fn, off = pick["layer"], pick["file"], pick["offset"]
+    sae = K.load(repo, fn)
     out["step0"] = {"repo": repo,
                     "layers_available": sorted(layers_avail),
                     "layer_used": L, "file_used": fn, "offset": off,
                     "sae_mode": sae["mode"], "d_sae": sae["d_sae"],
+                    "fvu_best_raw": best_raw, "labeled_width_preferred":
+                    bool(labeled) and pick is not best_raw,
+                    "trainer_config": K.trainer_config(repo, fn),
                     "scan": scan, "notes": notes}
-    print(f"[step0] BEST: L{L} off{off} {fn} d_sae={sae['d_sae']} "
-          f"fvu={best[0]}", flush=True)
+    print(f"[step0] PICK: L{L} off{off} {fn} d_sae={sae['d_sae']} "
+          f"fvu={pick['fvu_cellA']} (raw best {best_raw['fvu_cellA']} "
+          f"d_sae={best_raw['d_sae']})", flush=True)
 
     # ---- step 1: FVU gate, four populations ------------------------------
     if 1 in args.steps:

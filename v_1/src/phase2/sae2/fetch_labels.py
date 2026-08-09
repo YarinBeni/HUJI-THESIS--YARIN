@@ -66,6 +66,32 @@ def fetch(model, source, index, retries=3):
             time.sleep(2 * (i + 1))
 
 
+def probe_source(layer, test_index):
+    """LESSON FROM RUN 23760: every fetch 404'd — the guessed source id was
+    wrong (and/or the instrument wasn't the labeled 65k dict). Instead of
+    assuming one naming convention, probe a grid of (model id, source id)
+    candidates with one feature until something answers with an actual
+    explanations payload; return (model, source, tried)."""
+    sources = [f"{layer}-resid-batchtopk-65k",
+               f"{layer}-resid_post-batchtopk-65k",
+               f"{layer}-resid-post-batchtopk-65k",
+               f"{layer}-res-batchtopk-65k",
+               f"{layer}-resid-batchtopk-65k__l0-80",
+               f"{layer}-batchtopk-65k"]
+    tried = []
+    for model in (MODEL_NP, "qwen3-8b-base", "qwen3-8b-it"):
+        for src in sources:
+            j = fetch(model, src, test_index, retries=1)
+            ok = isinstance(j, dict) and "error" not in j \
+                and (j.get("explanations") or j.get("description"))
+            tried.append({"model": model, "source": src, "ok": bool(ok)})
+            print(f"  probe {model}/{src}: {'OK' if ok else 'no'}", flush=True)
+            if ok:
+                return model, src, tried
+            time.sleep(0.3)
+    return None, None, tried
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--source", required=True,
@@ -80,15 +106,33 @@ def main():
         sys.exit("run run_pipeline.py first")
     csv = csvs[-1]
     L = int(csv.split("layer")[1].split(".")[0])
-    src = (f"{L}-resid-batchtopk-65k" if args.source == "auto"
-           else args.source)
     tab = pd.read_csv(csv)
+    # GUARD: Neuronpedia labels the 65k release. If the pipeline's instrument
+    # is a different width, our indices live in another feature space and any
+    # label that comes back would be silently WRONG — refuse instead.
+    pj = os.path.join(RESULTS, "pipeline.json")
+    if os.path.exists(pj):
+        d_sae = json.load(open(pj)).get("step0", {}).get("d_sae")
+        if d_sae not in (None, 65536):
+            sys.exit(f"instrument width d_sae={d_sae} != 65536: indices do "
+                     "not map to the Neuronpedia source; not fetching labels")
+    model_np, tried = MODEL_NP, []
+    if args.source == "auto":
+        m, src, tried = probe_source(L, int(tab.feature.iloc[0]))
+        if src is None:
+            with open(os.path.join(RESULTS, f"labels.layer{L}.json"), "w") as f:
+                json.dump({"layer": L, "error": "no working (model, source) "
+                           "found on Neuronpedia", "tried": tried}, f, indent=2)
+            sys.exit("no working Neuronpedia source — recorded the probe grid")
+        model_np = m
+    else:
+        src = args.source
     print(f"[labels] {len(tab)} features from {os.path.basename(csv)} "
-          f"via {MODEL_NP}/{src}", flush=True)
+          f"via {model_np}/{src}", flush=True)
 
     labels, cats = [], []
     for f in tab.feature.astype(int):
-        j = fetch(MODEL_NP, src, int(f))
+        j = fetch(model_np, src, int(f))
         lab = (j.get("explanations") or [{}])[0].get("description") \
             if isinstance(j, dict) and "error" not in j else None
         lab = lab or j.get("error", "no-label")
@@ -100,7 +144,8 @@ def main():
     tab["np_category"] = cats
     tab.to_csv(csv, index=False)
 
-    summary = {"source": src, "layer": L,
+    summary = {"model": model_np, "source": src, "layer": L,
+               "probe_tried": tried,
                "category_counts": pd.Series(cats).value_counts().to_dict(),
                "top5": tab.head(5)[["feature", "rho_year", "np_category",
                                     "np_label"]].to_dict("records")}
