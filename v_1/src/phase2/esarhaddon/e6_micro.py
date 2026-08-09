@@ -105,10 +105,21 @@ def main():
     args = ap.parse_args()
 
     df = P.load_eligible()
+    wc_meta = pd.read_parquet(os.path.join(
+        os.path.dirname(os.path.abspath(PP.__file__)), "..", "..", "..",
+        "data/evaluation/corpora/orcc_corpus.parquet"
+    ))[["fragment_id", "word_count"]]
+    df = df.merge(wc_meta, on="fragment_id", how="left")
     es = df[df.ruler == RULER].reset_index(drop=True)
     y = es.year.values.astype(float)
+    logwc = np.log1p(es.word_count.fillna(0).values.astype(float))
+    # THE CONFOUND THIS SUBSET CARRIES: year correlates with length inside
+    # Esarhaddon (rho ~ .38 — mid-reign prisms are huge, reign-edge fragments
+    # tiny). Every read-out below therefore ships with a length control.
+    rho_yl = float(stats.spearmanr(y, logwc).correlation)
     print(f"[data] {RULER}: {len(es)} fragments, {es.year.nunique()} years "
-          f"({int(y.min())}-{int(y.max())})", flush=True)
+          f"({int(y.min())}-{int(y.max())}) | rho(year, log-length)={rho_yl:+.3f}",
+          flush=True)
 
     # feature space: one matrix per layer (activations) or one tfidf matrix
     if args.method == "tfidf_char":
@@ -154,6 +165,18 @@ def main():
           f"(max-over-layers null, mean {null.mean():+.3f}, {n_perm} perms)",
           flush=True)
 
+    # length controls for the probe read-out
+    _, bpred = oof_spearman(bX, y)
+    len_baseline = oof_spearman(logwc[:, None], y)[0]
+    from sklearn.linear_model import LinearRegression
+    ry = y - LinearRegression().fit(logwc[:, None], y).predict(logwc[:, None])
+    rp = bpred - LinearRegression().fit(logwc[:, None], bpred
+                                        ).predict(logwc[:, None])
+    partial_rho = float(stats.spearmanr(rp, ry).correlation)
+    print(f"[length] rho(year,len)={rho_yl:+.3f} | length-only baseline "
+          f"rho={len_baseline:+.3f} | probe PARTIAL rho (length out) = "
+          f"{partial_rho:+.3f}", flush=True)
+
     # --- within-ruler pairwise ---
     acc, sd, nd = pairwise_cv(bX, es, args.n_pairs, args.draws, args.seed)
     nullp = []
@@ -172,6 +195,9 @@ def main():
            "n_years": int(es.year.nunique()),
            "probe": {"best_layer": bl, "oof_spearman": brho, "p": p_probe,
                      "null": "max-over-layers (selection included)"},
+           "length_control": {"rho_year_length": rho_yl,
+                              "length_only_baseline_rho": len_baseline,
+                              "probe_partial_rho_length_out": partial_rho},
            "pairwise_layer_from_probe_selection": True,
            "pairwise": {"acc": acc, "sd": sd, "draws": nd, "p": p_pairs},
            "tfidf_vectorizer_in_subset": args.method == "tfidf_char"}
