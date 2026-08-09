@@ -1,0 +1,29 @@
+{
+  "step0": {
+    "repo": "adamkarvonen/qwen3-8b-saes",
+    "layers_available": [
+      9,
+      18,
+      27
+    ],
+    "layer_used": 27,
+    "sae_mode": "threshold",
+    "d_sae": 16384,
+    "notes": {
+      "tried": [],
+      "n_files": 38
+    },
+    "offset_probe": {
+      "0": 0.8669,
+      "1": 0.8207
+    },
+    "offset": 1
+  },
+  "step1_fvu": {
+    "cellA_entities": 0.8207,
+    "cellB_rulers": 2.9775,
+    "eng_tier0_frags": 0.6679,
+    "akk_maximal_frags": 0.764
+  },
+  "step1_verdict": "GATE FAILED \u2014 do not interpret features"
+}
