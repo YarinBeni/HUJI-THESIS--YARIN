@@ -1,9 +1,45 @@
 # SAE2 results — Karvonen Qwen3-8B dictionary
 
-Status: F22 run 2 (job 23760) landed; F23 interventions (23761) pending;
-labeled-65k rerun queued (see README progress).
+Status: F22 run 2 (23760, 16k pick) and run 3 (23898, **the pre-specified
+labeled 65k instrument — PRIMARY**) both landed. F23 run 1 (23761) crashed
+without a log commit; fixed rerun queued. Labels still blocked (source id
+unknown — full probe grid 404'd; needs one browser lookup on neuronpedia.org).
 
-## Step 0 — instrument scan (the gate picks the config)
+## PRIMARY — run 3 (23898): 65k labeled instrument, layer 9
+
+Step 0 picked trainer_2 65k per the labeled-width preference (FVU .0179 vs
+raw-best 16k .0171); its config.json confirms `dict_size=65536, k=80` — i.e.
+the "l0-80" release. Gate ×4: cellA .0179 / eng .0106 / akk .0075 / cellB
+1.387 (same small-n variance anomaly as run 2).
+
+Feature hunt: 776 candidates (sparser dict → fewer, cleaner); top
+|ρ(year)| = .42; cos(decoder, ridge) ≤ .08 → **F8's distributed-direction
+claim replicates**.
+
+Token-level firing (top-50 year candidates):
+
+| population | fired-anywhere | fire fraction | thirds |
+|---|---|---|---|
+| cell-A entities | .207 | .050 | .27/.33/.40 |
+| eng glosses | **.355** | .0039 | .34/.34/.32 |
+| akk maximal | **.020** | .0003 | .38/.32/.30 |
+
+Pre-registered verdicts, both **REPLICATE**:
+- `eng_midtext_firing_replicates` = True (.355 ≥ .10)
+- `akk_non_engagement_replicates` = True (.020 < .02, at the boundary)
+
+**Synthesis across the two dictionaries at layer 9:** the 65k sparse
+dictionary (primary, pre-specified) replicates BOTH halves of F11 — English
+glosses fire the year features mid-text, Akkadian essentially never engages
+them. The 16k run's Akkadian firing (.441, below) shows the non-engagement
+claim is defined relative to a sufficiently sparse feature basis: coarse
+16k features that mix year signal with broader lexical content do fire on
+the script. Report the 65k numbers as the replication; keep the 16k contrast
+as a dictionary-sensitivity note.
+
+## Run 2 (23760, 16k pick) — sensitivity record
+
+### Step 0 — instrument scan (the gate picks the config)
 
 38 files, layers {9, 18, 27}, 4 trainers/layer × offsets {0, 1}, all scored by
 FVU on cell-A last-token activations:
@@ -23,7 +59,7 @@ Qwen3's exploding deep-layer residual norms / massive activations). So SAE2
 is an EARLY-layer instrument, complementary to Qwen-Scope's layer 24 (F7–F8,
 F11): the two dictionaries look at opposite ends of the stack.
 
-## Step 1 — FVU gate, four populations (layer 9, offset 1, 16k trainer_1)
+### Step 1 — FVU gate, four populations (layer 9, offset 1, 16k trainer_1)
 
 | population | FVU |
 |---|---|
@@ -38,7 +74,7 @@ variance) is tiny for near-duplicate royal-name prompts, so this is flagged
 as a population-statistics artifact to verify, not read as "SAE broken on
 rulers" (absolute error is not comparable across populations).
 
-## Step 2 — feature hunt (2,615 candidates ≥2% firing)
+### Step 2 — feature hunt (2,615 candidates ≥2% firing)
 
 - top |ρ(strength, death-year)| = **.44** (SAE1 layer 24: .57)
 - cos(decoder row, cell-A ridge direction) ≤ **.10** → **replicates F8**: the
@@ -46,7 +82,7 @@ rulers" (absolute error is not comparable across populations).
 - median firing of the top-50 year candidates: cellA .277, cellB .037,
   eng .029, akk .0059.
 
-## Step 4 — token-level firing (pre-registered F11 rules)
+### Step 4 — token-level firing (pre-registered F11 rules)
 
 | population | median fired-anywhere | fire fraction | thirds (early/mid/late) |
 |---|---|---|---|
@@ -58,23 +94,27 @@ Verdicts (pre-registered):
 - `eng_midtext_firing_replicates` = **True** (.853 ≥ .10): English documents
   light up the year features mid-text in this dictionary too — second
   independent confirmation of F11's firing half.
-- `akk_non_engagement_replicates` = **False** (.441 ≥ .02): at layer 9 the
-  year-feature candidates DO engage on Akkadian (44% of fragments, ~1.3% of
-  tokens). Honest synthesis: **F11's "never engages on Akkadian" is a
-  deep-layer (L24) phenomenon, not universal** — early lexical features fire
-  on the script, and the non-engagement emerges by the late layers where the
-  entity-gated time machinery lives. This sharpens, not weakens, the story:
-  the Akkadian signal dies between the early lexical stage and the late
-  entity-time stage.
+- `akk_non_engagement_replicates` = **False** (.441 ≥ .02) in THIS 16k dict.
+  **SUPERSEDED by run 3**: the pre-specified 65k instrument replicates
+  non-engagement (.020). The 16k firing stands as the dictionary-sensitivity
+  note in the primary section — coarse features that mix year signal with
+  broader lexical content do fire on the script; sufficiently sparse ones
+  don't.
 
-## Step 3 — labels: FAILED in run 23760, fixed
+## Step 3 — labels: still blocked after two fixes
 
-All 50 Neuronpedia fetches 404'd. Root causes: (1) the scan had picked the
-16k trainer whose indices don't exist in Neuronpedia's 65k source; (2) the
-source id `9-resid-batchtopk-65k` was a guess. Fix: labeled-width preference
-in step 0 (picks trainer_2 65k at FVU .0179) + a (model, source) probe grid
-in `fetch_labels.py` that records what actually answers.
+Run 23760: all fetches 404'd (16k indices + guessed source id). Run 23898:
+instrument is now the labeled 65k, but the full (model × source) probe grid —
+qwen3-8b / qwen3-8b-base / qwen3-8b-it × six source-id patterns — also
+404'd (recorded in labels.layer9.json). The guess space is exhausted; the
+remaining step is a one-minute browser lookup on neuronpedia.org: open any
+feature of the Karvonen Qwen3-8B set and copy the exact model+source ids
+from the URL, then `python fetch_labels.py --source <exact-id>`.
 
 ## Step 5 — interventions (F23)
 
-Pending (job 23761, running on the 16k pick; valid without labels).
+Run 1 (23761, 16k instrument): crashed before committing results — log not
+in git (`sae2/logs/F23_fsteer_23761.out` on the cluster). Defensive fix
+applied to the prime crash suspect (global scalar batch-TopK threshold was
+indexed per-feature). Rerun 23899 chained after 23898 ran BEFORE this fix
+synced — if it also died, resubmit F23 once; it will pick up the fix.

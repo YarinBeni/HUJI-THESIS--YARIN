@@ -134,9 +134,13 @@ def main():
                                                               torch.bfloat16)
         w_enc_i = sae["W_enc"][int(feat)].to(dev)
         b_i = float(sae["b_enc"][int(feat)])
-        th_i = (float(sae["theta"][int(feat)])
-                if sae["theta"] is not None and sae["theta"].ndim else
-                (float(sae["theta"]) if sae["theta"] is not None else None))
+        th = sae["theta"]
+        if th is None:
+            th_i = None
+        elif th.ndim and th.numel() > 1:      # per-feature vector
+            th_i = float(th.reshape(-1)[int(feat)])
+        else:                                  # global scalar (batch-TopK)
+            th_i = float(th.reshape(-1)[0])
         scores, fires = [], []
         # hidden_states[L+off] is what the SAE reads; that is the OUTPUT of
         # transformer block (L+off-1) — hook there, per the empirical offset
