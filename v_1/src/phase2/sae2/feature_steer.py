@@ -55,12 +55,17 @@ RESULTS = os.path.join(_HERE, "results")
 ALPHAS = [-8, -4, -2, 0, 2, 4, 8]
 
 
-def pick_features(tab, n=5):
-    """Top-|rho| temporal candidates + firing-rate-matched near-zero-rho
-    controls."""
+def pick_features(tab, pool, n=5):
+    """Top-|rho| temporal candidates from the hunt table + firing-rate-matched
+    near-zero-rho controls from the FULL candidate pool.
+
+    THE 23761 CRASH: controls were drawn from the hunt CSV itself, which only
+    keeps the top-|rho| features — the |rho|<.05 pool was empty and the
+    resulting DataFrame had no columns. The pool is now recomputed from the
+    encodings over every >=2%-firing feature."""
     t = tab.reindex(tab.rho_year.abs().sort_values(ascending=False).index)
     treat = t.head(n)
-    pool = tab[tab.rho_year.abs() < 0.05]
+    pool = pool[pool.rho_year.abs() < 0.05].copy()
     ctrl_rows = []
     for _, r in treat.iterrows():
         if len(pool) == 0:
@@ -68,6 +73,8 @@ def pick_features(tab, n=5):
         j = (pool.fire_cellA - r.fire_cellA).abs().idxmin()
         ctrl_rows.append(pool.loc[j])
         pool = pool.drop(j)
+    if not ctrl_rows:
+        sys.exit("no rate-matched controls: near-zero-rho pool is empty")
     return treat, pd.DataFrame(ctrl_rows)
 
 
@@ -88,14 +95,24 @@ def main():
     sae = K.load(repo, pipe["step0"]["file_used"])
     tab = pd.read_csv(sorted(glob.glob(os.path.join(
         RESULTS, "feature_hunt2.layer*.csv")))[-1])
-    treat, ctrl = pick_features(tab, args.n_feats)
-    print(f"[feats] treat={treat.feature.tolist()} "
-          f"ctrl={ctrl.feature.tolist()}", flush=True)
 
-    # per-feature activation scale (act95 on cell A) for clamp units
+    # encodings once: control pool, treat/ctrl pick, and clamp scales
+    from scipy import stats
+    ent_full = pd.read_csv(ENT_CSV)
     Xa = load_layer_acts(os.path.join(ENT_ACTS, METHOD, "historical_figure"),
-                         L + pipe["step0"]["offset"])
+                         L + off)
     Za = K.encode(Xa, sae).numpy()
+    yr = ent_full["death_year"].values.astype(float)
+    okm = ent_full["is_test"].astype(bool).values & np.isfinite(yr)
+    fire_all = (Za[okm] > 0).mean(0)
+    cand = np.where(fire_all >= 0.02)[0]
+    rho_all = np.array([stats.spearmanr(Za[okm, f], yr[okm]).correlation
+                        for f in cand])
+    pool = pd.DataFrame({"feature": cand, "fire_cellA": fire_all[cand],
+                         "rho_year": rho_all})
+    treat, ctrl = pick_features(tab, pool, args.n_feats)
+    print(f"[feats] treat={treat.feature.astype(int).tolist()} "
+          f"ctrl={ctrl.feature.astype(int).tolist()}", flush=True)
     scale = {int(f): max(float(np.quantile(Za[:, int(f)][Za[:, int(f)] > 0], .95))
                          if (Za[:, int(f)] > 0).any() else 1.0, 1e-3)
              for f in pd.concat([treat, ctrl]).feature}
@@ -119,8 +136,8 @@ def main():
     coef_t = torch.from_numpy(coef).to(dev)
     W_dec = sae["W_dec"]
 
-    ent = pd.read_csv(ENT_CSV)
-    ent = ent[ent.is_test.astype(bool) & ent.death_year.notna()].sample(
+    ent = ent_full[ent_full.is_test.astype(bool)
+                   & ent_full.death_year.notna()].sample(
         args.n_entities, random_state=0)
     df = P.load_eligible()
     frags = df.text_eng_tier0.fillna("").astype(str)

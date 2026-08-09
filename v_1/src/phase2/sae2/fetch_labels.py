@@ -54,11 +54,20 @@ def classify_label(text):
     return "other"
 
 
+HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) "
+                         "AppleWebKit/537.36 (KHTML, like Gecko) "
+                         "Chrome/126.0 Safari/537.36",
+           "Accept": "application/json"}
+
+
 def fetch(model, source, index, retries=3):
+    # Browser-like headers: run 23898 saw the CONFIRMED source id 404 through
+    # bare urllib — Cloudflare rejects the default python User-Agent.
     url = f"https://www.neuronpedia.org/api/feature/{model}/{source}/{index}"
     for i in range(retries):
         try:
-            with urllib.request.urlopen(url, timeout=30) as r:
+            req = urllib.request.Request(url, headers=HEADERS)
+            with urllib.request.urlopen(req, timeout=30) as r:
                 return json.load(r)
         except Exception as e:                                    # noqa: BLE001
             if i == retries - 1:
@@ -66,29 +75,38 @@ def fetch(model, source, index, retries=3):
             time.sleep(2 * (i + 1))
 
 
-def probe_source(layer, test_index):
-    """LESSON FROM RUN 23760: every fetch 404'd — the guessed source id was
-    wrong (and/or the instrument wasn't the labeled 65k dict). Instead of
-    assuming one naming convention, probe a grid of (model id, source id)
-    candidates with one feature until something answers with an actual
-    explanations payload; return (model, source, tried)."""
-    sources = [f"{layer}-resid-batchtopk-65k",
-               f"{layer}-resid_post-batchtopk-65k",
-               f"{layer}-resid-post-batchtopk-65k",
-               f"{layer}-res-batchtopk-65k",
-               f"{layer}-resid-batchtopk-65k__l0-80",
-               f"{layer}-batchtopk-65k"]
+def probe_source(layer, test_indices):
+    """Probe (model id, source id) candidates until something answers with an
+    actual explanations payload; return (model, source, tried).
+
+    The USER-CONFIRMED convention (browser, 2026-08-09) is
+    `{L}-resid-batchtopk-65k__l0-80` on model `qwen3-8b` — first in the grid.
+    Several indices are tried per source: a single dead feature must not
+    disqualify the right source."""
+    sources = [f"{layer}-resid-batchtopk-65k__l0-80",
+               f"{layer}-resid-batchtopk-65k",
+               f"{layer}-resid_post-batchtopk-65k__l0-80",
+               f"{layer}-resid-post-batchtopk-65k__l0-80",
+               f"{layer}-batchtopk-65k__l0-80"]
     tried = []
     for model in (MODEL_NP, "qwen3-8b-base", "qwen3-8b-it"):
         for src in sources:
-            j = fetch(model, src, test_index, retries=1)
-            ok = isinstance(j, dict) and "error" not in j \
-                and (j.get("explanations") or j.get("description"))
-            tried.append({"model": model, "source": src, "ok": bool(ok)})
-            print(f"  probe {model}/{src}: {'OK' if ok else 'no'}", flush=True)
-            if ok:
+            hit = None
+            for ix in test_indices:
+                j = fetch(model, src, int(ix), retries=1)
+                if isinstance(j, dict) and "error" not in j \
+                        and (j.get("explanations") or j.get("description")):
+                    hit = ix
+                    break
+                time.sleep(0.3)
+            tried.append({"model": model, "source": src,
+                          "ok": hit is not None, "hit_index": hit,
+                          "last_reply": (j.get("error") or "empty")[:80]
+                          if isinstance(j, dict) else "?"})
+            print(f"  probe {model}/{src}: "
+                  f"{'OK@'+str(hit) if hit is not None else 'no'}", flush=True)
+            if hit is not None:
                 return model, src, tried
-            time.sleep(0.3)
     return None, None, tried
 
 
@@ -118,7 +136,8 @@ def main():
                      "not map to the Neuronpedia source; not fetching labels")
     model_np, tried = MODEL_NP, []
     if args.source == "auto":
-        m, src, tried = probe_source(L, int(tab.feature.iloc[0]))
+        m, src, tried = probe_source(
+            L, tab.feature.astype(int).head(3).tolist())
         if src is None:
             with open(os.path.join(RESULTS, f"labels.layer{L}.json"), "w") as f:
                 json.dump({"layer": L, "error": "no working (model, source) "

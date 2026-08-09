@@ -113,8 +113,18 @@ from the URL, then `python fetch_labels.py --source <exact-id>`.
 
 ## Step 5 — interventions (F23)
 
-Run 1 (23761, 16k instrument): crashed before committing results — log not
-in git (`sae2/logs/F23_fsteer_23761.out` on the cluster). Defensive fix
-applied to the prime crash suspect (global scalar batch-TopK threshold was
-indexed per-feature). Rerun 23899 chained after 23898 ran BEFORE this fix
-synced — if it also died, resubmit F23 once; it will pick up the fix.
+Runs 23761 / 23899 / 23921 all crashed at the same line; the log (23761)
+showed the real cause: `pick_features` drew its |ρ|<.05 controls from the
+hunt CSV, which only keeps the TOP-|ρ| features — the control pool was
+empty by construction and `pd.DataFrame([])` has no `.feature`. Fixed: the
+control pool is recomputed inside `feature_steer.py` from the encodings
+(all ≥2%-firing features), plus a defensive fix for the global scalar
+batch-TopK threshold (was indexed per-feature). Resubmit F23 once.
+
+## Labels — source id CONFIRMED by browser
+
+`https://www.neuronpedia.org/qwen3-8b/18-resid-batchtopk-65k__l0-80/45920`
+works, so layer 9 = `9-resid-batchtopk-65k__l0-80` on model `qwen3-8b` —
+which the probe grid DID try and saw 404: the API rejects the default
+python User-Agent (Cloudflare). `fetch_labels.py` now sends browser-like
+headers, puts the confirmed id first, and probes 3 indices per source.
