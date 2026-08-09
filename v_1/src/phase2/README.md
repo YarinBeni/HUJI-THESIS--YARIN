@@ -41,6 +41,11 @@ section of GAPS_AND_WAVE5.md):
 
 Cell-C steering SKIPPED per F12's pre-registered rule.
 
+**Wave 6 — the chat-mode audit** (user's question: were chat models probed the
+way they were trained to be addressed?):
+- [x] Extraction-chain audit: padding/last-token/mean-mask logic VERIFIED correct in wm_lib, extract_akk and stress_tests extract_lib; T11/T12 generation experiments already used apply_chat_template + enable_thinking=False. Base-model arms (Llama-2, OLMo-2, twins, encoders) are correctly probed on bare text — that IS their training-time operation.
+- [ ] F20 (GPU): new arm `qwen3_8b_chat` — fragments wrapped in the chat template + dating question, mean pooled over fragment tokens only, last = the pre-answer state; then the standard E1 probe. Decision rule: chat beats bare by >1 sd → deck's chat-model rows understated and get flagged/rerun; within 1 sd → the deck stands.
+
 ## Submitting
 
 ```bash
