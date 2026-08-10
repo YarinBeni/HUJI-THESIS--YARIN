@@ -56,6 +56,23 @@ way they were trained to be addressed?):
 - [x] F23 done (23948, after the empty-pool + bridge-padding fixes) — **three verdicts:** (1) AMPLIFY is the program's first positive causal result: pushing an onomastic feature moves the frozen year read-out monotonically in the sign of its ρ (Δ up to ±0.9 sd) while rate-matched controls stay flat — the name-culture features causally feed the entity time axis (direction-steering F9/F12 was null; feature-steering works). (2) ABLATE single features: nothing — the code is distributed, no single feature load-bearing. (3) THE BRIDGE: **null-with-control, the pre-registered publishable outcome** — clamping the features mid-text on glosses leaves last-token firing at exactly 0 and probe shifts inside the control band: mid-text firing stays local; no propagation channel exists even when the signal is forced in. F11/F18's "firing without chronology" is now causal. Tables in sae2/RESULTS.md.
 
 **Wave 7 complete.**
+
+**Wave 8 — the last two planned experiments** (user request: run everything
+still on the table; both audited pre-submission — block-28 DIR arm removed
+as causally unreachable, per-fragment years in the pair judge, y
+standardized for the MLP, spans smoke-tested at 547/1187):
+- [ ] F26 anchor ignition (`steering/ignite_anchor.py`, GPU): the original
+  "cell-C steering", re-justified by F23's positive amplify. FEAT arm
+  (top-5 onomastic features at the ruler-NAME token span of eng glosses /
+  all-but-last of akk, vs rate-matched controls) + DIR arm (rel-α ridge
+  direction at blocks 8/16/24 vs random direction). Read-out: frozen cell-A
+  probe at last token. Pre-registered rules in the docstring;
+  null-with-control publishable.
+- [ ] F27 nonlinear probes (`erasure/e4_nonlinear.py`, CPU array ×8):
+  kernel-RBF (median-heuristic γ, inner-CV) + MLP(256,128) under
+  GroupKFold-by-ruler, pairs judged only with BOTH rulers held out;
+  arms olmo/qwen/twin/tfidf × eng/akk. Retires the "nonlinear code would
+  not be caught" caveat, one way or the other.
 - [x] F25 feature interp done (23940) — **the layer-9 year-ρ features are ONOMASTIC detectors**, confirmed by the reliable instrument: max-activating contexts show German surnames (44713: Kienzle/Rusch/Riedel — and its clamped generation drifts into German, a clean Golden-Gate corroboration), Chinese name pieces (56768/26073), Chinese imperial names (9763), Byzantine/Korean/Liao monarchs (57332), "X of PLACE" nobility (17433), German noble houses (2343), 19th-c famous names (50848), and an ancient-genealogy feature firing on the GLOSSES themselves (53704: "son Cambyses I, father of", 17/20 examples from eng_tier0). The year correlation rides on naming culture ↔ era — the entity-mediated-time mechanism made concrete at the feature level. (α=10 clamps mostly degenerate generation — over-clamping; the labels rest on the contexts.) Full table in sae2/RESULTS.md.
 
 ## Submitting
