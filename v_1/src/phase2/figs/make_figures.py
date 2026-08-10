@@ -639,8 +639,144 @@ def fig9():
     plt.close(fig)
 
 
+
+# ============ fig 10 — decomposing the YEAR probe itself ====================
+def _byte_decode(tok):
+    """GPT-2-style byte-level tokens (OLMo/Qwen) -> readable text; llama's
+    sentencepiece marker -> leading space."""
+    bs = list(range(ord("!"), ord("~") + 1)) + \
+        list(range(ord("\u00a1"), ord("\u00ac") + 1)) + \
+        list(range(ord("\u00ae"), ord("\u00ff") + 1))
+    cs = bs[:]
+    n = 0
+    for b in range(256):
+        if b not in bs:
+            bs.append(b)
+            cs.append(256 + n)
+            n += 1
+    inv = {chr(c): b for b, c in zip(bs, cs)}
+    if tok.startswith("\u2581"):
+        return " " + tok[1:]
+    if all(ch in inv for ch in tok):
+        try:
+            return bytes(inv[ch] for ch in tok).decode("utf-8")
+        except (UnicodeDecodeError, KeyError):
+            return tok
+    return tok
+
+
+TEMPORAL_KEYS = ("bc", "bce", "ancient", "athen", "\u516c\u5143\u524d",
+                 "\u53e4\u4ee3", "\u6218\u56fd", "\u53e4\u4eba")
+
+
+def fig10():
+    """The user's question made explicit: WHAT did we find when we decomposed
+    the plain year probe (cell-A ridge, predicts death year — not the
+    pairwise difference)? (a) its logit-lens tokens vs the document
+    direction's; (b) its overlap with every hunted SAE feature (distributed
+    — no 'year neuron'); (c) the features the hunt actually found."""
+    fig = plt.figure(figsize=(12.6, 7.6))
+    gs = fig.add_gridspec(2, 3, height_ratios=[1.15, 1], hspace=.42,
+                          wspace=.35)
+    cjk = "WenQuanYi Zen Hei"
+
+    # (a) lens tokens: year-probe direction early end vs document direction
+    methods = ["olmo2_7b", "llama2_7b", "qwen3_8b"]
+    for j, m in enumerate(methods):
+        d = J("traces", "results", f"{m}.json")["directions"]
+        ck = [k for k in d if k.startswith("cellA")][0]
+        pk = [k for k in d if k.startswith("pairwise")][0]
+        ax = fig.add_subplot(gs[0, j])
+        ax.axis("off")
+        ax.set_title(ARM_LABEL.get(m, m), fontsize=10, pad=4)
+        ax.text(.05, 1.0, "year-probe direction\n(early end)", fontsize=8.5,
+                fontweight="bold", color=BLUE, va="top")
+        ax.text(.58, 1.0, "document direction\n(either end)", fontsize=8.5,
+                fontweight="bold", color=GRAY, va="top")
+        cell = [_byte_decode(e["token"]).strip() or "\u2423"
+                for e in d[ck]["negative_end"][:9]]
+        doc = [_byte_decode(e["token"]).strip() or "\u2423"
+               for e in d[pk]["negative_end"][:5] + d[pk]["positive_end"][:4]]
+        for i, t in enumerate(cell):
+            hot = any(k in t.lower() for k in TEMPORAL_KEYS)
+            ax.text(.05, .78 - .095 * i, t, fontsize=8.5,
+                    family=cjk if any(ord(c) > 0x2e80 for c in t)
+                    else "monospace",
+                    color=BLUE if hot else MUT,
+                    fontweight="bold" if hot else "normal", va="top")
+        for i, t in enumerate(doc):
+            ax.text(.58, .78 - .095 * i, t, fontsize=8.5,
+                    family=cjk if any(ord(c) > 0x2e80 for c in t)
+                    else "monospace", color=GRAY, va="top")
+
+    # (b) overlap of the ridge direction with every hunted feature
+    ax = fig.add_subplot(gs[1, 0])
+    fh1 = pd.read_csv(os.path.join(_P2, "sae", "results",
+                                   "feature_hunt.layer24.csv"))
+    fh2 = pd.read_csv(sorted(glob.glob(os.path.join(
+        _P2, "sae2", "results", "feature_hunt2.layer*.csv")))[-1])
+    rng = np.random.default_rng(0)
+    for k, (fh, lab, c) in enumerate((
+            (fh1, "Qwen-Scope L24", BLUE),
+            (fh2, "Karvonen 65k L9", ORANGE))):
+        x = np.full(len(fh), k) + rng.uniform(-.13, .13, len(fh))
+        ax.plot(x, fh.cos_ridge.abs(), "o", ms=4, color=c, alpha=.6)
+    ax.axhline(1, color=GRID, lw=1)
+    ax.annotate("|cos| = 1 would be a single 'year neuron'", (-.45, 1.02),
+                fontsize=7.5, color=MUT)
+    ax.set_ylim(0, 1.1)
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels(["Qwen-Scope\nlayer 24", "Karvonen 65k\nlayer 9"],
+                       fontsize=8)
+    ax.set_ylabel("|cos(feature decoder, ridge direction)|")
+    ax.set_title("(b) no single feature IS the axis:\nall overlaps"
+                 " \u2264 .12 \u2014 the code is distributed",
+                 fontsize=9, loc="left")
+    style_ax(ax)
+
+    # (c) what the hunt found: rho vs firing, labeled
+    ax = fig.add_subplot(gs[1, 1:])
+    ax.axhline(0, color=GRID, lw=1)
+    ax.plot(100 * fh1.fire_cellA, fh1.rho_year, "o", ms=5, color=BLUE,
+            alpha=.65, label="Qwen-Scope L24 features")
+    ax.plot(100 * fh2.fire_cellA, fh2.rho_year, "s", ms=5, color=ORANGE,
+            alpha=.65, label="Karvonen 65k L9 features")
+    f38 = fh1[fh1.feature == 38678].iloc[0]
+    ax.annotate("38678 \u2014 the entity-time feature\n(fires on 62% of"
+                " entities, \u03c1=+.57)",
+                (100 * f38.fire_cellA, f38.rho_year),
+                xytext=(100 * f38.fire_cellA + 8, f38.rho_year - .07),
+                fontsize=8, color=BLUE,
+                arrowprops=dict(arrowstyle="-", color=BLUE, lw=.8))
+    ax.set_ylim(-.5, .68)
+    for f, dx, dy in ((44713, 3, .05), (17433, 4, -.09), (9763, -14, -.1)):
+        r = fh2[fh2.feature == f]
+        if len(r):
+            ax.annotate(FEAT_LABEL.get(f, str(f)),
+                        (100 * r.fire_cellA.iloc[0], r.rho_year.iloc[0]),
+                        xytext=(100 * r.fire_cellA.iloc[0] + dx,
+                                r.rho_year.iloc[0] + dy), fontsize=7.5,
+                        color=ORANGE)
+    ax.set_xlabel("firing rate on entity prompts (%)")
+    ax.set_ylabel("\u03c1(feature strength, death year)")
+    ax.legend(frameon=False, fontsize=8, loc="lower right")
+    ax.set_title("(c) the features the hunt found on the YEAR probe's"
+                 " population (labels = fig. 9 cards)",
+                 fontsize=9, loc="left")
+    style_ax(ax)
+
+    fig.suptitle("Decomposing the plain YEAR probe (cell A, predicts death"
+                 " year): (a) its direction lenses to ancient-time tokens"
+                 " while the document direction lenses to junk;"
+                 " (b\u2013c) in feature space it is a distributed code"
+                 " over name-culture features", fontsize=10.5, y=.985)
+    fig.savefig(os.path.join(OUT, "fig10_year_probe_decomposition.png"),
+                dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+
 if __name__ == "__main__":
-    for fn in (fig1, fig2, fig3, fig4, fig5, fig6, fig7, fig8, fig9):
+    for fn in (fig1, fig2, fig3, fig4, fig5, fig6, fig7, fig8, fig9, fig10):
         fn()
         print(f"[fig] {fn.__name__} done", flush=True)
     print(f"[done] -> {OUT}", flush=True)
