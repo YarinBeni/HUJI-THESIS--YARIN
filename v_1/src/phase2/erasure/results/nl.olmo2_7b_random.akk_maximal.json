@@ -1,0 +1,25 @@
+{
+  "method": "olmo2_7b_random",
+  "variant": "akk_maximal",
+  "layer": 15,
+  "heads": {
+    "ridge": {
+      "oof_spearman": 0.10558493189515684,
+      "pairwise_macro": 0.6353545206628907,
+      "pairwise_sd": 0.37081565139521583,
+      "n_ruler_pairs": 227
+    },
+    "krr_rbf": {
+      "oof_spearman": 0.1064571924985468,
+      "pairwise_macro": 0.6443662780824517,
+      "pairwise_sd": 0.3640241362983957,
+      "n_ruler_pairs": 227
+    },
+    "mlp": {
+      "oof_spearman": 0.018894366333852646,
+      "pairwise_macro": 0.664275275455263,
+      "pairwise_sd": 0.3467609166254783,
+      "n_ruler_pairs": 227
+    }
+  }
+}
