@@ -178,6 +178,32 @@ marker). This is the entity-mediated-time story restated at the feature
 level, and it explains why these features fire on English glosses
 (proper names appear) yet the firing carries no usable chronology (F18).
 
+## F25 (23940) — max-activating contexts + clamped generation (PRIMARY interpretation)
+
+Every top year-ρ feature resolves to an **onomastic detector** — a
+cultural-naming-pattern recognizer, not a calendar concept:
+
+| feature | ρ | max-activating contexts read as | clamp α=10 generation |
+|---|---|---|---|
+| 44713 | +.40 | German surnames (Kienz**le**, Rus**ch**, Ried**el**) | **drifts into German** ("Ich habe einen 1000 Wör…") — Golden-Gate corroboration |
+| 56768 / 26073 | −.37/−.33 | Chinese name pieces (Xiao **Zij**ian, Guo **Zix**ing, Zhou **Yun**yuan) | degenerates |
+| 9763 | −.36 | Chinese imperial names (Empress Du **Ling**yang, 裴延**隽**) | neutral |
+| 57332 | −.35 | Byzantine/Korean/Liao monarchs (Kom**nen**os, Shizong of **Liao**, Yejong of Gory**eo**) | odd clergy/London loop |
+| 17433 | −.37 | "X of PLACE" nobility (Albert of R**iga**, Matilda of **England**) | degenerates |
+| 2343 | +.29 | German noble houses (Schleswig-Hol**stein**, Schaumburg-Lip**pe**) | neutral |
+| 50848 | +.33 | 19th-c famous names (Franz Lis**zt**, Mendele**ev**) | degenerates |
+| 22835 | +.42 | name-final subwords of Western names (Poll**ack**, Westph**al**) | neutral |
+| 53704 | −.37 | **ancient-genealogy contexts in the GLOSSES** ("son Camb**yses** I, father of") — 17/20 examples from eng_tier0 | neutral |
+
+Reading: the layer-9 year signal decomposes into **who-features** — naming
+culture, ethnicity, aristocratic naming patterns — which correlate with
+death year because naming culture tracks era and place. This is the
+entity-mediated-time mechanism made concrete, with the reliable instrument
+(max-activating examples), superseding and confirming F24's lens read.
+Methodological note: at α=10·act95 most clamps degenerate the generation
+(over-clamping — expected for strong interventions); the one clean semantic
+drift (44713 → German) matches its contexts exactly.
+
 ## Step 5 — interventions (F23)
 
 Runs 23761 / 23899 / 23921 all crashed at the same line; the log (23761)
