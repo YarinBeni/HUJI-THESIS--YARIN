@@ -113,6 +113,13 @@ from the URL, then `python fetch_labels.py --source <exact-id>`.
 
 ## F24 (23937) — decoder-row lens of the top-10 year-ρ features
 
+**Caveat (user, accepted): logit lens at layer 9 of 36 is a weak instrument**
+— early decoder rows need not write directly to the vocabulary, and early
+layers carry context-dependent features the lens misses. F24 is therefore
+DOWNGRADED to suggestive evidence; the primary interpretation is F25
+(max-activating contexts + Golden-Gate clamped generation), per standard
+practice (Neuronpedia dashboards / EleutherAI autointerp).
+
 The self-made labels tell one coherent story: **the layer-9 year-correlated
 features are WHO-features, not calendar features.** Positive/negative ends:
 
