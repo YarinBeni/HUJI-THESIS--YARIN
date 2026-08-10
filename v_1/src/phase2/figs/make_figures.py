@@ -288,58 +288,82 @@ def fig4():
 
 
 # ========================= fig 5 — feature causality ========================
+# short labels are the F25 max-activating-context reads (see
+# sae2/RESULTS.md, feature_interp.layer9.json) — not invented here
+FEAT_LABEL = {44713: "German surnames", 22835: "Western name endings",
+              17433: "'X of PLACE' nobility", 53704: "ancient genealogy",
+              56768: "Chinese names", 9763: "Chinese imperial names"}
+
+
 def fig5():
     st = J("sae2", "results", "steer.layer9.json")
     hunt = pd.read_csv(sorted(glob.glob(os.path.join(
         _P2, "sae2", "results", "feature_hunt2.layer*.csv")))[-1])
     rho = dict(zip(hunt.feature.astype(int), hunt.rho_year))
     alphas = [-8, -4, -2, 0, 2, 4, 8]
-    fig, axes = plt.subplots(1, 2, figsize=(9.6, 4.0),
-                             gridspec_kw={"width_ratios": [1.25, 1]})
+    fig, axes = plt.subplots(1, 2, figsize=(11.2, 4.6),
+                             gridspec_kw={"width_ratios": [1.3, 1]})
+
     ax = axes[0]
     ctrl_curves = np.array([[st["runs"][f"ctrl:{f}"]["amplify"][str(a)]
                              for a in alphas] for f in st["ctrl"]])
     ax.fill_between(alphas, ctrl_curves.min(0), ctrl_curves.max(0),
-                    color=GRAY, alpha=.22, lw=0,
-                    label="rate-matched control band")
+                    color=GRAY, alpha=.20, lw=0)
+    ax.annotate("5 rate-matched control\nfeatures stay in this band",
+                (-8.4, .06), fontsize=8, color=MUT)
     for f in st["treat"]:
         cur = [st["runs"][f"treat:{f}"]["amplify"][str(a)] for a in alphas]
-        c = BLUE if rho.get(int(f), 0) > 0 else ORANGE
-        ax.plot(alphas, cur, "-o", ms=4, lw=1.8, color=c)
-        ax.annotate(str(f), (alphas[-1] + .25, cur[-1]), fontsize=7.5,
+        pos = rho.get(int(f), 0) > 0
+        c = BLUE if pos else ORANGE
+        ax.plot(alphas, cur, "-o", ms=4, lw=1.9, color=c)
+        lab = FEAT_LABEL.get(int(f), str(f))
+        dodge = {17433: .10, 53704: -.10}.get(int(f), 0.0)
+        ax.annotate(f"{lab}\n(\u03c1={rho.get(int(f), 0):+.2f})",
+                    (alphas[-1] + .3, cur[-1] + dodge), fontsize=7.5,
                     color=c, va="center")
-    ax.set_xlabel("clamp strength α (× act95)")
-    ax.set_ylabel("frozen year probe read-out (sd of death year)")
-    ax.set_title("Amplify at entity prompts: read-out moves in the sign"
-                 " of each feature's ρ", fontsize=9.5)
-    ax.legend(frameon=False, fontsize=8, loc="upper left")
+    ax.annotate("push a \u03c1>0 feature \u2192 read-out LATER",
+                (0.4, .82), fontsize=8.5, color=BLUE)
+    ax.annotate("push a \u03c1<0 feature \u2192 read-out EARLIER",
+                (-8.4, -.5), fontsize=8.5, color=ORANGE)
+    ax.set_xlim(-9, 15.5)
+    ax.set_xticks(alphas)
+    ax.set_xlabel("clamp strength \u03b1 (\u00d7 the feature's own act95)")
+    ax.set_ylabel("frozen year read-out at the entity prompt\n"
+                  "(sd of death year)")
+    ax.set_title("(a) The entity time signal decomposes into name-culture"
+                 " features:\npushing one drags the year read-out in the"
+                 " sign of its correlation", fontsize=9.5, loc="left")
     style_ax(ax)
+
     ax = axes[1]
-    groups = [("treat", "onomastic features", AQUA),
-              ("ctrl", "matched controls", GRAY)]
-    for gi, (g, lab, c) in enumerate(groups):
-        f0 = [st["runs"][f"{g}:{f}"]["bridge"]["0"]["fire_last"]
-              for f in st[g]]
-        f4 = [st["runs"][f"{g}:{f}"]["bridge"]["4"]["fire_last"]
-              for f in st[g]]
-        x = np.arange(len(f0)) + gi * (len(f0) + 1)
-        ax.bar(x - .19, 100 * np.array(f0), width=.38, color=c, alpha=.45,
-               label=f"{lab}: α=0" if gi < 2 else None)
-        ax.bar(x + .19, 100 * np.array(f4), width=.38, color=c,
-               label=f"{lab}: mid-text clamp α=4" if gi < 2 else None)
-    ax.set_xticks([2, 8])
-    ax.set_xticklabels(["treated\n(top-5 year features)",
-                        "controls\n(rate-matched)"], fontsize=8.5)
-    ax.set_ylabel("% of glosses firing at the LAST token")
-    ax.set_title("The bridge: clamping mid-text changes last-token firing"
-                 " not at all", fontsize=9.5)
-    ax.legend(frameon=False, fontsize=7, loc="upper left",
-              bbox_to_anchor=(0.0, 1.0), ncol=1)
-    ax.set_ylim(0, 47)
+    labels, base_v, clamp_v, cols = [], [], [], []
+    for g, c in (("treat", AQUA), ("ctrl", GRAY)):
+        for f in st[g]:
+            b = st["runs"][f"{g}:{f}"]["bridge"]
+            labels.append(FEAT_LABEL.get(int(f), str(f))
+                          if g == "treat" else f"control {f}")
+            base_v.append(100 * b["0"]["fire_last"])
+            clamp_v.append(100 * b["4"]["fire_last"])
+            cols.append(c)
+    y = np.arange(len(labels))
+    ax.barh(y + .19, base_v, height=.38, color=cols, alpha=.45)
+    ax.barh(y - .19, clamp_v, height=.38, color=cols)
+    for yi, (b, cl) in enumerate(zip(base_v, clamp_v)):
+        ax.annotate(f"{b:.1f} \u2192 {cl:.1f}", (max(b, cl) + .6, yi),
+                    va="center", fontsize=7.5, color=MUT)
+    ax.set_yticks(y)
+    ax.set_yticklabels(labels, fontsize=8)
+    ax.invert_yaxis()
+    ax.set_xlabel("% of glosses where the feature fires at the READ-OUT"
+                  " token")
+    ax.set_title("(b) The bridge: light bar = no clamp, dark = feature"
+                 " forced ON over\nthe whole document \u2014 read-out"
+                 " firing does not move at all", fontsize=9.5, loc="left")
+    ax.set_xlim(0, 47)
     style_ax(ax)
-    fig.suptitle("F23 — features causally feed the entity read-out, but no"
-                 " intervention makes the signal propagate to the document"
-                 " read-out", fontsize=11, y=1.02)
+    fig.suptitle("F23 \u2014 causality: the features FEED the entity"
+                 " read-out (a), but nothing carries them to the document"
+                 " read-out, even by force (b)", fontsize=11, y=1.02)
     fig.tight_layout()
     fig.savefig(os.path.join(OUT, "fig5_causal.png"), dpi=300,
                 bbox_inches="tight")
@@ -484,8 +508,139 @@ def fig7():
     plt.close(fig)
 
 
+# =================== fig 8 — the spectrum as composition curves =============
+def fig8():
+    """The user-proposed reading: category share ALONG the ranked vocabulary
+    (10 buckets), not just the extreme ends. Share of ancient-temporal
+    vocabulary per bucket, entity axis vs document axis, per model;
+    significance markers carry the z vs 50 random directions."""
+    methods = ["olmo2_7b", "llama2_7b", "qwen3_8b"]
+    cat = "temporal_ancient"
+    fig, axes = plt.subplots(1, 3, figsize=(10.8, 3.6), sharey=True)
+    for ax, m in zip(axes, methods):
+        d = J("traces", "results", f"spectroscopy.{m}.json")
+        ci = d["cats"].index(cat)
+        x = np.arange(1, 11)
+        for dname, c, lab in (("cellA", BLUE, "entity time axis"),
+                              ("pairwise_doc", GRAY, "document axis")):
+            rec = d["directions"][dname]["cos"]
+            comp = 100 * np.array(rec["composition"])[:, ci]
+            z = np.array(rec["z_scores"])[:, ci]
+            ax.plot(x, comp, "-o", ms=4, lw=1.8, color=c, label=lab)
+            for xi, (cv, zv) in enumerate(zip(comp, z)):
+                if abs(zv) >= 3.35:
+                    ax.annotate(f"z={zv:+.1f}", (x[xi] + .35, cv),
+                                ha="left", va="center", fontsize=7.5,
+                                color=c)
+                    ax.plot(x[xi], cv, "o", ms=9, mfc="none", mec=INK,
+                            mew=1.2)
+        ax.set_title(ARM_LABEL.get(m, m), fontsize=10)
+        ax.set_xticks([1, 5, 10])
+        ax.set_xticklabels(["1\n(early end)", "5", "10\n(late end)"],
+                           fontsize=8)
+        ax.set_xlabel("rank bucket along the direction")
+        style_ax(ax)
+    axes[0].set_ylabel("share of ancient-temporal tokens\nin bucket (%)")
+    axes[0].legend(frameon=False, fontsize=8, loc="upper right")
+    fig.suptitle("F21 — reading the whole spectrum, not just the ends:"
+                 " ancient vocabulary concentrates in the entity axis's"
+                 " first bucket in every model (\u25cb = |z| \u2265 3.35);"
+                 " the document axis never leaves the noise", fontsize=10.5,
+                 y=1.04)
+    fig.tight_layout()
+    fig.savefig(os.path.join(OUT, "fig8_spectrum_curves.png"), dpi=300,
+                bbox_inches="tight")
+    plt.close(fig)
+
+
+# ================= fig 9 — feature dashboard (interp-paper style) ===========
+def fig9():
+    """Anthropic-dashboard-style cards for the SAE features: label, real
+    max-activating contexts (from feature_interp.layer9.json, verbatim),
+    year-correlation, and firing rates across the four populations. The
+    SAE1 headline feature (38678, layer 24) heads the figure with its
+    committed stats."""
+    interp = J("sae2", "results", "feature_interp.layer9.json")
+    hunt = pd.read_csv(sorted(glob.glob(os.path.join(
+        _P2, "sae2", "results", "feature_hunt2.layer*.csv")))[-1])
+    hunt = hunt.set_index(hunt.feature.astype(int))
+    fh1 = pd.read_csv(os.path.join(_P2, "sae", "results",
+                                   "feature_hunt.layer24.csv"))
+    f1 = fh1[fh1.feature == 38678].iloc[0]
+
+    show = [44713, 17433, 53704, 56768]     # Latin-script contexts
+    fig = plt.figure(figsize=(10.5, 8.2))
+    gs = fig.add_gridspec(len(show) + 1, 5, hspace=.75, wspace=.5,
+                          width_ratios=[2.9, 1, 1, 1, 1])
+
+    # header row: the SAE1 feature
+    axh = fig.add_subplot(gs[0, :])
+    axh.axis("off")
+    axh.text(0, .84, "Qwen-Scope layer 24 \u00b7 feature 38678 \u2014 the"
+             " headline entity-time feature (F8)", fontsize=10.5,
+             fontweight="bold", color=INK)
+    axh.text(0, .38, f"fires on {100*f1.fire_cellA:.0f}% of entity prompts"
+             f" with \u03c1(strength, death year) = {f1.rho_year:+.2f};"
+             f" on documents: {100*f1.fire_eng_tier0:.2f}% of English"
+             f" glosses, {100*f1.fire_akk_maximal:.2f}% of Akkadian"
+             " fragments \u2014 the entity gate in one feature",
+             fontsize=9, color=MUT)
+    axh.axhline(.05, color=GRID, lw=1)
+
+    def clean(ctx):
+        return ctx.split("<|endoftext|>")[0].strip()[:72]
+
+    pops = [("fire_cellA", "entities"), ("fire_eng_tier0_frags", "eng"),
+            ("fire_akk_maximal_frags", "akk")]
+    for i, f in enumerate(show):
+        rec = interp["features"][str(f)]
+        # contexts column
+        ax = fig.add_subplot(gs[i + 1, 0])
+        ax.axis("off")
+        lab = FEAT_LABEL.get(f, str(f))
+        ax.text(0, 1.02, f"L9 \u00b7 65k \u00b7 feature {f} \u2014 "
+                f"\u201c{lab}\u201d", fontsize=9.5, fontweight="bold",
+                color=INK, va="bottom")
+        exs = [e for e in rec["max_activating"] if clean(e["context"])][:3]
+        for j, e in enumerate(exs):
+            ax.text(0, .78 - .3 * j, clean(e["context"]), fontsize=7.6,
+                    family="monospace", color=INK, va="top")
+        # rho bar
+        ax = fig.add_subplot(gs[i + 1, 1])
+        r = float(hunt.loc[f, "rho_year"])
+        ax.barh([0], [r], color=BLUE if r > 0 else ORANGE, height=.5)
+        ax.set_xlim(-.5, .5)
+        ax.axvline(0, color=GRID, lw=1)
+        ax.set_yticks([])
+        ax.set_xticks([-.4, 0, .4])
+        ax.tick_params(labelsize=7)
+        if i == 0:
+            ax.set_title("\u03c1(year)", fontsize=8, pad=14)
+        style_ax(ax)
+        # firing-rate bars
+        for k, (col, plab) in enumerate(pops):
+            ax = fig.add_subplot(gs[i + 1, 2 + k])
+            v = 100 * float(hunt.loc[f, col])
+            ax.bar([0], [v], color=[AQUA, BLUE, ORANGE][k], width=.5)
+            ax.set_ylim(0, 60)
+            ax.set_xticks([])
+            ax.tick_params(labelsize=7)
+            ax.annotate(f"{v:.1f}%" if v >= .1 else f"{v:.2f}%",
+                        (0, v + 2), ha="center", fontsize=7.5)
+            if i == 0:
+                ax.set_title(f"fires on\n{plab} (%)", fontsize=8)
+            style_ax(ax)
+    fig.suptitle("F25 \u2014 what the year-correlated features actually are:"
+                 " name-culture detectors. Each card: real max-activating"
+                 " contexts (firing token marked >>so<<), year correlation,"
+                 " firing rates per population", fontsize=10.5, y=.985)
+    fig.savefig(os.path.join(OUT, "fig9_feature_cards.png"), dpi=300,
+                bbox_inches="tight")
+    plt.close(fig)
+
+
 if __name__ == "__main__":
-    for fn in (fig1, fig2, fig3, fig4, fig5, fig6, fig7):
+    for fn in (fig1, fig2, fig3, fig4, fig5, fig6, fig7, fig8, fig9):
         fn()
         print(f"[fig] {fn.__name__} done", flush=True)
     print(f"[done] -> {OUT}", flush=True)
