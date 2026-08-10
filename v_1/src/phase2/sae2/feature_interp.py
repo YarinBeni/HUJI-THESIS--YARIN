@@ -131,6 +131,7 @@ def main():
                         -1, idx, torch.relu(val))
                 zf = (z[..., fidx] * enc.attention_mask.unsqueeze(-1)).cpu()
                 ids = enc.input_ids.cpu()
+                am = enc.attention_mask.cpu()
                 for fi, f in enumerate(feats):
                     zz = zf[..., fi]
                     flat = zz.flatten()
@@ -141,7 +142,8 @@ def main():
                     T = zz.shape[1]
                     for v, ix in zip(topv.tolist(), topi.tolist()):
                         b, t = divmod(ix, T)
-                        lo, hi = max(0, t - 8), min(T, t + 9)
+                        real = int(am[b].sum())   # don't decode pad tokens
+                        lo, hi = max(0, t - 8), min(real, t + 9)
                         left = tok.decode(ids[b, lo:t])
                         mid = tok.decode(ids[b, t:t + 1])
                         right = tok.decode(ids[b, t + 1:hi])

@@ -1,5 +1,41 @@
 # SAE2 results — Karvonen Qwen3-8B dictionary
 
+## Interpretation methodology — what we run, why, and the audit trail
+
+**Why not the logit lens at layer 9 (F24's caveat).** The lens projects a
+residual-space vector straight onto the vocabulary; far from the unembedding
+this is known to be unreliable (that mismatch is why the *tuned lens* was
+invented — Belrose et al. 2023, arXiv:2303.08112), and early layers carry
+many context-dependent features a token-projection misses (GDM mech-interp
+progress update, AlignmentForum 2024). F24 therefore stands as suggestive
+only.
+
+**What replaces it (F25).** Standard practice interprets an SAE feature by
+its **max-activating examples** — the basis of Neuronpedia dashboards and of
+LLM autointerp over those examples (EleutherAI, "Open Source Automated
+Interpretability for SAE Features", 2024) — and, causally, by **clamping the
+feature during generation** and reading the drift of the model's output, as
+in Anthropic's Golden Gate demo (Templeton et al., "Scaling Monosemanticity",
+2024; on selecting steerable features see also arXiv:2505.20063). F25 does
+both: 20 strongest contexts per feature across our three populations
+(activating token marked), and greedy chat-template generations under an
+α·act95 clamp vs an unclamped baseline.
+
+**Audit trail of this wave's bugs (all found in review or from cluster
+logs, all fixed on main):**
+
+| where | bug | fix |
+|---|---|---|
+| step 0 (run 23753) | first matching file grabbed — arbitrary 16k config, gate failed .82 | FVU-scan every (layer, file, offset); gate picks the instrument |
+| step 0 (run 23760) | global-min FVU picked the unlabeled 16k at .0171 over the labeled 65k at .0179 | prefer 65k width within FVU tolerance .02 |
+| fetch_labels | one guessed source id; bare-urllib UA; single probe index | probe grid + browser headers + 3 indices; terminal finding: Neuronpedia hosts only layer 18 |
+| feature_steer (23761/23899/23921) | controls drawn from the top-\|ρ\|-only hunt CSV → empty pool → crash | control pool recomputed from encodings (all ≥2%-firing features) |
+| feature_steer | global scalar batch-TopK threshold indexed per-feature | shape-aware threshold read |
+| feature_steer (review, pre-23946-results) | **bridge padding bug**: `slice(0, T−1)` spares only the batch-longest sequence's real last token; right-padded shorter sequences got clamped at their readout position, trivially inflating `fire_last` | per-sample length mask `pos < len−1` |
+| F21 spectroscopy (23721/23900) | `'²'.isdigit()` is True but `int('²')` raises | `isdecimal()` (two sites) |
+| F21 (23934) | Qwen vocab has unassigned ids → `convert_ids_to_tokens` yields `None` | map `None → ""` (classified junk) |
+| F22 step-4 / steer (design review) | hardcoded `hs[L+1]` offset | use the empirical step-0 offset everywhere |
+
 Status: F22 run 2 (23760, 16k pick) and run 3 (23898, **the pre-specified
 labeled 65k instrument — PRIMARY**) both landed. F23 run 1 (23761) crashed
 without a log commit; fixed rerun queued. Labels still blocked (source id

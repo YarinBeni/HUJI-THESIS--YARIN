@@ -162,19 +162,26 @@ def main():
         # hidden_states[L+off] is what the SAE reads; that is the OUTPUT of
         # transformer block (L+off-1) — hook there, per the empirical offset
         blk = model.model.layers[L + off - 1]
+        state = {}
 
         def hook(mod, inp, out):
             h = out[0] if isinstance(out, tuple) else out
             T = h.shape[1]
-            sl = slice(0, T - 1) if exclude_last else slice(0, T)
+            # REVIEW FIX: with right padding, slice(0, T-1) only spared the
+            # LONGEST sequence's real last token — every shorter sequence had
+            # its readout position clamped too, trivially inflating the
+            # bridge's fire_last. Mask per sample by true length instead.
+            lens = state["lens"]
+            pos = torch.arange(T, device=h.device)[None, :]
+            lim = (lens - 1) if exclude_last else lens
+            m = (pos < lim[:, None]).unsqueeze(-1)
             if mode == "add" and alpha != 0:
-                h[:, sl] = h[:, sl] + alpha * d_vec
+                h += m * (alpha * d_vec)
             elif mode == "ablate":
-                z = torch.relu(h[:, sl].float() @ w_enc_i + b_i)
+                z = torch.relu(h.float() @ w_enc_i + b_i)
                 if th_i is not None:
                     z = z * (z > th_i)
-                h[:, sl] = h[:, sl] - (z.unsqueeze(-1)
-                                       * d_vec.float()).to(h.dtype)
+                h -= (m * z.unsqueeze(-1) * d_vec.float()).to(h.dtype)
             return (h,) + out[1:] if isinstance(out, tuple) else h
 
         with torch.no_grad():
@@ -182,6 +189,7 @@ def main():
                 bt = texts[i:i + args.batch]
                 enc = tok(bt, return_tensors="pt", padding=True,
                           truncation=True, max_length=512).to(dev)
+                state["lens"] = enc.attention_mask.sum(1)
                 hd = blk.register_forward_hook(hook) \
                     if (mode == "ablate" or alpha != 0) else None
                 res = model(**enc, output_hidden_states=True)
