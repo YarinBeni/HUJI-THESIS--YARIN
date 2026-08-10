@@ -1,0 +1,25 @@
+{
+  "method": "qwen3_8b",
+  "variant": "eng_tier0",
+  "layer": 19,
+  "heads": {
+    "ridge": {
+      "oof_spearman": 0.20751680388648783,
+      "pairwise_macro": 0.6214859100762182,
+      "pairwise_sd": 0.334182400472202,
+      "n_ruler_pairs": 227
+    },
+    "krr_rbf": {
+      "oof_spearman": 0.22212663132543575,
+      "pairwise_macro": 0.5393720219365279,
+      "pairwise_sd": 0.38119919144856235,
+      "n_ruler_pairs": 227
+    },
+    "mlp": {
+      "oof_spearman": 0.14523488680639268,
+      "pairwise_macro": 0.6327927367716543,
+      "pairwise_sd": 0.31844474532133876,
+      "n_ruler_pairs": 227
+    }
+  }
+}
