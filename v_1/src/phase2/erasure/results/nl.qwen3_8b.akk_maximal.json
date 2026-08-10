@@ -1,0 +1,25 @@
+{
+  "method": "qwen3_8b",
+  "variant": "akk_maximal",
+  "layer": 25,
+  "heads": {
+    "ridge": {
+      "oof_spearman": 0.16784968516109658,
+      "pairwise_macro": 0.641283326840281,
+      "pairwise_sd": 0.3547154974233234,
+      "n_ruler_pairs": 227
+    },
+    "krr_rbf": {
+      "oof_spearman": 0.20459558651047036,
+      "pairwise_macro": 0.6120105736861559,
+      "pairwise_sd": 0.3796362527418454,
+      "n_ruler_pairs": 227
+    },
+    "mlp": {
+      "oof_spearman": 0.1982874030625396,
+      "pairwise_macro": 0.6481450847593075,
+      "pairwise_sd": 0.32158317198415565,
+      "n_ruler_pairs": 227
+    }
+  }
+}
