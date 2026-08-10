@@ -87,9 +87,9 @@
 <header class="top">
   <div class="kicker">התזה · שלב 2 · מדריך לימוד מלא</div>
   <h1>למה מודלים יודעים מתי אנשים חיו — אבל לא מתי טקסטים נכתבו?</h1>
-  <p class="sub">כל ניסוי: הרעיון, המאמר שממנו נלקחה השיטה, המפרט המדויק (מודל, דאטה, pooling, קלט/פלט), טבלאות התוצאות האמיתיות, המסקנה — <b>וההנחות הסמויות</b>. נכון ל-8.8.2026; כל 9 הג'ובים (F1–F9) הושלמו.</p>
+  <p class="sub">כל ניסוי: הרעיון, המאמר שממנו נלקחה השיטה, המפרט המדויק (מודל, דאטה, pooling, קלט/פלט), טבלאות התוצאות האמיתיות, המסקנה — <b>וההנחות הסמויות</b>. נכון ל-10.8.2026; <b>כל הגלים הושלמו (F1–F25)</b>, כולל גל 5 (הניסויים שנותרו), גל 6 (ביקורת ה-chat) וגל 7 (SAE2, ספקטרוסקופיה והתערבויות-פיצ'ר).</p>
   <nav class="toc">
-    <a href="#bg">רקע והשערות</a><a href="#gloss">מילון</a><a href="#e1">E1 זוגות</a><a href="#f2">F2 התנהגותי</a><a href="#f4">E8 מובהקות</a><a href="#e3">E3 העברה</a><a href="#f6">E4.4 ‏lens</a><a href="#f7">E5 ‏SAE</a><a href="#f9">E2 ‏steering</a><a href="#todo">מה עוד לא רץ</a><a href="#synth">סינתזה</a><a href="#deck">קשר למצגת</a>
+    <a href="#bg">רקע והשערות</a><a href="#gloss">מילון</a><a href="#e1">E1 זוגות</a><a href="#f2">F2 התנהגותי</a><a href="#f4">E8 מובהקות</a><a href="#e3">E3 העברה</a><a href="#f6">E4.4 ‏lens</a><a href="#f7">E5 ‏SAE</a><a href="#f9">E2 ‏steering</a><a href="#w5">גל 5</a><a href="#w6">גל 6</a><a href="#w7">גל 7</a><a href="#synth">סינתזה</a><a href="#deck">קשר למצגת</a>
   </nav>
 </header>
 
@@ -392,19 +392,94 @@
     </ul></div>
 </section>
 
-<section class="exp" id="todo">
-  <div class="eyebrow">מה תוכנן ועוד לא רץ — בכוונה</div>
-  <h2>הניסויים שנשארו על השולחן</h2>
+<section class="exp" id="w5">
+  <div class="eyebrow">גל 5 — הניסויים שנשארו על השולחן: התשובות</div>
+  <h2>אסרחדון, סריאציה, מחיקה, התפשטות, עקומת-מפרט</h2>
   <div class="tblwrap"><table>
-    <thead><tr><th>ניסוי</th><th>מה זה</th><th>מה זה יכול לגלות</th></tr></thead>
+    <thead><tr><th>ניסוי</th><th>מה נמצא</th><th>פסק-דין</th></tr></thead>
     <tbody>
-      <tr><td><b>E6 אסרחדון</b></td><td>המלך היחיד עם שונות שנים פנימית (176 פרגמנטים, 11 שנים). כל הניסויים בתוכו בלבד</td><td>המקום היחיד שבו "זמן מסמכי נקי מזהות" בכלל מוגדר; כל אות שם = ממצא חסין-זהות</td></tr>
-      <tr><td><b>E7 סריאציה ספקטרלית</b></td><td>סדר 1-ממדי שצץ מוקטור Fiedler של גרף שכנויות — <b>בלי תוויות בכלל</b> (Atkins et al. 1998)</td><td>אם הסדר הטבעי של הענן מתאים לכרונולוגיה — עדות חסינת-תוויות; אם לז'אנר — גם תשובה</td></tr>
-      <tr><td><b>E4 מחיקת confounders</b></td><td>LEACE על ז'אנר/אורך/אתר-חפירה + ביקורות כירורגיות + probes לא-לינאריים</td><td>האם פער ה-PLS (.336 מול .243) שורד ניקוי; כמה מהאות הוא register</td></tr>
-      <tr><td><b>steering בתא C</b></td><td>דחיפה בטוקני שם-המלך בתוך פרגמנט אכדי (דורש שילוב king_token)</td><td>המבחן הסיבתי הישיר של "העוגן שלא מופעל"</td></tr>
-      <tr><td><b>המשכי-חובה מהביקורות</b></td><td>‏(א) הצתת פיצ'רים לאורך כל הטוקנים; (ב) steering בשכבות מוקדמות + α מנורמל; (ג) F2 עם chat template; (ד) E3 עם last-על-last</td><td>סוגרים את ארבעת הפערים הגדולים שסומנו למעלה</td></tr>
+      <tr><td><b>F15 אסרחדון (E6)</b></td><td>בסיס "אורך-בלבד" נותן ρ=.355 — שווה או עולה על כל probe גולמי (.28–.42); ‏partial על אורך מקריס הכול ל-.03–.22 והתאום לא נבדל מהמאומנים</td><td class="lose">מבני: ה"כרונולוגיה נטולת-הזהות" היא קידוד אורך</td></tr>
+      <tr><td><b>F16 סריאציה (E7)</b></td><td>הציר הטבעי של הענן (Fiedler) עוקב אחרי <b>אורך</b> (ρ עד .94) ופרובננס — לא שנה</td><td class="lose">אישור בלתי-תלוי שלישי: הציר המסמכי הדומיננטי הוא סגנוני</td></tr>
+      <tr><td><b>F17 מחיקה (E4)</b></td><td>LEACE(פרובננס+אורך): ‏olmo eng ‏.623→.558, ‏qwen ‏.628→.582 מול רצפה מחוקה .533; ‏probes של פרובננס .58–.66→.18–.27 (מחיקה מאומתת); ז'אנר קבוע — לא confounder</td><td>רוב אות-הזמן האנגלי רוכב על צורה; שאריות +.025/+.049</td></tr>
+      <tr><td><b>F18 התפשטות</b></td><td>‏max-pooling על פיצ'רי-השנה: ‏eng ‏.562 &lt; רצפה .586; ‏akk ‏.656 ≈ רצפה .658</td><td class="lose">ההצתות באמצע-טקסט הן רעש טמפורלי — לא כרונולוגיה שאפשר לחלץ</td></tr>
+      <tr><td><b>F19 עקומת-מפרט</b></td><td>הפער מאומן-מול-תאום באנגלית קיים רק ב-mean pooling; ‏ב-last התאום מגיע .623</td><td>טענת "המאומנים מנצחים" תלוית-pooling — מדווחת כך</td></tr>
     </tbody>
   </table></div>
+  <div class="box take"><div class="t">מסקנת הגל</div>
+    <p>כל מועמד ל"זמן מסמכי נלמד" התפרק לצורה — אורך, פרובננס, register. ‏steering בתא C דולג לפי הכלל הרשום-מראש של F12.</p></div>
+</section>
+
+<section class="exp" id="w6">
+  <div class="eyebrow">גל 6 — ביקורת ה-chat (השאלה שלך: אולי קראנו למודלים לא נכון?)</div>
+  <h2>‏F20: לקרוא ייצוגים כמו בצ'אט</h2>
+  <p>שרשרת החילוץ נבדקה (padding, last-token, mean-mask — תקינים; מודלי בסיס נבדקים על טקסט חשוף כי כך הם אומנו), ואז F20 חילץ ייצוגים מ-qwen3_8b עם chat template ושאלת תיארוך אמיתית.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>מצב</th><th class="n">eng mean</th><th class="n">eng last</th><th class="n">akk mean</th></tr></thead>
+    <tbody>
+      <tr><td>טקסט חשוף (כמו במצגת)</td><td class="n hl">.636</td><td class="n">—</td><td class="n hl">.649</td></tr>
+      <tr><td>‏chat template + שאלה</td><td class="n">.593</td><td class="n">.605</td><td class="n">.642</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box take"><div class="t">מסקנה</div><p>עטיפת-צ'אט זהה או מעט גרועה יותר. <b>המצגת עומדת</b> — הטבלאות לא מקפחות את מודלי הצ'אט.</p></div>
+</section>
+
+<section class="exp" id="w7">
+  <div class="eyebrow">גל 7 — מילון שני, ספקטרוסקופיה, והתערבויות-פיצ'ר</div>
+  <h2>‏SAE2 ‏(Karvonen), ‏F21 ספקטרוסקופיה, ‏F23–F25</h2>
+
+  <h3>‏F22 — שכפול במילון שני, בלתי-תלוי</h3>
+  <p>מהדורת Karvonen ל-Qwen3-8B ‏(batch-TopK). סריקת FVU על כל 38 הקבצים: <b>רק שכבה 9 שמישה</b> (.017–.023; שכבות 18/27 נכשלות ב-.50–127). נבחר מילון ה-65k ‏(k=80). שער ×4: תא A ‏.018, גלוסות .011, אכדית .008 (תא B ‏1.39 — ארטיפקט שונות של אוכלוסייה קטנה).</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>טענה מ-F8/F11 (שכבה 24, ‏Qwen-Scope)</th><th>במילון השני (שכבה 9, ‏65k)</th><th>פסק-דין</th></tr></thead>
+    <tbody>
+      <tr><td>הציר מבוזר על הרבה פיצ'רים (cos ≤ .12)</td><td class="n">cos ≤ .08</td><td class="win">משוכפל</td></tr>
+      <tr><td>גלוסות אנגליות מדליקות פיצ'רי-שנה באמצע-טקסט (≥10%)</td><td class="n">.355</td><td class="win">משוכפל</td></tr>
+      <tr><td>אכדית לא מפעילה כלל (&lt;2%)</td><td class="n">.020</td><td class="win">משוכפל (על הגבול; במילון 16k גס — ‏.441, תלוי-דלילות)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small muted">תוויות Neuronpedia: מסקנה סופית — מארחים רק את שכבה 18 (אומת ב-API), שנכשלת אצלנו בשער. אין autointerp לשכבה השמישה.</p>
+
+  <h3>‏F24 ↓ / ‏F25 ↑ — מה הפיצ'רים האלה?</h3>
+  <p>‏F24 (lens על שורות decoder) שודרג-לאחור ל"מרמז" — ‏lens בשכבה 9/36 לא אמין (הפער שבגללו הומצא tuned lens). ‏F25 עשה את זה נכון: ‏max-activating contexts + הצמדה בסגנון Golden Gate. התוצאה חד-משמעית: <b>כל פיצ'רי ה-ρ-שנה הם גלאים אונומסטיים</b>:</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>פיצ'ר</th><th class="n">ρ</th><th>מה הוא מזהה (מהדוגמאות)</th></tr></thead>
+    <tbody>
+      <tr><td class="n">44713</td><td class="n">+.40</td><td>שמות משפחה גרמניים (Kienzle, Rusch, Riedel) — <b>ההצמדה גוררת את המודל לכתוב גרמנית</b></td></tr>
+      <tr><td class="n">56768/26073</td><td class="n">−.37</td><td>חלקי שמות סיניים (Xiao Zijian, Zhou Yunyuan)</td></tr>
+      <tr><td class="n">9763</td><td class="n">−.36</td><td>שמות קיסריים סיניים (Empress Du Lingyang, 裴延隽)</td></tr>
+      <tr><td class="n">57332</td><td class="n">−.35</td><td>מלכי ביזנטיון/קוריאה/ליאו (Komnenos, Yejong of Goryeo)</td></tr>
+      <tr><td class="n">17433</td><td class="n">−.37</td><td>אצולת "X of PLACE" ‏(Albert of Riga, Matilda of England)</td></tr>
+      <tr><td class="n">53704</td><td class="n">−.37</td><td>גנאלוגיה עתיקה — נדלק על הגלוסות עצמן ("son Cambyses I, father of")</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box take"><div class="t">המשמעות</div><p>המתאם עם שנה רוכב על תרבות-שמות ↔ תקופה: מנגנון "הזמן מתווך-הישות" קונקרטי ברמת הפיצ'ר.</p></div>
+
+  <h3>‏F21 — ספקטרוסקופיית ה-lens (ההצעה שלך)</h3>
+  <p>הרכב קטגוריות על פני כל אוצר-המילים בעשירוני-דירוג, מול 50 כיוונים אקראיים, כולל וריאנט cos נגד שורות "רועשות" (סף בונפרוני |z|≥3.35).</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>כיוון</th><th>‏olmo</th><th>‏llama</th><th>‏qwen</th></tr></thead>
+    <tbody>
+      <tr><td>תא A — העשרת מילים עתיקות בקצה המוקדם (cos)</td><td class="n win">z=6.8</td><td class="n win">z=3.9</td><td class="n win">z=5.2</td></tr>
+      <tr><td>הכיוון המסמכי (pairwise)</td><td class="n">שטוח</td><td class="n">תא שולי יחיד (z=3.5, חשוד-ריבוי)</td><td class="n">שטוח</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box take"><div class="t">מסקנה</div><p>הציר האנטיטי טמפורלי סמנטית <b>על פני כל הספקטרום</b> בכל שלושת המודלים; הציר המסמכי לא-נבדל-מאקראי — עכשיו כקביעה ספקטרום-רחבה. מבחן סדר טוקני-השנים לא בר-הרצה (הטוקנייזרים מפצלים מספרים בני 4 ספרות); אזהרת המכשיר החד-כיווני בתוקף.</p></div>
+
+  <h3>‏F23 — התערבויות-פיצ'ר עם ביקורות מותאמות-שיעור</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>התערבות</th><th>טיפול (top-5)</th><th>ביקורת</th><th>פסק-דין</th></tr></thead>
+    <tbody>
+      <tr><td><b>הגברה</b> על ישויות</td><td>קריאת-השנה זזה מונוטונית בכיוון ה-ρ, עד ±0.9 ס"ת</td><td>שטוחה (±0.3 לא-מונוטוני)</td><td class="win">התוצאה הסיבתית החיובית הראשונה: פיצ'רי-שמות מזינים את ציר הזמן</td></tr>
+      <tr><td><b>מחיקת</b> פיצ'ר בודד</td><td>אפס שינוי</td><td>אפס</td><td>הקוד מבוזר — אף פיצ'ר לא נושא לבדו</td></tr>
+      <tr><td><b>ניסוי-הגשר</b> (הצמדה באמצע גלוסה)</td><td>‏fire_last נשאר 0 בדיוק; ‏probe בתוך רצועת הביקורת</td><td>אותו דבר</td><td class="lose">‏null-עם-ביקורת: אין ערוץ הולכה גם בכפייה — "ירי בלי כרונולוגיה" הפך סיבתי</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box audit"><div class="t">שקיפות — הבאגים של הגל (כולם תוקנו לפני פרשנות)</div>
+    <ul><li>בחירת מכשיר שרירותית → סריקת FVU מלאה; העדפת הרוחב המתויג בשוויון-כמעט.</li>
+    <li>מאגר-ביקורות ריק (נשאב מ-CSV של טופ-|ρ| בלבד) — 3 קריסות → חושב מחדש מהאקטיבציות.</li>
+    <li>באג ריפוד בגשר (רצפים קצרים הוצמדו גם בעמדת הקריאה) — נתפס בריוויו לפני תוצאות → מסכה פר-דגימה.</li>
+    <li>‏F21: ‏'²' עובר isdigit אך מפיל int; ‏None בחורי אוצר-המילים של Qwen.</li>
+    <li>הרשימה המלאה עם רפרנסים: ‏<span class="f">sae2/RESULTS.md</span>.</li></ul></div>
 </section>
 
 <section class="exp" id="synth">
@@ -419,11 +494,13 @@
       <tr><td>H-dilute (אותו ציר, חלש)</td><td class="lose">נהרגה</td><td>E3: העברה קפואה נכשלת; cos≈.01</td></tr>
       <tr><td><b>H-rotate (ציר אחר)</b></td><td class="win">נתמכת — באנגלית</td><td>E1+E8 (ציר מסמכי אמיתי, p=.0066) שהוא אורתוגונלי (E3) ולא-סמנטי (lens)</td></tr>
       <tr><td>H-absent</td><td class="win">באכדית בלבד</td><td>E8: מעבר לפני-השטח אין כלום (מול תאום p=.97)</td></tr>
-      <tr><td>"עוגן שלא מופעל" (סיבתי)</td><td>פתוח</td><td>F8 בעדו (פיצ'רים כבויים על מסמכים); F9 null אך עם פערי שיטה</td></tr>
+      <tr><td>"עוגן שלא מופעל" (סיבתי)</td><td class="win">נסגר</td><td>F23: הגברת פיצ'ר מזיזה את הקריאה (מול ביקורת); הגשר null-עם-ביקורת — אין הולכה גם בכפייה</td></tr>
+      <tr><td>מנגנון הציר האנטיטי</td><td class="win">זוהה</td><td>F25: פיצ'רים אונומסטיים (גרמני/סיני/ביזנטי/אצולה); F21: קצה עתיק מובהק בכל המודלים</td></tr>
+      <tr><td>"זמן מסמכי" באנגלית</td><td class="lose">פורק לצורה</td><td>F15–F19: אורך+פרובננס+pooling; F21: שטוח ספקטרום-רחב</td></tr>
     </tbody>
   </table></div>
-  <div class="box take"><div class="t">המשפט לתזה (מעודכן אחרי גל-4)</div>
-    <p>המודל מחזיק מנגנון זמן אנטיטי אמיתי וסמנטי שהפיצ'רים שלו <b>נדלקים בתוך מסמכים אנגליים אך האות לא מתפשט לייצוג המסמך</b>, ובאכדית לא נדלקים כלל; ולצדו ציר זמן מסמכי-סגנוני נפרד ואורתוגונלי (cos≈.01, נחתם עם ביקורת חיובית ρ=.88). שני מנגנוני כשל — התפשטות באנגלית, הפעלה באכדית — ואפס גשר בין המפות.</p></div>
+  <div class="box take"><div class="t">המשפט לתזה (סופי, אחרי גלים 5–7)</div>
+    <p>המודל מחזיק <b>ציר זמן אנטיטי אמיתי, סמנטי (קצה עתיק מובהק בכל המודלים) ומכויל-למחצה</b>, שהתשתית שלו היא <b>פיצ'רים אונומסטיים</b> — גלאי תרבות-שמות שמזינים את הקריאה <b>סיבתית</b> (הגברה מזיזה, מול ביקורת). ברמת המסמך אין מפת-זמן נלמדת: כל אות התפרק לצורה (אורך, פרובננס, register), הכיוון המסמכי לא-נבדל-מאקראי על פני כל הספקטרום, וגם <b>כשמכריחים</b> את פיצ'רי-הזמן להידלק באמצע מסמך — האות לא מגיע לייצוג המסמך. הקריסה ישות→מסמך היא ניתוק סיבתי, לא חוסר ידע.</p></div>
   <div class="box take" style="display:none"><div class="t">המשפט לתזה</div>
     <p>המודל מחזיק <b>מנגנון זמן אנטיטי אמיתי</b> (פיצ'ר ρ=.57; ‏lens: ‏BC/ancient) ש<b>מופעל רק בהקשר של אזכור-ישות</b> (הצתה 11.7% על ישויות מול 0.08% על מסמכים), ולצדו <b>ציר זמן מסמכי-סגנוני נפרד</b> (מובהק באנגלית, p=.0066) ש<b>אורתוגונלי</b> לציר האנטיטי (cos≈.01) ולא מוקרן לשום אוצר-מילים. הקריסה ישות→מסמך היא לא היעדר ידע ולא דילול — היא <b>ניתוק בין שתי מפות זמן שאין ביניהן גשר</b>.</p></div>
 </section>
@@ -441,6 +518,6 @@
       <tr><td class="n">31</td><td>ניסוי התדירות של OLMo (חשיפה ≠ ההסבר)</td><td>אותה מתודולוגיית "הרוג את ההסבר הפשוט" שממשיכה כאן: פורמט, תוויות, כתב — כולם נפסלו</td></tr>
     </tbody>
   </table></div>
-  <footer>מסמך זה: ‏<span class="f">v_1/src/phase2/TEACHING_GUIDE_HE.html</span> · מקורות המספרים: ‏<span class="f">pairs/RESULTS.md</span>, ‏<span class="f">pairs/results/inference/*.json</span>, ‏<span class="f">transfer/results/*.json</span>, ‏<span class="f">traces/results/*.json</span>, ‏<span class="f">sae/results/*</span>, ‏<span class="f">steering/results/*.json</span> · מאמרים: El-Shangiti et al. NAACL'25 (2410.13194) · Belrose et al. NeurIPS'23 (2306.03819) · Hong et al. EMNLP'25 (2406.11614) · Qwen-Scope (2605.11887) · Feldman et al. (2602.15730) · Snijders &amp; Borgatti 1999</footer>
+  <footer>מסמך זה: ‏<span class="f">v_1/src/phase2/TEACHING_GUIDE_HE.html</span> · מקורות המספרים: ‏<span class="f">pairs/RESULTS.md</span>, ‏<span class="f">pairs/results/inference/*.json</span>, ‏<span class="f">transfer/results/*.json</span>, ‏<span class="f">traces/results/*.json</span>, ‏<span class="f">sae/results/*</span>, ‏<span class="f">steering/results/*.json</span> · מאמרים: El-Shangiti et al. NAACL'25 (2410.13194) · Belrose et al. NeurIPS'23 (2306.03819) · Hong et al. EMNLP'25 (2406.11614) · Qwen-Scope (2605.11887) · Feldman et al. (2602.15730) · Snijders &amp; Borgatti 1999 · Templeton et al. 2024 (Golden Gate) · Belrose et al. 2023 (tuned lens, 2303.08112) · EleutherAI autointerp · ‏<span class="f">sae2/RESULTS.md</span> (גל 7)</footer>
 </section>
 </div>

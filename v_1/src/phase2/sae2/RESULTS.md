@@ -204,15 +204,46 @@ Methodological note: at α=10·act95 most clamps degenerate the generation
 (over-clamping — expected for strong interventions); the one clean semantic
 drift (44713 → German) matches its contexts exactly.
 
-## Step 5 — interventions (F23)
+## Step 5 — interventions (F23, job 23948) — DONE
 
-Runs 23761 / 23899 / 23921 all crashed at the same line; the log (23761)
-showed the real cause: `pick_features` drew its |ρ|<.05 controls from the
-hunt CSV, which only keeps the TOP-|ρ| features — the control pool was
-empty by construction and `pd.DataFrame([])` has no `.feature`. Fixed: the
-control pool is recomputed inside `feature_steer.py` from the encodings
-(all ≥2%-firing features), plus a defensive fix for the global scalar
-batch-TopK threshold (was indexed per-feature). Resubmit F23 once.
+(Crash history: 23761/23899/23921 — empty control pool, fixed; 23946
+scancelled for the bridge padding fix. 23948 ran the corrected code.)
+
+Treat = top-5 |ρ| features (22835, 44713, 17433, 53704, 56768); ctrl =
+firing-rate-matched |ρ|<.05 features. Read-out: the frozen cell-A ridge
+probe at layer 29, last token (standardized-year units; baseline ≈ +0.3).
+
+**1. AMPLIFY on entity prompts — CAUSAL, sign-consistent, monotone:**
+
+| feature (ρ) | α=−8 → α=+8 | Δ in ρ's direction |
+|---|---|---|
+| 44713 (+.40) | −0.2 → +0.5 | +0.7 ✓ monotone |
+| 22835 (+.42) | +0.2 → +0.4 | +0.2 ✓ |
+| 17433 (−.37) | +0.9 → +0.1 | −0.8 ✓ monotone |
+| 56768 (−.37) | +0.3 → −0.6 | −0.9 ✓ monotone |
+| 53704 (−.37) | +0.3 → −0.0 | −0.3 ✓ |
+| controls ×5 | flat (max non-monotone wiggle ±0.3) | — |
+
+Pushing an onomastic feature moves the frozen year read-out in the sign of
+its year-correlation, up to ~0.9 sd, while matched controls stay flat.
+**First positive causal result of the program** — where direction-level
+steering (F9/F12) was null, feature-level steering works: the name-culture
+features causally feed the entity time axis. (Caveat: read-out is the
+probe, not behaviour.)
+
+**2. ABLATE single features: no effect** (all read-outs stay at baseline
+0.3) — consistent with the distributed code (cos(dec, ridge) ≤ .08, F8/F22):
+no single feature is load-bearing.
+
+**3. THE BRIDGE — null WITH control, the pre-registered publishable
+outcome:** clamping each feature at α=4·act95 on all mid-text positions of
+the English glosses changes the last-token firing rate NOT AT ALL (fire_last
+0.000→0.000 for 4/5 treated; .08→.08 for 53704), and the probe shifts
+(+0.5/+0.6 max) sit inside the control band (a control moved +0.8). The
+mid-text firing stays LOCAL — there is no propagation channel from
+mid-document temporal-feature activity to the document-level readout. This
+turns the F11/F18 correlational "firing without chronology" into a causal
+finding: **the bridge does not exist, even when you force the signal in.**
 
 ## Labels — source id confirmed, but layer 9 is likely NOT hosted
 
