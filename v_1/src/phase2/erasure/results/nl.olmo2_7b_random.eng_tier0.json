@@ -1,0 +1,25 @@
+{
+  "method": "olmo2_7b_random",
+  "variant": "eng_tier0",
+  "layer": 9,
+  "heads": {
+    "ridge": {
+      "oof_spearman": 0.22065611413158306,
+      "pairwise_macro": 0.5965434734833728,
+      "pairwise_sd": 0.3991282495615413,
+      "n_ruler_pairs": 227
+    },
+    "krr_rbf": {
+      "oof_spearman": 0.1674533488699047,
+      "pairwise_macro": 0.6131084989061703,
+      "pairwise_sd": 0.37763602868256724,
+      "n_ruler_pairs": 227
+    },
+    "mlp": {
+      "oof_spearman": 0.030022914137182583,
+      "pairwise_macro": 0.5018276444204701,
+      "pairwise_sd": 0.3584677902461148,
+      "n_ruler_pairs": 227
+    }
+  }
+}
