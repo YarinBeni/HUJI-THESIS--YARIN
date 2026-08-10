@@ -1,0 +1,25 @@
+{
+  "method": "tfidf_char",
+  "variant": "eng_tier0",
+  "layer": -1,
+  "heads": {
+    "ridge": {
+      "oof_spearman": 0.06029752275446224,
+      "pairwise_macro": 0.47712557563407154,
+      "pairwise_sd": 0.3527110526249617,
+      "n_ruler_pairs": 227
+    },
+    "krr_rbf": {
+      "oof_spearman": 0.12269648819605622,
+      "pairwise_macro": 0.6063761275435284,
+      "pairwise_sd": 0.3132861303618633,
+      "n_ruler_pairs": 227
+    },
+    "mlp": {
+      "oof_spearman": 0.18818734312858554,
+      "pairwise_macro": 0.5646970241841229,
+      "pairwise_sd": 0.34644697556725706,
+      "n_ruler_pairs": 227
+    }
+  }
+}
