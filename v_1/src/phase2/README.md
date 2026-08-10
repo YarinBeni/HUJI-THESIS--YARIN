@@ -61,18 +61,10 @@ way they were trained to be addressed?):
 still on the table; both audited pre-submission — block-28 DIR arm removed
 as causally unreachable, per-fragment years in the pair judge, y
 standardized for the MLP, spans smoke-tested at 547/1187):
-- [ ] F26 anchor ignition (`steering/ignite_anchor.py`, GPU): the original
-  "cell-C steering", re-justified by F23's positive amplify. FEAT arm
-  (top-5 onomastic features at the ruler-NAME token span of eng glosses /
-  all-but-last of akk, vs rate-matched controls) + DIR arm (rel-α ridge
-  direction at blocks 8/16/24 vs random direction). Read-out: frozen cell-A
-  probe at last token. Pre-registered rules in the docstring;
-  null-with-control publishable.
-- [ ] F27 nonlinear probes (`erasure/e4_nonlinear.py`, CPU array ×8):
-  kernel-RBF (median-heuristic γ, inner-CV) + MLP(256,128) under
-  GroupKFold-by-ruler, pairs judged only with BOTH rulers held out;
-  arms olmo/qwen/twin/tfidf × eng/akk. Retires the "nonlinear code would
-  not be caught" caveat, one way or the other.
+- [x] F26 done (24057; span coverage .95, mean 4.2 name-tokens) — **the ignition test is NULL with controls; the DIR arm's big number is flagged as mechanical.** (1) FEAT arms, the actual test: clamping the onomastic features at the ruler-name span of eng glosses moves NOTHING (probe −1.18→−1.20 everywhere = controls; the clamped features do not even fire at the last token, 0.00); akk all-but-last also inside the control band (biggest treated move Δ+1.43 = exactly matched by control 25239's Δ+1.43). Per rule 2: **the final causal seal — the anchor cannot be ignited from document context, even where F23 proved the lever works at entity prompts.** (2) DIR arm: injecting the ridge direction itself at all akk positions floods the probe (b16 α4: −1.38→+5.67 vs random-dir +0.10) — but injected-vector = read-out-vector is circular by construction (the random-direction control does not control for that coupling); reported as "the probe can be trivially flooded by its own direction", NOT as a latent anchor. Full numbers in steering/results/ignite.json.
+- [x] F27 done (24058 array, 8/8) — **the nonlinear caveat is RETIRED.** eng: no nonlinear head beats its own linear head by >.02 in any model arm (olmo mlp .587 < ridge .605; qwen +.012). akk: the MLP lifts EVERY arm including the TWIN (+.029 → .664) and the FLOOR (+.096 → .626) — extra capacity finds more FORM, not chronology; olmo's best (.695) exceeds the twin's by .031 ≈ 1σ (227 ruler-pairs, sd≈.31), far below the >2sd rule. Verdict per rule 1: **no document-time signal, linear OR nonlinear, that separates trained models from twin/floor.** Full numbers in erasure/results/nl.*.json.
+
+**Wave 8 complete — the program's planned experiment list is EXHAUSTED (F1–F27).**
 - [x] F25 feature interp done (23940) — **the layer-9 year-ρ features are ONOMASTIC detectors**, confirmed by the reliable instrument: max-activating contexts show German surnames (44713: Kienzle/Rusch/Riedel — and its clamped generation drifts into German, a clean Golden-Gate corroboration), Chinese name pieces (56768/26073), Chinese imperial names (9763), Byzantine/Korean/Liao monarchs (57332), "X of PLACE" nobility (17433), German noble houses (2343), 19th-c famous names (50848), and an ancient-genealogy feature firing on the GLOSSES themselves (53704: "son Cambyses I, father of", 17/20 examples from eng_tier0). The year correlation rides on naming culture ↔ era — the entity-mediated-time mechanism made concrete at the feature level. (α=10 clamps mostly degenerate generation — over-clamping; the labels rest on the contexts.) Full table in sae2/RESULTS.md.
 
 ## Submitting
