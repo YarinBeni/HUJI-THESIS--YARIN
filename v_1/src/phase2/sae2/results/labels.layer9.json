@@ -4,93 +4,108 @@
   "tried": [
     {
       "model": "qwen3-8b",
-      "source": "9-resid-batchtopk-65k",
-      "ok": false
-    },
-    {
-      "model": "qwen3-8b",
-      "source": "9-resid_post-batchtopk-65k",
-      "ok": false
-    },
-    {
-      "model": "qwen3-8b",
-      "source": "9-resid-post-batchtopk-65k",
-      "ok": false
-    },
-    {
-      "model": "qwen3-8b",
-      "source": "9-res-batchtopk-65k",
-      "ok": false
-    },
-    {
-      "model": "qwen3-8b",
       "source": "9-resid-batchtopk-65k__l0-80",
-      "ok": false
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 404: Not Found"
     },
     {
       "model": "qwen3-8b",
-      "source": "9-batchtopk-65k",
-      "ok": false
-    },
-    {
-      "model": "qwen3-8b-base",
       "source": "9-resid-batchtopk-65k",
-      "ok": false
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 404: Not Found"
     },
     {
-      "model": "qwen3-8b-base",
-      "source": "9-resid_post-batchtopk-65k",
-      "ok": false
+      "model": "qwen3-8b",
+      "source": "9-resid_post-batchtopk-65k__l0-80",
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
     },
     {
-      "model": "qwen3-8b-base",
-      "source": "9-resid-post-batchtopk-65k",
-      "ok": false
+      "model": "qwen3-8b",
+      "source": "9-resid-post-batchtopk-65k__l0-80",
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
     },
     {
-      "model": "qwen3-8b-base",
-      "source": "9-res-batchtopk-65k",
-      "ok": false
+      "model": "qwen3-8b",
+      "source": "9-batchtopk-65k__l0-80",
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
     },
     {
       "model": "qwen3-8b-base",
       "source": "9-resid-batchtopk-65k__l0-80",
-      "ok": false
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
     },
     {
       "model": "qwen3-8b-base",
-      "source": "9-batchtopk-65k",
-      "ok": false
-    },
-    {
-      "model": "qwen3-8b-it",
       "source": "9-resid-batchtopk-65k",
-      "ok": false
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
     },
     {
-      "model": "qwen3-8b-it",
-      "source": "9-resid_post-batchtopk-65k",
-      "ok": false
+      "model": "qwen3-8b-base",
+      "source": "9-resid_post-batchtopk-65k__l0-80",
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
     },
     {
-      "model": "qwen3-8b-it",
-      "source": "9-resid-post-batchtopk-65k",
-      "ok": false
+      "model": "qwen3-8b-base",
+      "source": "9-resid-post-batchtopk-65k__l0-80",
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
     },
     {
-      "model": "qwen3-8b-it",
-      "source": "9-res-batchtopk-65k",
-      "ok": false
+      "model": "qwen3-8b-base",
+      "source": "9-batchtopk-65k__l0-80",
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
     },
     {
       "model": "qwen3-8b-it",
       "source": "9-resid-batchtopk-65k__l0-80",
-      "ok": false
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
     },
     {
       "model": "qwen3-8b-it",
-      "source": "9-batchtopk-65k",
-      "ok": false
+      "source": "9-resid-batchtopk-65k",
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
+    },
+    {
+      "model": "qwen3-8b-it",
+      "source": "9-resid_post-batchtopk-65k__l0-80",
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
+    },
+    {
+      "model": "qwen3-8b-it",
+      "source": "9-resid-post-batchtopk-65k__l0-80",
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
+    },
+    {
+      "model": "qwen3-8b-it",
+      "source": "9-batchtopk-65k__l0-80",
+      "ok": false,
+      "hit_index": null,
+      "last_reply": "HTTPError: HTTP Error 500: Internal Server Error"
     }
   ]
 }
