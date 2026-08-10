@@ -141,6 +141,8 @@ def main():
         method = args.method
         tok, W_U, norm = load_unembed(method)
         tokens = tok.convert_ids_to_tokens(list(range(W_U.shape[0])))
+        # Qwen's vocab has unassigned ids -> None entries; treat as junk
+        tokens = ["" if t is None else t for t in tokens]
         dirs = {}
         g = sorted(glob.glob(os.path.join(DIRS_A, method,
                                           f"{ENTITY}.*.layer*.npz")))
