@@ -111,6 +111,30 @@ remaining step is a one-minute browser lookup on neuronpedia.org: open any
 feature of the Karvonen Qwen3-8B set and copy the exact model+source ids
 from the URL, then `python fetch_labels.py --source <exact-id>`.
 
+## F24 (23937) — decoder-row lens of the top-10 year-ρ features
+
+The self-made labels tell one coherent story: **the layer-9 year-correlated
+features are WHO-features, not calendar features.** Positive/negative ends:
+
+| feature | ρ(year) | lens reads as |
+|---|---|---|
+| 44713 | +.40 | German surname morphology (mann / berger / inger / Neue) |
+| 56768 | −.37 | Chinese surnames (Liu / Zhao / Zhu / Jiang / Zhou / Chinese) |
+| 2343 | +.29 | Germany / German / 德国 |
+| 9763 | −.36 | classical-Chinese dynastic register (帝王 'emperor', 天下, 子孙) |
+| 50848 | +.33 | honorifics (Jr / 等人 / 老人家) |
+| others | ±.3–.4 | mixed name-fragments / script clusters, no temporal vocab |
+
+Taxonomy hits across all 20 lens ends: two weak "temporal" and one
+"entity_identity" — essentially **no calendar vocabulary anywhere**, in
+sharp contrast to the late-layer cell-A direction (F6: BC/BCE/ancient/公元前).
+Reading: at the early layer the year signal rides on identity carriers —
+name morphology, nationality, register (9763 is the one quasi-temporal
+carrier, an *ancient-Chinese-register* feature, itself an identity/style
+marker). This is the entity-mediated-time story restated at the feature
+level, and it explains why these features fire on English glosses
+(proper names appear) yet the firing carries no usable chronology (F18).
+
 ## Step 5 — interventions (F23)
 
 Runs 23761 / 23899 / 23921 all crashed at the same line; the log (23761)
