@@ -121,10 +121,17 @@ control pool is recomputed inside `feature_steer.py` from the encodings
 (all ≥2%-firing features), plus a defensive fix for the global scalar
 batch-TopK threshold (was indexed per-feature). Resubmit F23 once.
 
-## Labels — source id CONFIRMED by browser
+## Labels — source id confirmed, but layer 9 is likely NOT hosted
 
 `https://www.neuronpedia.org/qwen3-8b/18-resid-batchtopk-65k__l0-80/45920`
-works, so layer 9 = `9-resid-batchtopk-65k__l0-80` on model `qwen3-8b` —
-which the probe grid DID try and saw 404: the API rejects the default
-python User-Agent (Cloudflare). `fetch_labels.py` now sends browser-like
-headers, puts the confirmed id first, and probes 3 indices per source.
+works in a browser (layer 18). The browser-UA probe grid then showed a
+diagnostic split: `qwen3-8b/9-resid-batchtopk-65k__l0-80` returns a real
+**404** while every made-up source id returns **500** — i.e. the API route
+and model id are right and the layer-9 source simply isn't there.
+Decisive check (cluster):
+`curl -s -H "User-Agent: Mozilla/5.0" https://www.neuronpedia.org/api/feature/qwen3-8b/18-resid-batchtopk-65k__l0-80/45920 | head -c 300`
+— if that returns JSON, Neuronpedia hosts ONLY layer 18, which fails our
+FVU gate (.56): then the labeled-dictionary plan terminates honestly as
+"autointerp labels unavailable for the usable layer"; feature
+interpretation falls back to our own logit-lens of decoder rows (the
+fetch_labels cross-check) + manual web-UI reads of analogous L18 features.
