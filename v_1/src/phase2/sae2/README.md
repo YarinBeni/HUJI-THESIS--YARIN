@@ -13,8 +13,10 @@ labels, dashboards and a steering UI for free.
 | `run_pipeline.py` | steps 0–2 + 4: layer + empirical offset, FVU gate on FOUR populations (cell B now included), feature hunt with cross-population firing, token-level fired-anywhere + position thirds; explicit replicated/not verdicts vs F8/F11 |
 | `fetch_labels.py` | step 3: Neuronpedia autointerp labels + taxonomy classification (temporal / entity-identity / numeric-year / historical-domain / style / other) |
 | `feature_steer.py` | step 5: amplify/suppress + ablate with firing-rate-matched random-feature controls (Feldman non-surgicality), and THE BRIDGE — clamp temporal features on mid-text in English glosses, ask if the signal reaches the last token |
+| `lens_features.py` | step 3′ fallback: decoder-row logit lens per top feature + taxonomy pass — Neuronpedia hosts only layer 18 (API-confirmed), which fails our gate |
 | `sbatch/F22_*.sbatch` | pipeline + labels (GPU ×1) |
 | `sbatch/F23_*.sbatch` | interventions (GPU ×1, afterok F22) |
+| `sbatch/F24_*.sbatch` | feature lens (CPU) |
 
 Pre-registered rules carried over: eng fired-anywhere ≥10% and akk <2%
 replicate F11; gate FVU ≤ .35 on cell A or features are not interpreted.

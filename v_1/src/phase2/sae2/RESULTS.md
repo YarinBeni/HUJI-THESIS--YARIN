@@ -128,10 +128,12 @@ works in a browser (layer 18). The browser-UA probe grid then showed a
 diagnostic split: `qwen3-8b/9-resid-batchtopk-65k__l0-80` returns a real
 **404** while every made-up source id returns **500** — i.e. the API route
 and model id are right and the layer-9 source simply isn't there.
-Decisive check (cluster):
-`curl -s -H "User-Agent: Mozilla/5.0" https://www.neuronpedia.org/api/feature/qwen3-8b/18-resid-batchtopk-65k__l0-80/45920 | head -c 300`
-— if that returns JSON, Neuronpedia hosts ONLY layer 18, which fails our
-FVU gate (.56): then the labeled-dictionary plan terminates honestly as
-"autointerp labels unavailable for the usable layer"; feature
-interpretation falls back to our own logit-lens of decoder rows (the
-fetch_labels cross-check) + manual web-UI reads of analogous L18 features.
+**API-CONFIRMED (user curl, 2026-08-10):** the layer-18 feature answers with
+full JSON while layer 9 404s → Neuronpedia hosts ONLY layer 18 of this
+release, and layer 18 fails our FVU gate (.56). Terminal verdict:
+**autointerp labels are unavailable for the usable instrument** — that is
+the honest end of the "labeled dictionary" selling point at layer 9.
+Fallback implemented (F24, `lens_features.py`): decoder-row logit lens per
+top feature + keyword-taxonomy pass — an intrinsic, replicable read of what
+each feature writes to the vocabulary, plus optional manual web-UI reads of
+analogous layer-18 features.
