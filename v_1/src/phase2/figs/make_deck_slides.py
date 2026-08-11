@@ -750,8 +750,9 @@ def main():
           " throughout phase 2.")],
         f'<div class="p2chart">{chart_decomposition()}</div>',
         "<strong>The axis is spread across many features &mdash; there is"
-        " no &ldquo;year neuron&rdquo;.</strong> Every overlap is"
-        " |cos| &le; .12 in both dictionaries (left). The hunt map"
+        " no &ldquo;year neuron&rdquo;.</strong> The largest overlap is"
+        " |cos| = .23 in Qwen-Scope and .08 in the 65k dictionary (left)"
+        " &mdash; nowhere near a dedicated axis. The hunt map"
         " (right) shows what carries it instead: 38678 fires on 62% of"
         " entities at &rho;=+.57, surrounded by the name-culture detectors"
         " the next slide reads."))
