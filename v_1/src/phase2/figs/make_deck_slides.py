@@ -199,6 +199,15 @@ def chart_feature_cards():
                     f'{esc(post)}</div>')
         return f'<div class="p2ctx">{esc(c)}</div>'
 
+    gen = interp["features"]["44713"].get("generations_clamped", [])
+    gline = ""
+    if gen:
+        g = esc(str(gen[0]).replace("\n", " ")[:130])
+        gline = (f'<div class="p2ctx" style="margin-top:9px;white-space:'
+                 f'normal"><strong>clamp 44713 at 10&times;act95 during'
+                 f' generation &rarr;</strong> &ldquo;{g}&hellip;&rdquo;'
+                 f' &mdash; the model drifts into German mid-answer: the'
+                 f' feature really is name-Germanness.</div>')
     head = (f'<div class="p2feathead"><strong>Feature 38678 &middot; '
             f'Qwen-Scope layer 24</strong> &mdash; the headline entity-time '
             f'feature (F8): fires on <strong>{100*f1.fire_cellA:.0f}%</strong>'
@@ -223,7 +232,8 @@ def chart_feature_cards():
             f'{GREEN if rho > 0 else RED}">ρ={rho:+.2f}</span></div>'
             f'{"".join(ctx(e) for e in exs)}'
             f'<div class="p2fires">{fires}</div></div>')
-    return head + '<div class="p2cards">' + "".join(cards) + "</div>"
+    return (head + '<div class="p2cards">' + "".join(cards) + "</div>"
+            + gline)
 
 
 def chart_causality():
@@ -312,6 +322,53 @@ def chart_bridge():
     return "".join(s)
 
 
+
+
+def chart_ignite():
+    ig = J("steering", "results", "ignite.json")
+    W, H = 1040, 322
+    s = [svg_open(W, H)]
+    arms = (("eng_namespan",
+             "English glosses — clamp at the ruler-NAME tokens", -1.45, -.95),
+            ("akk_allbutlast",
+             "Akkadian — clamp everywhere but the read-out", -1.9, 0.35))
+    rows = ([("treat", f) for f in (22835, 44713, 17433, 53704, 56768)]
+            + [("ctrl", f) for f in (26421, 30594, 42030, 25239, 50550)])
+    ROW = 20
+    for pi, (arm, title, lo, hi) in enumerate(arms):
+        d = ig["arms"][arm]
+        X0, XW, Y0 = 168 + pi * 520, 316, 66
+        xm = lambda v: X0 + (min(max(v, lo), hi) - lo) / (hi - lo) * XW  # noqa: E731
+        s.append(txt(X0 + XW / 2, 26, title, 11.5, "var(--ink)", "middle",
+                     700))
+        base = d["feat:treat:22835:a0"]["probe"]
+        s.append(line(xm(base), Y0 - 6, xm(base), Y0 + len(rows) * ROW,
+                      "var(--border)", 1))
+        s.append(txt(xm(base), Y0 - 12, f"no clamp: {base:+.2f}", 9.5,
+                     "var(--ink-light)", "middle"))
+        for i, (g, f) in enumerate(rows):
+            y = Y0 + i * ROW + 8
+            c = GREEN if g == "treat" else GRAYC
+            name = (FEAT_LABEL.get(f, str(f)) if g == "treat"
+                    else f"control {f}")
+            s.append(txt(X0 - 8, y + 3.5, name, 10,
+                         "var(--ink)" if g == "treat" else "var(--ink-light)",
+                         "end", 700 if g == "treat" else 400))
+            v0 = d[f"feat:{g}:{f}:a0"]["probe"]
+            v8 = d[f"feat:{g}:{f}:a8"]["probe"]
+            s.append(line(xm(v0), y, xm(v8), y, c, 1.6))
+            s.append(circle(xm(v0), y, 2.6, "#ffffff", c, 1.4))
+            s.append(circle(xm(v8), y, 3.4, c))
+        yb = Y0 + len(rows) * ROW + 6
+        for gv in (lo, (lo + hi) / 2, hi):
+            s.append(line(xm(gv), yb, xm(gv), yb + 4, "var(--ink-light)", 1))
+            s.append(txt(xm(gv), yb + 15, f"{gv:+.1f}", 9,
+                         "var(--ink-light)", "middle"))
+        s.append(txt(X0 + XW / 2, yb + 30, "frozen year read-out (sd) — "
+                     "hollow: α=0 · solid: α=8", 10,
+                     "var(--ink-light)", "middle"))
+    s.append("</svg>")
+    return "".join(s)
 
 
 def chart_orthogonal():
@@ -560,7 +617,9 @@ TITLES_NEW = [
     "No single year neuron: a distributed code, and the features that carry it",
     "Decomposing the year signal into SAE features: name-culture detectors, not a concept of time",
     "Causal test: pushing a name-culture feature drags the year prediction, controls stay flat",
-    "And why it never reaches documents: even forced on, the signal dies before the read-out",
+    "The bridge: forced ON across a whole document, nothing arrives at the read-out token",
+    "Ignition at the ruler's own name: the read-out does not move (its control matches the one mover)",
+    "Synthesis: a real entity time axis, a form-built document axis, and no route between them",
 ]
 
 A_GT = '<a href="https://arxiv.org/abs/2310.02207">Gurnee &amp; Tegmark 2023</a>'
@@ -805,30 +864,82 @@ def main():
         " five controls stay inside the gray band."))
 
     S.append(slide(
-        base + 9, "F23 bridge + F26 ignition &middot; the causal seal",
-        "Force the features ON across a whole document &mdash; they still"
-        " never fire at the read-out token: the entity&ndash;document gap"
-        " is a disconnection, not missing knowledge",
-        [("Method", "the bridge: clamp <span class=\'frm2\'>h &larr; h +"
-          " m &#8857; (&alpha; &middot; act95_f &middot; d_f)</span> on"
-          " every mid-document position (a per-sample length mask spares"
-          " the read-out token), then ask whether the feature fires at"
-          " the last token. F26: the same clamp confined to the"
-          " offset-mapped <strong>ruler-NAME token span</strong> inside"
-          " each gloss (95% span coverage)."),
-         ("Setup", "300 English glosses (bridge) and 400 name-bearing"
-          " glosses + 400 Akkadian fragments (ignition); &alpha; ="
-          " 4&times;act95; pre-registered rules with rate-matched"
-          " controls &mdash; a null <em>with</em> controls is the"
-          " publishable outcome.")],
+        base + 9, "F23 bridge &middot; forcing the features across a document",
+        "Hold the year features ON over an entire gloss &mdash; nothing"
+        " arrives at the token the probe reads",
+        [("Task", "the gating slide showed the features fire mid-text but"
+          " not at the read-out. Can brute force carry them there? If yes,"
+          " the entity&ndash;document gap is a routing weakness; if not"
+          " even force works, it is a disconnection."),
+         ("Method", "clamp <span class=\'frm2\'>h &larr; h + m &#8857;"
+          " (&alpha; &middot; act95_f &middot; d_f)</span> on every"
+          " mid-document position; the per-sample mask m spares only the"
+          " read-out token, so anything measured there had to"
+          " <em>propagate</em>. Read-out: does the feature fire at the"
+          " last token? Every treated feature has a firing-rate-matched"
+          " random control."),
+         ("Setup", "300 English glosses; &alpha; = 4&times;act95;"
+          " 5 treated + 5 matched control features; pre-registered rules"
+          " &mdash; a null <em>with</em> controls is the publishable"
+          " outcome.")],
         f'<div class="p2chart">{chart_bridge()}</div>',
-        "<strong>The final causal seal of the thesis.</strong> Every row"
-        " reads x &rarr; x &mdash; nothing propagates to the token the"
-        " probe reads, treated and control alike, and igniting the"
-        " features at the ruler&rsquo;s own name is equally flat. A real,"
-        " semantic, causally-usable entity time axis built from onomastic"
-        " features &mdash; and no channel that carries any of it into a"
+        "<strong>Every row reads x &rarr; x.</strong> Whatever a"
+        " feature&rsquo;s natural rate at the read-out token (0%, 8%,"
+        " 34%), forcing it ON across the whole document changes that rate"
+        " by nothing &mdash; treated and control alike. The signal can be"
+        " everywhere in the text and still never reach the position the"
+        " model reads documents from."))
+
+    S.append(slide(
+        base + 10, "F26 ignition &middot; the anchor test",
+        "Light the features at the ruler&rsquo;s own name &mdash; the year"
+        " read-out still does not move (and the one mover is matched by"
+        " its control)",
+        [("Task", "maybe the features need their natural trigger &mdash; a"
+          " NAME &mdash; not arbitrary positions. So ignite them exactly"
+          " where the entity lives inside the document: the ruler-name"
+          " token span. This is the feature-level version of the original"
+          " cell-C steering idea."),
+         ("Method", "offset-mapped char&rarr;token spans for the ruler name"
+          " in each gloss (95% coverage, 4.2 tokens on average); clamp"
+          " <span class=\'frm2\'>h &larr; h + &alpha; &middot; act95_f"
+          " &middot; d_f</span> on the span; frozen ridge read-out at the"
+          " last token; rate-matched controls. A separate DIR arm injects"
+          " the ridge <em>direction itself</em> at blocks {8,16,24}; its"
+          " +5.7&thinsp;sd jump on Akkadian is <strong>circular</strong>"
+          " &mdash; the injected vector IS the read-out&rsquo;s own axis"
+          " &mdash; and is excluded by the pre-registered rule (a random"
+          " direction moves almost nothing)."),
+         ("Setup", "400 name-bearing glosses + 400 Akkadian fragments"
+          " (clamped everywhere but the read-out); &alpha; &isin;"
+          " {4, 8}.")],
+        f'<div class="p2chart">{chart_ignite()}</div>',
+        "<strong>The causal seal.</strong> On glosses every feature and"
+        " every control sits on the no-clamp line. On Akkadian the single"
+        " large move (44713 at &alpha;=8) is reproduced exactly by its"
+        " rate-matched control &mdash; a nonspecific perturbation, not"
+        " the feature. A real, semantic, causally-usable entity time"
+        " axis &mdash; and no channel that carries any of it into a"
         " document representation, even by force."))
+
+    S.append(f'''<section class="slide slide-text" data-index="{base + 11}">
+  <div class="eyebrow">Phase 2 &middot; synthesis</div>
+  <h2 class="sh">Five findings, one conclusion: the knowledge exists, the route does not</h2>
+  <div class="text-points">
+  <div class="tp"><div class="tp-h">The entity year axis is real and semantic (E3, F6, F21)</div>
+  <div class="tp-b">Orthogonal to the document axis at chance level (|cos| &le; .025); its vocabulary end literally reads Ancient / BCE / &#20844;&#20803;&#21069;; the enrichment holds across all ~150k tokens with multiple-comparison control (z up to +6.8).</div></div>
+  <div class="tp"><div class="tp-h">It is built from name-culture features (F8, F22, F25)</div>
+  <div class="tp-b">A distributed code (max |cos| with any single feature: .23): German-surname, nobility, genealogy-formula, Chinese-name detectors &mdash; onomastics, replicated in two independent dictionaries.</div></div>
+  <div class="tp"><div class="tp-h">Those features causally feed the read-out (F23)</div>
+  <div class="tp-b">Clamping one drags the frozen year prediction up to ~1 sd in the direction its correlation predicts; rate-matched controls stay flat; ablating any single feature changes nothing.</div></div>
+  <div class="tp"><div class="tp-h">The document side is text form (E1, E8, F15&ndash;F19, F27)</div>
+  <div class="tp-b">Untrained twins and a character-n-gram floor top the Akkadian board; find-spot + length erasure shaves the rest; kernel and MLP probes find nothing the linear ones missed.</div></div>
+  <div class="tp"><div class="tp-h">And no channel connects the two (F11, F23 bridge, F26)</div>
+  <div class="tp-b">The features are silent at the read-out token on documents; forcing them ON mid-text propagates nothing; igniting them at the ruler&rsquo;s own name moves nothing that its control does not.</div></div>
+  </div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>The model dates people, not documents.</strong> The collapse at the entity&rarr;document boundary is a <em>disconnection</em>: a genuine, causally-usable time axis on the entity side, a form-built pseudo-signal on the document side, and &mdash; under every forcing we tried &mdash; no bridge between them.</div>
+</section>
+''')
 
     block = ("<!-- PHASE2-BEGIN -->\n" + STYLE + "\n" + "".join(S)
              + "<!-- PHASE2-END -->\n")

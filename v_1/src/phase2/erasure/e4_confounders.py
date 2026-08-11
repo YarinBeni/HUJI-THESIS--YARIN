@@ -50,18 +50,54 @@ RESULTS = os.path.join(_HERE, "results")
 ALPHAS = np.logspace(-1, 5, 13)
 
 
-def build_Z(d):
-    """Confounders: provenance + length. GENRE IS DELIBERATELY ABSENT — every
-    dated fragment in this corpus is genre='Royal Inscription' (checked), so
-    genre has zero variance and is not a confounder here at all. That is worth
-    a sentence in the thesis: the register worry reduces to find-spot + length."""
+def build_Z(d, concept="all"):
+    """Confounder matrix. GENRE IS DELIBERATELY ABSENT — every dated fragment
+    in this corpus is genre='Royal Inscription' (checked), so genre has zero
+    variance and is not a confounder here at all.
+
+    F28 ladder (--concept): erase ONE variable at a time, so the drop in the
+    E1 read-out attributes the document signal variable by variable.
+      provenance  find-spot one-hot (top-20 + other)
+      length      log word count + 5 quantile bins (basis expansion)
+      ruler       ruler-identity one-hot (NOTE the ICC=1 degeneracy: ruler
+                  determines year almost 1:1 here, so this rung cannot
+                  distinguish "signal is ruler identity" from "signal is
+                  year"; read it as the joint upper rung of the era ladder)
+      year10      year-decile one-hot — coarse era bins (~period); the
+                  POSITIVE CONTROL: erasing it must crush any genuinely
+                  chronological read-out
+      all         provenance + length (the original E4 combination)"""
     top = d.provenance.fillna("unk").value_counts().head(20).index
     prov = pd.get_dummies(d.provenance.fillna("unk").where(
-        d.provenance.fillna("unk").isin(top), "other"), dtype=float)
+        d.provenance.fillna("unk").isin(top), "other"), dtype=float).values
     wc = np.log1p(d.word_count.fillna(0).astype(float))
     qbins = pd.get_dummies(pd.qcut(wc, 5, duplicates="drop"), dtype=float)
-    Z = np.hstack([prov.values, wc.values[:, None], qbins.values])
+    length = np.hstack([wc.values[:, None], qbins.values])
+    if concept == "provenance":
+        Z = prov
+    elif concept == "length":
+        Z = length
+    elif concept == "ruler":
+        Z = pd.get_dummies(d.ruler, dtype=float).values
+    elif concept == "year10":
+        Z = pd.get_dummies(pd.qcut(d.year.astype(float), 10,
+                                   duplicates="drop"), dtype=float).values
+    else:                                    # "all" = provenance + length
+        Z = np.hstack([prov, length])
     return Z.astype(np.float64)
+
+
+def concept_series(d, concept):
+    """The categorical the post-erasure check probe must fail to read."""
+    if concept == "ruler":
+        return d.ruler.astype(str)
+    if concept == "length":
+        wc = np.log1p(d.word_count.fillna(0).astype(float))
+        return pd.Series(pd.qcut(wc, 5, duplicates="drop")).astype(str)
+    if concept == "year10":
+        return pd.Series(pd.qcut(d.year.astype(float), 10,
+                                 duplicates="drop")).astype(str)
+    return d.provenance                      # provenance / all
 
 
 def fit_eraser(Xtr, Ztr):
@@ -151,6 +187,9 @@ def main():
     ap.add_argument("--m", type=int, default=P.M_DEFAULT)
     ap.add_argument("--draws", type=int, default=40)
     ap.add_argument("--seed", type=int, default=P.SEED)
+    ap.add_argument("--concept", default="all",
+                    choices=["all", "provenance", "length", "ruler", "year10"],
+                    help="F28 ladder: erase a single variable at a time")
     args = ap.parse_args()
 
     df = P.load_eligible()
@@ -159,9 +198,10 @@ def main():
         os.path.dirname(_WM), "..", "data/evaluation/corpora/orcc_corpus.parquet"
     ))[["fragment_id", "genre", "word_count"]]
     df = df.merge(meta, on="fragment_id", how="left").reset_index(drop=True)
-    Z = build_Z(df)
+    Z = build_Z(df, args.concept)
     y = df.year.values.astype(float)
-    print(f"[data] {len(df)} frags, Z dim {Z.shape[1]}", flush=True)
+    print(f"[data] {len(df)} frags, concept={args.concept}, "
+          f"Z dim {Z.shape[1]}", flush=True)
 
     if args.method == "tfidf_char":
         from sklearn.decomposition import TruncatedSVD
@@ -182,7 +222,8 @@ def main():
                                stride=1)[bl][df.pos.values]
 
     out = {"method": args.method, "variant": args.variant, "layer": bl,
-           "z_dim": int(Z.shape[1]), "m": args.m, "draws": args.draws}
+           "concept": args.concept, "z_dim": int(Z.shape[1]),
+           "m": args.m, "draws": args.draws}
     for tag, erase in (("raw", False), ("erased", True)):
         mac, sd = pairwise_macro(df, X, Z, args.m, args.draws,
                                  args.seed, erase)
@@ -192,16 +233,24 @@ def main():
                     "grouped_ridge_spearman": rho}
         print(f"[{tag}] pairwise={mac:.3f}±{sd:.3f} ridge_rho={rho:+.3f}",
               flush=True)
-    # did the erasure actually remove the confounder?
+    # did the erasure actually remove the concept? (manipulation check)
     e_all = fit_eraser(X, Z)
-    out["prov_probe_acc_before"] = provenance_probe_acc(X, df.provenance)
-    out["prov_probe_acc_after"] = provenance_probe_acc(e_all(X), df.provenance)
+    Xe = e_all(X)
+    chk = concept_series(df, args.concept)
+    out["concept_probe_acc_before"] = provenance_probe_acc(X, chk)
+    out["concept_probe_acc_after"] = provenance_probe_acc(Xe, chk)
+    if args.concept == "all":        # backward-compatible keys
+        out["prov_probe_acc_before"] = out["concept_probe_acc_before"]
+        out["prov_probe_acc_after"] = out["concept_probe_acc_after"]
     out["genre_constant"] = True     # every dated fragment is Royal Inscription
-    print(f"[check] provenance probe {out['prov_probe_acc_before']:.3f} -> "
-          f"{out['prov_probe_acc_after']:.3f}", flush=True)
+    print(f"[check] {args.concept} probe "
+          f"{out['concept_probe_acc_before']:.3f} -> "
+          f"{out['concept_probe_acc_after']:.3f}", flush=True)
 
     os.makedirs(RESULTS, exist_ok=True)
-    pth = os.path.join(RESULTS, f"{args.method}.{args.variant}.json")
+    name = (f"{args.method}.{args.variant}.json" if args.concept == "all"
+            else f"ladder.{args.concept}.{args.method}.{args.variant}.json")
+    pth = os.path.join(RESULTS, name)
     with open(pth, "w") as f:
         json.dump(out, f, indent=2)
     print(f"[done] -> {pth}", flush=True)

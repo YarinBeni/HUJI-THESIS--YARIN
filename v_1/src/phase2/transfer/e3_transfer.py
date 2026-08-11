@@ -58,21 +58,99 @@ import probe_pairs as PP                                 # noqa: E402
 _WM = os.path.abspath(os.path.join(_HERE, "..", "..", "world_models"))
 DIRS_ROOT = os.path.join(_WM, "results", "directions")
 RESULTS = os.path.join(_HERE, "results")
-ENTITY = "historical_figure"      # the cell-A set whose direction transfers
+
+# E3 transfers the cell-A axis (famous figures). E3b transfers the CELL-B axis
+# (our 34 rulers, probed as names) — the axis the reviewer argument says is the
+# one actually connected to these documents. Cell B has no saved direction
+# (probe_entity.py reports Monte-Carlo scores, never a canonical fit), so it is
+# fitted here once on the canonical train split and cached as an npz.
+ENTITY_CFG = {
+    "historical_figure": dict(
+        csv=os.path.join(_WM, "data", "entity_datasets",
+                         "historical_figure.csv"),
+        acts=os.path.join(_WM, "activations", "{method}",
+                          "historical_figure"),
+        site="last"),
+    "assyrian_ruler": dict(
+        csv=os.path.join(_WM, "data", "entity_datasets",
+                         "assyrian_ruler.csv"),
+        acts=os.path.join(_WM, "akkadian", "activations", "{method}",
+                          "assyrian_ruler"),
+        site="ent_last"),
+}
+RIDGE_ALPHAS = np.logspace(-1, 6, 15)
 
 
-def find_cellA_direction(method, dirs_root):
+def _cv_rho(X, y, groups):
+    """5-fold grouped OOF Spearman — layer selection for the cell-B fit."""
+    from sklearn.linear_model import RidgeCV
+    from sklearn.model_selection import GroupKFold
+    pred = np.full(len(y), np.nan)
+    for tr, te in GroupKFold(5).split(X, y, groups=groups):
+        pred[te] = RidgeCV(alphas=RIDGE_ALPHAS).fit(X[tr], y[tr]).predict(X[te])
+    return float(stats.spearmanr(pred, y).correlation)
+
+
+def fit_entity_direction(method, entity, dirs_root):
+    """Fit + cache the ruler-axis npz in probe_wm's format so the lens /
+    spectroscopy scripts pick it up through their existing globs."""
+    cfg = ENTITY_CFG[entity]
+    ent = pd.read_csv(cfg["csv"])
+    acts_dir = cfg["acts"].format(method=method)
+    files = sorted(glob.glob(os.path.join(acts_dir,
+                                          f"{cfg['site']}.layer*.npz")))
+    if not files:
+        sys.exit(f"no {entity} activations under {acts_dir} — run "
+                 f"akkadian/extract_entity.py --method {method}")
+    y = ent.death_year.values.astype(float)
+    valid = np.isfinite(y)
+    groups = (ent.entity_ix.values if "entity_ix" in ent
+              else np.arange(len(ent)))
+    bl = None
+    for g in glob.glob(os.path.join(_WM, "akkadian", "results",
+                                    "probes_entity", method,
+                                    f"{entity}.{cfg['site']}*.json")):
+        bl = json.load(open(g)).get("best_layer", bl)
+    if bl is None:                 # no committed probe result: pick honestly
+        best = (None, -np.inf)
+        for p in files:
+            L = int(re.search(r"layer(\d+)\.npz$", p).group(1))
+            X = np.load(p)["acts"].astype(np.float32)
+            r = _cv_rho(X[valid], y[valid], groups[valid])
+            print(f"  [fitB] layer {L}: grouped-CV rho {r:+.3f}", flush=True)
+            if r > best[1]:
+                best = (L, r)
+        bl = best[0]
+    p = os.path.join(acts_dir, f"{cfg['site']}.layer{bl}.npz")
+    X = np.load(p)["acts"].astype(np.float32)
+    from sklearn.linear_model import RidgeCV
+    tr = valid & ~ent.is_test.astype(bool).values
+    probe = RidgeCV(alphas=RIDGE_ALPHAS).fit(X[tr], y[tr])
+    dd = os.path.join(dirs_root, method)
+    os.makedirs(dd, exist_ok=True)
+    np.savez_compressed(
+        os.path.join(dd, f"{entity}.{cfg['site']}.layer{bl}.npz"),
+        coef=np.asarray(probe.coef_, np.float32),
+        intercept=np.atleast_1d(probe.intercept_).astype(np.float32))
+    print(f"[fitB] cached {entity} direction at layer {bl} "
+          f"(train n={int(tr.sum())})", flush=True)
+
+
+def find_entity_direction(method, dirs_root, entity):
     """The saved best-layer ridge direction for the entity set. probe_wm saves
     one file per entity_type x site: {entity}.{site}.layer{L}.npz."""
-    g = sorted(glob.glob(os.path.join(dirs_root, method,
-                                      f"{ENTITY}.*.layer*.npz")))
+    pat = os.path.join(dirs_root, method, f"{entity}.*.layer*.npz")
+    g = sorted(glob.glob(pat))
+    if not g and entity == "assyrian_ruler":
+        fit_entity_direction(method, entity, dirs_root)
+        g = sorted(glob.glob(pat))
     if not g:
-        sys.exit(f"no cell-A direction for {method} under {dirs_root}/{method} "
-                 f"(pattern {ENTITY}.*.layer*.npz).\nprobe_wm.py writes them; "
-                 f"on the cluster:  python v_1/src/world_models/probe_wm.py "
-                 f"--method {method} --entity-type {ENTITY}")
+        sys.exit(f"no {entity} direction for {method} under "
+                 f"{dirs_root}/{method}.\nprobe_wm.py writes them; on the "
+                 f"cluster:  python v_1/src/world_models/probe_wm.py "
+                 f"--method {method} --entity-type {entity}")
     p = g[0]                       # one best-layer file per site; site order: any
-    m = re.search(rf"{ENTITY}\.(\w+)\.layer(\d+)\.npz$", p)
+    m = re.search(rf"{entity}\.(\w+)\.layer(\d+)\.npz$", p)
     z = np.load(p)
     coef = np.asarray(z["coef"], np.float32).ravel()
     return coef, m.group(1), int(m.group(2)), os.path.basename(p)
@@ -129,17 +207,17 @@ def ruler_probe_acc(X, rulers, seed=0):
     return float(cross_val_score(clf, X[ok], y[ok], cv=cv).mean())
 
 
-def cellA_positive_control(method, coef, LA, site_dir):
-    """Score the CELL-A entity activations with the very same frozen direction
-    through the very same code path. If this does not reproduce rho ~ .85+,
-    any 'transfer fails' claim is a pipeline bug, not a finding."""
-    ent_csv = os.path.join(_WM, "data", "entity_datasets",
-                           "historical_figure.csv")
-    acts = os.path.join(_WM, "activations", method, "historical_figure",
+def entity_positive_control(method, entity, coef, LA, site_dir):
+    """Score the entity activations with the very same frozen direction
+    through the very same code path. If this does not reproduce the entity-set
+    held-out rho, any 'transfer fails' claim is a pipeline bug, not a
+    finding."""
+    cfg = ENTITY_CFG[entity]
+    acts = os.path.join(cfg["acts"].format(method=method),
                         f"{site_dir}.layer{LA}.npz")
-    if not (os.path.exists(ent_csv) and os.path.exists(acts)):
+    if not (os.path.exists(cfg["csv"]) and os.path.exists(acts)):
         return {"skipped": f"missing {acts}"}
-    ent = pd.read_csv(ent_csv)
+    ent = pd.read_csv(cfg["csv"])
     X = np.load(acts)["acts"].astype(np.float32)
     if len(X) != len(ent):
         return {"skipped": "row mismatch"}
@@ -147,6 +225,46 @@ def cellA_positive_control(method, coef, LA, site_dir):
     te = ent["is_test"].astype(bool).values & np.isfinite(y)
     s = X[te] @ coef
     return {"spearman_heldout": spearman(s, y[te]), "n": int(te.sum())}
+
+
+def stability(method, entity, LA, site_dir, coef_full, frag_X, year, df,
+              m, draws, seed, K):
+    """THE 'WHICH w DID YOU TAKE' ANSWER, as data. The canonical direction is
+    a single fit on the fixed train split; the Monte-Carlo machinery was
+    evaluation-only. Here we refit the direction on K resampled 80% train
+    sets (grouped by entity) and push EVERY refit through the frozen
+    transfer, reporting the spread. If the conclusion depended on which fit
+    you took, these quantiles would say so."""
+    cfg = ENTITY_CFG[entity]
+    p = os.path.join(cfg["acts"].format(method=method),
+                     f"{site_dir}.layer{LA}.npz")
+    if not os.path.exists(p):
+        return {"skipped": p}
+    from sklearn.linear_model import RidgeCV
+    ent = pd.read_csv(cfg["csv"])
+    Xe = np.load(p)["acts"].astype(np.float32)
+    y = ent.death_year.values.astype(float)
+    valid = np.isfinite(y)
+    groups = (ent.entity_ix.values if "entity_ix" in ent
+              else np.arange(len(ent)))
+    ug = np.unique(groups[valid])
+    rng = np.random.default_rng(seed)
+    cosims, rhos, macs = [], [], []
+    for k in range(K):
+        keep = rng.choice(ug, size=int(0.8 * len(ug)), replace=False)
+        tr = valid & np.isin(groups, keep)
+        w = RidgeCV(alphas=RIDGE_ALPHAS).fit(Xe[tr], y[tr]).coef_.ravel()
+        cosims.append(float(w @ coef_full /
+                            (np.linalg.norm(w) * np.linalg.norm(coef_full)
+                             + 1e-9)))
+        s = frag_X @ w.astype(np.float32)
+        rhos.append(spearman(s, year))
+        macs.append(pairwise_eval(df, s, m, min(draws, 10), seed + 977 + k)[0])
+    q = lambda a: {"q05": float(np.quantile(a, .05)),               # noqa: E731
+                   "median": float(np.median(a)),
+                   "q95": float(np.quantile(a, .95))}
+    return {"K": K, "cos_vs_canonical": q(cosims),
+            "frozen_spearman": q(rhos), "pairwise_macro": q(macs)}
 
 
 def spearman(a, b):
@@ -166,11 +284,20 @@ def main():
     ap.add_argument("--draws", type=int, default=50)
     ap.add_argument("--skip-leace", action="store_true")
     ap.add_argument("--seed", type=int, default=P.SEED)
+    ap.add_argument("--entity-set", default="historical_figure",
+                    choices=list(ENTITY_CFG),
+                    help="whose axis transfers: cell A (default) or the "
+                    "cell-B ruler axis (E3b)")
+    ap.add_argument("--stability", type=int, default=0, metavar="K",
+                    help="refit the direction on K resampled train sets and "
+                    "report the spread of every read-out")
     args = ap.parse_args()
 
     if args.acts_root:
         PP.ACTS = args.acts_root
-    coef, srcA_site, LA, src = find_cellA_direction(args.method, args.dirs_root)
+    ENTITY = args.entity_set
+    coef, srcA_site, LA, src = find_entity_direction(
+        args.method, args.dirs_root, ENTITY)
     df = P.load_eligible()
     layers = PP.load_act_layers(args.method, args.variant, args.site, stride=1)
     year = df.year.values.astype(float)
@@ -191,9 +318,9 @@ def main():
 
     # positive control FIRST: the same direction on its home turf must work,
     # or every downstream null is uninterpretable
-    out["positive_control_cellA"] = cellA_positive_control(
-        args.method, coef, LA, srcA_site)
-    print(f"  [control] cell-A held-out: {out['positive_control_cellA']}",
+    out["positive_control_cellA"] = entity_positive_control(
+        args.method, ENTITY, coef, LA, srcA_site)
+    print(f"  [control] {ENTITY} held-out: {out['positive_control_cellA']}",
           flush=True)
 
     # primary: the same residual depth the direction was fitted at
@@ -205,6 +332,12 @@ def main():
         out["cellA_layer_used"] = LA
     X = layers[LA]
     out["frozen"] = readout(X, f"frozen L{LA}")
+
+    if args.stability:
+        out["stability"] = stability(
+            args.method, ENTITY, LA, srcA_site, coef, X, year, df,
+            args.m, args.draws, args.seed, args.stability)
+        print(f"  [stability] {out['stability']}", flush=True)
 
     if not args.skip_leace:
         Xe = leace_erase(X, df.ruler.values)
@@ -246,8 +379,10 @@ def main():
     out["cosine_vs_pairwise_direction"] = cos
 
     os.makedirs(RESULTS, exist_ok=True)
+    suffix = "" if ENTITY == "historical_figure" else f".{ENTITY}"
     pth = os.path.join(RESULTS,
-                       f"{args.method}.{args.variant}.{args.site}.json")
+                       f"{args.method}.{args.variant}.{args.site}"
+                       f"{suffix}.json")
     with open(pth, "w") as f:
         json.dump(out, f, indent=2)
     print(f"[done] -> {pth}", flush=True)
