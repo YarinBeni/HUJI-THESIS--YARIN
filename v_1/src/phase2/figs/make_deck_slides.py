@@ -53,7 +53,7 @@ def chart_dissociation():
            "tfidf_char": "char n-gram floor"}
     W, PH, ROW = 1040, 54, 21
     n = sp[sp.variant == "akk_maximal"].shape[0]
-    H = PH + n * ROW + 40
+    H = PH + n * ROW + 56
     s = [svg_open(W, H)]
     for pi, (var, title) in enumerate(
             (("akk_maximal", "Akkadian (raw transliteration)"),
@@ -94,6 +94,9 @@ def chart_dissociation():
                 s.append(txt(xm(r.macro_acc + r.macro_sd) + 5, y + 3.5,
                              f"p={a['permutation']['p_value']:.3g}", 10, c,
                              "start", 700))
+    s.append(txt(W / 2, H - 4,
+                 "pairwise ordering accuracy, macro over ruler pairs "
+                 "(0.5 = chance)", 11, "var(--ink-light)", "middle"))
     s.append("</svg>")
     return "".join(s)
 
@@ -129,7 +132,7 @@ def chart_lens_tokens():
 
 
 def chart_spectrum():
-    W, H = 1040, 290
+    W, H = 1040, 312
     s = [svg_open(W, H)]
     for j, (m, name) in enumerate((("olmo2_7b", "OLMo-2 7B"),
                                    ("llama2_7b", "Llama-2 7B"),
@@ -163,6 +166,16 @@ def chart_spectrum():
         s.append(txt(X0 + XW / 2, H - 10,
                      "rank decile along the direction", 10,
                      "var(--ink-light)", "middle"))
+    s.append(txt(16, 130, "% ancient-temporal tokens in decile", 10,
+                 "var(--ink-light)", "middle")
+             .replace('<text', '<text transform="rotate(-90 16 130)"'))
+    s.append(line(300, 8, 320, 8, GREEN, 2.4))
+    s.append(txt(325, 12, "entity year axis", 10.5, GREEN, "start", 700))
+    s.append(line(435, 8, 455, 8, GRAYC, 2.4))
+    s.append(txt(460, 12, "document order axis", 10.5, GRAYC, "start",
+                 700))
+    s.append(txt(600, 12, "\u25cb = |z| \u2265 3.35 (Bonferroni vs 50 "
+                 "random directions)", 10.5, "var(--ink-light)", "start"))
     s.append("</svg>")
     return "".join(s)
 
@@ -329,6 +342,11 @@ def chart_orthogonal():
     s.append(txt(xm(chance) + 6, 46,
                  f"chance in d=4096  (1/√d = {chance:.3f})", 10.5,
                  "var(--ink-light)"))
+    for gv in (0, .01, .02, .03):
+        yb = 34 + len(t) * ROW
+        s.append(line(xm(gv), yb, xm(gv), yb + 5, "var(--ink-light)", 1))
+        s.append(txt(xm(gv), yb + 16, f"{gv:.2f}", 9.5, "var(--ink-light)",
+                     "middle"))
     for i, (_, r) in enumerate(t.iterrows()):
         y = 52 + i * ROW
         c = GREEN if r.m in ("olmo2_7b", "qwen3_8b") else GRAYC
@@ -354,6 +372,10 @@ def chart_orthogonal():
         h = abs(r.rho) * 90
         yb = ym2(0) - h if r.rho > 0 else ym2(0)
         s.append(rect(x, yb, bw, max(h, 1), c, 2))
+        s.append(txt(x + bw / 2, ym2(0) + (14 if r.rho > 0 else -8),
+                     f"{r.m.split('_')[0][:4]}·"
+                     f"{'a' if 'akk' in r.v else 'e'}", 8.5,
+                     "var(--ink-light)", "middle"))
     s.append(txt(X1 + X1W / 2, 52 + len(t) * ROW,
                  "the cell-A year probe, applied frozen to fragments", 10.5,
                  "var(--ink-light)", "middle"))
@@ -400,6 +422,9 @@ def chart_gating():
                          "var(--ink)", "middle", 700))
             s.append(txt(x + bw / 2, Y0 + YH + 16, plabels[k], 9.5,
                          "var(--ink-light)", "middle"))
+    s.append(txt(16, 150, "median firing rate of top-50 year features (%)",
+                 9.5, "var(--ink-light)", "middle")
+             .replace('<text', '<text transform="rotate(-90 16 150)"'))
     s.append("</svg>")
     return "".join(s)
 
@@ -469,7 +494,12 @@ def chart_decomposition():
             s.append(txt(xm2(float(r.fire_cellA.iloc[0])) + dx,
                          ym2(float(r.rho_year.iloc[0])) + dy, lab, 10.5,
                          "#7c5e00", "start", 700))
-    s.append(txt(X1 + X1W / 2, Y1 + Y1H + 26,
+    for gv in (0, .25, .5, .75, 1.0):
+        s.append(line(xm2(gv), Y1 + Y1H, xm2(gv), Y1 + Y1H + 5,
+                      "var(--ink-light)", 1))
+        s.append(txt(xm2(gv), Y1 + Y1H + 16, f"{int(100*gv)}%", 9.5,
+                     "var(--ink-light)", "middle"))
+    s.append(txt(X1 + X1W / 2, Y1 + Y1H + 30,
                  "firing rate on entity prompts", 10.5, "var(--ink-light)",
                  "middle"))
     s.append(txt(392, 160, "ρ(feature strength, death year)", 10.5,
@@ -497,22 +527,31 @@ STYLE = '''<style>/* phase-2 additions */
 .p2ctx{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:#fff;border:1px solid var(--border-light);border-radius:5px;padding:3px 8px;margin:4px 0;color:var(--ink-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .p2fire{background:#c3a94e;color:#fff;border-radius:3px;padding:0 4px;font-weight:800;}
 .p2fires{font-size:11.5px;color:var(--ink-light);margin-top:5px;font-variant-numeric:tabular-nums;}
+.cfg-v a{color:var(--green);font-weight:600;text-decoration:underline dotted;}
+.frm2{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:#fff;border:1px solid var(--border-light);border-radius:4px;padding:0 6px;white-space:nowrap;}
+.p2meth{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;background:#f8f9fb;border:1px solid var(--border);border-radius:8px;padding:9px 14px;margin:0 0 10px;font-size:12px;line-height:1.45;color:var(--ink-mid);}
+.p2meth b{display:block;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:2px;}
+.p2meth .frm{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;color:var(--ink);background:#fff;border:1px solid var(--border-light);border-radius:5px;padding:5px 10px;align-self:center;white-space:nowrap;}
 </style>'''
 
 
-def slide(idx, eyebrow, headline, body, takeaway=None, note=None):
-    tk = (f'<div class="takeaway"><span class="tk-label">Takeaway</span>'
-          f'{takeaway}</div>') if takeaway else ""
-    nt = f'<div class="fig-note">{note}</div>' if note else ""
-    return (f'<section class="slide" data-index="{idx}">\n'
+def slide(idx, eyebrow, headline, cfg_rows, body, takeaway):
+    cfg = ""
+    if cfg_rows:
+        cells = "".join(f'<div class="cfg-k">{k}</div>'
+                        f'<div class="cfg-v">{v}</div>' for k, v in cfg_rows)
+        cfg = f'<div class="cfg tight">{cells}</div>'
+    return (f'<section class="slide slide-figure fig-major" '
+            f'data-index="{idx}">\n'
             f'  <div class="eyebrow">{eyebrow}</div>\n'
-            f'  <h2 class="sh">{headline}</h2>\n'
-            f'  {body}\n{nt}{tk}\n</section>\n')
+            f'  <h2 class="sh">{headline}</h2>\n  {cfg}\n'
+            f'  {body}\n'
+            f'  <div class="takeaway tight"><span class="tk-label">Key '
+            f'takeaway</span>{takeaway}</div>\n</section>\n')
 
 
 TITLES_NEW = [
     "Phase 2: why does it collapse at the entity-to-document boundary?",
-    "Phase 2 method, data and configuration",
     "Ordering fragments: no model beats the surface floor in Akkadian",
     "The entity year axis and the document axis are different, orthogonal directions",
     "The year direction literally reads 'ancient'; the document direction reads nothing",
@@ -524,164 +563,277 @@ TITLES_NEW = [
     "And why it never reaches documents: even forced on, the signal dies before the read-out",
 ]
 
+A_GT = '<a href="https://arxiv.org/abs/2310.02207">Gurnee &amp; Tegmark 2023</a>'
+A_ELS = '<a href="https://arxiv.org/abs/2410.13194">El-Shangiti et al., NAACL 2025</a>'
+A_LEACE = '<a href="https://arxiv.org/abs/2306.03819">Belrose et al., NeurIPS 2023</a>'
+A_LENS = '<a href="https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens">nostalgebraist\u2019s logit lens</a>'
+A_CV = '<a href="https://arxiv.org/abs/2406.11614">Hong et al., EMNLP 2025</a>'
+A_GG = '<a href="https://transformer-circuits.pub/2024/scaling-monosemanticity/">Templeton et al. 2024</a>'
+A_AUTO = '<a href="https://blog.eleuther.ai/autointerp/">EleutherAI autointerp</a>'
+A_QS = '<a href="https://huggingface.co/Qwen/SAE-Res-Qwen3-8B-Base-W64K-L0_100">Qwen-Scope</a>'
+A_KV = '<a href="https://huggingface.co/adamkarvonen/qwen3-8b-saes">Karvonen\u2019s batch-TopK release</a>'
+
 
 def main():
     deck = open(DECK, encoding="utf-8").read()
-    # idempotent: strip any previous phase-2 block + title patch
     deck = re.sub(r"<!-- PHASE2-BEGIN -->.*?<!-- PHASE2-END -->\n?", "",
                   deck, flags=re.S)
     deck = re.sub(r"/\*P2TITLES\*/.*?/\*P2TITLES-END\*/\n?", "", deck,
                   flags=re.S)
-    base_total = len(re.findall(r'<section class="slide', deck))
+    base = len(re.findall(r'<section class="slide', deck))
+    S = []
 
-    s33 = slide(
-        base_total, "Phase 2 · the mechanistic program · F1–F27",
-        "Phase 2: the deck ends where a linear world model ends — 27"
-        " experiments ask <em>why</em> it ends there",
-        '''<div class="text-points">
+    S.append(f'''<section class="slide slide-text" data-index="{base}">
+  <div class="eyebrow">Phase 2 &middot; the mechanistic program &middot; F1&ndash;F27</div>
+  <h2 class="sh">Phase 2: the deck ends where a linear world model ends &mdash; twenty-seven experiments ask <em>why</em> it ends there</h2>
+  <div class="text-points">
   <div class="tp"><div class="tp-h">Reframe as ordering (E1, E8)</div>
-  <div class="tp-b">628k fragment pairs, "which was composed earlier?",
-  quota-balanced per ruler pair, permutation tests that shuffle whole
-  kings. Kills the "regression format" and "label leakage" explanations.</div></div>
+  <div class="tp-b">628k fragment pairs, &ldquo;which was composed earlier?&rdquo; &mdash; kills the regression-format and label-leakage explanations for the collapse.</div></div>
   <div class="tp"><div class="tp-h">Transfer the axis (E3)</div>
-  <div class="tp-b">Freeze the entity year direction, apply it to fragments:
-  ρ ≈ 0, and cos(entity axis, document axis) ≈ .01 — chance level in
-  d=4096. The two "times" are different directions.</div></div>
-  <div class="tp"><div class="tp-h">Decompose (F6–F8, F21–F25)</div>
-  <div class="tp-b">Logit-lens the directions; split representations into
-  sparse-autoencoder features in <strong>two independent dictionaries</strong>;
-  interpret the features by their max-activating contexts.</div></div>
+  <div class="tp-b">Freeze the entity year direction, apply it to fragments; measure the angle between the two learned &ldquo;time&rdquo; directions.</div></div>
+  <div class="tp"><div class="tp-h">Decompose (F6&ndash;F8, F21&ndash;F25)</div>
+  <div class="tp-b">Logit-lens the directions; split representations into sparse-autoencoder features in two independent dictionaries; read each feature by its max-activating contexts.</div></div>
   <div class="tp"><div class="tp-h">Intervene (F23, F26)</div>
-  <div class="tp-b">Clamp features with firing-rate-matched controls: does the
-  year prediction move? Can the signal be forced into a document?</div></div>
-  <div class="tp"><div class="tp-h">Exhaust the alternatives (F15–F19, F27)</div>
-  <div class="tp-b">Length, find-spot, pooling choice, seriation, kernel and MLP
-  probes — every "document time" candidate decomposes into text form.</div></div>
-</div>''',
-        "Same corpus, same probes, one new question: not <em>whether</em> the"
-        " model dates documents (it doesn't), but <em>what exists instead</em>"
-        " — mapped down to individual features."
-    )
-    s33b = slide(
-        base_total + 1, "Phase 2 · method, data, configuration",
-        "Where each method comes from, and exactly what it runs on",
-        '''<div class="cfg tight">
-  <div class="cfg-k">Paradigm</div><div class="cfg-v"><strong>Gurnee &amp; Tegmark 2023</strong> (linear probes on residual activations) is the frame the whole deck tests; phase 2 adds <strong>El-Shangiti et al., NAACL 2025</strong> (activation steering at name tokens), <strong>Belrose et al. 2023</strong> (LEACE concept erasure + the tuned-lens caveat), <strong>Atkins et al. 1998</strong> (spectral seriation), <strong>Templeton et al. 2024</strong> (Golden-Gate feature clamping) and two independent SAE dictionaries — <strong>Qwen-Scope</strong> (64k, layer 24) and <strong>Karvonen's batch-TopK 65k</strong> (layer 9, the only layer of that release passing our FVU ≤ .35 reconstruction gate).</div>
-  <div class="cfg-k">Data</div><div class="cfg-v"><strong>Cell A:</strong> 7,507 historical figures (death year), name prompts, held-out test split. <strong>Cells B'/C:</strong> the same 1,187 dated Assyrian royal inscriptions as the deck (40 rulers, 777 eligible ruler pairs) in two variants — <code>akk_maximal</code> (raw transliteration, royal names removed) and <code>eng_tier0</code> (literal English gloss). Genre is constant (all royal inscriptions) — checked, so it cannot confound.</div>
-  <div class="cfg-k">Pooling</div><div class="cfg-v">Fragments: <strong>mean pooling</strong> over tokens at the layer selected once in F1 (last-token also swept — F19 shows the trained-vs-twin gap is pooling-dependent and reports it). Entities: <strong>last-token</strong> of the name, the probe's own convention. Year targets standardized per train fold; probe read-outs are in sd-of-death-year units.</div>
-  <div class="cfg-k">Protocol</div><div class="cfg-v">Pairwise: quota m=21 pairs per ruler pair per draw, weights 1/m, macro over ruler pairs, <strong>both-rulers-held-out</strong> folds, 100 Monte-Carlo draws. Inference: permutation with full refit at ruler level (B=150) + dyadic bootstrap (Snijders &amp; Borgatti 1999). Interventions: every treated feature has a <strong>firing-rate-matched random control</strong>; claims are treated-minus-control.</div>
-  <div class="cfg-k">Controls</div><div class="cfg-v">Random-weight twins of each architecture, the char n-gram floor, random directions for every lens/spectroscopy read, pre-registered decision rules written before each job ran.</div>
-</div>''',
-        None)
-    s34 = slide(
-        base_total + 2, "E1 + E8 · pairwise ordering · ruler-level permutation",
+  <div class="tp-b">Clamp features with firing-rate-matched controls: does the year prediction move? Can the signal be forced into a document?</div></div>
+  <div class="tp"><div class="tp-h">Exhaust the alternatives (F15&ndash;F19, F27)</div>
+  <div class="tp-b">Length, find-spot, pooling, seriation, kernel and MLP probes &mdash; every &ldquo;document time&rdquo; candidate decomposes into text form.</div></div>
+  </div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Same corpus, same probes, one new question.</strong> Not <em>whether</em> the model dates documents (it doesn't), but <em>what exists instead</em> &mdash; mapped down to individual features. Cell A = 7,507 historical figures; cells B&prime;/C = the same 1,187 dated royal inscriptions (40 rulers).</div>
+</section>
+''')
+
+    S.append(slide(
+        base + 1, "E1 + E8 &middot; pairwise ordering",
         "Ordering fragments: untrained twins top the Akkadian board; only"
         " trained models are significant in English",
+        [("Task", "order two fragments &mdash; <strong>&ldquo;which was"
+          " composed earlier?&rdquo;</strong> &mdash; 628,454 ordered pairs"
+          " from the same 1,187 dated fragments, in both variants"
+          " (cleaned Akkadian transliteration / literal English gloss)."
+          " Relative order only: no absolute year ever enters training."),
+         ("Method", "Bradley&ndash;Terry pairwise logistic on activation"
+          f" differences, <span class=\'frm2\'>P(a&#8826;b) ="
+          " &sigma;(w&middot;(x_a &minus; x_b))</span>; evaluation protocol"
+          f" after {A_ELS}, probing frame after {A_GT}. Significance:"
+          " permutation that reassigns whole rulers and refits everything"
+          " (B=150) + dyadic bootstrap over rulers."),
+         ("Data &amp; pooling", "<strong>mean pooling</strong> over tokens"
+          " at the layer fixed once in F1; quota <strong>m=21</strong>"
+          " pairs per ruler pair per draw, weights 1/m, macro over ruler"
+          " pairs, <strong>both-rulers-held-out</strong> folds, 100"
+          " Monte-Carlo draws. Floor: char n-gram TF-IDF through the"
+          " identical protocol.")],
         f'<div class="p2chart">{chart_dissociation()}</div>',
-        "Left: random-weight twins (hollow) sit at the top and everything"
-        " hugs the char n-gram floor — the “order” is text form, not"
-        " knowledge. Right: only trained OLMo and Qwen are significant"
-        " (p=.0066, permuting whole kings) while the floor itself is not"
-        " (p=.11). This small English signal is what phase 2 dissects.")
-    s34b = slide(
-        base_total + 3, "E3 · frozen transfer + direction geometry",
-        "The entity year axis and the document order axis are two different"
-        " directions — orthogonal at chance level",
+        "<strong>The collapse is not a formatting artifact.</strong>"
+        " Left: random-weight twins (hollow) sit at the top of the"
+        " Akkadian board and every arm hugs the surface floor &mdash; the"
+        " achievable &ldquo;order&rdquo; is text form. Right: in English"
+        " only trained OLMo and Qwen are significant (p=.0066) while the"
+        " floor itself is not (p=.11); that small trained-only signal is"
+        " what the rest of phase 2 dissects."))
+
+    S.append(slide(
+        base + 2, "E3 &middot; frozen transfer + direction geometry",
+        "The entity year axis and the document order axis are two"
+        " different directions &mdash; orthogonal at chance level",
+        [("Task", "does the axis that dates <em>people</em> also order"
+          " <em>documents</em>? If document time were the same axis,"
+          " diluted, the frozen entity direction should order fragments"
+          " above chance."),
+         ("Method", "frozen linear transfer &mdash; <span class=\'frm2\'>"
+          "s(x) = w_A&middot;x</span>, zero training on the document side"
+          " &mdash; plus the direct geometric test cos(w_A, w_doc);"
+          f" erasure checks with LEACE ({A_LEACE}), fp64, verified by"
+          " ruler-probe collapse (.41&ndash;.59 &rarr; .07&ndash;.14)."),
+         ("Data &amp; pooling", "w_A = the cell-A ridge direction"
+          " (last-token of the name, its best layer); applied to"
+          " mean-pooled fragment activations, both variants. Positive"
+          " control: the same code path reproduces &rho;=.87&ndash;.89 on"
+          " cell A, so the null is not a bug.")],
         f'<div class="p2chart">{chart_orthogonal()}</div>',
-        "Freeze the cell-A year direction and apply it to fragments:"
-        " Spearman ρ ≈ 0 in every arm (right). And directly:"
-        " |cos| between the two learned directions sits inside the"
-        " 1/√d ≈ .016 chance band (left) — the document axis is not a"
-        " tilted or diluted copy of the entity axis; it is a different"
-        " axis altogether. The positive control (same code path on cell A)"
-        " reproduces ρ=.87–.89, so the null is real.")
-    s35 = slide(
-        base_total + 4, "F6 · logit lens on the probe directions",
+        "<strong>Document time is not a weaker copy of entity time"
+        " &mdash; it is a different direction altogether.</strong>"
+        " |cos| sits at the 1/&radic;d &asymp; .016 chance band (left) and"
+        " frozen transfer orders fragments at &rho; &asymp; 0 in every arm"
+        " (right). H-dilute is dead; whatever orders documents lives on"
+        " another axis."))
+
+    S.append(slide(
+        base + 3, "F6 &middot; logit lens on the probe directions",
         "Project each direction onto the vocabulary: the entity year axis"
         " points at ancient-time words, the document axis at junk",
-        f'<div class="p2chart" style="align-items:flex-start">{chart_lens_tokens()}</div>',
-        "Gold chips: the entity axis's early end reads Ancient / BCE / BC in"
-        " every model — in Qwen even in Chinese (公元前 “BCE”, 古代"
-        " “ancient”, 战国 “Warring States”). The direction trained to"
-        " order documents projects onto nothing temporal at either end.")
-    s36 = slide(
-        base_total + 5, "F21 · whole-vocabulary spectroscopy · 50 random-direction nulls",
-        "Not just the extremes: rank all ~150k tokens along each direction"
-        " — ancient vocabulary concentrates in the entity axis's first"
-        " decile only",
-        f'<div class="p2chart">{chart_spectrum()}</div>',
-        "Green: entity year axis — the share of ancient-temporal tokens"
-        " spikes in decile 1 in all three models (○ = |z| ≥ 3.35,"
-        " Bonferroni, vs 50 random directions). Gray: the document axis"
-        " never leaves the noise in any decile.")
-    s36b = slide(
-        base_total + 6, "F8 + F11 + F22 · where the year features fire",
-        "The year features are entity-gated: alive inside English text,"
-        " silent at the read-out, and (in a sparse basis) never engaging"
-        " Akkadian",
-        f'<div class="p2chart">{chart_gating()}</div>',
-        "Median firing of the top-50 year-correlated features. Left: at the"
-        " read-out token they fire on entities (11.7%) and essentially"
-        " never on documents (0.08% eng). Middle: anywhere in the text they"
-        " DO fire inside English glosses (14.9%) — the signal exists"
-        " mid-document but does not propagate. Right: an independently"
-        " trained second dictionary replicates both halves (35.5% eng,"
-        " 2.0% akk fired-anywhere).")
-    s36c = slide(
-        base_total + 7, "F8 + F22 · decomposing the year probe",
-        "No single year neuron: the year direction is a distributed code —"
-        " and these are the features that carry it",
-        f'<div class="p2chart">{chart_decomposition()}</div>',
-        "Left: the overlap of every hunted feature with the ridge year"
-        " direction — all |cos| ≤ .12 in both dictionaries; the axis is"
-        " spread across many features. Right: each dot is one feature"
-        " (firing rate × year correlation); 38678 is the headline"
-        " entity-time feature, and the labeled ones are the name-culture"
-        " detectors of the next slide.")
-    s37 = slide(
-        base_total + 8, "F8 + F25 · SAE decomposition · max-activating contexts",
-        "The year-correlated features are name-culture detectors — the"
-        " “time” the model knows about people is onomastics",
-        chart_feature_cards(),
-        "Each card: a real SAE feature, the contexts that fire it hardest"
-        " (firing token in gold), and its firing rates. German surname"
-        " endings, “X of England” nobility, ancient genealogy formulas,"
-        " Chinese names — naming culture tracks era, and that is the"
-        " correlation the probe reads.")
-    s38 = slide(
-        base_total + 9, "F23 · causal interventions · rate-matched controls",
-        "Clamp one feature at an entity prompt and the frozen year"
-        " prediction moves — monotonically, in the sign of that feature's"
-        " correlation",
-        f'<div class="p2chart">{chart_causality()}</div>',
-        "Each colored line is one name-culture feature; the gray band is"
-        " five control features matched on firing rate but uncorrelated"
-        " with year. Pushing “Chinese names” (ρ&lt;0) drags the read-out"
-        " earlier by up to 0.6 sd; “German surnames” (ρ&gt;0) later."
-        " Correlation became causation — for the features, not for a time"
-        " concept. (Side effect: clamping the German-surname feature during"
-        " free generation makes the model write German.)")
-    s39 = slide(
-        base_total + 10, "F23 bridge + F26 ignition · the causal seal",
-        "Force the features ON across a whole document — they still never"
-        " fire at the read-out token. The entity–document gap is a"
-        " disconnection, not missing knowledge",
-        f'<div class="p2chart">{chart_bridge()}</div>',
-        "Per feature, two bars: natural state vs clamped ON over the whole"
-        " mid-document. Every row reads x → x: nothing propagates to the"
-        " token the probe reads — treated and control alike. F26 also"
-        " ignited the features exactly at the ruler's name inside glosses:"
-        " flat against controls. The model has a real, semantic,"
-        " causally-usable entity time axis built from onomastic features"
-        " — and no channel that carries any of it into a document"
-        " representation, even by force.")
+        [("Method", f"direction-level logit lens ({A_LENS}; concept-vector"
+          f" reading after {A_CV}): normalize the probe direction, pass it"
+          " through the final RMSNorm and the unembedding, "
+          f"<span class=\'frm2\'>&#8467; = W_U(&gamma; &#8857;"
+          " &#375;)</span>, and read the extreme tokens at both ends."
+          " No training involved."),
+         ("Setup", "two directions per model: the cell-A year direction"
+          " (ridge, last-token) and E1&rsquo;s pairwise document direction"
+          " (mean-pooled); top tokens of each end; random directions"
+          " through the identical pipeline as control (F14) &mdash; they"
+          " lens to the same kind of junk as the document axis.")],
+        f'<div class="p2chart" style="align-items:flex-start">'
+        f'{chart_lens_tokens()}</div>',
+        "<strong>The entity year axis is semantically temporal; the"
+        " document axis is not a time axis at all.</strong> Its early end"
+        " literally reads Ancient / BCE / BC in every model &mdash; in"
+        " Qwen even in Chinese (&#20844;&#20803;&#21069; &ldquo;BCE&rdquo;,"
+        " &#21476;&#20195; &ldquo;ancient&rdquo;) &mdash; while the"
+        " document direction projects onto morphological debris at both"
+        " ends."))
 
-    block = ("<!-- PHASE2-BEGIN -->\n" + STYLE + "\n"
-             + s33 + s33b + s34 + s34b + s35 + s36 + s36b + s36c
-             + s37 + s38 + s39
+    S.append(slide(
+        base + 4, "F21 &middot; whole-vocabulary spectroscopy",
+        "Not just the extremes: rank all ~150k tokens along each"
+        " direction &mdash; ancient vocabulary concentrates in the entity"
+        " axis&rsquo;s first decile only",
+        [("Method", "upgrade the lens from anecdote to instrument: rank"
+          " the <strong>entire vocabulary</strong> along the direction,"
+          " split into 10 deciles, score each (decile &times; category)"
+          " cell against an empirical null of <strong>50 random"
+          " directions</strong>, <span class=\'frm2\'>z = (share &minus;"
+          " &mu;_null) / &sigma;_null</span>; a cosine variant divides"
+          " out loud unembedding rows. Bonferroni over 90 cells &rarr;"
+          " |z| &ge; 3.35."),
+         ("Setup", "~150k tokens per model &times; 9 keyword categories"
+          " (ancient-temporal, modern, year numerals, function words,"
+          " capitalized, &hellip;); both directions per model. The"
+          " year-token ordering test proved untestable: all three"
+          " tokenizers split 4-digit numbers.")],
+        f'<div class="p2chart">{chart_spectrum()}</div>',
+        "<strong>&ldquo;The year axis is semantic&rdquo; now holds across"
+        " the whole spectrum, with multiple-comparison control.</strong>"
+        " The ancient-token share spikes in decile 1 of the entity axis"
+        " in all three models (z up to +6.8) and survives the cosine"
+        " correction; the document axis never leaves the noise in any"
+        " decile of any model."))
+
+    S.append(slide(
+        base + 5, "F8 + F11 + F22 &middot; where the year features fire",
+        "The year features are entity-gated: alive inside English text,"
+        " silent at the read-out, and never engaging Akkadian",
+        [("Method", "split residual activations into sparse-autoencoder"
+          f" features in <strong>two independent dictionaries</strong>:"
+          f" {A_QS} (TopK k=100, layer 24) and {A_KV} (65k, layer 9"
+          " &mdash; the only layer of that release passing the"
+          " reconstruction gate FVU &le; .35). Inference per dictionary,"
+          " <span class=\'frm2\'>z = ReLU(W_enc h + b) &middot;"
+          " 1[pre &gt; &theta;]</span>."),
+         ("Setup", "features selected by |&rho;(strength, death year)| on"
+          " held-out cell-A entities (top-50); firing measured on three"
+          " populations &mdash; entity prompts, English glosses, Akkadian"
+          " fragments &mdash; at the read-out token and anywhere in the"
+          " text.")],
+        f'<div class="p2chart">{chart_gating()}</div>',
+        "<strong>The gate, in numbers.</strong> At the read-out token the"
+        " year features fire on entities (11.7%) and essentially never on"
+        " documents (0.08% eng). Mid-text they DO fire inside English"
+        " glosses (14.9%) &mdash; the signal exists inside the document"
+        " and does not propagate. An independently trained second"
+        " dictionary replicates both halves (35.5% eng / 2.0% akk"
+        " fired-anywhere)."))
+
+    S.append(slide(
+        base + 6, "F8 + F22 &middot; decomposing the year probe",
+        "No single year neuron: the year direction is a distributed code"
+        " &mdash; and these are the features that carry it",
+        [("Method", "feature&ndash;direction geometry: compare every"
+          " hunted feature&rsquo;s decoder row to the frozen ridge"
+          " direction, <span class=\'frm2\'>cos(W_dec,f&thinsp;,"
+          " w_ridge)</span>; hunt features by rank correlation with the"
+          " probe&rsquo;s own target, <span class=\'frm2\'>&rho;(z_f,"
+          " death year)</span>, on held-out entities."),
+         ("Setup", "all candidates firing on &ge;2% of entities in both"
+          " dictionaries (754 in Qwen-Scope L24, 776 in the 65k L9);"
+          " the ridge direction is the same frozen cell-A probe used"
+          " throughout phase 2.")],
+        f'<div class="p2chart">{chart_decomposition()}</div>',
+        "<strong>The axis is spread across many features &mdash; there is"
+        " no &ldquo;year neuron&rdquo;.</strong> Every overlap is"
+        " |cos| &le; .12 in both dictionaries (left). The hunt map"
+        " (right) shows what carries it instead: 38678 fires on 62% of"
+        " entities at &rho;=+.57, surrounded by the name-culture detectors"
+        " the next slide reads."))
+
+    S.append(slide(
+        base + 7, "F8 + F25 &middot; what the features mean",
+        "The year-correlated features are name-culture detectors &mdash;"
+        " the &ldquo;time&rdquo; the model knows about people is"
+        " onomastics",
+        [("Method", f"max-activating examples &mdash; the standard"
+          f" feature-reading practice behind Neuronpedia dashboards and"
+          f" {A_AUTO} &mdash; corroborated behaviourally by"
+          f" Golden-Gate-style clamped generation ({A_GG})."),
+         ("Setup", "20 strongest contexts per feature across all three"
+          " populations (firing token marked in gold); generation:"
+          " clamp at 10&times;act95 during greedy chat decoding &mdash;"
+          " clamping the German-surname feature makes the model write"
+          " German mid-answer.")],
+        chart_feature_cards(),
+        "<strong>Naming culture tracks era &mdash; and that is the"
+        " correlation the probe reads.</strong> German surname endings"
+        " (&rho;=+.40), &ldquo;X of England&rdquo; nobility (&minus;.37),"
+        " ancient genealogy formulas (&minus;.37, the only one firing on"
+        " the glosses too), Chinese names (&minus;.37): who-you-are"
+        " features from which when-you-lived is decodable."))
+
+    S.append(slide(
+        base + 8, "F23 &middot; causal interventions",
+        "Clamp one feature at an entity prompt and the frozen year"
+        " prediction moves &mdash; monotonically, in the sign of that"
+        " feature&rsquo;s correlation",
+        [("Method", "feature clamping with the non-surgicality discipline:"
+          " every treated feature has a <strong>firing-rate-matched random"
+          " control</strong>, and the claim is treated-minus-control."
+          " Intervention <span class=\'frm2\'>h &larr; h + &alpha;"
+          " &middot; act95_f &middot; d_f</span> at every position;"
+          " read-out = the frozen cell-A ridge probe at the last token,"
+          " in sd-of-death-year units. (Direction-level steering, F9/F12,"
+          " was null &mdash; the feature level is where causality"
+          " lives.)"),
+         ("Setup", "200 held-out entity prompts; hook at the SAE&rsquo;s"
+          " layer; &alpha; &isin; {&minus;8 &hellip; +8}; 5 treated"
+          " features + 5 matched controls; ablation of single features"
+          " changes nothing (distributed code).")],
+        f'<div class="p2chart">{chart_causality()}</div>',
+        "<strong>Correlation became causation &mdash; for the features,"
+        " not for a time concept.</strong> Pushing &ldquo;Chinese"
+        " names&rdquo; (&rho;&lt;0) drags the read-out earlier by up to"
+        " 0.6 sd; &ldquo;German surnames&rdquo; (&rho;&gt;0) later; all"
+        " five controls stay inside the gray band."))
+
+    S.append(slide(
+        base + 9, "F23 bridge + F26 ignition &middot; the causal seal",
+        "Force the features ON across a whole document &mdash; they still"
+        " never fire at the read-out token: the entity&ndash;document gap"
+        " is a disconnection, not missing knowledge",
+        [("Method", "the bridge: clamp <span class=\'frm2\'>h &larr; h +"
+          " m &#8857; (&alpha; &middot; act95_f &middot; d_f)</span> on"
+          " every mid-document position (a per-sample length mask spares"
+          " the read-out token), then ask whether the feature fires at"
+          " the last token. F26: the same clamp confined to the"
+          " offset-mapped <strong>ruler-NAME token span</strong> inside"
+          " each gloss (95% span coverage)."),
+         ("Setup", "300 English glosses (bridge) and 400 name-bearing"
+          " glosses + 400 Akkadian fragments (ignition); &alpha; ="
+          " 4&times;act95; pre-registered rules with rate-matched"
+          " controls &mdash; a null <em>with</em> controls is the"
+          " publishable outcome.")],
+        f'<div class="p2chart">{chart_bridge()}</div>',
+        "<strong>The final causal seal of the thesis.</strong> Every row"
+        " reads x &rarr; x &mdash; nothing propagates to the token the"
+        " probe reads, treated and control alike, and igniting the"
+        " features at the ruler&rsquo;s own name is equally flat. A real,"
+        " semantic, causally-usable entity time axis built from onomastic"
+        " features &mdash; and no channel that carries any of it into a"
+        " document representation, even by force."))
+
+    block = ("<!-- PHASE2-BEGIN -->\n" + STYLE + "\n" + "".join(S)
              + "<!-- PHASE2-END -->\n")
-    deck = deck.replace("<script>\nconst TOTAL", block + "<script>\nconst TOTAL")
-    new_total = base_total + 11
+    deck = deck.replace("<script>\nconst TOTAL",
+                        block + "<script>\nconst TOTAL")
+    new_total = base + len(S)
     deck = re.sub(r"const TOTAL = \d+;", f"const TOTAL = {new_total};",
                   deck, count=1)
     titles_js = ("/*P2TITLES*/TITLES.push("
@@ -691,8 +843,7 @@ def main():
     deck = deck.replace("let cur = 0;", titles_js + "let cur = 0;")
     with open(DECK, "w", encoding="utf-8") as f:
         f.write(deck)
-    print(f"[done] {base_total} -> {new_total} slides; deck "
-          f"{len(deck)/1e6:.1f} MB")
+    print(f"[done] {base} -> {new_total} slides")
 
 
 if __name__ == "__main__":
