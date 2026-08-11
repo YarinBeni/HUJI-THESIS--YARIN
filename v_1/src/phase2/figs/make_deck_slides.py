@@ -598,7 +598,7 @@ def main():
   <div class="tp"><div class="tp-h">Exhaust the alternatives (F15&ndash;F19, F27)</div>
   <div class="tp-b">Length, find-spot, pooling, seriation, kernel and MLP probes &mdash; every &ldquo;document time&rdquo; candidate decomposes into text form.</div></div>
   </div>
-  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Same corpus, same probes, one new question.</strong> Not <em>whether</em> the model dates documents (it doesn't), but <em>what exists instead</em> &mdash; mapped down to individual features. Cell A = 7,507 historical figures; cells B&prime;/C = the same 1,187 dated royal inscriptions (40 rulers).</div>
+  <div class="takeaway tight"><span class="tk-label">Key takeaway</span><strong>Same corpus, same probes, one new question.</strong> Not <em>whether</em> the model dates documents (it doesn't), but <em>what exists instead</em> &mdash; mapped down to individual features. Cell A = 7,507 historical figures; cell B (our 34 ruler names probed alone &mdash; the entity side already works, slide 9) re-enters at the feature level in F22; cells B&prime;/C = the same 1,187 dated royal inscriptions (40 rulers).</div>
 </section>
 ''')
 
