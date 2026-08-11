@@ -156,7 +156,7 @@ def chart_spectrum():
             s.append(path(pts, c, 2))
             for (x, y), zi in zip(pts, z):
                 s.append(circle(x, y, 2.8, c))
-                if abs(zi) >= 3.35:
+                if abs(zi) >= 3.0:
                     s.append(circle(x, y, 6, "none", c, 1.5))
                     s.append(txt(x + 9, y + 3, f"z={zi:+.1f}", 10.5, c,
                                  "start", 700))
@@ -174,8 +174,8 @@ def chart_spectrum():
     s.append(line(435, 8, 455, 8, GRAYC, 2.4))
     s.append(txt(460, 12, "document order axis", 10.5, GRAYC, "start",
                  700))
-    s.append(txt(600, 12, "\u25cb = |z| \u2265 3.35 (Bonferroni vs 50 "
-                 "random directions)", 10.5, "var(--ink-light)", "start"))
+    s.append(txt(600, 12, "\u25cb = 3\u03c3 above the null of 50 random "
+                 "directions", 10.5, "var(--ink-light)", "start"))
     s.append("</svg>")
     return "".join(s)
 
@@ -626,6 +626,7 @@ A_GT = '<a href="https://arxiv.org/abs/2310.02207">Gurnee &amp; Tegmark 2023</a>
 A_ELS = '<a href="https://arxiv.org/abs/2410.13194">El-Shangiti et al., NAACL 2025</a>'
 A_LEACE = '<a href="https://arxiv.org/abs/2306.03819">Belrose et al., NeurIPS 2023</a>'
 A_LENS = '<a href="https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens">nostalgebraist\u2019s logit lens</a>'
+A_GEVA = '<a href="https://arxiv.org/abs/2203.14680">Geva et al., EMNLP 2022</a>'
 A_CV = '<a href="https://arxiv.org/abs/2406.11614">Hong et al., EMNLP 2025</a>'
 A_GG = '<a href="https://transformer-circuits.pub/2024/scaling-monosemanticity/">Templeton et al. 2024</a>'
 A_AUTO = '<a href="https://blog.eleuther.ai/autointerp/">EleutherAI autointerp</a>'
@@ -721,8 +722,10 @@ def main():
         base + 3, "F6 &middot; logit lens on the probe directions",
         "Project each direction onto the vocabulary: the entity year axis"
         " points at ancient-time words, the document axis at junk",
-        [("Method", f"direction-level logit lens ({A_LENS}; concept-vector"
-          f" reading after {A_CV}): normalize the probe direction, pass it"
+        [("Method", f"direction-level logit lens ({A_LENS}; internal vectors"
+          f" read by their top vocabulary projections after {A_GEVA};"
+          f" concept-vector reading after {A_CV}): normalize the probe"
+          " direction, pass it"
           " through the final RMSNorm and the unembedding, "
           f"<span class=\'frm2\'>&#8467; = W_U(&gamma; &#8857;"
           " &#375;)</span>, and read the extreme tokens at both ends."
@@ -753,8 +756,10 @@ def main():
           " cell against an empirical null of <strong>50 random"
           " directions</strong>, <span class=\'frm2\'>z = (share &minus;"
           " &mu;_null) / &sigma;_null</span>; a cosine variant divides"
-          " out loud unembedding rows. Bonferroni over 90 cells &rarr;"
-          " |z| &ge; 3.35."),
+          " out loud unembedding rows. Category reading of vocabulary"
+          f" projections follows {A_GEVA}; the random-direction"
+          " calibration is the same control as the lens slide. Cells"
+          " 3&sigma; above the null are ringed."),
          ("Setup", "~150k tokens per model &times; 9 keyword categories"
           " (ancient-temporal, modern, year numerals, function words,"
           " capitalized, &hellip;); both directions per model. The"
@@ -762,7 +767,8 @@ def main():
           " tokenizers split 4-digit numbers.")],
         f'<div class="p2chart">{chart_spectrum()}</div>',
         "<strong>&ldquo;The year axis is semantic&rdquo; now holds across"
-        " the whole spectrum, with multiple-comparison control.</strong>"
+        " the whole spectrum, calibrated against 50 random"
+        " directions.</strong>"
         " The ancient-token share spikes in decile 1 of the entity axis"
         " in all three models (z up to +6.8) and survives the cosine"
         " correction; the document axis never leaves the noise in any"
@@ -927,7 +933,7 @@ def main():
   <h2 class="sh">Five findings, one conclusion: the knowledge exists, the route does not</h2>
   <div class="text-points">
   <div class="tp"><div class="tp-h">The entity year axis is real and semantic (E3, F6, F21)</div>
-  <div class="tp-b">Orthogonal to the document axis at chance level (|cos| &le; .025); its vocabulary end literally reads Ancient / BCE / &#20844;&#20803;&#21069;; the enrichment holds across all ~150k tokens with multiple-comparison control (z up to +6.8).</div></div>
+  <div class="tp-b">Orthogonal to the document axis at chance level (|cos| &le; .025); its vocabulary end literally reads Ancient / BCE / &#20844;&#20803;&#21069;; the enrichment holds across all ~150k tokens, 3&sigma;+ above a 50-random-direction null (z up to +6.8).</div></div>
   <div class="tp"><div class="tp-h">It is built from name-culture features (F8, F22, F25)</div>
   <div class="tp-b">A distributed code (max |cos| with any single feature: .23): German-surname, nobility, genealogy-formula, Chinese-name detectors &mdash; onomastics, replicated in two independent dictionaries.</div></div>
   <div class="tp"><div class="tp-h">Those features causally feed the read-out (F23)</div>

@@ -63,8 +63,13 @@ def build_Z(d, concept="all"):
                   determines year almost 1:1 here, so this rung cannot
                   distinguish "signal is ruler identity" from "signal is
                   year"; read it as the joint upper rung of the era ladder)
-      year10      year-decile one-hot — coarse era bins (~period); the
-                  POSITIVE CONTROL: erasing it must crush any genuinely
+      period      the catalogue period column (Neo-Assyrian, Neo-Babylonian,
+                  Middle Babylonian, Hellenistic, Achaemenid)
+      subgenre    the catalogue sub_genre column = the OBJECT TYPE the text
+                  is inscribed on (prism, cylinder, slab, brick, ...);
+                  top-20 + other
+      year10      year-decile one-hot — coarse era bins; the POSITIVE
+                  CONTROL: erasing it must crush any genuinely
                   chronological read-out
       all         provenance + length (the original E4 combination)"""
     top = d.provenance.fillna("unk").value_counts().head(20).index
@@ -79,6 +84,13 @@ def build_Z(d, concept="all"):
         Z = length
     elif concept == "ruler":
         Z = pd.get_dummies(d.ruler, dtype=float).values
+    elif concept == "period":
+        Z = pd.get_dummies(d.period.fillna("unk"), dtype=float).values
+    elif concept == "subgenre":
+        sg = d.sub_genre.fillna("unk")
+        top = sg.value_counts().head(20).index
+        Z = pd.get_dummies(sg.where(sg.isin(top), "other"),
+                           dtype=float).values
     elif concept == "year10":
         Z = pd.get_dummies(pd.qcut(d.year.astype(float), 10,
                                    duplicates="drop"), dtype=float).values
@@ -91,6 +103,10 @@ def concept_series(d, concept):
     """The categorical the post-erasure check probe must fail to read."""
     if concept == "ruler":
         return d.ruler.astype(str)
+    if concept == "period":
+        return d.period.fillna("unk").astype(str)
+    if concept == "subgenre":
+        return d.sub_genre.fillna("unk").astype(str)
     if concept == "length":
         wc = np.log1p(d.word_count.fillna(0).astype(float))
         return pd.Series(pd.qcut(wc, 5, duplicates="drop")).astype(str)
@@ -188,7 +204,8 @@ def main():
     ap.add_argument("--draws", type=int, default=40)
     ap.add_argument("--seed", type=int, default=P.SEED)
     ap.add_argument("--concept", default="all",
-                    choices=["all", "provenance", "length", "ruler", "year10"],
+                    choices=["all", "provenance", "length", "ruler",
+                             "period", "subgenre", "year10"],
                     help="F28 ladder: erase a single variable at a time")
     args = ap.parse_args()
 
@@ -196,7 +213,7 @@ def main():
     # provenance is already on the eligible frame; merge only what is missing
     meta = pd.read_parquet(os.path.join(
         os.path.dirname(_WM), "..", "data/evaluation/corpora/orcc_corpus.parquet"
-    ))[["fragment_id", "genre", "word_count"]]
+    ))[["fragment_id", "genre", "word_count", "period", "sub_genre"]]
     df = df.merge(meta, on="fragment_id", how="left").reset_index(drop=True)
     Z = build_Z(df, args.concept)
     y = df.year.values.astype(float)

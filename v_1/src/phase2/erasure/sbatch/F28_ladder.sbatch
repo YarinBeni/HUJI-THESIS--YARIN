@@ -4,19 +4,20 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=120G
 #SBATCH --time=08:00:00
-#SBATCH --array=0-31
+#SBATCH --array=0-47
 #SBATCH --output=v_1/src/phase2/erasure/logs/F28_ladder_%A_%a.out
 # ===========================================================================
 # F28 — the single-concept erasure ladder (reviewer request): LEACE one
 # variable at a time from the document representations and re-run the full
 # E1 read-out. Rungs: ruler (era ladder's top, ICC=1 caveat in the script
-# docstring), provenance (find-spot), length, year10 (coarse era bins ~
-# period — the POSITIVE CONTROL: erasing it must crush any real chronology).
-# Each rung reports raw vs erased pairwise macro + grouped ridge rho + a
-# concept-probe manipulation check.
+# docstring), period (catalogue column: Neo-Assyrian/Neo-Babylonian/...),
+# subgenre (the OBJECT TYPE: prism/cylinder/slab/brick...), provenance
+# (find-spot), length, year10 (coarse era bins — the POSITIVE CONTROL:
+# erasing it must crush any real chronology). Each rung reports raw vs
+# erased pairwise macro + grouped ridge rho + a concept-probe check.
 # ===========================================================================
 set -uo pipefail
-CONCEPTS=(ruler provenance length year10)
+CONCEPTS=(ruler period subgenre provenance length year10)
 METHODS=(olmo2_7b qwen3_8b olmo2_7b_random tfidf_char)
 VARS=(eng_tier0 akk_maximal)
 CONCEPT=${CONCEPTS[$((SLURM_ARRAY_TASK_ID / 8))]}

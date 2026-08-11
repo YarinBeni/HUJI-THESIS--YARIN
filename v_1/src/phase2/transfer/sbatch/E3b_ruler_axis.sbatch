@@ -10,10 +10,8 @@
 # E3b — the reviewer question: transfer the CELL-B ruler axis (w_B), not just
 # the cell-A famous-figure axis. Fits w_B once (canonical split, best layer
 # from probe_entity results, cached npz), applies it frozen to fragments,
-# LEACE mediation, cosine vs the E1 document direction. --stability 48 refits
-# the direction on 48 resampled train sets and reports the spread of every
-# read-out — the "which w did you take" answer, as data. The same stability
-# pass is run for the cell-A axis.
+# LEACE mediation, cosine vs the E1 document direction. The direction is one
+# canonical fit on the fixed 80/20 train split, same convention as cell A.
 # ===========================================================================
 set -uo pipefail
 METHODS=(olmo2_7b qwen3_8b llama2_7b olmo2_7b_random)
@@ -30,14 +28,9 @@ mkdir -p v_1/src/phase2/transfer/logs
 
 python -u v_1/src/phase2/transfer/e3_transfer.py \
     --method "${METHOD}" --variant "${VARIANT}" \
-    --entity-set assyrian_ruler --stability 48 \
+    --entity-set assyrian_ruler \
     || { echo "FAILED E3b ruler ${METHOD}/${VARIANT}"; exit 1; }
 
-python -u v_1/src/phase2/transfer/e3_transfer.py \
-    --method "${METHOD}" --variant "${VARIANT}" \
-    --entity-set historical_figure --stability 48 \
-    || { echo "FAILED E3 stability ${METHOD}/${VARIANT}"; exit 1; }
-
-commit_push "E3b: ruler-axis transfer + w-stability ${METHOD}/${VARIANT} (job ${SLURM_JOB_ID})" \
+commit_push "E3b: ruler-axis transfer ${METHOD}/${VARIANT} (job ${SLURM_JOB_ID})" \
     v_1/src/phase2/transfer/results
 echo "=== Done. $(date) ==="
