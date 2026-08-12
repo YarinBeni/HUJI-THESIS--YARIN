@@ -88,14 +88,52 @@ resubmitted individually; every job syncs main first and commits its results.
   single-cell mid-decile excursions (max 3.3, olmo eng, sign-unpatterned) vs
   the coherent decile-1 spike. **The "lens only works late" caveat is
   retired.** Results: traces/results/tuned.*.json.
-- [~] **F28 erasure ladder (25/48 landed)**: interim ranking, consistent in
-  every arm so far — ruler (−.06..−.18) ≥ period (−.06..−.13) > subgenre
-  (−.01..−.13) ≥ provenance (−.03..−.08) > length (≈0). The RANDOM TWIN
-  shows the same drops (akk ruler −.178), so what the erasure removes is
-  form/identity correlate, not trained semantic time. year10 (floor arm)
-  .561→.518 with a working manipulation check.
-- [ ] **E3b ruler-axis transfer**: run 25046 ended without results (second
-  failure — first was cleaned activations; log needed). Rerun required; the
-  ysign polarity fix (55e7d66b) is in.
-- [ ] **F30** (sae1 interp cards / labeled L18 peek / cellB steering):
-  awaiting job 25048.
+- [x] **F28 erasure ladder (47/48; one cell, year10/qwen/akk, still queued)**:
+  single-concept LEACE from the document representations, then the full E1
+  read-out. Ranking by mean Δ(pairwise macro) on the TRAINED arms —
+  **ruler −.150 > period −.109 > object type (sub_genre) −.094 > year-decile
+  −.069 > find-spot −.046 > length +.003** (grouped-ridge ρ moves the same
+  way: −.44/−.29/−.12/−.47/−.28/−.06). Every manipulation check passes
+  (concept probe .64→.16 for ruler, .91→.55 for period, etc.).
+  **The decisive column is the untrained twin**: it loses just as much at
+  every rung (−.118/−.121/−.110/−.069/−.076/+.005). What the erasures remove
+  is therefore an identity/register correlate that a random network carries
+  too — not learned chronology. Length contributes exactly nothing, and the
+  positive control (year-decile) is no larger than ruler/period, which is
+  what ICC=1 predicts: ruler already carries the era.
+- [~] **E3b ruler-axis transfer (4/8)**: the reviewer's alternative — maybe
+  the axis connected to these documents is w_B (our 34 rulers), not w_A
+  (famous figures). Positive control on held-out ruler rows: qwen +.52
+  (in band), olmo +.28 / llama +.36 (weak instrument — a null on those arms
+  is uninterpretable, exactly why w_A was the primary). For the interpretable
+  qwen arm: **|cos(w_B, document direction)| = .0001–.0147, at or below the
+  1/√d ≈ .0156 chance band** — the ruler axis is orthogonal to the document
+  axis too, so H-dilute is not rescued by swapping the axis. Frozen transfer
+  is weak (|ρ| .14–.19, twin-range) and **collapses under LEACE of ruler
+  identity** (ρ → +.06/−.02/+.19/+.22, macro → .47–.50): whatever ordering
+  the ruler axis achieves on documents is mediated by recognizing WHICH
+  RULER the text belongs to, not by dating it.
+  *Polarity note:* fragment `year` is BC-positive (larger = earlier) while
+  the entity targets are CE-signed, so in `pairwise_eval`'s frame a working
+  lateness scorer reads as ρ < 0 / macro < .5. Compare magnitudes against the
+  twin, not against .5.
+- [~] **F30 (2/3 landed)**:
+  * **cellB steering — null WITH controls.** Clamping the cell-A features on
+    ruler-name prompts moves the frozen read-out (mean +0.99 sd at α=8 from a
+    −2.32 baseline), but the rate-matched controls move just as much
+    (+0.72 sd; the single largest mover of all ten is control 25239, +2.75).
+    The specificity that held on cell A does NOT replicate on cell B — and
+    that is coherent: these onomastic features barely fire on Akkadian ruler
+    names at all (F22 median 0.5%), so clamping them there is a generic
+    perturbation.
+  * **Labeled L18 peek — independent corroboration of F25.** The one layer
+    Neuronpedia hosts fails our FVU gate (127 ≫ .35) so it is flagged as
+    anecdote, but its third-party autointerp labels for our top-50
+    year-correlated features are overwhelmingly onomastic: **26/50
+    entity_identity vs 6 temporal**, and the strongest are literally
+    "German names and places" (ρ=+.38), "Chinese pinyin names" (−.38),
+    "Chinese surnames" (−.32), "authors' last names" (+.32), "names followed
+    by ( or ," (+.54). Labels written by someone else, on a different layer,
+    reproduce the F25 reading.
+  * [ ] sae1 interp cards (Qwen-Scope L24): rerunning as job 25128 after the
+    encode-contract fix.

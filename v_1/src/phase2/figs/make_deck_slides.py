@@ -324,6 +324,62 @@ def chart_bridge():
 
 
 
+def chart_ladder():
+    """F28: mean drop in E1 pairwise macro when ONE variable is erased,
+    trained arms vs the untrained twin."""
+    import collections
+    rows = [J("erasure", "results", os.path.basename(p)) for p in
+            sorted(glob.glob(os.path.join(_P2, "erasure", "results",
+                                          "ladder.*.json")))]
+    LAB = {"ruler": "ruler identity", "period": "period (Neo-Assyrian…)",
+           "subgenre": "object type (prism, slab…)",
+           "year10": "year decile  ← positive control",
+           "provenance": "find-spot", "length": "text length"}
+    agg = collections.defaultdict(lambda: collections.defaultdict(list))
+    for d in rows:
+        a = ("trained" if d["method"] in ("olmo2_7b", "qwen3_8b")
+             else "twin" if d["method"] == "olmo2_7b_random" else "floor")
+        agg[d["concept"]][a].append(d["erased"]["pairwise_macro"]
+                                    - d["raw"]["pairwise_macro"])
+    order = sorted(agg, key=lambda c: np.mean(agg[c]["trained"]))
+    W, ROW = 1040, 44
+    H = 78 + len(order) * ROW + 30
+    X0, XW = 300, 560
+    lo = -0.20
+    xm = lambda v: X0 + (v - lo) / (0 - lo) * XW           # noqa: E731
+    s = [svg_open(W, H)]
+    s.append(txt(X0 + XW / 2, 22, "how much of the document ordering each "
+                 "variable was carrying", 13, "var(--ink)", "middle", 700))
+    s.append(line(xm(0), 54, xm(0), 62 + len(order) * ROW, "var(--ink)",
+                  1.2))
+    s.append(txt(xm(0) + 8, 48, "no loss", 10, "var(--ink-light)"))
+    for i, c in enumerate(order):
+        y = 66 + i * ROW
+        t, w = np.mean(agg[c]["trained"]), np.mean(agg[c]["twin"])
+        s.append(txt(X0 - 190, y + 14, LAB.get(c, c), 12.5,
+                     "var(--ink)", "start", 700 if c != "year10" else 600))
+        for v, col, h, yo in ((t, GREEN, 11, 1), (w, GRAYC, 11, 14)):
+            x = xm(min(v, 0))
+            s.append(rect(x, y + yo, max(xm(0) - x, 1.2), h, col, 2))
+        s.append(txt(xm(min(t, w)) - 8, y + 18,
+                     f"{t:+.3f} / {w:+.3f}", 10.5, "var(--ink-light)",
+                     "end"))
+    yb = 62 + len(order) * ROW
+    for g in (-0.20, -0.15, -0.10, -0.05, 0):
+        s.append(line(xm(g), yb, xm(g), yb + 5, "var(--ink-light)", 1))
+        s.append(txt(xm(g), yb + 17, f"{g:+.2f}", 9.5, "var(--ink-light)",
+                     "middle"))
+    s.append(txt(X0 + XW / 2, yb + 30, "Δ pairwise macro accuracy after "
+                 "erasing that variable (mean over arms)", 10.5,
+                 "var(--ink-light)", "middle"))
+    s.append(rect(X0 - 190, 44, 12, 8, GREEN, 2))
+    s.append(txt(X0 - 174, 52, "trained models", 10.5, "var(--ink-light)"))
+    s.append(rect(X0 - 80, 44, 12, 8, GRAYC, 2))
+    s.append(txt(X0 - 64, 52, "untrained twin", 10.5, "var(--ink-light)"))
+    s.append("</svg>")
+    return "".join(s)
+
+
 def chart_ignite():
     ig = J("steering", "results", "ignite.json")
     W, H = 1040, 322
@@ -610,6 +666,7 @@ def slide(idx, eyebrow, headline, cfg_rows, body, takeaway):
 TITLES_NEW = [
     "Phase 2: why does it collapse at the entity-to-document boundary?",
     "Ordering fragments: no model beats the surface floor in Akkadian",
+    "The erasure ladder: ruler and era carry the ordering — and so does the untrained twin",
     "The entity year axis and the document axis are different, orthogonal directions",
     "The year direction literally reads 'ancient'; the document direction reads nothing",
     "Across the whole vocabulary: ancient words pile up in the entity axis's first decile only",
@@ -700,7 +757,43 @@ def main():
         " what the rest of phase 2 dissects."))
 
     S.append(slide(
-        base + 2, "E3 &middot; frozen transfer + direction geometry",
+        base + 2, "F28 &middot; the single-variable erasure ladder",
+        "What was the &ldquo;order&rdquo; actually made of? Erase one"
+        " variable at a time &mdash; and the untrained twin loses exactly"
+        " as much",
+        [("Task", "the English side had a small trained-only signal"
+          " (previous slide). Before calling it time, subtract every"
+          " candidate: is the ordering carried by ruler identity, era,"
+          " what the text is written ON, where it was dug up, or simply"
+          " how long it is?"),
+         ("Method", f"one concept per run, erased with LEACE ({A_LEACE})"
+          " fitted <strong>inside each training fold</strong> and applied"
+          " to both sides, then the entire E1 protocol re-run on the"
+          " erased representations. Every run carries a manipulation"
+          " check &mdash; a probe for the erased concept must fall to"
+          " chance (ruler .64&rarr;.16, period .91&rarr;.55). Reading:"
+          " <span class=\'frm2\'>&Delta; = macro(erased) &minus;"
+          " macro(raw)</span>."),
+         ("Data &amp; pooling", "the same 1,187 fragments, mean pooling,"
+          " m=21, both-rulers-held-out folds. Six rungs &times; 4 arms"
+          " &times; 2 variants: ruler (40 one-hots), period, object type"
+          " (sub_genre, top-20), find-spot (top-20), length (log +"
+          " 5 quantile bins), and year-decile as the"
+          " <strong>positive control</strong> &mdash; erasing coarse era"
+          " must hurt any genuine chronology.")],
+        f'<div class="p2chart">{chart_ladder()}</div>',
+        "<strong>Ruler identity and era carry it &mdash; and they carry it"
+        " in an untrained network too.</strong> Erasing ruler costs the"
+        " trained models &minus;.150 and the random twin &minus;.118;"
+        " every rung repeats that pattern, so what the erasures remove is"
+        " an identity/register correlate present without any training, not"
+        " learned chronology. Text length contributes exactly nothing"
+        " (+.003), and the positive control is no larger than ruler"
+        " &mdash; which is what ICC = 1 predicts, since knowing the king"
+        " already fixes the era."))
+
+    S.append(slide(
+        base + 3, "E3 &middot; frozen transfer + direction geometry",
         "The entity year axis and the document order axis are two"
         " different directions &mdash; orthogonal at chance level",
         [("Task", "does the axis that dates <em>people</em> also order"
@@ -716,14 +809,19 @@ def main():
           " (last-token of the name, its best layer); applied to"
           " mean-pooled fragment activations, both variants. Positive"
           " control: the same code path reproduces &rho;=.87&ndash;.89 on"
-          " cell A, so the null is not a bug.")],
+          " cell A, so the null is not a bug. <strong>E3b</strong> repeats"
+          " everything with w_B &mdash; the axis fitted on <em>our own 34"
+          " rulers</em> (ent-last token), the entities these documents are"
+          " actually about: |cos| = .0001&ndash;.015, same chance band, and"
+          " its weak ordering collapses under LEACE of ruler identity.")],
         f'<div class="p2chart">{chart_orthogonal()}</div>',
         "<strong>Document time is not a weaker copy of entity time"
         " &mdash; it is a different direction altogether.</strong>"
         " |cos| sits at the 1/&radic;d &asymp; .016 chance band (left) and"
         " frozen transfer orders fragments at &rho; &asymp; 0 in every arm"
-        " (right). H-dilute is dead; whatever orders documents lives on"
-        " another axis."))
+        " (right). H-dilute is dead &mdash; and swapping in the ruler axis"
+        " does not rescue it: whatever orders documents lives on another"
+        " axis."))
 
     S.append(slide(
         base + 3, "F6 &middot; logit lens on the probe directions",
@@ -859,7 +957,14 @@ def main():
         " (&rho;=+.40), &ldquo;X of England&rdquo; nobility (&minus;.37),"
         " ancient genealogy formulas (&minus;.37, the only one firing on"
         " the glosses too), Chinese names (&minus;.37): who-you-are"
-        " features from which when-you-lived is decodable."))
+        " features from which when-you-lived is decodable."
+        " <strong>Independent check (F30):</strong> on the one layer"
+        " Neuronpedia hosts, third-party autointerp labels for our top-50"
+        " year-correlated features come back <strong>26/50"
+        " entity-identity vs 6 temporal</strong> &mdash; &ldquo;German"
+        " names and places&rdquo;, &ldquo;Chinese surnames&rdquo;,"
+        " &ldquo;authors&rsquo; last names&rdquo;. Someone else&rsquo;s"
+        " labels, same reading."))
 
     S.append(slide(
         base + 8, "F23 &middot; causal interventions",
@@ -967,6 +1072,10 @@ def main():
 </section>
 ''')
 
+    # single source of truth for slide numbering: position in S. (Slides are
+    # written with hand-passed indices; inserting one used to shift them all.)
+    S = [re.sub(r'data-index="\d+"', f'data-index="{base + i}"', sec, count=1)
+         for i, sec in enumerate(S)]
     block = ("<!-- PHASE2-BEGIN -->\n" + STYLE + "\n" + "".join(S)
              + "<!-- PHASE2-END -->\n")
     deck = deck.replace("<script>\nconst TOTAL",
