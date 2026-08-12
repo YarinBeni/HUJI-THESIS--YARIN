@@ -876,10 +876,14 @@ def main():
           " (ridge, last-token) and E1&rsquo;s pairwise document direction"
           " (mean-pooled); top tokens of each end; random directions"
           " through the identical pipeline as control (F14) &mdash; they"
-          " lens to the same kind of junk as the document axis. The"
-          f" mid-stack caveat is retired by F29: a per-layer translator"
-          f" ({A_TL}), trained on our own corpus, reproduces both"
-          " verdicts.")],
+          " lens to the same kind of junk as the document axis. Two"
+          " caveats retired: the mid-stack one by F29 (a per-layer"
+          f" translator, {A_TL}, trained on our own corpus, reproduces"
+          " both verdicts), and the pooling one by F31 &mdash; a"
+          " mean-pooled vector is the unfavourable case for a vocabulary"
+          " read-out, so the <strong>last-token</strong> document"
+          " directions went through the identical instrument (OLMo and"
+          " Qwen, where F19 fitted them).")],
         f'<div class="p2chart" style="align-items:flex-start">'
         f'{chart_lens_tokens()}</div>',
         "<strong>The entity year axis is semantically temporal; the"
@@ -888,7 +892,11 @@ def main():
         " Qwen even in Chinese (&#20844;&#20803;&#21069; &ldquo;BCE&rdquo;,"
         " &#21476;&#20195; &ldquo;ancient&rdquo;) &mdash; while the"
         " document direction projects onto morphological debris at both"
-        " ends."))
+        " ends &mdash; and that holds under the trained translator (F29)"
+        " and at last-token pooling (F31), so it is neither a"
+        " late-layer nor a pooling artefact. The ruler axis lenses to"
+        " debris too, which fits its E3b behaviour: it works by"
+        " recognising a name, not by carrying a date."))
 
     S.append(slide(
         base + 4, "F21 &middot; whole-vocabulary spectroscopy",
@@ -921,8 +929,11 @@ def main():
         " decile of any model. Re-reading every direction through"
         " tuned-lens translators (F29) reproduces the picture &mdash; the"
         " entity spike survives (z 3.4&ndash;6.0), the document"
-        " directions stay flat &mdash; so the verdict no longer leans on"
-        " the raw lens's late-layer assumption."))
+        " directions stay flat &mdash; and so does re-reading the"
+        " <strong>last-token</strong> document directions (F31): decile-1"
+        " z between &minus;0.9 and +1.9, never close to the bar. The"
+        " verdict leans on neither the late-layer assumption nor the"
+        " pooling choice."))
 
     S.append(slide(
         base + 5, "F8 + F11 + F22 &middot; where the year features fire",

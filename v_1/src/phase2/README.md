@@ -152,13 +152,23 @@ resubmitted individually; every job syncs main first and commits its results.
   **Wave 9 is complete.** Remaining optional follow-up: F31 (lens at
   last-token pooling), written and queued.
 
-- [ ] **F31 — the pooling control on the lens** (open question raised in
-  review): F6/F21/F29 lensed only MEAN-pooled document directions, which is
+- [x] **F31 — the pooling control on the lens (COMPLETE, 3/3)** — answers
+  an open review question: F6/F21/F29 lensed only MEAN-pooled document directions, which is
   the unfavourable case — the average of a whole inscription is not a
   next-token state, so "junk" there is partly expected. `lens_tuned.py` now
   collects each document-side direction at BOTH sites (suffix `@last`) from
   the F19 last-token fits, and runs the identical instrument on them. If the
   last-token document direction is ALSO junk, the uninterpretability claim
   stops being a pooling artefact; if it is not, that is a finding in itself.
-  Job: `traces/sbatch/F31_lens_last.sbatch` (reuses the cached F29
-  translators).
+  **Result: the last-token document directions are junk too.** Decile-1
+  ancient-token z for every `@last` document direction (OLMo and Qwen ×
+  {BT, year-regression} × {eng, akk}, raw and tuned) lies between −0.92 and
+  +1.86 — nowhere near the 3σ bar the cell-A axis clears at +5.2/+6.0 — and
+  their token ends are morphological debris (`irim / ocket / Artifact`,
+  `Kale / yr / zzo`). So "the document direction is not semantically
+  temporal" is neither a late-layer artefact (F29) nor a pooling artefact
+  (F31). Llama has no `@last` rows: F19 fitted last-token probes for
+  OLMo/Qwen/twin only.
+  *Bonus finding:* the cell-B RULER axis also lenses to debris (z −1.5…+1.7)
+  — consistent with E3b, where it ordered documents only through ruler
+  identity. It recognises a name; it does not carry a date.
