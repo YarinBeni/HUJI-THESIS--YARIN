@@ -1,0 +1,22 @@
+{
+  "method": "olmo2_7b",
+  "variant": "akk_maximal",
+  "layer": 25,
+  "concept": "length",
+  "z_dim": 6,
+  "m": 21,
+  "draws": 40,
+  "raw": {
+    "pairwise_macro": 0.672196534623932,
+    "pairwise_sd": 0.04130935644607359,
+    "grouped_ridge_spearman": 0.13587027793845557
+  },
+  "erased": {
+    "pairwise_macro": 0.6756758457675986,
+    "pairwise_sd": 0.04801312387544532,
+    "grouped_ridge_spearman": 0.10357114816180085
+  },
+  "concept_probe_acc_before": 0.5711844180198611,
+  "concept_probe_acc_after": 0.11035886289050846,
+  "genre_constant": true
+}
