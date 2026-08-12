@@ -697,7 +697,6 @@ def slide(idx, eyebrow, headline, cfg_rows, body, takeaway):
 
 TITLES_NEW = [
     "Phase 2: why does it collapse at the entity-to-document boundary?",
-    "Ordering fragments: no model beats the surface floor in Akkadian",
     "The erasure ladder: ruler and era carry the ordering — and so does the untrained twin",
     "The entity year axis and the document axis are different, orthogonal directions",
     "The year direction literally reads 'ancient'; the document direction reads nothing",
@@ -743,8 +742,8 @@ def main():
   <div class="eyebrow">Phase 2 &middot; the mechanistic program &middot; F1&ndash;F27</div>
   <h2 class="sh">Phase 2: the deck ends where a linear world model ends &mdash; twenty-seven experiments ask <em>why</em> it ends there</h2>
   <div class="text-points">
-  <div class="tp"><div class="tp-h">Reframe as ordering (E1, E8)</div>
-  <div class="tp-b">628k fragment pairs, &ldquo;which was composed earlier?&rdquo; &mdash; kills the regression-format and label-leakage explanations for the collapse.</div></div>
+  <div class="tp"><div class="tp-h">Reframe as ordering, then decompose it (E1, E8, F28)</div>
+  <div class="tp-b">628k fragment pairs, &ldquo;which was composed earlier?&rdquo; &mdash; kills the regression-format and label-leakage explanations; then erase one variable at a time to see what the residual order was made of.</div></div>
   <div class="tp"><div class="tp-h">Transfer the axis (E3)</div>
   <div class="tp-b">Freeze the entity year direction, apply it to fragments; measure the angle between the two learned &ldquo;time&rdquo; directions.</div></div>
   <div class="tp"><div class="tp-h">Decompose (F6&ndash;F8, F21&ndash;F25)</div>
@@ -759,45 +758,20 @@ def main():
 ''')
 
     S.append(slide(
-        base + 1, "E1 + E8 &middot; pairwise ordering",
-        "Ordering fragments: untrained twins top the Akkadian board; only"
-        " trained models are significant in English",
-        [("Task", "order two fragments &mdash; <strong>&ldquo;which was"
-          " composed earlier?&rdquo;</strong> &mdash; 628,454 ordered pairs"
-          " from the same 1,187 dated fragments, in both variants"
-          " (cleaned Akkadian transliteration / literal English gloss)."
-          " Relative order only: no absolute year ever enters training."),
-         ("Method", "Bradley&ndash;Terry pairwise logistic on activation"
-          f" differences, <span class=\'frm2\'>P(a&#8826;b) ="
-          " &sigma;(w&middot;(x_a &minus; x_b))</span>; evaluation protocol"
-          f" after {A_ELS}, probing frame after {A_GT}. Significance:"
-          " permutation that reassigns whole rulers and refits everything"
-          f" (B=150) + dyadic bootstrap over rulers ({A_SB})."),
-         ("Data &amp; pooling", "<strong>mean pooling</strong> over tokens"
-          " at the layer fixed once in F1; quota <strong>m=21</strong>"
-          " pairs per ruler pair per draw, weights 1/m, macro over ruler"
-          " pairs, <strong>both-rulers-held-out</strong> folds, 100"
-          " Monte-Carlo draws. Floor: char n-gram TF-IDF through the"
-          " identical protocol.")],
-        f'<div class="p2chart">{chart_dissociation()}</div>',
-        "<strong>The collapse is not a formatting artifact.</strong>"
-        " Left: random-weight twins (hollow) sit at the top of the"
-        " Akkadian board and every arm hugs the surface floor &mdash; the"
-        " achievable &ldquo;order&rdquo; is text form. Right: in English"
-        " only trained OLMo and Qwen are significant (p=.0066) while the"
-        " floor itself is not (p=.11); that small trained-only signal is"
-        " what the rest of phase 2 dissects."))
-
-    S.append(slide(
         base + 2, "F28 &middot; the single-variable erasure ladder",
         "What was the &ldquo;order&rdquo; actually made of? Erase one"
         " variable at a time &mdash; and the untrained twin loses exactly"
         " as much",
-        [("Task", "the English side had a small trained-only signal"
-          " (previous slide). Before calling it time, subtract every"
-          " candidate: is the ordering carried by ruler identity, era,"
-          " what the text is written ON, where it was dug up, or simply"
-          " how long it is?"),
+        [("Task", "reframed as ordering to remove the regression format"
+          " from the picture: <strong>&ldquo;which of these two fragments"
+          " was composed earlier?&rdquo;</strong> &mdash; 628,454 pairs,"
+          f" Bradley&ndash;Terry <span class=\'frm2\'>P(a&#8826;b) ="
+          " &sigma;(w&middot;(x_a &minus; x_b))</span>, protocol after"
+          f" {A_ELS}. There the models barely clear a character-n-gram"
+          " floor (English .62&ndash;.63 vs floor .57; in Akkadian a"
+          " random-weight twin tops the board). This slide asks what that"
+          " residual order is <em>made of</em>: ruler identity, era, what"
+          " the text is written ON, where it was dug up, or its length?"),
          ("Method", f"one concept per run, erased with LEACE ({A_LEACE})"
           " fitted <strong>inside each training fold</strong> and applied"
           " to both sides, then the entire E1 protocol re-run on the"

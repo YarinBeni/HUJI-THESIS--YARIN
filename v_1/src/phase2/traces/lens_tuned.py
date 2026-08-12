@@ -21,6 +21,14 @@ Directions read (whatever exists on disk is picked up):
                instrument only, never an evaluation probe
   bt_eng / bt_akk          E1 pairwise directions (std -> raw via sd)
 
+Each document-side direction is collected at BOTH pooling sites, suffixed
+"@last" for the last-token variant (F19 fitted those). This matters: a
+mean-pooled direction is the unfavourable case for any vocabulary lens —
+the average of a whole inscription is not a next-token state — so the
+"document directions are uninterpretable" claim is only decisive once the
+LAST-TOKEN document direction, the one the unembedding is actually trained
+to read, has been through the same instrument.
+
 Per direction, both the raw lens and the tuned lens are reported: top/bottom
 token ends + the F21 spectroscopy (decile composition, z vs N_NULL random
 directions pushed through the SAME translator).
@@ -61,15 +69,23 @@ TR_DIR = os.path.join(RESULTS, "translators")
 RIDGE_ALPHAS = np.logspace(-1, 5, 13)
 
 
-def frag_acts(method, variant, L, df):
-    p = os.path.join(AKK_ACTS, method, variant, f"mean.layer{L}.npz")
+def frag_acts(method, variant, L, df, site="mean"):
+    p = os.path.join(AKK_ACTS, method, variant, f"{site}.layer{L}.npz")
     if not os.path.exists(p):
         return None
     return np.load(p)["acts"].astype(np.float32)[df.pos.values]
 
 
-def collect_directions(method, df):
-    """{name: (vector_raw_coords, layer)} for everything on disk."""
+def collect_directions(method, df, sites=("mean", "last")):
+    """{name: (vector_raw_coords, layer)} for everything on disk.
+
+    Both POOLING SITES for the document side. Reading a mean-pooled
+    direction through the vocabulary is the unfavourable case by
+    construction — the mean of a whole inscription is not a next-token
+    state — so "the document direction lenses to junk" is only decisive if
+    the LAST-TOKEN document direction (the one the unembedding was actually
+    trained for) is junk too. F19 fitted those directions; this collects
+    them."""
     dirs = {}
     for ent, tag in (("historical_figure", "cellA"),
                      ("assyrian_ruler", "cellB")):
@@ -79,27 +95,30 @@ def collect_directions(method, df):
             L = int(re.search(r"layer(\d+)\.npz$", g[0]).group(1))
             dirs[tag] = (np.load(g[0])["coef"].astype(np.float32).ravel(), L)
     for variant, tag in (("eng_tier0", "eng"), ("akk_maximal", "akk")):
-        # E1 pairwise direction, standardized -> raw
-        for p in sorted(glob.glob(os.path.join(
-                DIRS_PAIR, f"{method}.{variant}.mean.layer*.npz"))):
-            L = int(re.search(r"layer(\d+)\.npz$", p).group(1))
-            X = frag_acts(method, variant, L, df)
-            if X is not None:
-                w = np.load(p)["w"].astype(np.float32) / (X.std(0) + 1e-8)
-                dirs[f"bt_{tag}"] = (w, L)
-                break
-        # document-year regression direction, fitted here (reading only)
-        pj = os.path.join(_PAIRS, "results", "probes",
-                          f"{method}.{variant}.mean.json")
-        if os.path.exists(pj):
-            L = json.load(open(pj))["best_layer"]
-            X = frag_acts(method, variant, L, df)
-            if X is not None:
-                from sklearn.linear_model import RidgeCV
-                y = df.year.values.astype(float)
-                r = RidgeCV(alphas=RIDGE_ALPHAS).fit(X, (y - y.mean())
-                                                     / (y.std() + 1e-9))
-                dirs[f"docreg_{tag}"] = (r.coef_.astype(np.float32).ravel(), L)
+        for site in sites:
+            sfx = "" if site == "mean" else f"@{site}"
+            # E1 pairwise direction, standardized -> raw
+            for p in sorted(glob.glob(os.path.join(
+                    DIRS_PAIR, f"{method}.{variant}.{site}.layer*.npz"))):
+                L = int(re.search(r"layer(\d+)\.npz$", p).group(1))
+                X = frag_acts(method, variant, L, df, site)
+                if X is not None:
+                    w = np.load(p)["w"].astype(np.float32) / (X.std(0) + 1e-8)
+                    dirs[f"bt_{tag}{sfx}"] = (w, L)
+                    break
+            # document-year regression direction, fitted here (reading only)
+            pj = os.path.join(_PAIRS, "results", "probes",
+                              f"{method}.{variant}.{site}.json")
+            if os.path.exists(pj):
+                L = json.load(open(pj))["best_layer"]
+                X = frag_acts(method, variant, L, df, site)
+                if X is not None:
+                    from sklearn.linear_model import RidgeCV
+                    y = df.year.values.astype(float)
+                    r = RidgeCV(alphas=RIDGE_ALPHAS).fit(
+                        X, (y - y.mean()) / (y.std() + 1e-9))
+                    dirs[f"docreg_{tag}{sfx}"] = (
+                        r.coef_.astype(np.float32).ravel(), L)
     return dirs
 
 

@@ -140,3 +140,14 @@ resubmitted individually; every job syncs main first and commits its results.
     reproduce the F25 reading.
   * [ ] sae1 interp cards (Qwen-Scope L24): rerunning as job 25128 after the
     encode-contract fix.
+
+- [ ] **F31 — the pooling control on the lens** (open question raised in
+  review): F6/F21/F29 lensed only MEAN-pooled document directions, which is
+  the unfavourable case — the average of a whole inscription is not a
+  next-token state, so "junk" there is partly expected. `lens_tuned.py` now
+  collects each document-side direction at BOTH sites (suffix `@last`) from
+  the F19 last-token fits, and runs the identical instrument on them. If the
+  last-token document direction is ALSO junk, the uninterpretability claim
+  stops being a pooling artefact; if it is not, that is a finding in itself.
+  Job: `traces/sbatch/F31_lens_last.sbatch` (reuses the cached F29
+  translators).
