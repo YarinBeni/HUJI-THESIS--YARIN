@@ -80,7 +80,15 @@ def draw_pairs(df: pd.DataFrame, m: int, rng: np.random.Generator,
                ruler_pairs: list[tuple[str, str]] | None = None) -> pd.DataFrame:
     """One Monte-Carlo draw: a frame of ordered pairs, balanced per ruler-pair.
 
-    Columns: pos_a, pos_b, ruler_a, ruler_b, year_a, year_b, label (1 = a earlier),
+    NOTE ON POLARITY: `year` in this corpus is BC-POSITIVE (Ashurbanipal =
+    631; larger = EARLIER). `label = year_a < year_b` therefore marks "a is
+    LATER", not "a is earlier". Nothing downstream is affected as long as the
+    scorer is TRAINED on this label (E1/E8/E4/F27 all are — a global label
+    flip leaves accuracy invariant). It matters only for a FROZEN scorer
+    imported from a CE-signed dataset (e3_transfer), where a correctly
+    transferring direction reads as macro < .5; see the polarity note there.
+
+    Columns: pos_a, pos_b, ruler_a, ruler_b, year_a, year_b, label (1 = a later,
     weight (1/m_ij), dyear (|year_a - year_b|). The presented order (a, b) is
     randomized per pair so the label is ~50/50 within every ruler-pair.
     """

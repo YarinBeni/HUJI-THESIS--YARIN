@@ -428,18 +428,34 @@ def chart_ignite():
 
 
 def chart_orthogonal():
+    """Left: |cos| of BOTH entity axes against the document direction.
+    Right: frozen transfer, in the LATENESS frame — the fragment `year`
+    column is BC-positive (larger = earlier) while the entity targets are
+    CE-signed, so the stored Spearman is negated here and macro is 1-macro;
+    positive now means 'orders documents correctly'."""
     import json as _j
-    rows = []
-    for f in glob.glob(os.path.join(_P2, "transfer", "results",
-                                    "*.mean.json")):
-        d = _j.load(open(f))
-        cos = d.get("cosine_vs_pairwise_direction", {})
-        cosv = [abs(v["cosine"]) for v in cos.values()
-                if isinstance(v, dict) and "cosine" in v]
-        rows.append({"m": d["method"], "v": d["variant"],
-                     "cos": max(cosv) if cosv else np.nan,
-                     "rho": d["frozen"]["spearman"]})
+
+    def collect(pattern, key):
+        out = {}
+        for f in glob.glob(os.path.join(_P2, "transfer", "results",
+                                        pattern)):
+            d = _j.load(open(f))
+            cosv = [abs(v["cosine"]) for v
+                    in d.get("cosine_vs_pairwise_direction", {}).values()
+                    if isinstance(v, dict) and "cosine" in v]
+            out[(d["method"], d["variant"])] = {
+                f"cos_{key}": max(cosv) if cosv else np.nan,
+                f"rho_{key}": -d["frozen"]["spearman"]}
+        return out
+    A = collect("*.mean.json", "A")
+    Bx = collect("*.mean.assyrian_ruler.json", "B")
+    rows = [{"m": m, "v": v, **rec, **Bx.get((m, v), {})}
+            for (m, v), rec in A.items() if "assyrian_ruler" not in v]
     t = pd.DataFrame(rows)
+    for c in ("cos_B", "rho_B"):
+        if c not in t:
+            t[c] = np.nan
+    t = t.rename(columns={"cos_A": "cos", "rho_A": "rho"})
     t = t[t.m != "olmo2_7b_random"].sort_values(["m", "v"]).reset_index(
         drop=True)
     chance = 1 / np.sqrt(4096)
@@ -447,7 +463,8 @@ def chart_orthogonal():
     s = [svg_open(W, H)]
     X0, XW = 250, 360
     ROW = 38
-    xm = lambda v: X0 + v / .03 * XW                       # noqa: E731
+    xhi = max(.03, float(np.nanmax([t.cos.max(), t.cos_B.max()])) * 1.12)
+    xm = lambda v: X0 + v / xhi * XW                       # noqa: E731
     s.append(txt(X0 + XW / 2, 20,
                  "|cos(entity year axis, document order axis)|", 12,
                  "var(--ink)", "middle", 700))
@@ -455,7 +472,7 @@ def chart_orthogonal():
     s.append(txt(xm(chance) + 6, 46,
                  f"chance in d=4096  (1/√d = {chance:.3f})", 10.5,
                  "var(--ink-light)"))
-    for gv in (0, .01, .02, .03):
+    for gv in np.arange(0, xhi + 1e-9, .01):
         yb = 34 + len(t) * ROW
         s.append(line(xm(gv), yb, xm(gv), yb + 5, "var(--ink-light)", 1))
         s.append(txt(xm(gv), yb + 16, f"{gv:.2f}", 9.5, "var(--ink-light)",
@@ -469,28 +486,43 @@ def chart_orthogonal():
                      "var(--ink)", "end", 600))
         s.append(line(X0, y, xm(r.cos), y, c, 2.4))
         s.append(circle(xm(r.cos), y, 5, c))
+        if np.isfinite(r.cos_B):
+            s.append(circle(xm(r.cos_B), y, 4.5, GOLD, "#ffffff", 1))
+    ylg = 34 + len(t) * ROW + 30
+    s.append(circle(X0 + 20, ylg, 5, GREEN))
+    s.append(txt(X0 + 30, ylg + 4, "famous-figure axis", 10.5,
+                 "var(--ink-light)"))
+    s.append(circle(X0 + 168, ylg, 4.5, GOLD, "#ffffff", 1))
+    s.append(txt(X0 + 178, ylg + 4, "our 34 rulers (E3b)", 10.5,
+                 "var(--ink-light)"))
     X1, X1W = 760, 240
-    s.append(txt(X1 + X1W / 2, 20, "frozen-transfer Spearman ρ", 12,
+    s.append(txt(X1 + X1W / 2, 20, "frozen transfer ρ (later = higher)", 12,
                  "var(--ink)", "middle", 700))
     y0 = 52 + (len(t) - 1) * ROW / 2
-    ym2 = lambda v: y0 - v * 90                            # noqa: E731
-    s.append(line(X1, ym2(0), X1 + X1W, ym2(0), "var(--ink-light)", 1))
-    s.append(txt(X1 - 8, ym2(0) + 4, "0", 10, "var(--ink-light)", "end"))
-    s.append(txt(X1 - 8, ym2(1) + 4, "+1", 10, "var(--ink-light)", "end"))
-    s.append(txt(X1 - 8, ym2(-1) + 4, "−1", 10, "var(--ink-light)", "end"))
-    bw = X1W / len(t) - 8
+    ym2 = lambda v: y0 - v * 380                           # noqa: E731
+    for g in (-.2, -.1, 0, .1, .2):
+        s.append(line(X1, ym2(g), X1 + X1W, ym2(g),
+                      "var(--ink-light)" if g == 0 else
+                      "var(--border-light)", 1))
+        s.append(txt(X1 - 8, ym2(g) + 4, f"{g:+.1f}" if g else "0", 10,
+                     "var(--ink-light)", "end"))
+    slot = X1W / len(t)
+    bw = slot / 2 - 3
     for i, (_, r) in enumerate(t.iterrows()):
-        c = GREEN if r.m in ("olmo2_7b", "qwen3_8b") else GRAYC
-        x = X1 + i * (bw + 8)
-        h = abs(r.rho) * 90
-        yb = ym2(0) - h if r.rho > 0 else ym2(0)
-        s.append(rect(x, yb, bw, max(h, 1), c, 2))
-        s.append(txt(x + bw / 2, ym2(0) + (14 if r.rho > 0 else -8),
+        x0 = X1 + i * slot
+        for j, (val, col) in enumerate(((r.rho, GREEN), (r.rho_B, GOLD))):
+            if not np.isfinite(val):
+                continue
+            x = x0 + j * (bw + 2)
+            h = abs(val) * 90
+            s.append(rect(x, ym2(0) - h if val > 0 else ym2(0), bw,
+                          max(h, 1), col, 2))
+        s.append(txt(x0 + slot / 2 - 2, ym2(0) + 14,
                      f"{r.m.split('_')[0][:4]}·"
                      f"{'a' if 'akk' in r.v else 'e'}", 8.5,
                      "var(--ink-light)", "middle"))
     s.append(txt(X1 + X1W / 2, 52 + len(t) * ROW,
-                 "the cell-A year probe, applied frozen to fragments", 10.5,
+                 "each entity axis, applied frozen to fragments", 10.5,
                  "var(--ink-light)", "middle"))
     s.append("</svg>")
     return "".join(s)
@@ -812,16 +844,24 @@ def main():
           " cell A, so the null is not a bug. <strong>E3b</strong> repeats"
           " everything with w_B &mdash; the axis fitted on <em>our own 34"
           " rulers</em> (ent-last token), the entities these documents are"
-          " actually about: |cos| = .0001&ndash;.015, same chance band, and"
-          " its weak ordering collapses under LEACE of ruler identity.")],
+          " actually about. Polarity: the fragment year column is"
+          " BC-positive while entity targets are CE-signed, so &rho; is"
+          " reported here in the lateness frame (higher = orders documents"
+          " correctly).")],
         f'<div class="p2chart">{chart_orthogonal()}</div>',
-        "<strong>Document time is not a weaker copy of entity time"
-        " &mdash; it is a different direction altogether.</strong>"
-        " |cos| sits at the 1/&radic;d &asymp; .016 chance band (left) and"
-        " frozen transfer orders fragments at &rho; &asymp; 0 in every arm"
-        " (right). H-dilute is dead &mdash; and swapping in the ruler axis"
-        " does not rescue it: whatever orders documents lives on another"
-        " axis."))
+        "<strong>Both entity axes are essentially orthogonal to the"
+        " document axis &mdash; and the one that does transfer, transfers"
+        " by naming, not by dating.</strong> Every |cos| is within a small"
+        " multiple of the 1/&radic;d &asymp; .016 chance line (left; the"
+        " largest, olmo&middot;akk ruler axis at .042, is still 2.6&times;"
+        " a chance overlap in 4,096 dimensions). The famous-figure axis"
+        " orders fragments no better than"
+        " an untrained twin; the ruler axis does slightly better"
+        " (&rho;=+.05&hellip;+.19, macro .53&ndash;.62 vs twin .43&ndash;"
+        ".49) &mdash; and that advantage <strong>vanishes to chance the"
+        " moment ruler identity is erased</strong> (macro &rarr;"
+        " .49&ndash;.53). The model is recognising WHICH KING the text"
+        " names and looking his date up; it is not dating the document."))
 
     S.append(slide(
         base + 3, "F6 &middot; logit lens on the probe directions",

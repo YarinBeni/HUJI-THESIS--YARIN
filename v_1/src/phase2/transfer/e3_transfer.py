@@ -318,12 +318,19 @@ def main():
           f"d={len(coef)} | fragment layers on disk: {len(layers)}", flush=True)
 
     def readout(X, tag):
+        # POLARITY. `year` is BC-positive (larger = earlier) while the entity
+        # targets are CE-signed/negated to lateness, so a direction that
+        # orders documents CORRECTLY scores rho < 0 and macro < .5 in the raw
+        # frame. Both raw keys are kept (every earlier result file uses them)
+        # and the lateness-frame values are stored alongside; always compare
+        # magnitudes against the untrained twin, never against .5.
         s = X @ coef
         rho = spearman(s, year)
         mac, sd = pairwise_eval(df, s, args.m, args.draws, args.seed)
         print(f"  [{tag}] spearman={rho:+.3f}  pairwise macro={mac:.3f}±{sd:.3f}",
               flush=True)
-        return {"spearman": rho, "pairwise_macro": mac, "pairwise_sd": sd}
+        return {"spearman": rho, "pairwise_macro": mac, "pairwise_sd": sd,
+                "spearman_lateness": -rho, "pairwise_macro_lateness": 1 - mac}
 
     out = {"method": args.method, "variant": args.variant, "site": args.site,
            "cellA_direction": src, "cellA_layer": LA, "entity_set": ENTITY,

@@ -101,22 +101,25 @@ resubmitted individually; every job syncs main first and commits its results.
   too — not learned chronology. Length contributes exactly nothing, and the
   positive control (year-decile) is no larger than ruler/period, which is
   what ICC=1 predicts: ruler already carries the era.
-- [~] **E3b ruler-axis transfer (4/8)**: the reviewer's alternative — maybe
-  the axis connected to these documents is w_B (our 34 rulers), not w_A
-  (famous figures). Positive control on held-out ruler rows: qwen +.52
-  (in band), olmo +.28 / llama +.36 (weak instrument — a null on those arms
-  is uninterpretable, exactly why w_A was the primary). For the interpretable
-  qwen arm: **|cos(w_B, document direction)| = .0001–.0147, at or below the
-  1/√d ≈ .0156 chance band** — the ruler axis is orthogonal to the document
-  axis too, so H-dilute is not rescued by swapping the axis. Frozen transfer
-  is weak (|ρ| .14–.19, twin-range) and **collapses under LEACE of ruler
-  identity** (ρ → +.06/−.02/+.19/+.22, macro → .47–.50): whatever ordering
-  the ruler axis achieves on documents is mediated by recognizing WHICH
-  RULER the text belongs to, not by dating it.
-  *Polarity note:* fragment `year` is BC-positive (larger = earlier) while
-  the entity targets are CE-signed, so in `pairwise_eval`'s frame a working
-  lateness scorer reads as ρ < 0 / macro < .5. Compare magnitudes against the
-  twin, not against .5.
+- [x] **E3b ruler-axis transfer (COMPLETE, 8/8)**: the reviewer's
+  alternative — maybe the axis connected to these documents is w_B (our 34
+  rulers), not w_A (famous figures). Positive control on held-out ruler rows:
+  qwen +.52, llama +.36, olmo +.28, twin +.17.
+  **Read in the lateness frame** (fragment `year` is BC-positive while entity
+  targets are CE-signed, so the stored ρ/macro are negated/complemented; see
+  the polarity note in pairs_data.draw_pairs):
+  * |cos(w_B, document direction)| = .0003–.042 against a 1/√d = .0156
+    chance line — the ruler axis is essentially orthogonal to the document
+    axis too, so H-dilute is not rescued by swapping the axis.
+  * unlike w_A, w_B **does** transfer weakly: ρ = +.05…+.19 and macro
+    .53–.62 in all four trained arms, against an untrained twin at −.13/−.17
+    and macro .43/.49. (w_A for comparison: ρ −.07…+.17, twin +.11/+.13 —
+    not above twin. The difference makes sense: ruler names appear in the
+    glosses, famous figures do not.)
+  * **and the whole advantage is ruler identity**: after LEACE of ruler
+    one-hots every arm falls to chance (macro → .49–.53, ρ → ~0 or negative;
+    ruler probe .60–.71 → .13–.18). The model recognises WHICH KING the text
+    names and looks his date up — it is not dating the document.
 - [~] **F30 (2/3 landed)**:
   * **cellB steering — null WITH controls.** Clamping the cell-A features on
     ruler-name prompts moves the frozen read-out (mean +0.99 sd at α=8 from a
