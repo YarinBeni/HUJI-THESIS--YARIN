@@ -128,6 +128,8 @@ def train_translators(method, layers, steps, seed=0):
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     hfid = registry.MODELS[method]["hfid"]
     tok = AutoTokenizer.from_pretrained(hfid)
+    if tok.pad_token is None:            # llama has no pad token
+        tok.pad_token = tok.eos_token
     model = AutoModelForCausalLM.from_pretrained(
         hfid, torch_dtype=torch.bfloat16, low_cpu_mem_usage=True).to(dev)
     model.eval()
@@ -196,40 +198,26 @@ def train_translators(method, layers, steps, seed=0):
             for L, a in A.items()}
 
 
-def spectro(scores_fn, vecs, cats, u_norms, seed=0):
-    """Composition + z for a direction under a scoring function, against
-    N_NULL random directions pushed through the SAME scoring function."""
-    out = {}
+def comp_of(sc, cats):
+    comp, _ = spectrum(sc, cats, np.zeros(len(sc), bool), np.zeros(len(sc)))
+    return comp
+
+
+def null_stats(score_fn, dim, cats, u_norms, transform, seed=0):
+    """(mu, sd) of the decile composition over N_NULL random directions,
+    pushed through the SAME transform (identity for the raw lens, A_L for
+    the tuned lens) — the calibration must match the treatment."""
     rng = np.random.default_rng(seed)
-    for name, v in vecs:
-        raw = scores_fn(v)
-        cosv = raw / u_norms
-        rec = {}
-        for tag, sc in (("raw", raw), ("cos", cosv)):
-            comp, _ = spectrum(sc, cats, np.zeros(len(sc), bool),
-                               np.zeros(len(sc)))
-            rec[tag] = comp
-        out[name] = rec
-    # shared null
-    dim = len(vecs[0][1])
-    nulls = {"raw": [], "cos": []}
+    nl = {"raw": [], "cos": []}
     for _ in range(N_NULL):
         r = rng.standard_normal(dim).astype(np.float32)
-        sr = scores_fn(r)
-        for tag, sc in (("raw", sr), ("cos", sr / u_norms)):
-            comp, _ = spectrum(sc, cats, np.zeros(len(sc), bool),
-                               np.zeros(len(sc)))
-            nulls[tag].append(comp)
-    res = {}
-    for name in out:
-        res[name] = {}
-        for tag in ("raw", "cos"):
-            nl = np.stack(nulls[tag])
-            mu, sd = nl.mean(0), nl.std(0) + 1e-9
-            z = (out[name][tag] - mu) / sd
-            res[name][tag] = {"composition": out[name][tag].tolist(),
-                              "z_scores": z.tolist()}
-    return res
+        if transform is not None:
+            r = transform(r)
+        sr = score_fn(r)
+        nl["raw"].append(comp_of(sr, cats))
+        nl["cos"].append(comp_of(sr / u_norms, cats))
+    return {t: (np.stack(v).mean(0), np.stack(v).std(0) + 1e-9)
+            for t, v in nl.items()}
 
 
 def token_ends(scores, tokens, k=25):
@@ -265,6 +253,8 @@ def main():
 
     out = {"method": args.method, "buckets": B, "n_null": N_NULL,
            "cats": CATS, "directions": {}}
+    score = lambda u: W_U @ (gamma * (u / (np.linalg.norm(u) + 1e-8)))  # noqa: E731
+    null_cache = {}          # ('rawlens',) shared; ('tuned', L) per layer
     for name, (v, L) in dirs.items():
         vh = v / (np.linalg.norm(v) + 1e-8)
         variants = {"rawlens": vh}
@@ -272,12 +262,22 @@ def main():
             tv = A[L] @ vh
             variants["tuned"] = tv / (np.linalg.norm(tv) + 1e-8)
         rec = {"layer": int(L), "has_translator": L in A}
-        score = lambda u: W_U @ (gamma * (u / (np.linalg.norm(u) + 1e-8)))
-        specs = spectro(score, list(variants.items()), cats, u_norms,
-                        args.seed)
         for vt, u in variants.items():
-            rec[vt] = {"ends": token_ends(score(u), tokens),
-                       "spectroscopy": specs[vt]}
+            key = ("tuned", L) if vt == "tuned" else ("rawlens",)
+            if key not in null_cache:
+                tr = ((lambda r, _M=A[L]: _M @ r) if vt == "tuned"
+                      else None)
+                null_cache[key] = null_stats(score, len(u), cats, u_norms,
+                                             tr, args.seed)
+            sc_raw = score(u)
+            spec = {}
+            for tag, sc in (("raw", sc_raw), ("cos", sc_raw / u_norms)):
+                comp = comp_of(sc, cats)
+                mu, sd = null_cache[key][tag]
+                spec[tag] = {"composition": comp.tolist(),
+                             "z_scores": ((comp - mu) / sd).tolist()}
+            rec[vt] = {"ends": token_ends(sc_raw, tokens),
+                       "spectroscopy": spec}
         out["directions"][name] = rec
         for vt in variants:
             ci = CATS.index("temporal_ancient")

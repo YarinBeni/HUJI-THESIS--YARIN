@@ -64,19 +64,26 @@ RESULTS = os.path.join(_HERE, "results")
 # one actually connected to these documents. Cell B has no saved direction
 # (probe_entity.py reports Monte-Carlo scores, never a canonical fit), so it is
 # fitted here once on the canonical train split and cached as an npz.
+# ysign: the polarity convention. Cell-A death years are CE-signed (larger =
+# LATER, -935..2021); the ruler CSV stores BC-positive years (Ashurbanipal =
+# 631, larger = EARLIER) — the same convention as the fragments' year column.
+# The E1 polarity rule in pairwise_eval ("a earlier <=> s_a < s_b") was built
+# for later-increasing scorers, so the ruler fit target is NEGATED once here
+# and every downstream read-out (spearman, pairwise, LEACE, cosines) stays in
+# the same frame as the cell-A rows.
 ENTITY_CFG = {
     "historical_figure": dict(
         csv=os.path.join(_WM, "data", "entity_datasets",
                          "historical_figure.csv"),
         acts=os.path.join(_WM, "activations", "{method}",
                           "historical_figure"),
-        site="last"),
+        site="last", ysign=+1.0),
     "assyrian_ruler": dict(
         csv=os.path.join(_WM, "data", "entity_datasets",
                          "assyrian_ruler.csv"),
         acts=os.path.join(_WM, "akkadian", "activations", "{method}",
                           "assyrian_ruler"),
-        site="ent_last"),
+        site="ent_last", ysign=-1.0),
 }
 RIDGE_ALPHAS = np.logspace(-1, 6, 15)
 
@@ -102,7 +109,10 @@ def fit_entity_direction(method, entity, dirs_root):
     if not files:
         sys.exit(f"no {entity} activations under {acts_dir} — run "
                  f"akkadian/extract_entity.py --method {method}")
-    y = ent.death_year.values.astype(float)
+    y = cfg["ysign"] * ent.death_year.values.astype(float)
+    if cfg["ysign"] < 0:
+        print("[fitB] BC-positive ruler years negated -> later-increasing "
+              "target (cell-A polarity frame)", flush=True)
     valid = np.isfinite(y)
     groups = (ent.entity_ix.values if "entity_ix" in ent
               else np.arange(len(ent)))
@@ -221,7 +231,7 @@ def entity_positive_control(method, entity, coef, LA, site_dir):
     X = np.load(acts)["acts"].astype(np.float32)
     if len(X) != len(ent):
         return {"skipped": "row mismatch"}
-    y = ent["death_year"].values.astype(float)
+    y = cfg["ysign"] * ent["death_year"].values.astype(float)
     te = ent["is_test"].astype(bool).values & np.isfinite(y)
     s = X[te] @ coef
     return {"spearman_heldout": spearman(s, y[te]), "n": int(te.sum())}
@@ -243,7 +253,7 @@ def stability(method, entity, LA, site_dir, coef_full, frag_X, year, df,
     from sklearn.linear_model import RidgeCV
     ent = pd.read_csv(cfg["csv"])
     Xe = np.load(p)["acts"].astype(np.float32)
-    y = ent.death_year.values.astype(float)
+    y = cfg["ysign"] * ent.death_year.values.astype(float)
     valid = np.isfinite(y)
     groups = (ent.entity_ix.values if "entity_ix" in ent
               else np.arange(len(ent)))
