@@ -1,0 +1,22 @@
+{
+  "method": "qwen3_8b",
+  "variant": "akk_maximal",
+  "layer": 25,
+  "concept": "year10",
+  "z_dim": 7,
+  "m": 21,
+  "draws": 40,
+  "raw": {
+    "pairwise_macro": 0.6542186331078144,
+    "pairwise_sd": 0.04677271354960629,
+    "grouped_ridge_spearman": 0.1181641590005544
+  },
+  "erased": {
+    "pairwise_macro": 0.5655532400535701,
+    "pairwise_sd": 0.0594485778538399,
+    "grouped_ridge_spearman": -0.3263510206960409
+  },
+  "concept_probe_acc_before": 0.6309742999616418,
+  "concept_probe_acc_after": 0.15078847547201976,
+  "genre_constant": true
+}
