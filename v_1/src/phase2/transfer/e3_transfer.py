@@ -78,11 +78,14 @@ ENTITY_CFG = {
         acts=os.path.join(_WM, "activations", "{method}",
                           "historical_figure"),
         site="last", ysign=+1.0),
+    # NB: akkadian/extract_entity.py writes to world_models/activations/
+    # (ACTS_DIR = dirname(akkadian)/activations), NOT akkadian/activations —
+    # the same root the cell-A prompts use. Run 25046 extracted fine and
+    # then failed the lookup because this pointed one directory too deep.
     "assyrian_ruler": dict(
         csv=os.path.join(_WM, "data", "entity_datasets",
                          "assyrian_ruler.csv"),
-        acts=os.path.join(_WM, "akkadian", "activations", "{method}",
-                          "assyrian_ruler"),
+        acts=os.path.join(_WM, "activations", "{method}", "assyrian_ruler"),
         site="ent_last", ysign=-1.0),
 }
 RIDGE_ALPHAS = np.logspace(-1, 6, 15)

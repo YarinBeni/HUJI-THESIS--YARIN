@@ -26,7 +26,7 @@ source v_1/src/stress_tests/sbatch/_common.sh
 sync_main
 mkdir -p v_1/src/phase2/transfer/logs
 
-ACTS="v_1/src/world_models/akkadian/activations/${METHOD}/assyrian_ruler"
+ACTS="v_1/src/world_models/activations/${METHOD}/assyrian_ruler"
 if ! ls "${ACTS}"/ent_last.layer*.npz >/dev/null 2>&1; then
     echo "--- ruler activations missing; re-extracting (${METHOD}) ---"
     python -u v_1/src/world_models/akkadian/extract_entity.py \

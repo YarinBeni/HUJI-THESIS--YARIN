@@ -77,9 +77,12 @@ def main():
     topk_fallback = 80
     if args.sae1:
         import fvu_gate as F1
-        W_enc1, b_enc1, W_dec1, _ = F1.load_sae(24)
+        W_enc1, b_enc1, W_dec1, b_dec1 = F1.load_sae(24)
+        # the dict must carry every key karvonen.encode/decode reads —
+        # "mode" above all (run 25048 died on sae["mode"])
         sae = {"W_enc": W_enc1, "b_enc": b_enc1, "W_dec": W_dec1,
-               "theta": None}
+               "b_dec": b_dec1, "theta": None, "mode": "topk_fallback",
+               "d_in": int(b_dec1.shape[0]), "d_sae": int(W_enc1.shape[0])}
         repo, L, off = F1.REPO, 24, 0
         topk_fallback = F1.K                    # TopK k=100
         tab = pd.read_csv(os.path.join(_SAE1, "results",
