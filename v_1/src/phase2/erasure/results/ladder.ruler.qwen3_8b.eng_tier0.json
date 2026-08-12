@@ -1,0 +1,22 @@
+{
+  "method": "qwen3_8b",
+  "variant": "eng_tier0",
+  "layer": 19,
+  "concept": "ruler",
+  "z_dim": 40,
+  "m": 21,
+  "draws": 40,
+  "raw": {
+    "pairwise_macro": 0.6316445573096118,
+    "pairwise_sd": 0.04472909866527442,
+    "grouped_ridge_spearman": 0.1427497689726335
+  },
+  "erased": {
+    "pairwise_macro": 0.48815369561940203,
+    "pairwise_sd": 0.06479605288588552,
+    "grouped_ridge_spearman": -0.3013852733148711
+  },
+  "concept_probe_acc_before": 0.6890794409861071,
+  "concept_probe_acc_after": 0.15890487511050647,
+  "genre_constant": true
+}
