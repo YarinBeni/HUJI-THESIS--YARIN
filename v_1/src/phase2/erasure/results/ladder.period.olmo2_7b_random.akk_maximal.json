@@ -1,0 +1,22 @@
+{
+  "method": "olmo2_7b_random",
+  "variant": "akk_maximal",
+  "layer": 15,
+  "concept": "period",
+  "z_dim": 6,
+  "m": 21,
+  "draws": 40,
+  "raw": {
+    "pairwise_macro": 0.6772986966526882,
+    "pairwise_sd": 0.03836229322537005,
+    "grouped_ridge_spearman": 0.054692023718202434
+  },
+  "erased": {
+    "pairwise_macro": 0.5436943690764654,
+    "pairwise_sd": 0.04027174555073656,
+    "grouped_ridge_spearman": -0.24782958352962162
+  },
+  "concept_probe_acc_before": 0.8871925360474978,
+  "concept_probe_acc_after": 0.45801526717557256,
+  "genre_constant": true
+}
