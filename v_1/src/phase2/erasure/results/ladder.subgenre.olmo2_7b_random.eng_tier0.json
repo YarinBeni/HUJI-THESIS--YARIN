@@ -1,0 +1,22 @@
+{
+  "method": "olmo2_7b_random",
+  "variant": "eng_tier0",
+  "layer": 9,
+  "concept": "subgenre",
+  "z_dim": 21,
+  "m": 21,
+  "draws": 40,
+  "raw": {
+    "pairwise_macro": 0.5501166162928438,
+    "pairwise_sd": 0.03923512238831369,
+    "grouped_ridge_spearman": 0.1149520344783728
+  },
+  "erased": {
+    "pairwise_macro": 0.45531753276062303,
+    "pairwise_sd": 0.043577454319688076,
+    "grouped_ridge_spearman": -0.05578518683102032
+  },
+  "concept_probe_acc_before": 0.482335729154393,
+  "concept_probe_acc_after": 0.1565703428773418,
+  "genre_constant": true
+}
