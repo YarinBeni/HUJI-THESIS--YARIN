@@ -33,7 +33,11 @@ GRAYC = "#8a8f99"
 FEAT_LABEL = {44713: "German surnames", 22835: "Western name endings",
               17433: "“X of PLACE” nobility",
               53704: "ancient genealogy", 56768: "Chinese names",
-              9763: "Chinese imperial names"}
+              9763: "Chinese imperial names",
+              # Qwen-Scope L24 (F30) — the same families, other dictionary
+              38678: "Germanic surname endings", 35304: "Germanic given names",
+              50840: "“X of PLACE” nobility", 44579: "Chinese names",
+              31934: "“of PLACE” clergy", 41906: "European surname endings"}
 
 
 # --------------------------- charts (deck-toned) ---------------------------
@@ -181,12 +185,16 @@ def chart_spectrum():
 
 
 def chart_feature_cards():
+    """Two dictionaries side by side (F25 + F30): the SAME three onomastic
+    families are found independently in Qwen-Scope L24 and in the 65k L9."""
     interp = J("sae2", "results", "feature_interp.layer9.json")
+    interp24 = J("sae2", "results", "feature_interp.layer24.json")
     hunt = pd.read_csv(sorted(glob.glob(os.path.join(
         _P2, "sae2", "results", "feature_hunt2.layer*.csv")))[-1])
     hunt = hunt.set_index(hunt.feature.astype(int))
     fh1 = pd.read_csv(os.path.join(_P2, "sae", "results",
                                    "feature_hunt.layer24.csv"))
+    hunt24 = fh1.set_index(fh1.feature.astype(int))
     f1 = fh1[fh1.feature == 38678].iloc[0]
 
     def ctx(e):
@@ -214,26 +222,38 @@ def chart_feature_cards():
             f' of entity prompts, ρ(strength, death year) = '
             f'<strong>+{f1.rho_year:.2f}</strong>; on documents almost '
             f'never ({100*f1.fire_eng_tier0:.2f}% eng, '
-            f'{100*f1.fire_akk_maximal:.2f}% akk).</div>')
-    cards = []
-    for f in (44713, 17433, 53704, 56768):
-        rec = interp["features"][str(f)]
+            f'{100*f1.fire_akk_maximal:.2f}% akk). Its own top contexts, '
+            f'read out in F30: Paul Bene|<b>ke</b>, Erich Hone|<b>cker</b>, '
+            f'Jacob Folk|<b>ema</b> &mdash; a surname-ending detector.</div>')
+
+    def card(f, rec, tab, cols):
         exs = [e for e in rec["max_activating"]
                if e["context"].split("<|endoftext|>")[0].strip()][:2]
-        rho = float(hunt.loc[f, "rho_year"])
-        fires = (f'{100*float(hunt.loc[f, "fire_cellA"]):.1f}% ent &middot; '
-                 f'{100*float(hunt.loc[f, "fire_eng_tier0_frags"]):.1f}% '
-                 f'eng &middot; '
-                 f'{100*float(hunt.loc[f, "fire_akk_maximal_frags"]):.1f}% '
-                 f'akk')
-        cards.append(
-            f'<div class="p2card"><div class="p2cardt">{f} &middot; '
-            f'“{FEAT_LABEL[f]}” <span style="color:'
-            f'{GREEN if rho > 0 else RED}">ρ={rho:+.2f}</span></div>'
-            f'{"".join(ctx(e) for e in exs)}'
-            f'<div class="p2fires">{fires}</div></div>')
-    return (head + '<div class="p2cards">' + "".join(cards) + "</div>"
-            + gline)
+        rho = float(tab.loc[f, "rho_year"])
+        fires = " &middot; ".join(
+            f'{100*float(tab.loc[f, c]):.1f}% {lab}'
+            for c, lab in cols)
+        return (f'<div class="p2card"><div class="p2cardt">{f} &middot; '
+                f'“{FEAT_LABEL[f]}” <span style="color:'
+                f'{GREEN if rho > 0 else RED}">ρ={rho:+.2f}</span></div>'
+                f'{"".join(ctx(e) for e in exs)}'
+                f'<div class="p2fires">{fires}</div></div>')
+
+    C9 = [("fire_cellA", "ent"), ("fire_eng_tier0_frags", "eng"),
+          ("fire_akk_maximal_frags", "akk")]
+    C24 = [("fire_cellA", "ent"), ("fire_eng_tier0", "eng"),
+           ("fire_akk_maximal", "akk")]
+    left = "".join(card(f, interp24["features"][str(f)], hunt24, C24)
+                   for f in (38678, 50840, 44579)
+                   if str(f) in interp24["features"])
+    right = "".join(card(f, interp["features"][str(f)], hunt, C9)
+                    for f in (44713, 17433, 56768)
+                    if str(f) in interp["features"])
+    grid = (f'<div class="p2cols"><div><div class="p2coln">Qwen-Scope '
+            f'&middot; layer 24 &middot; 64K TopK</div>{left}</div>'
+            f'<div><div class="p2coln">Karvonen batch-TopK &middot; layer 9 '
+            f'&middot; 65K</div>{right}</div></div>')
+    return head + grid + gline
 
 
 def chart_causality():
@@ -667,6 +687,9 @@ STYLE = '''<style>/* phase-2 additions */
 .p2chip.dim{opacity:.8;}
 .p2feathead{background:var(--green-bg);border-left:4px solid var(--green);border-radius:7px;padding:10px 16px;font-size:14.5px;line-height:1.5;color:var(--ink);margin-bottom:12px;}
 .p2cards{display:grid;grid-template-columns:1fr 1fr;gap:11px;flex:1;min-height:0;align-content:start;}
+.p2cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;min-height:0;align-content:start;}
+.p2cols>div{display:flex;flex-direction:column;gap:8px;}
+.p2coln{font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--green);}
 .p2card{background:#f8f9fb;border:1px solid var(--border);border-radius:9px;padding:11px 14px;}
 .p2cardt{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px;}
 .p2ctx{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:#fff;border:1px solid var(--border-light);border-radius:5px;padding:3px 8px;margin:4px 0;color:var(--ink-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -964,14 +987,19 @@ def main():
           " populations (firing token marked in gold); generation:"
           " clamp at 10&times;act95 during greedy chat decoding &mdash;"
           " clamping the German-surname feature makes the model write"
-          " German mid-answer.")],
+          " German mid-answer. Run <strong>independently in both"
+          " dictionaries</strong> (F25 on the 65k layer 9, F30 on"
+          " Qwen-Scope layer 24) so the reading cannot be an artefact of"
+          " one feature basis.")],
         chart_feature_cards(),
-        "<strong>Naming culture tracks era &mdash; and that is the"
-        " correlation the probe reads.</strong> German surname endings"
-        " (&rho;=+.40), &ldquo;X of England&rdquo; nobility (&minus;.37),"
-        " ancient genealogy formulas (&minus;.37, the only one firing on"
-        " the glosses too), Chinese names (&minus;.37): who-you-are"
-        " features from which when-you-lived is decodable."
+        "<strong>Naming culture tracks era &mdash; and the same three"
+        " families come out of two independent dictionaries.</strong>"
+        " Germanic surname endings (&rho;=+.57 / +.40),"
+        " &ldquo;X of PLACE&rdquo; nobility (&minus;.38 / &minus;.37),"
+        " Chinese names (&minus;.36 / &minus;.37) &mdash; found separately"
+        " in Qwen-Scope L24 and in the 65k L9, which never saw each"
+        " other&rsquo;s features. Who-you-are detectors, from which"
+        " when-you-lived is decodable."
         " <strong>Independent check (F30):</strong> on the one layer"
         " Neuronpedia hosts, third-party autointerp labels for our top-50"
         " year-correlated features come back <strong>26/50"

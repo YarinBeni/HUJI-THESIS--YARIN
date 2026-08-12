@@ -138,8 +138,19 @@ resubmitted individually; every job syncs main first and commits its results.
     "Chinese surnames" (−.32), "authors' last names" (+.32), "names followed
     by ( or ," (+.54). Labels written by someone else, on a different layer,
     reproduce the F25 reading.
-  * [ ] sae1 interp cards (Qwen-Scope L24): rerunning as job 25128 after the
-    encode-contract fix.
+  * **sae1 interp cards (Qwen-Scope L24) — CROSS-DICTIONARY REPLICATION.**
+    Reading the L24 features by max-activating contexts finds the SAME three
+    onomastic families the 65k L9 dictionary produced, independently:
+    Germanic surname endings 38678 ρ=+.57 (Paul Bene|**ke**, Erich
+    Hone|**cker**, Jacob Folk|**ema**) vs 44713 ρ=+.40; "X of PLACE"
+    nobility 50840 ρ=−.38 (Isabella of **England**, Lucia, Countess of
+    Trip|**oli**) vs 17433 ρ=−.37; Chinese names 44579 ρ=−.36 (Zhao
+    Y|**any**u, Guo Z|**ix**ing) vs 56768 ρ=−.37. The headline feature 38678
+    now has its own contexts and they are onomastic. Note: at L24 the
+    clamped generations degenerate into repetition (act95≈30, α=10× is far
+    off-distribution) — only the L9 German-drift generation is shown.
+  **Wave 9 is complete.** Remaining optional follow-up: F31 (lens at
+  last-token pooling), written and queued.
 
 - [ ] **F31 — the pooling control on the lens** (open question raised in
   review): F6/F21/F29 lensed only MEAN-pooled document directions, which is
