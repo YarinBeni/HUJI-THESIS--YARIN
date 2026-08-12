@@ -75,3 +75,27 @@ bash v_1/src/phase2/submit_all.sh      # wave 3, with dependencies
 
 Earlier waves' jobs live in `pairs/sbatch/` and `transfer/sbatch/` and can be
 resubmitted individually; every job syncs main first and commits its results.
+
+## Wave 9 — reviewer wave (E3b, F28, F29, F30)
+
+- [x] **F29 tuned lens (COMPLETE, 3/3)**: per-layer translators (Belrose
+  2303.08112) trained on the project corpus; every direction re-read raw AND
+  tuned with translator-matched random nulls. **Both F6/F21 verdicts
+  replicate**: cell-A decile-1 ancient z stays 6.0 / 5.2 / 3.4
+  (olmo/qwen/llama, cos variant) with the same Ancient/BCE/公元前 ends, while
+  all four document-side directions (BT eng/akk, doc-year regression eng/akk)
+  never cross 3σ in decile 1 under the translator (−1.3..+2.7). Scattered
+  single-cell mid-decile excursions (max 3.3, olmo eng, sign-unpatterned) vs
+  the coherent decile-1 spike. **The "lens only works late" caveat is
+  retired.** Results: traces/results/tuned.*.json.
+- [~] **F28 erasure ladder (25/48 landed)**: interim ranking, consistent in
+  every arm so far — ruler (−.06..−.18) ≥ period (−.06..−.13) > subgenre
+  (−.01..−.13) ≥ provenance (−.03..−.08) > length (≈0). The RANDOM TWIN
+  shows the same drops (akk ruler −.178), so what the erasure removes is
+  form/identity correlate, not trained semantic time. year10 (floor arm)
+  .561→.518 with a working manipulation check.
+- [ ] **E3b ruler-axis transfer**: run 25046 ended without results (second
+  failure — first was cleaned activations; log needed). Rerun required; the
+  ysign polarity fix (55e7d66b) is in.
+- [ ] **F30** (sae1 interp cards / labeled L18 peek / cellB steering):
+  awaiting job 25048.

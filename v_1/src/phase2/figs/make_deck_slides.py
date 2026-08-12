@@ -633,6 +633,7 @@ A_SB = ('<a href="https://scholar.google.com/scholar?q=%22Non-parametric+'
 A_SAELL = '<a href="https://www.alignmentforum.org/posts/qykrYY6rXXM7EEs8Q/understanding-sae-features-with-the-logit-lens">SAE-features-with-the-logit-lens</a>'
 A_MONO = '<a href="https://transformer-circuits.pub/2023/monosemantic-features">Bricken et al. 2023</a>'
 A_ACTADD = '<a href="https://arxiv.org/abs/2308.10248">Turner et al. 2023</a>'
+A_TL = '<a href="https://arxiv.org/abs/2303.08112">tuned lens, Belrose et al. 2023</a>'
 A_CV = '<a href="https://arxiv.org/abs/2406.11614">Hong et al., EMNLP 2025</a>'
 A_GG = '<a href="https://transformer-circuits.pub/2024/scaling-monosemanticity/">Templeton et al. 2024</a>'
 A_AUTO = '<a href="https://blog.eleuther.ai/autointerp/">EleutherAI autointerp</a>'
@@ -740,7 +741,10 @@ def main():
           " (ridge, last-token) and E1&rsquo;s pairwise document direction"
           " (mean-pooled); top tokens of each end; random directions"
           " through the identical pipeline as control (F14) &mdash; they"
-          " lens to the same kind of junk as the document axis.")],
+          " lens to the same kind of junk as the document axis. The"
+          f" mid-stack caveat is retired by F29: a per-layer translator"
+          f" ({A_TL}), trained on our own corpus, reproduces both"
+          " verdicts.")],
         f'<div class="p2chart" style="align-items:flex-start">'
         f'{chart_lens_tokens()}</div>',
         "<strong>The entity year axis is semantically temporal; the"
@@ -779,7 +783,11 @@ def main():
         " The ancient-token share spikes in decile 1 of the entity axis"
         " in all three models (z up to +6.8) and survives the cosine"
         " correction; the document axis never leaves the noise in any"
-        " decile of any model."))
+        " decile of any model. Re-reading every direction through"
+        " tuned-lens translators (F29) reproduces the picture &mdash; the"
+        " entity spike survives (z 3.4&ndash;6.0), the document"
+        " directions stay flat &mdash; so the verdict no longer leans on"
+        " the raw lens's late-layer assumption."))
 
     S.append(slide(
         base + 5, "F8 + F11 + F22 &middot; where the year features fire",
