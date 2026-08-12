@@ -87,6 +87,10 @@ def main():
     ap.add_argument("--n-frags", type=int, default=300)
     ap.add_argument("--n-feats", type=int, default=5)
     ap.add_argument("--batch", type=int, default=8)
+    ap.add_argument("--population", default="cellA",
+                    choices=["cellA", "cellB"],
+                    help="F23b: cellB = the ruler-name prompts themselves, "
+                    "same features/controls/read-out (bridge skipped)")
     args = ap.parse_args()
 
     pipe = json.load(open(os.path.join(RESULTS, "pipeline.json")))
@@ -136,9 +140,20 @@ def main():
     coef_t = torch.from_numpy(coef).to(dev)
     W_dec = sae["W_dec"]
 
-    ent = ent_full[ent_full.is_test.astype(bool)
-                   & ent_full.death_year.notna()].sample(
-        args.n_entities, random_state=0)
+    if args.population == "cellB":
+        # F23b — the ruler names themselves (all 6 carrier templates). The
+        # features and controls stay the ones hunted on cell A; the question
+        # is whether the same causal machinery responds on OUR entities.
+        rb = pd.read_csv(os.path.join(_WM, "data", "entity_datasets",
+                                      "assyrian_ruler.csv"))
+        ent = rb[rb.death_year.notna()].copy()
+        ent["name"] = ent.entity_string.astype(str)
+        if len(ent) > args.n_entities:
+            ent = ent.sample(args.n_entities, random_state=0)
+    else:
+        ent = ent_full[ent_full.is_test.astype(bool)
+                       & ent_full.death_year.notna()].sample(
+            args.n_entities, random_state=0)
     df = P.load_eligible()
     frags = df.text_eng_tier0.fillna("").astype(str)
     frags = [t for t in frags if t.strip()][:args.n_frags]
@@ -216,18 +231,25 @@ def main():
                 rec["amplify"][str(a)] = s
             s, _ = run(names, f, 0, "ablate")
             rec["ablate"] = s
-            for a in (0, 4):
-                s, fr = run(frags, f, a * scale[f], "add", exclude_last=True)
-                rec["bridge"][str(a)] = {"probe": s, "fire_last": fr}
+            if args.population == "cellA":       # bridge belongs to cell A
+                for a in (0, 4):
+                    s, fr = run(frags, f, a * scale[f], "add",
+                                exclude_last=True)
+                    rec["bridge"][str(a)] = {"probe": s, "fire_last": fr}
             out["runs"][f"{group}:{f}"] = rec
+            bmsg = (f"bridge fire {rec['bridge']['0']['fire_last']:.2f}->"
+                    f"{rec['bridge']['4']['fire_last']:.2f}"
+                    if rec["bridge"] else "no bridge (cellB)")
             print(f"[{group}:{f}] amp0={rec['amplify']['0']:+.1f} "
                   f"amp8={rec['amplify']['8']:+.1f} abl={rec['ablate']:+.1f} "
-                  f"bridge fire {rec['bridge']['0']['fire_last']:.2f}->"
-                  f"{rec['bridge']['4']['fire_last']:.2f}", flush=True)
+                  f"{bmsg}", flush=True)
 
-    with open(os.path.join(RESULTS, f"steer.layer{L}.json"), "w") as f:
+    out["population"] = args.population
+    suffix = "" if args.population == "cellA" else f".{args.population}"
+    pth = os.path.join(RESULTS, f"steer.layer{L}{suffix}.json")
+    with open(pth, "w") as f:
         json.dump(out, f, indent=2)
-    print(f"[done] -> {RESULTS}/steer.layer{L}.json", flush=True)
+    print(f"[done] -> {pth}", flush=True)
 
 
 if __name__ == "__main__":

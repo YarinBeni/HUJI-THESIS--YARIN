@@ -68,21 +68,36 @@ def main():
     ap.add_argument("--alpha", type=float, default=10.0)
     ap.add_argument("--gen-tokens", type=int, default=80)
     ap.add_argument("--batch", type=int, default=8)
+    ap.add_argument("--sae1", action="store_true",
+                    help="F25b: run on the FIRST dictionary instead "
+                    "(Qwen-Scope TopK k=100, layer 24) with its own hunt "
+                    "table (sae/results/feature_hunt.layer24.csv)")
     args = ap.parse_args()
 
-    pipe = json.load(open(os.path.join(RESULTS, "pipeline.json")))
-    repo, L = pipe["step0"]["repo"], pipe["step0"]["layer_used"]
-    off = pipe["step0"]["offset"]
-    sae = K.load(repo, pipe["step0"]["file_used"])
-    tab = pd.read_csv(sorted(glob.glob(os.path.join(
-        RESULTS, "feature_hunt2.layer*.csv")))[-1])
+    topk_fallback = 80
+    if args.sae1:
+        import fvu_gate as F1
+        W_enc1, b_enc1, W_dec1, _ = F1.load_sae(24)
+        sae = {"W_enc": W_enc1, "b_enc": b_enc1, "W_dec": W_dec1,
+               "theta": None}
+        repo, L, off = F1.REPO, 24, 0
+        topk_fallback = F1.K                    # TopK k=100
+        tab = pd.read_csv(os.path.join(_SAE1, "results",
+                                       "feature_hunt.layer24.csv"))
+    else:
+        pipe = json.load(open(os.path.join(RESULTS, "pipeline.json")))
+        repo, L = pipe["step0"]["repo"], pipe["step0"]["layer_used"]
+        off = pipe["step0"]["offset"]
+        sae = K.load(repo, pipe["step0"]["file_used"])
+        tab = pd.read_csv(sorted(glob.glob(os.path.join(
+            RESULTS, "feature_hunt2.layer*.csv")))[-1])
     feats = (args.features if args.features
              else tab.feature.astype(int).head(args.top_feats).tolist())
 
     # act95 per feature for the clamp scale (cell-A encodings, CPU)
     Xa = load_layer_acts(os.path.join(ENT_ACTS, METHOD, "historical_figure"),
                          L + off)
-    Za = K.encode(Xa, sae).numpy()
+    Za = K.encode(Xa, sae, k_fallback=topk_fallback).numpy()
     scale = {int(f): max(float(np.quantile(Za[:, int(f)][Za[:, int(f)] > 0],
                                            .95))
                          if (Za[:, int(f)] > 0).any() else 1.0, 1e-3)
@@ -126,7 +141,7 @@ def main():
                 if theta is not None:
                     z = torch.relu(pre) * (pre > theta)
                 else:
-                    val, idx = torch.topk(pre, 80, dim=-1)
+                    val, idx = torch.topk(pre, topk_fallback, dim=-1)
                     z = torch.zeros_like(pre).scatter_(
                         -1, idx, torch.relu(val))
                 zf = (z[..., fidx] * enc.attention_mask.unsqueeze(-1)).cpu()
