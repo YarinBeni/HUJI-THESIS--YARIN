@@ -88,11 +88,11 @@ resubmitted individually; every job syncs main first and commits its results.
   single-cell mid-decile excursions (max 3.3, olmo eng, sign-unpatterned) vs
   the coherent decile-1 spike. **The "lens only works late" caveat is
   retired.** Results: traces/results/tuned.*.json.
-- [x] **F28 erasure ladder (47/48; one cell, year10/qwen/akk, still queued)**:
+- [x] **F28 erasure ladder (COMPLETE, 48/48)**:
   single-concept LEACE from the document representations, then the full E1
   read-out. Ranking by mean Δ(pairwise macro) on the TRAINED arms —
   **ruler −.150 > period −.109 > object type (sub_genre) −.094 > year-decile
-  −.069 > find-spot −.046 > length +.003** (grouped-ridge ρ moves the same
+  −.074 > find-spot −.046 > length +.003** (grouped-ridge ρ moves the same
   way: −.44/−.29/−.12/−.47/−.28/−.06). Every manipulation check passes
   (concept probe .64→.16 for ruler, .91→.55 for period, etc.).
   **The decisive column is the untrained twin**: it loses just as much at
