@@ -627,6 +627,12 @@ A_ELS = '<a href="https://arxiv.org/abs/2410.13194">El-Shangiti et al., NAACL 20
 A_LEACE = '<a href="https://arxiv.org/abs/2306.03819">Belrose et al., NeurIPS 2023</a>'
 A_LENS = '<a href="https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens">nostalgebraist\u2019s logit lens</a>'
 A_GEVA = '<a href="https://arxiv.org/abs/2203.14680">Geva et al., EMNLP 2022</a>'
+A_SB = ('<a href="https://scholar.google.com/scholar?q=%22Non-parametric+'
+        'standard+errors+and+tests+for+network+statistics%22">Snijders'
+        ' &amp; Borgatti 1999</a>')
+A_SAELL = '<a href="https://www.alignmentforum.org/posts/qykrYY6rXXM7EEs8Q/understanding-sae-features-with-the-logit-lens">SAE-features-with-the-logit-lens</a>'
+A_MONO = '<a href="https://transformer-circuits.pub/2023/monosemantic-features">Bricken et al. 2023</a>'
+A_ACTADD = '<a href="https://arxiv.org/abs/2308.10248">Turner et al. 2023</a>'
 A_CV = '<a href="https://arxiv.org/abs/2406.11614">Hong et al., EMNLP 2025</a>'
 A_GG = '<a href="https://transformer-circuits.pub/2024/scaling-monosemanticity/">Templeton et al. 2024</a>'
 A_AUTO = '<a href="https://blog.eleuther.ai/autointerp/">EleutherAI autointerp</a>'
@@ -676,7 +682,7 @@ def main():
           " &sigma;(w&middot;(x_a &minus; x_b))</span>; evaluation protocol"
           f" after {A_ELS}, probing frame after {A_GT}. Significance:"
           " permutation that reassigns whole rulers and refits everything"
-          " (B=150) + dyadic bootstrap over rulers."),
+          f" (B=150) + dyadic bootstrap over rulers ({A_SB})."),
          ("Data &amp; pooling", "<strong>mean pooling</strong> over tokens"
           " at the layer fixed once in F1; quota <strong>m=21</strong>"
           " pairs per ruler pair per draw, weights 1/m, macro over ruler"
@@ -758,8 +764,9 @@ def main():
           " &mu;_null) / &sigma;_null</span>; a cosine variant divides"
           " out loud unembedding rows. Category reading of vocabulary"
           f" projections follows {A_GEVA}; the random-direction"
-          " calibration is the same control as the lens slide. Cells"
-          " 3&sigma; above the null are ringed."),
+          f" calibration is the same control used in the SAE-feature"
+          f" logit-lens practice ({A_SAELL}). Cells 3&sigma; above the"
+          " null are ringed."),
          ("Setup", "~150k tokens per model &times; 9 keyword categories"
           " (ancient-temporal, modern, year numerals, function words,"
           " capitalized, &hellip;); both directions per model. The"
@@ -778,8 +785,9 @@ def main():
         base + 5, "F8 + F11 + F22 &middot; where the year features fire",
         "The year features are entity-gated: alive inside English text,"
         " silent at the read-out, and never engaging Akkadian",
-        [("Method", "split residual activations into sparse-autoencoder"
-          f" features in <strong>two independent dictionaries</strong>:"
+        [("Method", f"split residual activations into sparse-autoencoder"
+          f" features ({A_MONO}) in <strong>two independent"
+          f" dictionaries</strong>:"
           f" {A_QS} (TopK k=100, layer 24) and {A_KV} (65k, layer 9"
           " &mdash; the only layer of that release passing the"
           " reconstruction gate FVU &le; .35). Inference per dictionary,"
@@ -803,7 +811,8 @@ def main():
         base + 6, "F8 + F22 &middot; decomposing the year probe",
         "No single year neuron: the year direction is a distributed code"
         " &mdash; and these are the features that carry it",
-        [("Method", "feature&ndash;direction geometry: compare every"
+        [("Method", f"feature&ndash;direction geometry (after the"
+          f" SAE-feature logit-lens line, {A_SAELL}): compare every"
           " hunted feature&rsquo;s decoder row to the frozen ridge"
           " direction, <span class=\'frm2\'>cos(W_dec,f&thinsp;,"
           " w_ridge)</span>; hunt features by rank correlation with the"
@@ -849,7 +858,8 @@ def main():
         "Clamp one feature at an entity prompt and the frozen year"
         " prediction moves &mdash; monotonically, in the sign of that"
         " feature&rsquo;s correlation",
-        [("Method", "feature clamping with the non-surgicality discipline:"
+        [("Method", f"feature clamping ({A_GG}) with the non-surgicality"
+          " discipline:"
           " every treated feature has a <strong>firing-rate-matched random"
           " control</strong>, and the claim is treated-minus-control."
           " Intervention <span class=\'frm2\'>h &larr; h + &alpha;"
@@ -877,7 +887,8 @@ def main():
           " not at the read-out. Can brute force carry them there? If yes,"
           " the entity&ndash;document gap is a routing weakness; if not"
           " even force works, it is a disconnection."),
-         ("Method", "clamp <span class=\'frm2\'>h &larr; h + m &#8857;"
+         ("Method", f"clamp (Golden-Gate style, {A_GG})"
+          " <span class=\'frm2\'>h &larr; h + m &#8857;"
           " (&alpha; &middot; act95_f &middot; d_f)</span> on every"
           " mid-document position; the per-sample mask m spares only the"
           " read-out token, so anything measured there had to"
@@ -910,8 +921,9 @@ def main():
           " in each gloss (95% coverage, 4.2 tokens on average); clamp"
           " <span class=\'frm2\'>h &larr; h + &alpha; &middot; act95_f"
           " &middot; d_f</span> on the span; frozen ridge read-out at the"
-          " last token; rate-matched controls. A separate DIR arm injects"
-          " the ridge <em>direction itself</em> at blocks {8,16,24}; its"
+          " last token; rate-matched controls. A separate DIR arm"
+          f" (activation addition, {A_ACTADD}) injects the ridge"
+          " <em>direction itself</em> at blocks {8,16,24}; its"
           " +5.7&thinsp;sd jump on Akkadian is <strong>circular</strong>"
           " &mdash; the injected vector IS the read-out&rsquo;s own axis"
           " &mdash; and is excluded by the pre-registered rule (a random"
