@@ -1,0 +1,22 @@
+{
+  "method": "tfidf_char",
+  "variant": "akk_maximal",
+  "layer": -1,
+  "concept": "ruler",
+  "z_dim": 40,
+  "m": 21,
+  "draws": 40,
+  "raw": {
+    "pairwise_macro": 0.5487762953721635,
+    "pairwise_sd": 0.04494986617212574,
+    "grouped_ridge_spearman": -0.010375024111255737
+  },
+  "erased": {
+    "pairwise_macro": 0.49205492173369897,
+    "pairwise_sd": 0.051605109669734486,
+    "grouped_ridge_spearman": -0.27562851770290586
+  },
+  "concept_probe_acc_before": 0.5903862802490002,
+  "concept_probe_acc_after": 0.16331139235867767,
+  "genre_constant": true
+}
