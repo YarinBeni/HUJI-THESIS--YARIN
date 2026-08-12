@@ -1,0 +1,22 @@
+{
+  "method": "olmo2_7b",
+  "variant": "eng_tier0",
+  "layer": 11,
+  "concept": "period",
+  "z_dim": 6,
+  "m": 21,
+  "draws": 40,
+  "raw": {
+    "pairwise_macro": 0.6213541983707835,
+    "pairwise_sd": 0.042013944271920116,
+    "grouped_ridge_spearman": 0.2099955602755642
+  },
+  "erased": {
+    "pairwise_macro": 0.5166127360885014,
+    "pairwise_sd": 0.05599232490109051,
+    "grouped_ridge_spearman": -0.10908153020237046
+  },
+  "concept_probe_acc_before": 0.9355385920271416,
+  "concept_probe_acc_after": 0.5979643765903307,
+  "genre_constant": true
+}
