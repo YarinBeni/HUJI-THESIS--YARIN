@@ -1,0 +1,22 @@
+{
+  "method": "olmo2_7b",
+  "variant": "eng_tier0",
+  "layer": 11,
+  "concept": "year10",
+  "z_dim": 7,
+  "m": 21,
+  "draws": 40,
+  "raw": {
+    "pairwise_macro": 0.6213541983707835,
+    "pairwise_sd": 0.042013944271920116,
+    "grouped_ridge_spearman": 0.2099955602755642
+  },
+  "erased": {
+    "pairwise_macro": 0.5584408773591882,
+    "pairwise_sd": 0.051739422053440384,
+    "grouped_ridge_spearman": -0.33810993001808537
+  },
+  "concept_probe_acc_before": 0.6967097131654093,
+  "concept_probe_acc_after": 0.1752056429271619,
+  "genre_constant": true
+}
