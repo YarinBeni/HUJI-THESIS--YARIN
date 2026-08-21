@@ -1,5 +1,12 @@
 # Presentation context — one file to orient a fresh agent
 
+> **⚠️ PARTIALLY SUPERSEDED — read [`HANDOFF_PROMPT.md`](HANDOFF_PROMPT.md) first.**
+> This file was written when the deck had **33** slides; it now has **43** (phase 2 was
+> added as slides 32–43, and slides were removed/reordered since). **Section 4's
+> slide-by-slide map and the slide counts in section 0 are stale** — use the map in
+> `HANDOFF_PROMPT.md` instead. Sections 1–3 (what we extend, the climbing matrix, and
+> where the phase-1 code and data live) are still accurate and useful.
+
 **Purpose of this file.** You are being asked to help reorganise the story, order and
 slides of a thesis presentation. This file tells you: where the deck is, what every slide
 is, which experiment produced it, where that experiment's code and results live, and how
