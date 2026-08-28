@@ -315,12 +315,25 @@ The plan above was written before the mechanistic follow-up program (F1–F31; s
   m=21 quota per ruler pair, ruler-level permutation + dyadic bootstrap inference
   (`v_1/src/phase2/pairs/`). This is exactly the combinatorial supervision §2 promises —
   the CJB rank term can reuse the pair generator and the evaluation harness as-is.
-- **The confound menu is now measured, not guessed (→ P1.x).** F28's single-concept
-  erasure ladder ranks what actually carries the document "order": ruler identity −.150
-  > period −.109 > object type (prism/slab/brick) −.094 > find-spot −.046 > length ≈ 0 —
-  and an **untrained twin loses the same at every rung**. Typed ruler-name masks are the
-  right first augmentation; object-type deserves a view of its own; length-based views
-  matter less than assumed.
+- **F28 gives a measured *starting* menu of confounds (→ P1.x) — not the ceiling.**
+  The single-concept erasure ladder ranks what carried the document "order" in *our*
+  probes: ruler identity −.150 > period −.109 > object type (prism/slab/brick) −.094 >
+  find-spot −.046 > length ≈ 0, with an untrained twin losing the same at every rung.
+  Read it as priorities for the first augmentation menu (typed ruler-name masks first,
+  an object-type view of its own, length matters less than assumed) — **not** as an
+  exhaustive inventory: the ladder only tested metadata columns we happened to have,
+  and a linear eraser only removes what it can name.
+- **NEW TICKET → P1.0 (runs before P1.1): philological dating-criteria survey.** Deep
+  research into how Assyriologists and philologists actually date and periodize texts —
+  diachronic orthography and sign forms, dialect stages (Old/Middle/Neo Assyrian and
+  Babylonian grammar), lexical change, evolving titulary and formula conventions, curse
+  formulae, month-name and eponym systems, prosopography, palaeography, tablet/object
+  typology — then convert **every criterion** into exactly one of: (a) an augmentation
+  (remove or normalize it, so the representation cannot rely on it), (b) a confound to
+  audit and deconfound, or (c) a *legitimate* diachronic feature the SAE should be
+  expected to rediscover — the ChronoAtlas target list. Deliverable: criteria table with
+  the a/b/c decision per criterion + expert sign-off; feeds the augmentation engine
+  (P1.x), the leakage audits (P3.5), and the feature taxonomy (P6.4).
 - **The token-identity illusion is now mechanistic (→ §2 row 5, RQ4).** The entity year
   axis decomposes into onomastic (name-culture) SAE features, replicated in two
   independent dictionaries and causally verified with rate-matched controls; the ruler
