@@ -1,0 +1,36 @@
+# E-MIN cluster config (plan P3.3): Chrono-Barlow over the cached
+# Thalesian/AKK_300m encoder (P0.4 best layer L11, mean-pooled site),
+# full view menus (A2 engine defaults), GroupKFold-by-ruler eval.
+# Seed comes from the sbatch grid: --seed {0..4}, --fold {0..4}.
+run_name: emin_thalesian
+features:
+  kind: emb
+  model: Thalesian/AKK_300m
+  layer: 11
+  site: mean
+views:
+  menu_a:
+    - []
+    - [mask_ruler]
+    - [strip_formula]
+    - [mask_ruler, strip_formula]
+    - [mask_ruler, crop16]
+    - [mask_ruler, crop32]
+    - [orthonorm]
+    - [mask_ruler, drop_span]
+  menu_b:
+    - []
+    - [mask_ruler]
+    - [mask_ruler, crop32]
+  seeds: [0, 1, 2]
+loss:
+  lambda_rank: 1.0
+  lambda_var: 0.1
+  temp: 1.0
+  lambda_offdiag: 0.005
+train:
+  epochs: 200
+  lr: 0.001
+  batch: 256
+  seed: 0
+eval_split: gkf_ruler
