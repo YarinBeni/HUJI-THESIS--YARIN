@@ -234,10 +234,28 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
         raise ValueError(f"{len(empty)} docs have no view in a menu, "
                          f"e.g. {empty[:5]}")
 
-    pairs, margins, _meta = make_order_pairs(
-        train_docs, ruler_table, per_ruler_pair=21, seed=seed)
-    pairs = torch.as_tensor(np.asarray(pairs), dtype=torch.long)
-    margins = torch.as_tensor(np.asarray(margins, dtype=np.float32))
+    resample_pairs = bool(cfg.get("train", {}).get("resample_pairs", True))
+
+    def draw_pairs(epoch):
+        """Order constraints for one epoch.
+
+        REVIEW FIX (wave B1): a single frozen draw is 2,428 constraints
+        in which 20% of docs never appear and the median ruler-pair
+        contributes ONE pair — the quota is min(m, n_i, n_j) and most of
+        the 40 rulers are long-tail. Redrawing per epoch is the plan's
+        combinatorial-supervision promise (plan section 2) actually
+        delivered: measured coverage goes 80.1% -> 99.9% after five
+        redraws and 100% by ten, at no extra GPU cost (the pair sampler
+        is pure numpy over doc ids). resample_pairs=false restores the
+        frozen-draw behaviour for ablations.
+        """
+        sd = seed if not resample_pairs else int(seed) * 100003 + epoch
+        pr, mg, _ = make_order_pairs(train_docs, ruler_table,
+                                     per_ruler_pair=21, seed=sd)
+        return (torch.as_tensor(np.asarray(pr), dtype=torch.long),
+                torch.as_tensor(np.asarray(mg, dtype=np.float32)))
+
+    pairs, margins = draw_pairs(0)
 
     lcfg, tcfg = cfg["loss"], cfg["train"]
     head = AdapterHead(d_in=X.shape[1])
@@ -249,6 +267,8 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
 
     loss_curve = []
     for epoch in range(epochs):
+        if resample_pairs and epoch:
+            pairs, margins = draw_pairs(epoch)
         order = g.permutation(n)
         ep_loss, nb = 0.0, 0
         for lo in range(0, n, batch):

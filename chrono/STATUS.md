@@ -34,6 +34,17 @@ orchestrating agent after every wave; read this first when resuming.
 | F5 | med | placebo shuffled t per DOC, but 39/40 rulers carry ONE year → null 3× too narrow (±.18 vs ±.50) | added `block_placebo_rho` (permutes ruler→t); doc-level demoted to leak detector; SLA now mandates the block null for significance |
 | F6 | low | diacritic variants missed ('Sîn' vs 'Sin') → a few "masked" eng views still named the ruler | length-preserving NFKD fold in `contract._fold`; eng span docs 547→548 |
 | F7 | low | `test_spearman` silently subset the fold's test docs | raises `KeyError` listing missing ids |
+| F8 | med | **(orchestrator finding)** order pairs were drawn ONCE before the epoch loop: 2,428 frozen constraints, 20% of docs in none of them, median ruler-pair contributing 1 pair (quota is min(m, n_i, n_j) and the ruler tail is long) — the plan's combinatorial-supervision promise under-delivered | `train.resample_pairs` (default true): redraw per epoch with a derived seed. Measured coverage 80.1% → 99.9% after 5 epochs, 100% by 10, at zero GPU cost |
+
+### Verified by the orchestrator (not agent claims)
+- **Axis sign is correct end-to-end.** For a pair (i, j) with t_i < t_j the
+  gradient moves s_i down and s_j up; all emitted pairs satisfy t_i < t_j;
+  fitting a free score vector on the REAL pairs alone gives ρ(s, t) = +0.62
+  (positive as the SLA requires). A sign flip here would have inverted every
+  downstream number silently.
+- **Pair eligibility is not the bottleneck**: 776 of 780 ruler pairs have
+  disjoint reign proxies, so the order signal spans essentially the whole
+  ruler graph.
 - [ ] adversarial review wave (math/leakage/determinism) + fixes
 - [x] pushed to yarin-sandbox
 - [ ] NEXT: re-run the 3 missing review lenses (math/trainer/cluster), then hand sbatch order to Yarin:
