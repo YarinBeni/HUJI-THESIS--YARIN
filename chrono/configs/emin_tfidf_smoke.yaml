@@ -8,8 +8,10 @@ features:
   site: null
 views:
   menu_a:
-    - []
-    - [mask_ruler]
+    - [mask_ruler, crop16]
+    - [mask_ruler, crop32]
+    - [mask_ruler, drop_span]
+    - [orthonorm]
   menu_b:
     - []
   seeds: [0]

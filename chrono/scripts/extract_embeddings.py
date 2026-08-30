@@ -271,8 +271,10 @@ def extract(table: pd.DataFrame, encode, *, store, model_name: str,
         chunk = table.iloc[lo:lo + shard_size]
         ids = chunk["id"].tolist()
         texts = chunk["text"].tolist()
+        # REVIEW FIX (wave B1): pass the texts so a chunk whose text
+        # changed under a stable view_id is re-embedded instead of skipped
         if not overwrite and all(
-                store.has(model_name, ly, st, ids).all()
+                store.has(model_name, ly, st, ids, texts=texts).all()
                 for ly in layers for st in sites):
             n_skip += len(ids)
             continue

@@ -94,14 +94,49 @@ class EmbStore:
         return m[(m["model"] == str(model)) & (m["layer"] == int(layer))
                  & (m["site"] == str(site))]
 
-    def has(self, model, layer, site, ids) -> np.ndarray:
-        known = set(self._select(model, layer, site)["id"])
-        return np.array([str(i) in known for i in ids], dtype=bool)
+    def has(self, model, layer, site, ids, texts=None) -> np.ndarray:
+        """Which ids are cached. With `texts` (order-aligned), an id
+        counts as cached ONLY if its stored text_sha matches.
 
-    def get(self, model, layer, site, ids) -> np.ndarray:
+        REVIEW FIX (wave B1): resume was keyed on id membership alone,
+        so a views.parquet rebuild that changed the TEXT under a stable
+        view_id left the cache stale and C1 skipped re-extraction — the
+        run would then train on vectors of the old text with nothing in
+        the results to show it.
+        """
+        sel = self._select(model, layer, site)
+        if texts is None:
+            known = set(sel["id"])
+            return np.array([str(i) in known for i in ids], dtype=bool)
+        sha = dict(zip(sel["id"], sel["text_sha"]))
+        return np.array(
+            [sha.get(str(i), None) == common.sha16(str(t))
+             for i, t in zip(ids, texts)], dtype=bool)
+
+    def stale(self, model, layer, site, ids, texts) -> list:
+        """Cached ids whose stored text_sha disagrees with `texts`."""
+        sel = self._select(model, layer, site)
+        sha = dict(zip(sel["id"], sel["text_sha"]))
+        out = []
+        for i, t in zip(ids, texts):
+            got = sha.get(str(i))
+            if got not in (None, "") and got != common.sha16(str(t)):
+                out.append(str(i))
+        return out
+
+    def get(self, model, layer, site, ids, texts=None) -> np.ndarray:
         """Gather float32 [len(ids), d] in the order of `ids`; KeyError
-        listing every missing id."""
+        listing every missing id. With `texts`, also raises when any
+        cached row was embedded from different text (review fix)."""
         ids = [str(i) for i in ids]
+        if texts is not None:
+            bad = self.stale(model, layer, site, ids, texts)
+            if bad:
+                raise KeyError(
+                    f"EmbStore has {len(bad)} STALE row(s) for "
+                    f"({model}, L{layer}, {site}) — text changed since "
+                    f"extraction, e.g. {bad[:10]}. Re-extract or clear "
+                    f"the store.")
         sel = self._select(model, layer, site)
         where = {r.id: (r.shard, int(r.row)) for r in sel.itertuples()}
         missing = [i for i in ids if i not in where]

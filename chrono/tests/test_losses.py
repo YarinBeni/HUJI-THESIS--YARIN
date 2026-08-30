@@ -2,6 +2,7 @@
 every term — gradcheck in double, behavior on synthetic data with known
 answers, and the weak-label pair generator's disjointness guarantee."""
 import numpy as np
+from chrono.losses import calibrate, core
 import pandas as pd
 import pytest
 import torch
@@ -189,6 +190,46 @@ def test_graph_smoothness_prefers_ordered_scores():
 
 
 # ---------------------------------------------------------------- P2.5
+def test_calibrator_block_conformal_beats_doc_split():
+    """REVIEW FIX (wave B1) + mutation guard.
+
+    Rebuilds the real data's structure — t is block-constant within
+    ruler — and asserts the group split is what makes leave-a-ruler-out
+    coverage honest. Deleting the split, or banking per-document
+    residuals under a group split, both fail this test (the old
+    iid-style test passed under either mutation).
+    """
+    rng = np.random.default_rng(3)
+    s, t, g = [], [], []
+    for k in range(40):                       # 40 single-year rulers
+        yr = -1100.0 + 20.0 * k
+        # the real pathology: documents of one ruler are near-copies
+        # (tiny within-ruler spread) while the ERROR lives at ruler level
+        # (a per-ruler offset). Doc-split residuals then measure only the
+        # copy noise and promise intervals far too tight for a new ruler.
+        offset = rng.normal(0, 2.5)
+        for _ in range(rng.integers(8, 30)):
+            s.append(yr / 100.0 + offset + rng.normal(0, 0.05))
+            t.append(yr)
+            g.append(f"R{k}")
+    s = np.array(s); t = np.array(t); g = np.array(g)
+
+    doc = calibrate.MonotoneCalibrator(seed=0).fit(s, t)
+    blk = calibrate.MonotoneCalibrator(seed=0).fit(s, t, groups=g)
+
+    # effective n is BLOCKS under the group split, documents otherwise
+    assert blk.n_effective < 0.2 * doc.n_effective
+
+    cov_doc, _ = doc.coverage_by_group(s, t, g, 0.8)
+    cov_blk, per = blk.coverage_by_group(s, t, g, 0.8)
+    assert cov_blk >= 0.75                    # honest at the block level
+    # strictly better, and by more than sampling jitter — this is the
+    # assertion that dies if the group split is deleted (both calibrators
+    # then bank the same doc-level residuals and the numbers coincide).
+    # On the REAL corpus the same comparison is .88 vs .54.
+    assert cov_blk > cov_doc + 0.03
+    assert sum(v == 0.0 for v in per.values()) <= 4
+
 def test_calibrator_coverage_and_monotonicity():
     r = np.random.default_rng(11)
 
@@ -279,3 +320,93 @@ def test_make_order_pairs_deterministic(toy_corpus, toy_ruler_table):
     assert torch.equal(a[0], b[0]) and torch.equal(a[1], b[1])
     assert a[2].equals(b[2])
     assert not a[2]["doc_i"].equals(c[2]["doc_i"])
+
+def test_hsic_is_double_centered():
+    """Mutation guard: tr(KHLH), not tr(KHL).
+
+    A singly-centered HSIC survived the old suite. Double centering is
+    what makes HSIC zero for independent variables; with one H the
+    statistic keeps a mean term and no longer vanishes.
+    """
+    rng = np.random.default_rng(0)
+    x = torch.tensor(rng.normal(size=(120, 1)), dtype=torch.float64)
+    y = torch.tensor(rng.normal(size=(120, 1)), dtype=torch.float64)
+    indep = float(hsic_loss(x, y))
+    dep = float(hsic_loss(x, x ** 2))
+    assert indep < 0.02 and dep > 5 * max(indep, 1e-6)
+
+    # hand-computed reference on a 4x4 problem, following the module's
+    # stated convention: K_ij = exp(-d2 / (2 sigma^2)), sigma = median
+    # heuristic, statistic tr(KHLH)/(n-1)^2
+    n = 4
+    xs = torch.tensor([[0.0], [1.0], [2.0], [3.0]], dtype=torch.float64)
+    ys = torch.tensor([[0.0], [1.0], [4.0], [9.0]], dtype=torch.float64)
+
+    def rbf(a, ref_sigma=None):
+        d2 = (a - a.T) ** 2
+        sig = core._median_sigma(d2) if ref_sigma is None else ref_sigma
+        return torch.exp(-d2 / (2.0 * sig ** 2))
+
+    K, L = rbf(xs), rbf(ys)
+    H = torch.eye(n, dtype=torch.float64) - 1.0 / n
+    ref = float(torch.trace(K @ H @ L @ H) / (n - 1) ** 2)
+    got = float(hsic_loss(xs, ys))
+    assert abs(got - ref) < 1e-9, (got, ref)
+
+
+def test_variance_loss_hinges_on_std_not_var():
+    """Mutation guard: swapping std for var passed the old suite.
+
+    At std = 0.5 the hinge must read 0.5 below the floor, not 0.75.
+    """
+    s = torch.tensor([-0.5, 0.5], dtype=torch.float64)      # std = 0.5 (pop)
+    got = float(variance_loss(s, floor=1.0))
+    assert abs(got - 0.5) < 1e-6, got
+
+
+def test_bt_offdiag_weight_is_honoured():
+    """Mutation guard: a 100x change to lambda_offdiag passed before."""
+    rng = np.random.default_rng(1)
+    z_a = torch.tensor(rng.normal(size=(64, 6)), dtype=torch.float64)
+    z_b = z_a + 0.01 * torch.tensor(rng.normal(size=(64, 6)),
+                                    dtype=torch.float64)
+    lo = float(bt_loss(z_a, z_b, lambda_offdiag=1e-3))
+    hi = float(bt_loss(z_a, z_b, lambda_offdiag=1e-1))
+    assert hi > lo                       # off-diag term actually weighted
+    # and the weighting is linear in lambda: (hi - lo) tracks the ratio
+    mid = float(bt_loss(z_a, z_b, lambda_offdiag=5e-2))
+    assert lo < mid < hi
+
+    # NUMERIC PIN — an ordering-only assertion survives a global rescale
+    # of the off-diagonal term (a x100 mutation passed it). Recompute the
+    # Barlow objective by hand and demand exact agreement.
+    def reference(za, zb, lam):
+        n = za.shape[0]
+        # mirror the module's standardization exactly: sqrt(var + eps)
+        a = (za - za.mean(0)) / torch.sqrt(za.var(0, unbiased=False) + 1e-6)
+        b = (zb - zb.mean(0)) / torch.sqrt(zb.var(0, unbiased=False) + 1e-6)
+        c = (a.T @ b) / n
+        on = torch.diagonal(c)
+        off = c - torch.diag_embed(on)
+        return float(((on - 1.0) ** 2).sum() + lam * (off ** 2).sum())
+
+    for lam in (1e-3, 5e-2, 1e-1):
+        assert abs(float(bt_loss(z_a, z_b, lambda_offdiag=lam))
+                   - reference(z_a, z_b, lam)) < 1e-8, lam
+
+
+def test_touching_intervals_emit_no_pairs(toy_corpus):
+    """SLA: touching (a1 == b0) is NOT disjoint — the real corpus has 4
+    such ruler pairs, incl. Sennacherib/Esarhaddon (411 docs). Mutating
+    `<` to `<=` passed the old suite."""
+    docs = toy_corpus.copy()
+    tbl = pd.DataFrame({"ruler": ["A", "B"], "t_min": [-700.0, -681.0],
+                        "t_max": [-681.0, -670.0],      # touch at -681
+                        "proxy": True, "n_docs": [5, 5]})
+    d = pd.DataFrame({"doc_id": [f"x{i}" for i in range(10)],
+                      "ruler": ["A"] * 5 + ["B"] * 5,
+                      "t": [-700.0, -690, -685, -683, -681,
+                            -681.0, -678, -675, -672, -670]})
+    pairs, margins, meta = make_order_pairs(d, tbl, t_std=10.0,
+                                            per_ruler_pair=5, seed=0)
+    assert len(pairs) == 0, meta

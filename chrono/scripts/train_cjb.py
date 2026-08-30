@@ -155,18 +155,56 @@ def build_features(cfg: dict, views_df: pd.DataFrame, store=None,
     raise ValueError(f"unknown features.kind: {kind!r}")
 
 
-def _view_index(views_df, doc_ids, menu, seeds):
-    """doc_id -> list of views_df ROW POSITIONS whose augs chain is in
-    `menu` and seed in `seeds`."""
+def _view_index(views_df, doc_ids, menu, seeds, by_lang=False):
+    """doc_id -> row positions whose augs chain is in `menu` and seed in
+    `seeds`. With by_lang=True the value is {lang: [positions]}."""
     want_augs = {_chain_str(c) for c in menu}
     want_seeds = {int(s) for s in seeds}
     ok = (views_df["augs"].isin(want_augs)
           & views_df["seed"].astype(int).isin(want_seeds))
-    idx = {d: [] for d in doc_ids}
+    langs = views_df["lang"].to_numpy()
+    idx = {d: ({} if by_lang else []) for d in doc_ids}
     for pos, (doc, hit) in enumerate(zip(views_df["doc_id"], ok)):
-        if hit and doc in idx:
+        if not hit or doc not in idx:
+            continue
+        if by_lang:
+            idx[doc].setdefault(langs[pos], []).append(pos)
+        else:
             idx[doc].append(pos)
     return idx
+
+
+def _pair_rows(idx_a, idx_b, doc, rng, texts, tries=8):
+    """One (row_a, row_b) view pair for `doc`.
+
+    REVIEW FIX (wave B1). The old sampler drew each branch independently
+    from the whole menu, which measured out at 23-39% of steps drawing
+    BYTE-IDENTICAL text (the invariance term is then satisfied for free
+    and teaches nothing) and ~50% drawing DIFFERENT LANGUAGES — so half
+    the Barlow pressure was akk-vs-eng translation invariance rather than
+    the confound invariance the method is about. Now: one language per
+    step for both branches, and identical-text draws are rejected and
+    resampled (up to `tries`, then accepted so a doc with a single view
+    still trains). Returns (row_a, row_b, same_text) so the trainer can
+    report the realised rate.
+    """
+    langs = [lg for lg in idx_a.get(doc, {}) if idx_b.get(doc, {}).get(lg)]
+    if not langs:                       # no language has both branches
+        a_all = [p for ps in idx_a.get(doc, {}).values() for p in ps]
+        b_all = [p for ps in idx_b.get(doc, {}).values() for p in ps]
+        if not a_all or not b_all:
+            return None, None, False
+        ra, rb = a_all[rng.integers(len(a_all))], b_all[rng.integers(len(b_all))]
+        return ra, rb, texts[ra] == texts[rb]
+    lg = langs[rng.integers(len(langs))]
+    a_rows, b_rows = idx_a[doc][lg], idx_b[doc][lg]
+    ra = rb = None
+    for _ in range(tries):
+        ra = a_rows[rng.integers(len(a_rows))]
+        rb = b_rows[rng.integers(len(b_rows))]
+        if texts[ra] != texts[rb]:
+            return ra, rb, False
+    return ra, rb, True
 
 
 def _condition_scores(head, X, views_df, doc_ids):
@@ -247,10 +285,29 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
                                                 and fold is not None)
                                     else None))
     idx_a = _view_index(views_df, doc_ids, cfg["views"]["menu_a"],
-                        cfg["views"]["seeds"])
+                        cfg["views"]["seeds"], by_lang=True)
     idx_b = _view_index(views_df, doc_ids, cfg["views"]["menu_b"],
-                        cfg["views"]["seeds"])
-    empty = [d for d in doc_ids if not idx_a[d] or not idx_b[d]]
+                        cfg["views"]["seeds"], by_lang=True)
+    view_texts = views_df["text"].to_numpy()
+    # REVIEW FIX (W2-13): a config asking for a chain or seed that
+    # views.parquet does not contain used to shrink the menu silently
+    # (emin_thalesian asks for seeds [0,1,2] against a 2-seed artifact).
+    have_chains = set(views_df["augs"].unique())
+    have_seeds = set(int(x) for x in views_df["seed"].unique())
+    for tag, menu in (("menu_a", cfg["views"]["menu_a"]),
+                      ("menu_b", cfg["views"]["menu_b"])):
+        miss = [c for c in menu if _chain_str(c) not in have_chains]
+        if miss:
+            print(f"WARNING: {tag} requests chains absent from views: "
+                  f"{miss} — the menu is silently smaller than configured",
+                  file=sys.stderr)
+    miss_s = [s_ for s_ in cfg["views"]["seeds"]
+              if int(s_) not in have_seeds]
+    if miss_s:
+        print(f"WARNING: views.seeds {miss_s} absent from views.parquet "
+              f"(have {sorted(have_seeds)})", file=sys.stderr)
+    empty = [d for d in doc_ids
+             if not any(idx_a[d].values()) or not any(idx_b[d].values())]
     if empty:
         raise ValueError(f"{len(empty)} docs have no view in a menu, "
                          f"e.g. {empty[:5]}")
@@ -287,6 +344,7 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
     t_train = train_docs["t"].to_numpy(dtype=float)
 
     loss_curve = []
+    n_same = n_pairs = 0
     for epoch in range(epochs):
         if resample_pairs and epoch:
             pairs, margins = draw_pairs(epoch)
@@ -294,10 +352,18 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
         ep_loss, nb = 0.0, 0
         for lo in range(0, n, batch):
             take = order[lo:lo + batch]
-            rows_a = [idx_a[doc_ids[i]][g.integers(
-                len(idx_a[doc_ids[i]]))] for i in take]
-            rows_b = [idx_b[doc_ids[i]][g.integers(
-                len(idx_b[doc_ids[i]]))] for i in take]
+            rows_a, rows_b = [], []
+            for i in take:
+                ra, rb, same = _pair_rows(idx_a, idx_b, doc_ids[i], g,
+                                          view_texts)
+                if ra is None:
+                    continue
+                rows_a.append(ra)
+                rows_b.append(rb)
+                n_same += int(same)
+                n_pairs += 1
+            if len(rows_a) < 2:        # bt_loss needs a real batch
+                continue
             xa = torch.as_tensor(X[rows_a])
             xb = torch.as_tensor(X[rows_b])
             _, s_a, p_a = head(xa)
@@ -338,7 +404,11 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
     rho_hard = _safe_spearman(s_train, t_train)
     metrics = {"train_soft_spearman": rho_soft,
                "train_spearman": rho_hard,
-               "final_loss": loss_curve[-1]}
+               "final_loss": loss_curve[-1],
+               # realised rate of view pairs whose two branches ended up
+               # byte-identical (the invariance term learns nothing from
+               # those); was 23-39% before the sampler fix
+               "identical_view_rate": (n_same / n_pairs) if n_pairs else 0.0}
     if split is not None and fold is not None:
         want = list(split["folds"][fold]["test"])
         te = [d for d in want if d in s_by_doc]

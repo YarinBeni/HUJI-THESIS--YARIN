@@ -10,19 +10,15 @@ features:
   site: mean
 views:
   menu_a:
-    - []
-    - [mask_ruler]
-    - [strip_formula]
     - [mask_ruler, strip_formula]
     - [mask_ruler, crop16]
     - [mask_ruler, crop32]
-    - [orthonorm]
     - [mask_ruler, drop_span]
+    - [orthonorm]
   menu_b:
     - []
     - [mask_ruler]
-    - [mask_ruler, crop32]
-  seeds: [0, 1, 2]
+  seeds: [0, 1]   # views.parquet is built with seeds 0,1
 loss:
   lambda_rank: 1.0
   lambda_var: 0.1

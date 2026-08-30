@@ -39,22 +39,80 @@ class MonotoneCalibrator:
             raise ValueError("calib_frac must be in (0, 1)")
         self.calib_frac = calib_frac
         self.seed = seed
+        self.n_effective: int = 0
         self._iso: IsotonicRegression | None = None
         self._resid: np.ndarray | None = None
 
-    def fit(self, s: np.ndarray, t: np.ndarray) -> "MonotoneCalibrator":
+    def fit(self, s: np.ndarray, t: np.ndarray,
+            groups=None) -> "MonotoneCalibrator":
+        """Fit isotonic s->t and bank conformal residuals.
+
+        REVIEW FIX (wave B1): split conformal is only valid when the
+        calibration units are exchangeable with the test units. Splitting
+        at DOCUMENT level looks valid (measured coverage .800 at nominal
+        .80) and is not: t is block-constant within ruler (39 of our 40
+        rulers carry ONE year), so documents of the same ruler are near
+        copies. Measured leave-one-RULER-out coverage of the doc-split
+        calibrator: .665, with 6 of 40 rulers covered 0% of the time —
+        the error is all-or-nothing per ruler, not 1-in-5 per document.
+        Passing `groups` (the ruler per row) splits BY GROUP, so the
+        residual bank comes from rulers the isotonic fit never saw. The
+        effective n is then the number of calibration RULERS (~8-12),
+        not the number of documents — quote that, not n_docs.
+        """
         s = np.asarray(s, dtype=float).ravel()
         t = np.asarray(t, dtype=float).ravel()
         if s.shape != t.shape or len(s) < 4:
             raise ValueError("need matching 1-d s, t with n >= 4")
-        order = np.random.default_rng(self.seed).permutation(len(s))
-        n_cal = max(1, int(round(self.calib_frac * len(s))))
-        cal, fit_ = order[:n_cal], order[n_cal:]
+        rng = np.random.default_rng(self.seed)
+        if groups is None:
+            order = rng.permutation(len(s))
+            n_cal = max(1, int(round(self.calib_frac * len(s))))
+            cal, fit_ = order[:n_cal], order[n_cal:]
+            self.n_effective = int(n_cal)
+        else:
+            g = np.asarray(groups).ravel()
+            if g.shape != s.shape:
+                raise ValueError("groups must align with s")
+            uniq = np.array(sorted(set(g.tolist())))
+            if len(uniq) < 4:
+                raise ValueError("need >= 4 groups for a group split")
+            k = max(2, int(round(self.calib_frac * len(uniq))))
+            cal_g = set(rng.permutation(uniq)[:k].tolist())
+            mask = np.array([x in cal_g for x in g])
+            cal, fit_ = np.flatnonzero(mask), np.flatnonzero(~mask)
+            self.n_effective = int(k)          # blocks, not documents
         self._iso = IsotonicRegression(increasing=True,
                                        out_of_bounds="clip")
         self._iso.fit(s[fit_], t[fit_])
-        self._resid = np.sort(np.abs(t[cal] - self._iso.predict(s[cal])))
+        err = np.abs(t[cal] - self._iso.predict(s[cal]))
+        if groups is None:
+            self._resid = np.sort(err)
+        else:
+            # BLOCK conformal: one residual per calibration RULER (its
+            # median document error). Banking per-document residuals
+            # would treat ~30 near-copies of one ruler as 30 independent
+            # draws and produce intervals that are too narrow for an
+            # unseen ruler — measured ruler-coverage .57 at nominal .80.
+            gc = np.asarray(groups).ravel()[cal]
+            self._resid = np.sort(np.array(
+                [np.median(err[gc == u]) for u in sorted(set(gc.tolist()))]))
         return self
+
+    def coverage_by_group(self, s, t, groups, coverage: float = 0.8):
+        """Per-group coverage — the number to report for this data.
+
+        Returns (mean over groups, dict group -> coverage). A ruler whose
+        every fragment falls outside its interval shows up as 0.0 here
+        while the document-level average hides it."""
+        lo, hi = self.predict_interval(s, coverage)
+        t = np.asarray(t, dtype=float).ravel()
+        g = np.asarray(groups).ravel()
+        per = {}
+        for u in sorted(set(g.tolist())):
+            m = g == u
+            per[u] = float(((t[m] >= lo[m]) & (t[m] <= hi[m])).mean())
+        return float(np.mean(list(per.values()))), per
 
     def predict(self, s: np.ndarray) -> np.ndarray:
         if self._iso is None:
