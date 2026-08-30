@@ -96,7 +96,9 @@ def test_spans_in_bounds_and_matching(corpus):
     n_eng_hit = 0
     for row in corpus.itertuples(index=False):
         for lang, text in (("eng", row.text_eng), ("akk", row.text_akk)):
-            variants = {v.lower()
+            # diacritic-folded on both sides (review fix F6: the gloss
+            # writes 'Sin-...' where the ruler table writes 'Sîn-...')
+            variants = {contract._fold(v).lower()
                         for v in contract.name_variants(row.ruler)}
             got = sorted((int(s), int(e))
                          for s, e in getattr(row, f"ruler_spans_{lang}"))
@@ -105,9 +107,10 @@ def test_spans_in_bounds_and_matching(corpus):
                 assert 0 <= s < e <= len(text)
                 assert s >= prev_end          # non-overlapping
                 prev_end = e
-                sub = text[s:e].lower()
+                sub = contract._fold(text[s:e]).lower()
                 assert (sub in variants
-                        or str(row.ruler).lower().startswith(sub))
+                        or contract._fold(str(row.ruler)).lower()
+                        .startswith(sub))
         n_eng_hit += len(row.ruler_spans_eng) > 0
     # ignite_anchor measured ~46% of glosses carrying the royal name
     assert n_eng_hit / len(corpus) > 0.35
