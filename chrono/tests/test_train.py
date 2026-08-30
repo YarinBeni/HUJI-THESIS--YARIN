@@ -154,7 +154,8 @@ def test_overfit_gate_tfidf():
     assert np.isfinite(res["loss_curve"]).all()
     # scores frame carries the SLA schema
     assert list(res["scores"].columns) == \
-        ["run_id", "doc_id", "condition", "s"]
+        ["run_id", "doc_id", "condition", "s", "fit", "fold"]
+    assert (res["scores"]["fit"] == "full").all()      # no fold given
     assert (res["scores"]["condition"] == "orig").all()
     assert len(res["scores"]) == len(corpus)
 
@@ -183,7 +184,8 @@ def test_trainer_writes_scores_and_results(tmp_path, monkeypatch):
                           ruler_table=ruler_table, write=True,
                           out_dir=str(tmp_path / "scores"), log_every=0)
     got = pd.read_parquet(res["scores_path"])
-    assert list(got.columns) == ["run_id", "doc_id", "condition", "s"]
+    assert list(got.columns) == ["run_id", "doc_id", "condition", "s",
+                                 "fit", "fold"]
     assert set(got["doc_id"]) == set(corpus["doc_id"])
     results = pd.read_parquet(tmp_path / "results.parquet")
     assert list(results.columns) == common.RESULTS_COLS

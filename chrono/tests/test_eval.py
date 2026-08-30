@@ -154,7 +154,12 @@ def test_battery_grid_exact(perfect_scores, toy_corpus, mc_split,
     out = battery(scores_df, toy_corpus, splits)
 
     assert list(out.columns) == BATTERY_COLS == [
-        "condition", "split", "rho_mean", "rho_sd", "n"]
+        "condition", "split", "readout", "rho_mean", "rho_sd", "n"]
+    # review fix: mc keeps the per-draw read-out, everything else pools
+    assert set(out.loc[out["split"] == "mc_balanced", "readout"]) == \
+        {"per_draw"}
+    assert set(out.loc[out["split"] == "gkf_ruler", "readout"]) == \
+        {"pooled"}
     assert len(out) == 4                        # 2 conditions x 2 splits
     assert list(out["condition"]) == ["orig", "orig", "anti", "anti"]
     assert list(out["split"]) == ["mc_balanced", "gkf_ruler"] * 2
@@ -168,7 +173,7 @@ def test_battery_grid_exact(perfect_scores, toy_corpus, mc_split,
         pytest.approx(0.0)
     assert (out.loc[out["split"] == "mc_balanced", "n"] == N_DRAWS).all()
     assert (out.loc[out["split"] == "gkf_ruler", "n"]
-            == len(gkf_split["folds"])).all()
+            == sum(len(f["test"]) for f in gkf_split["folds"])).all()
 
 
 def test_battery_missing_doc_raises(perfect_scores, toy_corpus,

@@ -63,12 +63,46 @@ def _ruler_spans(doc_row, lang):
     return [[int(a), int(b)] for a, b in raw]
 
 
+PN_TOKEN = "[PN]"
+
+
+def _base_text(doc_row, lang, chain):
+    """Source text for a view, and its ruler spans.
+
+    REVIEW FIX (wave B1): anglicized royal names never occur in the
+    transliteration, so ruler_spans_akk is empty on all 1,187 docs and
+    mask_ruler was a byte-for-byte no-op on every Akkadian view — an
+    "survives ruler masking" row that passes by construction, plus
+    thousands of duplicate texts sent to the GPU. The corpus ships a
+    pre-masked Akkadian tier instead ([PN] over personal names), so for a
+    chain containing mask_ruler we start from it and rewrite [PN] to the
+    typed token. English keeps the span path (46% of glosses name the
+    ruler; the rest genuinely never do).
+    """
+    if lang == "akk" and "mask_ruler" in chain:
+        pre = str(doc_row.get("text_akk_masked") or "")
+        if pre.strip():
+            spans, out, i = [], [], 0
+            while True:
+                j = pre.find(PN_TOKEN, i)
+                if j < 0:
+                    out.append(pre[i:])
+                    break
+                out.append(pre[i:j])
+                spans.append([sum(len(x) for x in out), 0])
+                out.append(ops.MASK_TOKEN)
+                spans[-1][1] = spans[-1][0] + len(ops.MASK_TOKEN)
+                i = j + len(PN_TOKEN)
+            return "".join(out), {"ruler": spans}
+    return (str(doc_row.get(f"text_{lang}") or ""),
+            {"ruler": _ruler_spans(doc_row, lang)})
+
+
 def make_view(doc_row, lang, chain, seed):
     """One view row (dict in VIEW_COLS order) — the single constructor
     both build_views and sample_view_pair go through."""
-    text = str(doc_row.get(f"text_{lang}") or "")
-    spans = {"ruler": _ruler_spans(doc_row, lang)}
     augs = ",".join(chain)
+    text, spans = _base_text(doc_row, lang, chain)
     rng = _view_rng(doc_row["doc_id"], lang, augs, seed)
     for name in chain:
         if name not in ops.OPS:

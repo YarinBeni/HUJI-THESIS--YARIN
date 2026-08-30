@@ -153,8 +153,14 @@ scripts/train_cjb.py --config chrono/configs/X.yaml --seed S
     # reads: corpus, splits, views, EmbStore (or --features tfidf for the
     # LOCAL SMOKE PATH: fit sklearn TfidfVectorizer char_wb 2-5 on view texts)
     # loss = bt + λ_rank·softrank + λ_var·variance (+ λ_hsic, λ_graph later)
-    # writes: per-doc scores parquet (run_id, doc_id, condition, s) +
-    # results rows via chrono.common.append_results
+    # writes: per-doc scores parquet (run_id, doc_id, condition, s, fit,
+    #   fold) + results rows via chrono.common.append_results.
+    #   REVIEW FIX (wave B1): `fit` is scoring provenance — 'oof' when a
+    #   (split, fold) was given (featurizer AND head fitted on that
+    #   fold's train docs only; test docs honest, per-fold runs
+    #   concatenable into a pooled-OOF Series), 'full' otherwise (every
+    #   doc seen: held-out battery cells are TRANSDUCTIVE and must be
+    #   labelled so). `fold` = -1 when not in a fold.
 ```
 Config yaml keys (fixed): `run_name, features {kind: emb|tfidf, model, layer,
 site}, views {menu_a, menu_b, seeds}, loss {lambda_rank, lambda_var, temp,
@@ -170,7 +176,29 @@ gkf_rho(scores_by_fold: dict[int, pd.Series], corpus_df, split) -> np.ndarray
 placebo_rho(scores, corpus_df, split, seed) -> np.ndarray   # t shuffled within draw — must straddle 0
 battery(scores_df: pd.DataFrame, corpus_df, splits: dict[str, dict]) -> pd.DataFrame
     # scores_df: doc_id, condition, s  (conditions: orig, mask_ruler,
-    # strip_formula, crop16, ...) → rows: condition × split × {rho_mean, rho_sd, n}
+    # strip_formula, crop16, ...) → rows: condition × split ×
+    # {readout, rho_mean, rho_sd, n}
+pooled_rho(scores, corpus_df, split) -> float          # REVIEW FIX (B1)
+block_placebo_rho(scores, corpus_df, split, seed) -> np.ndarray
+```
+READ-OUT POLICY (review fix, wave B1). 39 of our 40 rulers carry exactly
+ONE distinct year, so per-fold Spearman is undefined wherever a fold holds
+a single ruler — true for leave-one-ruler-out (10/11 folds), for gkf's two
+mega-ruler folds and for held-out-category folds. `battery` therefore
+routes: `mc_balanced` → per-draw rho (readout='per_draw'); every other
+split → ONE pooled rho over the concatenated held-out docs
+(readout='pooled', n = docs). Averaging surviving folds instead would
+silently report a WITHIN-reign number under an unseen-ruler label.
+
+SIGNIFICANCE (review fix, wave B1). Because t is block-constant within
+ruler, the exchangeable unit is the RULER, not the document. `placebo_rho`
+(doc-level shuffle) stays as a LEAK DETECTOR; its band on the real
+artifacts is ±.18, while the honest `block_placebo_rho` null is ±.50.
+Every significance claim uses the block null; mc `rho_sd` is a
+doc-resampling spread over 200 heavily overlapping draws sharing one fixed
+8-ruler design — it is NOT a standard error and must never be divided by
+√200.
+```python
 coverage(lo, hi, t) -> float
 ```
 All metrics computed against `t`; NEVER re-derive years inside eval.

@@ -25,11 +25,13 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from chrono.eval.protocol import mc_balanced_rho
+from chrono.eval.protocol import mc_balanced_rho, pooled_rho
 
 __all__ = ["battery", "BATTERY_COLS"]
 
-BATTERY_COLS = ["condition", "split", "rho_mean", "rho_sd", "n"]
+BATTERY_COLS = ["condition", "split", "readout", "rho_mean",
+                "rho_sd", "n"]
+MC_SPLITS = frozenset({"mc_balanced"})
 
 
 def battery(scores_df: pd.DataFrame, corpus_df: pd.DataFrame,
@@ -42,6 +44,17 @@ def battery(scores_df: pd.DataFrame, corpus_df: pd.DataFrame,
     Returns a DataFrame with exactly BATTERY_COLS; rows ordered by
     condition first-appearance then splits insertion order. rho_sd uses
     ddof=1 (nan when n < 2); n counts folds with a defined rho.
+
+    READ-OUT POLICY (review fix, wave B1). Per-fold rho is only defined
+    where a fold spans several years. With 39 of 40 rulers carrying one
+    distinct year, that holds for the mc draws (8 rulers each) but NOT
+    for leave-one-ruler-out, gkf (its two mega-ruler folds) or the
+    held-out-category splits. Those are therefore POOLED: one rho over
+    the concatenated held-out docs (`pooled_rho`), reported with
+    readout='pooled', n = docs. Averaging per-fold rho there would
+    silently answer a within-reign question instead. A split name is
+    routed by MC_SPLITS membership, so a new mc-style split must be
+    registered there.
     """
     need = {"doc_id", "condition", "s"}
     missing = need - set(scores_df.columns)
@@ -63,12 +76,20 @@ def battery(scores_df: pd.DataFrame, corpus_df: pd.DataFrame,
         s = pd.Series(sub["s"].to_numpy(dtype=float),
                       index=pd.Index(sub["doc_id"], name="doc_id"))
         for split_name, split in splits.items():
-            rhos = mc_balanced_rho(s, corpus_df, split)
-            fin = rhos[np.isfinite(rhos)]
-            n = int(fin.size)
-            rows.append(dict(
-                condition=cond, split=split_name,
-                rho_mean=float(fin.mean()) if n else float("nan"),
-                rho_sd=float(fin.std(ddof=1)) if n > 1 else float("nan"),
-                n=n))
+            if split_name in MC_SPLITS:
+                rhos = mc_balanced_rho(s, corpus_df, split)
+                fin = rhos[np.isfinite(rhos)]
+                n = int(fin.size)
+                rows.append(dict(
+                    condition=cond, split=split_name, readout="per_draw",
+                    rho_mean=float(fin.mean()) if n else float("nan"),
+                    rho_sd=float(fin.std(ddof=1)) if n > 1
+                    else float("nan"),
+                    n=n))
+            else:
+                rho = pooled_rho(s, corpus_df, split)
+                n = sum(len(f.get("test", [])) for f in split["folds"])
+                rows.append(dict(
+                    condition=cond, split=split_name, readout="pooled",
+                    rho_mean=float(rho), rho_sd=float("nan"), n=int(n)))
     return pd.DataFrame(rows, columns=BATTERY_COLS)

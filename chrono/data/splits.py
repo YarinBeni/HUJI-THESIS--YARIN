@@ -17,6 +17,18 @@ id lists. mc_balanced folds are evaluation draws, not generalization
 splits: "test" is the 168 balanced docs, "train" the eligible remainder
 (same-ruler docs on both sides, by design). The 'unk' fill value never
 qualifies as a held-out category — holding out "unknown" tests nothing.
+
+
+REVIEW FIX (wave B1) — how to read mc_balanced. Exactly 8 rulers have
+>= 21 docs, so every one of the 200 draws samples the SAME 8 rulers; one
+ruler with exactly 21 docs contributes all of them to every draw, mean
+pairwise test overlap is ~48/168 docs and 116 eligible docs never appear
+in any draw. The draws are therefore heavily dependent resamples of ONE
+fixed 8-ruler design: the spread of per-draw rho is doc-resampling noise,
+NOT a standard error, and must never be divided by sqrt(200). Any
+model-vs-model claim needs ruler-level uncertainty (leave-one-ruler-out
+deltas or a bootstrap over the 8 rulers) plus the block placebo in
+chrono.eval.block_placebo_rho.
 """
 from __future__ import annotations
 

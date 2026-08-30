@@ -111,12 +111,17 @@ def _safe_spearman(a, b) -> float:
     return float(stats.spearmanr(a, b).statistic)
 
 
-def build_features(cfg: dict, views_df: pd.DataFrame, store=None):
+def build_features(cfg: dict, views_df: pd.DataFrame, store=None,
+                   fit_doc_ids=None):
     """Feature matrix over ALL rows of views_df (row-aligned).
 
-    kind 'tfidf': char_wb 2-5 tfidf FITTED ON THE VIEW TEXTS (the local
-    smoke path — augmentations change the text, so they change the
-    vector). kind 'emb': EmbStore lookup by view_id (P3.2 cache).
+    kind 'tfidf': char_wb 2-5 tfidf. REVIEW FIX (wave B1): when
+    `fit_doc_ids` is given the vectorizer is FITTED ON THOSE DOCS' VIEWS
+    ONLY and merely transforms the rest — otherwise vocabulary and idf
+    are learned from held-out text and every held-out battery cell is
+    quietly transductive, biasing chrono against honestly cross-fitted
+    baselines. kind 'emb': EmbStore lookup by view_id; extraction is
+    unsupervised so the question does not arise there.
     Returns float32 [n_views, d] (dense).
     """
     feats = cfg["features"]
@@ -126,7 +131,15 @@ def build_features(cfg: dict, views_df: pd.DataFrame, store=None):
         vec = TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 5),
                               max_features=TFIDF_MAX_FEATURES,
                               dtype=np.float32)
-        X = vec.fit_transform(views_df["text"].astype(str).tolist())
+        texts = views_df["text"].astype(str).tolist()
+        if fit_doc_ids is None:
+            X = vec.fit_transform(texts)
+        else:
+            keep = views_df["doc_id"].isin(set(fit_doc_ids)).to_numpy()
+            if not keep.any():
+                raise ValueError("fit_doc_ids matched no views")
+            vec.fit([t for t, k in zip(texts, keep) if k])
+            X = vec.transform(texts)
         return np.asarray(X.todense(), dtype=np.float32)
     if kind == "emb":
         if store is None:
@@ -207,7 +220,11 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
             "t_max": gt.max().values, "proxy": True,
             "n_docs": gt.size().values})
 
-    X = build_features(cfg, views_df, store)
+    # featurizer sees TRAIN docs only whenever we are inside a fold
+    X = build_features(cfg, views_df, store,
+                       fit_doc_ids=(doc_ids if (split is not None
+                                                and fold is not None)
+                                    else None))
     idx_a = _view_index(views_df, doc_ids, cfg["views"]["menu_a"],
                         cfg["views"]["seeds"])
     idx_b = _view_index(views_df, doc_ids, cfg["views"]["menu_b"],
@@ -281,7 +298,13 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
                "train_spearman": rho_hard,
                "final_loss": loss_curve[-1]}
     if split is not None and fold is not None:
-        te = [d for d in split["folds"][fold]["test"] if d in s_by_doc]
+        want = list(split["folds"][fold]["test"])
+        te = [d for d in want if d in s_by_doc]
+        if len(te) != len(want):                    # review fix: no silent
+            miss = [d for d in want if d not in s_by_doc][:10]
+            raise KeyError(
+                f"{len(want) - len(te)} test docs have no score "
+                f"(views/EmbStore incomplete), e.g. {miss}")
         t_by_doc = dict(zip(docs["doc_id"], docs["t"]))
         metrics["test_spearman"] = _safe_spearman(
             [s_by_doc[d] for d in te], [t_by_doc[d] for d in te])
@@ -289,9 +312,17 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
     split_name = cfg["eval_split"] or "all"
     run_id = f"{cfg['run_name']}-s{seed}" + \
         (f"-f{fold}" if fold is not None else "")
+    # `fit` is scoring PROVENANCE, consumed by whoever reads the parquet:
+    # 'full' = head (and featurizer) saw every doc, so held-out battery
+    # cells are transductive and must be labelled as such; 'oof' = this
+    # run trained on one fold's train docs only, so its test docs are
+    # honest and per-fold runs can be concatenated into a pooled-OOF
+    # Series for chrono.eval.pooled_rho.
+    fit_tag = "oof" if (split is not None and fold is not None) else "full"
     scores = pd.DataFrame({
         "run_id": run_id, "doc_id": all_ids, "condition": "orig",
-        "s": s_all})
+        "s": s_all, "fit": fit_tag, "fold": (-1 if fold is None
+                                             else int(fold))})
 
     scores_path = None
     if write:

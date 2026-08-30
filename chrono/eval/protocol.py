@@ -147,3 +147,64 @@ def placebo_rho(scores: pd.Series, corpus_df: pd.DataFrame, split: dict,
     """
     return _per_draw_rho(scores, corpus_df, split,
                          perm_rng=np.random.default_rng(seed))
+
+def pooled_rho(scores: pd.Series, corpus_df: pd.DataFrame,
+               split: dict) -> float:
+    """ONE Spearman over the concatenation of every fold's test docs.
+
+    REVIEW FIX (wave B1). Per-fold rho is undefined wherever a fold holds
+    a single ruler: 39 of our 40 rulers carry exactly ONE distinct year,
+    so leave-one-ruler-out folds have constant t by construction and
+    gkf folds 0/1 (the two mega-rulers) do too. Averaging the surviving
+    folds silently changes the measurand — a LORO cell computed that way
+    is a WITHIN-reign number wearing an unseen-ruler label.
+
+    Pooling is the honest read-out for those split kinds: the claim
+    "unseen rulers land in the right chronological place" is exactly a
+    correlation across the pooled held-out docs. Scores must already be
+    out-of-fold (each doc scored by a model that did not train on it);
+    with a single frozen scoring this is a transductive number and the
+    caller is responsible for saying so.
+    """
+    t_by_doc = _t_by_doc(corpus_df)
+    scores = _check_scores(scores)
+    ids = [d for f in _folds(split) for d in f.get("test", [])]
+    if not ids:
+        return float("nan")
+    s, t = _gather(scores, t_by_doc, ids, "pooled")
+    return _spearman(s, t)
+
+
+def block_placebo_rho(scores: pd.Series, corpus_df: pd.DataFrame,
+                      split: dict, seed: int) -> np.ndarray:
+    """The placebo at the RIGHT exchangeable unit: permute the ruler->t
+    assignment, docs inherit their ruler's permuted year.
+
+    REVIEW FIX (wave B1). placebo_rho shuffles t per DOC, but t is
+    block-constant within ruler (39/40 rulers = one year), so the
+    doc-level null is far too narrow: measured on the real artifacts its
+    95% band is about [-0.16, +0.18] against [-0.51, +0.47] for this
+    block null. Doc-level stays as a LEAK DETECTOR; significance claims
+    must be made against this one, because the effective sample size is
+    the number of rulers in a draw (8), not its 168 documents.
+    """
+    t_by_doc = _t_by_doc(corpus_df)
+    ruler = corpus_df.set_index("doc_id")["ruler"]
+    rng = np.random.default_rng(seed)
+    scores = _check_scores(scores)
+    out = []
+    for f in _folds(split):
+        ids = list(f.get("test", []))
+        if not ids:
+            out.append(float("nan"))
+            continue
+        rl = ruler.loc[ids]
+        uniq = list(dict.fromkeys(rl.tolist()))
+        true_t = {r: float(t_by_doc.loc[rl.index[rl == r]].iloc[0])
+                  for r in uniq}
+        perm = rng.permutation(len(uniq))
+        mapped = {r: true_t[uniq[perm[i]]] for i, r in enumerate(uniq)}
+        s = scores.loc[ids].to_numpy(dtype=float)
+        t = np.array([mapped[r] for r in rl], dtype=float)
+        out.append(_spearman(s, t))
+    return np.asarray(out, dtype=float)

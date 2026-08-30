@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import os
 import re
+import unicodedata
 
 import pandas as pd
 
@@ -56,15 +57,34 @@ def name_variants(ruler: str) -> list:
                   key=lambda v: (-len(v), v))
 
 
+def _fold(text: str) -> str:
+    """Strip combining marks (NFKD) so 'Sîn' matches 'Sin'.
+
+    REVIEW FIX (wave B1): the ruler table spells names with diacritics
+    the gloss does not always carry, so a handful of "masked" views kept
+    the ruler's name. Decomposing and dropping combining marks is
+    LENGTH-PRESERVING for our data only if we re-compose per character —
+    so map each source char to its mark-free form and keep a 1:1 index.
+    """
+    out = []
+    for ch in text:
+        d = unicodedata.normalize("NFKD", ch)
+        base = "".join(c for c in d if not unicodedata.combining(c))
+        out.append(base[0] if base else ch)      # 1 char in, 1 char out
+    return "".join(out)
+
+
 def find_spans(text: str, ruler: str) -> list:
     """All non-overlapping char [start, end) ruler-name mentions in text.
 
-    Case-insensitive; longer variants win where variants nest ("Sargon
-    II" claims its span before "Sargon" can). Indices always point into
-    the ORIGINAL string (regex spans, no lowercased copy)."""
+    Case-insensitive and diacritic-insensitive; longer variants win where
+    variants nest ("Sargon II" claims its span before "Sargon" can).
+    Indices always point into the ORIGINAL string (matching runs on a
+    length-preserving folded copy)."""
     spans = []
+    folded = _fold(text)
     for v in name_variants(ruler):
-        for m in re.finditer(re.escape(v), text, re.IGNORECASE):
+        for m in re.finditer(re.escape(_fold(v)), folded, re.IGNORECASE):
             s, e = m.span()
             if all(e <= s0 or s >= e0 for s0, e0 in spans):
                 spans.append((s, e))
