@@ -29,7 +29,25 @@ META_COLS = ["ruler_i", "ruler_j", "doc_i", "doc_j", "pos_i", "pos_j",
              "t_i", "t_j", "gap", "margin", "weight"]
 
 
+MARGIN_MAX = 2.0        # see _margin: the achievable score scale
+
+
+def _margin(gap, t_std):
+    """Squash the reign gap into a margin the score scale can satisfy.
+
+    REVIEW FIX (wave B1). margin = gap/std(t) ran to 9.99 while
+    variance_loss floors std(s) at 1.0, so 36% of pairs sat permanently
+    in softplus's saturated regime: constant gradient regardless of the
+    actual ordering error, i.e. force allocated by reign distance rather
+    than by violation. tanh keeps the ordering of margins (far pairs
+    still ask for more separation) but bounds them inside the range a
+    unit-variance axis can actually deliver.
+    """
+    return MARGIN_MAX * np.tanh(np.asarray(gap, dtype=float) / t_std)
+
+
 def make_order_pairs(doc_df: pd.DataFrame, ruler_table: pd.DataFrame, *,
+                     t_std: float = None,
                      per_ruler_pair: int = 21, seed: int
                      ) -> tuple[torch.Tensor, torch.Tensor, pd.DataFrame]:
     """Build (pairs, margins, meta_df) from disjoint reign intervals.
@@ -45,7 +63,11 @@ def make_order_pairs(doc_df: pd.DataFrame, ruler_table: pd.DataFrame, *,
         raise ValueError("per_ruler_pair must be >= 1")
     rng = np.random.default_rng(seed)
     t_all = doc_df["t"].to_numpy(dtype=float)
-    t_std = float(np.std(t_all))
+    # REVIEW FIX: t_std must be a CORPUS constant, not a fold statistic,
+    # or the same reign gap asks for different separations in different
+    # folds (measured fold std(t): 101-127) and margins stop being
+    # comparable across the E-MIN grid.
+    t_std = float(t_std if t_std is not None else np.std(t_all))
     if not t_std > 0:
         raise ValueError("std(t) over doc_df must be > 0 for margins")
 
@@ -70,7 +92,7 @@ def make_order_pairs(doc_df: pd.DataFrame, ruler_table: pd.DataFrame, *,
         k = min(per_ruler_pair, len(pe), len(pl))
         i = pe[rng.choice(len(pe), size=k, replace=False)]
         j = pl[rng.choice(len(pl), size=k, replace=False)]
-        margin = gap / t_std
+        margin = float(_margin(gap, t_std))
         ij.append(np.stack([i, j], axis=1))
         rows.append(pd.DataFrame({
             "ruler_i": re_, "ruler_j": rl,

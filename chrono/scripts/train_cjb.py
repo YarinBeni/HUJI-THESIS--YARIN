@@ -54,9 +54,15 @@ try:
                                variance_loss)
     LOSS_LIB = "chrono.losses"
 except ImportError as _e:
-    print(f"WARNING: chrono.losses unavailable ({_e}) — using the "
-          "PRIVATE fallback shims in chrono.models._fallback_losses. "
-          "Fine for the local smoke path; NOT for cluster runs.",
+    # REVIEW FIX (wave B1): a transitive import error used to swap the
+    # real loss library for stubs with only a stderr line as evidence —
+    # a whole cluster run could be scored on shims. Opt in explicitly.
+    if os.environ.get("CHRONO_ALLOW_FALLBACK_LOSSES") != "1":
+        raise ImportError(
+            f"chrono.losses failed to import ({_e}). Set "
+            "CHRONO_ALLOW_FALLBACK_LOSSES=1 to run on the private "
+            "fallback shims — never do this for a science run.") from _e
+    print(f"WARNING: running on FALLBACK loss shims ({_e})",
           file=sys.stderr)
     from chrono.models._fallback_losses import (         # noqa: E402
         bt_loss, make_order_pairs, soft_spearman, softrank_loss,
@@ -163,26 +169,41 @@ def _view_index(views_df, doc_ids, menu, seeds):
     return idx
 
 
-def _orig_scores(head, X, views_df, doc_ids):
-    """Per-doc lateness on condition 'orig': mean s over the doc's
-    unaugmented views (all langs/seeds — identical text, harmless).
-    views_df must be positionally indexed (train() resets it)."""
+def _condition_scores(head, X, views_df, doc_ids):
+    """Per-doc lateness for EVERY augmentation condition present.
+
+    REVIEW FIX (wave B1): this used to emit condition='orig' only, so
+    chrono.eval.battery — whose whole point is the condition x split grid
+    of P3.4 — could never return more than one row per split. The
+    robustness claim of the plan ("degrades <= half as much as PLS under
+    name-masking / formula-removal") was therefore not computable from
+    anything chrono wrote. Every augs chain in views_df becomes one
+    condition ('' -> 'orig'), scored as the mean s over that doc's views
+    of that chain. Returns {condition: np.ndarray aligned to doc_ids}.
+    """
     head.eval()
     with torch.no_grad():
         _, s_all, _ = head(torch.as_tensor(X))
     s_all = s_all.numpy()
     head.train()
     doc_col = views_df["doc_id"].to_numpy()
-    by_doc = {}
-    for p in np.flatnonzero((views_df["augs"] == "").to_numpy()):
-        by_doc.setdefault(doc_col[p], []).append(p)
-    out = []
-    for d in doc_ids:
-        ps = by_doc.get(d)
-        if not ps:
-            raise ValueError(f"doc {d!r} has no orig (augs='') view")
-        out.append(float(s_all[ps].mean()))
-    return np.array(out, dtype=np.float64)
+    augs_col = views_df["augs"].to_numpy()
+    out = {}
+    for chain in pd.unique(augs_col):
+        cond = "orig" if chain == "" else str(chain)
+        by_doc = {}
+        for p in np.flatnonzero(augs_col == chain):
+            by_doc.setdefault(doc_col[p], []).append(p)
+        vals = []
+        for d in doc_ids:
+            ps = by_doc.get(d)
+            vals.append(float(s_all[ps].mean()) if ps else np.nan)
+        arr = np.array(vals, dtype=np.float64)
+        if cond == "orig" and not np.isfinite(arr).all():
+            miss = [d for d, v in zip(doc_ids, arr) if not np.isfinite(v)]
+            raise ValueError(f"docs without an orig view: {miss[:10]}")
+        out[cond] = arr
+    return out
 
 
 def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
@@ -307,7 +328,8 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
 
     # ---- score every doc (condition 'orig') + metrics ----------------
     all_ids = docs["doc_id"].tolist()
-    s_all = _orig_scores(head, X, views_df, all_ids)
+    cond_scores = _condition_scores(head, X, views_df, all_ids)
+    s_all = cond_scores["orig"]
     s_by_doc = dict(zip(all_ids, s_all))
     s_train = np.array([s_by_doc[d] for d in doc_ids])
     rho_soft = float(soft_spearman(
@@ -339,10 +361,29 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
     # honest and per-fold runs can be concatenated into a pooled-OOF
     # Series for chrono.eval.pooled_rho.
     fit_tag = "oof" if (split is not None and fold is not None) else "full"
-    scores = pd.DataFrame({
-        "run_id": run_id, "doc_id": all_ids, "condition": "orig",
-        "s": s_all, "fit": fit_tag, "fold": (-1 if fold is None
-                                             else int(fold))})
+    test_set = (set(split["folds"][fold]["test"])
+                if (split is not None and fold is not None) else set())
+    frames = []
+    for cond, arr in cond_scores.items():
+        frames.append(pd.DataFrame({
+            "run_id": run_id, "doc_id": all_ids, "condition": cond,
+            "s": arr, "fit": fit_tag,
+            "fold": (-1 if fold is None else int(fold)),
+            # REVIEW FIX: is_test marks the rows a pooled-OOF read-out may
+            # use; s_rank is the fold-local rank of s among that fold's
+            # test docs, because heads trained on different folds share no
+            # scale and raw s cannot be concatenated across folds.
+            "is_test": [d in test_set for d in all_ids]}))
+    scores = pd.concat(frames, ignore_index=True)
+    if test_set:
+        m = scores["is_test"].to_numpy()
+        scores["s_rank"] = np.nan
+        for cond in scores["condition"].unique():
+            sel = m & (scores["condition"] == cond).to_numpy()
+            v = scores.loc[sel, "s"].to_numpy(dtype=float)
+            scores.loc[sel, "s_rank"] = (stats.rankdata(v) / max(len(v), 1))
+    else:
+        scores["s_rank"] = np.nan
 
     scores_path = None
     if write:

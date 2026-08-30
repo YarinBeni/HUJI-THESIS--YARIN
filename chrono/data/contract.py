@@ -30,6 +30,7 @@ import os
 import re
 import unicodedata
 
+import numpy as np
 import pandas as pd
 
 from chrono import common
@@ -38,9 +39,20 @@ TRANS = os.path.join(common.REPO, "v_1", "src", "stress_tests",
                      "translation", "translations.parquet")
 
 # rows / distinct rulers / distinct years after eligibility filtering
-EXPECT = (1187, 40, 47)
+EXPECT = (1187, 40, 47)     # rows / rulers / distinct RAW years
 
-COLUMNS = ["doc_id", "ruler", "t", "text_akk", "text_eng",
+# ORCC's `year` field holds a CENTURY, not a year, for rulers whose exact
+# dates are unknown — six of ours (13 docs) carry 7..10, which read as
+# "9 BC" and would place 9th-century Babylonian kings 250 years AFTER
+# Antiochus I. Verified against the catalogue period column and the known
+# reigns (Marduk-zakir-šumi I c. 855-819 = "9"; Eriba-Marduk c. 769 = "8";
+# Bazi dynasty c. 1000 = "10"). No genuine year in this corpus is below
+# 261, so any value <= CENTURY_MAX is a century index; we map it to the
+# MID-century year and mark the row t_quality='century' so downstream code
+# can widen intervals, drop it from order supervision, or report on it.
+CENTURY_MAX = 30
+
+COLUMNS = ["doc_id", "ruler", "t", "t_quality", "text_akk", "text_eng",
            "text_akk_masked", "text_eng_masked", "sub_genre",
            "provenance", "period", "n_words",
            "ruler_spans_eng", "ruler_spans_akk"]
@@ -91,6 +103,15 @@ def find_spans(text: str, ruler: str) -> list:
     return [[s, e] for s, e in sorted(spans)]
 
 
+def _repair_years(year: pd.Series) -> np.ndarray:
+    """Century indices -> mid-century BC years; genuine years untouched."""
+    y = year.to_numpy(dtype=float)
+    cent = y <= CENTURY_MAX
+    out = y.copy()
+    out[cent] = 100.0 * y[cent] - 50.0        # "9" -> 850 BC
+    return out
+
+
 def _fill_unk(s: pd.Series) -> pd.Series:
     s = s.fillna("").astype(str).str.strip()
     return s.mask(s == "", "unk")
@@ -111,7 +132,10 @@ def build_corpus(orcc_path=common.ORCC, trans_path=TRANS,
     out = pd.DataFrame({
         "doc_id": df["fragment_id"].astype(str),
         "ruler": df["ruler"].astype(str),
-        "t": common.to_astro(df["year"].astype(float).values),
+        "t": common.to_astro(_repair_years(df["year"].astype(float))),
+        "t_quality": np.where(
+            df["year"].astype(float).values <= CENTURY_MAX,
+            "century", "year"),
         "text_akk": df["text_akk"].values,
         "text_eng": df["eng_tier0"].fillna("").astype(str).values,
         "text_akk_masked":
@@ -132,7 +156,8 @@ def build_corpus(orcc_path=common.ORCC, trans_path=TRANS,
         raise AssertionError("duplicate doc_id in eligible corpus")
     if not (out["t"] < 0).all():
         raise AssertionError("non-negative t: BC-positive year leaked in")
-    got = (len(out), out["ruler"].nunique(), out["t"].nunique())
+    got = (len(out), out["ruler"].nunique(),
+           int(df["year"].astype(float).nunique()))
     if strict and got != EXPECT:
         raise AssertionError(
             f"corpus census drifted: got {got} (rows/rulers/years), "

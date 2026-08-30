@@ -30,23 +30,45 @@ _git_abort_inflight() {
 }
 
 # Bring the working tree up to date with origin/yarin-sandbox.
+#
+# REVIEW FIX (wave B1): this used to fetch + rebase WITHOUT ever checking
+# the branch out. On a cluster clone sitting on main that rebased main
+# onto the sandbox and left HEAD on main, so the later
+# `git push origin HEAD:yarin-sandbox` would have pushed MAIN's history
+# into the sandbox branch. It now checks out the branch explicitly and
+# refuses to continue unless HEAD really is on it; failures return 1
+# instead of a silent no-op, so callers can abort the job.
 sync_sandbox() {
+    local ok=1
     ( flock -w 300 9 || true
       _git_abort_inflight
       for _i in 1 2 3 4 5; do
           if git fetch origin "${SANDBOX_BRANCH}" \
+             && git checkout -B "${SANDBOX_BRANCH}" FETCH_HEAD \
              && git rebase --autostash FETCH_HEAD; then
-              break
+              exit 0
           fi
           _git_abort_inflight
           sleep $((RANDOM % 8 + 5))
       done
+      exit 1
     ) 9>"$GIT_LOCK"
+    ok=$?
+    local head
+    head="$(git rev-parse --abbrev-ref HEAD)"
+    if [ "$ok" -ne 0 ] || [ "$head" != "${SANDBOX_BRANCH}" ]; then
+        echo "[sync_sandbox] FAILED: HEAD is '${head}', wanted "\
+             "'${SANDBOX_BRANCH}' (sync rc=${ok}) — refusing to run" >&2
+        return 1
+    fi
+    return 0
 }
 
 # Stage + commit the given paths and push to yarin-sandbox — all inside
 # one lock so overlapping array tasks never collide on the index.
 # Usage: commit_push_sandbox "msg" path [path...]
+# REVIEW FIX (wave B1): returns non-zero when the push never lands, so a
+# job cannot report success having pushed nothing.
 commit_push_sandbox() {
     local msg="$1"; shift
     ( flock -w 600 9 || true
@@ -62,10 +84,12 @@ commit_push_sandbox() {
              && git rebase --autostash FETCH_HEAD \
              && git push origin "HEAD:${SANDBOX_BRANCH}"; then
               echo "[commit_push_sandbox] pushed to ${SANDBOX_BRANCH}"
-              break
+              exit 0
           fi
           _git_abort_inflight
           sleep $((RANDOM % 8 + 5))
       done
+      echo "[commit_push_sandbox] FAILED after 5 attempts" >&2
+      exit 1
     ) 9>"$GIT_LOCK"
 }

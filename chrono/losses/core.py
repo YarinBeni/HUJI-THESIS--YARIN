@@ -36,6 +36,12 @@ def bt_loss(z_a: torch.Tensor, z_b: torch.Tensor, *,
     """Barlow Twins: cross-correlate the two views' batch-standardized
     projections; pull the diagonal to 1 (invariance) and the off-diagonal
     to 0 (redundancy reduction). z_a, z_b: [B, D]."""
+    if z_a.shape[0] < 2:                       # REVIEW FIX (wave B1)
+        raise ValueError(
+            "bt_loss needs batch >= 2: the cross-correlation of a single "
+            "sample is undefined and used to return D with a zero "
+            "gradient — a silently dead training step")
+
     if z_a.shape != z_b.shape or z_a.dim() != 2:
         raise ValueError(f"expected matching [B, D], got "
                          f"{tuple(z_a.shape)} vs {tuple(z_b.shape)}")

@@ -150,7 +150,11 @@ def test_baseline_gate_synthetic(tmp_path, toy_corpus, monkeypatch):
 
     txt = open(report).read()
     assert "P0.4 BASELINE GATE" in txt
-    assert "best: " in txt and "L1" in txt
+    # review fix: the verdict is now the a-priori cell; the best cell is
+    # printed only as selection-inflated context
+    assert "VERDICT CELL (" in txt
+    assert "SELECTION-INFLATED" in txt
+    assert "block null" in txt
     assert "verdict: PASS" in txt          # 0.6+ vs --gate-rho 0.2
     assert "re-pin" in txt                 # above band -> re-pin note
 

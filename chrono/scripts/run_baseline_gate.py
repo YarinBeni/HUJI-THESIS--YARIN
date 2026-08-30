@@ -82,8 +82,8 @@ except ImportError as _e:                                # parallel build
             return np.stack(out).astype(np.float32)
 
 try:
-    from chrono.eval import (gkf_rho, mc_balanced_rho,   # noqa: E402
-                             placebo_rho)
+    from chrono.eval import (block_placebo_rho, gkf_rho,  # noqa: E402
+                             mc_balanced_rho, placebo_rho, pooled_rho)
     EVAL_LIB = "chrono.eval"
 except ImportError as _e:                                # parallel build
     print(f"WARNING: chrono.eval unavailable ({_e}) — using MINIMAL "
@@ -183,9 +183,17 @@ def evaluate(probe, X_by_doc, corpus, gkf, mc, seed, n_components):
     by_fold, oof = cross_fit(probe, X_by_doc, corpus.set_index(
         "doc_id")["t"], gkf, n_components)
     return {
-        "gkf": gkf_rho(by_fold, corpus, gkf),
+        # REVIEW FIX (wave B1): gkf folds 0/1 hold a single ruler each and
+        # 39/40 rulers carry one year, so per-fold rho is undefined there
+        # and averaging the survivors answers a different question. The
+        # SLA read-out policy for every non-mc split is POOLED.
+        "gkf_pooled": pooled_rho(oof, corpus, gkf),
+        "gkf_perfold": gkf_rho(by_fold, corpus, gkf),   # diagnostic only
         "mc": mc_balanced_rho(oof, corpus, mc),
-        "placebo": placebo_rho(oof, corpus, mc, seed),
+        "placebo": placebo_rho(oof, corpus, mc, seed),        # leak check
+        # the honest null: t is block-constant within ruler, so the
+        # exchangeable unit is the RULER (~8 per draw), not the document
+        "block_placebo": block_placebo_rho(oof, corpus, mc, seed),
     }
 
 
@@ -204,21 +212,58 @@ def _fmt(v: np.ndarray) -> str:
     return f"{np.nanmean(v):+.3f}±{np.nanstd(v):.3f}"
 
 
+APRIORI_LAYER, APRIORI_SITE, APRIORI_PROBE = 11, "mean", "pls"
+
+
 def verdict_block(rows: list, gate_rho, gate_tol) -> str:
-    """rows: dicts with probe/layer/site + rho arrays. Best cell by mc
-    mean; verdict against --gate-rho when pinned, UNPINNED otherwise."""
-    lines = ["=" * 68, "P0.4 BASELINE GATE", "=" * 68,
-             f"{'probe':<6} {'layer':>5} {'site':<5} {'gkf rho':>14} "
-             f"{'mc rho':>14} {'placebo':>14}"]
+    """rows: dicts with probe/layer/site + rho arrays.
+
+    The verdict is read off the A-PRIORI cell (PLS, layer 11, mean — the
+    M.Sc. convention), not off the best of the grid; see the review-fix
+    note below.
+    """
+    lines = ["=" * 72, "P0.4 BASELINE GATE", "=" * 72,
+             f"{'probe':<6} {'layer':>5} {'site':<5} {'gkf pooled':>12} "
+             f"{'mc rho':>14} {'doc placebo':>14} {'BLOCK null':>14}"]
     for r in rows:
         lines.append(f"{r['probe']:<6} {r['layer']:>5} {r['site']:<5} "
-                     f"{_fmt(r['gkf']):>14} {_fmt(r['mc']):>14} "
-                     f"{_fmt(r['placebo']):>14}")
+                     f"{np.nanmean(r.get('gkf_pooled', np.nan)):>+12.3f} "
+                     f"{_fmt(r['mc']):>14} {_fmt(r['placebo']):>14} "
+                     f"{_fmt(r.get('block_placebo', np.array([np.nan]))):>14}")
+    # REVIEW FIX (wave B1): the verdict used to be max-over-52-cells
+    # (13 layers x 2 sites x 2 probes) compared to a fixed threshold on
+    # the same data — with ~40 exchangeable ruler blocks a simulation put
+    # the max-of-52 of PURE ruler-block noise at rho 0.72, so that gate
+    # could not fail. We now report the a-priori cell as the verdict and
+    # show the best cell only as selection-inflated context.
+    ap = [r for r in rows
+          if r["layer"] == APRIORI_LAYER and r["site"] == APRIORI_SITE
+          and r["probe"] == APRIORI_PROBE]
     best = max(rows, key=lambda r: np.nanmean(r["mc"]))
-    b = float(np.nanmean(best["mc"]))
-    lines += ["-" * 68,
-              f"best: {best['probe']} L{best['layer']} {best['site']} "
-              f"— mc rho {b:+.3f}"]
+    sel = float(np.nanmean(best["mc"]))
+    if ap:
+        vcell, vlabel = ap[0], (f"a priori: {APRIORI_PROBE} "
+                                f"L{APRIORI_LAYER} {APRIORI_SITE}")
+    else:
+        # restricted sweep (e.g. the selftest grid): the a-priori cell is
+        # not in `rows`, so the verdict falls back to the best cell and
+        # says so — a selection-inflated verdict must never look pinned.
+        vcell, vlabel = best, (f"a-priori cell absent from this sweep — "
+                               f"FELL BACK to best of {len(rows)}, "
+                               f"SELECTION-INFLATED")
+    b = float(np.nanmean(vcell["mc"]))
+    blk = np.concatenate([np.atleast_1d(np.asarray(
+        r.get("block_placebo", [np.nan]), dtype=float)) for r in rows])
+    blk = blk[np.isfinite(blk)] if np.isfinite(blk).any() else blk
+    lines += ["-" * 72,
+              f"VERDICT CELL ({vlabel}) — mc rho {b:+.3f}",
+              f"best-of-{len(rows)} cell (SELECTION-INFLATED, context "
+              f"only): {best['probe']} L{best['layer']} {best['site']} "
+              f"mc rho {sel:+.3f}",
+              f"block null (ruler-level, the honest reference): "
+              f"{np.nanmean(blk):+.3f}±{np.nanstd(blk):.3f} — a max over "
+              f"{len(rows)} cells of pure ruler-block noise reaches "
+              f"~0.72, so never read the best cell as a result."]
     if gate_rho is None:
         lines += [
             "gate reference: UNPINNED — re-pin from "
@@ -296,9 +341,9 @@ def main(argv=None):
                     "eval_lib": EVAL_LIB, "store_lib": STORE_LIB})
                 run_id = (f"p04_gate::{args.model}::L{layer}::{site}"
                           f"::{probe}")
-                for split, key in (("gkf_ruler", "gkf"),
+                for split, key in (("gkf_ruler", "gkf_pooled"),
                                    ("mc_balanced", "mc")):
-                    v = r[key]
+                    v = np.atleast_1d(r[key])
                     for metric, val in (("rho_mean", np.nanmean(v)),
                                         ("rho_sd", np.nanstd(v))):
                         results.append(dict(
@@ -314,7 +359,7 @@ def main(argv=None):
                     value=float(np.nanmean(r["placebo"])),
                     n=int(len(r["placebo"])), extra=extra))
                 print(f"[gate] {probe} L{layer} {site}: "
-                      f"mc {_fmt(r['mc'])} gkf {_fmt(r['gkf'])} "
+                      f"mc {_fmt(r['mc'])} gkf_pooled {r['gkf_pooled']:+.3f} "
                       f"placebo {_fmt(r['placebo'])}", flush=True)
 
     path = common.append_results(results)

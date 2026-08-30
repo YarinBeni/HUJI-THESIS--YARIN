@@ -240,7 +240,14 @@ def test_make_order_pairs_quota_and_order(toy_corpus, toy_ruler_table):
         assert g["doc_i"].is_unique and g["doc_j"].is_unique
     # margin = interval gap / std(t), constant within a ruler-pair
     assert torch.all(margins > 0)
-    assert np.allclose(meta["margin"], meta["gap"] / np.std(t))
+    # REVIEW FIX (wave B1): margins are tanh-squashed into the range a
+    # unit-variance axis can satisfy, not raw gap/std(t)
+    from chrono.losses.pairs import MARGIN_MAX, _margin
+    assert np.allclose(meta["margin"], _margin(meta["gap"], np.std(t)))
+    assert (meta["margin"] <= MARGIN_MAX).all()
+    # order-preserving: bigger reign gap still asks for more separation
+    o = np.argsort(meta["gap"].to_numpy())
+    assert np.all(np.diff(meta["margin"].to_numpy()[o]) >= -1e-12)
     # per-ruler-pair weights sum to 1
     assert np.allclose(meta.groupby(["ruler_i", "ruler_j"])["weight"]
                        .sum(), 1.0)

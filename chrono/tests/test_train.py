@@ -154,10 +154,14 @@ def test_overfit_gate_tfidf():
     assert np.isfinite(res["loss_curve"]).all()
     # scores frame carries the SLA schema
     assert list(res["scores"].columns) == \
-        ["run_id", "doc_id", "condition", "s", "fit", "fold"]
+        ["run_id", "doc_id", "condition", "s", "fit", "fold",
+         "is_test", "s_rank"]
     assert (res["scores"]["fit"] == "full").all()      # no fold given
+    # review fix: every augmentation chain is scored, not just 'orig'
+    assert "orig" in set(res["scores"]["condition"])
     assert (res["scores"]["condition"] == "orig").all()
-    assert len(res["scores"]) == len(corpus)
+    n_cond = res["scores"]["condition"].nunique()
+    assert len(res["scores"]) == len(corpus) * n_cond
 
 
 def test_trainer_emb_path(tmp_path):
@@ -185,8 +189,10 @@ def test_trainer_writes_scores_and_results(tmp_path, monkeypatch):
                           out_dir=str(tmp_path / "scores"), log_every=0)
     got = pd.read_parquet(res["scores_path"])
     assert list(got.columns) == ["run_id", "doc_id", "condition", "s",
-                                 "fit", "fold"]
+                                 "fit", "fold", "is_test", "s_rank"]
     assert set(got["doc_id"]) == set(corpus["doc_id"])
+    assert set(got.loc[got["condition"] == "orig", "doc_id"]) == \
+        set(corpus["doc_id"])
     results = pd.read_parquet(tmp_path / "results.parquet")
     assert list(results.columns) == common.RESULTS_COLS
     assert "train_soft_spearman" in set(results["metric"])

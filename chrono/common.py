@@ -46,7 +46,16 @@ def config_sha(cfg: dict) -> str:
 
 def append_results(rows: list) -> str:
     """Append rows (dicts with RESULTS_COLS keys; extra is a JSON string)
-    to artifacts/results.parquet. Returns the path."""
+    to artifacts/results.parquet. Returns the path.
+
+    REVIEW FIX (wave B1): the C3 array runs 5 tasks against ONE repo
+    checkout, and this was an unlocked read-concat-write — two tasks
+    finishing together silently dropped one task's rows, and a crash
+    mid-write left a truncated parquet. Now: an flock held across the
+    whole read-modify-write, plus write-to-temp + os.replace so the file
+    is never observed half-written. The lock is advisory and per-file,
+    so nothing outside this function needs to know about it.
+    """
     os.makedirs(ART, exist_ok=True)
     p = os.path.join(ART, "results.parquet")
     df = pd.DataFrame(rows)
@@ -54,7 +63,16 @@ def append_results(rows: list) -> str:
     if missing:
         raise ValueError(f"results rows missing {sorted(missing)}")
     df = df[RESULTS_COLS]
-    if os.path.exists(p):
-        df = pd.concat([pd.read_parquet(p), df], ignore_index=True)
-    df.to_parquet(p, index=False)
+    lock = os.path.join(ART, ".results.lock")
+    with open(lock, "w") as fh:
+        try:
+            import fcntl
+            fcntl.flock(fh, fcntl.LOCK_EX)
+        except (ImportError, OSError):        # non-posix / odd fs
+            pass
+        if os.path.exists(p):
+            df = pd.concat([pd.read_parquet(p), df], ignore_index=True)
+        tmp = f"{p}.tmp.{os.getpid()}"
+        df.to_parquet(tmp, index=False)
+        os.replace(tmp, p)
     return p
