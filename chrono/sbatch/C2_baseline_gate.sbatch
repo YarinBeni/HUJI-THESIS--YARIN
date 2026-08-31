@@ -32,7 +32,7 @@ fi
 
 for LANG_ in akk eng; do
     python -u chrono/scripts/run_baseline_gate.py \
-        --model Thalesian/AKK_300m --layers 0-12 --sites mean last \
+        --model Thalesian/AKK_300m --layers 0-8 --sites mean last \
         --lang "${LANG_}" --probes ridge pls \
         --report-out "${ART}/baseline_gate_report_${LANG_}.txt" \
         ${GATE_ARGS[@]+"${GATE_ARGS[@]}"} \

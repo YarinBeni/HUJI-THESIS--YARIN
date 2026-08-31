@@ -10,7 +10,7 @@
 # C1 — P0.3 extraction cache: build the data artifacts if missing (corpus,
 # splits, views — all deterministic, so a rebuild is byte-identical), then
 # embed every view + corpus original with the Thalesian/AKK_300m encoder
-# (hfid from wm_lib registry), layers 0..12, sites mean+last, into the
+# (hfid from wm_lib registry), layers 0..8 (AKK_300m has 8 encoder blocks + embeddings = 9 hidden states), sites mean+last, into the
 # gitignored EmbStore. Only the small extraction meta json is copied into
 # chrono/reports/ (tracked) and pushed; the npz shards stay cluster-local.
 # Submit ONLY after C0 is green.
@@ -42,7 +42,7 @@ if [ ! -f "${ART}/views.parquet" ]; then
 fi
 
 python -u chrono/scripts/extract_embeddings.py \
-    --model thalesian_akk300m --layers 0-12 --sites mean last \
+    --model thalesian_akk300m --layers 0-8 --sites mean last \
     --views "${ART}/views.parquet" --corpus "${ART}/corpus_chrono.parquet" \
     --store-root "${ART}/emb_store" --batch-size 32 \
     || { echo "FAILED extract_embeddings"; exit 1; }

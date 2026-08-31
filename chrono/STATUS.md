@@ -43,6 +43,7 @@ orchestrating agent after every wave; read this first when resuming.
 | W2-12 | low | the loss-library fallback could silently swap the real losses for stubs on the cluster | fallback is opt-in via `CHRONO_ALLOW_FALLBACK_LOSSES=1`, else hard ImportError |
 | W2-13 | med | nested config keys never validated; `emin_thalesian.yaml` asked for view seeds [0,1,2] against a 2-seed artifact | trainer warns loudly for any requested chain/seed absent from views.parquet; the cluster config's seeds corrected to [0,1] |
 | W2-T | med | **mutation testing of our own suite**: deleting split-conformal, single-centering HSIC, var-instead-of-std, ×100 off-diag weight and `<=` disjointness ALL passed green | four new mutation-killing tests (hand-computed HSIC tr(KHLH) reference, numeric Barlow pin, std hinge value, touching-interval fixture) + the block-conformal test. **Re-audited: all five mutations now CAUGHT** |
+| C1-1 | high | `--layers 0-12` and the a-priori verdict cell L11 assumed a 12-block encoder; Thalesian/AKK_300m has 8 blocks + embeddings = 9 hidden states (0..8). The C1 smoke run failed loudly on the bounds check; had the range been valid-but-wrong the gate verdict would have fallen through to the selection-inflated best cell | layer grid is 0-8 everywhere (extract, gate, C1/C2 sbatch, INTERFACES); `APRIORI_LAYER = 8` (top encoder block); new test `test_apriori_cell_is_a_real_layer` |
 
 ### Review fixes applied (wave B1)
 | # | Sev | Finding | Fix |

@@ -212,7 +212,7 @@ git rebase --autostash FETCH_HEAD` + `commit_push_sandbox` pushing to
 `yarin-sandbox`, adapted from `v_1/src/stress_tests/sbatch/_common.sh`).
 Jobs: `C0_tests.sbatch` (full pytest on cluster — the gate before any GPU),
 `C1_extract.sbatch` (extract_embeddings.py: Thalesian/AKK_300m encoder — hfid
-from `v_1/src/world_models/wm_lib/registry.py` — layers 0..12, sites
+from `v_1/src/world_models/wm_lib/registry.py` — layers 0..8 — AKK_300m has 8 encoder blocks + embeddings, i.e. 9 hidden states; the 13 in an earlier draft was cuneiformBase-400m’s count — sites
 mean+last, over views.parquet texts, into EmbStore; gpu:1),
 `C2_baseline_gate.sbatch` (run_baseline_gate.py: PLS+ridge on cached
 embeddings through A5 protocol — the P0.4 reproduction gate),

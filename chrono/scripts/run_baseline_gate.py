@@ -14,7 +14,9 @@ frozen scoring of every doc. Scoring each doc from the gkf fold that
 holds its ruler out gives that frozen vector with zero ruler leakage.
 
 GATE NUMBERS MUST BE RE-PINNED (plan addendum). The plan's legacy gate
-(Thalesian L11 rho = 0.41 +/- 0.02; Qwen3-8B L16 0.36; TF-IDF ~0.29)
+(Thalesian "L11" rho = 0.41 +/- 0.02; Qwen3-8B L16 0.36; TF-IDF ~0.29
+-- note the plan's L11 cannot be AKK_300m, which only has layers 0..8;
+it is either cuneiformBase-400m or a typo, one more reason to re-pin)
 was pinned on the 1,202-fragment / 41-ruler frame; the current eligible
 corpus is 1,187 / 40 rulers, and the pairwise harness
 (v_1/src/phase2/pairs/RESULTS.md) reports macro accuracy with
@@ -23,7 +25,7 @@ pass the re-pinned value via --gate-rho to get a PASS/FAIL verdict,
 otherwise the verdict prints UNPINNED with the comparison numbers.
 
     python chrono/scripts/run_baseline_gate.py \
-        --model Thalesian/AKK_300m --layers 0-12 --sites mean last
+        --model Thalesian/AKK_300m --layers 0-8 --sites mean last
 """
 from __future__ import annotations
 
@@ -212,13 +214,21 @@ def _fmt(v: np.ndarray) -> str:
     return f"{np.nanmean(v):+.3f}±{np.nanstd(v):.3f}"
 
 
-APRIORI_LAYER, APRIORI_SITE, APRIORI_PROBE = 11, "mean", "pls"
+# The verdict cell is fixed BEFORE looking at any chrono result.
+# L8 = the top encoder block of Thalesian/AKK_300m (8 blocks +
+# embeddings = 9 hidden states, indices 0..8) — the standard
+# read-out point for an encoder, and the M.Sc. PLS convention
+# (mean pooling, maximal cleaning). An earlier draft said 11,
+# a layer index inherited from the 12-block cuneiformBase-400m;
+# it does not exist in this encoder, so the verdict would have
+# silently fallen through to the selection-inflated best cell.
+APRIORI_LAYER, APRIORI_SITE, APRIORI_PROBE = 8, "mean", "pls"
 
 
 def verdict_block(rows: list, gate_rho, gate_tol) -> str:
     """rows: dicts with probe/layer/site + rho arrays.
 
-    The verdict is read off the A-PRIORI cell (PLS, layer 11, mean — the
+    The verdict is read off the A-PRIORI cell (PLS, layer 8, mean — the
     M.Sc. convention), not off the best of the grid; see the review-fix
     note below.
     """
@@ -231,7 +241,7 @@ def verdict_block(rows: list, gate_rho, gate_tol) -> str:
                      f"{_fmt(r['mc']):>14} {_fmt(r['placebo']):>14} "
                      f"{_fmt(r.get('block_placebo', np.array([np.nan]))):>14}")
     # REVIEW FIX (wave B1): the verdict used to be max-over-52-cells
-    # (13 layers x 2 sites x 2 probes) compared to a fixed threshold on
+    # (9 layers x 2 sites x 2 probes) compared to a fixed threshold on
     # the same data — with ~40 exchangeable ruler blocks a simulation put
     # the max-of-52 of PURE ruler-block noise at rho 0.72, so that gate
     # could not fail. We now report the a-priori cell as the verdict and
@@ -290,7 +300,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--model", default="Thalesian/AKK_300m",
                     help="model name as stored in the EmbStore manifest")
-    ap.add_argument("--layers", default="0-12")
+    ap.add_argument("--layers", default="0-8")
     ap.add_argument("--sites", nargs="+", default=["mean"],
                     choices=["mean", "last"])
     ap.add_argument("--lang", default="akk", choices=["akk", "eng"],

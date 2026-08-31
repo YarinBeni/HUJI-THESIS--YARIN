@@ -159,6 +159,16 @@ def test_baseline_gate_synthetic(tmp_path, toy_corpus, monkeypatch):
     assert "re-pin" in txt                 # above band -> re-pin note
 
 
+def test_apriori_cell_is_a_real_layer():
+    """The verdict cell must exist in the encoder we actually run.
+    Thalesian/AKK_300m returns 9 hidden states (0..8); an a-priori layer
+    outside that range makes verdict_block fall through to the
+    selection-inflated best cell without saying so."""
+    gate = _load("run_baseline_gate")
+    assert gate.APRIORI_LAYER in range(0, 9), gate.APRIORI_LAYER
+    assert gate.APRIORI_LAYER in gate._parse_layers("0-8")
+
+
 def test_baseline_gate_unpinned_verdict():
     gate = _load("run_baseline_gate")
     rows = [dict(probe="ridge", layer=11, site="mean",

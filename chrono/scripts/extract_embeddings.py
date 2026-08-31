@@ -18,7 +18,7 @@ deterministic (fp32 pooled outputs; text_sha in the manifest lets the
 P0.3 spot-check re-embed a sample and compare).
 
     python chrono/scripts/extract_embeddings.py \
-        --model thalesian_akk300m --layers 0-12 --sites mean last
+        --model thalesian_akk300m --layers 0-8 --sites mean last
     python chrono/scripts/extract_embeddings.py --selftest \
         --store-root /tmp/store            # no transformers, CPU-only
 
@@ -377,7 +377,7 @@ def main(argv=None):
         common.ART, "corpus_chrono.parquet"))
     ap.add_argument("--store-root",
                     default=os.path.join(common.ART, "emb_store"))
-    ap.add_argument("--layers", default="0-12")
+    ap.add_argument("--layers", default="0-8")
     ap.add_argument("--sites", nargs="+", default=["mean", "last"],
                     choices=["mean", "last"])
     ap.add_argument("--batch-size", type=int, default=16)
