@@ -44,6 +44,8 @@ done
 mkdir -p chrono/reports
 cp "${ART}/results.parquet" chrono/reports/results.parquet
 cp "${ART}"/baseline_gate_report_*.txt chrono/reports/
+# C1's meta commit was lost to the old sync (see _sandbox.sh); re-land it
+cp "${ART}"/emb_store/extract_meta__*.json chrono/reports/ 2>/dev/null || true
 commit_push_sandbox "C2: P0.4 baseline gate reports (job ${SLURM_JOB_ID})" \
     chrono/reports
 echo "=== Done. $(date) ==="

@@ -151,7 +151,16 @@ def fit_predict(probe: str, Xtr, ytr, Xte, n_components: int):
         model = RidgeCV(alphas=ALPHAS).fit(Xtr, ytr)
     elif probe == "pls":
         k = max(1, min(n_components, Xtr.shape[1], len(ytr) - 1))
-        model = PLSRegression(n_components=k).fit(Xtr, ytr)
+        try:
+            model = PLSRegression(n_components=k).fit(Xtr, ytr)
+        except (ValueError, np.linalg.LinAlgError) as exc:
+            # a numerically degenerate fold (near-constant features,
+            # fewer distinct rows than components) must not kill the
+            # whole sweep; the cell reads NaN and the report says why
+            print(f"[gate] pls fit failed on a fold ({exc}); NaN scores",
+                  flush=True)
+            nan_te = np.full(len(Xte), np.nan)
+            return nan_te, float("nan")
     else:
         raise ValueError(f"unknown probe {probe!r}")
     return (np.asarray(model.predict(Xte)).ravel(),
@@ -357,6 +366,18 @@ def main(argv=None):
             X = pd.DataFrame(store.get(args.model, layer, site, ids),
                              index=pd.Index(corpus["doc_id"],
                                             name="doc_id"))
+            # CLUSTER FIX (job 32723): L0/last is the embedding-layer
+            # vector of the final token, and every text ends in the same
+            # </s>, so the matrix is one row repeated 1,187 times. Ridge
+            # returns a constant (mc rho -0.08 +/- 0.000) and PLS divides
+            # by zero inside gesdd. A feature matrix with no variance
+            # carries no information about anything; skip it and say so.
+            n_var = int((X.std(axis=0) > 1e-8).sum())
+            if n_var == 0:
+                print(f"[gate] L{layer} {site}: all {X.shape[1]} features "
+                      "constant across documents, skipped", flush=True)
+                missing.append((layer, site, "constant"))
+                continue
             for probe in args.probes:
                 r = evaluate(probe, X, corpus, gkf, mc, args.seed,
                              args.pls_components)

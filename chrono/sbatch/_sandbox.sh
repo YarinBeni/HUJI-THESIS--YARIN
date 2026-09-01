@@ -43,8 +43,15 @@ sync_sandbox() {
     ( flock -w 300 9 || true
       _git_abort_inflight
       for _i in 1 2 3 4 5; do
+          # CLUSTER FIX (jobs 32706/32723): `checkout -B ... FETCH_HEAD`
+          # RESET the branch to the remote, silently discarding commits a
+          # previous job had made but could not push (token expired) --
+          # C1's extraction-meta commits vanished this way. Check the
+          # branch out as it is (create it only if absent), then rebase
+          # whatever is local onto the fetched tip; nothing is dropped.
           if git fetch origin "${SANDBOX_BRANCH}" \
-             && git checkout -B "${SANDBOX_BRANCH}" FETCH_HEAD \
+             && { git checkout -q "${SANDBOX_BRANCH}" 2>/dev/null \
+                  || git checkout -q -b "${SANDBOX_BRANCH}" FETCH_HEAD; } \
              && git rebase --autostash FETCH_HEAD; then
               exit 0
           fi
