@@ -314,7 +314,15 @@ def main(argv=None):
                     default=os.path.join(common.ART, "splits"))
     ap.add_argument("--store-root",
                     default=os.path.join(common.ART, "emb_store"))
-    ap.add_argument("--pls-components", type=int, default=20)
+    # k=2, not an arbitrary 20: the M.Sc. PLS probe on THIS corpus swept
+    # k in {1,2,3,5} and k=2 was the selected component count at 7 of the
+    # 9 mean-pooled layers (L8 included, its best cell). k=5 already had
+    # negative R2 at L8, so 20 components would overfit ~40 ruler blocks
+    # and fail the gate for a reason that has nothing to do with the
+    # representation. Pinned from the prior work, before seeing any
+    # chrono number. Source: v_1/src/linear_probing/results/
+    # orcc__probe_pls/pls_results_thalesian_akk300m.json
+    ap.add_argument("--pls-components", type=int, default=2)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--gate-rho", type=float, default=None,
                     help="re-pinned reference rho; omit -> UNPINNED")
