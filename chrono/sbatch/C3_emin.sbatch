@@ -24,7 +24,9 @@ source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
 cd ~/projects/HUJI-THESIS--YARIN
 source chrono/sbatch/_sandbox.sh
-sync_sandbox
+sync_sandbox || { echo "FAILED sync_sandbox — refusing to run "\
+    "stale code and push results from it"; exit 1; }
+enable_log_push
 mkdir -p chrono/sbatch/logs
 
 for FOLD in 0 1 2 3 4; do

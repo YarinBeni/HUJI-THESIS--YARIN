@@ -93,3 +93,34 @@ commit_push_sandbox() {
       exit 1
     ) 9>"$GIT_LOCK"
 }
+
+# Push this job's slurm log to the sandbox branch on EVERY exit, success
+# or failure. Without it the only jobs whose output reaches the repo are
+# the ones that finished, i.e. exactly the ones nobody needs to read; a
+# failure like job 32500 could only be diagnosed by hand-copying the log
+# out of a browser terminal.
+#
+# Usage, right after `sync_sandbox` (which must already have run, so the
+# checkout is on the sandbox branch):
+#     enable_log_push
+LOG_PUSH_LINES="${LOG_PUSH_LINES:-4000}"
+
+push_job_log() {
+    local rc=$?
+    local out dest
+    out="$(scontrol show job "${SLURM_JOB_ID:-0}" 2>/dev/null \
+           | tr ' ' '\n' | sed -n 's/^StdOut=//p' | head -1)"
+    [ -n "$out" ] && [ -f "$out" ] || return 0
+    dest="chrono/reports/logs/${SLURM_JOB_NAME:-job}_${SLURM_JOB_ID:-0}.log"
+    mkdir -p chrono/reports/logs
+    {
+        echo "# job ${SLURM_JOB_ID:-?} ${SLURM_JOB_NAME:-?} exit=${rc} $(date -u)"
+        echo "# last ${LOG_PUSH_LINES} lines of ${out}"
+        tail -n "${LOG_PUSH_LINES}" "$out"
+    } > "$dest" 2>/dev/null || return 0
+    commit_push_sandbox \
+        "logs: ${SLURM_JOB_NAME:-job} ${SLURM_JOB_ID:-0} exit=${rc}" \
+        chrono/reports/logs || true
+}
+
+enable_log_push() { trap push_job_log EXIT; }
