@@ -42,7 +42,7 @@ if [ ! -f "${ART}/views.parquet" ]; then
 fi
 
 python -u chrono/scripts/extract_embeddings.py \
-    --model thalesian_akk300m --layers 0-8 --sites mean last \
+    --model thalesian_akk300m --layers all --sites mean last \
     --views "${ART}/views.parquet" --corpus "${ART}/corpus_chrono.parquet" \
     --store-root "${ART}/emb_store" --batch-size 32 \
     || { echo "FAILED extract_embeddings"; exit 1; }

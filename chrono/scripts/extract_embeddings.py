@@ -18,7 +18,7 @@ deterministic (fp32 pooled outputs; text_sha in the manifest lets the
 P0.3 spot-check re-embed a sample and compare).
 
     python chrono/scripts/extract_embeddings.py \
-        --model thalesian_akk300m --layers 0-8 --sites mean last
+        --model thalesian_akk300m --layers all --sites mean last
     python chrono/scripts/extract_embeddings.py --selftest \
         --store-root /tmp/store            # no transformers, CPU-only
 
@@ -316,7 +316,24 @@ def resolve_hfid(model_key: str) -> str:
     return MODELS[model_key]["hfid"]
 
 
-def parse_layers(spec: str) -> list:
+def n_hidden_states(encode) -> int:
+    """How many hidden states this encoder actually returns, asked of the
+    encoder itself with one throwaway forward pass. Hardcoding the count
+    is how C1 (job 32500) died: AKK_300m has 8 blocks + embeddings = 9
+    states, while the grid said 0..12, which is cuneiformBase-400m's
+    count. A batch script frozen at submit time cannot be fixed by the
+    in-job git sync, so the number must not live in the batch script."""
+    hs, _ = encode(["a"])
+    return len(hs)
+
+
+def parse_layers(spec: str, encode=None) -> list:
+    """'all' asks the encoder (requires `encode`); otherwise an explicit
+    list/range like '0-8' or '0,4,8'."""
+    if spec.strip() == "all":
+        if encode is None:
+            raise ValueError("--layers all needs a loaded encoder")
+        return list(range(n_hidden_states(encode)))
     out = []
     for part in spec.split(","):
         if "-" in part:
@@ -377,7 +394,9 @@ def main(argv=None):
         common.ART, "corpus_chrono.parquet"))
     ap.add_argument("--store-root",
                     default=os.path.join(common.ART, "emb_store"))
-    ap.add_argument("--layers", default="0-8")
+    ap.add_argument("--layers", default="all",
+                    help="'all' (asks the encoder how many hidden "
+                         "states it returns) or e.g. '0-8' / '0,4,8'")
     ap.add_argument("--sites", nargs="+", default=["mean", "last"],
                     choices=["mean", "last"])
     ap.add_argument("--batch-size", type=int, default=16)
@@ -397,15 +416,15 @@ def main(argv=None):
         return
 
     hfid = resolve_hfid(args.model)
-    layers = parse_layers(args.layers)
     table = gather_texts(pd.read_parquet(args.views),
                          pd.read_parquet(args.corpus))
     if args.limit:
         table = table.iloc[:args.limit]
-    print(f"[extract] {hfid}: {len(table)} texts, layers {layers}, "
-          f"sites {args.sites}, store={STORE_LIB}", flush=True)
     encode = make_hf_encoder(hfid, max_tokens=args.max_tokens,
                              dtype=args.dtype)
+    layers = parse_layers(args.layers, encode)
+    print(f"[extract] {hfid}: {len(table)} texts, layers {layers}, "
+          f"sites {args.sites}, store={STORE_LIB}", flush=True)
     store = EmbStore(args.store_root)
     meta = extract(table, encode, store=store, model_name=hfid,
                    layers=layers, sites=args.sites,

@@ -343,8 +343,17 @@ def main(argv=None):
     cfg = {k: v for k, v in vars(args).items()}
     gsha, csha = _git_sha(), common.config_sha(cfg)
     cells, results = [], []
+    missing = []
     for layer in _parse_layers(args.layers):
         for site in args.sites:
+            # The grid here is a REQUEST; the encoder decides what exists
+            # (extract_embeddings --layers all). A cell with nothing at
+            # all in the store is skipped with a note. A cell that is
+            # merely INCOMPLETE still raises from store.get -- a few
+            # missing documents is a bug, not a smaller encoder.
+            if not store.has(args.model, layer, site, ids).any():
+                missing.append((layer, site))
+                continue
             X = pd.DataFrame(store.get(args.model, layer, site, ids),
                              index=pd.Index(corpus["doc_id"],
                                             name="doc_id"))
@@ -381,6 +390,23 @@ def main(argv=None):
                       f"placebo {_fmt(r['placebo'])}", flush=True)
 
     path = common.append_results(results)
+    if missing:
+        print(f"[gate] {len(missing)} (layer, site) cell(s) absent from "
+              f"the store, skipped: {missing}", flush=True)
+    # Only when the a-priori cell was ASKED FOR: a deliberately narrow
+    # sweep keeps verdict_block's documented "restricted grid" fallback,
+    # which already labels its verdict selection-inflated.
+    apriori_requested = (APRIORI_LAYER in _parse_layers(args.layers)
+                         and APRIORI_SITE in args.sites
+                         and APRIORI_PROBE in args.probes)
+    if apriori_requested and not any(
+            c["layer"] == APRIORI_LAYER and c["site"] == APRIORI_SITE
+            and c["probe"] == APRIORI_PROBE for c in cells):
+        raise SystemExit(
+            f"the a-priori verdict cell (probe={APRIORI_PROBE} "
+            f"L{APRIORI_LAYER} site={APRIORI_SITE}) is not in the store; "
+            "refusing to print a verdict that would silently fall back "
+            "to the selection-inflated best cell. Re-run C1 first.")
     block = verdict_block(cells, args.gate_rho, args.gate_tol)
     print(block, flush=True)
     os.makedirs(os.path.dirname(args.report_out) or ".", exist_ok=True)
