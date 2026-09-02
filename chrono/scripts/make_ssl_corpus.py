@@ -132,8 +132,20 @@ def main(argv=None):
     uni.loc[uni["genre_1st"].notna(), "genre_raw"] = uni["genre_1st"]
     uni = uni.drop(columns=["genre_1st"])
 
+    # letters: 75% of them are already in the unified table (same fragment_id,
+    # text rebuilt from a different token column). Give those rows the letters'
+    # PERIOD label instead of adding a near-duplicate text; add only the rest
+    # (the 'lbl' Late-Babylonian letters and the archibab letters not in unified).
+    lab = let.set_index("fragment_id")["period"]
+    hit = uni["fragment_id"].isin(lab.index)
+    uni.loc[hit & uni["period"].isna(), "period"] = uni.loc[hit & uni["period"].isna(), "fragment_id"].map(lab)
+    let = let[~let["fragment_id"].isin(set(uni["fragment_id"]))].copy()
+    print(f"[letters] period attached to {int(hit.sum()):,} unified rows; {len(let):,} new texts added", flush=True)
     frames = [uni, let, seal, orcc]
     all_ = pd.concat(frames, ignore_index=True, sort=False)
+    all_["uid"] = all_["source"].astype(str) + "::" + all_["fragment_id"].astype(str)
+    if all_["uid"].duplicated().any():
+        raise ValueError(f"duplicate uid: {all_[all_.uid.duplicated()].uid.head().tolist()}")
     all_["text"] = all_["text"].fillna("").astype(str).str.replace(r"\s+", " ", regex=True).str.strip()
     all_["n_words"] = all_["text"].str.split().str.len().fillna(0).astype(int)
     all_["period_norm"] = all_["period"].map(norm_period)
@@ -163,7 +175,7 @@ def main(argv=None):
     # every dated ORCC document stays evaluable by the 40-king protocol -> keep them all in 'dated'
     all_.loc[all_["year"].notna(), "split"] = "dated"
 
-    cols = ["source", "fragment_id", "text", "text_signs", "n_words", "period", "period_norm",
+    cols = ["uid", "source", "fragment_id", "text", "text_signs", "n_words", "period", "period_norm",
             "genre_raw", "sub_genre", "provenance", "year", "ruler", "label_source", "hash", "split"]
     all_ = all_[cols].reset_index(drop=True)
     out = os.path.join(args.out_dir, "corpus_all.parquet"); all_.to_parquet(out, index=False)

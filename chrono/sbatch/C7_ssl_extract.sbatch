@@ -33,7 +33,7 @@ ART=chrono/artifacts_ssl
   fi
 ) 9>"${GIT_LOCK}.ssl" || exit 1
 python -u chrono/scripts/extract_embeddings.py --model "${MODEL}" --layers "${LAYER}" --sites mean \
-    --table "${ART}/corpus_all.parquet" --id-col fragment_id --text-col text --id-prefix "ssl::" \
+    --table "${ART}/corpus_all.parquet" --id-col uid --text-col text --id-prefix "ssl::" \
     --store-root "${ART}/emb_store" --batch-size 16 --max-tokens 512 \
     || { echo "FAILED extract ${MODEL}"; exit 1; }
 cp "${ART}/emb_store/extract_meta__${MODEL}.json" chrono/reports/ssl/

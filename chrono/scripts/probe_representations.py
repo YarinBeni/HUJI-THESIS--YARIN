@@ -79,7 +79,7 @@ def main(argv=None):
     c = pd.read_parquet(args.corpus)
     c = c[c["split"] != "dated"].reset_index(drop=True)      # dated docs keep their own protocol
     store = EmbStore(args.store_root)
-    ids = ("ssl::" + c["fragment_id"].astype(str)).tolist()
+    ids = ("ssl::" + c["uid"].astype(str)).tolist()
     X = store.get(args.model, args.layer, args.site, ids).astype(np.float32)
     if args.pca and X.shape[1] > args.pca:
         X = PCA(args.pca, random_state=args.seed).fit_transform(StandardScaler().fit_transform(X)).astype(np.float32)
