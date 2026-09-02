@@ -55,3 +55,41 @@ mc ρ (mean ± sd over seeds; pooled gkf ρ in brackets). Probe = ridge on the S
 
 Sources: `tier0/ladder/head_scores/*.parquet` (C5), `tier0/ladder/*_ridge.md`
 (C4), `scripts/aggregate_head_ladder.py`.
+
+## Nonlinear-recovery check (C5b + `probe_head_hidden.py`) — the decisive caveat
+
+Balanced accuracy for **provenance** (15 classes ≥ 10 docs, chance .07), within-train
+split, mean ± sd over 5 folds:
+
+| features | probe | cunei400m | Llama-2-7B | Qwen3-8B |
+|---|---|---|---|---|
+| X raw | linear | .44 | .42 | .41 |
+| X raw | MLP | .44 | .44 | .41 |
+| X after LEACE | linear | **.05** | **.05** | **.07** |
+| X after LEACE | MLP | .25 | .35 | .42 |
+| **head hidden h(X after LEACE)** | linear | .06 | **.42** | **.46** |
+| **head hidden h(X after LEACE)** | MLP | .17 | .39 | **.49** |
+
+**Reading.**
+1. LEACE did its job *linearly* (.05–.07 = chance) but provenance remains
+   **nonlinearly** recoverable from the erased features: .25 (cunei), .35 (Llama),
+   .42 (Qwen) — the more general the encoder, the more redundantly site is encoded.
+2. **On the LLM features the head re-linearises provenance.** From an input with no
+   linear provenance, its hidden layer makes site linearly readable again at
+   .42 / .46 — as readable as from the raw features. Its post-erasure dating
+   accuracy (.38 / .29) is therefore **not** evidence of non-site chronology; the
+   head has simply undone the erasure. The +.38 / +.49 "margins" over the ridge
+   probe in the head ladder must be read that way.
+3. **On the Akkadian-native encoder the head does not reconstruct site.** Its
+   hidden layer carries *less* provenance than the erased input (MLP .17 vs .25;
+   linear .06). The retained .36 there is the one arm where "non-site chronology"
+   survives this check.
+4. **Consequence for the method.** Invariance to *text-level* corruption (name
+   masking, cropping) does not make the head invariant to a *metadata* confound
+   that the encoder encodes redundantly. The plan's HSIC / adversarial
+   deconfounding term against provenance — so far unused — is now the required
+   next ingredient, and the nonlinear-recovery probe is the test it must pass.
+
+This supersedes point 4 of the reading above: the claim that survives is
+*"the head's signal is not linearly reducible to site"*, and on LLM features that
+is a statement about LEACE, not about the head.

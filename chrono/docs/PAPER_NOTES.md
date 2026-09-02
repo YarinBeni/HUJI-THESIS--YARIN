@@ -95,6 +95,17 @@ find-spot, period, object type or length; the frozen probe's largely is.
 Pending: nonlinear-recovery check (can an MLP read provenance from the head's
 hidden layer after erasure?). `reports/HEAD_LADDER_RESULT.md`.
 
+### P1 — nonlinear-recovery check — 2026-09-02 (**negative result, important**)
+After LEACE, provenance is linearly at chance (.05) but an MLP still reads it from
+the erased features (.25 cunei / .35 Llama / .42 Qwen). **The head re-linearises
+it on LLM features**: from its hidden layer a *linear* probe reads provenance at
+.42 / .46 (raw: .42 / .41). So the head's post-erasure ρ on Llama/Qwen is a
+reconstruction of site, not non-site chronology. On cuneiformBase-400m the head
+does not reconstruct site (linear .06, MLP .17 < input .25) — the one arm where
+the retained .36 survives. → Next ingredient: HSIC/adversarial deconfounding
+against provenance in the objective; this probe is its acceptance test.
+`reports/HEAD_LADDER_RESULT.md` (last section).
+
 ### Gate reference (P0.4), re-pinned on tier0
 cuneiformBase-400m L12 mean, Akkadian: ridge mc .447 ± .060, PLS k=2 .431 ±
 .056 (single cross-fit, C3v2 gate). The M.Sc.'s .352 (AKK_300m, maximal, PLS)
@@ -113,9 +124,10 @@ advisors before any thesis text quotes it. `docs/gate_reference.md`.
 | 09-02 | per-language read-out `<cond>@<lang>` | gloss vs transliteration was hidden by pooling |
 | 09-02 | ladder readability check within train, classes ≥10 docs | across ruler folds the number measured distribution shift (random features read .60) |
 | 09-02 | head ladder on LEACE-erased features (C5) | the only way to tell 'head reads site better' from 'head finds non-site chronology' |
+| 09-02 | nonlinear-recovery probe is the acceptance test for any deconfounding claim | LEACE is linear; the head re-linearised provenance on LLM features |
 
 ## 6. Open / next
-Nonlinear-recovery check (C5b heads + probe_head_hidden); ladder readability re-pass;
+HSIC/adversarial provenance deconfounding in the head objective (P2 first step), judged by the nonlinear-recovery probe; ladder readability re-pass (5 tables pending);
 Assyriologist review of `docs/dating_criteria.md`; P2 factorisation; P3
 held-out-ruler calibration.
 
