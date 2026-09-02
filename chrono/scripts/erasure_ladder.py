@@ -88,17 +88,38 @@ def main(argv=None):
     for concept in args.concepts:
         Z, z = concept_matrix(corpus, concept)
         oof = pd.Series(np.nan, index=pd.Index(ids, name="doc_id"), dtype=float)
-        readab = []
+        readab, readab_before = [], []
         run = f"ladder_{args.probe}_{tag}_{concept}"
+        # readability is judged on classes with >= 10 docs only: a class of
+        # 1-4 docs (Hellenistic, Achaemenid, a mislabelled 'wall slab' in the
+        # period column) makes balanced accuracy jump on a single lucky guess
+        # and says nothing about whether the eraser worked
+        if z is not None:
+            vc = pd.Series(z).value_counts(); freq = set(vc[vc >= 10].index)
         for k, fold in enumerate(gkf["folds"]):
             tr = corpus["doc_id"].isin(set(fold["train"])).to_numpy()
             te = corpus["doc_id"].isin(set(fold["test"])).to_numpy()
             Xtr, Xte = X[tr], X[te]
             if Z is not None:
+                # Readability is checked WITHIN the fold's train docs on a
+                # random doc-level split, not across the ruler-grouped fold:
+                # period / provenance / year-decile are block-constant per
+                # ruler, so a held-out ruler's class is often absent from
+                # train and the cross-fold number measures distribution
+                # shift, not erasure (random features gave .60 "readability"
+                # for period and below-chance for year10 that way).
+                rows_tr = np.flatnonzero(tr & np.isin(z, list(freq)))
+                rng = np.random.default_rng(k)
+                perm = rng.permutation(rows_tr); cut = int(0.8 * len(perm))
+                a, b = perm[:cut], perm[cut:]
+                ok = len(set(z[a])) > 1 and len(b) > 0 and set(z[b]) <= set(z[a])
+                if ok:
+                    readab_before.append(z_readability(X[a], z[a], X[b], z[b]))
                 er = LeaceEraser().fit(Xtr, Z[tr])
                 Xtr, Xte = er(Xtr), er(Xte)
-                if len(set(z[tr])) > 1 and len(set(z[te])) > 0:
-                    readab.append(z_readability(Xtr, z[tr], Xte, z[te]))
+                if ok:
+                    Xa, Xb = er(X[a]), er(X[b])
+                    readab.append(z_readability(Xa, z[a], Xb, z[b]))
             s_te, s_tr_mean = fit_predict(args.probe, Xtr, t[tr], Xte, 2)
             oof.loc[corpus["doc_id"][te]] = s_te - s_tr_mean
             sc = pd.DataFrame({"run_id": f"{run}-s0-f{k}", "doc_id": ids, "condition": "orig",
@@ -112,6 +133,8 @@ def main(argv=None):
         pr = float(pooled_rho(oof, corpus, gkf))
         rows.append(dict(concept=concept, mc_rho=mcr, gkf_pooled=pr,
                          z_readability=(float(np.mean(readab)) if readab else np.nan),
+                         z_readability_before=(float(np.mean(readab_before)) if readab_before else np.nan),
+                         n_classes=(0 if z is None else len(freq)),
                          k=(0 if Z is None else Z.shape[1])))
         print(f"[ladder] {tag} {args.probe} erase={concept:<10s} mc {mcr:+.3f} pooled {pr:+.3f} "
               f"readability after {rows[-1]['z_readability']:.3f} (k={rows[-1]['k']})", flush=True)
@@ -119,11 +142,13 @@ def main(argv=None):
     out = args.table_out or os.path.join(os.path.dirname(args.out_dir), f"ladder_{args.probe}_{tag}.md")
     with open(out, "w") as f:
         f.write(f"# Erasure ladder — {feats['model']} L{feats['layer']} {feats['site']} · langs {langs} · {args.probe}\n\n")
-        f.write("| erased | k | mc ρ | gkf pooled ρ | Δ mc vs none | z readable after (bal. acc) |\n|---|---|---|---|---|---|\n")
+        f.write("| erased | k | mc ρ | gkf pooled ρ | Δ mc vs none | z readable before → after (bal. acc, classes ≥10 docs; chance = 1/n) |\n|---|---|---|---|---|---|\n")
         base = tab.loc[tab.concept == "none", "mc_rho"].iloc[0] if (tab.concept == "none").any() else np.nan
         for r in tab.itertuples():
             f.write(f"| {r.concept} | {r.k} | {r.mc_rho:+.3f} | {r.gkf_pooled:+.3f} | {r.mc_rho - base:+.3f} | "
-                    f"{'—' if np.isnan(r.z_readability) else f'{r.z_readability:.2f}'} |\n")
+                    + ("—" if np.isnan(r.z_readability) else
+                       f"{r.z_readability_before:.2f} → {r.z_readability:.2f} (n={r.n_classes}, chance {1/max(r.n_classes,1):.2f})")
+                    + " |\n")
     print(open(out).read())
 
 
