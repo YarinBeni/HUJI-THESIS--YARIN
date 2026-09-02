@@ -56,6 +56,11 @@ def main(argv=None):
                          "on ALL their views (augmentation as plain data "
                          "augmentation, no invariance loss -- isolates what "
                          "the Barlow objective adds over seeing the views)")
+    ap.add_argument("--subsample-seed", type=int, default=0,
+                    help="0 = fit on every train doc (the reference). s>0 = drop a "
+                         "random 10%% of TRAIN docs per fold with this seed, giving "
+                         "the frozen probes a spread comparable to the head's seeds; "
+                         "written as run -s<seed>")
     ap.add_argument("--langs", nargs="+", default=None,
                     help="restrict views to these languages (default: all, "
                          "= what the head sees)")
@@ -90,7 +95,12 @@ def main(argv=None):
         for k, fold in enumerate(gkf["folds"]):
             tr, te = set(fold["train"]), set(fold["test"])
             fit_mask = is_orig if args.train_views == "orig" else np.ones_like(is_orig)
-            tr_rows = np.flatnonzero(fit_mask & np.isin(doc, list(tr)))
+            tr_docs = sorted(tr)
+            if args.subsample_seed:
+                rng = np.random.default_rng(1000 * args.subsample_seed + k)
+                tr_docs = list(rng.choice(tr_docs, size=int(round(0.9 * len(tr_docs))),
+                                          replace=False))
+            tr_rows = np.flatnonzero(fit_mask & np.isin(doc, tr_docs))
             # BUG FIX (runner job 007): the orig chain exists once per view
             # seed with byte-identical text, so every training doc appeared
             # twice per language. RidgeCV's efficient LOO then sees each
@@ -115,13 +125,13 @@ def main(argv=None):
                     per_doc = (pd.Series(s_all[m], index=doc[m])
                                .groupby(level=0).mean().reindex(all_ids))
                     frames.append(pd.DataFrame({
-                        "run_id": f"{run}-s0-f{k}", "doc_id": all_ids,
+                        "run_id": f"{run}-s{args.subsample_seed}-f{k}", "doc_id": all_ids,
                         "condition": name, "s": per_doc.to_numpy(),
                         "fit": "oof", "fold": k,
                         "is_test": [d in te for d in all_ids]}))
             sc = pd.concat(frames, ignore_index=True)
             sc["s_rank"] = np.nan
-            path = os.path.join(args.out_dir, f"{run}-s0-f{k}.parquet")
+            path = os.path.join(args.out_dir, f"{run}-s{args.subsample_seed}-f{k}.parquet")
             sc.to_parquet(path, index=False)
             print(f"[baseline] {run} fold {k}: fit on {len(tr_rows)} distinct {args.train_views} views "
                   f"of {len(tr)} docs -> {path}", flush=True)
