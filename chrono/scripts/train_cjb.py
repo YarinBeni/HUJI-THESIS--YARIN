@@ -503,6 +503,13 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
         os.makedirs(out_dir, exist_ok=True)
         scores_path = os.path.join(out_dir, f"{run_id}.parquet")
         scores.to_parquet(scores_path, index=False)
+        # keep the trained head (a few hundred KB): the P1 follow-up asks a
+        # NONLINEAR probe whether provenance is recoverable from the head's
+        # hidden layer after LEACE (linear) erasure -- impossible from scores
+        head_dir = os.path.join(os.path.dirname(out_dir), "heads")
+        os.makedirs(head_dir, exist_ok=True)
+        torch.save({k: v.detach().cpu() for k, v in head.state_dict().items()},
+                   os.path.join(head_dir, f"{run_id}.pt"))
         sha, gsha = common.config_sha(cfg), git_sha()
         extra = json.dumps({"features": cfg["features"]["kind"],
                             "epochs": epochs, "fold": fold,
