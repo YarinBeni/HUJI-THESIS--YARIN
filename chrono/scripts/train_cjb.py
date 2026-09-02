@@ -49,7 +49,7 @@ from chrono.models.heads import AdapterHead, EmaTwin     # noqa: E402
 from chrono.models.store import EmbStore                 # noqa: E402
 
 try:
-    from chrono.losses import (bt_loss, make_order_pairs,  # noqa: E402
+    from chrono.losses import (bt_loss, hsic_loss, make_order_pairs,  # noqa: E402
                                soft_spearman, softrank_loss,
                                variance_loss)
     LOSS_LIB = "chrono.losses"
@@ -65,7 +65,7 @@ except ImportError as _e:
     print(f"WARNING: running on FALLBACK loss shims ({_e})",
           file=sys.stderr)
     from chrono.models._fallback_losses import (         # noqa: E402
-        bt_loss, make_order_pairs, soft_spearman, softrank_loss,
+        bt_loss, hsic_loss, make_order_pairs, soft_spearman, softrank_loss,
         variance_loss)
     LOSS_LIB = "chrono.models._fallback_losses"
 
@@ -385,6 +385,23 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
     epochs = int(tcfg["epochs"])
     t_train = train_docs["t"].to_numpy(dtype=float)
 
+    # P2 first step: HSIC deconfounding. Penalise statistical dependence
+    # (RBF-HSIC, nonlinear) between the head's HIDDEN layer and a metadata
+    # confound of the batch's documents. Motivated by the nonlinear-recovery
+    # check (2026-09-02): LEACE removed provenance linearly, and the head
+    # re-linearised it from what remained; only a dependence penalty in the
+    # objective can stop that. Confound one-hot is built over TRAIN docs.
+    lam_hsic = float(lcfg.get("lambda_hsic", 0.0))
+    Zc_all = None
+    if lam_hsic > 0:
+        from chrono.eval.erasure import concept_matrix
+        cname = lcfg.get("confound", "provenance")
+        Zfull, _ = concept_matrix(corpus_df.reset_index(drop=True), cname)
+        pos = {d: i for i, d in enumerate(corpus_df["doc_id"].astype(str))}
+        Zc_all = torch.as_tensor(np.stack([Zfull[pos[str(d)]] for d in doc_ids]),
+                                 dtype=torch.float32)
+        print(f"[hsic] lambda={lam_hsic} confound='{cname}' k={Zc_all.shape[1]}", flush=True)
+
     loss_curve = []
     n_same = n_pairs = 0
     for epoch in range(epochs):
@@ -394,7 +411,7 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
         ep_loss, nb = 0.0, 0
         for lo in range(0, n, batch):
             take = order[lo:lo + batch]
-            rows_a, rows_b = [], []
+            rows_a, rows_b, kept = [], [], []
             for i in take:
                 ra, rb, same = _pair_rows(idx_a, idx_b, doc_ids[i], g,
                                           view_texts)
@@ -402,13 +419,14 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
                     continue
                 rows_a.append(ra)
                 rows_b.append(rb)
+                kept.append(int(i))
                 n_same += int(same)
                 n_pairs += 1
             if len(rows_a) < 2:        # bt_loss needs a real batch
                 continue
             xa = torch.as_tensor(X[rows_a])
             xb = torch.as_tensor(X[rows_b])
-            _, s_a, p_a = head(xa)
+            h_a, s_a, p_a = head(xa)
             _, _, p_b = twin(xb)
             loss = bt_loss(p_a, p_b,
                            lambda_offdiag=float(lcfg["lambda_offdiag"]))
@@ -423,6 +441,8 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
                     s_a, torch.stack([li[m], lj[m]], 1), margins[m],
                     temp=float(lcfg["temp"]))
             loss = loss + float(lcfg["lambda_var"]) * variance_loss(s_a)
+            if Zc_all is not None:
+                loss = loss + lam_hsic * hsic_loss(h_a, Zc_all[kept])
             opt.zero_grad()
             loss.backward()
             opt.step()

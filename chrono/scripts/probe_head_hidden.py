@@ -45,6 +45,8 @@ def main(argv=None):
     ap.add_argument("--heads-dir", default="chrono/reports/tier0/heads")
     ap.add_argument("--art", default="chrono/artifacts_tier0")
     ap.add_argument("--concept", default="provenance")
+    ap.add_argument("--no-erase", action="store_true",
+                    help="feed the head RAW features (for HSIC-deconfounded heads trained without LEACE)")
     ap.add_argument("--out", default=None)
     args = ap.parse_args(argv)
     cfg = yaml.safe_load(open(args.config)); feats = cfg["features"]; run = cfg["run_name"]
@@ -64,7 +66,7 @@ def main(argv=None):
     rows = []
     for k, fold in enumerate(gkf["folds"]):
         tr = corpus["doc_id"].isin(set(fold["train"])).to_numpy()
-        er = LeaceEraser().fit(X[tr], Z[tr]); Xe = er(X)
+        Xe = X if args.no_erase else LeaceEraser().fit(X[tr], Z[tr])(X)
         pt = os.path.join(args.heads_dir, f"{run}-s0-f{k}.pt")
         if not os.path.exists(pt):
             print(f"[probe] missing head {pt}; skipping fold {k}"); continue
@@ -76,7 +78,8 @@ def main(argv=None):
         a, b = perm[:cut], perm[cut:]
         if len(set(zi[a])) < 2 or not set(zi[b]) <= set(zi[a]):
             continue
-        for name, F in (("X raw", X), ("X erased", Xe), ("head hidden h(X erased)", H)):
+        feats_in = "X raw" if args.no_erase else "X erased"
+        for name, F in (("X raw", X), (feats_in, Xe), (f"head hidden h({feats_in})", H)):
             for kind in ("linear", "mlp"):
                 rows.append(dict(fold=k, features=name, probe=kind,
                                  bal_acc=probe(F[a], zi[a], F[b], zi[b], kind)))
