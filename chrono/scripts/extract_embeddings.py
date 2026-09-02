@@ -137,6 +137,48 @@ def gather_texts(views_df: pd.DataFrame,
 # with hidden_states a list of [B, T, d] float32 tensors, index 0 = the
 # embedding layer (the transformers output_hidden_states convention).
 
+def make_causal_encoder(spec: dict, *, max_tokens: int, dtype: str):
+    """Decoder-only LM (Llama-2, Qwen3, OLMo) through the M.Sc. loader
+    wm_lib.extract.load_model -- same snapshot/fallback/tokenizer logic,
+    same bf16 device_map=auto -- so the vectors are the thesis's vectors.
+    Tokenisation mirrors wm_lib.tokenize_lib.encode_all with an empty
+    prompt: BOS + text, truncated to max_tokens, right-padded. The mask
+    handed to pool() EXCLUDES the BOS position, as the M.Sc. entity mask
+    did ('entity tokens: after the prefix'); `last` is the final real
+    token, the causal summary state."""
+    wm = os.path.join(common.REPO, "v_1", "src", "world_models")
+    if wm not in sys.path:
+        sys.path.insert(0, wm)
+    from wm_lib import extract as ex
+    tok, core = ex.load_model(spec, dtype=("bfloat16" if dtype == "auto" else dtype))
+    bos = tok.bos_token_id
+    pad = tok.pad_token_id
+    device = next(core.parameters()).device
+
+    def encode(texts):
+        enc = tok(list(texts), add_special_tokens=False,
+                  return_attention_mask=False)["input_ids"]
+        rows = []
+        for ids in enc:
+            ids = ([bos] if bos is not None else []) + list(ids)
+            rows.append(ids[:max_tokens])
+        T = max(len(r) for r in rows)
+        ids_t = torch.full((len(rows), T), pad, dtype=torch.long)
+        attn = torch.zeros((len(rows), T), dtype=torch.long)
+        pool_mask = torch.zeros((len(rows), T), dtype=torch.long)
+        for i, r in enumerate(rows):
+            ids_t[i, :len(r)] = torch.tensor(r)
+            attn[i, :len(r)] = 1
+            start = 1 if (bos is not None and len(r) > 1) else 0
+            pool_mask[i, start:len(r)] = 1
+        with torch.no_grad():
+            out = core(input_ids=ids_t.to(device), attention_mask=attn.to(device),
+                       output_hidden_states=True, use_cache=False)
+        return [h.float().cpu() for h in out.hidden_states], pool_mask
+
+    return encode
+
+
 def make_hf_encoder(hfid: str, *, max_tokens: int, dtype: str):
     """Lazy transformers load, encoder side of the seq2seq model."""
     import transformers
@@ -300,6 +342,17 @@ def extract(table: pd.DataFrame, encode, *, store, model_name: str,
             "elapsed_s": round(time.time() - t0, 1)}
 
 
+def resolve_spec(model_key: str):
+    """Registry spec for a key; None for a literal 'org/name'."""
+    if "/" in model_key:
+        return None
+    wm = os.path.join(common.REPO, "v_1", "src", "world_models")
+    if wm not in sys.path:
+        sys.path.insert(0, wm)
+    from wm_lib.registry import MODELS
+    return MODELS.get(model_key)
+
+
 def resolve_hfid(model_key: str) -> str:
     """Register key -> hfid via the world-models registry (the single
     source of truth for encoder ids); a literal 'org/name' passes
@@ -420,8 +473,13 @@ def main(argv=None):
                          pd.read_parquet(args.corpus))
     if args.limit:
         table = table.iloc[:args.limit]
-    encode = make_hf_encoder(hfid, max_tokens=args.max_tokens,
-                             dtype=args.dtype)
+    spec = resolve_spec(args.model)
+    if spec is not None and spec.get("arch") == "causal":
+        encode = make_causal_encoder(spec, max_tokens=args.max_tokens,
+                                     dtype=args.dtype)
+    else:
+        encode = make_hf_encoder(hfid, max_tokens=args.max_tokens,
+                                 dtype=args.dtype)
     layers = parse_layers(args.layers, encode)
     print(f"[extract] {hfid}: {len(table)} texts, layers {layers}, "
           f"sites {args.sites}, store={STORE_LIB}", flush=True)

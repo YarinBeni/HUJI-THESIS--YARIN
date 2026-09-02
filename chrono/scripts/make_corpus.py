@@ -26,10 +26,13 @@ def main() -> None:
     ap.add_argument("--orcc", default=common.ORCC)
     ap.add_argument("--trans", default=contract.TRANS)
     ap.add_argument("--out-dir", default=common.ART)
+    ap.add_argument("--akk-tier", default="maximal",
+                    choices=sorted(contract.AKK_TIERS),
+                    help="Akkadian text tier (see contract.AKK_TIERS)")
     args = ap.parse_args()
     os.makedirs(args.out_dir, exist_ok=True)
 
-    df = contract.build_corpus(args.orcc, args.trans)
+    df = contract.build_corpus(args.orcc, args.trans, akk_tier=args.akk_tier)
     p_corpus = os.path.join(args.out_dir, "corpus_chrono.parquet")
     df.to_parquet(p_corpus, index=False)
 

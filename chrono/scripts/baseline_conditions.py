@@ -77,6 +77,7 @@ def main(argv=None):
     doc = views["doc_id"].to_numpy()
     chain = views["augs"].fillna("").to_numpy()
     text = views["text"].astype(str).to_numpy()
+    lang = views["lang"].astype(str).to_numpy()
     is_orig = chain == ""
     all_ids = corpus["doc_id"].tolist()
     tag = f"L{feats['layer']}{feats['site']}" + (
@@ -102,16 +103,22 @@ def main(argv=None):
             ytr = t.loc[doc[tr_rows]].to_numpy()
             s_all, _ = fit_predict(probe, X[tr_rows], ytr, X, args.pls_components)
             frames = []
+            langs_present = list(pd.unique(lang))
             for ch in pd.unique(chain):
                 cond = "orig" if ch == "" else str(ch)
-                m = chain == ch
-                per_doc = (pd.Series(s_all[m], index=doc[m])
-                           .groupby(level=0).mean().reindex(all_ids))
-                frames.append(pd.DataFrame({
-                    "run_id": f"{run}-s0-f{k}", "doc_id": all_ids,
-                    "condition": cond, "s": per_doc.to_numpy(),
-                    "fit": "oof", "fold": k,
-                    "is_test": [d in te for d in all_ids]}))
+                m_chain = chain == ch
+                arms = [(cond, m_chain)]
+                if len(langs_present) > 1:        # mirror _condition_scores
+                    arms += [(f"{cond}@{lg}", m_chain & (lang == lg))
+                             for lg in langs_present]
+                for name, m in arms:
+                    per_doc = (pd.Series(s_all[m], index=doc[m])
+                               .groupby(level=0).mean().reindex(all_ids))
+                    frames.append(pd.DataFrame({
+                        "run_id": f"{run}-s0-f{k}", "doc_id": all_ids,
+                        "condition": name, "s": per_doc.to_numpy(),
+                        "fit": "oof", "fold": k,
+                        "is_test": [d in te for d in all_ids]}))
             sc = pd.concat(frames, ignore_index=True)
             sc["s_rank"] = np.nan
             path = os.path.join(args.out_dir, f"{run}-s0-f{k}.parquet")

@@ -39,7 +39,15 @@ TRANS = os.path.join(common.REPO, "v_1", "src", "stress_tests",
                      "translation", "translations.parquet")
 
 # rows / distinct rulers / distinct years after eligibility filtering
-EXPECT = (1187, 40, 47)     # rows / rulers / distinct RAW years
+EXPECT = (1187, 40, 47)     # rows / rulers / distinct RAW years (maximal)
+# The Akkadian text tier. "maximal" is the M.Sc. cleaned transliteration
+# (determinatives, logograms and sign indices stripped); "tier0" is the
+# raw one. Review 2026-09-02: maximal is ALREADY a heavy corruption, so
+# masking/cropping on top of it may leave no signal by construction --
+# tier0 is the honest base text for the augmentation ladder. Six more
+# fragments have a non-empty tier0 than maximal.
+AKK_TIERS = {"maximal": ("text_maximal", "text_maximal_masked", (1187, 40, 47)),
+             "tier0":   ("text_tier0",   "text_tier0_masked",   (1193, 40, 47))}
 
 # ORCC's `year` field holds a CENTURY, not a year, for rulers whose exact
 # dates are unknown — six of ours (13 docs) carry 7..10, which read as
@@ -118,7 +126,7 @@ def _fill_unk(s: pd.Series) -> pd.Series:
 
 
 def build_corpus(orcc_path=common.ORCC, trans_path=TRANS,
-                 strict: bool = True) -> pd.DataFrame:
+                 strict: bool = True, akk_tier: str = "maximal") -> pd.DataFrame:
     """The corpus_chrono frame (INTERFACES.md section 3), sorted by
     doc_id. strict=True (the default) hard-fails unless the census
     matches EXPECT — pass False only for synthetic inputs."""
@@ -126,7 +134,8 @@ def build_corpus(orcc_path=common.ORCC, trans_path=TRANS,
     tr = pd.read_parquet(trans_path)[["fragment_id", "eng_tier0"]]
     df = df[df["year"].notna() & df["ruler"].notna()].copy()
     df = df.merge(tr, on="fragment_id", how="left")
-    df["text_akk"] = df["text_maximal"].fillna("").astype(str)
+    col_text, col_masked, expect = AKK_TIERS[akk_tier]
+    df["text_akk"] = df[col_text].fillna("").astype(str)
     df = df[df["text_akk"].str.strip().str.len() > 0].copy()
 
     out = pd.DataFrame({
@@ -139,7 +148,7 @@ def build_corpus(orcc_path=common.ORCC, trans_path=TRANS,
         "text_akk": df["text_akk"].values,
         "text_eng": df["eng_tier0"].fillna("").astype(str).values,
         "text_akk_masked":
-            df["text_maximal_masked"].fillna("").astype(str).values,
+            df[col_masked].fillna("").astype(str).values,
         "text_eng_masked": "",
         "sub_genre": _fill_unk(df["sub_genre"]).values,
         "provenance": _fill_unk(df["provenance"]).values,
@@ -158,10 +167,10 @@ def build_corpus(orcc_path=common.ORCC, trans_path=TRANS,
         raise AssertionError("non-negative t: BC-positive year leaked in")
     got = (len(out), out["ruler"].nunique(),
            int(df["year"].astype(float).nunique()))
-    if strict and got != EXPECT:
+    if strict and got != expect:
         raise AssertionError(
             f"corpus census drifted: got {got} (rows/rulers/years), "
-            f"expected {EXPECT} — eligibility no longer mirrors "
+            f"expected {expect} for tier {akk_tier!r} — eligibility no longer mirrors "
             "pairs_data.load_eligible(); do NOT ship this artifact")
     return out
 

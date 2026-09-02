@@ -345,6 +345,10 @@ def main(argv=None):
     # representation. Pinned from the prior work, before seeing any
     # chrono number. Source: v_1/src/linear_probing/results/
     # orcc__probe_pls/pls_results_thalesian_akk300m.json
+    ap.add_argument("--apriori-layer", type=int, default=None,
+                    help="verdict-cell layer for a model other than "
+                         "Thalesian/AKK_300m; fix it BEFORE looking at "
+                         "the grid (default keeps L8)")
     ap.add_argument("--row-l2", action="store_true",
                     help="row-wise L2 normalise features first (the M.Sc. probe convention)")
     ap.add_argument("--pls-components", type=int, default=2)
@@ -356,8 +360,10 @@ def main(argv=None):
         common.ART, "baseline_gate_report.txt"))
     args = ap.parse_args(argv)
 
-    global ROW_L2
+    global ROW_L2, APRIORI_LAYER
     ROW_L2 = bool(args.row_l2)
+    if args.apriori_layer is not None:
+        APRIORI_LAYER = int(args.apriori_layer)
     tag = "::rowl2" if ROW_L2 else ""
     corpus = pd.read_parquet(args.corpus)
     with open(os.path.join(args.splits_dir, "gkf_ruler.json")) as f:

@@ -226,21 +226,35 @@ def _condition_scores(head, X, views_df, doc_ids):
     head.train()
     doc_col = views_df["doc_id"].to_numpy()
     augs_col = views_df["augs"].to_numpy()
+    lang_col = views_df["lang"].to_numpy()
     out = {}
+    # REVIEW FIX (E-MIN read-out, 2026-09-02): the pooled condition mixes the
+    # Akkadian and English-gloss views of a document, which hid that the
+    # gloss alone dates better than the transliteration alone. Every chain
+    # is therefore ALSO emitted per language as '<cond>@<lang>' (skipped
+    # when only one language is present -- it would duplicate the pooled
+    # row). The pooled row keeps its name so existing readers still work.
+    langs_present = [lg for lg in pd.unique(lang_col)]
     for chain in pd.unique(augs_col):
         cond = "orig" if chain == "" else str(chain)
-        by_doc = {}
-        for p in np.flatnonzero(augs_col == chain):
-            by_doc.setdefault(doc_col[p], []).append(p)
-        vals = []
-        for d in doc_ids:
-            ps = by_doc.get(d)
-            vals.append(float(s_all[ps].mean()) if ps else np.nan)
-        arr = np.array(vals, dtype=np.float64)
-        if cond == "orig" and not np.isfinite(arr).all():
-            miss = [d for d, v in zip(doc_ids, arr) if not np.isfinite(v)]
-            raise ValueError(f"docs without an orig view: {miss[:10]}")
-        out[cond] = arr
+        sel_chain = augs_col == chain
+        arms = [(cond, sel_chain)]
+        if len(langs_present) > 1:
+            arms += [(f"{cond}@{lg}", sel_chain & (lang_col == lg))
+                     for lg in langs_present]
+        for name, sel in arms:
+            by_doc = {}
+            for p in np.flatnonzero(sel):
+                by_doc.setdefault(doc_col[p], []).append(p)
+            vals = []
+            for d in doc_ids:
+                ps = by_doc.get(d)
+                vals.append(float(s_all[ps].mean()) if ps else np.nan)
+            arr = np.array(vals, dtype=np.float64)
+            if name == "orig" and not np.isfinite(arr).all():
+                miss = [d for d, v in zip(doc_ids, arr) if not np.isfinite(v)]
+                raise ValueError(f"docs without an orig view: {miss[:10]}")
+            out[name] = arr
     return out
 
 
@@ -258,6 +272,10 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
     torch.manual_seed(seed)
     g = np.random.default_rng(seed)
 
+    # optional language arm: cfg["views"]["langs"] = ["akk"] | ["eng"] | both
+    langs = cfg["views"].get("langs")
+    if langs:
+        views_df = views_df[views_df["lang"].isin(langs)]
     views_df = views_df.reset_index(drop=True)
     corpus_df = corpus_df.reset_index(drop=True)
     have_views = set(views_df["doc_id"])
@@ -475,8 +493,8 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
             "loss_curve": loss_curve, "scores_path": scores_path}
 
 
-def _load_split(name: str) -> dict:
-    with open(os.path.join(common.ART, "splits", f"{name}.json")) as f:
+def _load_split(name: str, splits_dir: str) -> dict:
+    with open(os.path.join(splits_dir, f"{name}.json")) as f:
         return json.load(f)
 
 
@@ -493,6 +511,9 @@ def main(argv=None):
         common.ART, "views.parquet"))
     ap.add_argument("--ruler-table", default=os.path.join(
         common.ART, "ruler_table.parquet"))
+    ap.add_argument("--splits-dir", default=os.path.join(common.ART, "splits"),
+                    help="folds must come from the SAME artifacts root as "
+                         "--corpus (tier0 has 1,193 docs, maximal 1,187)")
     ap.add_argument("--store-root", default=os.path.join(
         common.ART, "emb_store"))
     args = ap.parse_args(argv)
@@ -514,7 +535,7 @@ def main(argv=None):
         if os.path.exists(args.ruler_table) else None
     store = EmbStore(args.store_root) \
         if cfg["features"]["kind"] == "emb" else None
-    split = _load_split(cfg["eval_split"]) if cfg["eval_split"] else None
+    split = _load_split(cfg["eval_split"], args.splits_dir) if cfg["eval_split"] else None
     fold = args.fold if split is not None else None
     if split is not None and fold is None:
         fold = 0

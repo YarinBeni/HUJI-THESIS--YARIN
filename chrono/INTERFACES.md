@@ -225,3 +225,22 @@ chrono-barlow ± mask views, 5 seeds).
 `chrono/artifacts/results.parquet` with EXACT cols:
 `run_id, git_sha, config_sha, seed, split, metric, value, n, extra`
 (extra = JSON string). Plots/tables only ever read this file.
+
+## 10. Amendments (2026-09-02, E-MIN review)
+
+* **Akkadian text tier.** `contract.build_corpus(akk_tier=)` with
+  `AKK_TIERS = {maximal: (1187,40,47), tier0: (1193,40,47)}`. A tier lives in
+  its OWN artifacts root (`chrono/artifacts_tier0`: corpus, ruler_table,
+  splits, views, emb_store) because the doc census differs and folds must
+  match the corpus. `results.parquet` stays shared; `run_name` carries the tier.
+* **Language arm.** `cfg["views"]["langs"]` (list) filters views before
+  training. Omit for both languages.
+* **Per-language read-out.** `_condition_scores` (and `baseline_conditions`)
+  emit `<cond>@<lang>` next to the pooled `<cond>` whenever more than one
+  language is present. `battery` treats them as ordinary conditions.
+* **Causal LMs in EmbStore.** `extract_embeddings --model <registry key>`
+  routes `arch=causal` through `wm_lib.extract.load_model` (M.Sc. loader);
+  BOS excluded from mean pooling, `last` = final real token. Store model
+  name = registry hfid (Llama: `NousResearch/Llama-2-7b-hf`).
+* **Gate verdict layer** per model via `run_baseline_gate --apriori-layer`;
+  fixed before the grid is looked at (Llama 16, Qwen 18, cunei 12).
