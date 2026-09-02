@@ -64,7 +64,9 @@ advantage was a better reading of the same site-coded signal.
   year-decile .73 → .09 (chance .14). Every rung is erased to chance or below. The
   first pass measured this across the ruler-grouped fold, where block-constant
   concepts turned it into a distribution-shift number; that column was discarded.
-  Remaining arms' second-pass tables: `tier0/ladder/*_ridge.md` as they land.
+  All six arms (second pass complete): linear readability of the erased variable falls
+  to chance on every rung — provenance .38–.44 → .05–.07 (chance .07), ruler .63–.74 →
+  .09–.12 (chance .09), period .64–.74 → .21–.25 (chance .33). Tables: `tier0/ladder/*_ridge.md`.
 
 Sources: `reports/tier0/ladder/*_ridge.md`, `scripts/erasure_ladder.py`,
 `chrono/eval/erasure.py`.
