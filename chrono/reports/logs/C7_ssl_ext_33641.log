@@ -1,0 +1,63 @@
+# job 33641 C7_ssl_ext exit=0 Wed Sep  2 21:27:23 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C7_ssl_ext_33641_3.out
+=== C7 ssl extract qwen3_8b L18,27 === job 33641 Wed Sep  2 19:52:14 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Fetching 15 files:   0%|          | 0/15 [00:00<?, ?it/s]Fetching 15 files: 100%|██████████| 15/15 [00:00<00:00, 4292.17it/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   0%|          | 1/399 [00:00<01:03,  6.29it/s]Loading weights:   1%|          | 2/399 [00:00<01:09,  5.68it/s]Loading weights:   4%|▍         | 17/399 [00:00<00:07, 50.99it/s]Loading weights:  10%|▉         | 38/399 [00:00<00:03, 99.45it/s]Loading weights:  15%|█▍        | 58/399 [00:00<00:02, 129.77it/s]Loading weights:  20%|█▉        | 78/399 [00:00<00:02, 149.94it/s]Loading weights:  24%|██▍       | 95/399 [00:00<00:01, 153.49it/s]Loading weights:  29%|██▉       | 115/399 [00:00<00:01, 165.21it/s]Loading weights:  34%|███▍      | 136/399 [00:01<00:01, 177.40it/s]Loading weights:  39%|███▉      | 155/399 [00:01<00:01, 180.33it/s]Loading weights:  44%|████▎     | 174/399 [00:01<00:01, 180.68it/s]Loading weights:  48%|████▊     | 193/399 [00:01<00:01, 175.97it/s]Loading weights:  54%|█████▍    | 215/399 [00:01<00:01, 180.89it/s]Loading weights:  59%|█████▉    | 236/399 [00:01<00:00, 186.49it/s]Loading weights:  64%|██████▍   | 257/399 [00:01<00:00, 187.42it/s]Loading weights:  69%|██████▉   | 276/399 [00:01<00:00, 187.53it/s]Loading weights:  74%|███████▍  | 295/399 [00:01<00:00, 184.15it/s]Loading weights:  79%|███████▊  | 314/399 [00:02<00:00, 178.32it/s]Loading weights:  84%|████████▍ | 336/399 [00:02<00:00, 182.52it/s]Loading weights:  89%|████████▉ | 355/399 [00:02<00:00, 184.54it/s]Loading weights:  94%|█████████▎| 374/399 [00:02<00:00, 185.85it/s]Loading weights:  98%|█████████▊| 393/399 [00:02<00:00, 182.89it/s]Loading weights: 100%|██████████| 399/399 [00:02<00:00, 160.51it/s]
+[extract] Qwen/Qwen3-8B: 31905 texts, layers [18, 27], sites ['mean'], store=chrono.models.store
+[extract] 1024/31905 texts (212.6s)
+[extract] 2048/31905 texts (391.5s)
+[extract] 3072/31905 texts (556.4s)
+[extract] 4096/31905 texts (723.7s)
+[extract] 5120/31905 texts (882.0s)
+[extract] 6144/31905 texts (1038.1s)
+[extract] 7168/31905 texts (1200.8s)
+[extract] 8192/31905 texts (1367.1s)
+[extract] 9216/31905 texts (1540.9s)
+[extract] 10240/31905 texts (1690.5s)
+[extract] 11264/31905 texts (1821.1s)
+[extract] 12288/31905 texts (1980.7s)
+[extract] 13312/31905 texts (2206.9s)
+[extract] 14336/31905 texts (2417.6s)
+[extract] 15360/31905 texts (2633.2s)
+[extract] 16384/31905 texts (2820.2s)
+[extract] 17408/31905 texts (3014.2s)
+[extract] 18432/31905 texts (3214.2s)
+[extract] 19456/31905 texts (3398.2s)
+[extract] 20480/31905 texts (3605.9s)
+[extract] 21504/31905 texts (3794.8s)
+[extract] 22528/31905 texts (3997.0s)
+[extract] 23552/31905 texts (4165.6s)
+[extract] 24576/31905 texts (4356.4s)
+[extract] 25600/31905 texts (4544.0s)
+[extract] 26624/31905 texts (4744.9s)
+[extract] 27648/31905 texts (4930.5s)
+[extract] 28672/31905 texts (5084.6s)
+[extract] 29696/31905 texts (5247.1s)
+[extract] 30720/31905 texts (5427.6s)
+[extract] 31744/31905 texts (5635.0s)
+[extract] 31905/31905 texts (5659.8s)
+[done] {"n_texts": 31905, "n_embedded": 31905, "n_skipped": 0, "layers": [18, 27], "sites": ["mean"], "elapsed_s": 5659.8, "model": "qwen3_8b", "hfid": "Qwen/Qwen3-8B", "store_root": "chrono/artifacts_ssl/emb_store", "max_tokens": 512, "dtype": "auto"}
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox be066f54] C7: ssl features qwen3_8b (job 33641)
+ 1 file changed, 18 insertions(+)
+ create mode 100644 chrono/reports/ssl/extract_meta__qwen3_8b.json
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+   e7252a46..fa45c2ef  yarin-sandbox -> origin/yarin-sandbox
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Rebasing (1/1)[KSuccessfully rebased and updated refs/heads/yarin-sandbox.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   fa45c2ef..e80b43c9  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 21:27:23 UTC 2026 ===
