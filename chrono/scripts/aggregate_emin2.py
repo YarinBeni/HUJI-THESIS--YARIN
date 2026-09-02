@@ -85,10 +85,12 @@ def main(argv=None):
         if m:
             enc, arm = m.group(1), m.group(2); key = "head"
         else:
-            m = re.match(r"baseline_(ridge|pls)_L(\d+)mean(?:_([a-z+]+))?$", run)
+            m = re.match(r"baseline_(ridge|pls)_L(\d+)mean(?:_([a-z+]+))?(_allviews)?$", run)
             if not m:
                 continue
             key, layer, langs = m.group(1), int(m.group(2)), m.group(3)
+            if m.group(4):
+                key = key + "_allviews"
             arm = {None: "mix", "akk": "akk", "eng": "eng", "akk+eng": "mix"}.get(langs, langs)
             enc = {16: "llama2_7b", 18: "qwen3_8b", 12: "cunei400m", 8: "akk300m"}.get(layer, f"L{layer}")
         agg, n_seeds, null = summarise(files, corpus, splits, with_null=(key == "head"))
@@ -103,7 +105,7 @@ def main(argv=None):
     for (enc, arm), d in sorted(table.items()):
         lines += [f"## {enc} — arm `{arm}`", ""]
         conds = list(dict.fromkeys(pd.concat([a for a in d.values()])["condition"]))
-        cols = [k for k in ("head", "ridge", "pls") if k in d]
+        cols = [k for k in ("head", "ridge", "ridge_allviews", "pls") if k in d]
         lines.append("| condition | " + " | ".join(f"{c} mc ρ" for c in cols) + " | " +
                      " | ".join(f"{c} gkf ρ" for c in cols) + " |")
         lines.append("|---|" + "---|" * (2 * len(cols)))
