@@ -113,6 +113,15 @@ raw RBF-HSIC on a 256-row batch is O(10⁻²) against an O(5) Barlow term. → C
 kernel CKA (scale-free, [0, 1]) with λ ∈ {1, 5}, penalty value logged per run.
 `reports/HSIC_RESULT.md`.
 
+### P2 step 1b — CKA (C6b) — null; deconfounding line CLOSED (2026-09-02 evening)
+CKA λ 1/5 drove the batch statistic to ≈ .1 yet a linear probe still reads
+provenance from h at .4; ρ dropped .61 → .58/.54. An adversary prototype
+collapsed. **Decision (Yarin):** the method is text-view invariance
+(SSL/contrastive); forcing a metadata variable out of the head is not the
+design. Find-spot stays as a *stated limitation* in the paper, the penalties as
+a failed side experiment. Possible future SSL-consistent form: a `mask_place`
+text view. `reports/HSIC_RESULT.md`.
+
 ### Gate reference (P0.4), re-pinned on tier0
 cuneiformBase-400m L12 mean, Akkadian: ridge mc .447 ± .060, PLS k=2 .431 ±
 .056 (single cross-fit, C3v2 gate). The M.Sc.'s .352 (AKK_300m, maximal, PLS)
@@ -132,9 +141,10 @@ advisors before any thesis text quotes it. `docs/gate_reference.md`.
 | 09-02 | ladder readability check within train, classes ≥10 docs | across ruler folds the number measured distribution shift (random features read .60) |
 | 09-02 | head ladder on LEACE-erased features (C5) | the only way to tell 'head reads site better' from 'head finds non-site chronology' |
 | 09-02 | nonlinear-recovery probe is the acceptance test for any deconfounding claim | LEACE is linear; the head re-linearised provenance on LLM features |
+| 09-02 | **deconfounding penalties dropped; method = text-view invariance only** | Yarin: interpretation question ≠ training objective; HSIC/CKA null, adversary unstable |
 
 ## 6. Open / next
-CKA deconfounding (C6b) judged by the nonlinear-recovery probe; if it fails too, an adversarial provenance classifier; ladder readability re-pass (5 tables pending);
+(deconfounding line closed — see above); Assyriologist review of `docs/dating_criteria.md`; ladder readability re-pass (5 tables pending);
 Assyriologist review of `docs/dating_criteria.md`; P2 factorisation; P3
 held-out-ruler calibration.
 

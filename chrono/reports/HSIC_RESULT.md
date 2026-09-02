@@ -29,3 +29,33 @@ a 256-row batch and a 21-class one-hot is O(10⁻²), while the Barlow loss is O
 which is scale-free in [0, 1], log its per-epoch value, and sweep λ ∈ {1, 5}. Same
 acceptance probe. If CKA at λ = 5 does not move readability either, the next
 lever is an adversarial provenance classifier on h.
+
+## C6b — kernel CKA, λ ∈ {1, 5} (2026-09-02, evening)
+
+| encoder | λ | logged CKA at end | provenance from h: lin / MLP (raw lin) | mc ρ orig |
+|---|---|---|---|---|
+| cunei400m | 1 | .06–.11 | .42 / .32 (.44) | .58 ± .02 |
+| cunei400m | 5 | — | .42 / .34 (.44) | .54 ± .01 |
+| Llama-2-7B | 1 | — | .40 / .31 (.42) | .51 ± .03 |
+| Llama-2-7B | 5 | — | .39 / .30 (.42) | .51 ± .04 |
+| Qwen3-8B | 1 | — | .29 / .20 (.41) | .43 ± .04 |
+| Qwen3-8B | 5 | — | .27 / .18 (.41) | .43 ± .02 |
+
+**Also null.** The penalty was active this time (batch CKA driven to ≈ .1) and
+still a linear probe reads provenance from h at .4. Minimising a batch-level
+dependence statistic does not prevent decodability. A gradient-reversal
+adversary was prototyped and collapsed (the adversary reached CE ≈ 0, both
+gradients vanished); the confusion-loss variant did not reach chance either
+in a synthetic check. Not pursued further.
+
+## Decision (Yarin, 2026-09-02 evening) — this line is closed
+
+The method is augmentation invariance: one document, several *text* views
+(clean / names masked / cropped / formulas stripped) must embed the same.
+That is what was trained and what won (E-MIN v2). "Remove find-spot from the
+head" was an *interpretation* question about the result, wrongly turned into a
+training objective. It stays in the paper as a stated limitation — the head's
+gain on LLM features co-varies with find-spot information — and as a failed side
+experiment, not as part of the method. If the idea is ever revisited, the
+SSL-consistent form is one more text view (`mask_place`: toponyms masked like
+`mask_ruler`), not a penalty.
