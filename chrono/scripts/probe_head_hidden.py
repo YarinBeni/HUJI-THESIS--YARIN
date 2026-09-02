@@ -57,6 +57,10 @@ def main(argv=None):
                            [f"{d}::{lg}::orig" for d in ids]) for lg in langs], axis=0).astype(np.float32)
     Z, z = concept_matrix(corpus, args.concept)
     vc = pd.Series(z).value_counts(); freq = set(vc[vc >= 10].index)
+    # integer labels: sklearn's MLPClassifier early-stopping scorer calls
+    # np.isnan on predictions and chokes on string classes (job 018)
+    from sklearn.preprocessing import LabelEncoder
+    zi = LabelEncoder().fit(z).transform(z)
     rows = []
     for k, fold in enumerate(gkf["folds"]):
         tr = corpus["doc_id"].isin(set(fold["train"])).to_numpy()
@@ -70,12 +74,12 @@ def main(argv=None):
         rows_tr = np.flatnonzero(tr & np.isin(z, list(freq)))
         rng = np.random.default_rng(k); perm = rng.permutation(rows_tr); cut = int(0.8 * len(perm))
         a, b = perm[:cut], perm[cut:]
-        if len(set(z[a])) < 2 or not set(z[b]) <= set(z[a]):
+        if len(set(zi[a])) < 2 or not set(zi[b]) <= set(zi[a]):
             continue
         for name, F in (("X raw", X), ("X erased", Xe), ("head hidden h(X erased)", H)):
             for kind in ("linear", "mlp"):
                 rows.append(dict(fold=k, features=name, probe=kind,
-                                 bal_acc=probe(F[a], z[a], F[b], z[b], kind)))
+                                 bal_acc=probe(F[a], zi[a], F[b], zi[b], kind)))
         print(f"[probe] fold {k} done", flush=True)
     tab = pd.DataFrame(rows)
     agg = tab.groupby(["features", "probe"], sort=False)["bal_acc"].agg(["mean", "std"]).reset_index()
