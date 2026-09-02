@@ -464,6 +464,9 @@ def main(argv=None):
     ap.add_argument("--text-col", default="text")
     ap.add_argument("--id-prefix", default="",
                     help="prefix for store ids in --table mode (e.g. 'ssl::')")
+    ap.add_argument("--part", default=None,
+                    help="'k/n': embed only the k-th of n equal row slices of the sorted "
+                         "table (array-job sharding; shards are disjoint, the store merges)")
     ap.add_argument("--limit", type=int, default=0,
                     help="first N texts only (smoke)")
     ap.add_argument("--overwrite", action="store_true")
@@ -487,6 +490,11 @@ def main(argv=None):
     else:
         table = gather_texts(pd.read_parquet(args.views),
                              pd.read_parquet(args.corpus))
+    if args.part:
+        k, n = (int(x) for x in args.part.split("/"))
+        bounds = np.linspace(0, len(table), n + 1).astype(int)
+        table = table.iloc[bounds[k]:bounds[k + 1]].reset_index(drop=True)
+        print(f"[extract] part {k}/{n}: rows {bounds[k]}..{bounds[k + 1]}", flush=True)
     if args.limit:
         table = table.iloc[:args.limit]
     spec = resolve_spec(args.model)
