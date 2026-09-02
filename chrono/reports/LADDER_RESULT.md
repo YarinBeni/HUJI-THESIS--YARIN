@@ -1,4 +1,4 @@
-# P1 — single-variable erasure ladder (frozen-probe level) — 2026-09-02
+# P1 — single-variable erasure ladder (frozen-probe level) — 2026-09-02 · all 6 arms
 
 **Question.** Three encoders and two text tiers agree that masking the ruler's
 *name* does not reduce dating accuracy. So what does the representation date
@@ -11,17 +11,17 @@ protocol, and compare with the unerased probe. Positive control `year10`
 
 | erased | cunei400m akk | cunei400m eng | Llama-2-7B akk | Llama-2-7B eng | Qwen3-8B akk | Qwen3-8B eng |
 |---|---|---|---|---|---|---|
-| **none** | .447 | .417 | .356 | .360 | .259 | *pending* |
-| **provenance** (21) | .142 (−.30) | .144 (−.27) | **−.001 (−.36)** | .078 (−.28) | **−.198 (−.46)** | |
-| period (6) | .246 (−.20) | .217 (−.20) | .219 (−.14) | .249 (−.11) | .160 (−.10) | |
-| sub-genre / object (21) | .294 (−.15) | .301 (−.12) | .277 (−.08) | .223 (−.14) | .214 (−.04) | |
-| length (6) | .423 (−.02) | .357 (−.06) | .255 (−.10) | .282 (−.08) | .193 (−.07) | |
-| ruler (40) | .039 (−.41) | .000 (−.42) | −.042 (−.40) | −.045 (−.41) | −.023 (−.28) | |
-| year10 (7) — control | −.003 | −.177 | .044 | −.177 | .073 | |
+| **none** | .447 | .417 | .356 | .360 | .259 | .395 |
+| **provenance** (21) | .142 (−.30) | .144 (−.27) | **−.001 (−.36)** | .078 (−.28) | **−.198 (−.46)** | .019 (−.38) |
+| period (6) | .246 (−.20) | .217 (−.20) | .219 (−.14) | .249 (−.11) | .160 (−.10) | .270 (−.13) |
+| sub-genre / object (21) | .294 (−.15) | .301 (−.12) | .277 (−.08) | .223 (−.14) | .214 (−.04) | .187 (−.21) |
+| length (6) | .423 (−.02) | .357 (−.06) | .255 (−.10) | .282 (−.08) | .193 (−.07) | .328 (−.07) |
+| ruler (40) | .039 (−.41) | .000 (−.42) | −.042 (−.40) | −.045 (−.41) | −.023 (−.28) | −.044 (−.44) |
+| year10 (7) — control | −.003 | −.177 | .044 | −.177 | .073 | −.098 |
 
 Share of the linear dating signal removed by erasing provenance alone:
-cunei 68 % / 65 %, Llama **100 %** / 78 %, Qwen > 100 % (the residual is
-*anti*-correlated with time).
+cunei 68 % / 65 %, Llama **100 %** / 78 %, Qwen > 100 % / 95 % (on Akkadian the
+residual is *anti*-correlated with time).
 
 ## Reading
 
