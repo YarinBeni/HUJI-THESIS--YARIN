@@ -57,10 +57,14 @@ advantage was a better reading of the same site-coded signal.
 * Erasure is linear (LEACE). A nonlinear head can in principle recover erased
   concepts; the head ladder is the test of that.
 * Provenance one-hot covers the top-20 sites + "other"; 74 distinct sites.
-* Readability-after column withheld: the first pass measured it across the
-  ruler-grouped fold, where block-constant concepts make the number reflect
-  distribution shift, not erasure; the second pass (within-train split,
-  classes ≥ 10 docs, before → after) is running and will replace it.
+* **Erasure check (second pass, within-train split, classes ≥ 10 docs).** cunei400m /
+  Akkadian: balanced accuracy of a linear probe for the erased variable before → after:
+  ruler .74 → .09 (chance .09), period .71 → .23 (chance .33), object type .48 → .04
+  (chance .06), provenance .44 → .05 (chance .07), length .64 → .04 (chance .20),
+  year-decile .73 → .09 (chance .14). Every rung is erased to chance or below. The
+  first pass measured this across the ruler-grouped fold, where block-constant
+  concepts turned it into a distribution-shift number; that column was discarded.
+  Remaining arms' second-pass tables: `tier0/ladder/*_ridge.md` as they land.
 
 Sources: `reports/tier0/ladder/*_ridge.md`, `scripts/erasure_ladder.py`,
 `chrono/eval/erasure.py`.
