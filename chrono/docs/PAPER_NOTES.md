@@ -37,6 +37,10 @@ mc ρ by ≤ .01 in every arm checked (head .609 → .613; ridge .447 → .448).
 Recorded in `reports/sensitivity_dup_century.md`. Revisit only if a later
 claim depends on the last .01.
 
+**Data bug found 2026-09-02 (S0 census):** the unified corpus has 574,744 exact
+duplicate ORACC word rows; the true size is ≈ 1.88 M words / 40,429 texts, not the
+2.45 M quoted in the M.Sc. data notes. Corrected in the SSL corpus build.
+
 ## 3. Method
 
 Frozen encoder → per-view vector (mean pooling, a fixed layer) → **AdapterHead**
