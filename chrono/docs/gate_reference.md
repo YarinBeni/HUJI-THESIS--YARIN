@@ -112,3 +112,26 @@ encoder — same asymmetry the M.Sc. saw between cells B′ and C.
   recorded here; the a-priori cell stays PLS/L8/mean either way.
 * The plan's "0.41" is now doubly unusable: no Akkadian cell reaches it
   under either estimator; only the *English gloss* does.
+
+### Row-L2 rerun (job 33317)
+
+| cell | plain | row-L2 |
+|---|---|---|
+| akk PLS k=2 L8 mean (a-priori) | .126 | **.148** |
+| akk ridge L8 mean | .287 | .296 |
+| eng PLS k=2 L8 mean | .154 | **−.027** |
+| eng ridge L8 mean | .392 | .333 |
+
+Row-L2 does **not** recover the M.Sc.'s .352. The pre-stated explanation
+(outlier dimensions) was wrong, or at most a small part. What is left is the
+estimator: the M.Sc. figure is a mean over the 3 of 5 folds where Spearman
+was defined; the pooled read-out uses all 40 rulers. Under the honest
+estimator a 2-component PLS at the top layer is simply weak and unstable
+(it even flips sign on the gloss), while ridge is steady at .27–.30 (akk)
+across every mid/late layer with nulls at zero.
+
+**Standing decision.** The a-priori cell stays PLS/L8/mean and is recorded
+as *below band*. The gate is nevertheless read as *reproduced*, on the
+ridge rows and the clean nulls, and C3 proceeds on L8/mean features. The
+discrepancy is a finding about the M.Sc. read-out, to be raised with the
+advisors before the thesis text quotes .352 anywhere.

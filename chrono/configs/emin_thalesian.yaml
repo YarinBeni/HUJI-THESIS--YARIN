@@ -1,12 +1,13 @@
 # E-MIN cluster config (plan P3.3): Chrono-Barlow over the cached
-# Thalesian/AKK_300m encoder (P0.4 best layer L11, mean-pooled site),
+# Thalesian/AKK_300m encoder, L8 = top encoder block (the a-priori gate cell;
+# the encoder has 9 hidden states 0..8 — "L11" was a 12-block model's index),
 # full view menus (A2 engine defaults), GroupKFold-by-ruler eval.
 # Seed comes from the sbatch grid: --seed {0..4}, --fold {0..4}.
 run_name: emin_thalesian
 features:
   kind: emb
   model: Thalesian/AKK_300m
-  layer: 11
+  layer: 8
   site: mean
 views:
   menu_a:
