@@ -18,8 +18,10 @@ overwrites in place instead of accumulating orphans.
 """
 from __future__ import annotations
 
+import fcntl
 import os
 import re
+import tempfile
 
 import numpy as np
 import pandas as pd
@@ -44,8 +46,61 @@ class EmbStore:
 
     def manifest(self) -> pd.DataFrame:
         if os.path.exists(self.manifest_path):
-            return pd.read_parquet(self.manifest_path)
+            try:
+                return pd.read_parquet(self.manifest_path)
+            except Exception as exc:  # noqa: BLE001 -- corrupt / half-written
+                # CLUSTER FIX (C1v2 jobs 33341-33344): three extract tasks
+                # wrote one store concurrently; the manifest was rewritten
+                # in place by each put, so readers saw half a file
+                # ("Couldn't deserialize thrift") and all three died. The
+                # shards themselves are self-describing (see put), so a
+                # broken manifest is rebuilt from them instead of being
+                # fatal; the write path is locked + atomic from now on.
+                print(f"[EmbStore] manifest unreadable ({type(exc).__name__}); "
+                      "rebuilding from shards", flush=True)
+                return self.rebuild_manifest()
         return pd.DataFrame(columns=MANIFEST_COLS)
+
+    def rebuild_manifest(self) -> pd.DataFrame:
+        """Reconstruct manifest.parquet from the shard files. Shards written
+        before this fix carry no model/layer/site/text_sha inside and are
+        skipped with a note (they are re-extracted on the next run)."""
+        rows = []
+        skipped = 0
+        for fn in sorted(os.listdir(self.root)):
+            if not fn.endswith(".npz"):
+                continue
+            with np.load(os.path.join(self.root, fn), allow_pickle=False) as z:
+                if "model" not in z.files:
+                    skipped += 1
+                    continue
+                ids = z["ids"].astype(str)
+                rows.append(pd.DataFrame({
+                    "id": ids, "model": str(z["model"]),
+                    "layer": int(z["layer"]), "site": str(z["site"]),
+                    "dim": int(z["dim"]), "shard": fn,
+                    "row": np.arange(len(ids), dtype=np.int64),
+                    "text_sha": z["text_sha"].astype(str)}))
+        m = (pd.concat(rows, ignore_index=True)[MANIFEST_COLS] if rows
+             else pd.DataFrame(columns=MANIFEST_COLS))
+        if skipped:
+            print(f"[EmbStore] rebuild: {skipped} legacy shard(s) without "
+                  "metadata skipped", flush=True)
+        self._write_manifest(m)
+        return m
+
+    def _write_manifest(self, m: pd.DataFrame) -> None:
+        """Atomic: write to a temp file in the same directory, then
+        os.replace, so a concurrent reader never sees a partial file."""
+        fd, tmp = tempfile.mkstemp(prefix=".manifest.", suffix=".parquet",
+                                   dir=self.root)
+        os.close(fd)
+        try:
+            m[MANIFEST_COLS].to_parquet(tmp, index=False)
+            os.replace(tmp, self.manifest_path)
+        finally:
+            if os.path.exists(tmp):
+                os.unlink(tmp)
 
     @staticmethod
     def _shard_name(model, layer, site, ids) -> str:
@@ -67,24 +122,35 @@ class EmbStore:
         if texts is not None and len(texts) != len(ids):
             raise ValueError("texts must align with ids")
         shard = self._shard_name(model, layer, site, ids)
+        text_sha = np.array([common.sha16(str(t)) for t in texts]
+                            if texts is not None else [""] * len(ids), dtype=str)
+        # self-describing shard: the manifest can be rebuilt from shards alone
         np.savez_compressed(os.path.join(self.root, shard),
-                            ids=np.array(ids, dtype=str), X=X)
+                            ids=np.array(ids, dtype=str), X=X,
+                            model=np.array(str(model)), layer=np.array(int(layer)),
+                            site=np.array(str(site)), dim=np.array(int(X.shape[1])),
+                            text_sha=text_sha)
         rows = pd.DataFrame({
             "id": ids, "model": str(model), "layer": int(layer),
             "site": str(site), "dim": int(X.shape[1]), "shard": shard,
             "row": np.arange(len(ids), dtype=np.int64),
-            "text_sha": ([common.sha16(str(t)) for t in texts]
-                         if texts is not None else [""] * len(ids)),
+            "text_sha": text_sha,
         })
-        m = self.manifest()
-        if len(m):
-            stale = ((m["model"] == str(model))
-                     & (m["layer"] == int(layer))
-                     & (m["site"] == str(site))
-                     & m["id"].isin(set(ids)))
-            m = m[~stale]
-        pd.concat([m, rows], ignore_index=True)[MANIFEST_COLS] \
-            .to_parquet(self.manifest_path, index=False)
+        # the manifest read-modify-write is serialised across PROCESSES
+        # (several extract tasks share one store) and written atomically
+        with open(os.path.join(self.root, ".manifest.lock"), "w") as lk:
+            fcntl.flock(lk, fcntl.LOCK_EX)
+            try:
+                m = self.manifest()
+                if len(m):
+                    stale = ((m["model"] == str(model))
+                             & (m["layer"] == int(layer))
+                             & (m["site"] == str(site))
+                             & m["id"].isin(set(ids)))
+                    m = m[~stale]
+                self._write_manifest(pd.concat([m, rows], ignore_index=True))
+            finally:
+                fcntl.flock(lk, fcntl.LOCK_UN)
         return shard
 
     def _select(self, model, layer, site) -> pd.DataFrame:
