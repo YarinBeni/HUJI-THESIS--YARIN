@@ -183,7 +183,9 @@ def main(argv=None):
     unm = all_[all_.period.notna() & all_.period_norm.isna()].period.value_counts().head(8)
     if len(unm):
         L += ["", "unmapped period strings (top): " + "; ".join(f"`{k}`×{v}" for k, v in unm.items())]
-    L += ["", "## splits", "", all_.groupby(["split", "source"]).size().unstack(fill_value=0).to_markdown()]
+    piv = all_.groupby(["split", "source"]).size().unstack(fill_value=0)
+    L += ["", "## splits", "", "| split | " + " | ".join(piv.columns) + " |", "|---|" + "---|" * len(piv.columns)]
+    L += [f"| {idx} | " + " | ".join(str(int(v)) for v in row) + " |" for idx, row in piv.iterrows()]
     open(os.path.join(args.out_dir, "CENSUS.md"), "w").write("\n".join(L) + "\n")
     print("\n".join(L))
 
