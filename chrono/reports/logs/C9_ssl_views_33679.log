@@ -1,0 +1,61 @@
+# job 33679 C9_ssl_views exit=0 Wed Sep  2 23:11:44 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C9_ssl_views_33648_18.out
+=== C9 views qwen3_8b L18 part 6/8 === job 33679 Wed Sep  2 21:59:16 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[extract] part 6/8: rows 263216..307085
+Fetching 15 files:   0%|          | 0/15 [00:00<?, ?it/s]Fetching 15 files: 100%|██████████| 15/15 [00:00<00:00, 5867.80it/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   0%|          | 1/399 [00:00<00:49,  8.01it/s]Loading weights:   1%|          | 2/399 [00:00<01:07,  5.84it/s]Loading weights:   4%|▍         | 17/399 [00:00<00:07, 51.79it/s]Loading weights:  10%|▉         | 38/399 [00:00<00:03, 97.35it/s]Loading weights:  15%|█▍        | 59/399 [00:00<00:02, 129.29it/s]Loading weights:  20%|█▉        | 78/399 [00:00<00:02, 146.01it/s]Loading weights:  24%|██▎       | 94/399 [00:00<00:02, 141.66it/s]Loading weights:  29%|██▉       | 116/399 [00:00<00:01, 157.10it/s]Loading weights:  35%|███▍      | 138/399 [00:01<00:01, 168.76it/s]Loading weights:  40%|███▉      | 159/399 [00:01<00:01, 174.18it/s]Loading weights:  45%|████▌     | 181/399 [00:01<00:01, 178.84it/s]Loading weights:  51%|█████     | 203/399 [00:01<00:01, 184.22it/s]Loading weights:  56%|█████▌    | 224/399 [00:01<00:00, 188.05it/s]Loading weights:  61%|██████    | 243/399 [00:01<00:00, 181.31it/s]Loading weights:  66%|██████▌   | 262/399 [00:01<00:00, 176.15it/s]Loading weights:  70%|███████   | 280/399 [00:01<00:00, 170.32it/s]Loading weights:  75%|███████▌  | 301/399 [00:02<00:00, 174.77it/s]Loading weights:  80%|████████  | 320/399 [00:02<00:00, 177.77it/s]Loading weights:  85%|████████▍ | 338/399 [00:02<00:00, 164.47it/s]Loading weights:  89%|████████▉ | 356/399 [00:02<00:00, 167.77it/s]Loading weights:  93%|█████████▎| 373/399 [00:02<00:00, 165.06it/s]Loading weights:  98%|█████████▊| 391/399 [00:02<00:00, 164.26it/s]Loading weights: 100%|██████████| 399/399 [00:02<00:00, 154.76it/s]
+[extract] Qwen/Qwen3-8B: 43869 texts, layers [18], sites ['mean'], store=chrono.models.store
+[extract] 1024/43869 texts (119.2s)
+[extract] 2048/43869 texts (241.7s)
+[extract] 3072/43869 texts (332.4s)
+[extract] 4096/43869 texts (430.3s)
+[extract] 5120/43869 texts (546.5s)
+[extract] 6144/43869 texts (663.6s)
+[extract] 7168/43869 texts (800.8s)
+[extract] 8192/43869 texts (886.7s)
+[extract] 9216/43869 texts (946.5s)
+[extract] 10240/43869 texts (1043.9s)
+[extract] 11264/43869 texts (1150.5s)
+[extract] 12288/43869 texts (1246.0s)
+[extract] 13312/43869 texts (1354.7s)
+[extract] 14336/43869 texts (1478.0s)
+[extract] 15360/43869 texts (1596.2s)
+[extract] 16384/43869 texts (1683.1s)
+[extract] 17408/43869 texts (1758.7s)
+[extract] 18432/43869 texts (1823.1s)
+[extract] 19456/43869 texts (1891.4s)
+[extract] 20480/43869 texts (1987.9s)
+[extract] 21504/43869 texts (2062.4s)
+[extract] 22528/43869 texts (2155.9s)
+[extract] 23552/43869 texts (2280.1s)
+[extract] 24576/43869 texts (2394.9s)
+[extract] 25600/43869 texts (2503.6s)
+[extract] 26624/43869 texts (2654.9s)
+[extract] 27648/43869 texts (2808.9s)
+[extract] 28672/43869 texts (2939.5s)
+[extract] 29696/43869 texts (3020.9s)
+[extract] 30720/43869 texts (3120.6s)
+[extract] 31744/43869 texts (3242.5s)
+[extract] 32768/43869 texts (3365.0s)
+[extract] 33792/43869 texts (3458.7s)
+[extract] 34816/43869 texts (3608.8s)
+[extract] 35840/43869 texts (3680.7s)
+[extract] 36864/43869 texts (3708.8s)
+[extract] 37888/43869 texts (3739.9s)
+[extract] 38912/43869 texts (3795.0s)
+[extract] 39936/43869 texts (3903.5s)
+[extract] 40960/43869 texts (4045.7s)
+[extract] 41984/43869 texts (4155.2s)
+[extract] 43008/43869 texts (4255.2s)
+[extract] 43869/43869 texts (4326.8s)
+[done] {"n_texts": 43869, "n_embedded": 43869, "n_skipped": 0, "layers": [18], "sites": ["mean"], "elapsed_s": 4326.8, "model": "qwen3_8b", "hfid": "Qwen/Qwen3-8B", "store_root": "chrono/artifacts_ssl/emb_store", "max_tokens": 512, "dtype": "auto"}
+=== Done. Wed Sep  2 23:11:44 UTC 2026 ===
