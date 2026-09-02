@@ -116,7 +116,7 @@ def main(argv=None):
                     a = d[c]; r = a[(a["condition"] == cond) & (a["split"] == split)]
                     if len(r) == 0:
                         cells.append("—")
-                    elif c == "head" and r["count"].iloc[0] > 1:
+                    elif r["count"].iloc[0] > 1:      # any run with a seed spread
                         cells.append(f"{r['mean'].iloc[0]:+.3f} ± {r['std'].iloc[0]:.3f}")
                     else:
                         cells.append(f"{r['mean'].iloc[0]:+.3f}")
