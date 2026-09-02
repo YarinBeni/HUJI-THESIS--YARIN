@@ -1,0 +1,27 @@
+========================================================================
+P0.4 BASELINE GATE
+========================================================================
+probe  layer site    gkf pooled         mc rho    doc placebo     BLOCK null
+ridge      8 mean        +0.388   +0.399±0.058   -0.003±0.075   +0.011±0.179
+pls        8 mean        +0.278   +0.284±0.058   -0.003±0.076   -0.002±0.153
+ridge      8 last        +0.173   +0.158±0.065   +0.005±0.079   -0.005±0.095
+pls        8 last        +0.173   +0.118±0.066   +0.002±0.081   -0.001±0.086
+ridge     16 mean        +0.313   +0.356±0.056   +0.003±0.079   +0.008±0.165
+pls       16 mean        +0.247   +0.221±0.059   -0.000±0.078   -0.008±0.132
+ridge     16 last        +0.220   +0.194±0.066   -0.003±0.079   -0.005±0.111
+pls       16 last        +0.175   +0.098±0.070   -0.006±0.079   -0.002±0.086
+ridge     24 mean        +0.271   +0.344±0.058   +0.002±0.078   +0.006±0.164
+pls       24 mean        +0.201   +0.188±0.062   -0.003±0.081   -0.022±0.138
+ridge     24 last        +0.257   +0.279±0.061   -0.004±0.079   -0.012±0.132
+pls       24 last        +0.195   +0.143±0.065   -0.008±0.077   -0.005±0.094
+ridge     32 mean        +0.315   +0.359±0.059   +0.004±0.078   +0.008±0.172
+pls       32 mean        +0.185   +0.174±0.061   -0.004±0.082   -0.016±0.134
+ridge     32 last        +0.265   +0.296±0.057   -0.005±0.077   -0.006±0.144
+pls       32 last        +0.214   +0.181±0.062   -0.006±0.072   -0.009±0.108
+------------------------------------------------------------------------
+VERDICT CELL (a priori: pls L16 mean) — mc rho +0.221
+best-of-16 cell (SELECTION-INFLATED, context only): ridge L8 mean mc rho +0.399
+block null (ruler-level, the honest reference): -0.004±0.134 — a max over 16 cells of pure ruler-block noise reaches ~0.72, so never read the best cell as a result.
+gate reference: UNPINNED — re-pin from v_1/src/phase2/pairs/RESULTS.md (plan addendum): the legacy 0.41±0.02 used the 1,202/41-ruler frame, the eligible corpus is now 1,187/40.
+verdict: UNPINNED (comparison only, no pass/fail)
+====================================================================
