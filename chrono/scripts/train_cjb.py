@@ -49,7 +49,7 @@ from chrono.models.heads import AdapterHead, EmaTwin     # noqa: E402
 from chrono.models.store import EmbStore                 # noqa: E402
 
 try:
-    from chrono.losses import (bt_loss, hsic_loss, make_order_pairs,  # noqa: E402
+    from chrono.losses import (bt_loss, cka_loss, hsic_loss, make_order_pairs,  # noqa: E402
                                soft_spearman, softrank_loss,
                                variance_loss)
     LOSS_LIB = "chrono.losses"
@@ -65,7 +65,7 @@ except ImportError as _e:
     print(f"WARNING: running on FALLBACK loss shims ({_e})",
           file=sys.stderr)
     from chrono.models._fallback_losses import (         # noqa: E402
-        bt_loss, hsic_loss, make_order_pairs, soft_spearman, softrank_loss,
+        bt_loss, cka_loss, hsic_loss, make_order_pairs, soft_spearman, softrank_loss,
         variance_loss)
     LOSS_LIB = "chrono.models._fallback_losses"
 
@@ -400,7 +400,10 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
         pos = {d: i for i, d in enumerate(corpus_df["doc_id"].astype(str))}
         Zc_all = torch.as_tensor(np.stack([Zfull[pos[str(d)]] for d in doc_ids]),
                                  dtype=torch.float32)
-        print(f"[hsic] lambda={lam_hsic} confound='{cname}' k={Zc_all.shape[1]}", flush=True)
+        dep_fn = cka_loss if lcfg.get("dep_measure", "hsic") == "cka" else hsic_loss
+        print(f"[hsic] lambda={lam_hsic} measure={lcfg.get('dep_measure', 'hsic')} "
+              f"confound='{cname}' k={Zc_all.shape[1]}", flush=True)
+    dep_curve = []
 
     loss_curve = []
     n_same = n_pairs = 0
@@ -442,7 +445,9 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
                     temp=float(lcfg["temp"]))
             loss = loss + float(lcfg["lambda_var"]) * variance_loss(s_a)
             if Zc_all is not None:
-                loss = loss + lam_hsic * hsic_loss(h_a, Zc_all[kept])
+                dep = dep_fn(h_a, Zc_all[kept])
+                loss = loss + lam_hsic * dep
+                dep_curve.append(float(dep.detach()))
             opt.zero_grad()
             loss.backward()
             opt.step()
@@ -464,7 +469,8 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
         torch.tensor(s_train), torch.tensor(t_train),
         temp=METRIC_TEMP))
     rho_hard = _safe_spearman(s_train, t_train)
-    metrics = {"train_soft_spearman": rho_soft,
+    metrics = {
+        "final_dep": (float(np.mean(dep_curve[-50:])) if dep_curve else float("nan")),"train_soft_spearman": rho_soft,
                "train_spearman": rho_hard,
                "final_loss": loss_curve[-1],
                # realised rate of view pairs whose two branches ended up

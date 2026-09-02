@@ -106,6 +106,13 @@ the retained .36 survives. → Next ingredient: HSIC/adversarial deconfounding
 against provenance in the objective; this probe is its acceptance test.
 `reports/HEAD_LADDER_RESULT.md` (last section).
 
+### P2 step 1 — HSIC deconfounding (C6) — 2026-09-02 (**null result**)
+λ·HSIC(h, provenance) with λ ∈ {1, 10} changed nothing: provenance from h stays
+.43 / .41 / .28 (raw .44 / .42 / .41), ρ unchanged; λ = 1 ≡ λ = 10. Scale problem:
+raw RBF-HSIC on a 256-row batch is O(10⁻²) against an O(5) Barlow term. → C6b:
+kernel CKA (scale-free, [0, 1]) with λ ∈ {1, 5}, penalty value logged per run.
+`reports/HSIC_RESULT.md`.
+
 ### Gate reference (P0.4), re-pinned on tier0
 cuneiformBase-400m L12 mean, Akkadian: ridge mc .447 ± .060, PLS k=2 .431 ±
 .056 (single cross-fit, C3v2 gate). The M.Sc.'s .352 (AKK_300m, maximal, PLS)
@@ -127,7 +134,7 @@ advisors before any thesis text quotes it. `docs/gate_reference.md`.
 | 09-02 | nonlinear-recovery probe is the acceptance test for any deconfounding claim | LEACE is linear; the head re-linearised provenance on LLM features |
 
 ## 6. Open / next
-HSIC/adversarial provenance deconfounding in the head objective (P2 first step), judged by the nonlinear-recovery probe; ladder readability re-pass (5 tables pending);
+CKA deconfounding (C6b) judged by the nonlinear-recovery probe; if it fails too, an adversarial provenance classifier; ladder readability re-pass (5 tables pending);
 Assyriologist review of `docs/dating_criteria.md`; P2 factorisation; P3
 held-out-ruler calibration.
 

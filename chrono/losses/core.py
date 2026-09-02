@@ -135,6 +135,20 @@ def hsic_loss(x: torch.Tensor, y: torch.Tensor, *,
     return torch.trace(k @ h @ l @ h) / (n - 1) ** 2
 
 
+def cka_loss(x: torch.Tensor, y: torch.Tensor, *, sigma_x: float | None = None,
+             sigma_y: float | None = None) -> torch.Tensor:
+    """Kernel CKA (Kornblith et al. 2019): HSIC(x,y) / sqrt(HSIC(x,x) HSIC(y,y)),
+    a scale-free dependence measure in [0, 1]. Added after C6 (2026-09-02):
+    raw RBF-HSIC on a 256-row batch with a 21-class one-hot is O(1e-2) and its
+    gradient vanished against the O(5) Barlow term -- lambda 1 and 10 gave
+    identical heads. CKA puts the penalty on a fixed scale so lambda means
+    something."""
+    hxy = hsic_loss(x, y, sigma_x=sigma_x, sigma_y=sigma_y)
+    hxx = hsic_loss(x, x, sigma_x=sigma_x, sigma_y=sigma_x)
+    hyy = hsic_loss(y, y, sigma_x=sigma_y, sigma_y=sigma_y)
+    return hxy / torch.sqrt(hxx.clamp_min(1e-12) * hyy.clamp_min(1e-12))
+
+
 def graph_smoothness(s: torch.Tensor, edges: torch.Tensor,
                      weights: torch.Tensor) -> torch.Tensor:
     """Weighted Dirichlet energy sum_e w_e (s_i - s_j)^2 over an edge
