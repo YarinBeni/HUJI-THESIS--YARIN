@@ -63,3 +63,7 @@ v_1/src/chronorank/autopsy/results/probes/*__draw[0-9][0-9][0-9].json
 # would otherwise swallow them.
 !chrono/reports/logs/
 !chrono/reports/logs/**
+
+# runner outputs must reach the repo; *.out above would swallow them
+!chrono/agent/outbox/
+!chrono/agent/outbox/**
