@@ -25,37 +25,11 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from chrono import common                                       # noqa: E402
 from chrono.models.store import EmbStore                        # noqa: E402
-from chrono.eval.erasure import LeaceEraser, z_readability      # noqa: E402
+from chrono.eval.erasure import (LeaceEraser, z_readability,      # noqa: E402
+                                 CONCEPTS, concept_matrix)
 from chrono.eval.protocol import mc_balanced_rho, pooled_rho    # noqa: E402
 from run_baseline_gate import fit_predict                       # noqa: E402
 
-CONCEPTS = ["none", "ruler", "period", "subgenre", "provenance", "length", "year10"]
-
-
-def concept_matrix(c: pd.DataFrame, concept: str):
-    """(Z one-hot float64 [n,k], z categorical labels) for the corpus rows."""
-    if concept == "none":
-        return None, None
-    if concept == "ruler":
-        z = c["ruler"].astype(str)
-    elif concept == "period":
-        z = c["period"].fillna("unk").astype(str)
-    elif concept == "subgenre":
-        sg = c["sub_genre"].fillna("unk").astype(str); top = sg.value_counts().head(20).index
-        z = sg.where(sg.isin(top), "other")
-    elif concept == "provenance":
-        pv = c["provenance"].fillna("unk").astype(str); top = pv.value_counts().head(20).index
-        z = pv.where(pv.isin(top), "other")
-    elif concept == "length":
-        z = pd.qcut(np.log1p(c["n_words"].astype(float)), 5, duplicates="drop").astype(str)
-    elif concept == "year10":
-        z = pd.qcut(c["t"].astype(float), 10, duplicates="drop").astype(str)
-    else:
-        raise ValueError(concept)
-    Z = pd.get_dummies(z, dtype=float).to_numpy()
-    if concept == "length":   # basis expansion as in phase 2: log length + bins
-        Z = np.hstack([np.log1p(c["n_words"].astype(float)).to_numpy()[:, None], Z])
-    return Z.astype(np.float64), z.to_numpy()
 
 
 def main(argv=None):

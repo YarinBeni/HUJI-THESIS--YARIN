@@ -12,8 +12,9 @@ TRAIN fold and applied to train and test (never fitted on held-out docs).
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 
-__all__ = ["LeaceEraser", "z_readability"]
+__all__ = ["LeaceEraser", "z_readability", "CONCEPTS", "concept_matrix"]
 
 
 class LeaceEraser:
@@ -60,3 +61,32 @@ def z_readability(Xtr, ztr, Xte, zte, seed: int = 0) -> float:
     clf.fit(sc.transform(Xtr), ztr)
     pred = clf.predict(sc.transform(Xte))
     return float(balanced_accuracy_score(zte, pred))
+
+
+CONCEPTS = ["none", "ruler", "period", "subgenre", "provenance", "length", "year10"]
+
+
+def concept_matrix(c: pd.DataFrame, concept: str):
+    """(Z one-hot float64 [n,k], z categorical labels) for the corpus rows."""
+    if concept == "none":
+        return None, None
+    if concept == "ruler":
+        z = c["ruler"].astype(str)
+    elif concept == "period":
+        z = c["period"].fillna("unk").astype(str)
+    elif concept == "subgenre":
+        sg = c["sub_genre"].fillna("unk").astype(str); top = sg.value_counts().head(20).index
+        z = sg.where(sg.isin(top), "other")
+    elif concept == "provenance":
+        pv = c["provenance"].fillna("unk").astype(str); top = pv.value_counts().head(20).index
+        z = pv.where(pv.isin(top), "other")
+    elif concept == "length":
+        z = pd.qcut(np.log1p(c["n_words"].astype(float)), 5, duplicates="drop").astype(str)
+    elif concept == "year10":
+        z = pd.qcut(c["t"].astype(float), 10, duplicates="drop").astype(str)
+    else:
+        raise ValueError(concept)
+    Z = pd.get_dummies(z, dtype=float).to_numpy()
+    if concept == "length":   # basis expansion as in phase 2: log length + bins
+        Z = np.hstack([np.log1p(c["n_words"].astype(float)).to_numpy()[:, None], Z])
+    return Z.astype(np.float64), z.to_numpy()

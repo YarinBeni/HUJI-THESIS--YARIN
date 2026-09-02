@@ -302,6 +302,30 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
                        fit_doc_ids=(doc_ids if (split is not None
                                                 and fold is not None)
                                     else None))
+    # P1 (head ladder): optionally LEACE-erase one metadata concept from the
+    # frozen features BEFORE the head sees them. The eraser is fitted on the
+    # TRAIN docs' orig views only (one row per doc per language) and applied
+    # to every view row, so the head is trained and read out on features
+    # from which the concept is linearly unrecoverable. Answers whether the
+    # head's advantage over the frozen probe survives losing e.g. provenance.
+    erase = cfg["features"].get("erase")
+    if erase and erase != "none":
+        from chrono.eval.erasure import LeaceEraser, concept_matrix
+        cdf = corpus_df.set_index("doc_id")
+        Zdoc, _ = concept_matrix(cdf.loc[list(cdf.index)].reset_index(), erase)
+        zrow = {d: Zdoc[i] for i, d in enumerate(cdf.index)}
+        fit_rows = np.flatnonzero(views_df["doc_id"].isin(set(doc_ids)).to_numpy()
+                                  & (views_df["augs"].fillna("") == "").to_numpy())
+        # one row per (doc, lang): orig views repeat across view seeds
+        _, first = np.unique(views_df.loc[fit_rows, ["doc_id", "lang"]].astype(str)
+                             .agg("|".join, axis=1).to_numpy(), return_index=True)
+        fit_rows = fit_rows[np.sort(first)]
+        Zfit = np.stack([zrow[d] for d in views_df["doc_id"].to_numpy()[fit_rows]])
+        eraser = LeaceEraser().fit(X[fit_rows], Zfit)
+        X = eraser(X).astype(np.float32)
+        print(f"[erase] LEACE '{erase}' (k={Zfit.shape[1]}, rank {eraser.rank}) "
+              f"fitted on {len(fit_rows)} train orig rows, applied to {len(X)} views",
+              flush=True)
     idx_a = _view_index(views_df, doc_ids, cfg["views"]["menu_a"],
                         cfg["views"]["seeds"], by_lang=True)
     idx_b = _view_index(views_df, doc_ids, cfg["views"]["menu_b"],

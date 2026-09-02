@@ -77,6 +77,14 @@ mixed arm). Head *loses* on the gloss with the Akkadian-only encoder (.39 vs
 **Masking the ruler's name does not reduce dating accuracy for any method**
 (often +.01–.05). The representation does not date by the name. → P1 ladder.
 
+### P1 — erasure ladder, frozen probe (C4) — 2026-09-02
+Erasing **provenance** alone removes 65–100 % of the linear dating signal
+(cunei .45 → .14; Llama .36 → .00; Qwen .26 → −.20). Period −.10…−.20, object
+type −.04…−.15, length ≤ .10. Controls (ruler, year-decile) crush the signal.
+The Akkadian-native encoder keeps a site-independent residue (.14); the LLMs
+keep none. **The representation dates mainly by find-spot, then period — not
+by the ruler's name.** `reports/LADDER_RESULT.md`. Head ladder (C5) running.
+
 ### Gate reference (P0.4), re-pinned on tier0
 cuneiformBase-400m L12 mean, Akkadian: ridge mc .447 ± .060, PLS k=2 .431 ±
 .056 (single cross-fit, C3v2 gate). The M.Sc.'s .352 (AKK_300m, maximal, PLS)
@@ -93,6 +101,8 @@ advisors before any thesis text quotes it. `docs/gate_reference.md`.
 | 09-02 | encoders: cunei400m, Llama-2-7B, Qwen3-8B | AKK_300m too weak; these were the M.Sc.'s best |
 | 09-02 | keep duplicates + century docs | sensitivity ≤ .01 |
 | 09-02 | per-language read-out `<cond>@<lang>` | gloss vs transliteration was hidden by pooling |
+| 09-02 | ladder readability check within train, classes ≥10 docs | across ruler folds the number measured distribution shift (random features read .60) |
+| 09-02 | head ladder on LEACE-erased features (C5) | the only way to tell 'head reads site better' from 'head finds non-site chronology' |
 
 ## 6. Open / next
 P1 erasure ladder (C4, running); baseline seed spread (C3v2c, running);
