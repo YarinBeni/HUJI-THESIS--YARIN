@@ -148,7 +148,10 @@ def main(argv=None):
     all_ = all_.drop_duplicates("hash", keep="first")
     cross = dup_groups[dup_groups.str.contains(",")]
     n_dedup = n_before - len(all_)
-    all_ = all_[all_["n_words"] >= args.min_words].copy()
+    # the dated benchmark must stay complete: every dated ORCC document is
+    # kept whatever its length (the 40-king protocol is evaluated on all of them)
+    keep = (all_["n_words"] >= args.min_words) | all_["year"].notna()
+    all_ = all_[keep].copy()
 
     # tablet-level splits stratified by source
     rng = np.random.default_rng(args.seed)

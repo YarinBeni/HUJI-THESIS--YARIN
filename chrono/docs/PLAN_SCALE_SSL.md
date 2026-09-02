@@ -121,7 +121,18 @@ its log; read-outs use the SLA §7 protocol.
   win must come from pretrained encoders + better objectives, and we say so.
 * **Duplicates across sources** → content-hash dedupe before splitting.
 
-## 8. First concrete step (S0, ≈ 1 day)
+## 8. S0 done (2026-09-02) — census
+
+`make_ssl_corpus.py` → **35,379 texts / 2.39 M words** after dropping 574,744 duplicated
+ORACC word rows (DATA-3), 1,012 content duplicates (47 cross-source) and texts < 8 words.
+Period labels on 9,785 texts: Neo-Assyrian 6,239 · Old Babylonian 1,734 · Late Babylonian
+1,084 · Hellenistic 401 · Neo-Babylonian 221 · Middle Babylonian 80 · rest < 20. Period is
+correlated with source (OB ≈ Archibab, LB ≈ lbl letters), hence the within-source and
+held-out-source probes. The dated 40-king benchmark stays on `artifacts_tier0` (17 dated
+exemplar duplicates collapse in the SSL table); `corpus_all`'s `dated` split only marks
+those texts as excluded from SSL evaluation splits. Census: `reports/ssl/CENSUS.md`.
+
+## 8b. Original S0 note
 
 `chrono/scripts/make_ssl_corpus.py`: read the unified corpus + letters + SEAL +
 ORCC, rebuild texts from sign tokens per fragment, hash-dedupe, filter ≥ 8 words,

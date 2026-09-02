@@ -457,6 +457,13 @@ def main(argv=None):
     ap.add_argument("--shard-size", type=int, default=1024)
     ap.add_argument("--dtype", default="auto",
                     choices=["auto", "float32", "bfloat16", "float16"])
+    ap.add_argument("--table", default=None,
+                    help="S1/SSL mode: a plain parquet with --id-col/--text-col instead "
+                         "of views+corpus (e.g. chrono/artifacts_ssl/corpus_all.parquet)")
+    ap.add_argument("--id-col", default="fragment_id")
+    ap.add_argument("--text-col", default="text")
+    ap.add_argument("--id-prefix", default="",
+                    help="prefix for store ids in --table mode (e.g. 'ssl::')")
     ap.add_argument("--limit", type=int, default=0,
                     help="first N texts only (smoke)")
     ap.add_argument("--overwrite", action="store_true")
@@ -469,8 +476,17 @@ def main(argv=None):
         return
 
     hfid = resolve_hfid(args.model)
-    table = gather_texts(pd.read_parquet(args.views),
-                         pd.read_parquet(args.corpus))
+    if args.table:
+        t = pd.read_parquet(args.table, columns=[args.id_col, args.text_col])
+        t = t[t[args.text_col].fillna("").astype(str).str.strip() != ""]
+        table = pd.DataFrame({"id": args.id_prefix + t[args.id_col].astype(str),
+                              "text": t[args.text_col].astype(str)})
+        if table["id"].duplicated().any():
+            raise ValueError("duplicate ids in --table")
+        table = table.sort_values("id").reset_index(drop=True)
+    else:
+        table = gather_texts(pd.read_parquet(args.views),
+                             pd.read_parquet(args.corpus))
     if args.limit:
         table = table.iloc[:args.limit]
     spec = resolve_spec(args.model)
