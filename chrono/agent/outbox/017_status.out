@@ -1,0 +1,61 @@
+# 017_status  host=g0381  start=Wed Sep  2 14:50:36 UTC 2026  timeout=1800s
+# HEAD=65618d06
+# ---------------------------------------------------------
+## squeue
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           33523_1 voltagepa C5b_head  yarin.b  R       2:26      1 g0376
+           33523_2 voltagepa C5b_head  yarin.b  R       2:26      1 g0376
+           33523_0 voltagepa C5b_head  yarin.b  R       2:27      1 g0377
+           33445_0 voltagepa C4_ladde  yarin.b  R      30:00      1 g0375
+           33445_1 voltagepa C4_ladde  yarin.b  R      30:00      1 g0375
+           33445_2 voltagepa C4_ladde  yarin.b  R      30:00      1 g0381
+           33445_3 voltagepa C4_ladde  yarin.b  R      30:00      1 g0381
+           33445_4 voltagepa C4_ladde  yarin.b  R      30:00      1 g0378
+           33445_5 voltagepa C4_ladde  yarin.b  R      30:00      1 g0378
+             33315 voltagepa AGENT_ru  yarin.b  R   10:44:28      1 g0381
+## recent (6h)
+33475_29           C5_headlad  COMPLETED   00:05:34      0:0 
+33475_29.ba+            batch  COMPLETED   00:05:34      0:0 
+33475_29.ex+           extern  COMPLETED   00:05:34      0:0 
+33475_30           C5_headlad  COMPLETED   00:04:58      0:0 
+33475_30.ba+            batch  COMPLETED   00:04:58      0:0 
+33475_30.ex+           extern  COMPLETED   00:04:58      0:0 
+33475_31           C5_headlad  COMPLETED   00:04:33      0:0 
+33475_31.ba+            batch  COMPLETED   00:04:33      0:0 
+33475_31.ex+           extern  COMPLETED   00:04:33      0:0 
+33475_32           C5_headlad  COMPLETED   00:04:31      0:0 
+33475_32.ba+            batch  COMPLETED   00:04:31      0:0 
+33475_32.ex+           extern  COMPLETED   00:04:31      0:0 
+33475_33           C5_headlad  COMPLETED   00:04:29      0:0 
+33475_33.ba+            batch  COMPLETED   00:04:29      0:0 
+33475_33.ex+           extern  COMPLETED   00:04:29      0:0 
+33475_34           C5_headlad  COMPLETED   00:04:27      0:0 
+33475_34.ba+            batch  COMPLETED   00:04:27      0:0 
+33475_34.ex+           extern  COMPLETED   00:04:27      0:0 
+33475_35           C5_headlad  COMPLETED   00:05:42      0:0 
+33475_35.ba+            batch  COMPLETED   00:05:42      0:0 
+33475_35.ex+           extern  COMPLETED   00:05:42      0:0 
+33523_0             C5b_heads    RUNNING   00:02:27      0:0 
+33523_0.bat+            batch    RUNNING   00:02:27      0:0 
+33523_0.ext+           extern    RUNNING   00:02:27      0:0 
+33523_1             C5b_heads    RUNNING   00:02:26      0:0 
+33523_1.bat+            batch    RUNNING   00:02:26      0:0 
+33523_1.ext+           extern    RUNNING   00:02:26      0:0 
+33523_2             C5b_heads    RUNNING   00:02:26      0:0 
+33523_2.bat+            batch    RUNNING   00:02:26      0:0 
+33523_2.ext+           extern    RUNNING   00:02:26      0:0 
+## ladder dir
+total 6
+drwx------ 2 yarin.b pwuser 4096 Sep  2 14:20 .
+drwx------ 2 yarin.b pwuser 4096 Sep  2 14:48 ..
+-rw------- 1 yarin.b pwuser  545 Sep  2 13:04 emin2_cunei400m_t0_akk_ridge.md
+-rw------- 1 yarin.b pwuser  545 Sep  2 13:12 emin2_cunei400m_t0_eng_ridge.md
+-rw------- 1 yarin.b pwuser  543 Sep  2 13:58 emin2_llama2_7b_t0_akk_ridge.md
+-rw------- 1 yarin.b pwuser  543 Sep  2 14:07 emin2_llama2_7b_t0_eng_ridge.md
+-rw------- 1 yarin.b pwuser  530 Sep  2 14:11 emin2_qwen3_8b_t0_akk_ridge.md
+-rw------- 1 yarin.b pwuser  530 Sep  2 14:20 emin2_qwen3_8b_t0_eng_ridge.md
+drwx------ 2 yarin.b pwuser 4096 Sep  2 14:48 head_scores
+drwx------ 2 yarin.b pwuser 4096 Sep  2 14:20 scores
+## heads
+# ---------------------------------------------------------
+# exit=0  end=Wed Sep  2 14:50:36 UTC 2026
