@@ -284,6 +284,19 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
     if split is not None and fold is not None:
         keep = set(split["folds"][fold]["train"])
         train_docs = docs[docs["doc_id"].isin(keep)]
+    frac = float(cfg.get("train", {}).get("label_frac", 1.0))
+    if frac < 1.0 and split is not None and fold is not None:
+        # (S3) fewer dated labels: keep a deterministic random fraction of the
+        # fold's TRAIN docs (test docs untouched), stratified by ruler so no
+        # ruler vanishes entirely
+        picked = train_docs.groupby("ruler", group_keys=False).sample(frac=frac, random_state=seed)
+        lost = set(train_docs["ruler"]) - set(picked["ruler"])        # rulers rounded to zero docs
+        if lost:
+            picked = pd.concat([picked, train_docs[train_docs["ruler"].isin(lost)]
+                                .groupby("ruler", group_keys=False).head(1)])
+        print(f"[labels] label_frac={frac}: {len(picked)}/{len(train_docs)} train docs kept "
+              f"({train_docs.ruler.nunique()} rulers, all retained)", flush=True)
+        train_docs = picked
     train_docs = train_docs.reset_index(drop=True)
     doc_ids = train_docs["doc_id"].tolist()
     n = len(doc_ids)
@@ -378,7 +391,15 @@ def train(cfg: dict, corpus_df: pd.DataFrame, views_df: pd.DataFrame, *,
     pairs, margins = draw_pairs(0)
 
     lcfg, tcfg = cfg["loss"], cfg["train"]
-    head = AdapterHead(d_in=X.shape[1])
+    hcfg = cfg.get("head", {})
+    head = AdapterHead(d_in=X.shape[1], d_hidden=int(hcfg.get("d_hidden", 512)),
+                       d_proj=int(hcfg.get("d_proj", 128)))
+    # (S3) initialise from an SSL-pretrained adapter of the same shape
+    init = cfg.get("init_head")
+    if init:
+        sd = torch.load(init, map_location="cpu")
+        missing, unexpected = head.load_state_dict(sd, strict=False)
+        print(f"[init] loaded {init}: missing {list(missing)} unexpected {list(unexpected)}", flush=True)
     twin = EmaTwin(head, momentum=0.996)
     opt = torch.optim.Adam(head.parameters(), lr=float(tcfg["lr"]))
     batch = int(tcfg["batch"])
