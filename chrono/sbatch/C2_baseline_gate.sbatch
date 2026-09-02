@@ -28,6 +28,10 @@ mkdir -p chrono/sbatch/logs
 
 ART=chrono/artifacts
 GATE_ARGS=()
+TAG=""
+if [ -n "${ROW_L2:-}" ]; then
+    GATE_ARGS+=(--row-l2); TAG="_rowl2"
+fi
 if [ -n "${GATE_RHO:-}" ]; then
     GATE_ARGS+=(--gate-rho "${GATE_RHO}" --gate-tol "${GATE_TOL:-0.02}")
 fi
@@ -36,7 +40,7 @@ for LANG_ in akk eng; do
     python -u chrono/scripts/run_baseline_gate.py \
         --model Thalesian/AKK_300m --layers 0-8 --sites mean last \
         --lang "${LANG_}" --probes ridge pls \
-        --report-out "${ART}/baseline_gate_report_${LANG_}.txt" \
+        --report-out "${ART}/baseline_gate_report_${LANG_}${TAG}.txt" \
         ${GATE_ARGS[@]+"${GATE_ARGS[@]}"} \
         || { echo "FAILED baseline gate (${LANG_})"; exit 1; }
 done

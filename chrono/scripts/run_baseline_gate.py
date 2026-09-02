@@ -141,10 +141,24 @@ def _git_sha() -> str:
     return "unknown"
 
 
+ROW_L2 = False   # set from --row-l2; module-level so cross_fit needn't change
+
+
+def _row_l2(X):
+    """Row-wise L2 normalisation, the M.Sc. probe's first step
+    (v_1/src/linear_probing/pls_utils.l2_normalize). C2 job 33316
+    without it: PLS k=2 at L8 read .126 (akk) where the M.Sc. read
+    .352 — T5's final layer norm leaves a few outlier dimensions that a
+    2-component PLS latches onto; ridge, being shrunk, did not care."""
+    return X / np.maximum(np.linalg.norm(X, axis=1, keepdims=True), 1e-10)
+
+
 def fit_predict(probe: str, Xtr, ytr, Xte, n_components: int):
-    """Standardize on train, fit, return (test scores, mean train
-    prediction). Lateness = larger predicted t = later; SLA section 1
-    comes for free from y = t."""
+    """(Optionally row-L2, then) standardize on train, fit, return (test
+    scores, mean train prediction). Lateness = larger predicted t =
+    later; SLA section 1 comes for free from y = t."""
+    if ROW_L2:
+        Xtr, Xte = _row_l2(Xtr), _row_l2(Xte)
     sc = StandardScaler().fit(Xtr)
     Xtr, Xte = sc.transform(Xtr), sc.transform(Xte)
     if probe == "ridge":
@@ -331,6 +345,8 @@ def main(argv=None):
     # representation. Pinned from the prior work, before seeing any
     # chrono number. Source: v_1/src/linear_probing/results/
     # orcc__probe_pls/pls_results_thalesian_akk300m.json
+    ap.add_argument("--row-l2", action="store_true",
+                    help="row-wise L2 normalise features first (the M.Sc. probe convention)")
     ap.add_argument("--pls-components", type=int, default=2)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--gate-rho", type=float, default=None,
@@ -340,6 +356,9 @@ def main(argv=None):
         common.ART, "baseline_gate_report.txt"))
     args = ap.parse_args(argv)
 
+    global ROW_L2
+    ROW_L2 = bool(args.row_l2)
+    tag = "::rowl2" if ROW_L2 else ""
     corpus = pd.read_parquet(args.corpus)
     with open(os.path.join(args.splits_dir, "gkf_ruler.json")) as f:
         gkf = json.load(f)
@@ -385,10 +404,10 @@ def main(argv=None):
                                   **r))
                 extra = json.dumps({
                     "model": args.model, "layer": layer, "site": site,
-                    "probe": probe, "lang": args.lang,
+                    "probe": probe, "lang": args.lang, "row_l2": ROW_L2,
                     "eval_lib": EVAL_LIB, "store_lib": STORE_LIB})
                 run_id = (f"p04_gate::{args.model}::L{layer}::{site}"
-                          f"::{probe}")
+                          f"::{probe}{tag}")
                 for split, key in (("gkf_ruler", "gkf_pooled"),
                                    ("mc_balanced", "mc")):
                     v = np.atleast_1d(r[key])

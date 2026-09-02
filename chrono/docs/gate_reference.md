@@ -76,3 +76,39 @@ there is no reason for it to land on .352 exactly.
   get a PASS. If C2 lands in the expected band, the gate is reproduced;
   record the pooled value as the reference for later phases and say that
   is what it is.
+
+## C2 outcome (job 33316, 2026-09-02) — read against the band above
+
+Pooled mc ρ, Akkadian (`akk`), mean pooling:
+
+| layer | ridge | PLS k=2 |
+|---|---|---|
+| L2 | .274 | .124 |
+| L3 | .295 | .103 |
+| L4 | .276 | .134 |
+| L6 | .273 | .147 |
+| L7 | .293 | .140 |
+| **L8** | **.287** | **.126** ← a-priori cell |
+
+Doc placebo ≈ 0 and **ruler-block null ≈ 0 (±.13–.16) in every cell** — no
+leakage, no fold artefact. L0/last skipped (constant `</s>` vector).
+
+English gloss (`eng`): ridge .39–.42 at L5–L8, PLS .35–.43 at L4–L7, PLS L8
+.154. The gloss dates *better* than the Akkadian on an Akkadian-trained
+encoder — same asymmetry the M.Sc. saw between cells B′ and C.
+
+**Reading.**
+* **Pipeline reproduces the M.Sc. signal**: ridge sits in the pre-stated
+  .25–.40 band at every mid/late layer, with clean nulls. Extraction,
+  splits, read-out and null machinery are sound. C3 is unblocked.
+* **The a-priori cell itself (PLS k=2, L8, mean) is below the .15
+  "investigate" line at .126.** Not re-picked. Likely cause, found by
+  reading the M.Sc. probe code after the fact: the M.Sc. **row-L2-normalised**
+  every vector before PLS (`pls_utils.l2_normalize`); C2 column-standardised
+  only. T5's final layer norm leaves a few outlier dimensions that a
+  2-component PLS latches onto; ridge's shrinkage does not care, which is
+  exactly the ridge-vs-PLS gap in the table. A like-for-like rerun with
+  `--row-l2` is queued (reports `*_rowl2.txt`). Whatever it shows is
+  recorded here; the a-priori cell stays PLS/L8/mean either way.
+* The plan's "0.41" is now doubly unusable: no Akkadian cell reaches it
+  under either estimator; only the *English gloss* does.
