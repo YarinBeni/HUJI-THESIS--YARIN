@@ -71,6 +71,7 @@ def main(argv=None):
                   views["view_id"].tolist())
     doc = views["doc_id"].to_numpy()
     chain = views["augs"].fillna("").to_numpy()
+    text = views["text"].astype(str).to_numpy()
     is_orig = chain == ""
     all_ids = corpus["doc_id"].tolist()
     tag = f"L{feats['layer']}{feats['site']}" + (
@@ -82,6 +83,15 @@ def main(argv=None):
         for k, fold in enumerate(gkf["folds"]):
             tr, te = set(fold["train"]), set(fold["test"])
             tr_rows = np.flatnonzero(is_orig & np.isin(doc, list(tr)))
+            # BUG FIX (runner job 007): the orig chain exists once per view
+            # seed with byte-identical text, so every training doc appeared
+            # twice per language. RidgeCV's efficient LOO then sees each
+            # row's twin, judges tiny alphas as excellent, and returns a
+            # memorising probe -- akk-only orig read .094 where C2's single-
+            # row fit read .287, and MASKING the names "helped" (.208).
+            # One row per distinct training text.
+            _, keep = np.unique(text[tr_rows], return_index=True)
+            tr_rows = tr_rows[np.sort(keep)]
             ytr = t.loc[doc[tr_rows]].to_numpy()
             s_all, _ = fit_predict(probe, X[tr_rows], ytr, X, args.pls_components)
             frames = []
@@ -99,7 +109,7 @@ def main(argv=None):
             sc["s_rank"] = np.nan
             path = os.path.join(args.out_dir, f"{run}-s0-f{k}.parquet")
             sc.to_parquet(path, index=False)
-            print(f"[baseline] {run} fold {k}: fit on {len(tr_rows)} orig views "
+            print(f"[baseline] {run} fold {k}: fit on {len(tr_rows)} distinct orig views "
                   f"of {len(tr)} docs -> {path}", flush=True)
 
 
