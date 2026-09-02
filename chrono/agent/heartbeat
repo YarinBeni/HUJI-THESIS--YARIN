@@ -1,18 +1,16 @@
-alive Wed Sep  2 21:48:53 UTC 2026
+alive Wed Sep  2 22:49:44 UTC 2026
 host g0381
 job 33315
-     33648_[18-19] voltagepa C9_ssl_v  yarin.b PD       0:00      1 (Priority)
-       33660_[0-7] voltagepa  C11_e2e  yarin.b PD       0:00      1 (Priority)
+       33660_[4-7] voltagepa  C11_e2e  yarin.b PD       0:00      1 (Resources)
       33674_[0-65] voltagepa   C13_s3  yarin.b PD       0:00      1 (Dependency)
       33649_[0-15] voltagepa  C10_ssl  yarin.b PD       0:00      1 (Dependency)
        33661_[0-7] voltagepa C12_e2e_  yarin.b PD       0:00      1 (Dependency)
        33642_[0-7] voltagepa C8_ssl_p  yarin.b PD       0:00      1 (DependencyNeverSatisfied)
-          33648_17 voltagepa C9_ssl_v  yarin.b  R       6:37      1 g0381
-          33648_16 voltagepa C9_ssl_v  yarin.b  R      15:48      1 g0376
-          33648_15 voltagepa C9_ssl_v  yarin.b  R      21:08      1 g0376
-          33648_14 voltagepa C9_ssl_v  yarin.b  R      26:38      1 g0381
-          33648_13 voltagepa C9_ssl_v  yarin.b  R      29:24      1 g0381
-          33648_12 voltagepa C9_ssl_v  yarin.b  R      37:24      1 g0376
-          33648_11 voltagepa C9_ssl_v  yarin.b  R      51:38      1 g0376
-          33648_10 voltagepa C9_ssl_v  yarin.b  R      53:24      1 g0377
-             33315 voltagepa AGENT_ru  yarin.b  R   17:42:45      1 g0381
+           33660_3 voltagepa  C11_e2e  yarin.b  R       0:27      1 g0376
+           33660_2 voltagepa  C11_e2e  yarin.b  R       1:27      1 g0381
+          33648_19 voltagepa C9_ssl_v  yarin.b  R      45:28      1 g0381
+          33648_18 voltagepa C9_ssl_v  yarin.b  R      50:28      1 g0381
+           33660_1 voltagepa  C11_e2e  yarin.b  R      32:27      1 g0376
+           33660_0 voltagepa  C11_e2e  yarin.b  R      36:28      1 g0376
+          33648_15 voltagepa C9_ssl_v  yarin.b  R    1:21:59      1 g0376
+             33315 voltagepa AGENT_ru  yarin.b  R   18:43:36      1 g0381
