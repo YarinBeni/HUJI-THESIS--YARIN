@@ -1,0 +1,368 @@
+# 023_cka_probe  host=g0381  start=Wed Sep  2 16:36:44 UTC 2026  timeout=14400s
+# HEAD=4115ee26
+# ---------------------------------------------------------
+heads present: 30
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 0 done
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 1 done
+[probe] fold 2 done
+[probe] fold 3 done
+[probe] fold 4 done
+# Nonlinear-recovery check — emin2_cunei400m_t0_akk_cka1_provenance — erased concept `provenance` (15 classes ≥10 docs, chance 0.07)
+
+| features | probe | balanced acc (mean ± sd over folds) |
+|---|---|---|
+| X raw | linear | 0.444 ± 0.084 |
+| X raw | mlp | 0.439 ± 0.062 |
+| head hidden h(X raw) | linear | 0.424 ± 0.082 |
+| head hidden h(X raw) | mlp | 0.315 ± 0.062 |
+
+# E-MIN summary — `emin2_cunei400m_t0_akk_cka1_provenance`
+
+Seeds: 0, 1, 2 · folds per seed: [5] · read-out: SLA §7 (gkf pooled over centred OOF scores; mc = mean of per-draw rho)
+
+## Chrono-Barlow head, by condition (mean ± sd across seeds)
+
+| condition | gkf pooled ρ | mc ρ | seeds |
+|---|---|---|---|
+| `orig` | +0.468 ± 0.021 | +0.576 ± 0.016 | 3 |
+| `mask_ruler` | +0.430 ± 0.010 | +0.521 ± 0.014 | 3 |
+| `strip_formula` | +0.439 ± 0.019 | +0.549 ± 0.015 | 3 |
+| `mask_ruler,strip_formula` | +0.401 ± 0.012 | +0.496 ± 0.017 | 3 |
+| `mask_ruler,crop16` | +0.384 ± 0.007 | +0.453 ± 0.007 | 3 |
+| `mask_ruler,crop32` | +0.390 ± 0.009 | +0.486 ± 0.010 | 3 |
+| `orthonorm` | +0.438 ± 0.033 | +0.549 ± 0.025 | 3 |
+| `mask_ruler,drop_span` | +0.417 ± 0.013 | +0.506 ± 0.017 | 3 |
+
+Ruler-block null on `orig` (all seeds × draws): -0.010 ± 0.252, 95% band [-0.485, +0.467] — that is ONE draw; the reported mc ρ is a mean over draws, whose block null is +0.002 ± 0.017, 95% band [-0.028, +0.033] (200 ruler permutations, seed 0 scores)
+
+## C2 baseline at the same features (Thalesian/AKK_300m L8 mean, lang=akk)
+
+| probe | split | ρ |
+|---|---|---|
+| pls | gkf_ruler | +0.141 |
+| pls | mc_balanced | +0.126 |
+| pls::rowl2 | gkf_ruler | +0.154 |
+| pls::rowl2 | mc_balanced | +0.148 |
+| ridge | gkf_ruler | +0.260 |
+| ridge | mc_balanced | +0.287 |
+| ridge::rowl2 | gkf_ruler | +0.264 |
+| ridge::rowl2 | mc_balanced | +0.296 |
+
+Baseline rows are ONE cross-fit (no seeds); the head has 5. Both use the same folds, the same pooled/mc read-out and the same corpus, so the columns are directly comparable.
+
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 0 done
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 1 done
+[probe] fold 2 done
+[probe] fold 3 done
+[probe] fold 4 done
+# Nonlinear-recovery check — emin2_cunei400m_t0_akk_cka5_provenance — erased concept `provenance` (15 classes ≥10 docs, chance 0.07)
+
+| features | probe | balanced acc (mean ± sd over folds) |
+|---|---|---|
+| X raw | linear | 0.444 ± 0.084 |
+| X raw | mlp | 0.439 ± 0.062 |
+| head hidden h(X raw) | linear | 0.423 ± 0.086 |
+| head hidden h(X raw) | mlp | 0.339 ± 0.033 |
+
+# E-MIN summary — `emin2_cunei400m_t0_akk_cka5_provenance`
+
+Seeds: 0, 1, 2 · folds per seed: [5] · read-out: SLA §7 (gkf pooled over centred OOF scores; mc = mean of per-draw rho)
+
+## Chrono-Barlow head, by condition (mean ± sd across seeds)
+
+| condition | gkf pooled ρ | mc ρ | seeds |
+|---|---|---|---|
+| `orig` | +0.452 ± 0.018 | +0.537 ± 0.009 | 3 |
+| `mask_ruler` | +0.397 ± 0.007 | +0.464 ± 0.013 | 3 |
+| `strip_formula` | +0.420 ± 0.016 | +0.505 ± 0.008 | 3 |
+| `mask_ruler,strip_formula` | +0.363 ± 0.010 | +0.433 ± 0.014 | 3 |
+| `mask_ruler,crop16` | +0.350 ± 0.009 | +0.394 ± 0.006 | 3 |
+| `mask_ruler,crop32` | +0.348 ± 0.007 | +0.421 ± 0.012 | 3 |
+| `orthonorm` | +0.411 ± 0.029 | +0.493 ± 0.035 | 3 |
+| `mask_ruler,drop_span` | +0.385 ± 0.008 | +0.449 ± 0.015 | 3 |
+
+Ruler-block null on `orig` (all seeds × draws): -0.009 ± 0.239, 95% band [-0.456, +0.440] — that is ONE draw; the reported mc ρ is a mean over draws, whose block null is +0.002 ± 0.017, 95% band [-0.026, +0.034] (200 ruler permutations, seed 0 scores)
+
+## C2 baseline at the same features (Thalesian/AKK_300m L8 mean, lang=akk)
+
+| probe | split | ρ |
+|---|---|---|
+| pls | gkf_ruler | +0.141 |
+| pls | mc_balanced | +0.126 |
+| pls::rowl2 | gkf_ruler | +0.154 |
+| pls::rowl2 | mc_balanced | +0.148 |
+| ridge | gkf_ruler | +0.260 |
+| ridge | mc_balanced | +0.287 |
+| ridge::rowl2 | gkf_ruler | +0.264 |
+| ridge::rowl2 | mc_balanced | +0.296 |
+
+Baseline rows are ONE cross-fit (no seeds); the head has 5. Both use the same folds, the same pooled/mc read-out and the same corpus, so the columns are directly comparable.
+
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 0 done
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 1 done
+[probe] fold 2 done
+[probe] fold 3 done
+[probe] fold 4 done
+# Nonlinear-recovery check — emin2_llama2_7b_t0_akk_cka1_provenance — erased concept `provenance` (15 classes ≥10 docs, chance 0.07)
+
+| features | probe | balanced acc (mean ± sd over folds) |
+|---|---|---|
+| X raw | linear | 0.423 ± 0.095 |
+| X raw | mlp | 0.435 ± 0.065 |
+| head hidden h(X raw) | linear | 0.400 ± 0.067 |
+| head hidden h(X raw) | mlp | 0.309 ± 0.085 |
+
+# E-MIN summary — `emin2_llama2_7b_t0_akk_cka1_provenance`
+
+Seeds: 0, 1, 2 · folds per seed: [5] · read-out: SLA §7 (gkf pooled over centred OOF scores; mc = mean of per-draw rho)
+
+## Chrono-Barlow head, by condition (mean ± sd across seeds)
+
+| condition | gkf pooled ρ | mc ρ | seeds |
+|---|---|---|---|
+| `orig` | +0.420 ± 0.023 | +0.511 ± 0.033 | 3 |
+| `mask_ruler` | +0.455 ± 0.019 | +0.540 ± 0.021 | 3 |
+| `strip_formula` | +0.421 ± 0.021 | +0.510 ± 0.032 | 3 |
+| `mask_ruler,strip_formula` | +0.452 ± 0.022 | +0.540 ± 0.024 | 3 |
+| `mask_ruler,crop16` | +0.377 ± 0.027 | +0.452 ± 0.021 | 3 |
+| `mask_ruler,crop32` | +0.411 ± 0.030 | +0.486 ± 0.027 | 3 |
+| `orthonorm` | +0.421 ± 0.032 | +0.506 ± 0.037 | 3 |
+| `mask_ruler,drop_span` | +0.448 ± 0.024 | +0.530 ± 0.026 | 3 |
+
+Ruler-block null on `orig` (all seeds × draws): -0.007 ± 0.233, 95% band [-0.439, +0.415] — that is ONE draw; the reported mc ρ is a mean over draws, whose block null is +0.003 ± 0.017, 95% band [-0.026, +0.036] (200 ruler permutations, seed 0 scores)
+
+## C2 baseline at the same features (Thalesian/AKK_300m L8 mean, lang=akk)
+
+| probe | split | ρ |
+|---|---|---|
+| pls | gkf_ruler | +0.141 |
+| pls | mc_balanced | +0.126 |
+| pls::rowl2 | gkf_ruler | +0.154 |
+| pls::rowl2 | mc_balanced | +0.148 |
+| ridge | gkf_ruler | +0.260 |
+| ridge | mc_balanced | +0.287 |
+| ridge::rowl2 | gkf_ruler | +0.264 |
+| ridge::rowl2 | mc_balanced | +0.296 |
+
+Baseline rows are ONE cross-fit (no seeds); the head has 5. Both use the same folds, the same pooled/mc read-out and the same corpus, so the columns are directly comparable.
+
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 0 done
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 1 done
+[probe] fold 2 done
+[probe] fold 3 done
+[probe] fold 4 done
+# Nonlinear-recovery check — emin2_llama2_7b_t0_akk_cka5_provenance — erased concept `provenance` (15 classes ≥10 docs, chance 0.07)
+
+| features | probe | balanced acc (mean ± sd over folds) |
+|---|---|---|
+| X raw | linear | 0.423 ± 0.095 |
+| X raw | mlp | 0.435 ± 0.065 |
+| head hidden h(X raw) | linear | 0.392 ± 0.065 |
+| head hidden h(X raw) | mlp | 0.303 ± 0.090 |
+
+# E-MIN summary — `emin2_llama2_7b_t0_akk_cka5_provenance`
+
+Seeds: 0, 1, 2 · folds per seed: [5] · read-out: SLA §7 (gkf pooled over centred OOF scores; mc = mean of per-draw rho)
+
+## Chrono-Barlow head, by condition (mean ± sd across seeds)
+
+| condition | gkf pooled ρ | mc ρ | seeds |
+|---|---|---|---|
+| `orig` | +0.422 ± 0.026 | +0.505 ± 0.035 | 3 |
+| `mask_ruler` | +0.453 ± 0.023 | +0.532 ± 0.025 | 3 |
+| `strip_formula` | +0.422 ± 0.025 | +0.505 ± 0.034 | 3 |
+| `mask_ruler,strip_formula` | +0.452 ± 0.027 | +0.535 ± 0.028 | 3 |
+| `mask_ruler,crop16` | +0.377 ± 0.026 | +0.445 ± 0.018 | 3 |
+| `mask_ruler,crop32` | +0.413 ± 0.030 | +0.480 ± 0.023 | 3 |
+| `orthonorm` | +0.421 ± 0.039 | +0.507 ± 0.046 | 3 |
+| `mask_ruler,drop_span` | +0.447 ± 0.026 | +0.522 ± 0.028 | 3 |
+
+Ruler-block null on `orig` (all seeds × draws): -0.007 ± 0.233, 95% band [-0.443, +0.421] — that is ONE draw; the reported mc ρ is a mean over draws, whose block null is +0.003 ± 0.018, 95% band [-0.026, +0.036] (200 ruler permutations, seed 0 scores)
+
+## C2 baseline at the same features (Thalesian/AKK_300m L8 mean, lang=akk)
+
+| probe | split | ρ |
+|---|---|---|
+| pls | gkf_ruler | +0.141 |
+| pls | mc_balanced | +0.126 |
+| pls::rowl2 | gkf_ruler | +0.154 |
+| pls::rowl2 | mc_balanced | +0.148 |
+| ridge | gkf_ruler | +0.260 |
+| ridge | mc_balanced | +0.287 |
+| ridge::rowl2 | gkf_ruler | +0.264 |
+| ridge::rowl2 | mc_balanced | +0.296 |
+
+Baseline rows are ONE cross-fit (no seeds); the head has 5. Both use the same folds, the same pooled/mc read-out and the same corpus, so the columns are directly comparable.
+
+[probe] fold 0 done
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 1 done
+[probe] fold 2 done
+[probe] fold 3 done
+[probe] fold 4 done
+# Nonlinear-recovery check — emin2_qwen3_8b_t0_akk_cka1_provenance — erased concept `provenance` (15 classes ≥10 docs, chance 0.07)
+
+| features | probe | balanced acc (mean ± sd over folds) |
+|---|---|---|
+| X raw | linear | 0.414 ± 0.085 |
+| X raw | mlp | 0.405 ± 0.072 |
+| head hidden h(X raw) | linear | 0.290 ± 0.054 |
+| head hidden h(X raw) | mlp | 0.196 ± 0.067 |
+
+# E-MIN summary — `emin2_qwen3_8b_t0_akk_cka1_provenance`
+
+Seeds: 0, 1, 2 · folds per seed: [5] · read-out: SLA §7 (gkf pooled over centred OOF scores; mc = mean of per-draw rho)
+
+## Chrono-Barlow head, by condition (mean ± sd across seeds)
+
+| condition | gkf pooled ρ | mc ρ | seeds |
+|---|---|---|---|
+| `orig` | +0.332 ± 0.034 | +0.430 ± 0.038 | 3 |
+| `mask_ruler` | +0.374 ± 0.037 | +0.477 ± 0.038 | 3 |
+| `strip_formula` | +0.326 ± 0.032 | +0.424 ± 0.037 | 3 |
+| `mask_ruler,strip_formula` | +0.375 ± 0.035 | +0.474 ± 0.037 | 3 |
+| `mask_ruler,crop16` | +0.297 ± 0.012 | +0.378 ± 0.023 | 3 |
+| `mask_ruler,crop32` | +0.329 ± 0.024 | +0.423 ± 0.031 | 3 |
+| `orthonorm` | +0.406 ± 0.029 | +0.507 ± 0.027 | 3 |
+| `mask_ruler,drop_span` | +0.367 ± 0.042 | +0.478 ± 0.044 | 3 |
+
+Ruler-block null on `orig` (all seeds × draws): -0.008 ± 0.222, 95% band [-0.434, +0.401] — that is ONE draw; the reported mc ρ is a mean over draws, whose block null is +0.003 ± 0.015, 95% band [-0.028, +0.032] (200 ruler permutations, seed 0 scores)
+
+## C2 baseline at the same features (Thalesian/AKK_300m L8 mean, lang=akk)
+
+| probe | split | ρ |
+|---|---|---|
+| pls | gkf_ruler | +0.141 |
+| pls | mc_balanced | +0.126 |
+| pls::rowl2 | gkf_ruler | +0.154 |
+| pls::rowl2 | mc_balanced | +0.148 |
+| ridge | gkf_ruler | +0.260 |
+| ridge | mc_balanced | +0.287 |
+| ridge::rowl2 | gkf_ruler | +0.264 |
+| ridge::rowl2 | mc_balanced | +0.296 |
+
+Baseline rows are ONE cross-fit (no seeds); the head has 5. Both use the same folds, the same pooled/mc read-out and the same corpus, so the columns are directly comparable.
+
+[probe] fold 0 done
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 1 done
+[probe] fold 2 done
+[probe] fold 3 done
+[probe] fold 4 done
+# Nonlinear-recovery check — emin2_qwen3_8b_t0_akk_cka5_provenance — erased concept `provenance` (15 classes ≥10 docs, chance 0.07)
+
+| features | probe | balanced acc (mean ± sd over folds) |
+|---|---|---|
+| X raw | linear | 0.414 ± 0.085 |
+| X raw | mlp | 0.405 ± 0.072 |
+| head hidden h(X raw) | linear | 0.273 ± 0.055 |
+| head hidden h(X raw) | mlp | 0.183 ± 0.037 |
+
+# E-MIN summary — `emin2_qwen3_8b_t0_akk_cka5_provenance`
+
+Seeds: 0, 1, 2 · folds per seed: [5] · read-out: SLA §7 (gkf pooled over centred OOF scores; mc = mean of per-draw rho)
+
+## Chrono-Barlow head, by condition (mean ± sd across seeds)
+
+| condition | gkf pooled ρ | mc ρ | seeds |
+|---|---|---|---|
+| `orig` | +0.352 ± 0.038 | +0.434 ± 0.024 | 3 |
+| `mask_ruler` | +0.388 ± 0.039 | +0.479 ± 0.024 | 3 |
+| `strip_formula` | +0.347 ± 0.038 | +0.432 ± 0.025 | 3 |
+| `mask_ruler,strip_formula` | +0.390 ± 0.035 | +0.480 ± 0.023 | 3 |
+| `mask_ruler,crop16` | +0.305 ± 0.021 | +0.382 ± 0.020 | 3 |
+| `mask_ruler,crop32` | +0.340 ± 0.033 | +0.433 ± 0.025 | 3 |
+| `orthonorm` | +0.413 ± 0.051 | +0.503 ± 0.036 | 3 |
+| `mask_ruler,drop_span` | +0.383 ± 0.042 | +0.481 ± 0.024 | 3 |
+
+Ruler-block null on `orig` (all seeds × draws): -0.009 ± 0.219, 95% band [-0.424, +0.391] — that is ONE draw; the reported mc ρ is a mean over draws, whose block null is +0.002 ± 0.015, 95% band [-0.031, +0.032] (200 ruler permutations, seed 0 scores)
+
+## C2 baseline at the same features (Thalesian/AKK_300m L8 mean, lang=akk)
+
+| probe | split | ρ |
+|---|---|---|
+| pls | gkf_ruler | +0.141 |
+| pls | mc_balanced | +0.126 |
+| pls::rowl2 | gkf_ruler | +0.154 |
+| pls::rowl2 | mc_balanced | +0.148 |
+| ridge | gkf_ruler | +0.260 |
+| ridge | mc_balanced | +0.287 |
+| ridge::rowl2 | gkf_ruler | +0.264 |
+| ridge::rowl2 | mc_balanced | +0.296 |
+
+Baseline rows are ONE cross-fit (no seeds); the head has 5. Both use the same folds, the same pooled/mc read-out and the same corpus, so the columns are directly comparable.
+
+# ---------------------------------------------------------
+# exit=0  end=Wed Sep  2 18:46:27 UTC 2026
