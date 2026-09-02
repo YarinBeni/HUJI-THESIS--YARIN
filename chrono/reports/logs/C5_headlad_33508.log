@@ -1,0 +1,97 @@
+# job 33508 C5_headlad exit=0 Wed Sep  2 14:40:53 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C5_headlad_33475_24.out
+=== C5 emin2_qwen3_8b_t0_akk_erase_provenance seed 0 === job 33508 Wed Sep  2 14:36:06 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[erase] LEACE 'provenance' (k=21, rank 20) fitted on 925 train orig rows, applied to 19088 views
+epoch 50/200 loss 32.8972
+epoch 100/200 loss 31.4285
+epoch 150/200 loss 27.7938
+epoch 200/200 loss 23.5741
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_erase_provenance-s0-f0",
+  "metrics": {
+    "train_soft_spearman": 0.3798659552706733,
+    "train_spearman": 0.3798837538163641,
+    "final_loss": 23.57405662536621,
+    "identical_view_rate": 0.0074648648648648645,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_erase_provenance-s0-f0.parquet"
+}
+[erase] LEACE 'provenance' (k=21, rank 20) fitted on 956 train orig rows, applied to 19088 views
+epoch 50/200 loss 33.8310
+epoch 100/200 loss 30.9980
+epoch 150/200 loss 27.3480
+epoch 200/200 loss 22.5917
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_erase_provenance-s0-f1",
+  "metrics": {
+    "train_soft_spearman": 0.39897614749829924,
+    "train_spearman": 0.3992790664159731,
+    "final_loss": 22.59168243408203,
+    "identical_view_rate": 0.006731171548117155,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_erase_provenance-s0-f1.parquet"
+}
+[erase] LEACE 'provenance' (k=21, rank 20) fitted on 963 train orig rows, applied to 19088 views
+epoch 50/200 loss 32.5148
+epoch 100/200 loss 30.1136
+epoch 150/200 loss 25.7811
+epoch 200/200 loss 24.7537
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_erase_provenance-s0-f2",
+  "metrics": {
+    "train_soft_spearman": 0.465718900148598,
+    "train_spearman": 0.46540087345216086,
+    "final_loss": 24.75369882583618,
+    "identical_view_rate": 0.007751817237798546,
+    "test_spearman": 0.21773222630669012
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_erase_provenance-s0-f2.parquet"
+}
+[erase] LEACE 'provenance' (k=21, rank 17) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 34.0944
+epoch 100/200 loss 29.1314
+epoch 150/200 loss 24.5103
+epoch 200/200 loss 20.0920
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_erase_provenance-s0-f3",
+  "metrics": {
+    "train_soft_spearman": 0.4381148746703962,
+    "train_spearman": 0.4377934812439011,
+    "final_loss": 20.092018604278564,
+    "identical_view_rate": 0.0035840248962655604,
+    "test_spearman": 0.38574972632155013
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_erase_provenance-s0-f3.parquet"
+}
+[erase] LEACE 'provenance' (k=21, rank 20) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 34.8971
+epoch 100/200 loss 29.8487
+epoch 150/200 loss 24.9485
+epoch 200/200 loss 21.4639
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_erase_provenance-s0-f4",
+  "metrics": {
+    "train_soft_spearman": 0.4145995829494999,
+    "train_spearman": 0.41487088391306765,
+    "final_loss": 21.46391725540161,
+    "identical_view_rate": 0.007085062240663901,
+    "test_spearman": 0.4814447046954367
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_erase_provenance-s0-f4.parquet"
+}
+[commit_push_sandbox] nothing to commit
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Everything up-to-date
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 14:40:53 UTC 2026 ===
