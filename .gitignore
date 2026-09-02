@@ -67,3 +67,6 @@ v_1/src/chronorank/autopsy/results/probes/*__draw[0-9][0-9][0-9].json
 # runner outputs must reach the repo; *.out above would swallow them
 !chrono/agent/outbox/
 !chrono/agent/outbox/**
+
+# tier0 artifacts root (rebuildable, large)
+chrono/artifacts_tier0/
