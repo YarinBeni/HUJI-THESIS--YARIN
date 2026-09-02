@@ -14,9 +14,13 @@ is one cross-fit on the same folds. Full tables: `EMIN2_TABLES.md`.
 
 | encoder | PLS k=2 | ridge (orig views) | ridge (all views) | **Chrono-Barlow** | under crop16: ridge-all → head |
 |---|---|---|---|---|---|
-| cuneiformBase-400m | .44 | .45 | .46 | **.61 ± .01** | .38 → **.49** |
-| Llama-2-7B | .22 | .35 | .44 | **.54 ± .03** | .33 → **.45** |
-| Qwen3-8B | .20 | .26 | .33 | **.43 ± .02** | .36 → **.39** |
+| cuneiformBase-400m | .44 | .45 ± .02 | .46 ± .02 | **.61 ± .01** | .37 ± .01 → **.49 ± .01** |
+| Llama-2-7B | .22 | .35 ± .02 | .43 ± .01 | **.54 ± .03** | .33 ± .01 → **.45 ± .03** |
+| Qwen3-8B | .20 | .26 ± .02 | .32 ± .01 | **.43 ± .02** | .35 ± .01 → **.39 ± .02** |
+
+± = sd over 5 fits (head: training seeds; ridge: the reference fit plus four
+refits each dropping a random 10 % of the train docs per fold — C3v2c). The
+head–ridge-all-views gap is .15 / .11 / .11, i.e. 5–8 combined sd.
 
 Ruler-block null of the reported statistic: .00 ± .02 in every arm. Doc placebo ≈ 0.
 
@@ -45,8 +49,8 @@ Ruler-block null of the reported statistic: .00 ± .02 in every arm. Doc placebo
 
 ## Caveats
 
-* Baselines are single cross-fits; the head has a seed spread. Give ridge a spread
-  (bootstrap fold assignment) before quoting the margins as ±.
+* Baseline spread comes from train-doc subsampling, the head's from training seeds:
+  comparable in size (.01–.03) but not the same source of variation.
 * PLS k=2 is competitive only on the small encoder (cunei .44); on 4096-d LLM
   features it is not a serious baseline.
 * Duplicate texts (136 akk docs in 50 groups) and the 13 century-coded docs are

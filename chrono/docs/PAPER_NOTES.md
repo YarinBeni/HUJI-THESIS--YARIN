@@ -64,9 +64,10 @@ encoder too weak.
 ### E-MIN v2 — tier0, strong encoders, language arms — 2026-09-02
 | Akkadian arm, mc ρ | PLS | ridge | ridge-all-views | **head** |
 |---|---|---|---|---|
-| cuneiformBase-400m L12 | .44 | .45 | .46 | **.61 ± .01** |
-| Llama-2-7B L16 | .22 | .35 | .44 | **.54 ± .03** |
-| Qwen3-8B L18 | .20 | .26 | .33 | **.43 ± .02** |
+| cuneiformBase-400m L12 | .44 | .45 ± .02 | .46 ± .02 | **.61 ± .01** |
+| Llama-2-7B L16 | .22 | .35 ± .02 | .43 ± .01 | **.54 ± .03** |
+| Qwen3-8B L18 | .20 | .26 ± .02 | .32 ± .01 | **.43 ± .02** |
+Baseline ± from 4 train-subsample refits (C3v2c); head–ridge-all gap = 5–8 combined sd.
 Block null .00 ± .02. Head most robust to crop-16 in every Akkadian arm.
 Akkadian > gloss with a competent encoder (.55 vs .41 per-language inside the
 mixed arm). Head *loses* on the gloss with the Akkadian-only encoder (.39 vs
