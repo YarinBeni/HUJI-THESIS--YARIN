@@ -1,0 +1,15 @@
+# 027_submit_S2  host=g0381  start=Wed Sep  2 19:58:02 UTC 2026  timeout=1800s
+# HEAD=423ddddf
+# ---------------------------------------------------------
+C9 array: 33648
+C10 array: 33649
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+      33648_[2-19] voltagepa C9_ssl_v  yarin.b PD       0:00      1 (Resources)
+      33649_[0-15] voltagepa  C10_ssl  yarin.b PD       0:00      1 (Dependency)
+       33642_[0-7] voltagepa C8_ssl_p  yarin.b PD       0:00      1 (Dependency)
+           33648_1 voltagepa C9_ssl_v  yarin.b  R       0:04      1 g0376
+           33648_0 voltagepa C9_ssl_v  yarin.b  R       0:05      1 g0376
+           33641_3 voltagepa C7_ssl_e  yarin.b  R       5:53      1 g0376
+             33315 voltagepa AGENT_ru  yarin.b  R   15:51:59      1 g0381
+# ---------------------------------------------------------
+# exit=0  end=Wed Sep  2 19:58:07 UTC 2026
