@@ -144,6 +144,11 @@ advisors before any thesis text quotes it. `docs/gate_reference.md`.
 | 09-02 | **deconfounding penalties dropped; method = text-view invariance only** | Yarin: interpretation question ≠ training objective; HSIC/CKA null, adversary unstable |
 
 ## 6. Open / next
+
+**Direction change (2026-09-02, PI):** the method is augmentation invariance;
+the deconfounding penalties are parked. Next programme: SSL pretraining on all
+~40k Akkadian texts + a scaling sweep — see `docs/PLAN_SCALE_SSL.md`.
+
 (deconfounding line closed — see above); Assyriologist review of `docs/dating_criteria.md`; ladder readability re-pass (5 tables pending);
 Assyriologist review of `docs/dating_criteria.md`; P2 factorisation; P3
 held-out-ruler calibration.
