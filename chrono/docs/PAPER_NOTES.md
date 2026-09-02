@@ -85,6 +85,16 @@ The Akkadian-native encoder keeps a site-independent residue (.14); the LLMs
 keep none. **The representation dates mainly by find-spot, then period — not
 by the ruler's name.** `reports/LADDER_RESULT.md`. Head ladder (C5) running.
 
+### P1 — head ladder (C5) — 2026-09-02
+Head trained on LEACE-erased features. After erasing **provenance** the ridge
+probe reads .14 / .00 / −.20 (cunei / Llama / Qwen) while the head reads
+**.36 / .38 / .29** — retaining 59–70 %; margin over the probe grows to
++.22 / +.38 / +.49. Period costs the head −.15…−.25, object type −.03…−.14,
+length ≈ 0. The head's chronological signal is not linearly reducible to
+find-spot, period, object type or length; the frozen probe's largely is.
+Pending: nonlinear-recovery check (can an MLP read provenance from the head's
+hidden layer after erasure?). `reports/HEAD_LADDER_RESULT.md`.
+
 ### Gate reference (P0.4), re-pinned on tier0
 cuneiformBase-400m L12 mean, Akkadian: ridge mc .447 ± .060, PLS k=2 .431 ±
 .056 (single cross-fit, C3v2 gate). The M.Sc.'s .352 (AKK_300m, maximal, PLS)
@@ -105,7 +115,7 @@ advisors before any thesis text quotes it. `docs/gate_reference.md`.
 | 09-02 | head ladder on LEACE-erased features (C5) | the only way to tell 'head reads site better' from 'head finds non-site chronology' |
 
 ## 6. Open / next
-P1 erasure ladder (C4, running); baseline seed spread (C3v2c, running);
+Nonlinear-recovery check (C5b heads + probe_head_hidden); ladder readability re-pass;
 Assyriologist review of `docs/dating_criteria.md`; P2 factorisation; P3
 held-out-ruler calibration.
 
