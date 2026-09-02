@@ -51,6 +51,11 @@ def main(argv=None):
     ap.add_argument("--splits-dir", default=os.path.join(common.ART, "splits"))
     ap.add_argument("--store-root", default=os.path.join(common.ART, "emb_store"))
     ap.add_argument("--out-dir", default="chrono/reports/scores")
+    ap.add_argument("--train-views", choices=["orig", "all"], default="orig",
+                    help="fit on the train docs' orig views only (a probe) or "
+                         "on ALL their views (augmentation as plain data "
+                         "augmentation, no invariance loss -- isolates what "
+                         "the Barlow objective adds over seeing the views)")
     ap.add_argument("--langs", nargs="+", default=None,
                     help="restrict views to these languages (default: all, "
                          "= what the head sees)")
@@ -75,14 +80,16 @@ def main(argv=None):
     is_orig = chain == ""
     all_ids = corpus["doc_id"].tolist()
     tag = f"L{feats['layer']}{feats['site']}" + (
-        "" if not args.langs else "_" + "+".join(args.langs))
+        "" if not args.langs else "_" + "+".join(args.langs)) + (
+        "" if args.train_views == "orig" else "_allviews")
     os.makedirs(args.out_dir, exist_ok=True)
 
     for probe in args.probes:
         run = f"baseline_{probe}_{tag}"
         for k, fold in enumerate(gkf["folds"]):
             tr, te = set(fold["train"]), set(fold["test"])
-            tr_rows = np.flatnonzero(is_orig & np.isin(doc, list(tr)))
+            fit_mask = is_orig if args.train_views == "orig" else np.ones_like(is_orig)
+            tr_rows = np.flatnonzero(fit_mask & np.isin(doc, list(tr)))
             # BUG FIX (runner job 007): the orig chain exists once per view
             # seed with byte-identical text, so every training doc appeared
             # twice per language. RidgeCV's efficient LOO then sees each
@@ -109,7 +116,7 @@ def main(argv=None):
             sc["s_rank"] = np.nan
             path = os.path.join(args.out_dir, f"{run}-s0-f{k}.parquet")
             sc.to_parquet(path, index=False)
-            print(f"[baseline] {run} fold {k}: fit on {len(tr_rows)} distinct orig views "
+            print(f"[baseline] {run} fold {k}: fit on {len(tr_rows)} distinct {args.train_views} views "
                   f"of {len(tr)} docs -> {path}", flush=True)
 
 
