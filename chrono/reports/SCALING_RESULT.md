@@ -24,6 +24,7 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 | adapter (SSL on frozen) | `ssl::ssl_infonce_llama2_7b-s0::L0::h` | 0.852 | 0.829 | 0.120 | 0.973 | 0.246 | 0.620 | -0.056 | 0.973 |
 | adapter (SSL on frozen) | `ssl::ssl_infonce_qwen3_8b-s0::L0::h` | 0.852 | 0.823 | 0.094 | 0.968 | 0.234 | 0.632 | -0.025 | 0.975 |
 | adapter (SSL on frozen) | `ssl::ssl_jepa_cunei400m-s0::L0::h` | 0.809 | 0.766 | 0.146 | 0.924 | 0.136 | 0.447 | 0.175 | 0.890 |
+| from-scratch | `ssl_e2e::e2e_barlow_L-s0::L0::h` | 0.878 | 0.851 | 0.123 | 0.972 | 0.265 | 0.672 | 0.233 | 0.983 |
 | from-scratch | `ssl_e2e::e2e_barlow_M-s0::L0::h` | 0.886 | 0.866 | 0.125 | 0.972 | 0.261 | 0.634 | 0.222 | 0.981 |
 | from-scratch | `ssl_e2e::e2e_barlow_S-s0::L0::h` | 0.871 | 0.885 | 0.203 | 0.966 | 0.245 | 0.649 | 0.190 | 0.981 |
 | from-scratch | `ssl_e2e::e2e_jepa_L-s0::L0::h` | 0.870 | 0.839 | 0.104 | 0.951 | 0.278 | 0.664 | 0.060 | 0.959 |
@@ -53,6 +54,7 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 | `ssl::ssl_infonce_llama2_7b-s0::L0::h` | 0.993 | 0.753 | 0.120 | 0.422 |
 | `ssl::ssl_infonce_qwen3_8b-s0::L0::h` | 0.990 | 0.722 | 0.094 | 0.451 |
 | `ssl::ssl_jepa_cunei400m-s0::L0::h` | 0.964 | 0.700 | 0.146 | 0.661 |
+| `ssl_e2e::e2e_barlow_L-s0::L0::h` | 0.987 | 0.828 | 0.123 | 0.360 |
 | `ssl_e2e::e2e_barlow_M-s0::L0::h` | 0.988 | 0.817 | 0.125 | 0.501 |
 | `ssl_e2e::e2e_barlow_S-s0::L0::h` | 0.989 | 0.793 | 0.203 | 0.622 |
 | `ssl_e2e::e2e_jepa_L-s0::L0::h` | 0.991 | 0.765 | 0.104 | 0.603 |
