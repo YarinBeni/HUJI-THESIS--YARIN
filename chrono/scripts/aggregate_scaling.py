@@ -45,6 +45,21 @@ def main(argv=None):
     L = ["# Representation sweep — S1 frozen vs S2 adapters vs S2 from-scratch", "",
          "Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), source chance ≈ .17. "
          "A high SOURCE probe with a low WITHIN-source period probe means the model learned corpora, not time.", "",
+         "## How to read this (2026-09-03)", "",
+         "**Within the SSL corpora the period is nearly free, and it is nearly the same question as the "
+         "source.** Cells read the period at .81-.90 and the SOURCE at .92-.98, because here one implies "
+         "the other (Old Babylonian = Archibab, Late Babylonian = the letters, Hellenistic = ORACC). The "
+         "high period numbers, the k-NN purity and the UMAP silhouette are therefore not evidence that "
+         "anything chronological was learned.", "",
+         "**The `HELD-OUT dated` column is NOT usable; it is kept so the mistake stays on the record.** It "
+         "scores balanced accuracy over the periods the dated royal inscriptions share with the undated "
+         "pool — Neo-Assyrian (924 test documents), Middle Babylonian (28) and Hellenistic (ONE) — while "
+         "the pool training the probe holds 52 Middle Babylonian and 5 Neo-Babylonian texts. Averaging "
+         "three such classes is what produced \".10-.20, below chance\": an artefact of the class filter, "
+         "not a finding about time. The 216 Neo-Babylonian inscriptions, the second largest group in the "
+         "test set, were dropped from it entirely. The read-out that replaces it is C17 "
+         "(`ssl/TRANSFER_DATED.md`): fit against an approximate period midpoint on the undated corpora, "
+         "then Spearman against the true year of the dated inscriptions.", "",
          "## Main table", "",
          "| kind | model | " + " | ".join(c.replace("probe_linear_period_heldout_orcc", "HELD-OUT dated").replace("probe_linear_", "lin ").replace("probe_mlp_", "mlp ").replace("_norm", "").replace("_raw", "") for c in cols) + " |",
          "|---|---|" + "---|" * len(cols)]
