@@ -47,6 +47,20 @@ their own logs (`chrono/reports/logs/`), independently of the runner.
   cancelled, or the node died) — re-submit.
 - The runner also restarts itself when `runner.sh` changes on the branch,
   so fixes to it need no manual restart.
+- **Alive but silent = pushes are failing.** If `squeue` shows the runner
+  running while the branch gets no commits, the cluster cannot push
+  (the repo is public, so `fetch` still works without credentials — only
+  `push` needs the token). Nothing is lost: every job and the runner commit
+  locally and their commits ride along with the next push that succeeds.
+  Diagnose on the login node with
+  `tail -5 chrono/sbatch/logs/AGENT_runner_<jobid>.out` (the runner logs
+  git's reason after `push failed`) or
+  `git push origin HEAD:yarin-sandbox 2>&1 | tail -4`. The usual cause is
+  an **expired token** (2026-09-03: ~6 h of finished jobs went unpushed).
+  Fix: Yarin creates a new fine-grained token (this repo only, Contents
+  read/write, ≥ 90 days) and sets it himself on the cluster with
+  `git remote set-url origin https://<TOKEN>@github.com/YarinBeni/HUJI-THESIS--YARIN.git`.
+  The token is never pasted into the chat with the assistant.
 
 ## Files
 

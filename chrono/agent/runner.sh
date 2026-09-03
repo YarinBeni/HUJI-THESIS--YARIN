@@ -38,6 +38,15 @@ fi
 
 log() { echo "[runner $(date -u +%H:%M:%S)] $*"; }
 
+# One line saying WHY a git fetch/push failed (expired token? network?
+# rejected?), pulled from git's own chatter. Pushes fail silently otherwise:
+# on 2026-09-03 an expired token stopped every push from the cluster for
+# hours while jobs kept finishing, and nothing on the branch said so.
+git_reason() {
+    printf '%s\n' "$1" | grep -iE 'fatal|error|remote:|denied|auth|could not|timed out|unable|reject' \
+        | tail -2 | tr '\n' ' ' | cut -c1-300
+}
+
 self_sha() { sha1sum "$AGENT/runner.sh" | cut -c1-12; }
 START_SHA="$(self_sha)"
 last_beat=0
@@ -45,8 +54,8 @@ last_beat=0
 while true; do
     # re-source each loop so fixes to the git helpers take effect live
     source chrono/sbatch/_sandbox.sh
-    if ! sync_sandbox >/dev/null 2>&1; then
-        log "sync failed; retry next tick"; sleep "$POLL"; continue
+    if ! synclog="$(sync_sandbox 2>&1)"; then
+        log "sync failed; retry next tick -- $(git_reason "$synclog")"; sleep "$POLL"; continue
     fi
 
     if [ -f "$AGENT/STOP" ]; then
@@ -82,8 +91,12 @@ while true; do
         } > "$out" 2>&1
         git mv -f "$job" "$AGENT/done/$name.sh" 2>/dev/null \
             || mv -f "$job" "$AGENT/done/$name.sh"
-        commit_push_sandbox "agent: $name (exit $(tail -1 "$out" | sed 's/.*exit=\([0-9]*\).*/\1/'))" \
-            "$AGENT" >/dev/null 2>&1 || log "push failed for $name"
+        msg="agent: $name (exit $(tail -1 "$out" | sed 's/.*exit=\([0-9]*\).*/\1/'))"
+        if ! pushlog="$(commit_push_sandbox "$msg" "$AGENT" 2>&1)"; then
+            # the commit is kept locally and rides along with the next push
+            # that succeeds; say WHY it failed so `tail` of this log is enough
+            log "push failed for $name -- $(git_reason "$pushlog")"
+        fi
         ran=1
     done
 
@@ -92,7 +105,9 @@ while true; do
         { echo "alive $(date -u)"; echo "host $(hostname)";
           echo "job ${SLURM_JOB_ID:-login}"; squeue -u "$USER" -h 2>/dev/null; } \
             > "$AGENT/heartbeat"
-        commit_push_sandbox "agent: heartbeat" "$AGENT/heartbeat" >/dev/null 2>&1
+        if ! pushlog="$(commit_push_sandbox "agent: heartbeat" "$AGENT/heartbeat" 2>&1)"; then
+            log "heartbeat push failed -- $(git_reason "$pushlog")"
+        fi
         last_beat=$now
     fi
     sleep "$POLL"
