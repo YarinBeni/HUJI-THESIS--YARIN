@@ -84,13 +84,22 @@ def main(argv=None):
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args(argv)
 
-    c = pd.read_parquet(args.corpus)
-    c = c[c["split"] != "dated"].reset_index(drop=True)      # dated docs keep their own protocol
+    c_all = pd.read_parquet(args.corpus)
+    c = c_all[c_all["split"] != "dated"].reset_index(drop=True)   # dated docs keep their own protocol
+    cd = c_all[c_all["split"] == "dated"].reset_index(drop=True)  # used ONLY as a held-out TEST source below
     store = EmbStore(args.store_root)
     ids = ("ssl::" + c["uid"].astype(str)).tolist()
     X = store.get(args.model, args.layer, args.site, ids).astype(np.float32)
+    ids_d = ("ssl::" + cd["uid"].astype(str)).tolist()
+    Xd = None
+    if len(ids_d) and bool(np.all(store.has(args.model, args.layer, args.site, ids_d))):
+        Xd = store.get(args.model, args.layer, args.site, ids_d).astype(np.float32)
     if args.pca and X.shape[1] > args.pca:
-        X = PCA(args.pca, random_state=args.seed).fit_transform(StandardScaler().fit_transform(X)).astype(np.float32)
+        sc0 = StandardScaler().fit(X)
+        pca0 = PCA(args.pca, random_state=args.seed).fit(sc0.transform(X))
+        X = pca0.transform(sc0.transform(X)).astype(np.float32)
+        if Xd is not None:
+            Xd = pca0.transform(sc0.transform(Xd)).astype(np.float32)
     tag = f"{args.model}::L{args.layer}::{args.site}"
     rows, lines = [], [f"# S1 representation probes — {tag}", "",
                        f"texts {len(c):,} · PCA {args.pca} · classes need ≥ {args.min_n} docs", ""]
@@ -121,19 +130,31 @@ def main(argv=None):
             lines.append(f"| {src} | {r[2]} | {int(m.sum()):,} | {r[0]:.3f} ± {r[1]:.3f} | {1/r[2]:.3f} |")
             add(f"probe_linear_period_within_{src}", r[0], {"n": int(m.sum()), "classes": r[2]})
 
-    lines += ["", "## Period probe, HELD-OUT source (train on the others, linear)", "", "| held out | n test | balanced acc | chance |", "|---|---|---|---|"]
+    # Period is nearly a proxy for source in this corpus (OB = archibab, LB =
+    # letters, Hellenistic = oracc ...), so a held-out source rarely shares its
+    # whole label set with the rest. Test only on the classes the probe could
+    # learn from the other sources, and add the dated royal inscriptions (S3's
+    # labelled set, never seen in SSL training) as one more held-out test source.
+    lines += ["", "## Period probe, HELD-OUT source (train on the other non-dated sources, linear)", "",
+              "| held out | classes | n test | balanced acc | chance |", "|---|---|---|---|---|"]
     y = c["period_norm"]; m_all = y.notna()
     vc = y[m_all].value_counts(); keep = vc[vc >= args.min_n].index; m_all = m_all & y.isin(keep)
-    le = LabelEncoder().fit(y[m_all])
-    for src in c.loc[m_all, "source"].unique():
-        te = m_all & (c["source"] == src); tr = m_all & (c["source"] != src)
-        if te.sum() < 50 or y[te].nunique() < 2 or not set(y[te]) <= set(y[tr]):
+    cases = [(src, (m_all & (c["source"] != src)).to_numpy(), (m_all & (c["source"] == src)).to_numpy(), X, y)
+             for src in c.loc[m_all, "source"].unique()]
+    if Xd is not None:
+        yd = cd["period_norm"]
+        cases.append(("orcc (dated)", m_all.to_numpy(), yd.notna().to_numpy(), Xd, yd))
+    for src, tr, te, Xte, yte in cases:
+        te = te & yte.isin(set(y[tr])).to_numpy()
+        if tr.sum() < 100 or te.sum() < 50 or yte[te].nunique() < 2:
             continue
-        sc = StandardScaler().fit(X[tr.to_numpy()])
-        clf = LogisticRegression(max_iter=3000, C=0.5).fit(sc.transform(X[tr.to_numpy()]), le.transform(y[tr]))
-        acc = balanced_accuracy_score(le.transform(y[te]), clf.predict(sc.transform(X[te.to_numpy()])))
-        lines.append(f"| {src} | {int(te.sum()):,} | {acc:.3f} | {1/y[te].nunique():.3f} |")
-        add(f"probe_linear_period_heldout_{src}", acc, {"n": int(te.sum())})
+        le = LabelEncoder().fit(y[tr])
+        sc = StandardScaler().fit(X[tr])
+        clf = LogisticRegression(max_iter=3000, C=0.5).fit(sc.transform(X[tr]), le.transform(y[tr]))
+        acc = balanced_accuracy_score(le.transform(yte[te]), clf.predict(sc.transform(Xte[te])))
+        k = int(yte[te].nunique())
+        lines.append(f"| {src} | {k} | {int(te.sum()):,} | {acc:.3f} | {1/k:.3f} |")
+        add(f"probe_linear_period_heldout_{src.split()[0]}", acc, {"n": int(te.sum()), "classes": k})
 
     lines += ["", "## Geometry (period)", ""]
     m = m_all.to_numpy()
