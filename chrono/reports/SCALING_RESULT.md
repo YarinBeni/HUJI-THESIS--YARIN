@@ -12,15 +12,19 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 
 | kind | model | lin period | mlp period | HELD-OUT dated | lin source | lin genre | lin provenance | silhouette_period | knn10_purity_period |
 |---|---|---|---|---|---|---|---|---|---|
+| adapter (SSL on frozen) | `ssl::ssl_barlow_akk300m-s0::L0::h` | 0.871 | 0.865 | 0.205 | 0.947 | 0.258 | 0.623 | 0.086 | 0.979 |
 | adapter (SSL on frozen) | `ssl::ssl_barlow_cunei400m-s0::L0::h` | 0.901 | 0.882 | 0.161 | 0.971 | 0.262 | 0.676 | 0.091 | 0.984 |
 | adapter (SSL on frozen) | `ssl::ssl_barlow_llama2_7b-s0::L0::h` | 0.862 | 0.839 | 0.115 | 0.978 | 0.228 | 0.613 | 0.195 | 0.979 |
 | adapter (SSL on frozen) | `ssl::ssl_barlow_qwen3_8b-s0::L0::h` | 0.820 | 0.801 | 0.096 | 0.964 | 0.206 | 0.586 | 0.197 | 0.966 |
 | adapter (SSL on frozen) | `ssl::ssl_byol_akk300m-s0::L0::h` | 0.885 | 0.848 | 0.143 | 0.935 | 0.188 | 0.492 | 0.302 | 0.974 |
 | adapter (SSL on frozen) | `ssl::ssl_byol_cunei400m-s0::L0::h` | 0.840 | 0.815 | 0.159 | 0.918 | 0.129 | 0.391 | 0.192 | 0.903 |
+| adapter (SSL on frozen) | `ssl::ssl_byol_llama2_7b-s0::L0::h` | 0.836 | 0.825 | 0.141 | 0.962 | 0.179 | 0.502 | 0.336 | 0.956 |
+| adapter (SSL on frozen) | `ssl::ssl_infonce_cunei400m-s0::L0::h` | 0.891 | 0.870 | 0.101 | 0.960 | 0.247 | 0.637 | 0.025 | 0.976 |
 | adapter (SSL on frozen) | `ssl::ssl_jepa_cunei400m-s0::L0::h` | 0.809 | 0.766 | 0.146 | 0.924 | 0.136 | 0.447 | 0.175 | 0.890 |
 | from-scratch | `ssl_e2e::e2e_barlow_M-s0::L0::h` | 0.886 | 0.866 | 0.125 | 0.972 | 0.261 | 0.634 | 0.222 | 0.981 |
 | from-scratch | `ssl_e2e::e2e_barlow_S-s0::L0::h` | 0.871 | 0.885 | 0.203 | 0.966 | 0.245 | 0.649 | 0.190 | 0.981 |
 | from-scratch | `ssl_e2e::e2e_jepa_L-s0::L0::h` | 0.870 | 0.839 | 0.104 | 0.951 | 0.278 | 0.664 | 0.060 | 0.959 |
+| from-scratch | `ssl_e2e::e2e_jepa_M-s0::L0::h` | 0.863 | 0.817 | 0.188 | 0.952 | 0.279 | 0.653 | 0.052 | 0.953 |
 | from-scratch | `ssl_e2e::e2e_jepa_S-s0::L0::h` | 0.848 | 0.824 | 0.121 | 0.900 | 0.241 | 0.616 | 0.019 | 0.920 |
 | from-scratch | `ssl_e2e::e2e_jepa_XL-s0::L0::h` | 0.855 | 0.822 | 0.106 | 0.946 | 0.265 | 0.618 | 0.068 | 0.949 |
 | frozen encoder | `Qwen/Qwen3-8B::L18::mean` | 0.838 | 0.816 |  | 0.963 | 0.234 | 0.633 | 0.052 | 0.957 |
@@ -34,15 +38,19 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 
 | model | within_oracc | within_seal | heldout_orcc | heldout_seal |
 |---|---|---|---|---|
+| `ssl::ssl_barlow_akk300m-s0::L0::h` | 0.996 | 0.765 | 0.205 | 0.662 |
 | `ssl::ssl_barlow_cunei400m-s0::L0::h` | 0.992 | 0.802 | 0.161 | 0.676 |
 | `ssl::ssl_barlow_llama2_7b-s0::L0::h` | 0.996 | 0.722 | 0.115 | 0.502 |
 | `ssl::ssl_barlow_qwen3_8b-s0::L0::h` | 0.977 | 0.653 | 0.096 | 0.597 |
 | `ssl::ssl_byol_akk300m-s0::L0::h` | 0.992 | 0.791 | 0.143 | 0.664 |
 | `ssl::ssl_byol_cunei400m-s0::L0::h` | 0.980 | 0.807 | 0.159 | 0.643 |
+| `ssl::ssl_byol_llama2_7b-s0::L0::h` | 0.975 | 0.707 | 0.141 | 0.626 |
+| `ssl::ssl_infonce_cunei400m-s0::L0::h` | 0.993 | 0.767 | 0.101 | 0.634 |
 | `ssl::ssl_jepa_cunei400m-s0::L0::h` | 0.964 | 0.700 | 0.146 | 0.661 |
 | `ssl_e2e::e2e_barlow_M-s0::L0::h` | 0.988 | 0.817 | 0.125 | 0.501 |
 | `ssl_e2e::e2e_barlow_S-s0::L0::h` | 0.989 | 0.793 | 0.203 | 0.622 |
 | `ssl_e2e::e2e_jepa_L-s0::L0::h` | 0.991 | 0.765 | 0.104 | 0.603 |
+| `ssl_e2e::e2e_jepa_M-s0::L0::h` | 0.991 | 0.749 | 0.188 | 0.552 |
 | `ssl_e2e::e2e_jepa_S-s0::L0::h` | 0.959 | 0.725 | 0.121 | 0.502 |
 | `ssl_e2e::e2e_jepa_XL-s0::L0::h` | 0.988 | 0.677 | 0.106 | 0.514 |
 | `Qwen/Qwen3-8B::L18::mean` | 0.988 | 0.697 |  |  |
