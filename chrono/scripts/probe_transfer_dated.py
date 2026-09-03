@@ -119,6 +119,12 @@ def main(argv=None):
              f"`rho within NA` repeats it over the {int((te.period_norm == 'Neo-Assyrian').sum()):,} "
              "Neo-Assyrian inscriptions alone — the same question the thesis asks, with the easy "
              "between-period contrast removed.", "",
+             "", "**On `rho within NA`, read the ceiling before the number.** The training target here "
+             "is a period MIDPOINT, which is one constant value for every Neo-Assyrian text, so a model "
+             "fit on it cannot resolve time inside that period however good its representation is. A "
+             "near-zero column is what this target predicts; it is not evidence that the signal is "
+             "absent. Within-period dating is answered with real years, by the thesis-protocol read-out "
+             "in `EMIN_SSL_RESULT.md` (C18).",
              "| model | transfer rho | rho within NA | classes | bal acc | per-class recall |",
              "|---|---|---|---|---|---|"]
     for _, r in R.iterrows():
