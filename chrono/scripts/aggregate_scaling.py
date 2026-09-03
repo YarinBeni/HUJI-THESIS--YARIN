@@ -31,7 +31,7 @@ def main(argv=None):
     pr = r[r.run_id.str.startswith("s1_probe::")].copy()
     pr["model"] = pr.run_id.str.replace("s1_probe::", "", regex=False)
     pr["kind"] = pr["model"].map(kind_of)
-    latest = pr.sort_values("value").drop_duplicates(["model", "metric"], keep="last")  # one row per cell
+    latest = pr.drop_duplicates(["model", "metric"], keep="last")  # one row per cell: the LATEST run (append order), not the max
     piv = latest.pivot_table(index=["kind", "model"], columns="metric", values="value")
     cols = [c for c in ["probe_linear_period_norm", "probe_mlp_period_norm", "probe_linear_source", "probe_linear_genre_raw",
                         "probe_linear_provenance", "silhouette_period", "knn10_purity_period"] if c in piv.columns]
