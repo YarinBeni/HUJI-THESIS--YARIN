@@ -18,7 +18,7 @@ git push origin HEAD:yarin-sandbox 2>&1 | tail -2
 # finally leaves the queue. Everything above is idempotent; the submission
 # below is not, so refuse when a re-probe array is already waiting (more
 # than one C14 array in the queue means one of them is ours).
-LIST=$(python3 chrono/scripts/c14_stale_cells.py) || { echo "stale-cell check FAILED"; exit 1; }
+LIST=$(python chrono/scripts/c14_stale_cells.py)
 ARRAYS=$(squeue -u "$USER" -h -n C14_reprobe -o %A | sed 's/_.*//' | sort -u)
 LIVE=$(echo "$ARRAYS" | head -1)
 echo "stale cells: ${LIST:-none}   C14 arrays queued: $(echo $ARRAYS | tr '\n' ' ')"
@@ -27,4 +27,5 @@ echo "stale cells: ${LIST:-none}   C14 arrays queued: $(echo $ARRAYS | tr '\n' '
 if [ -n "$LIVE" ]; then
     sbatch --parsable --dependency=afterany:"$LIVE" --array="$LIST" chrono/sbatch/C14_reprobe.sbatch
 else
-    sbatch --parsable --ar
+    sbatch --parsable --array="$LIST" chrono/sbatch/C14_reprobe.sbatch
+fi
