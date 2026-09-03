@@ -81,7 +81,13 @@ def main(argv=None):
 
         y_mid = tr.period_norm.map(MIDPOINT).to_numpy(float)
         pred = RidgeCV(alphas=np.logspace(-1, 4, 12)).fit(A, y_mid).predict(B)
-        rho = spearmanr(pred, te.year.to_numpy(float)).statistic
+        yr = te.year.to_numpy(float)
+        rho = spearmanr(pred, yr).statistic
+        # 924 of the 1,176 dated inscriptions are Neo-Assyrian, so the overall
+        # rho mostly measures "is this Neo-Assyrian or not". The thesis task is
+        # the harder one inside a single period, so report that separately.
+        m_na = (te.period_norm == "Neo-Assyrian").to_numpy()
+        rho_na = spearmanr(pred[m_na], yr[m_na]).statistic if m_na.sum() >= 50 else np.nan
 
         # classification, honest class filter
         vc_tr, vc_te = tr.period_norm.value_counts(), te.period_norm.value_counts()
@@ -97,8 +103,8 @@ def main(argv=None):
             per_class = ", ".join(f"{cl} {r:.2f} (n={int(vc_te.get(cl, 0))})"
                                   for cl, r in zip(le.classes_, rec) if cl in keep)
         rows.append(dict(model=f"{model}::L{layer}::{site}", n_train=len(tr), n_test=len(te),
-                         rho=rho, classes=len(keep), acc=acc, per_class=per_class))
-        print(f"{model} L{layer} {site}: rho={rho:+.3f} acc={acc:.3f}", flush=True)
+                         rho=rho, rho_na=rho_na, classes=len(keep), acc=acc, per_class=per_class))
+        print(f"{model} L{layer} {site}: rho={rho:+.3f} rho_NA={rho_na:+.3f} acc={acc:.3f}", flush=True)
 
     if not rows:
         raise SystemExit("no cell had embeddings for both the undated pool and the dated inscriptions")
@@ -110,10 +116,15 @@ def main(argv=None):
              f"`acc` is balanced accuracy over the periods with >= {MIN_TEST} test and >= {MIN_TRAIN} "
              "training documents, with per-class recall beside it; earlier tables scored classes "
              "with as little as one test document and are superseded here.", "",
-             "| model | transfer rho | classes | bal acc | per-class recall |", "|---|---|---|---|---|"]
+             f"`rho within NA` repeats it over the {int((te.period_norm == 'Neo-Assyrian').sum()):,} "
+             "Neo-Assyrian inscriptions alone — the same question the thesis asks, with the easy "
+             "between-period contrast removed.", "",
+             "| model | transfer rho | rho within NA | classes | bal acc | per-class recall |",
+             "|---|---|---|---|---|---|"]
     for _, r in R.iterrows():
         a = "" if pd.isna(r.acc) else f"{r.acc:.3f}"
-        lines.append(f"| `{r.model}` | {r.rho:+.3f} | {r.classes} | {a} | {r.per_class} |")
+        na = "" if pd.isna(r.rho_na) else f"{r.rho_na:+.3f}"
+        lines.append(f"| `{r.model}` | {r.rho:+.3f} | {na} | {r.classes} | {a} | {r.per_class} |")
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     open(args.out, "w").write("\n".join(lines) + "\n")
     print(f"wrote {args.out} ({len(R)} cells)")
