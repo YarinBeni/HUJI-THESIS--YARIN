@@ -81,6 +81,22 @@ commit_push_sandbox() {
     ( flock -w 600 9 || true
       _git_abort_inflight
       git add "$@" 2>/dev/null || true
+      # BIG-FILE GUARD (2026-09-03). Twice in one day a job staged a
+      # multi-hundred-MB checkpoint that had been copied under
+      # chrono/reports; pack-objects was then OOM-killed on the login
+      # node and EVERY push from the cluster failed for hours, with the
+      # results of unrelated jobs stuck behind it. Nothing this repo
+      # tracks is legitimately larger than a few MB, so unstage anything
+      # over the limit and say so, rather than poisoning the branch.
+      local _big
+      _big="$(git diff --cached --name-only --diff-filter=AM | while read -r _f; do
+                  [ -f "$_f" ] && [ "$(stat -c%s "$_f" 2>/dev/null || echo 0)" -gt "${MAX_COMMIT_BYTES:-20000000}" ] \
+                      && printf '%s\n' "$_f"; done)"
+      if [ -n "$_big" ]; then
+          echo "[commit_push_sandbox] REFUSING to commit oversized file(s):" >&2
+          printf '  %s\n' $_big >&2
+          git reset -q -- $_big
+      fi
       if git diff --cached --quiet; then
           echo "[commit_push_sandbox] nothing to commit"
       else
