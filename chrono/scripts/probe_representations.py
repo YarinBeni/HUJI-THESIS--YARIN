@@ -20,7 +20,7 @@ Writes one markdown per (model, layer, site) under --out-dir and appends rows
 to results.parquet (run_id 's1_probe::<model>::L<layer>::<site>').
 """
 from __future__ import annotations
-import argparse, json, os, sys, warnings
+import argparse, json, os, re, sys, warnings
 import numpy as np, pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -35,6 +35,14 @@ from sklearn.neighbors import NearestNeighbors                  # noqa: E402
 from sklearn.decomposition import PCA                           # noqa: E402
 
 warnings.filterwarnings("ignore")
+
+
+def _safe(name: str) -> str:
+    """Filename-safe model tag. The store's model names carry '::' and '/'
+    (e.g. 'ssl::ssl_barlow_cunei400m-s0'), which the cluster filesystem
+    rejects: every C10 probe computed its whole battery and then died with
+    OSError on the output path (jobs 33691+)."""
+    return re.sub(r"[^0-9A-Za-z_.-]+", "_", name)
 
 
 def cv_probe(X, y, kind, seed=0, folds=5):
@@ -145,12 +153,12 @@ def main(argv=None):
             os.makedirs(args.out_dir, exist_ok=True)
             pd.DataFrame({"fragment_id": c.loc[m, "fragment_id"].to_numpy(), "u1": U[:, 0], "u2": U[:, 1],
                           "period": y[m].to_numpy(), "source": c.loc[m, "source"].to_numpy()}) \
-              .to_parquet(os.path.join(args.out_dir, f"umap_{args.model.replace('/', '_')}_L{args.layer}_{args.site}.parquet"), index=False)
+              .to_parquet(os.path.join(args.out_dir, f"umap_{_safe(args.model)}_L{args.layer}_{args.site}.parquet"), index=False)
         except ImportError:
             lines.append("(umap-learn not installed: UMAP skipped)")
 
     os.makedirs(args.out_dir, exist_ok=True)
-    out = os.path.join(args.out_dir, f"S1_{args.model.replace('/', '_')}_L{args.layer}_{args.site}.md")
+    out = os.path.join(args.out_dir, f"S1_{_safe(args.model)}_L{args.layer}_{args.site}.md")
     open(out, "w").write("\n".join(lines) + "\n"); print("\n".join(lines))
     common.append_results(rows)
 
