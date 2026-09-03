@@ -24,7 +24,7 @@ cd ~/projects/HUJI-THESIS--YARIN
 source chrono/sbatch/_sandbox.sh
 sync_sandbox || { echo "FAILED sync_sandbox"; exit 1; }
 enable_log_push
-mkdir -p chrono/sbatch/logs chrono/reports/ssl/hyb
+mkdir -p chrono/sbatch/logs
 ART=chrono/artifacts_ssl
 ( flock -w 1200 9; [ -f "${ART}/corpus_all.parquet" ] || python -u chrono/scripts/make_ssl_corpus.py --out-dir "${ART}" || exit 1 ) 9>"${GIT_LOCK}.ssl" || exit 1
 python -u chrono/scripts/train_ssl_e2e.py --size "${SZ}" --objective "${OBJ}" --hours 5 --batch "${BATCH}" \
@@ -32,7 +32,8 @@ python -u chrono/scripts/train_ssl_e2e.py --size "${SZ}" --objective "${OBJ}" --
     --corpus "${ART}/corpus_all.parquet" --store-root "${ART}/emb_store" --out-dir "${ART}/hyb" \
     || { echo "FAILED hyb ${OBJ} ${SZ} ${FRZ[$F]}"; exit 1; }
 RUN="hyb_${OBJ}_${SZ}_${FRZ[$F]}-s0"
-cp "${ART}/hyb/${RUN}/final.pt" "chrono/reports/ssl/hyb/${RUN}.pt" 2>/dev/null || true
+# final.pt stays under ${ART} (ignored by git); copying it into chrono/reports
+# put 100-400 MB blobs into every later `commit_push_sandbox chrono/reports`.
 cp chrono/artifacts/results.parquet chrono/reports/results.parquet
 commit_push_sandbox "C15: ${RUN} (job ${SLURM_JOB_ID})" chrono/reports/results.parquet
 echo "=== Done. $(date) ==="

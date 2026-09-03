@@ -73,3 +73,11 @@ chrono/artifacts_tier0/
 
 # SSL corpus root (rebuildable)
 chrono/artifacts_ssl/
+
+# SSL checkpoints must never ride into chrono/reports (2026-09-03 outage:
+# 100-400 MB final.pt files copied here by C11/C15 were swept up by every
+# `commit_push_sandbox ... chrono/reports` and killed pack-objects on the
+# login node -> 8 h without a single successful push). Checkpoints live
+# under chrono/artifacts_ssl/ only.
+chrono/reports/ssl/e2e/*.pt
+chrono/reports/ssl/hyb/*.pt
