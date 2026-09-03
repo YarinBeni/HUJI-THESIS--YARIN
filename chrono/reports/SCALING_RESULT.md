@@ -19,6 +19,7 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 | adapter (SSL on frozen) | `ssl::ssl_byol_akk300m-s0::L0::h` | 0.885 | 0.848 | 0.143 | 0.935 | 0.188 | 0.492 | 0.302 | 0.974 |
 | adapter (SSL on frozen) | `ssl::ssl_byol_cunei400m-s0::L0::h` | 0.840 | 0.815 | 0.159 | 0.918 | 0.129 | 0.391 | 0.192 | 0.903 |
 | adapter (SSL on frozen) | `ssl::ssl_byol_llama2_7b-s0::L0::h` | 0.836 | 0.825 | 0.141 | 0.962 | 0.179 | 0.502 | 0.336 | 0.956 |
+| adapter (SSL on frozen) | `ssl::ssl_infonce_akk300m-s0::L0::h` | 0.879 | 0.841 | 0.145 | 0.948 | 0.249 | 0.603 | 0.018 | 0.972 |
 | adapter (SSL on frozen) | `ssl::ssl_infonce_cunei400m-s0::L0::h` | 0.891 | 0.870 | 0.101 | 0.960 | 0.247 | 0.637 | 0.025 | 0.976 |
 | adapter (SSL on frozen) | `ssl::ssl_infonce_qwen3_8b-s0::L0::h` | 0.852 | 0.823 | 0.094 | 0.968 | 0.234 | 0.632 | -0.025 | 0.975 |
 | adapter (SSL on frozen) | `ssl::ssl_jepa_cunei400m-s0::L0::h` | 0.809 | 0.766 | 0.146 | 0.924 | 0.136 | 0.447 | 0.175 | 0.890 |
@@ -46,6 +47,7 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 | `ssl::ssl_byol_akk300m-s0::L0::h` | 0.992 | 0.791 | 0.143 | 0.664 |
 | `ssl::ssl_byol_cunei400m-s0::L0::h` | 0.980 | 0.807 | 0.159 | 0.643 |
 | `ssl::ssl_byol_llama2_7b-s0::L0::h` | 0.975 | 0.707 | 0.141 | 0.626 |
+| `ssl::ssl_infonce_akk300m-s0::L0::h` | 0.994 | 0.761 | 0.145 | 0.642 |
 | `ssl::ssl_infonce_cunei400m-s0::L0::h` | 0.993 | 0.767 | 0.101 | 0.634 |
 | `ssl::ssl_infonce_qwen3_8b-s0::L0::h` | 0.990 | 0.722 | 0.094 | 0.451 |
 | `ssl::ssl_jepa_cunei400m-s0::L0::h` | 0.964 | 0.700 | 0.146 | 0.661 |
