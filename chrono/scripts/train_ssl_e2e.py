@@ -24,7 +24,7 @@ from chrono.models.store import EmbStore                        # noqa: E402
 from chrono.losses import bt_loss, variance_loss                # noqa: E402
 from chrono.augment.ops import OPS                              # noqa: E402
 from chrono.ssl.tokenizer import SignTokenizer                  # noqa: E402
-from chrono.ssl.encoder import SignEncoder, SIZES               # noqa: E402
+from chrono.ssl.encoder import SignEncoder, HybridEncoder, SIZES  # noqa: E402
 
 WORD_OPS = ["crop16", "crop32", "drop_span", "orthonorm"]
 
@@ -73,12 +73,17 @@ def infonce(pa, pb, temp):
 
 
 @torch.no_grad()
-def embed(model, tok, texts, max_len, dev, bs=512):
+def embed(model, tok, texts, max_len, dev, bs=512, frozen=None):
     model.eval(); out = []
+    if frozen is not None:
+        bs = 64
     for lo in range(0, len(texts), bs):
-        ids = pad([tok.encode(t, max_len) for t in texts[lo:lo + bs]], max_len).to(dev)
         with torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=(dev == "cuda")):
-            h, _, _ = model(ids)
+            if frozen is not None:
+                st, m = frozen(list(texts[lo:lo + bs])); h, _, _ = model(st, m)
+            else:
+                ids = pad([tok.encode(t, max_len) for t in texts[lo:lo + bs]], max_len).to(dev)
+                h, _, _ = model(ids)
         out.append(h.float().cpu().numpy())
     model.train(); return np.concatenate(out)
 
@@ -110,9 +115,15 @@ def main(argv=None):
     ap.add_argument("--ema", type=float, default=0.996); ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--ckpt-every", type=int, default=1000); ap.add_argument("--eval-every", type=int, default=2000)
     ap.add_argument("--limit", type=int, default=0, help="smoke: first N train texts")
+    ap.add_argument("--frozen", default=None,
+                    help="HYBRID family: registry key of a frozen encoder whose token states are the input "
+                         "(e.g. thalesian_cunei400m, llama2_7b); a fresh Transformer of --size trains on top")
+    ap.add_argument("--frozen-layer", type=int, default=None)
     ap.add_argument("--run-name", default=None)
     args = ap.parse_args(argv)
-    run = args.run_name or f"e2e_{args.objective}_{args.size}-s{args.seed}"
+    fam = "hyb" if args.frozen else "e2e"
+    run = args.run_name or (f"hyb_{args.objective}_{args.size}_{args.frozen}-s{args.seed}" if args.frozen
+                            else f"e2e_{args.objective}_{args.size}-s{args.seed}")
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     torch.manual_seed(args.seed); rng = np.random.default_rng(args.seed)
     out_dir = os.path.join(args.out_dir, run); os.makedirs(out_dir, exist_ok=True)
@@ -130,7 +141,14 @@ def main(argv=None):
     vc = lab["period_norm"].value_counts(); lab = lab[lab["period_norm"].isin(vc[vc >= 30].index)]
     lab = lab.sample(min(len(lab), 4000), random_state=0)
 
-    model = SignEncoder(len(tok), args.size, args.max_len).to(dev)
+    frozen = None
+    if args.frozen:
+        from chrono.ssl.frozen import FrozenTokenEncoder
+        frozen = FrozenTokenEncoder(args.frozen, args.frozen_layer, args.max_len, dev)
+        model = HybridEncoder(frozen.d, args.size).to(dev)
+        print(f"[hyb] frozen {args.frozen} L{args.frozen_layer} d={frozen.d} -> trainable {args.size}", flush=True)
+    else:
+        model = SignEncoder(len(tok), args.size, args.max_len).to(dev)
     ema = EMA(model, args.ema) if args.objective in ("byol", "jepa") else None
     pred = (torch.nn.Sequential(torch.nn.Linear(256, 512), torch.nn.GELU(), torch.nn.Linear(512, 256)).to(dev)
             if args.objective in ("byol", "jepa") else None)
@@ -153,21 +171,46 @@ def main(argv=None):
         # not a step count, so a cosine schedule has nothing to anchor to
         return args.lr * min(1.0, s / max(1, args.warmup))
 
+    def word_view(text, heavy=False):
+        """text-level part of a view (for the hybrid family; masking happens in embedding space)"""
+        if heavy or rng.random() < 0.8:
+            op = OPS[rng.choice(["crop16", "crop32", "drop_span"] if heavy else WORD_OPS)]
+            text, _ = op(text, {}, rng)
+        return text
+
+    def fwd(net, texts_batch, heavy=False, clean=False):
+        """hybrid forward: frozen token states (no grad) -> drop mask -> trainable net"""
+        st, m = frozen([t if clean else word_view(t, heavy) for t in texts_batch])
+        drop = None
+        if not clean:
+            pm = args.p_mask * (2 if heavy else 1)
+            drop = (torch.rand(m.shape, device=m.device) < pm) & m
+        return net(st, m, drop)
+
     step0 = step; rows = []
     while step < args.max_steps and (time.time() - t0) < budget_s:
         bi = rng.choice(len(texts), size=args.batch, replace=False, p=p)
-        if args.objective == "jepa":
-            va = [views.make(texts[i], rng, heavy=True) for i in bi]; vb = [tok.encode(texts[i], args.max_len) for i in bi]
-        else:
-            va = [views.make(texts[i], rng) for i in bi]; vb = [views.make(texts[i], rng) for i in bi]
-        xa, xb = pad(va, args.max_len).to(dev), pad(vb, args.max_len).to(dev)
+        if frozen is None:
+            if args.objective == "jepa":
+                va = [views.make(texts[i], rng, heavy=True) for i in bi]; vb = [tok.encode(texts[i], args.max_len) for i in bi]
+            else:
+                va = [views.make(texts[i], rng) for i in bi]; vb = [views.make(texts[i], rng) for i in bi]
+            xa, xb = pad(va, args.max_len).to(dev), pad(vb, args.max_len).to(dev)
         for g in opt.param_groups: g["lr"] = lr_at(step)
         with torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=(dev == "cuda")):
-            h_a, s_a, p_a = model(xa)
-            if ema is not None:
-                with torch.no_grad(): _, _, p_b = ema.t(xb)
+            if frozen is not None:
+                tb = [texts[i] for i in bi]
+                h_a, s_a, p_a = fwd(model, tb, heavy=(args.objective == "jepa"))
+                if ema is not None:
+                    with torch.no_grad(): _, _, p_b = fwd(ema.t, tb, clean=(args.objective == "jepa"))
+                else:
+                    _, _, p_b = fwd(model, tb)
             else:
-                _, _, p_b = model(xb)
+                h_a, s_a, p_a = model(xa)
+                if ema is not None:
+                    with torch.no_grad(): _, _, p_b = ema.t(xb)
+                else:
+                    _, _, p_b = model(xb)
             if args.objective == "barlow":
                 loss = bt_loss(p_a.float(), p_b.float(), lambda_offdiag=0.005)
             elif args.objective in ("byol", "jepa"):
@@ -186,30 +229,30 @@ def main(argv=None):
             print(f"[e2e] step {step} loss {np.mean(curve[-100:]):.4f} lr {lr_at(step):.2e} "
                   f"{(time.time() - t0) / 60:.1f} min", flush=True)
         if step % args.eval_every == 0 and len(lab) >= 200:
-            H = embed(model, tok, lab["text"].tolist(), args.max_len, dev)
+            H = embed(model, tok, lab["text"].tolist(), args.max_len, dev, frozen=frozen)
             acc = quick_period_probe(H, lab["period_norm"].to_numpy())
             print(f"[e2e] step {step} quick period probe (linear, {lab.period_norm.nunique()} classes, n={len(lab)}) "
                   f"bal.acc {acc:.3f}", flush=True)
-            rows.append(dict(run_id=f"ssl_e2e::{run}", git_sha="", config_sha="", seed=args.seed, split="ssl_cv",
+            rows.append(dict(run_id=f"ssl_{fam}::{run}", git_sha="", config_sha="", seed=args.seed, split="ssl_cv",
                              metric="quick_period_probe", value=acc, n=len(lab),
                              extra=json.dumps({"step": step, "loss": float(np.mean(curve[-100:])), "size": args.size,
-                                               "objective": args.objective, "params": n_par})))
+                                               "objective": args.objective, "params": n_par, "frozen": args.frozen})))
         if step % args.ckpt_every == 0:
             torch.save({"model": model.state_dict(), "opt": opt.state_dict(), "step": step, "curve": curve,
                         "pred": pred.state_dict() if pred else None, "ema": ema.t.state_dict() if ema else None}, ck)
 
     torch.save({k: v.cpu() for k, v in model.state_dict().items()}, os.path.join(out_dir, "final.pt"))
     clean = c.drop_duplicates("uid")
-    H = embed(model, tok, clean["text"].tolist(), args.max_len, dev)
+    H = embed(model, tok, clean["text"].tolist(), args.max_len, dev, frozen=frozen)
     store = EmbStore(args.store_root)
     for lo in range(0, len(clean), 4096):
-        store.put(f"ssl_e2e::{run}", 0, "h", ("ssl::" + clean["uid"].iloc[lo:lo + 4096]).tolist(), H[lo:lo + 4096])
-    rows.append(dict(run_id=f"ssl_e2e::{run}", git_sha="", config_sha="", seed=args.seed, split="train", metric="final_loss",
+        store.put(f"ssl_{fam}::{run}", 0, "h", ("ssl::" + clean["uid"].iloc[lo:lo + 4096]).tolist(), H[lo:lo + 4096])
+    rows.append(dict(run_id=f"ssl_{fam}::{run}", git_sha="", config_sha="", seed=args.seed, split="train", metric="final_loss",
                      value=float(np.mean(curve[-200:])) if curve else float("nan"), n=len(texts),
                      extra=json.dumps({"steps": step, "hours": round((time.time() - t0) / 3600, 2), "size": args.size,
                                        "objective": args.objective, "params": n_par})))
     common.append_results(rows)
-    print(f"[e2e] done {run}: {step} steps in {(time.time() - t0) / 3600:.2f}h; embeddings -> store 'ssl_e2e::{run}' "
+    print(f"[e2e] done {run}: {step} steps in {(time.time() - t0) / 3600:.2f}h; embeddings -> store 'ssl_{fam}::{run}' "
           f"({len(clean):,} texts); final.pt in {out_dir}", flush=True)
 
 

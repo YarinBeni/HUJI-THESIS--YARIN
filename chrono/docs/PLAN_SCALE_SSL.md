@@ -72,6 +72,14 @@ Archibab full export. Each needs one normalisation pass to sign-level tokens.
 
 All share the same views, tokeniser (sign level), encoder sizes, and read-out.
 
+**Three input families for each objective** (PI, 2026-09-03):
+| family | input to the trainable part | trainable part |
+|---|---|---|
+| adapter | ONE pooled vector from the frozen encoder | 3-layer MLP (C10) |
+| from scratch | raw signs | full Transformer incl. embeddings, 8–100 M (C11) |
+| **hybrid** | the frozen encoder's **token states** (all of them, before pooling) | fresh S/M Transformer on top (C15) — inherits the frozen model's knowledge, learns a new composition instead of a mean |
+
+
 ## 4. Avoiding ORACC bias
 
 1. **Balanced sampling**: sample sources with probability ∝ nᵅ, α = 0.5 (temperature

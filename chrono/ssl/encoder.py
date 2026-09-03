@@ -45,3 +45,42 @@ class SignEncoder(nn.Module):
     def n_params(self, with_embedding=True):
         n = sum(p.numel() for p in self.parameters())
         return n if with_embedding else n - self.tok.weight.numel() - self.pos.weight.numel()
+
+
+class HybridEncoder(nn.Module):
+    """Third family (PI suggestion, 2026-09-03): the FROZEN encoder's token
+    states are the input, a fresh Transformer of the same S/M/L/XL family is
+    trained on top with SSL. Between the shallow adapter (one pooled vector ->
+    MLP) and the from-scratch model (raw signs): it inherits everything the
+    frozen model learned from its much larger pretraining data, but learns a
+    new COMPOSITION of the tokens instead of a plain mean. Token masking is
+    done in embedding space with a learned <mask> vector, so it works for any
+    frozen tokenizer."""
+
+    def __init__(self, d_frozen: int, size: str = "S", d_proj: int = 256, dropout: float = 0.1):
+        super().__init__()
+        c = SIZES[size]; d = c["d"]
+        self.inp = nn.Linear(d_frozen, d)
+        self.mask_vec = nn.Parameter(torch.zeros(d))
+        layer = nn.TransformerEncoderLayer(d, c["heads"], c["ff"], dropout=dropout, batch_first=True,
+                                           norm_first=True, activation="gelu")
+        self.enc = nn.TransformerEncoder(layer, c["L"])
+        self.norm = nn.LayerNorm(d)
+        self.proj = nn.Sequential(nn.Linear(d, 2 * d), nn.GELU(), nn.Linear(2 * d, d_proj))
+        self.axis = nn.Linear(d, 1)
+        self.d = d
+
+    def forward(self, states: torch.Tensor, mask: torch.Tensor, drop: torch.Tensor | None = None):
+        """states [B,T,d_frozen], mask [B,T] bool (real tokens), drop [B,T] bool
+        positions whose token vector is replaced by the learned mask vector."""
+        x = self.inp(states.to(self.inp.weight.dtype))
+        if drop is not None:
+            x = torch.where(drop.unsqueeze(-1), self.mask_vec.to(x.dtype).expand_as(x), x)
+        x = self.enc(x, src_key_padding_mask=~mask)
+        x = self.norm(x)
+        m = mask.unsqueeze(-1).to(x.dtype)
+        h = (x * m).sum(1) / m.sum(1).clamp_min(1.0)
+        return h, self.axis(h).squeeze(-1), self.proj(h)
+
+    def n_params(self, with_embedding=True):
+        return sum(p.numel() for p in self.parameters())
