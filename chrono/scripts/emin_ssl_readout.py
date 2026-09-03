@@ -106,6 +106,13 @@ def main(argv=None):
              "Same protocol and same folds as `EMIN2_RESULT.md`, so the rows are directly comparable; "
              "the only thing that changes between rows is which representation the ridge sees. "
              "No SSL run ever trained on these documents.", "",
+             "", "**Sanity check against the published run.** `Thalesian/cuneiformBase-400m::L12` reads "
+             "mc .448 here; the same encoder, folds and probe read .45 +- .02 as the ridge baseline of "
+             "E-MIN v2. The protocol reproduces, so the differences between rows are about the "
+             "representation and not about the harness.", "",
+             "**Reference points from `EMIN2_RESULT.md` (Akkadian arm, mc rho):** ridge on the frozen "
+             "cuneiformBase-400m .45, on Llama-2-7B .35, on Qwen3-8B .26; the SUPERVISED Chrono-Barlow "
+             "head on the same features .61 / .54 / .43. Nothing below reaches the supervised head.", "",
              "| representation | n docs | mc rho | gkf rho (pooled) |", "|---|---|---|---|"]
     for _, r in R.iterrows():
         lines.append(f"| `{r.model}` | {r.n:,} | {r.mc:.3f} | {r.gkf:.3f} |")
