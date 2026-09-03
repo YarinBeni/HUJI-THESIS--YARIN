@@ -33,7 +33,12 @@ def main(argv=None):
     pr["kind"] = pr["model"].map(kind_of)
     latest = pr.drop_duplicates(["model", "metric"], keep="last")  # one row per cell: the LATEST run (append order), not the max
     piv = latest.pivot_table(index=["kind", "model"], columns="metric", values="value")
-    cols = [c for c in ["probe_linear_period_norm", "probe_mlp_period_norm", "probe_linear_source", "probe_linear_genre_raw",
+    # probe_linear_period_heldout_orcc is the one number that answers the
+    # thesis question: train the period probe on every undated corpus, test it
+    # on the dated royal inscriptions the SSL run never saw. It belongs in the
+    # main table, next to the within-corpus number it so often contradicts.
+    cols = [c for c in ["probe_linear_period_norm", "probe_mlp_period_norm", "probe_linear_period_heldout_orcc",
+                        "probe_linear_source", "probe_linear_genre_raw",
                         "probe_linear_provenance", "silhouette_period", "knn10_purity_period"] if c in piv.columns]
     within = [c for c in piv.columns if c.startswith("probe_linear_period_within_")]
     held = [c for c in piv.columns if c.startswith("probe_linear_period_heldout_")]
@@ -41,7 +46,7 @@ def main(argv=None):
          "Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), source chance ≈ .17. "
          "A high SOURCE probe with a low WITHIN-source period probe means the model learned corpora, not time.", "",
          "## Main table", "",
-         "| kind | model | " + " | ".join(c.replace("probe_linear_", "lin ").replace("probe_mlp_", "mlp ").replace("_norm", "").replace("_raw", "") for c in cols) + " |",
+         "| kind | model | " + " | ".join(c.replace("probe_linear_period_heldout_orcc", "HELD-OUT dated").replace("probe_linear_", "lin ").replace("probe_mlp_", "mlp ").replace("_norm", "").replace("_raw", "") for c in cols) + " |",
          "|---|---|" + "---|" * len(cols)]
     for (kind, model), row in piv.sort_index().iterrows():
         L.append(f"| {kind} | `{model}` | " + " | ".join("" if pd.isna(row.get(c)) else f"{row[c]:.3f}" for c in cols) + " |")
