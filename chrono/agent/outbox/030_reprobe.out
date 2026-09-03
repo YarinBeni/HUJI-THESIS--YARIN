@@ -1,0 +1,21 @@
+# 030_reprobe  host=g0375  start=Thu Sep  3 08:52:58 UTC 2026  timeout=1800s
+# HEAD=422c9584
+# ---------------------------------------------------------
+C14 array: 33784
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+      33674_[3-65] voltagepa   C13_s3  yarin.b PD       0:00      1 (Resources)
+      33784_[7-31] voltagepa C14_repr  yarin.b PD       0:00      1 (Priority)
+       33642_[0-7] voltagepa C8_ssl_p  yarin.b PD       0:00      1 (DependencyNeverSatisfied)
+           33674_2 voltagepa   C13_s3  yarin.b  R      13:03      1 g0381
+           33674_0 voltagepa   C13_s3  yarin.b  R    1:08:37      1 g0381
+           33674_1 voltagepa   C13_s3  yarin.b  R    1:08:37      1 g0381
+           33784_0 voltagepa C14_repr  yarin.b  R       0:03      1 g0376
+           33784_1 voltagepa C14_repr  yarin.b  R       0:03      1 g0375
+           33784_2 voltagepa C14_repr  yarin.b  R       0:03      1 g0375
+           33784_3 voltagepa C14_repr  yarin.b  R       0:03      1 g0375
+           33784_4 voltagepa C14_repr  yarin.b  R       0:03      1 g0377
+           33784_5 voltagepa C14_repr  yarin.b  R       0:03      1 g0377
+           33784_6 voltagepa C14_repr  yarin.b  R       0:03      1 g0377
+             33781 voltagepa AGENT_ru  yarin.b  R      23:34      1 g0375
+# ---------------------------------------------------------
+# exit=0  end=Thu Sep  3 08:53:03 UTC 2026
