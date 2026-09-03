@@ -1,0 +1,59 @@
+# job 33915 C14_reprobe exit=0 Thu Sep  3 22:17:58 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C14_reprobe_33784_8.out
+=== C14 ssl::ssl_barlow_cunei400m-s0 L0 h === job 33915 Thu Sep  3 19:35:18 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+# S1 representation probes — ssl::ssl_barlow_cunei400m-s0::L0::h
+
+texts 30,729 · PCA 0 · classes need ≥ 30 docs
+
+## Probes (balanced accuracy, 5-fold, tablet level)
+
+| label | classes | n | linear | MLP | chance |
+|---|---|---|---|---|---|
+| period_norm | 5 | 6,300 | 0.901 ± 0.062 | 0.882 ± 0.029 | 0.200 |
+| genre_raw | 71 | 27,187 | 0.262 ± 0.006 | 0.227 ± 0.012 | 0.014 |
+| provenance | 16 | 30,419 | 0.676 ± 0.010 | 0.662 ± 0.029 | 0.062 |
+| source | 5 | 30,720 | 0.971 ± 0.006 | 0.970 ± 0.003 | 0.200 |
+
+## Period probe WITHIN source (linear)
+
+| source | classes | n | balanced acc | chance |
+|---|---|---|---|---|
+| oracc | 2 | 3,414 | 0.992 ± 0.007 | 0.500 |
+| seal | 3 | 328 | 0.802 ± 0.036 | 0.333 |
+
+## Period probe, HELD-OUT source (train on the other non-dated sources, linear)
+
+| held out | classes | n test | balanced acc | chance |
+|---|---|---|---|---|
+| seal | 3 | 292 | 0.676 | 0.333 |
+| orcc (dated) | 3 | 953 | 0.161 | 0.333 |
+
+## Geometry (period)
+
+silhouette (raw space) +0.091 · permutation null -0.020 ± 0.014 · p = 0.000
+k-NN (k=10) period purity 0.984 · chance ≈ 0.341
+silhouette (UMAP-2d) +0.666 · null -0.053 ± 0.027 · p = 0.000
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox b6dc5272] C14: probes ssl::ssl_barlow_cunei400m-s0 L0 (job 33915)
+ 3 files changed, 32 insertions(+)
+ create mode 100644 chrono/reports/ssl/S1_ssl_ssl_barlow_cunei400m-s0_L0_h.md
+ create mode 100644 chrono/reports/ssl/umap_ssl_ssl_barlow_cunei400m-s0_L0_h.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   4d866a40..b6dc5272  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Thu Sep  3 22:17:58 UTC 2026 ===
