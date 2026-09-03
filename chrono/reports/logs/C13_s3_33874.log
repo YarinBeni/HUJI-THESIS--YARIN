@@ -1,0 +1,145 @@
+# job 33874 C13_s3 exit=0 Thu Sep  3 21:25:07 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C13_s3_33674_56.out
+=== C13 s3_llama2_7b_init-none_frac100_h128 seed 2 === job 33874 Thu Sep  3 17:24:43 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: b454588e
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+epoch 50/200 loss 11.3077
+epoch 100/200 loss 7.9936
+epoch 150/200 loss 6.4764
+epoch 200/200 loss 5.5055
+{
+  "run_id": "s3_llama2_7b_init-none_frac100_h128-s2-f0",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7291712508783005,
+    "train_spearman": 0.72879538870891,
+    "final_loss": 5.505463123321533,
+    "identical_view_rate": 0.007491891891891892,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac100_h128-s2-f0.parquet"
+}
+epoch 50/200 loss 10.8495
+epoch 100/200 loss 7.4224
+epoch 150/200 loss 6.3100
+epoch 200/200 loss 5.3324
+{
+  "run_id": "s3_llama2_7b_init-none_frac100_h128-s2-f1",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7733769888908216,
+    "train_spearman": 0.773316744088876,
+    "final_loss": 5.332351803779602,
+    "identical_view_rate": 0.00651673640167364,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac100_h128-s2-f1.parquet"
+}
+epoch 50/200 loss 9.7388
+epoch 100/200 loss 6.9602
+epoch 150/200 loss 5.5796
+epoch 200/200 loss 4.9425
+{
+  "run_id": "s3_llama2_7b_init-none_frac100_h128-s2-f2",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7582704396397992,
+    "train_spearman": 0.7581938968813926,
+    "final_loss": 4.942500591278076,
+    "identical_view_rate": 0.007876427829698858,
+    "test_spearman": 0.23920232080470932
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac100_h128-s2-f2.parquet"
+}
+epoch 50/200 loss 11.6236
+epoch 100/200 loss 7.9899
+epoch 150/200 loss 6.4574
+epoch 200/200 loss 5.6390
+{
+  "run_id": "s3_llama2_7b_init-none_frac100_h128-s2-f3",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7223530865893408,
+    "train_spearman": 0.7222020277538819,
+    "final_loss": 5.638980507850647,
+    "identical_view_rate": 0.0036566390041493776,
+    "test_spearman": 0.6192412806812585
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac100_h128-s2-f3.parquet"
+}
+epoch 50/200 loss 10.8939
+epoch 100/200 loss 7.6447
+epoch 150/200 loss 6.1571
+epoch 200/200 loss 5.5729
+{
+  "run_id": "s3_llama2_7b_init-none_frac100_h128-s2-f4",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.6659519762746515,
+    "train_spearman": 0.6661379512652986,
+    "final_loss": 5.572940349578857,
+    "identical_view_rate": 0.007287344398340249,
+    "test_spearman": 0.6274984728033359
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac100_h128-s2-f4.parquet"
+}
+[commit_push_sandbox] nothing to commit
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[2026-09-03T21:25:07.013] error: *** JOB 33874 ON g0381 CANCELLED AT 2026-09-03T21:25:07 DUE TO TIME LIMIT ***
