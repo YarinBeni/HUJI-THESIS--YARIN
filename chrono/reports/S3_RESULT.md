@@ -4,19 +4,21 @@ Read-out: SLA §7 on centred out-of-fold scores, `orig` condition. `gkf` is the 
 
 **The SSL claim is a difference.** Compare each `barlow`/`jepa` row with the `none` row of the same encoder and label fraction; the absolute rho is dominated by the frozen encoder underneath.
 
-| encoder | init | label frac | seeds | folds | mc rho | gkf rho (pooled) |
-|---|---|---|---|---|---|---|
-| `cunei400m` | barlow | 25% | 3 | 5 | 0.536 ± 0.085 | 0.459 ± 0.058 |
-| `cunei400m` | barlow | 50% | 3 | 5 | 0.606 ± 0.017 | 0.534 ± 0.018 |
-| `cunei400m` | barlow | 100% | 3 | 5 | 0.590 ± 0.020 | 0.502 ± 0.019 |
-| `cunei400m` | jepa | 25% | 3 | 5 | 0.534 ± 0.040 | 0.422 ± 0.020 |
-| `cunei400m` | jepa | 50% | 3 | 5 | 0.622 ± 0.023 | 0.508 ± 0.019 |
-| `cunei400m` | jepa | 100% | 3 | 5 | 0.625 ± 0.018 | 0.506 ± 0.024 |
-| `cunei400m` | none | 25% | 3 | 5 | 0.534 ± 0.024 | 0.394 ± 0.020 |
-| `cunei400m` | none | 50% | 3 | 5 | 0.663 ± 0.011 | 0.537 ± 0.007 |
-| `cunei400m` | none | 100% | 3 | 5 | 0.603 ± 0.013 | 0.508 ± 0.016 |
-| `llama2_7b` | barlow | 25% | 1 | 5 | 0.547 | 0.440 |
-| `llama2_7b` | barlow | 50% | 2 | 5 | 0.551 ± 0.046 | 0.491 ± 0.001 |
+| encoder | init | label frac | head width | seeds | folds | mc rho | gkf rho (pooled) |
+|---|---|---|---|---|---|---|---|
+| `cunei400m` | barlow | 25% | 512 | 3 | 5 | 0.536 ± 0.085 | 0.459 ± 0.058 |
+| `cunei400m` | barlow | 50% | 512 | 3 | 5 | 0.606 ± 0.017 | 0.534 ± 0.018 |
+| `cunei400m` | barlow | 100% | 512 | 3 | 5 | 0.590 ± 0.020 | 0.502 ± 0.019 |
+| `cunei400m` | jepa | 25% | 512 | 3 | 5 | 0.534 ± 0.040 | 0.422 ± 0.020 |
+| `cunei400m` | jepa | 50% | 512 | 3 | 5 | 0.622 ± 0.023 | 0.508 ± 0.019 |
+| `cunei400m` | jepa | 100% | 512 | 3 | 5 | 0.625 ± 0.018 | 0.506 ± 0.024 |
+| `cunei400m` | none | 25% | 512 | 3 | 5 | 0.534 ± 0.024 | 0.394 ± 0.020 |
+| `cunei400m` | none | 50% | 512 | 3 | 5 | 0.663 ± 0.011 | 0.537 ± 0.007 |
+| `cunei400m` | none | 100% | 128 | 3 | 5 | 0.638 ± 0.011 | 0.492 ± 0.022 |
+| `cunei400m` | none | 100% | 512 | 3 | 5 | 0.603 ± 0.013 | 0.508 ± 0.016 |
+| `cunei400m` | none | 100% | 2048 | 3 | 5 | 0.587 ± 0.017 | 0.499 ± 0.023 |
+| `llama2_7b` | barlow | 25% | 512 | 1 | 5 | 0.547 | 0.440 |
+| `llama2_7b` | barlow | 50% | 512 | 2 | 5 | 0.551 ± 0.046 | 0.491 ± 0.001 |
 
 ## SSL init minus the `none` control (same encoder, same label fraction)
 
