@@ -62,6 +62,30 @@ their own logs (`chrono/reports/logs/`), independently of the runner.
   `git remote set-url origin https://<TOKEN>@github.com/YarinBeni/HUJI-THESIS--YARIN.git`.
   The token is never pasted into the chat with the assistant.
 
+## Flushing the cluster after a push outage
+
+Symptom: `git push` from the cluster dies with `the remote end hung up
+unexpectedly … while reading sideband packet` (2026-09-03, ~8 h). That is a
+cut transfer, not an auth error; hours of finished jobs then sit as local
+commits, and every later push carries them all, so every push dies. Do not
+rewrite history — push the backlog in slices, oldest first (each slice is a
+fast-forward of the branch), with the runner stopped:
+
+```bash
+cd ~/projects/HUJI-THESIS--YARIN
+git config http.postBuffer 524288000 && git config http.version HTTP/1.1
+git fetch -q origin yarin-sandbox && git rebase -q --autostash FETCH_HEAD
+echo "unpushed: $(git rev-list --count FETCH_HEAD..HEAD)"
+for c in $(git rev-list --reverse FETCH_HEAD..HEAD | awk 'NR%4==0'); do
+    git push -q origin "$c:yarin-sandbox" || { echo "FAIL at $c"; break; }
+done
+git push origin HEAD:yarin-sandbox
+```
+
+Then `sbatch chrono/sbatch/AGENT_runner.sbatch` again. Keep result files
+small: heads of ~10 MB (`chrono/reports/ssl/heads/`) are the largest thing a
+job commits; checkpoints stay under `chrono/artifacts_ssl/` (ignored).
+
 ## Files
 
 | path | tracked | purpose |
