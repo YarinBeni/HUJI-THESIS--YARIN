@@ -27,7 +27,14 @@ enable_log_push
 mkdir -p chrono/sbatch/logs
 ART=chrono/artifacts_ssl
 ( flock -w 1200 9; [ -f "${ART}/corpus_all.parquet" ] || python -u chrono/scripts/make_ssl_corpus.py --out-dir "${ART}" || exit 1 ) 9>"${GIT_LOCK}.ssl" || exit 1
-python -u chrono/scripts/train_ssl_e2e.py --size "${SZ}" --objective "${OBJ}" --hours 5 --batch "${BATCH}" \
+# HYB_HOURS is the TRAINING budget, not the wall limit. Six of the eight
+# first-wave runs trained their full 5 h and were then killed by the 6:30
+# wall limit part-way through the embedding pass, which for a frozen 7B
+# encoder over 31,905 texts takes well over an hour -- so five hours of GPU
+# produced no usable vectors. Runs resume from ckpt.pt, so a resubmission
+# with a small budget goes almost straight to embedding.
+HOURS="${HYB_HOURS:-5}"
+python -u chrono/scripts/train_ssl_e2e.py --size "${SZ}" --objective "${OBJ}" --hours "${HOURS}" --batch "${BATCH}" \
     --frozen "${FRZ[$F]}" --frozen-layer "${FL[$F]}" \
     --corpus "${ART}/corpus_all.parquet" --store-root "${ART}/emb_store" --out-dir "${ART}/hyb" \
     || { echo "FAILED hyb ${OBJ} ${SZ} ${FRZ[$F]}"; exit 1; }
