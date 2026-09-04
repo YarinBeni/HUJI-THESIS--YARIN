@@ -15,10 +15,22 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 | `ssl::ssl_jepa_cunei400m-s0::L0::h` | 1,176 | 0.494 | 0.376 |
 | `ssl::ssl_infonce_llama2_7b-s0::L0::h` | 1,176 | 0.417 | 0.374 |
 | `Thalesian/cuneiformBase-400m::L6::mean` | 1,176 | 0.426 | 0.361 |
+| `ssl::ssl_jepa_cunei400m_adv-s99::L0::h` | 1,176 | 0.388 | 0.357 |
+| `ssl::ssl_barlow_cunei400m_leopard-s0::L0::h` | 1,176 | 0.447 | 0.354 |
+| `ssl::ssl_jepa_cunei400m_both-s99::L0::h` | 1,176 | 0.373 | 0.353 |
+| `ssl::ssl_jepa_cunei400m_leace-s0::L0::h` | 1,176 | 0.437 | 0.352 |
+| `ssl::ssl_jepa_cunei400m_leace-s99::L0::h` | 1,176 | 0.370 | 0.346 |
+| `ssl::ssl_barlow_cunei400m_adv-s99::L0::h` | 1,176 | 0.368 | 0.343 |
 | `Qwen/Qwen3-8B::L27::mean` | 1,176 | 0.353 | 0.337 |
+| `ssl::ssl_barlow_cunei400m_leopard-s99::L0::h` | 1,176 | 0.355 | 0.336 |
 | `ssl_e2e::e2e_jepa_XL-s0::L0::h` | 1,176 | 0.403 | 0.333 |
+| `ssl::ssl_jepa_cunei400m_leopard-s99::L0::h` | 1,176 | 0.367 | 0.326 |
 | `ssl_e2e::e2e_jepa_L-s0::L0::h` | 1,176 | 0.367 | 0.324 |
 | `ssl::ssl_barlow_cunei400m-s0::L0::h` | 1,176 | 0.419 | 0.322 |
+| `ssl::ssl_barlow_cunei400m_leace-s99::L0::h` | 1,176 | 0.313 | 0.318 |
+| `ssl::ssl_barlow_cunei400m_both-s99::L0::h` | 1,176 | 0.313 | 0.318 |
+| `ssl::ssl_barlow_cunei400m_adv-s0::L0::h` | 1,176 | 0.419 | 0.313 |
+| `ssl::ssl_barlow_cunei400m_leace-s0::L0::h` | 1,176 | 0.340 | 0.297 |
 | `ssl_hyb::hyb_barlow_S_thalesian_cunei400m-s0::L0::h` | 1,176 | 0.386 | 0.294 |
 | `ssl::ssl_infonce_qwen3_8b-s0::L0::h` | 1,176 | 0.385 | 0.292 |
 | `Thalesian/AKK_300m::L4::mean` | 1,176 | 0.310 | 0.287 |
@@ -29,8 +41,10 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 | `ssl::ssl_jepa_llama2_7b-s0::L0::h` | 1,176 | 0.316 | 0.269 |
 | `ssl::ssl_byol_akk300m-s0::L0::h` | 1,176 | 0.377 | 0.269 |
 | `Thalesian/AKK_300m::L8::mean` | 1,176 | 0.338 | 0.265 |
+| `ssl::ssl_jepa_cunei400m_leopard-s0::L0::h` | 1,176 | 0.334 | 0.265 |
 | `Qwen/Qwen3-8B::L18::mean` | 1,176 | 0.261 | 0.262 |
 | `ssl_e2e::e2e_barlow_M-s0::L0::h` | 1,176 | 0.364 | 0.255 |
+| `ssl::ssl_jepa_cunei400m_both-s0::L0::h` | 1,176 | 0.199 | 0.247 |
 | `ssl::ssl_barlow_akk300m-s0::L0::h` | 1,176 | 0.340 | 0.240 |
 | `ssl::ssl_byol_llama2_7b-s0::L0::h` | 1,176 | 0.285 | 0.228 |
 | `ssl_e2e::e2e_barlow_L-s0::L0::h` | 1,176 | 0.307 | 0.219 |
@@ -38,10 +52,12 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 | `ssl::ssl_barlow_llama2_7b-s0::L0::h` | 1,176 | 0.292 | 0.217 |
 | `ssl_e2e::e2e_jepa_S-s0::L0::h` | 1,176 | 0.383 | 0.209 |
 | `ssl_hyb::hyb_jepa_S_thalesian_cunei400m-s0::L0::h` | 1,176 | 0.291 | 0.209 |
+| `ssl::ssl_barlow_cunei400m_both-s0::L0::h` | 1,176 | 0.151 | 0.198 |
 | `ssl_hyb::hyb_barlow_M_llama2_7b-s0::L0::h` | 1,176 | 0.283 | 0.198 |
 | `ssl_hyb::hyb_barlow_S_llama2_7b-s0::L0::h` | 1,176 | 0.183 | 0.177 |
 | `ssl_hyb::hyb_barlow_M_thalesian_cunei400m-s0::L0::h` | 1,176 | 0.203 | 0.166 |
 | `ssl_hyb::hyb_jepa_S_llama2_7b-s0::L0::h` | 1,176 | 0.204 | 0.164 |
+| `ssl::ssl_jepa_cunei400m_adv-s0::L0::h` | 1,176 | 0.314 | 0.149 |
 | `ssl::ssl_byol_qwen3_8b-s0::L0::h` | 1,176 | 0.190 | 0.135 |
 | `ssl_e2e::e2e_barlow_S-s0::L0::h` | 1,176 | 0.298 | 0.133 |
 | `ssl_hyb::hyb_jepa_M_llama2_7b-s0::L0::h` | 1,176 | 0.150 | 0.131 |
@@ -52,7 +68,7 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 
 | family | cells | best mc | median mc | best gkf | median gkf |
 |---|---|---|---|---|---|
-| adapter on a frozen encoder | 16 | 0.494 | 0.379 | 0.393 | 0.277 |
+| adapter on a frozen encoder | 32 | 0.494 | 0.368 | 0.393 | 0.305 |
 | from scratch (raw signs) | 8 | 0.403 | 0.364 | 0.333 | 0.237 |
 | frozen encoder, no SSL | 6 | 0.448 | 0.346 | 0.419 | 0.312 |
 | hybrid (frozen states -> fresh transformer) | 8 | 0.386 | 0.204 | 0.294 | 0.171 |
