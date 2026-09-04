@@ -15,20 +15,12 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 | `ssl::ssl_jepa_cunei400m-s0::L0::h` | 1,176 | 0.494 | 0.376 |
 | `ssl::ssl_infonce_llama2_7b-s0::L0::h` | 1,176 | 0.417 | 0.374 |
 | `Thalesian/cuneiformBase-400m::L6::mean` | 1,176 | 0.426 | 0.361 |
-| `ssl::ssl_jepa_cunei400m_adv-s99::L0::h` | 1,176 | 0.388 | 0.357 |
 | `ssl::ssl_barlow_cunei400m_leopard-s0::L0::h` | 1,176 | 0.447 | 0.354 |
-| `ssl::ssl_jepa_cunei400m_both-s99::L0::h` | 1,176 | 0.373 | 0.353 |
 | `ssl::ssl_jepa_cunei400m_leace-s0::L0::h` | 1,176 | 0.437 | 0.352 |
-| `ssl::ssl_jepa_cunei400m_leace-s99::L0::h` | 1,176 | 0.370 | 0.346 |
-| `ssl::ssl_barlow_cunei400m_adv-s99::L0::h` | 1,176 | 0.368 | 0.343 |
 | `Qwen/Qwen3-8B::L27::mean` | 1,176 | 0.353 | 0.337 |
-| `ssl::ssl_barlow_cunei400m_leopard-s99::L0::h` | 1,176 | 0.355 | 0.336 |
 | `ssl_e2e::e2e_jepa_XL-s0::L0::h` | 1,176 | 0.403 | 0.333 |
-| `ssl::ssl_jepa_cunei400m_leopard-s99::L0::h` | 1,176 | 0.367 | 0.326 |
 | `ssl_e2e::e2e_jepa_L-s0::L0::h` | 1,176 | 0.367 | 0.324 |
 | `ssl::ssl_barlow_cunei400m-s0::L0::h` | 1,176 | 0.419 | 0.322 |
-| `ssl::ssl_barlow_cunei400m_leace-s99::L0::h` | 1,176 | 0.313 | 0.318 |
-| `ssl::ssl_barlow_cunei400m_both-s99::L0::h` | 1,176 | 0.313 | 0.318 |
 | `ssl::ssl_barlow_cunei400m_adv-s0::L0::h` | 1,176 | 0.419 | 0.313 |
 | `ssl::ssl_barlow_cunei400m_leace-s0::L0::h` | 1,176 | 0.340 | 0.297 |
 | `ssl_hyb::hyb_barlow_S_thalesian_cunei400m-s0::L0::h` | 1,176 | 0.386 | 0.294 |
@@ -68,7 +60,7 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 
 | family | cells | best mc | median mc | best gkf | median gkf |
 |---|---|---|---|---|---|
-| adapter on a frozen encoder | 32 | 0.494 | 0.368 | 0.393 | 0.305 |
+| adapter on a frozen encoder | 24 | 0.494 | 0.358 | 0.393 | 0.277 |
 | from scratch (raw signs) | 8 | 0.403 | 0.364 | 0.333 | 0.237 |
 | frozen encoder, no SSL | 6 | 0.448 | 0.346 | 0.419 | 0.312 |
 | hybrid (frozen states -> fresh transformer) | 8 | 0.386 | 0.204 | 0.294 | 0.171 |
