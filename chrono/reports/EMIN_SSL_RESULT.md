@@ -47,3 +47,12 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 | `ssl_hyb::hyb_jepa_M_llama2_7b-s0::L0::h` | 1,176 | 0.150 | 0.131 |
 | `ssl_e2e::e2e_barlow_XL-s0::L0::h` | 1,176 | 0.260 | 0.130 |
 | `ssl_hyb::hyb_jepa_M_thalesian_cunei400m-s0::L0::h` | 1,176 | 0.194 | 0.113 |
+
+## By family
+
+| family | cells | best mc | median mc | best gkf | median gkf |
+|---|---|---|---|---|---|
+| adapter on a frozen encoder | 16 | 0.494 | 0.379 | 0.393 | 0.277 |
+| from scratch (raw signs) | 8 | 0.403 | 0.364 | 0.333 | 0.237 |
+| frozen encoder, no SSL | 6 | 0.448 | 0.346 | 0.419 | 0.312 |
+| hybrid (frozen states -> fresh transformer) | 8 | 0.386 | 0.204 | 0.294 | 0.171 |
