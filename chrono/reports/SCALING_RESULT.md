@@ -42,6 +42,14 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 | frozen encoder | `Thalesian/AKK_300m::L8::mean` | 0.865 | 0.816 | 0.122 | 0.939 | 0.261 | 0.650 | 0.113 | 0.969 |
 | frozen encoder | `Thalesian/cuneiformBase-400m::L12::mean` | 0.890 | 0.823 | 0.179 | 0.963 | 0.273 | 0.674 | 0.092 | 0.981 |
 | frozen encoder | `Thalesian/cuneiformBase-400m::L6::mean` | 0.901 | 0.843 | 0.158 | 0.967 | 0.278 | 0.689 | 0.138 | 0.983 |
+| frozen encoder | `ssl_hyb::hyb_barlow_M_llama2_7b-s0::L0::h` | 0.875 | 0.858 | 0.145 | 0.988 | 0.247 | 0.617 | 0.193 | 0.984 |
+| frozen encoder | `ssl_hyb::hyb_barlow_M_thalesian_cunei400m-s0::L0::h` | 0.799 | 0.780 | 0.167 | 0.917 | 0.128 | 0.432 | 0.203 | 0.960 |
+| frozen encoder | `ssl_hyb::hyb_barlow_S_llama2_7b-s0::L0::h` | 0.886 | 0.886 | 0.092 | 0.987 | 0.251 | 0.658 | 0.178 | 0.985 |
+| frozen encoder | `ssl_hyb::hyb_barlow_S_thalesian_cunei400m-s0::L0::h` | 0.908 | 0.917 | 0.106 | 0.976 | 0.245 | 0.609 | 0.114 | 0.982 |
+| frozen encoder | `ssl_hyb::hyb_jepa_M_llama2_7b-s0::L0::h` | 0.860 | 0.842 | 0.052 | 0.984 | 0.226 | 0.650 | 0.115 | 0.983 |
+| frozen encoder | `ssl_hyb::hyb_jepa_M_thalesian_cunei400m-s0::L0::h` | 0.820 | 0.808 | 0.070 | 0.936 | 0.167 | 0.478 | 0.239 | 0.968 |
+| frozen encoder | `ssl_hyb::hyb_jepa_S_llama2_7b-s0::L0::h` | 0.862 | 0.859 | 0.048 | 0.979 | 0.239 | 0.643 | 0.102 | 0.979 |
+| frozen encoder | `ssl_hyb::hyb_jepa_S_thalesian_cunei400m-s0::L0::h` | 0.836 | 0.826 | 0.100 | 0.935 | 0.228 | 0.521 | 0.045 | 0.945 |
 
 ## Period probe within source / with a source held out (linear)
 
@@ -77,6 +85,14 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 | `Thalesian/AKK_300m::L8::mean` | 0.991 | 0.793 | 0.122 | 0.647 |
 | `Thalesian/cuneiformBase-400m::L12::mean` | 0.993 | 0.775 | 0.179 | 0.668 |
 | `Thalesian/cuneiformBase-400m::L6::mean` | 0.995 | 0.768 | 0.158 | 0.658 |
+| `ssl_hyb::hyb_barlow_M_llama2_7b-s0::L0::h` | 0.993 | 0.782 | 0.145 | 0.361 |
+| `ssl_hyb::hyb_barlow_M_thalesian_cunei400m-s0::L0::h` | 0.957 | 0.708 | 0.167 | 0.610 |
+| `ssl_hyb::hyb_barlow_S_llama2_7b-s0::L0::h` | 0.991 | 0.815 | 0.092 | 0.423 |
+| `ssl_hyb::hyb_barlow_S_thalesian_cunei400m-s0::L0::h` | 0.992 | 0.808 | 0.106 | 0.565 |
+| `ssl_hyb::hyb_jepa_M_llama2_7b-s0::L0::h` | 0.996 | 0.759 | 0.052 | 0.595 |
+| `ssl_hyb::hyb_jepa_M_thalesian_cunei400m-s0::L0::h` | 0.981 | 0.687 | 0.070 | 0.649 |
+| `ssl_hyb::hyb_jepa_S_llama2_7b-s0::L0::h` | 0.992 | 0.702 | 0.048 | 0.417 |
+| `ssl_hyb::hyb_jepa_S_thalesian_cunei400m-s0::L0::h` | 0.989 | 0.694 | 0.100 | 0.501 |
 
 ## From-scratch family — quick linear period probe during training
 
