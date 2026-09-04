@@ -195,3 +195,27 @@ does not have):
 - **If every fixed-projection arm fails the C18 gate,** the SCOPE-style move
   — a projection gated per input — is the natural next arm, since a fixed
   projector provably cannot cross the frontier.
+
+## The success criterion, stated once (advisor, 2026-09-04)
+
+A run counts as a win only if all three hold on the final h:
+
+1. **linear source probe ≈ chance** (.20) — the linear trace is gone;
+2. **MLP source probe ≈ chance** — the nonlinear trace is gone too;
+3. **C18 Spearman ≥ the frozen baseline** (gkf .419) — and the interesting
+   regime is toward the supervised head's .61.
+
+Anything that clears 1-2 but collapses 3 has erased the concept together
+with the signal (the entanglement frontier made real); anything that clears
+3 but not 1-2 is dating through the corpus shortcut again.
+
+## The paper's arc (advisor's framing)
+
+representation learning (Barlow/JEPA/BYOL/InfoNCE over 31,905 unlabelled
+Akkadian texts) -> interpretability of what was actually learned (probe
+battery: source .92-.98, period ≈ source, the shortcut made visible) ->
+controlling what is learned (erasure in-training: LEACE-in-the-loop,
+adversarial, density matching; and post-hoc, the unlearning family). Each
+stage's failures are findings: the adversary is fooled only by its own
+co-trained probe (.36 in-training, .96 post-hoc); the linear eraser leaves
+the MLP trace (.21 linear vs .88 MLP).
