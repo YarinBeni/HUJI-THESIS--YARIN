@@ -18,10 +18,12 @@ texts 30,729 · PCA 256 · classes need ≥ 30 docs
 | oracc | 2 | 3,414 | 0.991 ± 0.006 | 0.500 |
 | seal | 3 | 328 | 0.793 ± 0.056 | 0.333 |
 
-## Period probe, HELD-OUT source (train on the others, linear)
+## Period probe, HELD-OUT source (train on the other non-dated sources, linear)
 
-| held out | n test | balanced acc | chance |
-|---|---|---|---|
+| held out | classes | n test | balanced acc | chance |
+|---|---|---|---|---|
+| seal | 3 | 292 | 0.647 | 0.333 |
+| orcc (dated) | 3 | 953 | 0.122 | 0.333 |
 
 ## Geometry (period)
 
