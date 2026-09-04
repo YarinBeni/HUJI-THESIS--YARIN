@@ -28,6 +28,7 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 | from-scratch | `ssl_e2e::e2e_barlow_L-s0::L0::h` | 0.878 | 0.851 | 0.123 | 0.972 | 0.265 | 0.672 | 0.233 | 0.983 |
 | from-scratch | `ssl_e2e::e2e_barlow_M-s0::L0::h` | 0.886 | 0.866 | 0.125 | 0.972 | 0.261 | 0.634 | 0.222 | 0.981 |
 | from-scratch | `ssl_e2e::e2e_barlow_S-s0::L0::h` | 0.871 | 0.885 | 0.203 | 0.966 | 0.245 | 0.649 | 0.190 | 0.981 |
+| from-scratch | `ssl_e2e::e2e_barlow_XL-s0::L0::h` | 0.856 | 0.852 | 0.282 | 0.972 | 0.260 | 0.659 | 0.163 | 0.982 |
 | from-scratch | `ssl_e2e::e2e_jepa_L-s0::L0::h` | 0.870 | 0.839 | 0.104 | 0.951 | 0.278 | 0.664 | 0.060 | 0.959 |
 | from-scratch | `ssl_e2e::e2e_jepa_M-s0::L0::h` | 0.863 | 0.817 | 0.188 | 0.952 | 0.279 | 0.653 | 0.052 | 0.953 |
 | from-scratch | `ssl_e2e::e2e_jepa_S-s0::L0::h` | 0.848 | 0.824 | 0.121 | 0.900 | 0.241 | 0.616 | 0.019 | 0.920 |
@@ -59,6 +60,7 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 | `ssl_e2e::e2e_barlow_L-s0::L0::h` | 0.987 | 0.828 | 0.123 | 0.360 |
 | `ssl_e2e::e2e_barlow_M-s0::L0::h` | 0.988 | 0.817 | 0.125 | 0.501 |
 | `ssl_e2e::e2e_barlow_S-s0::L0::h` | 0.989 | 0.793 | 0.203 | 0.622 |
+| `ssl_e2e::e2e_barlow_XL-s0::L0::h` | 0.987 | 0.782 | 0.282 | 0.378 |
 | `ssl_e2e::e2e_jepa_L-s0::L0::h` | 0.991 | 0.765 | 0.104 | 0.603 |
 | `ssl_e2e::e2e_jepa_M-s0::L0::h` | 0.991 | 0.749 | 0.188 | 0.552 |
 | `ssl_e2e::e2e_jepa_S-s0::L0::h` | 0.959 | 0.725 | 0.121 | 0.502 |
