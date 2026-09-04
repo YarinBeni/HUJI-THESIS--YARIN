@@ -1,9 +1,12 @@
-alive Fri Sep  4 09:14:28 UTC 2026
+alive Fri Sep  4 10:15:30 UTC 2026
 host g0378
 job 33861
-       34176_[0-3] voltagepa C19_anti  yarin.b PD       0:00      1 (Priority)
+       34176_[2-3] voltagepa C19_anti  yarin.b PD       0:00      1 (Resources)
        34180_[2,5] voltagepa C19_anti  yarin.b PD       0:00      1 (Priority)
+       34185_[3,7] voltagepa C19_anti  yarin.b PD       0:00      1 (Priority)
+             34186 voltagepa C18_emin  yarin.b PD       0:00      1 (Dependency)
              34181 voltagepa C18_emin  yarin.b PD       0:00      1 (Dependency)
              34177 voltagepa C18_emin  yarin.b PD       0:00      1 (Dependency)
        33642_[0-7] voltagepa C8_ssl_p  yarin.b PD       0:00      1 (DependencyNeverSatisfied)
-             33861 voltagepa AGENT_ru  yarin.b  R   11:05:11      1 g0378
+             33861 voltagepa AGENT_ru  yarin.b  R   12:06:13      1 g0378
+           34176_1 voltagepa C19_anti  yarin.b  R      27:27      1 g0377
