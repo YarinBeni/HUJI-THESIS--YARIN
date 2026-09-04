@@ -36,7 +36,7 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 | from-scratch | `ssl_e2e::e2e_jepa_M-s0::L0::h` | 0.863 | 0.817 | 0.188 | 0.952 | 0.279 | 0.653 | 0.052 | 0.953 |
 | from-scratch | `ssl_e2e::e2e_jepa_S-s0::L0::h` | 0.848 | 0.824 | 0.121 | 0.900 | 0.241 | 0.616 | 0.019 | 0.920 |
 | from-scratch | `ssl_e2e::e2e_jepa_XL-s0::L0::h` | 0.855 | 0.822 | 0.106 | 0.946 | 0.265 | 0.618 | 0.068 | 0.949 |
-| frozen encoder | `Qwen/Qwen3-8B::L18::mean` | 0.838 | 0.816 |  | 0.963 | 0.234 | 0.633 | 0.052 | 0.957 |
+| frozen encoder | `Qwen/Qwen3-8B::L18::mean` | 0.838 | 0.813 | 0.114 | 0.963 | 0.233 | 0.631 | 0.052 | 0.957 |
 | frozen encoder | `Qwen/Qwen3-8B::L27::mean` | 0.856 | 0.798 |  | 0.963 | 0.249 | 0.655 | 0.080 | 0.964 |
 | frozen encoder | `Thalesian/AKK_300m::L4::mean` | 0.841 | 0.825 | 0.181 | 0.961 | 0.273 | 0.660 | 0.096 | 0.980 |
 | frozen encoder | `Thalesian/AKK_300m::L8::mean` | 0.865 | 0.816 | 0.122 | 0.939 | 0.261 | 0.650 | 0.113 | 0.969 |
@@ -71,7 +71,7 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 | `ssl_e2e::e2e_jepa_M-s0::L0::h` | 0.991 | 0.749 | 0.188 | 0.552 |
 | `ssl_e2e::e2e_jepa_S-s0::L0::h` | 0.959 | 0.725 | 0.121 | 0.502 |
 | `ssl_e2e::e2e_jepa_XL-s0::L0::h` | 0.988 | 0.677 | 0.106 | 0.514 |
-| `Qwen/Qwen3-8B::L18::mean` | 0.988 | 0.697 |  |  |
+| `Qwen/Qwen3-8B::L18::mean` | 0.988 | 0.702 | 0.114 | 0.415 |
 | `Qwen/Qwen3-8B::L27::mean` | 0.990 | 0.761 |  |  |
 | `Thalesian/AKK_300m::L4::mean` | 0.992 | 0.795 | 0.181 | 0.570 |
 | `Thalesian/AKK_300m::L8::mean` | 0.991 | 0.793 | 0.122 | 0.647 |
