@@ -1,0 +1,32 @@
+# S1 representation probes — ssl_hyb::hyb_barlow_S_thalesian_cunei400m-s0::L0::h
+
+texts 30,729 · PCA 0 · classes need ≥ 30 docs
+
+## Probes (balanced accuracy, 5-fold, tablet level)
+
+| label | classes | n | linear | MLP | chance |
+|---|---|---|---|---|---|
+| period_norm | 5 | 6,300 | 0.908 ± 0.023 | 0.917 ± 0.033 | 0.200 |
+| genre_raw | 71 | 27,187 | 0.245 ± 0.005 | 0.226 ± 0.020 | 0.014 |
+| provenance | 16 | 30,419 | 0.609 ± 0.016 | 0.570 ± 0.019 | 0.062 |
+| source | 5 | 30,720 | 0.976 ± 0.005 | 0.975 ± 0.007 | 0.200 |
+
+## Period probe WITHIN source (linear)
+
+| source | classes | n | balanced acc | chance |
+|---|---|---|---|---|
+| oracc | 2 | 3,414 | 0.992 ± 0.002 | 0.500 |
+| seal | 3 | 328 | 0.808 ± 0.046 | 0.333 |
+
+## Period probe, HELD-OUT source (train on the other non-dated sources, linear)
+
+| held out | classes | n test | balanced acc | chance |
+|---|---|---|---|---|
+| seal | 3 | 292 | 0.565 | 0.333 |
+| orcc (dated) | 3 | 953 | 0.106 | 0.333 |
+
+## Geometry (period)
+
+silhouette (raw space) +0.114 · permutation null -0.012 ± 0.003 · p = 0.000
+k-NN (k=10) period purity 0.982 · chance ≈ 0.341
+silhouette (UMAP-2d) +0.058 · null -0.039 ± 0.018 · p = 0.000
