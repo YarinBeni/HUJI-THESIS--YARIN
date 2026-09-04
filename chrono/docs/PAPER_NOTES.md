@@ -163,3 +163,35 @@ git runner (`chrono/agent/`). Every job pushes its slurm log to
 `reports/logs/`; every result row goes to `reports/results.parquet`
 (run_id, git_sha, config_sha). Tables regenerate with
 `scripts/aggregate_emin2.py`, `scripts/sensitivity_readout.py`.
+
+## Related work — the erasure family and where we sit (2026-09-04)
+
+Three generations, mapped onto our problem (source = the concept to erase):
+
+1. **Linear, closed form.** INLP -> RLACE -> LEACE (guarantee: no linear
+   probe can read the concept). Our LEACE-in-the-loop arm. Verified live:
+   linear source probe .97 -> .21, but an MLP still reads .88 — the linear
+   guarantee is real and insufficient.
+2. **Nonlinear by density matching.** KRaM, LEOPARD (ECAI 2025): learned
+   rank-r orthogonal projection + MMD between class-conditional densities.
+   Our `leopard` arm is this, trained jointly with the SSL objective.
+3. **Unlearning-flavoured, 2026.** Double Projections (arXiv 2604.10032):
+   two closed-form projections, the second constrained to the left
+   nullspace of representations to PRESERVE — built for erasing a target
+   concept from a generative model while protecting neighbours. SCOPE
+   (arXiv 2608.02058): input-conditional gating of the projection, and an
+   "entanglement frontier" — a proven limit on how much a FIXED projection
+   can erase without destroying retained information.
+
+Two things transfer to us; the machinery mostly does not (their setting is
+"erase concept X, keep siblings", ours is invariance to an always-present
+attribute, and their protect-lists need labels for what to retain, which SSL
+does not have):
+
+- **The entanglement frontier names what we measured.** Erasing source
+  linearly dropped the linear PERIOD probe from .90 to .63 — period and
+  source are entangled in this corpus, and the retain-cost of erasure is
+  visible in one number. Good framing for the paper.
+- **If every fixed-projection arm fails the C18 gate,** the SCOPE-style move
+  — a projection gated per input — is the natural next arm, since a fixed
+  projector provably cannot cross the frontier.
