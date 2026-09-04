@@ -20,6 +20,7 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 | `ssl::ssl_byol_cunei400m-s0::L0::h` | 1,176 | 0.470 | 0.393 |
 | `ssl::ssl_infonce_cunei400m_wdated-s0::L0::h` | 1,176 | 0.425 | 0.388 |
 | `ssl::ssl_byol_cunei400m_wdated-s1::L0::h` | 1,176 | 0.457 | 0.384 |
+| `ssl_e2e::e2e_barlow_S_wdated-s0::L0::h` | 1,176 | 0.443 | 0.383 |
 | `ssl::ssl_infonce_cunei400m-s0::L0::h` | 1,176 | 0.381 | 0.380 |
 | `ssl::ssl_jepa_cunei400m-s0::L0::h` | 1,176 | 0.494 | 0.376 |
 | `ssl::ssl_infonce_llama2_7b-s0::L0::h` | 1,176 | 0.417 | 0.374 |
@@ -72,6 +73,6 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 | family | cells | best mc | median mc | best gkf | median gkf |
 |---|---|---|---|---|---|
 | adapter on a frozen encoder | 35 | 0.519 | 0.417 | 0.417 | 0.322 |
-| from scratch (raw signs) | 8 | 0.403 | 0.364 | 0.333 | 0.237 |
+| from scratch (raw signs) | 9 | 0.443 | 0.365 | 0.383 | 0.255 |
 | frozen encoder, no SSL | 6 | 0.448 | 0.346 | 0.419 | 0.312 |
 | hybrid (frozen states -> fresh transformer) | 8 | 0.386 | 0.204 | 0.294 | 0.171 |
