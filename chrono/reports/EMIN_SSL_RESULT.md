@@ -12,11 +12,13 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 | `Thalesian/cuneiformBase-400m::L12::mean` | 1,176 | 0.448 | 0.419 |
 | `ssl::ssl_barlow_cunei400m_wdated-s2::L0::h` | 1,176 | 0.471 | 0.417 |
 | `ssl::ssl_barlow_cunei400m_wdated-s1::L0::h` | 1,176 | 0.422 | 0.415 |
+| `ssl::ssl_barlow_cunei400m_leace_wdated-s0::L0::h` | 1,176 | 0.482 | 0.414 |
 | `ssl::ssl_byol_cunei400m_wdated-s2::L0::h` | 1,176 | 0.499 | 0.413 |
 | `ssl::ssl_barlow_cunei400m_wdated-s0::L0::h` | 1,176 | 0.491 | 0.410 |
 | `ssl::ssl_jepa_cunei400m_leace_wdated-s0::L0::h` | 1,176 | 0.473 | 0.401 |
 | `ssl::ssl_byol_cunei400m_wdated-s0::L0::h` | 1,176 | 0.519 | 0.401 |
 | `ssl::ssl_byol_cunei400m-s0::L0::h` | 1,176 | 0.470 | 0.393 |
+| `ssl::ssl_infonce_cunei400m_wdated-s0::L0::h` | 1,176 | 0.425 | 0.388 |
 | `ssl::ssl_byol_cunei400m_wdated-s1::L0::h` | 1,176 | 0.457 | 0.384 |
 | `ssl::ssl_infonce_cunei400m-s0::L0::h` | 1,176 | 0.381 | 0.380 |
 | `ssl::ssl_jepa_cunei400m-s0::L0::h` | 1,176 | 0.494 | 0.376 |
@@ -25,6 +27,7 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 | `Thalesian/cuneiformBase-400m::L6::mean` | 1,176 | 0.426 | 0.361 |
 | `ssl::ssl_barlow_cunei400m_leopard-s0::L0::h` | 1,176 | 0.447 | 0.354 |
 | `ssl::ssl_jepa_cunei400m_leace-s0::L0::h` | 1,176 | 0.437 | 0.352 |
+| `ssl::ssl_byol_cunei400m_leace_wdated-s0::L0::h` | 1,176 | 0.437 | 0.342 |
 | `Qwen/Qwen3-8B::L27::mean` | 1,176 | 0.353 | 0.337 |
 | `ssl_e2e::e2e_jepa_XL-s0::L0::h` | 1,176 | 0.403 | 0.333 |
 | `ssl_e2e::e2e_jepa_L-s0::L0::h` | 1,176 | 0.367 | 0.324 |
@@ -68,7 +71,7 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 
 | family | cells | best mc | median mc | best gkf | median gkf |
 |---|---|---|---|---|---|
-| adapter on a frozen encoder | 32 | 0.519 | 0.393 | 0.417 | 0.305 |
+| adapter on a frozen encoder | 35 | 0.519 | 0.417 | 0.417 | 0.322 |
 | from scratch (raw signs) | 8 | 0.403 | 0.364 | 0.333 | 0.237 |
 | frozen encoder, no SSL | 6 | 0.448 | 0.346 | 0.419 | 0.312 |
 | hybrid (frozen states -> fresh transformer) | 8 | 0.386 | 0.204 | 0.294 | 0.171 |
