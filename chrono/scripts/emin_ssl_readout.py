@@ -99,6 +99,17 @@ def main(argv=None):
     if not rows:
         raise SystemExit("no cell had embeddings for the dated inscriptions")
     R = pd.DataFrame(rows).sort_values("gkf", ascending=False)
+
+    def family(n):
+        if n.startswith("ssl_hyb::"):
+            return "hybrid (frozen states -> fresh transformer)"
+        if n.startswith("ssl_e2e::"):
+            return "from scratch (raw signs)"
+        if n.startswith("ssl::"):
+            return "adapter on a frozen encoder"
+        return "frozen encoder, no SSL"
+    R["family"] = R.model.map(family)
+    fam = R.groupby("family")[["mc", "gkf"]].agg(["count", "max", "median"]).round(3)
     lines = ["# The dated inscriptions, read out on the thesis protocol", "",
              "Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped folds, "
              "SLA §7: `gkf` is the POOLED Spearman over the held-out docs (per-fold rho is undefined "
@@ -116,6 +127,11 @@ def main(argv=None):
              "| representation | n docs | mc rho | gkf rho (pooled) |", "|---|---|---|---|"]
     for _, r in R.iterrows():
         lines.append(f"| `{r.model}` | {r.n:,} | {r.mc:.3f} | {r.gkf:.3f} |")
+    lines += ["", "## By family", "",
+              "| family | cells | best mc | median mc | best gkf | median gkf |", "|---|---|---|---|---|---|"]
+    for f, r in fam.iterrows():
+        lines.append(f"| {f} | {int(r[('mc','count')])} | {r[('mc','max')]:.3f} | {r[('mc','median')]:.3f} | "
+                     f"{r[('gkf','max')]:.3f} | {r[('gkf','median')]:.3f} |")
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     open(args.out, "w").write("\n".join(lines) + "\n")
     print(f"wrote {args.out} ({len(R)} cells)")
