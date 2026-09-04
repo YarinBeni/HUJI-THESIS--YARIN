@@ -72,6 +72,10 @@ def main(argv=None):
                          "after arXiv:2507.12341")
     ap.add_argument("--refit-every", type=int, default=500)
     ap.add_argument("--steps", type=int, default=None, help="override train.steps (smoke tests)")
+    ap.add_argument("--include-dated", action="store_true",
+                    help="S5a (advisor): also train on the dated inscriptions' RAW TEXT "
+                         "(never their labels) — the thesis setting, where the encoder has "
+                         "seen the documents and only the kings are held out at read-out")
     ap.add_argument("--lambda-adv", type=float, default=1.0)
     ap.add_argument("--lambda-mmd", type=float, default=1.0)
     ap.add_argument("--leopard-remove", type=int, default=64,
@@ -81,12 +85,13 @@ def main(argv=None):
     feats, scfg, tcfg = cfg["features"], cfg["ssl"], cfg["train"]
     seed = int(args.seed if args.seed is not None else tcfg.get("seed", 0))
     torch.manual_seed(seed); rng = np.random.default_rng(seed)
-    suffix = f"_{args.anti}" if args.anti else ""
+    suffix = (f"_{args.anti}" if args.anti else "") + ("_wdated" if args.include_dated else "")
     run = f"{cfg['run_name']}{suffix}-s{seed}"
     dev = "cuda" if torch.cuda.is_available() else "cpu"
 
     corpus = pd.read_parquet(args.corpus, columns=["uid", "source", "split"])
-    train_uids = corpus.loc[corpus["split"] == "train", "uid"].to_numpy()
+    keep_splits = ("train", "dated") if args.include_dated else ("train",)
+    train_uids = corpus.loc[corpus["split"].isin(keep_splits), "uid"].to_numpy()
     views = pd.read_parquet(args.views, columns=["uid", "source", "augs", "seed", "view_id"])
     views = views[views["uid"].isin(set(train_uids))].reset_index(drop=True)
     store = EmbStore(args.store_root)

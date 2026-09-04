@@ -62,6 +62,8 @@ def main(argv=None):
 
     rows = []
     for model, layer, site in sorted({(r.model, int(r.layer), r.site) for r in man.itertuples()}):
+        if model.endswith("-s99"):
+            continue                    # 60-step smoke runs also embed; not results
         ids = [args.uid_prefix + d for d in corpus.doc_id]
         try:
             have = np.asarray(store.has(model, layer, site, ids))
