@@ -37,7 +37,13 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 | `ssl::ssl_barlow_qwen3_8b-s0::L0::h` | 1,176 | 0.251 | 0.217 |
 | `ssl::ssl_barlow_llama2_7b-s0::L0::h` | 1,176 | 0.292 | 0.217 |
 | `ssl_e2e::e2e_jepa_S-s0::L0::h` | 1,176 | 0.383 | 0.209 |
+| `ssl_hyb::hyb_jepa_S_thalesian_cunei400m-s0::L0::h` | 1,176 | 0.291 | 0.209 |
+| `ssl_hyb::hyb_barlow_M_llama2_7b-s0::L0::h` | 1,176 | 0.283 | 0.198 |
+| `ssl_hyb::hyb_barlow_S_llama2_7b-s0::L0::h` | 1,176 | 0.183 | 0.177 |
+| `ssl_hyb::hyb_barlow_M_thalesian_cunei400m-s0::L0::h` | 1,176 | 0.203 | 0.166 |
 | `ssl_hyb::hyb_jepa_S_llama2_7b-s0::L0::h` | 1,176 | 0.204 | 0.164 |
 | `ssl::ssl_byol_qwen3_8b-s0::L0::h` | 1,176 | 0.190 | 0.135 |
 | `ssl_e2e::e2e_barlow_S-s0::L0::h` | 1,176 | 0.298 | 0.133 |
+| `ssl_hyb::hyb_jepa_M_llama2_7b-s0::L0::h` | 1,176 | 0.150 | 0.131 |
 | `ssl_e2e::e2e_barlow_XL-s0::L0::h` | 1,176 | 0.260 | 0.130 |
+| `ssl_hyb::hyb_jepa_M_thalesian_cunei400m-s0::L0::h` | 1,176 | 0.194 | 0.113 |
