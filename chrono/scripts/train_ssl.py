@@ -29,6 +29,7 @@ from chrono.models.store import EmbStore
 from chrono.eval.erasure import LeaceEraser                        # noqa: E402
 from chrono.models.heads import AdapterHead, EmaTwin            # noqa: E402
 from chrono.losses import bt_loss, variance_loss                # noqa: E402
+from chrono.losses.core import mmd_loss                          # noqa: E402
 
 CONTEXT_VIEWS = ("tokmask", "crop16", "crop32", "drop_span")
 
@@ -60,15 +61,21 @@ def main(argv=None):
     # --- S5b anti-shortcut arms (advisor, 2026-09-04). The 32-run sweep showed
     # every SSL family learns SOURCE (probe .92-.98) and never beats the frozen
     # encoder on dating; these arms forbid the shortcut during training.
-    ap.add_argument("--anti", choices=["leace", "adv", "both"], default=None,
+    ap.add_argument("--anti", choices=["leace", "adv", "both", "leopard"], default=None,
                     help="leace: re-fit a LEACE eraser for source on h every "
                          "--refit-every steps and apply it inside the forward "
                          "pass; adv: gradient-reversal source classifier on h; "
                          "both: the two at once — the eraser kills the linear "
-                         "trace, the adversary chases what grows back")
+                         "trace, the adversary chases what grows back; leopard: "
+                         "a learned rank-r orthogonal projection trained to make "
+                         "the per-source densities of h indistinguishable (MMD), "
+                         "after arXiv:2507.12341")
     ap.add_argument("--refit-every", type=int, default=500)
     ap.add_argument("--steps", type=int, default=None, help="override train.steps (smoke tests)")
     ap.add_argument("--lambda-adv", type=float, default=1.0)
+    ap.add_argument("--lambda-mmd", type=float, default=1.0)
+    ap.add_argument("--leopard-remove", type=int, default=64,
+                    help="how many of d_hidden dimensions the projection drops")
     args = ap.parse_args(argv)
     cfg = yaml.safe_load(open(args.config))
     feats, scfg, tcfg = cfg["features"], cfg["ssl"], cfg["train"]
@@ -123,6 +130,13 @@ def main(argv=None):
     Z_onehot = np.eye(n_classes, dtype=np.float64)[src_cat.codes]
     eraser_M = eraser_mu = None            # torch constants, refreshed by refit
     adv_clf = None
+    U = None                                # LEOPARD's rank-r frame
+    if args.anti == "leopard":
+        d_h = head.proj.in_features
+        r = d_h - args.leopard_remove
+        U0 = torch.linalg.qr(torch.randn(d_h, r)).Q
+        U = torch.nn.Parameter(U0.to(dev))
+        opt.add_param_group({"params": [U]})
     if args.anti in ("adv", "both"):
         adv_clf = torch.nn.Linear(head.proj.in_features, n_classes).to(dev)
         opt.add_param_group({"params": adv_clf.parameters()})
@@ -138,11 +152,13 @@ def main(argv=None):
             return -ctx.lam * g, None
 
     def fwd(module, x):
-        """mlp -> (optional LEACE) -> axis/proj, so the erasure sits INSIDE the
-        computation the SSL loss sees, not applied post-hoc as in P1."""
+        """mlp -> (optional erasure) -> axis/proj, so the erasure sits INSIDE
+        the computation the SSL loss sees, not applied post-hoc as in P1."""
         h = module.mlp(x)
         if eraser_M is not None:
             h = h - (h - eraser_mu) @ eraser_M.T
+        if U is not None:
+            h = (h @ U) @ U.T               # near-projection while U trains
         return h, module.axis(h).squeeze(-1), module.proj(h)
 
     def refit_eraser():
@@ -191,6 +207,22 @@ def main(argv=None):
         else:
             raise ValueError(obj)
         loss = loss + float(scfg.get("lambda_var", 0.0)) * variance_loss(s_a)
+        if U is not None:
+            # density matching: per-source MMD against the rest of the batch,
+            # plus the frame penalty that keeps UU^T a projection
+            y_np = code_of.loc[bu].to_numpy()
+            terms = []
+            for c in np.unique(y_np):
+                m = torch.as_tensor(y_np == c, device=dev)
+                if int(m.sum()) >= 8 and int((~m).sum()) >= 8:
+                    terms.append(mmd_loss(h_a[m], h_a[~m]))
+            if terms:
+                loss = loss + args.lambda_mmd * torch.stack(terms).sum()
+            frame = ((U.T @ U - torch.eye(U.shape[1], device=dev)) ** 2).sum()
+            loss = loss + frame
+            if step % 200 == 0:
+                print(f"[ssl] step {step} mmd {float(torch.stack(terms).sum()) if terms else -1:.4f} "
+                      f"frame {float(frame):.4f}", flush=True)
         if adv_clf is not None:
             lam = args.lambda_adv * min(1.0, step / max(1, steps // 5))   # warmup
             y_src = torch.as_tensor(code_of.loc[bu].to_numpy(), dtype=torch.long, device=dev)
@@ -213,6 +245,12 @@ def main(argv=None):
     Xc = torch.as_tensor(store.get(feats["model"], feats["layer"], feats["site"], ("ssl::" + clean["view_id"]).tolist())).float()
     if args.anti in ("leace", "both"):
         refit_eraser()                      # final eraser on the finished head
+    if U is not None:
+        # snap to an exact rank-r orthogonal projector (paper's final step)
+        with torch.no_grad():
+            w, V = torch.linalg.eigh(U @ U.T)
+            keep = V[:, -U.shape[1]:]
+            U = torch.nn.Parameter(keep)
     head.eval(); H = []
     with torch.no_grad():
         for lo in range(0, len(Xc), 2048):

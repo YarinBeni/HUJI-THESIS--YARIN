@@ -135,6 +135,22 @@ def hsic_loss(x: torch.Tensor, y: torch.Tensor, *,
     return torch.trace(k @ h @ l @ h) / (n - 1) ** 2
 
 
+def mmd_loss(x: torch.Tensor, y: torch.Tensor, *, sigma: float | None = None) -> torch.Tensor:
+    """Squared MMD with an RBF kernel (median-heuristic bandwidth over the
+    pooled batch). Used by the LEOPARD-style erasure arm (arXiv:2507.12341):
+    driving MMD(source_c, rest) -> 0 for every source makes the
+    class-conditional distributions of the projected features
+    indistinguishable -- nonlinear erasure by density matching, where LEACE
+    only guarantees the linear trace."""
+    z = torch.cat([x, y], 0)
+    sq = _sq_dists(z)
+    sg = _median_sigma(sq) if sigma is None else float(sigma)
+    K = torch.exp(-sq / (2 * sg ** 2 + 1e-12))
+    n, m = len(x), len(y)
+    kxx = K[:n, :n]; kyy = K[n:, n:]; kxy = K[:n, n:]
+    return kxx.mean() + kyy.mean() - 2 * kxy.mean()
+
+
 def cka_loss(x: torch.Tensor, y: torch.Tensor, *, sigma_x: float | None = None,
              sigma_y: float | None = None) -> torch.Tensor:
     """Kernel CKA (Kornblith et al. 2019): HSIC(x,y) / sqrt(HSIC(x,x) HSIC(y,y)),
