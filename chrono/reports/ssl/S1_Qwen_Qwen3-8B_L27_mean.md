@@ -6,25 +6,27 @@ texts 30,729 · PCA 256 · classes need ≥ 30 docs
 
 | label | classes | n | linear | MLP | chance |
 |---|---|---|---|---|---|
-| period_norm | 5 | 6,300 | 0.856 ± 0.021 | 0.798 ± 0.011 | 0.200 |
-| genre_raw | 71 | 27,187 | 0.249 ± 0.009 | 0.199 ± 0.007 | 0.014 |
-| provenance | 16 | 30,419 | 0.655 ± 0.011 | 0.657 ± 0.020 | 0.062 |
-| source | 5 | 30,720 | 0.963 ± 0.003 | 0.970 ± 0.004 | 0.200 |
+| period_norm | 5 | 6,300 | 0.856 ± 0.021 | 0.807 ± 0.014 | 0.200 |
+| genre_raw | 71 | 27,187 | 0.250 ± 0.011 | 0.198 ± 0.008 | 0.014 |
+| provenance | 16 | 30,419 | 0.650 ± 0.021 | 0.651 ± 0.024 | 0.062 |
+| source | 5 | 30,720 | 0.965 ± 0.002 | 0.969 ± 0.004 | 0.200 |
 
 ## Period probe WITHIN source (linear)
 
 | source | classes | n | balanced acc | chance |
 |---|---|---|---|---|
-| oracc | 2 | 3,414 | 0.990 ± 0.005 | 0.500 |
+| oracc | 2 | 3,414 | 0.989 ± 0.005 | 0.500 |
 | seal | 3 | 328 | 0.761 ± 0.043 | 0.333 |
 
-## Period probe, HELD-OUT source (train on the others, linear)
+## Period probe, HELD-OUT source (train on the other non-dated sources, linear)
 
-| held out | n test | balanced acc | chance |
-|---|---|---|---|
+| held out | classes | n test | balanced acc | chance |
+|---|---|---|---|---|
+| seal | 3 | 292 | 0.401 | 0.333 |
+| orcc (dated) | 3 | 953 | 0.095 | 0.333 |
 
 ## Geometry (period)
 
 silhouette (raw space) +0.080 · permutation null -0.025 ± 0.016 · p = 0.000
 k-NN (k=10) period purity 0.964 · chance ≈ 0.341
-silhouette (UMAP-2d) +0.462 · null -0.063 ± 0.034 · p = 0.000
+silhouette (UMAP-2d) +0.460 · null -0.064 ± 0.034 · p = 0.000
