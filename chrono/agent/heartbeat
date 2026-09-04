@@ -1,14 +1,12 @@
-alive Fri Sep  4 01:11:35 UTC 2026
+alive Fri Sep  4 02:12:05 UTC 2026
 host g0378
 job 33861
-33995_[0-9,11,13-3 voltagepa C14_repr  yarin.b PD       0:00      1 (Dependency)
-       33797_[0-7] voltagepa C16_prob  yarin.b PD       0:00      1 (Dependency)
+     33995_[14-31] voltagepa C14_repr  yarin.b PD       0:00      1 (Priority)
+       33797_[0-7] voltagepa C16_prob  yarin.b PD       0:00      1 (Priority)
        33642_[0-7] voltagepa C8_ssl_p  yarin.b PD       0:00      1 (DependencyNeverSatisfied)
-          33784_17 voltagepa C14_repr  yarin.b  R    4:33:49      1 g0378
-           33796_3 voltagepa  C15_hyb  yarin.b  R    5:36:17      1 g0381
-           33796_4 voltagepa  C15_hyb  yarin.b  R    5:36:17      1 g0376
-           33796_6 voltagepa  C15_hyb  yarin.b  R    5:36:17      1 g0378
-           33796_7 voltagepa  C15_hyb  yarin.b  R    5:36:17      1 g0378
-           33796_2 voltagepa  C15_hyb  yarin.b  R    5:38:51      1 g0375
-           33796_1 voltagepa  C15_hyb  yarin.b  R    6:00:28      1 g0381
-             33861 voltagepa AGENT_ru  yarin.b  R    3:02:18      1 g0378
+             33861 voltagepa AGENT_ru  yarin.b  R    4:02:48      1 g0378
+          33995_11 voltagepa C14_repr  yarin.b  R       5:41      1 g0378
+          33995_13 voltagepa C14_repr  yarin.b  R       5:41      1 g0378
+           33995_9 voltagepa C14_repr  yarin.b  R       6:11      1 g0376
+           33995_8 voltagepa C14_repr  yarin.b  R      16:41      1 g0378
+           33995_7 voltagepa C14_repr  yarin.b  R      18:41      1 g0377
