@@ -40,7 +40,7 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 | frozen encoder | `Qwen/Qwen3-8B::L27::mean` | 0.856 | 0.798 |  | 0.963 | 0.249 | 0.655 | 0.080 | 0.964 |
 | frozen encoder | `Thalesian/AKK_300m::L4::mean` | 0.841 | 0.825 |  | 0.961 | 0.273 | 0.660 | 0.096 | 0.980 |
 | frozen encoder | `Thalesian/AKK_300m::L8::mean` | 0.865 | 0.816 |  | 0.939 | 0.261 | 0.650 | 0.113 | 0.969 |
-| frozen encoder | `Thalesian/cuneiformBase-400m::L12::mean` | 0.890 | 0.823 |  | 0.963 | 0.273 | 0.674 | 0.092 | 0.981 |
+| frozen encoder | `Thalesian/cuneiformBase-400m::L12::mean` | 0.890 | 0.823 | 0.179 | 0.963 | 0.273 | 0.674 | 0.092 | 0.981 |
 | frozen encoder | `Thalesian/cuneiformBase-400m::L6::mean` | 0.901 | 0.843 |  | 0.967 | 0.278 | 0.689 | 0.138 | 0.983 |
 
 ## Period probe within source / with a source held out (linear)
@@ -75,7 +75,7 @@ Balanced accuracy unless noted; period chance ≈ .17 (6 classes ≥ 30 docs), s
 | `Qwen/Qwen3-8B::L27::mean` | 0.990 | 0.761 |  |  |
 | `Thalesian/AKK_300m::L4::mean` | 0.992 | 0.795 |  |  |
 | `Thalesian/AKK_300m::L8::mean` | 0.991 | 0.793 |  |  |
-| `Thalesian/cuneiformBase-400m::L12::mean` | 0.993 | 0.775 |  |  |
+| `Thalesian/cuneiformBase-400m::L12::mean` | 0.993 | 0.775 | 0.179 | 0.668 |
 | `Thalesian/cuneiformBase-400m::L6::mean` | 0.995 | 0.768 |  |  |
 
 ## From-scratch family — quick linear period probe during training
