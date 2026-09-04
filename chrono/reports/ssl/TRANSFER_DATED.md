@@ -4,6 +4,8 @@ Fit on 6,328 undated texts (period midpoint as the target), evaluated on 1,176 d
 
 `rho within NA` repeats it over the 924 Neo-Assyrian inscriptions alone — the same question the thesis asks, with the easy between-period contrast removed.
 
+
+**On `rho within NA`, read the ceiling before the number.** The training target here is a period MIDPOINT, which is one constant value for every Neo-Assyrian text, so a model fit on it cannot resolve time inside that period however good its representation is. A near-zero column is what this target predicts; it is not evidence that the signal is absent. Within-period dating is answered with real years, by the thesis-protocol read-out in `EMIN_SSL_RESULT.md` (C18).
 | model | transfer rho | rho within NA | classes | bal acc | per-class recall |
 |---|---|---|---|---|---|
 | `ssl::ssl_barlow_cunei400m-s0::L0::h` | +0.269 | -0.063 | 2 | 0.817 | Middle Babylonian 0.82 (n=28), Neo-Assyrian 0.81 (n=924) |
@@ -14,8 +16,10 @@ Fit on 6,328 undated texts (period midpoint as the target), evaluated on 1,176 d
 | `Thalesian/cuneiformBase-400m::L6::mean` | +0.227 | -0.040 | 2 | 0.756 | Middle Babylonian 0.61 (n=28), Neo-Assyrian 0.90 (n=924) |
 | `ssl_e2e::e2e_barlow_S-s0::L0::h` | +0.201 | -0.096 | 2 | 0.460 | Middle Babylonian 0.46 (n=28), Neo-Assyrian 0.46 (n=924) |
 | `ssl_e2e::e2e_jepa_XL-s0::L0::h` | +0.182 | -0.137 | 2 | 0.624 | Middle Babylonian 0.54 (n=28), Neo-Assyrian 0.71 (n=924) |
+| `ssl_hyb::hyb_barlow_S_thalesian_cunei400m-s0::L0::h` | +0.180 | -0.121 | 2 | 0.571 | Middle Babylonian 0.32 (n=28), Neo-Assyrian 0.82 (n=924) |
 | `ssl_e2e::e2e_barlow_L-s0::L0::h` | +0.174 | -0.153 | 2 | 0.543 | Middle Babylonian 0.50 (n=28), Neo-Assyrian 0.59 (n=924) |
 | `ssl::ssl_jepa_akk300m-s0::L0::h` | +0.160 | -0.072 | 2 | 0.802 | Middle Babylonian 0.71 (n=28), Neo-Assyrian 0.89 (n=924) |
+| `ssl_hyb::hyb_jepa_S_llama2_7b-s0::L0::h` | +0.159 | -0.100 | 2 | 0.404 | Middle Babylonian 0.25 (n=28), Neo-Assyrian 0.56 (n=924) |
 | `ssl::ssl_infonce_llama2_7b-s0::L0::h` | +0.139 | -0.116 | 2 | 0.505 | Middle Babylonian 0.25 (n=28), Neo-Assyrian 0.76 (n=924) |
 | `ssl_e2e::e2e_barlow_M-s0::L0::h` | +0.131 | -0.145 | 2 | 0.547 | Middle Babylonian 0.46 (n=28), Neo-Assyrian 0.63 (n=924) |
 | `ssl::ssl_barlow_llama2_7b-s0::L0::h` | +0.125 | -0.164 | 2 | 0.475 | Middle Babylonian 0.25 (n=28), Neo-Assyrian 0.70 (n=924) |
