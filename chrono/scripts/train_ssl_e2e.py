@@ -120,16 +120,20 @@ def main(argv=None):
                          "(e.g. thalesian_cunei400m, llama2_7b); a fresh Transformer of --size trains on top")
     ap.add_argument("--frozen-layer", type=int, default=None)
     ap.add_argument("--run-name", default=None)
+    ap.add_argument("--include-dated", action="store_true",
+                    help="also train on the dated inscriptions' RAW TEXT (never labels)")
     args = ap.parse_args(argv)
     fam = "hyb" if args.frozen else "e2e"
-    run = args.run_name or (f"hyb_{args.objective}_{args.size}_{args.frozen}-s{args.seed}" if args.frozen
-                            else f"e2e_{args.objective}_{args.size}-s{args.seed}")
+    wd = "_wdated" if args.include_dated else ""
+    run = args.run_name or (f"hyb_{args.objective}_{args.size}_{args.frozen}{wd}-s{args.seed}" if args.frozen
+                            else f"e2e_{args.objective}_{args.size}{wd}-s{args.seed}")
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     torch.manual_seed(args.seed); rng = np.random.default_rng(args.seed)
     out_dir = os.path.join(args.out_dir, run); os.makedirs(out_dir, exist_ok=True)
 
     c = pd.read_parquet(args.corpus, columns=["uid", "source", "text", "split", "period_norm"])
-    tr = c[c["split"] == "train"].reset_index(drop=True)
+    keep = ("train", "dated") if args.include_dated else ("train",)
+    tr = c[c["split"].isin(keep)].reset_index(drop=True)
     if args.limit: tr = tr.iloc[:args.limit]
     vpath = os.path.join(args.out_dir, "vocab.json")
     tok = SignTokenizer.load(vpath) if os.path.exists(vpath) else SignTokenizer.fit(tr["text"])
