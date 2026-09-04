@@ -10,10 +10,14 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 | representation | n docs | mc rho | gkf rho (pooled) |
 |---|---|---|---|
 | `Thalesian/cuneiformBase-400m::L12::mean` | 1,176 | 0.448 | 0.419 |
+| `ssl::ssl_barlow_cunei400m_wdated-s0::L0::h` | 1,176 | 0.491 | 0.410 |
+| `ssl::ssl_jepa_cunei400m_leace_wdated-s0::L0::h` | 1,176 | 0.473 | 0.401 |
+| `ssl::ssl_byol_cunei400m_wdated-s0::L0::h` | 1,176 | 0.519 | 0.401 |
 | `ssl::ssl_byol_cunei400m-s0::L0::h` | 1,176 | 0.470 | 0.393 |
 | `ssl::ssl_infonce_cunei400m-s0::L0::h` | 1,176 | 0.381 | 0.380 |
 | `ssl::ssl_jepa_cunei400m-s0::L0::h` | 1,176 | 0.494 | 0.376 |
 | `ssl::ssl_infonce_llama2_7b-s0::L0::h` | 1,176 | 0.417 | 0.374 |
+| `ssl::ssl_jepa_cunei400m_wdated-s0::L0::h` | 1,176 | 0.473 | 0.369 |
 | `Thalesian/cuneiformBase-400m::L6::mean` | 1,176 | 0.426 | 0.361 |
 | `ssl::ssl_barlow_cunei400m_leopard-s0::L0::h` | 1,176 | 0.447 | 0.354 |
 | `ssl::ssl_jepa_cunei400m_leace-s0::L0::h` | 1,176 | 0.437 | 0.352 |
@@ -60,7 +64,7 @@ Ridge on frozen features of the 1,193 dated royal inscriptions, ruler-grouped fo
 
 | family | cells | best mc | median mc | best gkf | median gkf |
 |---|---|---|---|---|---|
-| adapter on a frozen encoder | 24 | 0.494 | 0.358 | 0.393 | 0.277 |
+| adapter on a frozen encoder | 28 | 0.519 | 0.383 | 0.410 | 0.287 |
 | from scratch (raw signs) | 8 | 0.403 | 0.364 | 0.333 | 0.237 |
 | frozen encoder, no SSL | 6 | 0.448 | 0.346 | 0.419 | 0.312 |
 | hybrid (frozen states -> fresh transformer) | 8 | 0.386 | 0.204 | 0.294 | 0.171 |
