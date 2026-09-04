@@ -5,7 +5,7 @@
 #SBATCH --mem=64G
 #SBATCH --gres=gpu:1
 #SBATCH --time=04:00:00
-#SBATCH --array=0-3
+#SBATCH --array=0-5
 #SBATCH --output=chrono/sbatch/logs/C19_anti_%A_%a.out
 # ===========================================================================
 # C19 — S5b anti-shortcut arms (advisor, 2026-09-04). The 32-run sweep showed
@@ -16,8 +16,8 @@
 # read-out is C18. Probes run in-job; a C18 refresh is chained by inbox 043.
 # ===========================================================================
 set -uo pipefail
-OBJS=(barlow jepa); ANTIS=(leace adv)
-OBJ=${OBJS[$((SLURM_ARRAY_TASK_ID / 2))]}; ANTI=${ANTIS[$((SLURM_ARRAY_TASK_ID % 2))]}
+OBJS=(barlow jepa); ANTIS=(leace adv both)
+OBJ=${OBJS[$((SLURM_ARRAY_TASK_ID / 3))]}; ANTI=${ANTIS[$((SLURM_ARRAY_TASK_ID % 3))]}
 echo "=== C19 ${OBJ} + ${ANTI} === job ${SLURM_JOB_ID} $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis

@@ -60,10 +60,12 @@ def main(argv=None):
     # --- S5b anti-shortcut arms (advisor, 2026-09-04). The 32-run sweep showed
     # every SSL family learns SOURCE (probe .92-.98) and never beats the frozen
     # encoder on dating; these arms forbid the shortcut during training.
-    ap.add_argument("--anti", choices=["leace", "adv"], default=None,
+    ap.add_argument("--anti", choices=["leace", "adv", "both"], default=None,
                     help="leace: re-fit a LEACE eraser for source on h every "
                          "--refit-every steps and apply it inside the forward "
-                         "pass; adv: gradient-reversal source classifier on h")
+                         "pass; adv: gradient-reversal source classifier on h; "
+                         "both: the two at once — the eraser kills the linear "
+                         "trace, the adversary chases what grows back")
     ap.add_argument("--refit-every", type=int, default=500)
     ap.add_argument("--steps", type=int, default=None, help="override train.steps (smoke tests)")
     ap.add_argument("--lambda-adv", type=float, default=1.0)
@@ -121,7 +123,7 @@ def main(argv=None):
     Z_onehot = np.eye(n_classes, dtype=np.float64)[src_cat.codes]
     eraser_M = eraser_mu = None            # torch constants, refreshed by refit
     adv_clf = None
-    if args.anti == "adv":
+    if args.anti in ("adv", "both"):
         adv_clf = torch.nn.Linear(head.proj.in_features, n_classes).to(dev)
         opt.add_param_group({"params": adv_clf.parameters()})
 
@@ -169,7 +171,7 @@ def main(argv=None):
             rb = [idx[u][""][0] for u in bu]                    # clean target
         else:
             ra = [pick(u, all_views) for u in bu]; rb = [pick(u, all_views) for u in bu]
-        if args.anti == "leace" and step % args.refit_every == 0:
+        if args.anti in ("leace", "both") and step % args.refit_every == 0:
             rk = refit_eraser()
             if step % 2000 == 0:
                 print(f"[ssl] step {step}: LEACE refit, rank {rk}", flush=True)
@@ -209,7 +211,7 @@ def main(argv=None):
     clean = pd.read_parquet(args.views, columns=["uid", "augs", "view_id"])
     clean = clean[clean["augs"] == ""].drop_duplicates("uid")
     Xc = torch.as_tensor(store.get(feats["model"], feats["layer"], feats["site"], ("ssl::" + clean["view_id"]).tolist())).float()
-    if args.anti == "leace":
+    if args.anti in ("leace", "both"):
         refit_eraser()                      # final eraser on the finished head
     head.eval(); H = []
     with torch.no_grad():
