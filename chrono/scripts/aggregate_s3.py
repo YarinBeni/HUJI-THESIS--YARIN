@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(
 from chrono.eval.robustness import battery                     # noqa: E402
 from chrono.scripts.aggregate_emin import load_oof             # noqa: E402
 
-RUN_RE = re.compile(r"^s3_(?P<enc>.+?)_init-(?P<init>none|barlow|byol|jepa|infonce)"
+RUN_RE = re.compile(r"^s3_(?P<enc>.+?)_init-(?P<init>[a-z0-9_]+?)"
                     r"_frac(?P<frac>\d+)(?:_h(?P<hid>\d+))?-s(?P<seed>\d+)-f(?P<fold>\d+)$")
 
 
