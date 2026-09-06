@@ -1,0 +1,175 @@
+# job 33892 C13_s3 exit=0 Thu Sep  3 20:28:50 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C13_s3_33674_63.out
+=== C13 s3_llama2_7b_init-none_frac50 seed 0 === job 33892 Thu Sep  3 18:28:08 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[labels] label_frac=0.5: 473/925 train docs kept (39 rulers, all retained)
+epoch 50/200 loss 13.9465
+epoch 100/200 loss 10.0695
+epoch 150/200 loss 8.3434
+epoch 200/200 loss 6.9830
+{
+  "run_id": "s3_llama2_7b_init-none_frac50-s0-f0",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.74395224813314,
+    "train_spearman": 0.7442242663601133,
+    "final_loss": 6.982996702194214,
+    "identical_view_rate": 0.00799154334038055,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac50-s0-f0.parquet"
+}
+[labels] label_frac=0.5: 489/956 train docs kept (39 rulers, all retained)
+epoch 50/200 loss 14.8420
+epoch 100/200 loss 11.0372
+epoch 150/200 loss 8.6083
+epoch 200/200 loss 7.0484
+{
+  "run_id": "s3_llama2_7b_init-none_frac50-s0-f1",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.8369009351453723,
+    "train_spearman": 0.8366072124570971,
+    "final_loss": 7.048445463180542,
+    "identical_view_rate": 0.005511247443762781,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac50-s0-f1.parquet"
+}
+[labels] label_frac=0.5: 488/963 train docs kept (27 rulers, all retained)
+epoch 50/200 loss 13.6197
+epoch 100/200 loss 10.1736
+epoch 150/200 loss 8.2032
+epoch 200/200 loss 7.1316
+{
+  "run_id": "s3_llama2_7b_init-none_frac50-s0-f2",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7965331527629448,
+    "train_spearman": 0.7962141395389173,
+    "final_loss": 7.131591320037842,
+    "identical_view_rate": 0.006157786885245902,
+    "test_spearman": 0.19765554338617405
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac50-s0-f2.parquet"
+}
+[labels] label_frac=0.5: 490/964 train docs kept (30 rulers, all retained)
+epoch 50/200 loss 15.8866
+epoch 100/200 loss 11.9731
+epoch 150/200 loss 9.8374
+epoch 200/200 loss 8.4962
+{
+  "run_id": "s3_llama2_7b_init-none_frac50-s0-f3",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7782227518969855,
+    "train_spearman": 0.777992436597695,
+    "final_loss": 8.496182441711426,
+    "identical_view_rate": 0.004765306122448979,
+    "test_spearman": 0.5989623435507209
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac50-s0-f3.parquet"
+}
+[labels] label_frac=0.5: 488/964 train docs kept (25 rulers, all retained)
+epoch 50/200 loss 15.3369
+epoch 100/200 loss 11.7090
+epoch 150/200 loss 9.2506
+epoch 200/200 loss 7.7681
+{
+  "run_id": "s3_llama2_7b_init-none_frac50-s0-f4",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.6691197928191976,
+    "train_spearman": 0.6692140648683511,
+    "final_loss": 7.768076419830322,
+    "identical_view_rate": 0.0038114754098360656,
+    "test_spearman": 0.6601849153882631
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac50-s0-f4.parquet"
+}
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 8b822b33] C13: s3_llama2_7b_init-none_frac50 seed 0 (job 33892)
+ 22 files changed, 164 insertions(+)
+ create mode 100644 chrono/reports/logs/C13_s3_33674.log
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac100_h2048-s2-f0.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac100_h2048-s2-f1.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac100_h2048-s2-f2.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac100_h2048-s2-f3.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac100_h2048-s2-f4.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s1-f0.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s1-f1.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s1-f2.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s1-f3.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s1-f4.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s2-f0.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s2-f1.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s2-f2.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s2-f3.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_llama2_7b_init-none_frac25-s2-f4.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+[commit_push_sandbox] FAILED after 5 attempts
+=== Done. Thu Sep  3 20:28:50 UTC 2026 ===

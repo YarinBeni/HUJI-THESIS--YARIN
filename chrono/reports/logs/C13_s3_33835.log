@@ -1,0 +1,121 @@
+# job 33835 C13_s3 exit=0 Thu Sep  3 18:27:36 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C13_s3_33674_31.out
+=== C13 s3_cunei400m_init-none_frac50 seed 1 === job 33835 Thu Sep  3 14:27:10 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: dcafb08e
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[labels] label_frac=0.5: 473/925 train docs kept (39 rulers, all retained)
+epoch 50/200 loss 8.3764
+epoch 100/200 loss 6.4406
+epoch 150/200 loss 5.0333
+epoch 200/200 loss 4.6071
+{
+  "run_id": "s3_cunei400m_init-none_frac50-s1-f0",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7046885400868348,
+    "train_spearman": 0.7044221667285965,
+    "final_loss": 4.607107162475586,
+    "identical_view_rate": 0.005443974630021142,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-none_frac50-s1-f0.parquet"
+}
+[labels] label_frac=0.5: 489/956 train docs kept (39 rulers, all retained)
+epoch 50/200 loss 8.7992
+epoch 100/200 loss 6.3778
+epoch 150/200 loss 5.4041
+epoch 200/200 loss 4.4618
+{
+  "run_id": "s3_cunei400m_init-none_frac50-s1-f1",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7396310841134398,
+    "train_spearman": 0.7395229610687817,
+    "final_loss": 4.461829662322998,
+    "identical_view_rate": 0.0033640081799591,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-none_frac50-s1-f1.parquet"
+}
+[labels] label_frac=0.5: 488/963 train docs kept (27 rulers, all retained)
+epoch 50/200 loss 7.9837
+epoch 100/200 loss 5.7723
+epoch 150/200 loss 4.8507
+epoch 200/200 loss 4.1216
+{
+  "run_id": "s3_cunei400m_init-none_frac50-s1-f2",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7650132191487617,
+    "train_spearman": 0.7651321010054004,
+    "final_loss": 4.121634244918823,
+    "identical_view_rate": 0.006875,
+    "test_spearman": 0.19512873483175447
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-none_frac50-s1-f2.parquet"
+}
+[labels] label_frac=0.5: 490/964 train docs kept (30 rulers, all retained)
+epoch 50/200 loss 8.8824
+epoch 100/200 loss 6.6196
+epoch 150/200 loss 5.2986
+epoch 200/200 loss 4.6438
+{
+  "run_id": "s3_cunei400m_init-none_frac50-s1-f3",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7165012550744855,
+    "train_spearman": 0.7165661223807548,
+    "final_loss": 4.6437811851501465,
+    "identical_view_rate": 0.0045,
+    "test_spearman": 0.6490590123491637
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-none_frac50-s1-f3.parquet"
+}
+[labels] label_frac=0.5: 488/964 train docs kept (25 rulers, all retained)
+epoch 50/200 loss 8.0423
+epoch 100/200 loss 6.1690
+epoch 150/200 loss 4.7908
+epoch 200/200 loss 4.0006
+{
+  "run_id": "s3_cunei400m_init-none_frac50-s1-f4",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.6290482211686302,
+    "train_spearman": 0.628908980699248,
+    "final_loss": 4.000567674636841,
+    "identical_view_rate": 0.007704918032786885,
+    "test_spearman": 0.7139487492332699
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-none_frac50-s1-f4.parquet"
+}
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 7ee228e7] C13: s3_cunei400m_init-none_frac50 seed 1 (job 33835)
+ 1 file changed, 159 insertions(+)
+ create mode 100644 chrono/reports/logs/C13_s3_33834.log
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[2026-09-03T18:27:36.011] error: *** JOB 33835 ON g0378 CANCELLED AT 2026-09-03T18:27:36 DUE TO TIME LIMIT ***

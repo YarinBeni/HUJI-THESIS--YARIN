@@ -1,0 +1,74 @@
+# 001_status  host=g0381  start=Wed Sep  2 04:06:18 UTC 2026  timeout=1800s
+# HEAD=9048ea34
+# ---------------------------------------------------------
+## whoami/host
+yarin.b
+g0381
+## squeue
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+             33315 voltagepa AGENT_ru  yarin.b  R       0:10      1 g0381
+## recent jobs
+JobID                 JobName      State    Elapsed ExitCode                 End 
+------------ ---------------- ---------- ---------- -------- ------------------- 
+32287                C0_tests     FAILED   00:00:07      1:0 2026-08-30T17:13:38 
+32355                C0_tests  COMPLETED   00:00:50      0:0 2026-08-30T21:29:01 
+32357                C0_tests  COMPLETED   00:00:24      0:0 2026-08-30T21:35:32 
+32358              C1_extract     FAILED   00:01:16      1:0 2026-08-30T22:29:28 
+32500              C1_extract     FAILED   00:00:15      1:0 2026-08-31T16:24:36 
+32706              C1_extract  COMPLETED   00:13:56      0:0 2026-09-01T16:48:39 
+32710              C1_extract  COMPLETED   00:06:25      0:0 2026-09-01T17:41:09 
+32723                 C2_gate     FAILED   00:01:57      1:0 2026-09-01T20:17:42 
+33315            AGENT_runner    RUNNING   00:00:10      0:0             Unknown 
+## git
+## yarin-sandbox...origin/yarin-sandbox
+ M v_1/src/world_models/activations/llama2_7b/assyrian_ruler/metadata.json
+ M v_1/src/world_models/activations/olmo2_7b/assyrian_ruler/metadata.json
+ M v_1/src/world_models/activations/qwen3_8b/assyrian_ruler/metadata.json
+?? v_1/src/geodesic/fig1_followups/pls_ksweep/probes/
+9048ea34 agent: queue C2 resubmission
+3daa86c7 sandbox: git-driven command runner for the cluster (inert until submitted)
+deddd111 sandbox: gate skips constant cells; sync no longer drops unpushed commits
+## emb_store
+482M	chrono/artifacts/emb_store
+Thalesian_AKK_300m__L0__last__0149a1229b3de4cf.npz
+Thalesian_AKK_300m__L0__last__0257a29eb0b41ec2.npz
+Thalesian_AKK_300m__L0__last__04da3fdfeabd0fa0.npz
+Thalesian_AKK_300m__L0__last__052c1b64918a88a2.npz
+Thalesian_AKK_300m__L0__last__06ffbc48cd4c32d6.npz
+Thalesian_AKK_300m__L0__last__0b1dec8797a671ce.npz
+Thalesian_AKK_300m__L0__last__0cbb5c5eb11acda2.npz
+Thalesian_AKK_300m__L0__last__0eac95751de80c4d.npz
+Thalesian_AKK_300m__L0__last__0ef3ba52260b0fb6.npz
+Thalesian_AKK_300m__L0__last__10051078dcf34d51.npz
+## extract meta
+{
+  "n_texts": 59350,
+  "n_embedded": 0,
+  "n_skipped": 59350,
+  "layers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "sites": [
+    "mean",
+    "last"
+  ],
+  "elapsed_s": 252.9,
+  "model": "thalesian_akk300m",
+  "hfid": "Thalesian/AKK_300m",
+  "store_root": "chrono/artifacts/emb_store",
+  "max_tokens": 512,
+  "dtype": "auto"
+}## can sbatch run from here?
+/usr/bin/sbatch
+/usr/bin/squeue
+/usr/bin/sacct
+# ---------------------------------------------------------
+# exit=0  end=Wed Sep  2 04:06:18 UTC 2026

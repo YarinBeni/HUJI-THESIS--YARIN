@@ -1,0 +1,96 @@
+# job 33489 C5_headlad exit=0 Wed Sep  2 14:26:15 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C5_headlad_33475_8.out
+=== C5 emin2_cunei400m_t0_akk_erase_subgenre seed 2 === job 33489 Wed Sep  2 14:23:06 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[erase] LEACE 'subgenre' (k=21, rank 19) fitted on 925 train orig rows, applied to 19088 views
+epoch 50/200 loss 8.3559
+epoch 100/200 loss 6.6877
+epoch 150/200 loss 5.4782
+epoch 200/200 loss 4.9921
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_subgenre-s2-f0",
+  "metrics": {
+    "train_soft_spearman": 0.3649719486362662,
+    "train_spearman": 0.3653083862013254,
+    "final_loss": 4.99207067489624,
+    "identical_view_rate": 0.007491891891891892,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_subgenre-s2-f0.parquet"
+}
+[erase] LEACE 'subgenre' (k=21, rank 20) fitted on 956 train orig rows, applied to 19088 views
+epoch 50/200 loss 8.5304
+epoch 100/200 loss 6.4477
+epoch 150/200 loss 5.6747
+epoch 200/200 loss 5.0145
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_subgenre-s2-f1",
+  "metrics": {
+    "train_soft_spearman": 0.42226886855559964,
+    "train_spearman": 0.4224587567061024,
+    "final_loss": 5.014525055885315,
+    "identical_view_rate": 0.00651673640167364,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_subgenre-s2-f1.parquet"
+}
+[erase] LEACE 'subgenre' (k=21, rank 20) fitted on 963 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.8692
+epoch 100/200 loss 5.9298
+epoch 150/200 loss 4.9108
+epoch 200/200 loss 4.5206
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_subgenre-s2-f2",
+  "metrics": {
+    "train_soft_spearman": 0.41293108915627713,
+    "train_spearman": 0.41257271305832993,
+    "final_loss": 4.520604133605957,
+    "identical_view_rate": 0.007876427829698858,
+    "test_spearman": 0.20503540223145897
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_subgenre-s2-f2.parquet"
+}
+[erase] LEACE 'subgenre' (k=21, rank 20) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 8.9268
+epoch 100/200 loss 6.6298
+epoch 150/200 loss 5.5070
+epoch 200/200 loss 5.1347
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_subgenre-s2-f3",
+  "metrics": {
+    "train_soft_spearman": 0.36989911616693255,
+    "train_spearman": 0.3696777651866955,
+    "final_loss": 5.134711265563965,
+    "identical_view_rate": 0.0036566390041493776,
+    "test_spearman": 0.2863370187379494
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_subgenre-s2-f3.parquet"
+}
+[erase] LEACE 'subgenre' (k=21, rank 20) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 8.1578
+epoch 100/200 loss 6.0315
+epoch 150/200 loss 5.0119
+epoch 200/200 loss 4.7701
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_subgenre-s2-f4",
+  "metrics": {
+    "train_soft_spearman": 0.448085559688528,
+    "train_spearman": 0.44792777386758764,
+    "final_loss": 4.770107984542847,
+    "identical_view_rate": 0.007287344398340249,
+    "test_spearman": 0.6091048950294949
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_subgenre-s2-f4.parquet"
+}
+[yarin-sandbox b27fd2d1] C5: head ladder emin2_cunei400m_t0_akk_erase_subgenre seed 2 (job 33489)
+ 1 file changed, 96 insertions(+)
+ create mode 100644 chrono/reports/logs/C5_headlad_33491.log
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   f28f415b..b27fd2d1  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 14:26:15 UTC 2026 ===

@@ -1,0 +1,105 @@
+# job 34185 C19_anti exit=0 Fri Sep  4 12:57:47 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C19_anti_34185_7.out
+=== C19 jepa + leopard === job 34185 Fri Sep  4 11:55:07 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[ssl] ssl_jepa_cunei400m_leopard-s99: 24,589 train texts, 270,479 views; loading features
+[ssl] objective=jepa d_in=768 head_params=722,561 steps=60 batch=512 balance_alpha=0.5 sources={'ebl': 13242, 'oracc': 9016, 'archibab': 1218, 'lbl_letters': 816, 'seal': 288, 'orcc': 9}
+/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/train_ssl.py:224: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"[ssl] step {step} mmd {float(torch.stack(terms).sum()) if terms else -1:.4f} "
+[ssl] step 0 mmd 0.5806 frame 0.0000
+[ssl] step 0 loss 2.6929 (1s)
+[ssl] step 59 loss 0.3316 (2s)
+[ssl] done ssl_jepa_cunei400m_leopard-s99: head -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts_ssl/ssl_runs/ssl_jepa_cunei400m_leopard-s99.pt; embeddings -> store model 'ssl::ssl_jepa_cunei400m_leopard-s99' L0 site h (31,905 texts)
+[ssl] ssl_jepa_cunei400m_leopard-s0: 24,589 train texts, 270,479 views; loading features
+[ssl] objective=jepa d_in=768 head_params=722,561 steps=3000 batch=512 balance_alpha=0.5 sources={'ebl': 13242, 'oracc': 9016, 'archibab': 1218, 'lbl_letters': 816, 'seal': 288, 'orcc': 9}
+/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/train_ssl.py:224: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  print(f"[ssl] step {step} mmd {float(torch.stack(terms).sum()) if terms else -1:.4f} "
+[ssl] step 0 mmd 0.5274 frame 0.0000
+[ssl] step 0 loss 2.6054 (0s)
+[ssl] step 200 mmd 0.0778 frame 0.0057
+[ssl] step 200 loss 0.2185 (5s)
+[ssl] step 400 mmd 0.0543 frame 0.0050
+[ssl] step 400 loss 0.1848 (9s)
+[ssl] step 600 mmd 0.1065 frame 0.0072
+[ssl] step 600 loss 0.1755 (14s)
+[ssl] step 800 mmd 0.0816 frame 0.0052
+[ssl] step 800 loss 0.1701 (18s)
+[ssl] step 1000 mmd 0.1244 frame 0.0018
+[ssl] step 1000 loss 0.1677 (23s)
+[ssl] step 1200 mmd 0.0315 frame 0.0035
+[ssl] step 1200 loss 0.1754 (27s)
+[ssl] step 1400 mmd 0.0892 frame 0.0044
+[ssl] step 1400 loss 0.1814 (31s)
+[ssl] step 1600 mmd 0.1416 frame 0.0098
+[ssl] step 1600 loss 0.1835 (36s)
+[ssl] step 1800 mmd 0.0729 frame 0.0111
+[ssl] step 1800 loss 0.1835 (40s)
+[ssl] step 2000 mmd 0.0787 frame 0.0072
+[ssl] step 2000 loss 0.1882 (45s)
+[ssl] step 2200 mmd 0.0746 frame 0.0048
+[ssl] step 2200 loss 0.1963 (49s)
+[ssl] step 2400 mmd 0.1230 frame 0.0118
+[ssl] step 2400 loss 0.1908 (54s)
+[ssl] step 2600 mmd 0.0853 frame 0.0089
+[ssl] step 2600 loss 0.1877 (58s)
+[ssl] step 2800 mmd 0.0622 frame 0.0050
+[ssl] step 2800 loss 0.1800 (62s)
+[ssl] step 2999 loss 0.1873 (67s)
+[ssl] done ssl_jepa_cunei400m_leopard-s0: head -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts_ssl/ssl_runs/ssl_jepa_cunei400m_leopard-s0.pt; embeddings -> store model 'ssl::ssl_jepa_cunei400m_leopard-s0' L0 site h (31,905 texts)
+# S1 representation probes — ssl::ssl_jepa_cunei400m_leopard-s0::L0::h
+
+texts 30,729 · PCA 0 · classes need ≥ 30 docs
+
+## Probes (balanced accuracy, 5-fold, tablet level)
+
+| label | classes | n | linear | MLP | chance |
+|---|---|---|---|---|---|
+| period_norm | 5 | 6,300 | 0.790 ± 0.018 | 0.786 ± 0.021 | 0.200 |
+| genre_raw | 71 | 27,187 | 0.186 ± 0.003 | 0.168 ± 0.016 | 0.014 |
+| provenance | 16 | 30,419 | 0.478 ± 0.015 | 0.463 ± 0.019 | 0.062 |
+| source | 5 | 30,720 | 0.798 ± 0.010 | 0.820 ± 0.016 | 0.200 |
+
+## Period probe WITHIN source (linear)
+
+| source | classes | n | balanced acc | chance |
+|---|---|---|---|---|
+| oracc | 2 | 3,414 | 0.955 ± 0.006 | 0.500 |
+| seal | 3 | 328 | 0.680 ± 0.072 | 0.333 |
+
+## Period probe, HELD-OUT source (train on the other non-dated sources, linear)
+
+| held out | classes | n test | balanced acc | chance |
+|---|---|---|---|---|
+| seal | 3 | 292 | 0.593 | 0.333 |
+| orcc (dated) | 3 | 953 | 0.076 | 0.333 |
+
+## Geometry (period)
+
+silhouette (raw space) -0.025 · permutation null -0.032 ± 0.025 · p = 0.545
+k-NN (k=10) period purity 0.767 · chance ≈ 0.341
+silhouette (UMAP-2d) -0.048 · null -0.047 ± 0.024 · p = 0.580
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 0b5526e6] C19: ssl_jepa_cunei400m_leopard-s0 (job 34185)
+ 3 files changed, 32 insertions(+)
+ create mode 100644 chrono/reports/ssl/S1_ssl_ssl_jepa_cunei400m_leopard-s0_L0_h.md
+ create mode 100644 chrono/reports/ssl/umap_ssl_ssl_jepa_cunei400m_leopard-s0_L0_h.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   4f5bcf62..0b5526e6  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Fri Sep  4 12:57:47 UTC 2026 ===

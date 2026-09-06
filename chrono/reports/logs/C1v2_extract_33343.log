@@ -1,0 +1,50 @@
+# job 33343 C1v2_extract exit=1 Wed Sep  2 06:24:35 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C1v2_extract_33341_0.out
+=== C1v2 extract llama2_7b layers 8,16,24,32 === job 33343 Wed Sep  2 06:20:00 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: 2dac845b
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Fetching 18 files:   0%|          | 0/18 [00:00<?, ?it/s]Fetching 18 files: 100%|██████████| 18/18 [00:00<00:00, 493.49it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights:   0%|          | 1/291 [00:00<00:45,  6.42it/s]Loading weights:   1%|          | 2/291 [00:00<01:16,  3.78it/s]Loading weights:   4%|▍         | 13/291 [00:00<00:15, 18.46it/s]Loading weights:   7%|▋         | 19/291 [00:00<00:10, 25.05it/s]Loading weights:   8%|▊         | 23/291 [00:01<00:12, 21.75it/s]Loading weights:  11%|█         | 31/291 [00:01<00:10, 25.23it/s]Loading weights:  12%|█▏        | 34/291 [00:01<00:10, 25.40it/s]Loading weights:  14%|█▎        | 40/291 [00:01<00:10, 23.16it/s]Loading weights:  17%|█▋        | 49/291 [00:02<00:09, 25.67it/s]Loading weights:  19%|█▉        | 55/291 [00:02<00:07, 30.51it/s]Loading weights:  20%|██        | 59/291 [00:02<00:08, 26.55it/s]Loading weights:  22%|██▏       | 64/291 [00:02<00:07, 30.00it/s]Loading weights:  23%|██▎       | 68/291 [00:02<00:09, 24.50it/s]Loading weights:  26%|██▌       | 76/291 [00:03<00:08, 25.46it/s]Loading weights:  29%|██▊       | 83/291 [00:03<00:06, 30.07it/s]Loading weights:  30%|██▉       | 87/291 [00:03<00:07, 26.60it/s]Loading weights:  32%|███▏      | 94/291 [00:03<00:07, 25.19it/s]Loading weights:  35%|███▍      | 101/291 [00:03<00:05, 31.72it/s]Loading weights:  36%|███▌      | 105/291 [00:04<00:07, 24.70it/s]Loading weights:  38%|███▊      | 112/291 [00:04<00:06, 26.57it/s]Loading weights:  41%|████      | 119/291 [00:04<00:05, 30.01it/s]Loading weights:  42%|████▏     | 123/291 [00:04<00:06, 27.11it/s]Loading weights:  45%|████▍     | 130/291 [00:05<00:06, 25.09it/s]Loading weights:  47%|████▋     | 137/291 [00:05<00:05, 30.49it/s]Loading weights:  48%|████▊     | 141/291 [00:05<00:05, 25.88it/s]Loading weights:  51%|█████     | 148/291 [00:05<00:05, 24.63it/s]Loading weights:  53%|█████▎    | 155/291 [00:05<00:04, 30.19it/s]Loading weights:  55%|█████▍    | 159/291 [00:06<00:05, 25.44it/s]Loading weights:  57%|█████▋    | 166/291 [00:06<00:05, 23.28it/s]Loading weights:  59%|█████▉    | 172/291 [00:06<00:04, 28.04it/s]Loading weights:  60%|██████    | 176/291 [00:06<00:04, 24.61it/s]Loading weights:  63%|██████▎   | 183/291 [00:07<00:03, 32.01it/s]Loading weights:  65%|██████▍   | 188/291 [00:07<00:03, 28.83it/s]Loading weights:  66%|██████▋   | 193/291 [00:07<00:04, 23.44it/s]Loading weights:  69%|██████▉   | 202/291 [00:07<00:03, 26.35it/s]Loading weights:  71%|███████   | 206/291 [00:07<00:02, 28.35it/s]Loading weights:  73%|███████▎  | 211/291 [00:08<00:03, 24.14it/s]Loading weights:  76%|███████▌  | 220/291 [00:08<00:02, 25.23it/s]Loading weights:  78%|███████▊  | 227/291 [00:08<00:02, 31.44it/s]Loading weights:  80%|███████▉  | 232/291 [00:08<00:02, 27.46it/s]Loading weights:  81%|████████  | 236/291 [00:09<00:01, 28.75it/s]Loading weights:  82%|████████▏ | 240/291 [00:09<00:01, 26.71it/s]Loading weights:  85%|████████▍ | 247/291 [00:09<00:01, 25.22it/s]Loading weights:  86%|████████▌ | 250/291 [00:09<00:01, 25.76it/s]Loading weights:  88%|████████▊ | 256/291 [00:09<00:01, 25.55it/s]Loading weights:  90%|█████████ | 262/291 [00:09<00:00, 30.60it/s]Loading weights:  91%|█████████▏| 266/291 [00:10<00:00, 26.81it/s]Loading weights:  93%|█████████▎| 270/291 [00:10<00:00, 29.14it/s]Loading weights:  94%|█████████▍| 274/291 [00:10<00:00, 21.28it/s]Loading weights:  96%|█████████▌| 280/291 [00:10<00:00, 25.75it/s]Loading weights:  98%|█████████▊| 284/291 [00:10<00:00, 23.59it/s]Loading weights: 100%|██████████| 291/291 [00:11<00:00, 26.39it/s]
+[extract] NousResearch/Llama-2-7b-hf: 40562 texts, layers [8, 16, 24, 32], sites ['mean', 'last'], store=chrono.models.store
+Token indices sequence length is longer than the specified maximum sequence length for this model (16677 > 2048). Running this sequence through the model will result in indexing errors
+[extract] 1024/40562 texts (105.3s)
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 501, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 487, in main
+    meta = extract(table, encode, store=store, model_name=hfid,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 335, in extract
+    _put(store, model_name, ly, st, ids,
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 298, in _put
+    store.put(model, layer, site, ids, X, texts=texts)
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/models/store.py", line 79, in put
+    m = self.manifest()
+        ^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/models/store.py", line 47, in manifest
+    return pd.read_parquet(self.manifest_path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/parquet.py", line 669, in read_parquet
+    return impl.read(
+           ^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/parquet.py", line 265, in read
+    pa_table = self.api.parquet.read_table(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pyarrow/parquet/core.py", line 1844, in read_table
+    dataset = ParquetDataset(
+              ^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pyarrow/parquet/core.py", line 1413, in __init__
+    [fragment], schema=schema or fragment.physical_schema,
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/_dataset.pyx", line 1477, in pyarrow._dataset.Fragment.physical_schema.__get__
+  File "pyarrow/error.pxi", line 155, in pyarrow.lib.pyarrow_internal_check_status
+  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
+OSError: Could not open Parquet input source '<Buffer>': Couldn't deserialize thrift: invalid TType
+
+FAILED extract_embeddings llama2_7b

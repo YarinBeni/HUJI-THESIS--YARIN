@@ -1,0 +1,95 @@
+# job 33393 C3v2_emin exit=0 Wed Sep  2 08:05:50 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C3v2_emin_33352_34.out
+=== C3v2 emin2_cunei400m_t0_akk seed 4 === job 33393 Wed Sep  2 08:03:04 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+epoch 50/200 loss 7.4220
+epoch 100/200 loss 5.3535
+epoch 150/200 loss 4.4937
+epoch 200/200 loss 4.0994
+{
+  "run_id": "emin2_cunei400m_t0_akk-s4-f0",
+  "metrics": {
+    "train_soft_spearman": 0.6904735415843998,
+    "train_spearman": 0.6901988677050914,
+    "final_loss": 4.099393963813782,
+    "identical_view_rate": 0.007648648648648649,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk-s4-f0.parquet"
+}
+epoch 50/200 loss 7.8045
+epoch 100/200 loss 5.7246
+epoch 150/200 loss 4.8931
+epoch 200/200 loss 4.4730
+{
+  "run_id": "emin2_cunei400m_t0_akk-s4-f1",
+  "metrics": {
+    "train_soft_spearman": 0.7377664271454398,
+    "train_spearman": 0.7375930271792689,
+    "final_loss": 4.472982883453369,
+    "identical_view_rate": 0.006621338912133891,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk-s4-f1.parquet"
+}
+epoch 50/200 loss 7.1897
+epoch 100/200 loss 5.0116
+epoch 150/200 loss 4.3909
+epoch 200/200 loss 4.0420
+{
+  "run_id": "emin2_cunei400m_t0_akk-s4-f2",
+  "metrics": {
+    "train_soft_spearman": 0.7734664333321444,
+    "train_spearman": 0.7733716111198109,
+    "final_loss": 4.041963756084442,
+    "identical_view_rate": 0.007938733125649014,
+    "test_spearman": 0.15656879179944608
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk-s4-f2.parquet"
+}
+epoch 50/200 loss 7.8542
+epoch 100/200 loss 5.7605
+epoch 150/200 loss 4.8496
+epoch 200/200 loss 4.2529
+{
+  "run_id": "emin2_cunei400m_t0_akk-s4-f3",
+  "metrics": {
+    "train_soft_spearman": 0.7283097588525725,
+    "train_spearman": 0.7279834031414308,
+    "final_loss": 4.25292307138443,
+    "identical_view_rate": 0.0034387966804979254,
+    "test_spearman": 0.5667217252983011
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk-s4-f3.parquet"
+}
+epoch 50/200 loss 7.2010
+epoch 100/200 loss 5.2875
+epoch 150/200 loss 4.4773
+epoch 200/200 loss 3.9320
+{
+  "run_id": "emin2_cunei400m_t0_akk-s4-f4",
+  "metrics": {
+    "train_soft_spearman": 0.6453586535085563,
+    "train_spearman": 0.6454153604196978,
+    "final_loss": 3.9320473074913025,
+    "identical_view_rate": 0.007219917012448133,
+    "test_spearman": 0.7067726739230492
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk-s4-f4.parquet"
+}
+[yarin-sandbox b8394142] C3v2: emin2_cunei400m_t0_akk seed 4 (job 33393)
+ 6 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 chrono/reports/tier0/scores/emin2_cunei400m_t0_akk-s4-f0.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_cunei400m_t0_akk-s4-f1.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_cunei400m_t0_akk-s4-f2.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_cunei400m_t0_akk-s4-f3.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_cunei400m_t0_akk-s4-f4.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   3a6fc162..b8394142  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 08:05:50 UTC 2026 ===
