@@ -35,6 +35,11 @@ from wm_lib.registry import MODELS                    # noqa: E402
 
 ENTITY_TYPES = {"assyrian_ruler": ("death_year", False),
                 "assyrian_ruler_akk": ("death_year", False),
+                # fairness cell: the ENGLISH names, restricted to exactly the
+                # rulers whose Akkadian spelling survived the harvest, so the
+                # eng<->akk comparison runs on identical entity sets. Reuses
+                # the assyrian_ruler CSV and activations with a row mask.
+                "assyrian_ruler_eng25": ("death_year", False),
                 "mesopotamian_place": (("longitude", "latitude"), True)}
 SITES = ["ent_last", "ent_mean", "last", "mean"]
 DATA_DIR = os.path.join(os.path.dirname(_HERE), "data", "entity_datasets")
@@ -141,23 +146,32 @@ def score_matrix(X, df, entity_type, tag, sweep_k=False):
 
 
 def probe_one(method, entity_type, site, args):
-    act_dir = os.path.join(ACTS_DIR, method, entity_type)
+    act_dir = os.path.join(ACTS_DIR, method,
+                           "assyrian_ruler" if entity_type == "assyrian_ruler_eng25" else entity_type)
     files = sorted(glob.glob(os.path.join(act_dir, f"{site}.layer*.npz")),
                    key=lambda p: int(re.search(r"layer(\d+)\.npz$", p).group(1)))
     if not files:
         print(f"[skip] no {site} activations for {method}/{entity_type}")
         return None
 
-    df = load_df(entity_type)
+    src_type = "assyrian_ruler" if entity_type == "assyrian_ruler_eng25" else entity_type
+    df = load_df(src_type)
     with open(os.path.join(act_dir, "metadata.json")) as f:
         meta = json.load(f)
-    df = df.iloc[:meta["n_rows"]]
+    n_rows = meta["n_rows"]
+    df = df.iloc[:n_rows]
+    rowmask = np.ones(len(df), dtype=bool)
+    if entity_type == "assyrian_ruler_eng25":
+        akk_names = set(load_df("assyrian_ruler_akk").name.unique())
+        rowmask = df.name.isin(akk_names).values
+        df = df[rowmask]
+        print(f"[eng25] restricted to {df.name.nunique()} rulers shared with the akk set")
     bare = (df.template == "bare").values
 
     per_layer, best = {}, (None, -np.inf)
     for path in files:
         li = int(re.search(r"layer(\d+)\.npz$", path).group(1))
-        X = np.load(path)["acts"][:len(df)]
+        X = np.load(path)["acts"][:n_rows][rowmask]
         X, bad = probing.sanitize(X)
         if bad > 0.01:
             print(f"[warn] layer {li}: {bad:.1%} non-finite, skipping")
@@ -181,7 +195,7 @@ def probe_one(method, entity_type, site, args):
     bpath = next((p for p in files
                   if int(re.search(r"layer(\d+)\.npz$", p).group(1)) == bl), None)
     if bpath is not None:
-        Xb, _ = probing.sanitize(np.load(bpath)["acts"][:len(df)])
+        Xb, _ = probing.sanitize(np.load(bpath)["acts"][:n_rows][rowmask])
         per_layer[bl]["all"] = score_matrix(Xb, df, entity_type, "all", sweep_k=True)
         if bare.sum() >= 8:
             per_layer[bl]["bare"] = score_matrix(Xb[bare], df[bare], entity_type,
