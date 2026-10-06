@@ -1,0 +1,79 @@
+# job 53184 C26_deep_ext exit=0 Tue Oct  6 11:43:59 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C26_deep_ext_53184_2.out
+=== C26 deep extract olmo2_7b === job 53184 Tue Oct  6 09:58:22 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch                yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+Fetching 16 files:   0%|          | 0/16 [00:00<?, ?it/s]Fetching 16 files: 100%|██████████| 16/16 [00:00<00:00, 1534.30it/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/355 [00:00<?, ?it/s]Loading weights:   0%|          | 1/355 [00:01<10:33,  1.79s/it]Loading weights:   1%|          | 2/355 [00:04<13:26,  2.29s/it]Loading weights:  14%|█▎        | 48/355 [00:04<00:19, 15.57it/s]Loading weights:  16%|█▌        | 56/355 [00:04<00:16, 18.20it/s]Loading weights:  18%|█▊        | 63/355 [00:05<00:18, 16.20it/s]Loading weights:  19%|█▉        | 69/355 [00:05<00:18, 15.25it/s]Loading weights:  21%|██        | 73/355 [00:06<00:16, 16.66it/s]Loading weights:  22%|██▏       | 79/355 [00:06<00:14, 19.65it/s]Loading weights:  23%|██▎       | 83/355 [00:06<00:18, 14.71it/s]Loading weights:  25%|██▌       | 90/355 [00:06<00:14, 18.46it/s]Loading weights:  26%|██▋       | 94/355 [00:07<00:18, 13.91it/s]Loading weights:  28%|██▊       | 100/355 [00:07<00:14, 17.72it/s]Loading weights:  29%|██▉       | 104/355 [00:08<00:20, 12.27it/s]Loading weights:  32%|███▏      | 113/355 [00:08<00:15, 16.03it/s]Loading weights:  33%|███▎      | 116/355 [00:08<00:15, 15.35it/s]Loading weights:  35%|███▍      | 124/355 [00:09<00:13, 16.65it/s]Loading weights:  36%|███▌      | 127/355 [00:09<00:12, 17.74it/s]Loading weights:  38%|███▊      | 134/355 [00:09<00:09, 23.40it/s]Loading weights:  39%|███▉      | 138/355 [00:10<00:12, 16.88it/s]Loading weights:  41%|████      | 145/355 [00:10<00:09, 21.84it/s]Loading weights:  42%|████▏     | 149/355 [00:10<00:12, 16.07it/s]Loading weights:  44%|████▎     | 155/355 [00:10<00:10, 18.97it/s]Loading weights:  45%|████▍     | 158/355 [00:11<00:13, 14.39it/s]Loading weights:  45%|████▌     | 161/355 [00:11<00:12, 15.16it/s]Loading weights:  47%|████▋     | 168/355 [00:11<00:13, 14.00it/s]Loading weights:  48%|████▊     | 170/355 [00:12<00:12, 14.42it/s]Loading weights:  50%|█████     | 179/355 [00:12<00:11, 15.91it/s]Loading weights:  51%|█████     | 181/355 [00:12<00:11, 15.68it/s]Loading weights:  54%|█████▎    | 190/355 [00:13<00:08, 20.38it/s]Loading weights:  54%|█████▍    | 193/355 [00:13<00:08, 19.95it/s]Loading weights:  56%|█████▋    | 200/355 [00:13<00:06, 23.83it/s]Loading weights:  57%|█████▋    | 203/355 [00:13<00:09, 16.35it/s]Loading weights:  59%|█████▉    | 210/355 [00:14<00:07, 19.96it/s]Loading weights:  60%|██████    | 213/355 [00:14<00:09, 14.73it/s]Loading weights:  61%|██████    | 215/355 [00:14<00:10, 13.77it/s]Loading weights:  63%|██████▎   | 223/355 [00:15<00:08, 15.67it/s]Loading weights:  63%|██████▎   | 225/355 [00:15<00:08, 14.86it/s]Loading weights:  66%|██████▌   | 233/355 [00:15<00:05, 22.48it/s]Loading weights:  66%|██████▋   | 236/355 [00:16<00:08, 13.55it/s]Loading weights:  68%|██████▊   | 243/355 [00:16<00:05, 19.17it/s]Loading weights:  70%|██████▉   | 247/355 [00:16<00:08, 12.68it/s]Loading weights:  72%|███████▏  | 256/355 [00:17<00:06, 14.39it/s]Loading weights:  73%|███████▎  | 259/355 [00:17<00:06, 15.36it/s]Loading weights:  75%|███████▍  | 266/355 [00:17<00:04, 20.93it/s]Loading weights:  76%|███████▌  | 270/355 [00:18<00:05, 14.50it/s]Loading weights:  78%|███████▊  | 276/355 [00:18<00:04, 17.90it/s]Loading weights:  79%|███████▊  | 279/355 [00:18<00:05, 13.56it/s]Loading weights:  79%|███████▉  | 282/355 [00:18<00:05, 14.47it/s]Loading weights:  81%|████████▏ | 289/355 [00:19<00:04, 13.63it/s]Loading weights:  82%|████████▏ | 291/355 [00:19<00:04, 13.87it/s]Loading weights:  84%|████████▍ | 299/355 [00:19<00:02, 20.88it/s]Loading weights:  85%|████████▌ | 302/355 [00:20<00:03, 14.03it/s]Loading weights:  87%|████████▋ | 310/355 [00:20<00:02, 21.26it/s]Loading weights:  88%|████████▊ | 314/355 [00:20<00:02, 15.01it/s]Loading weights:  91%|█████████ | 322/355 [00:21<00:01, 16.80it/s]Loading weights:  92%|█████████▏| 325/355 [00:21<00:01, 17.83it/s]Loading weights:  94%|█████████▎| 332/355 [00:21<00:00, 24.07it/s]Loading weights:  95%|█████████▍| 336/355 [00:22<00:01, 15.87it/s]Loading weights:  96%|█████████▋| 342/355 [00:22<00:00, 20.11it/s]Loading weights:  97%|█████████▋| 346/355 [00:22<00:00, 11.59it/s]Loading weights: 100%|██████████| 355/355 [00:23<00:00, 15.42it/s]
+[extract] allenai/OLMo-2-1124-7B: 59350 texts, layers [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 32], sites ['mean'], store=chrono.models.store
+[extract] 1024/59350 texts (119.4s)
+[extract] 2048/59350 texts (192.3s)
+[extract] 3072/59350 texts (284.8s)
+[extract] 4096/59350 texts (364.9s)
+[extract] 5120/59350 texts (454.7s)
+[extract] 6144/59350 texts (586.3s)
+[extract] 7168/59350 texts (717.6s)
+[extract] 8192/59350 texts (776.6s)
+[extract] 9216/59350 texts (845.9s)
+[extract] 10240/59350 texts (944.6s)
+[extract] 11264/59350 texts (1076.7s)
+[extract] 12288/59350 texts (1197.3s)
+[extract] 13312/59350 texts (1325.3s)
+[extract] 14336/59350 texts (1449.7s)
+[extract] 15360/59350 texts (1510.9s)
+[extract] 16384/59350 texts (1553.1s)
+[extract] 17408/59350 texts (1596.4s)
+[extract] 18432/59350 texts (1771.5s)
+[extract] 19456/59350 texts (1825.7s)
+[extract] 20480/59350 texts (1876.2s)
+[extract] 21504/59350 texts (1962.5s)
+[extract] 22528/59350 texts (2117.8s)
+[extract] 23552/59350 texts (2280.1s)
+[extract] 24576/59350 texts (2399.9s)
+[extract] 25600/59350 texts (2513.7s)
+[extract] 26624/59350 texts (2561.6s)
+[extract] 27648/59350 texts (2666.4s)
+[extract] 28672/59350 texts (2831.4s)
+[extract] 29696/59350 texts (2882.8s)
+[extract] 30720/59350 texts (2956.2s)
+[extract] 31744/59350 texts (3035.2s)
+[extract] 32768/59350 texts (3135.3s)
+[extract] 33792/59350 texts (3243.0s)
+[extract] 34816/59350 texts (3364.1s)
+[extract] 35840/59350 texts (3483.1s)
+[extract] 36864/59350 texts (3583.6s)
+[extract] 37888/59350 texts (3683.1s)
+[extract] 38912/59350 texts (3857.8s)
+[extract] 39936/59350 texts (3959.9s)
+[extract] 40960/59350 texts (4097.0s)
+[extract] 41984/59350 texts (4171.1s)
+[extract] 43008/59350 texts (4284.3s)
+[extract] 44032/59350 texts (4358.3s)
+[extract] 45056/59350 texts (4475.1s)
+[extract] 46080/59350 texts (4678.9s)
+[extract] 47104/59350 texts (4730.0s)
+[extract] 48128/59350 texts (4853.7s)
+[extract] 49152/59350 texts (4941.7s)
+[extract] 50176/59350 texts (5055.5s)
+[extract] 51200/59350 texts (5180.8s)
+[extract] 52224/59350 texts (5294.1s)
+[extract] 53248/59350 texts (5367.6s)
+[extract] 54272/59350 texts (5487.0s)
+[extract] 55296/59350 texts (5636.9s)
+[extract] 56320/59350 texts (5792.9s)
+[extract] 57344/59350 texts (6008.0s)
+[extract] 58368/59350 texts (6170.2s)
+[extract] 59350/59350 texts (6275.4s)
+[done] {"n_texts": 59350, "n_embedded": 59350, "n_skipped": 0, "layers": [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 32], "sites": ["mean"], "elapsed_s": 6275.4, "model": "olmo2_7b", "hfid": "allenai/OLMo-2-1124-7B", "store_root": "chrono/artifacts_tier0/emb_store", "max_tokens": 512, "dtype": "auto"}
+[commit_push_sandbox] nothing to commit
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch                yarin-sandbox -> FETCH_HEAD
+Created autostash: a8c0dd131
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Everything up-to-date
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Tue Oct  6 11:43:59 UTC 2026 ===
