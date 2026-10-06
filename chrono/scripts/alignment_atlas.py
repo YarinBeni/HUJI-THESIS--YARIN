@@ -94,12 +94,21 @@ def main(argv=None):
     cent = ((-t_of // 100).astype(int)).rename("century")
 
     def fetch(model, layer, lang):
+        """Embeddings for the clean views of one language. The deep extraction
+        skipped a handful of documents, and requiring np.all(has) silently
+        discarded WHOLE LAYERS over ~5 missing ids (that is how the v2 atlas
+        reproduced the 4-layer ladder with 16 layers in the manifest). Use the
+        subset that exists; give up only when real coverage is lacking."""
         sub = clean[clean.lang == lang]
-        ids = sub.view_id.tolist()
-        if not np.all(store.has(model, int(layer), args.site, ids)):
+        ids = np.asarray(sub.view_id.tolist())
+        h = np.asarray(store.has(model, int(layer), args.site, list(ids)), bool)
+        if h.sum() < 0.8 * len(ids):
             return None, None
-        X = store.get(model, int(layer), args.site, ids).astype(np.float32)
-        return X, sub.doc_id.to_numpy()
+        if not h.all():
+            print(f"[fetch] {model} L{layer} {lang}: {int((~h).sum())} ids missing; "
+                  "using the subset", flush=True)
+        X = store.get(model, int(layer), args.site, list(ids[h])).astype(np.float32)
+        return X, sub.doc_id.to_numpy()[h]
 
     lines = ["# Alignment atlas — dated inscriptions, tier0 store", ""]
     layers_of = {m: sorted(g.layer.unique())
