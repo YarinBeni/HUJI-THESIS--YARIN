@@ -34,6 +34,7 @@ from wm_lib import probing                            # noqa: E402
 from wm_lib.registry import MODELS                    # noqa: E402
 
 ENTITY_TYPES = {"assyrian_ruler": ("death_year", False),
+                "assyrian_ruler_akk": ("death_year", False),
                 "mesopotamian_place": (("longitude", "latitude"), True)}
 SITES = ["ent_last", "ent_mean", "last", "mean"]
 DATA_DIR = os.path.join(os.path.dirname(_HERE), "data", "entity_datasets")

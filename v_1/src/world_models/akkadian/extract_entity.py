@@ -36,7 +36,7 @@ sys.path.insert(0, os.path.dirname(_HERE))          # world_models/
 from wm_lib import extract as ex                     # noqa: E402
 from wm_lib.registry import MODELS, RANDOM_SEED      # noqa: E402
 
-ENTITY_TYPES = ["assyrian_ruler", "mesopotamian_place"]
+ENTITY_TYPES = ["assyrian_ruler", "mesopotamian_place", "assyrian_ruler_akk"]
 SITES = ["ent_last", "ent_mean", "last", "mean"]
 DATA_DIR = os.path.join(os.path.dirname(_HERE), "data", "entity_datasets")
 ACTS_DIR = os.path.join(os.path.dirname(_HERE), "activations")
