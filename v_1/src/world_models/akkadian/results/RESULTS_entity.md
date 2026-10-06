@@ -160,6 +160,7 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | qwen3_8b | last | 32 | -1.218 | 5.634 | 0.252 | 0.491 |
 | thalesian_cunei400m | last | 11 | -0.808 | 4.533 | 0.451 | 0.383 |
 | llama2_7b | mean | 4 | -1.107 | 4.911 | 0.363 | 0.465 |
+| qwen3_8b | mean | 10 | -0.819 | 4.400 | 0.439 | 0.429 |
 | thalesian_cunei400m | mean | 5 | -0.820 | 5.018 | 0.508 | 0.402 |
 
 ## assyrian_ruler_akk — rows=all
@@ -176,6 +177,7 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | qwen3_8b | last | 9 | -1.778 | 6.032 | 0.296 | 0.371 |
 | thalesian_cunei400m | last | 10 | -0.999 | 4.690 | 0.408 | 0.330 |
 | llama2_7b | mean | 9 | -1.010 | 4.573 | 0.412 | 0.400 |
+| qwen3_8b | mean | 10 | -0.861 | 4.810 | 0.436 | 0.442 |
 | thalesian_cunei400m | mean | 6 | -0.766 | 4.381 | 0.508 | 0.354 |
 
 ## mesopotamian_place — rows=bare
