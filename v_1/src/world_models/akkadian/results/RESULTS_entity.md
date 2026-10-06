@@ -153,15 +153,19 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | llama2_7b | ent_last | 5 | -1.300 | 5.863 | 0.138 | 0.465 |
 | qwen3_8b | ent_last | 32 | -1.218 | 5.634 | 0.252 | 0.491 |
 | thalesian_cunei400m | ent_last | 11 | -0.808 | 4.533 | 0.451 | 0.383 |
+| olmo2_7b | ent_last | 3 | -1.474 | 6.323 | 0.129 | 0.521 |
 | llama2_7b | ent_mean | 4 | -1.107 | 4.911 | 0.363 | 0.465 |
 | qwen3_8b | ent_mean | 10 | -0.819 | 4.400 | 0.439 | 0.429 |
 | thalesian_cunei400m | ent_mean | 5 | -0.820 | 5.018 | 0.508 | 0.402 |
+| olmo2_7b | ent_mean | 20 | -1.143 | 5.276 | 0.338 | 0.457 |
 | llama2_7b | last | 5 | -1.300 | 5.863 | 0.138 | 0.465 |
 | qwen3_8b | last | 32 | -1.218 | 5.634 | 0.252 | 0.491 |
 | thalesian_cunei400m | last | 11 | -0.808 | 4.533 | 0.451 | 0.383 |
+| olmo2_7b | last | 3 | -1.474 | 6.323 | 0.129 | 0.521 |
 | llama2_7b | mean | 4 | -1.107 | 4.911 | 0.363 | 0.465 |
 | qwen3_8b | mean | 10 | -0.819 | 4.400 | 0.439 | 0.429 |
 | thalesian_cunei400m | mean | 5 | -0.820 | 5.018 | 0.508 | 0.402 |
+| olmo2_7b | mean | 20 | -1.143 | 5.276 | 0.338 | 0.457 |
 
 ## assyrian_ruler_akk — rows=all
 
@@ -170,15 +174,35 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | llama2_7b | ent_last | 4 | -1.177 | 5.500 | 0.157 | 0.462 |
 | qwen3_8b | ent_last | 5 | -1.209 | 5.545 | 0.311 | 0.436 |
 | thalesian_cunei400m | ent_last | 12 | -0.685 | 4.549 | 0.470 | 0.369 |
+| olmo2_7b | ent_last | 8 | -1.488 | 6.428 | 0.180 | 0.471 |
 | llama2_7b | ent_mean | 9 | -1.061 | 5.276 | 0.411 | 0.410 |
 | qwen3_8b | ent_mean | 10 | -0.848 | 4.745 | 0.447 | 0.437 |
 | thalesian_cunei400m | ent_mean | 5 | -0.628 | 3.823 | 0.525 | 0.381 |
+| olmo2_7b | ent_mean | 17 | -1.228 | 5.358 | 0.390 | 0.440 |
 | llama2_7b | last | 4 | -0.889 | 4.661 | 0.381 | 0.371 |
 | qwen3_8b | last | 9 | -1.778 | 6.032 | 0.296 | 0.371 |
 | thalesian_cunei400m | last | 10 | -0.999 | 4.690 | 0.408 | 0.330 |
+| olmo2_7b | last | 1 | -1.535 | 6.747 | -0.002 | 0.346 |
 | llama2_7b | mean | 9 | -1.010 | 4.573 | 0.412 | 0.400 |
 | qwen3_8b | mean | 10 | -0.861 | 4.810 | 0.436 | 0.442 |
 | thalesian_cunei400m | mean | 6 | -0.766 | 4.381 | 0.508 | 0.354 |
+| olmo2_7b | mean | 5 | -1.339 | 5.672 | 0.295 | 0.457 |
+
+## assyrian_ruler_eng25 — rows=bare
+
+| arm | site | best layer | MC R2 | +/- | MC rho | +/- |
+|---|---|--:|--:|--:|--:|--:|
+| llama2_7b | ent_last | 6 | -0.470 | 4.240 | 0.519 | 0.416 |
+| llama2_7b | ent_mean | 12 | -0.378 | 4.687 | 0.689 | 0.332 |
+| llama2_7b | last | 6 | -0.470 | 4.240 | 0.519 | 0.416 |
+
+## assyrian_ruler_eng25 — rows=all
+
+| arm | site | best layer | MC R2 | +/- | MC rho | +/- |
+|---|---|--:|--:|--:|--:|--:|
+| llama2_7b | ent_last | 14 | -0.142 | 2.322 | 0.512 | 0.377 |
+| llama2_7b | ent_mean | 12 | -0.473 | 6.206 | 0.651 | 0.323 |
+| llama2_7b | last | 12 | -0.050 | 2.676 | 0.668 | 0.309 |
 
 ## mesopotamian_place — rows=bare
 
