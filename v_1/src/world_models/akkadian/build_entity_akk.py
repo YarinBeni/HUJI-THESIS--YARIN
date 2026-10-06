@@ -92,7 +92,12 @@ def harvest(corpus: pd.DataFrame):
         names = pn_strings(str(r.text_akk or ""), m)
         if names:
             n_aligned += 1
-        for s in {clean(n) for n in names}:
+        # TITULARY PRIOR (first harvest's lesson): counting every PN hands the
+        # dominance filter the king's ENEMIES — Teumman outnumbers Ashurbanipal
+        # inside Ashurbanipal's own annals, Merodach-baladan outnumbers
+        # Sennacherib. A royal inscription OPENS with the royal name, so only
+        # the first personal name of each document is a candidate spelling.
+        for s in {clean(n) for n in names[:1]}:
             if 3 <= len(s) <= 60:
                 by_spell[s][r.ruler].add(r.doc_id)
     print(f"[harvest] {n_aligned}/{n_docs} PN-bearing docs aligned", flush=True)
