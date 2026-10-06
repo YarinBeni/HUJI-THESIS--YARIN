@@ -30,9 +30,12 @@ python -u chrono/scripts/length_control.py --build || { echo "FAILED build"; exi
 for ML in "llama2_7b 20" "qwen3_8b 27" "olmo2_7b 9" "thalesian_cunei400m 4"; do
     set -- $ML
     echo "--- extract $1 layer $2 $(date)"
+    # --store-root is mandatory here: the default is chrono/artifacts, but
+    # the analysis reads the tier0 store (job 53381 wrote to the wrong one).
     python -u chrono/scripts/extract_embeddings.py \
         --model "$1" --table chrono/artifacts_tier0/lenctl.parquet \
         --id-col id --text-col text --layers "$2" --sites mean \
+        --store-root chrono/artifacts_tier0/emb_store \
         || { echo "FAILED extract $1"; exit 1; }
 done
 
