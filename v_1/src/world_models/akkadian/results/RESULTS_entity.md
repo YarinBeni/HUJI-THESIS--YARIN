@@ -146,6 +146,28 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | olmo2_7b_random | mean | 18 | -0.316 | 1.543 | 0.363 | 0.302 |
 | *tfidf* | text | 0 | -0.293 | 1.478 | 0.340 | 0.374 |
 
+## assyrian_ruler_akk — rows=bare
+
+| arm | site | best layer | MC R2 | +/- | MC rho | +/- |
+|---|---|--:|--:|--:|--:|--:|
+| llama2_7b | ent_last | 5 | -1.300 | 5.863 | 0.138 | 0.465 |
+| qwen3_8b | ent_last | 32 | -1.218 | 5.634 | 0.252 | 0.491 |
+| thalesian_cunei400m | ent_last | 11 | -0.808 | 4.533 | 0.451 | 0.383 |
+| thalesian_cunei400m | ent_mean | 5 | -0.820 | 5.018 | 0.508 | 0.402 |
+| thalesian_cunei400m | last | 11 | -0.808 | 4.533 | 0.451 | 0.383 |
+| thalesian_cunei400m | mean | 5 | -0.820 | 5.018 | 0.508 | 0.402 |
+
+## assyrian_ruler_akk — rows=all
+
+| arm | site | best layer | MC R2 | +/- | MC rho | +/- |
+|---|---|--:|--:|--:|--:|--:|
+| llama2_7b | ent_last | 4 | -1.177 | 5.500 | 0.157 | 0.462 |
+| qwen3_8b | ent_last | 5 | -1.209 | 5.545 | 0.311 | 0.436 |
+| thalesian_cunei400m | ent_last | 12 | -0.685 | 4.549 | 0.470 | 0.369 |
+| thalesian_cunei400m | ent_mean | 5 | -0.628 | 3.823 | 0.525 | 0.381 |
+| thalesian_cunei400m | last | 10 | -0.999 | 4.690 | 0.408 | 0.330 |
+| thalesian_cunei400m | mean | 6 | -0.766 | 4.381 | 0.508 | 0.354 |
+
 ## mesopotamian_place — rows=bare
 
 | arm | site | best layer | MC R2 | +/- | MC rho | +/- |
