@@ -104,6 +104,8 @@ def main(argv=None):
     lines = ["# Alignment atlas — dated inscriptions, tier0 store", ""]
     layers_of = {m: sorted(g.layer.unique())
                  for m, g in man[man.site == args.site].groupby("model")}
+    for m, Ls in sorted(layers_of.items()):
+        print(f"[store] {m}: {len(Ls)} layers at site {args.site}: {Ls}", flush=True)
 
     # ---- Fig A: layer x layer manifold alignment, every deep-enough model -
     for am, Ls_all in sorted(layers_of.items()):
