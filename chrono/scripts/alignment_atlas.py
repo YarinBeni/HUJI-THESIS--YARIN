@@ -124,14 +124,21 @@ def main(argv=None):
         for L in Ls_all:
             X, docs = fetch(am, L, "akk")
             if X is not None:
-                labs[L] = clusters(X, args.seed)
+                # subset-tolerant fetch means layers can cover slightly
+                # different doc sets; index by doc so ARI aligns on the overlap
+                labs[L] = pd.Series(clusters(X, args.seed), index=docs)
         Ls = sorted(labs)
         if len(Ls) < 6:
             continue
         M = np.full((len(Ls), len(Ls)), np.nan)
         for i, a in enumerate(Ls):
             for j, b in enumerate(Ls):
-                M[i, j] = 1.0 if i == j else ari(labs[a], labs[b])
+                if i == j:
+                    M[i, j] = 1.0
+                else:
+                    ix = labs[a].index.intersection(labs[b].index)
+                    M[i, j] = ari(labs[a].loc[ix].to_numpy(),
+                                  labs[b].loc[ix].to_numpy())
         tag = am.split("/")[-1].replace(":", "_")
         fig, ax = plt.subplots(figsize=(6, 5))
         im = ax.imshow(M, origin="lower", cmap="magma", vmin=0)
