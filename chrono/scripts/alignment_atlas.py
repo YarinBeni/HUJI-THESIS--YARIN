@@ -105,29 +105,32 @@ def main(argv=None):
     layers_of = {m: sorted(g.layer.unique())
                  for m, g in man[man.site == args.site].groupby("model")}
 
-    # ---- Fig A: layer x layer manifold alignment -------------------------
-    am = args.atlas_model
-    labs, Ls = {}, layers_of.get(am, [])
-    for L in Ls:
-        X, docs = fetch(am, L, "akk")
-        if X is not None:
-            labs[L] = clusters(X, args.seed)
-    Ls = sorted(labs)
-    if len(Ls) >= 3:
+    # ---- Fig A: layer x layer manifold alignment, every deep-enough model -
+    for am, Ls_all in sorted(layers_of.items()):
+        if len(Ls_all) < 6:
+            continue                       # a 4-layer ladder draws no matrix
+        labs = {}
+        for L in Ls_all:
+            X, docs = fetch(am, L, "akk")
+            if X is not None:
+                labs[L] = clusters(X, args.seed)
+        Ls = sorted(labs)
+        if len(Ls) < 6:
+            continue
         M = np.full((len(Ls), len(Ls)), np.nan)
         for i, a in enumerate(Ls):
             for j, b in enumerate(Ls):
                 M[i, j] = 1.0 if i == j else ari(labs[a], labs[b])
+        tag = am.split("/")[-1].replace(":", "_")
         fig, ax = plt.subplots(figsize=(6, 5))
         im = ax.imshow(M, origin="lower", cmap="magma", vmin=0)
         ax.set_xticks(range(len(Ls)), Ls); ax.set_yticks(range(len(Ls)), Ls)
         ax.set_xlabel("layer"); ax.set_ylabel("layer")
-        ax.set_title(f"Manifold alignment (ARI) — {am.split('/')[-1]}, akk")
+        ax.set_title(f"Manifold alignment (ARI) — {tag}, akk")
         fig.colorbar(im); fig.tight_layout()
-        fig.savefig(os.path.join(args.out_dir, "A_layer_alignment.png"), dpi=150)
+        fig.savefig(os.path.join(args.out_dir, f"A_layer_alignment_{tag}.png"), dpi=150)
         plt.close(fig)
-        lines += [f"**Fig A** `A_layer_alignment.png` — {am}, {len(Ls)} layers, "
-                  "UMAP+HDBSCAN per layer, ARI between layers.", ""]
+        lines += [f"**Fig A** `A_layer_alignment_{tag}.png` — {am}, {len(Ls)} layers.", ""]
 
     # ---- Fig B: language alignment + century silhouette per layer --------
     from sklearn.metrics import silhouette_score
@@ -209,6 +212,66 @@ def main(argv=None):
         C.to_csv(os.path.join(args.out_dir, "C_time_depth.csv"), index=False)
         lines += ["**Fig C** `C_time_depth.png` — document-level rho per layer per "
                   "language; entity-level curves overlaid where available.", ""]
+
+    # ---- Fig D: where it WORKS — entity-name maps coloured by year -------
+    # Uses the WB activations (per-layer npz, cluster-local) for every arm
+    # present; English names and Akkadian names side by side; layer = the
+    # best entity layer from the layerwise summary when known, else middle.
+    import umap as _umap
+    WB = os.path.join("v_1", "src", "world_models")
+    ACTS = os.path.join(WB, "activations")
+    DATA = os.path.join(WB, "data", "entity_datasets")
+    best_layer = {}
+    lw = os.path.join(WB, "akkadian", "results", "summary_entity_layerwise.csv")
+    if os.path.exists(lw):
+        E = pd.read_csv(lw)
+        col = next((c for c in ("mc_rho", "rho") if c in E.columns), None)
+        if col:
+            for (arm, ds), g in E[E.get("site") == "ent_last"].groupby(["arm", "dataset"]):
+                best_layer[(arm, ds)] = int(g.loc[g[col].idxmax(), "layer"])
+    panels = []
+    for arm in ("llama2_7b", "qwen3_8b", "olmo2_7b", "thalesian_cunei400m"):
+        for ds in ("assyrian_ruler", "assyrian_ruler_akk"):
+            d = os.path.join(ACTS, arm, ds)
+            csv = os.path.join(DATA, f"{ds}.csv")
+            if not (os.path.isdir(d) and os.path.exists(csv)):
+                continue
+            df = pd.read_csv(csv)
+            files = sorted(glob.glob(os.path.join(d, "ent_last.layer*.npz")),
+                           key=lambda f: int(f.rsplit("layer", 1)[1].split(".")[0]))
+            if not files:
+                continue
+            want = best_layer.get((arm, ds))
+            f = next((x for x in files if want is not None and
+                      int(x.rsplit("layer", 1)[1].split(".")[0]) == want),
+                     files[len(files) // 2])
+            L = int(f.rsplit("layer", 1)[1].split(".")[0])
+            A = np.load(f)["acts"]
+            if len(A) != len(df):
+                continue
+            m = (df.template == "bare").to_numpy()
+            panels.append((f"{arm} · {'akk names' if ds.endswith('_akk') else 'eng names'} · L{L}",
+                           A[m], df.loc[m, "death_year"].to_numpy(),
+                           df.loc[m, "name"].to_numpy()))
+    if panels:
+        n = len(panels)
+        ncol = min(4, n); nrow = (n + ncol - 1) // ncol
+        fig, axes = plt.subplots(nrow, ncol, figsize=(4.2 * ncol, 3.8 * nrow),
+                                 squeeze=False)
+        for ax, (title, A, yr, names) in zip(axes.ravel(), panels):
+            U2 = _umap.UMAP(n_components=2, random_state=args.seed,
+                            n_neighbors=max(5, min(15, len(A) - 2))).fit_transform(A)
+            sc = ax.scatter(U2[:, 0], U2[:, 1], c=yr, cmap="viridis", s=26)
+            ax.set_title(title, fontsize=8); ax.set_xticks([]); ax.set_yticks([])
+            fig.colorbar(sc, ax=ax, label="year BC")
+        for ax in axes.ravel()[n:]:
+            ax.axis("off")
+        fig.tight_layout()
+        fig.savefig(os.path.join(args.out_dir, "D_entity_maps.png"), dpi=150)
+        plt.close(fig)
+        lines += ["**Fig D** `D_entity_maps.png` — the success case: ruler-NAME "
+                  "embeddings (bare, ent_last), UMAP-2D coloured by reign year; "
+                  "English and Akkadian name forms side by side per model.", ""]
 
     open(os.path.join(args.out_dir, "ATLAS.md"), "w").write("\n".join(lines) + "\n")
     print(f"atlas written to {args.out_dir}")

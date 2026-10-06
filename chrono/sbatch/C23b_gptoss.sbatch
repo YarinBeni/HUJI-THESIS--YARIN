@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=C23_wb_akk
+#SBATCH --job-name=C23b_gptoss
 #SBATCH --partition=voltagepark
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:8
 #SBATCH --time=03:00:00
-#SBATCH --array=0-3
-#SBATCH --output=chrono/sbatch/logs/C23_wb_akk_%A_%a.out
+
+#SBATCH --output=chrono/sbatch/logs/C23b_gptoss_%j.out
 # ===========================================================================
 # C23 / WB-akk — the missing cell of the entity matrix: the same rulers, the
 # same templates and fold-matched split as CELL-B, but the entity string is
@@ -15,8 +15,8 @@
 # cliff" from the "span/aggregation cliff" at the name level.
 # ===========================================================================
 set -uo pipefail
-METHODS=(llama2_7b qwen3_8b thalesian_cunei400m olmo2_7b)
-M=${METHODS[$SLURM_ARRAY_TASK_ID]}
+METHODS=(gpt_oss_120b)
+M=${METHODS[0]}
 echo "=== C23 WB-akk ${M} === job ${SLURM_JOB_ID} $(date)"
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate thesis
