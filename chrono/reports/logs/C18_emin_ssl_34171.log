@@ -1,0 +1,63 @@
+# job 34171 C18_emin_ssl exit=0 Fri Sep  4 07:53:01 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C18_emin_ssl_34171.out
+=== C18 emin-ssl === job 34171 Fri Sep  4 07:51:02 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Qwen/Qwen3-8B L18 mean: n=1176 mc=0.261 gkf=0.262
+Qwen/Qwen3-8B L27 mean: n=1176 mc=0.353 gkf=0.337
+Thalesian/AKK_300m L4 mean: n=1176 mc=0.310 gkf=0.287
+Thalesian/AKK_300m L8 mean: n=1176 mc=0.338 gkf=0.265
+Thalesian/cuneiformBase-400m L6 mean: n=1176 mc=0.426 gkf=0.361
+Thalesian/cuneiformBase-400m L12 mean: n=1176 mc=0.448 gkf=0.419
+ssl::ssl_barlow_akk300m-s0 L0 h: n=1176 mc=0.340 gkf=0.240
+ssl::ssl_barlow_cunei400m-s0 L0 h: n=1176 mc=0.419 gkf=0.322
+ssl::ssl_barlow_llama2_7b-s0 L0 h: n=1176 mc=0.292 gkf=0.217
+ssl::ssl_barlow_qwen3_8b-s0 L0 h: n=1176 mc=0.251 gkf=0.217
+ssl::ssl_byol_akk300m-s0 L0 h: n=1176 mc=0.377 gkf=0.269
+ssl::ssl_byol_cunei400m-s0 L0 h: n=1176 mc=0.470 gkf=0.393
+ssl::ssl_byol_llama2_7b-s0 L0 h: n=1176 mc=0.285 gkf=0.228
+ssl::ssl_byol_qwen3_8b-s0 L0 h: n=1176 mc=0.190 gkf=0.135
+ssl::ssl_infonce_akk300m-s0 L0 h: n=1176 mc=0.396 gkf=0.275
+ssl::ssl_infonce_cunei400m-s0 L0 h: n=1176 mc=0.381 gkf=0.380
+ssl::ssl_infonce_llama2_7b-s0 L0 h: n=1176 mc=0.417 gkf=0.374
+ssl::ssl_infonce_qwen3_8b-s0 L0 h: n=1176 mc=0.385 gkf=0.292
+ssl::ssl_jepa_akk300m-s0 L0 h: n=1176 mc=0.389 gkf=0.282
+ssl::ssl_jepa_cunei400m-s0 L0 h: n=1176 mc=0.494 gkf=0.376
+ssl::ssl_jepa_llama2_7b-s0 L0 h: n=1176 mc=0.316 gkf=0.269
+ssl::ssl_jepa_qwen3_8b-s0 L0 h: n=1176 mc=0.248 gkf=0.279
+ssl_e2e::e2e_barlow_L-s0 L0 h: n=1176 mc=0.307 gkf=0.219
+ssl_e2e::e2e_barlow_M-s0 L0 h: n=1176 mc=0.364 gkf=0.255
+ssl_e2e::e2e_barlow_S-s0 L0 h: n=1176 mc=0.298 gkf=0.133
+ssl_e2e::e2e_barlow_XL-s0 L0 h: n=1176 mc=0.260 gkf=0.130
+ssl_e2e::e2e_jepa_L-s0 L0 h: n=1176 mc=0.367 gkf=0.324
+ssl_e2e::e2e_jepa_M-s0 L0 h: n=1176 mc=0.365 gkf=0.285
+ssl_e2e::e2e_jepa_S-s0 L0 h: n=1176 mc=0.383 gkf=0.209
+ssl_e2e::e2e_jepa_XL-s0 L0 h: n=1176 mc=0.403 gkf=0.333
+ssl_hyb::hyb_barlow_M_llama2_7b-s0 L0 h: n=1176 mc=0.283 gkf=0.198
+ssl_hyb::hyb_barlow_M_thalesian_cunei400m-s0 L0 h: n=1176 mc=0.203 gkf=0.166
+ssl_hyb::hyb_barlow_S_llama2_7b-s0 L0 h: n=1176 mc=0.183 gkf=0.177
+ssl_hyb::hyb_barlow_S_thalesian_cunei400m-s0 L0 h: n=1176 mc=0.386 gkf=0.294
+ssl_hyb::hyb_jepa_M_llama2_7b-s0 L0 h: n=1176 mc=0.150 gkf=0.131
+ssl_hyb::hyb_jepa_M_thalesian_cunei400m-s0 L0 h: n=1176 mc=0.194 gkf=0.113
+ssl_hyb::hyb_jepa_S_llama2_7b-s0 L0 h: n=1176 mc=0.204 gkf=0.164
+ssl_hyb::hyb_jepa_S_thalesian_cunei400m-s0 L0 h: n=1176 mc=0.291 gkf=0.209
+wrote chrono/reports/EMIN_SSL_RESULT.md (38 cells)
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 4f1198fa] C18: dated inscriptions on the thesis protocol (job 34171)
+ 1 file changed, 9 insertions(+)
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+   a3ed2310..0216acee  yarin-sandbox -> origin/yarin-sandbox
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Rebasing (1/1)[KSuccessfully rebased and updated refs/heads/yarin-sandbox.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   0216acee..03ab3701  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Fri Sep  4 07:53:01 UTC 2026 ===

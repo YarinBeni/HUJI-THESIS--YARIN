@@ -1,0 +1,96 @@
+# job 33502 C5_headlad exit=0 Wed Sep  2 14:35:47 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C5_headlad_33475_21.out
+=== C5 emin2_llama2_7b_t0_akk_erase_length seed 0 === job 33502 Wed Sep  2 14:31:07 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[erase] LEACE 'length' (k=6, rank 5) fitted on 925 train orig rows, applied to 19088 views
+epoch 50/200 loss 10.0276
+epoch 100/200 loss 7.1689
+epoch 150/200 loss 5.8676
+epoch 200/200 loss 5.1900
+{
+  "run_id": "emin2_llama2_7b_t0_akk_erase_length-s0-f0",
+  "metrics": {
+    "train_soft_spearman": 0.7257888139085283,
+    "train_spearman": 0.7258336107885947,
+    "final_loss": 5.190041542053223,
+    "identical_view_rate": 0.0074648648648648645,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk_erase_length-s0-f0.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 956 train orig rows, applied to 19088 views
+epoch 50/200 loss 9.4599
+epoch 100/200 loss 6.3695
+epoch 150/200 loss 5.4170
+epoch 200/200 loss 4.6711
+{
+  "run_id": "emin2_llama2_7b_t0_akk_erase_length-s0-f1",
+  "metrics": {
+    "train_soft_spearman": 0.7673985647733607,
+    "train_spearman": 0.7672117498094313,
+    "final_loss": 4.671112895011902,
+    "identical_view_rate": 0.006731171548117155,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk_erase_length-s0-f1.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 963 train orig rows, applied to 19088 views
+epoch 50/200 loss 8.5132
+epoch 100/200 loss 6.2703
+epoch 150/200 loss 4.9039
+epoch 200/200 loss 4.6744
+{
+  "run_id": "emin2_llama2_7b_t0_akk_erase_length-s0-f2",
+  "metrics": {
+    "train_soft_spearman": 0.7326039734808473,
+    "train_spearman": 0.7325303253408844,
+    "final_loss": 4.6743574142456055,
+    "identical_view_rate": 0.007751817237798546,
+    "test_spearman": 0.17822889696712482
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk_erase_length-s0-f2.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 10.1523
+epoch 100/200 loss 7.3116
+epoch 150/200 loss 5.8232
+epoch 200/200 loss 5.1714
+{
+  "run_id": "emin2_llama2_7b_t0_akk_erase_length-s0-f3",
+  "metrics": {
+    "train_soft_spearman": 0.6813737050333034,
+    "train_spearman": 0.6811979989146081,
+    "final_loss": 5.171375751495361,
+    "identical_view_rate": 0.0035840248962655604,
+    "test_spearman": 0.6006350933050582
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk_erase_length-s0-f3.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 10.0199
+epoch 100/200 loss 6.8543
+epoch 150/200 loss 5.6170
+epoch 200/200 loss 4.9293
+{
+  "run_id": "emin2_llama2_7b_t0_akk_erase_length-s0-f4",
+  "metrics": {
+    "train_soft_spearman": 0.6620878385902451,
+    "train_spearman": 0.6621030058751991,
+    "final_loss": 4.9292813539505005,
+    "identical_view_rate": 0.007085062240663901,
+    "test_spearman": 0.6971773218805305
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk_erase_length-s0-f4.parquet"
+}
+[yarin-sandbox 498843a6] C5: head ladder emin2_llama2_7b_t0_akk_erase_length seed 0 (job 33502)
+ 1 file changed, 96 insertions(+)
+ create mode 100644 chrono/reports/logs/C5_headlad_33500.log
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   4f6454f5..498843a6  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 14:35:47 UTC 2026 ===

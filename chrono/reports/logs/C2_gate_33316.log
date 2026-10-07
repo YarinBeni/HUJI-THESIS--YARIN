@@ -1,0 +1,187 @@
+# job 33316 C2_gate exit=0 Wed Sep  2 04:08:32 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C2_gate_33316.out
+=== C2 baseline gate === job 33316 Wed Sep  2 04:06:23 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: 6514e63f
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+[gate] ridge L0 mean: mc +0.186±0.062 gkf_pooled +0.194 placebo +0.002±0.083
+[gate] pls L0 mean: mc +0.148±0.064 gkf_pooled +0.179 placebo +0.003±0.082
+[gate] L0 last: all 512 features constant across documents, skipped
+[gate] ridge L1 mean: mc +0.155±0.065 gkf_pooled +0.155 placebo +0.004±0.081
+[gate] pls L1 mean: mc +0.134±0.065 gkf_pooled +0.173 placebo +0.002±0.082
+[gate] ridge L1 last: mc +0.160±0.057 gkf_pooled +0.155 placebo +0.001±0.088
+[gate] pls L1 last: mc +0.128±0.066 gkf_pooled +0.148 placebo +0.000±0.084
+[gate] ridge L2 mean: mc +0.274±0.064 gkf_pooled +0.244 placebo +0.004±0.083
+[gate] pls L2 mean: mc +0.124±0.066 gkf_pooled +0.165 placebo +0.001±0.079
+[gate] ridge L2 last: mc +0.178±0.062 gkf_pooled +0.193 placebo +0.004±0.085
+[gate] pls L2 last: mc +0.118±0.067 gkf_pooled +0.163 placebo +0.005±0.081
+[gate] ridge L3 mean: mc +0.295±0.063 gkf_pooled +0.243 placebo +0.003±0.083
+[gate] pls L3 mean: mc +0.103±0.064 gkf_pooled +0.147 placebo +0.002±0.079
+[gate] ridge L3 last: mc +0.140±0.056 gkf_pooled +0.167 placebo +0.001±0.085
+[gate] pls L3 last: mc +0.045±0.063 gkf_pooled +0.108 placebo +0.005±0.082
+[gate] ridge L4 mean: mc +0.276±0.061 gkf_pooled +0.252 placebo +0.001±0.083
+[gate] pls L4 mean: mc +0.134±0.061 gkf_pooled +0.164 placebo +0.000±0.081
+[gate] ridge L4 last: mc +0.162±0.061 gkf_pooled +0.152 placebo -0.001±0.090
+[gate] pls L4 last: mc +0.049±0.063 gkf_pooled +0.097 placebo +0.002±0.083
+[gate] ridge L5 mean: mc +0.201±0.062 gkf_pooled +0.211 placebo -0.000±0.079
+[gate] pls L5 mean: mc +0.141±0.060 gkf_pooled +0.194 placebo +0.003±0.079
+[gate] ridge L5 last: mc +0.096±0.058 gkf_pooled +0.114 placebo -0.001±0.093
+[gate] pls L5 last: mc +0.062±0.064 gkf_pooled +0.092 placebo -0.002±0.083
+[gate] ridge L6 mean: mc +0.273±0.057 gkf_pooled +0.230 placebo +0.003±0.079
+[gate] pls L6 mean: mc +0.147±0.060 gkf_pooled +0.184 placebo +0.003±0.079
+[gate] ridge L6 last: mc +0.096±0.061 gkf_pooled +0.114 placebo -0.005±0.089
+[gate] pls L6 last: mc +0.085±0.069 gkf_pooled +0.109 placebo -0.002±0.083
+[gate] ridge L7 mean: mc +0.293±0.059 gkf_pooled +0.253 placebo -0.001±0.079
+[gate] pls L7 mean: mc +0.140±0.059 gkf_pooled +0.194 placebo +0.004±0.083
+[gate] ridge L7 last: mc +0.097±0.061 gkf_pooled +0.117 placebo -0.003±0.086
+[gate] pls L7 last: mc +0.108±0.067 gkf_pooled +0.128 placebo +0.001±0.085
+[gate] ridge L8 mean: mc +0.287±0.058 gkf_pooled +0.260 placebo -0.005±0.079
+[gate] pls L8 mean: mc +0.126±0.056 gkf_pooled +0.141 placebo +0.002±0.081
+[gate] ridge L8 last: mc +0.113±0.058 gkf_pooled +0.122 placebo -0.006±0.082
+[gate] pls L8 last: mc +0.084±0.068 gkf_pooled +0.118 placebo +0.002±0.083
+[gate] 1 (layer, site) cell(s) absent from the store, skipped: [(0, 'last', 'constant')]
+========================================================================
+P0.4 BASELINE GATE
+========================================================================
+probe  layer site    gkf pooled         mc rho    doc placebo     BLOCK null
+ridge      0 mean        +0.194   +0.186±0.062   +0.002±0.083   -0.007±0.117
+pls        0 mean        +0.179   +0.148±0.064   +0.003±0.082   -0.001±0.134
+ridge      1 mean        +0.155   +0.155±0.065   +0.004±0.081   -0.004±0.115
+pls        1 mean        +0.173   +0.134±0.065   +0.002±0.082   -0.006±0.135
+ridge      1 last        +0.155   +0.160±0.057   +0.001±0.088   +0.003±0.114
+pls        1 last        +0.148   +0.128±0.066   +0.000±0.084   -0.006±0.131
+ridge      2 mean        +0.244   +0.274±0.064   +0.004±0.083   +0.003±0.147
+pls        2 mean        +0.165   +0.124±0.066   +0.001±0.079   -0.007±0.139
+ridge      2 last        +0.193   +0.178±0.062   +0.004±0.085   -0.001±0.118
+pls        2 last        +0.163   +0.118±0.067   +0.005±0.081   -0.007±0.112
+ridge      3 mean        +0.243   +0.295±0.063   +0.003±0.083   +0.004±0.157
+pls        3 mean        +0.147   +0.103±0.064   +0.002±0.079   -0.008±0.142
+ridge      3 last        +0.167   +0.140±0.056   +0.001±0.085   -0.007±0.117
+pls        3 last        +0.108   +0.045±0.063   +0.005±0.082   -0.000±0.099
+ridge      4 mean        +0.252   +0.276±0.061   +0.001±0.083   +0.001±0.153
+pls        4 mean        +0.164   +0.134±0.061   +0.000±0.081   -0.007±0.143
+ridge      4 last        +0.152   +0.162±0.061   -0.001±0.090   -0.003±0.122
+pls        4 last        +0.097   +0.049±0.063   +0.002±0.083   +0.000±0.098
+ridge      5 mean        +0.211   +0.201±0.062   -0.000±0.079   -0.005±0.135
+pls        5 mean        +0.194   +0.141±0.060   +0.003±0.079   -0.007±0.136
+ridge      5 last        +0.114   +0.096±0.058   -0.001±0.093   -0.007±0.113
+pls        5 last        +0.092   +0.062±0.064   -0.002±0.083   -0.004±0.101
+ridge      6 mean        +0.230   +0.273±0.057   +0.003±0.079   -0.006±0.153
+pls        6 mean        +0.184   +0.147±0.060   +0.003±0.079   -0.006±0.136
+ridge      6 last        +0.114   +0.096±0.061   -0.005±0.089   -0.006±0.103
+pls        6 last        +0.109   +0.085±0.069   -0.002±0.083   +0.000±0.096
+ridge      7 mean        +0.253   +0.293±0.059   -0.001±0.079   -0.001±0.152
+pls        7 mean        +0.194   +0.140±0.059   +0.004±0.083   -0.006±0.137
+ridge      7 last        +0.117   +0.097±0.061   -0.003±0.086   -0.007±0.107
+pls        7 last        +0.128   +0.108±0.067   +0.001±0.085   +0.003±0.099
+ridge      8 mean        +0.260   +0.287±0.058   -0.005±0.079   +0.001±0.155
+pls        8 mean        +0.141   +0.126±0.056   +0.002±0.081   -0.005±0.144
+ridge      8 last        +0.122   +0.113±0.058   -0.006±0.082   -0.004±0.112
+pls        8 last        +0.118   +0.084±0.068   +0.002±0.083   +0.002±0.099
+------------------------------------------------------------------------
+VERDICT CELL (a priori: pls L8 mean) — mc rho +0.126
+best-of-34 cell (SELECTION-INFLATED, context only): ridge L3 mean mc rho +0.295
+block null (ruler-level, the honest reference): -0.003±0.127 — a max over 34 cells of pure ruler-block noise reaches ~0.72, so never read the best cell as a result.
+gate reference: UNPINNED — re-pin from v_1/src/phase2/pairs/RESULTS.md (plan addendum): the legacy 0.41±0.02 used the 1,202/41-ruler frame, the eligible corpus is now 1,187/40.
+verdict: UNPINNED (comparison only, no pass/fail)
+====================================================================
+[gate] 170 result rows -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/results.parquet; report -> chrono/artifacts/baseline_gate_report_akk.txt
+[gate] ridge L0 mean: mc +0.292±0.063 gkf_pooled +0.142 placebo -0.004±0.074
+[gate] pls L0 mean: mc +0.232±0.061 gkf_pooled +0.117 placebo -0.001±0.077
+[gate] L0 last: all 512 features constant across documents, skipped
+[gate] ridge L1 mean: mc +0.295±0.062 gkf_pooled +0.163 placebo -0.006±0.075
+[gate] pls L1 mean: mc +0.227±0.063 gkf_pooled +0.136 placebo -0.006±0.078
+[gate] ridge L1 last: mc +0.220±0.060 gkf_pooled +0.176 placebo -0.005±0.082
+[gate] pls L1 last: mc +0.150±0.063 gkf_pooled +0.151 placebo -0.001±0.086
+[gate] ridge L2 mean: mc +0.314±0.061 gkf_pooled +0.175 placebo -0.004±0.077
+[gate] pls L2 mean: mc +0.263±0.063 gkf_pooled +0.165 placebo -0.007±0.079
+[gate] ridge L2 last: mc +0.251±0.059 gkf_pooled +0.186 placebo -0.005±0.083
+[gate] pls L2 last: mc +0.198±0.060 gkf_pooled +0.156 placebo -0.003±0.081
+[gate] ridge L3 mean: mc +0.313±0.057 gkf_pooled +0.184 placebo -0.005±0.076
+[gate] pls L3 mean: mc +0.289±0.060 gkf_pooled +0.167 placebo -0.007±0.079
+[gate] ridge L3 last: mc +0.277±0.060 gkf_pooled +0.210 placebo -0.003±0.086
+[gate] pls L3 last: mc +0.217±0.062 gkf_pooled +0.170 placebo -0.003±0.081
+[gate] ridge L4 mean: mc +0.361±0.059 gkf_pooled +0.220 placebo -0.004±0.073
+[gate] pls L4 mean: mc +0.383±0.059 gkf_pooled +0.209 placebo -0.005±0.077
+[gate] ridge L4 last: mc +0.273±0.059 gkf_pooled +0.197 placebo -0.003±0.084
+[gate] pls L4 last: mc +0.249±0.063 gkf_pooled +0.188 placebo -0.004±0.080
+[gate] ridge L5 mean: mc +0.398±0.055 gkf_pooled +0.278 placebo -0.003±0.075
+[gate] pls L5 mean: mc +0.434±0.055 gkf_pooled +0.268 placebo -0.002±0.076
+[gate] ridge L5 last: mc +0.282±0.058 gkf_pooled +0.209 placebo -0.003±0.079
+[gate] pls L5 last: mc +0.233±0.062 gkf_pooled +0.178 placebo -0.004±0.077
+[gate] ridge L6 mean: mc +0.417±0.055 gkf_pooled +0.271 placebo -0.002±0.075
+[gate] pls L6 mean: mc +0.418±0.055 gkf_pooled +0.245 placebo -0.002±0.077
+[gate] ridge L6 last: mc +0.319±0.055 gkf_pooled +0.221 placebo -0.003±0.083
+[gate] pls L6 last: mc +0.283±0.057 gkf_pooled +0.182 placebo -0.005±0.080
+[gate] ridge L7 mean: mc +0.408±0.054 gkf_pooled +0.267 placebo -0.001±0.078
+[gate] pls L7 mean: mc +0.354±0.058 gkf_pooled +0.231 placebo -0.002±0.077
+[gate] ridge L7 last: mc +0.312±0.053 gkf_pooled +0.220 placebo -0.005±0.080
+[gate] pls L7 last: mc +0.238±0.058 gkf_pooled +0.158 placebo -0.004±0.078
+[gate] ridge L8 mean: mc +0.392±0.057 gkf_pooled +0.272 placebo -0.003±0.075
+[gate] pls L8 mean: mc +0.154±0.062 gkf_pooled +0.105 placebo +0.001±0.079
+[gate] ridge L8 last: mc +0.293±0.054 gkf_pooled +0.198 placebo -0.002±0.081
+[gate] pls L8 last: mc +0.199±0.060 gkf_pooled +0.146 placebo -0.004±0.077
+[gate] 1 (layer, site) cell(s) absent from the store, skipped: [(0, 'last', 'constant')]
+========================================================================
+P0.4 BASELINE GATE
+========================================================================
+probe  layer site    gkf pooled         mc rho    doc placebo     BLOCK null
+ridge      0 mean        +0.142   +0.292±0.063   -0.004±0.074   +0.009±0.167
+pls        0 mean        +0.117   +0.232±0.061   -0.001±0.077   +0.010±0.159
+ridge      1 mean        +0.163   +0.295±0.062   -0.006±0.075   +0.006±0.164
+pls        1 mean        +0.136   +0.227±0.063   -0.006±0.078   -0.000±0.131
+ridge      1 last        +0.176   +0.220±0.060   -0.005±0.082   -0.012±0.118
+pls        1 last        +0.151   +0.150±0.063   -0.001±0.086   -0.005±0.095
+ridge      2 mean        +0.175   +0.314±0.061   -0.004±0.077   +0.005±0.168
+pls        2 mean        +0.165   +0.263±0.063   -0.007±0.079   -0.002±0.144
+ridge      2 last        +0.186   +0.251±0.059   -0.005±0.083   -0.008±0.130
+pls        2 last        +0.156   +0.198±0.060   -0.003±0.081   -0.007±0.114
+ridge      3 mean        +0.184   +0.313±0.057   -0.005±0.076   +0.005±0.159
+pls        3 mean        +0.167   +0.289±0.060   -0.007±0.079   +0.002±0.153
+ridge      3 last        +0.210   +0.277±0.060   -0.003±0.086   -0.004±0.138
+pls        3 last        +0.170   +0.217±0.062   -0.003±0.081   -0.005±0.116
+ridge      4 mean        +0.220   +0.361±0.059   -0.004±0.073   +0.002±0.172
+pls        4 mean        +0.209   +0.383±0.059   -0.005±0.077   +0.004±0.184
+ridge      4 last        +0.197   +0.273±0.059   -0.003±0.084   -0.002±0.138
+pls        4 last        +0.188   +0.249±0.063   -0.004±0.080   -0.004±0.127
+ridge      5 mean        +0.278   +0.398±0.055   -0.003±0.075   +0.003±0.185
+pls        5 mean        +0.268   +0.434±0.055   -0.002±0.076   +0.004±0.198
+ridge      5 last        +0.209   +0.282±0.058   -0.003±0.079   -0.004±0.144
+pls        5 last        +0.178   +0.233±0.062   -0.004±0.077   -0.005±0.129
+ridge      6 mean        +0.271   +0.417±0.055   -0.002±0.075   +0.002±0.191
+pls        6 mean        +0.245   +0.418±0.055   -0.002±0.077   +0.005±0.192
+ridge      6 last        +0.221   +0.319±0.055   -0.003±0.083   -0.001±0.165
+pls        6 last        +0.182   +0.283±0.057   -0.005±0.080   -0.005±0.157
+ridge      7 mean        +0.267   +0.408±0.054   -0.001±0.078   -0.000±0.188
+pls        7 mean        +0.231   +0.354±0.058   -0.002±0.077   -0.001±0.165
+ridge      7 last        +0.220   +0.312±0.053   -0.005±0.080   +0.000±0.165
+pls        7 last        +0.158   +0.238±0.058   -0.004±0.078   -0.007±0.145
+ridge      8 mean        +0.272   +0.392±0.057   -0.003±0.075   -0.006±0.182
+pls        8 mean        +0.105   +0.154±0.062   +0.001±0.079   -0.008±0.118
+ridge      8 last        +0.198   +0.293±0.054   -0.002±0.081   +0.002±0.160
+pls        8 last        +0.146   +0.199±0.060   -0.004±0.077   -0.009±0.135
+------------------------------------------------------------------------
+VERDICT CELL (a priori: pls L8 mean) — mc rho +0.154
+best-of-34 cell (SELECTION-INFLATED, context only): pls L5 mean mc rho +0.434
+block null (ruler-level, the honest reference): -0.001±0.155 — a max over 34 cells of pure ruler-block noise reaches ~0.72, so never read the best cell as a result.
+gate reference: UNPINNED — re-pin from v_1/src/phase2/pairs/RESULTS.md (plan addendum): the legacy 0.41±0.02 used the 1,202/41-ruler frame, the eligible corpus is now 1,187/40.
+verdict: UNPINNED (comparison only, no pass/fail)
+====================================================================
+[gate] 170 result rows -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/results.parquet; report -> chrono/artifacts/baseline_gate_report_eng.txt
+[yarin-sandbox bfb92419] C2: P0.4 baseline gate reports (job 33316)
+ 4 files changed, 116 insertions(+)
+ create mode 100644 chrono/reports/baseline_gate_report_akk.txt
+ create mode 100644 chrono/reports/baseline_gate_report_eng.txt
+ create mode 100644 chrono/reports/extract_meta__thalesian_akk300m.json
+ create mode 100644 chrono/reports/results.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: 55a38610
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   88fe9b33..bfb92419  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 04:08:32 UTC 2026 ===

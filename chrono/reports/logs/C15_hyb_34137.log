@@ -1,0 +1,40 @@
+# job 34137 C15_hyb exit=0 Fri Sep  4 06:15:46 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C15_hyb_34137_7.out
+=== C15 hyb jepa M on llama2_7b L16 === job 34137 Fri Sep  4 06:06:03 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Fetching 18 files:   0%|          | 0/18 [00:00<?, ?it/s]Fetching 18 files: 100%|██████████| 18/18 [00:00<00:00, 13525.17it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights:   1%|          | 2/291 [00:00<00:18, 15.34it/s]Loading weights:   8%|▊         | 22/291 [00:00<00:02, 108.52it/s]Loading weights:  14%|█▎        | 40/291 [00:00<00:02, 119.15it/s]Loading weights:  20%|█▉        | 58/291 [00:00<00:01, 136.01it/s]Loading weights:  26%|██▌       | 76/291 [00:00<00:01, 143.84it/s]Loading weights:  32%|███▏      | 94/291 [00:00<00:01, 141.97it/s]Loading weights:  38%|███▊      | 112/291 [00:00<00:01, 138.59it/s]Loading weights:  45%|████▍     | 130/291 [00:00<00:01, 146.76it/s]Loading weights:  51%|█████     | 148/291 [00:01<00:00, 149.00it/s]Loading weights:  56%|█████▋    | 164/291 [00:01<00:00, 147.94it/s]Loading weights:  62%|██████▏   | 179/291 [00:01<00:00, 148.40it/s]Loading weights:  67%|██████▋   | 194/291 [00:01<00:00, 144.02it/s]Loading weights:  72%|███████▏  | 209/291 [00:01<00:00, 137.39it/s]Loading weights:  79%|███████▊  | 229/291 [00:01<00:00, 150.11it/s]Loading weights:  85%|████████▍ | 247/291 [00:01<00:00, 149.47it/s]Loading weights:  91%|█████████ | 265/291 [00:01<00:00, 147.24it/s]Loading weights:  97%|█████████▋| 283/291 [00:02<00:00, 146.40it/s]Loading weights: 100%|██████████| 291/291 [00:02<00:00, 142.60it/s]
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+[hyb] frozen llama2_7b L16 d=4096 -> trainable M
+[e2e] resumed hyb_jepa_M_llama2_7b-s0 at step 14000
+[e2e] hyb_jepa_M_llama2_7b-s0: size M params 16.3M vocab 23044 train texts 24,589 objective jepa batch 96 budget 0.1h dev cuda
+Token indices sequence length is longer than the specified maximum sequence length for this model (2512 > 2048). Running this sequence through the model will result in indexing errors
+[e2e] step 14100 loss 0.2466 lr 3.00e-04 1.8 min
+[e2e] step 14200 loss 0.2421 lr 3.00e-04 3.6 min
+[e2e] step 14300 loss 0.2475 lr 3.00e-04 5.4 min
+[e2e] done hyb_jepa_M_llama2_7b-s0: 14336 steps in 0.16h; embeddings -> store 'ssl_hyb::hyb_jepa_M_llama2_7b-s0' (31,905 texts); final.pt in chrono/artifacts_ssl/hyb/hyb_jepa_M_llama2_7b-s0
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 72c28111] C15: hyb_jepa_M_llama2_7b-s0 (job 34137)
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   a6919fdf..72c28111  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Fri Sep  4 06:15:46 UTC 2026 ===

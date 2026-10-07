@@ -1,0 +1,116 @@
+# job 33518 C5_headlad exit=0 Wed Sep  2 14:45:21 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C5_headlad_33475_33.out
+=== C5 emin2_qwen3_8b_t0_akk_erase_length seed 0 === job 33518 Wed Sep  2 14:41:07 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[erase] LEACE 'length' (k=6, rank 5) fitted on 925 train orig rows, applied to 19088 views
+epoch 50/200 loss 40.4006
+epoch 100/200 loss 31.3507
+epoch 150/200 loss 23.6720
+epoch 200/200 loss 20.0388
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_erase_length-s0-f0",
+  "metrics": {
+    "train_soft_spearman": 0.6290501322394555,
+    "train_spearman": 0.6292684585124202,
+    "final_loss": 20.03883981704712,
+    "identical_view_rate": 0.0074648648648648645,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_erase_length-s0-f0.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 956 train orig rows, applied to 19088 views
+epoch 50/200 loss 33.5147
+epoch 100/200 loss 23.9154
+epoch 150/200 loss 19.9082
+epoch 200/200 loss 16.0551
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_erase_length-s0-f1",
+  "metrics": {
+    "train_soft_spearman": 0.6856057455735537,
+    "train_spearman": 0.685827577161079,
+    "final_loss": 16.05505895614624,
+    "identical_view_rate": 0.006731171548117155,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_erase_length-s0-f1.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 963 train orig rows, applied to 19088 views
+epoch 50/200 loss 38.7893
+epoch 100/200 loss 32.7624
+epoch 150/200 loss 23.7763
+epoch 200/200 loss 19.1192
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_erase_length-s0-f2",
+  "metrics": {
+    "train_soft_spearman": 0.6219962607299857,
+    "train_spearman": 0.6221636796832976,
+    "final_loss": 19.11924409866333,
+    "identical_view_rate": 0.007751817237798546,
+    "test_spearman": 0.19757887241420619
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_erase_length-s0-f2.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 33.8287
+epoch 100/200 loss 22.4045
+epoch 150/200 loss 19.5897
+epoch 200/200 loss 16.5854
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_erase_length-s0-f3",
+  "metrics": {
+    "train_soft_spearman": 0.5580641316375942,
+    "train_spearman": 0.558081238966237,
+    "final_loss": 16.585447311401367,
+    "identical_view_rate": 0.0035840248962655604,
+    "test_spearman": 0.49670387627533574
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_erase_length-s0-f3.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 37.4709
+epoch 100/200 loss 25.7494
+epoch 150/200 loss 20.2493
+epoch 200/200 loss 17.7772
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_erase_length-s0-f4",
+  "metrics": {
+    "train_soft_spearman": 0.4843836011339536,
+    "train_spearman": 0.48444774991438416,
+    "final_loss": 17.777165412902832,
+    "identical_view_rate": 0.007085062240663901,
+    "test_spearman": 0.6147970059436412
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_erase_length-s0-f4.parquet"
+}
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox d575a8a1] C5: head ladder emin2_qwen3_8b_t0_akk_erase_length seed 0 (job 33518)
+ 12 files changed, 117 insertions(+)
+ create mode 100644 chrono/reports/logs/C5_headlad_33519.log
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_qwen3_8b_t0_akk_erase_subgenre-s1-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_qwen3_8b_t0_akk_erase_subgenre-s1-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_qwen3_8b_t0_akk_erase_subgenre-s1-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_qwen3_8b_t0_akk_erase_subgenre-s1-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_qwen3_8b_t0_akk_erase_subgenre-s1-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_qwen3_8b_t0_akk_erase_subgenre-s2-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_qwen3_8b_t0_akk_erase_subgenre-s2-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_qwen3_8b_t0_akk_erase_subgenre-s2-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_qwen3_8b_t0_akk_erase_subgenre-s2-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_qwen3_8b_t0_akk_erase_subgenre-s2-f4.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   cc480e12..d575a8a1  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 14:45:21 UTC 2026 ===

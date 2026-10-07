@@ -1,0 +1,99 @@
+# job 34176 C19_anti exit=0 Fri Sep  4 12:37:20 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C19_anti_34176_3.out
+=== C19 jepa + adv === job 34176 Fri Sep  4 11:55:07 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[ssl] ssl_jepa_cunei400m_adv-s99: 24,589 train texts, 270,479 views; loading features
+[ssl] objective=jepa d_in=768 head_params=722,561 steps=60 batch=512 balance_alpha=0.5 sources={'ebl': 13242, 'oracc': 9016, 'archibab': 1218, 'lbl_letters': 816, 'seal': 288, 'orcc': 9}
+[ssl] step 0 adv_acc 0.055 lam 0.00
+[ssl] step 0 loss 3.9554 (1s)
+[ssl] step 59 loss 3.7652 (2s)
+[ssl] done ssl_jepa_cunei400m_adv-s99: head -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts_ssl/ssl_runs/ssl_jepa_cunei400m_adv-s99.pt; embeddings -> store model 'ssl::ssl_jepa_cunei400m_adv-s99' L0 site h (31,905 texts)
+[ssl] ssl_jepa_cunei400m_adv-s0: 24,589 train texts, 270,479 views; loading features
+[ssl] objective=jepa d_in=768 head_params=722,561 steps=3000 batch=512 balance_alpha=0.5 sources={'ebl': 13242, 'oracc': 9016, 'archibab': 1218, 'lbl_letters': 816, 'seal': 288, 'orcc': 9}
+[ssl] step 0 adv_acc 0.299 lam 0.00
+[ssl] step 0 loss 3.9009 (0s)
+[ssl] step 200 adv_acc 0.221 lam 0.33
+[ssl] step 200 loss 9.5846 (2s)
+[ssl] step 400 adv_acc 0.125 lam 0.67
+[ssl] step 400 loss 18.1261 (3s)
+[ssl] step 600 adv_acc 0.504 lam 1.00
+[ssl] step 600 loss 221.8974 (4s)
+[ssl] step 800 adv_acc 0.385 lam 1.00
+[ssl] step 800 loss 26.8483 (5s)
+[ssl] step 1000 adv_acc 0.076 lam 1.00
+[ssl] step 1000 loss 47.2246 (7s)
+[ssl] step 1200 adv_acc 0.252 lam 1.00
+[ssl] step 1200 loss 44.9832 (8s)
+[ssl] step 1400 adv_acc 0.531 lam 1.00
+[ssl] step 1400 loss 10.7733 (9s)
+[ssl] step 1600 adv_acc 0.326 lam 1.00
+[ssl] step 1600 loss 14.9374 (11s)
+[ssl] step 1800 adv_acc 0.500 lam 1.00
+[ssl] step 1800 loss 20.8994 (12s)
+[ssl] step 2000 adv_acc 0.572 lam 1.00
+[ssl] step 2000 loss 11.5490 (13s)
+[ssl] step 2200 adv_acc 0.635 lam 1.00
+[ssl] step 2200 loss 10.1173 (14s)
+[ssl] step 2400 adv_acc 0.600 lam 1.00
+[ssl] step 2400 loss 8.8156 (16s)
+[ssl] step 2600 adv_acc 0.498 lam 1.00
+[ssl] step 2600 loss 8.0507 (17s)
+[ssl] step 2800 adv_acc 0.523 lam 1.00
+[ssl] step 2800 loss 11.8278 (18s)
+[ssl] step 2999 loss 25.7449 (20s)
+[ssl] done ssl_jepa_cunei400m_adv-s0: head -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts_ssl/ssl_runs/ssl_jepa_cunei400m_adv-s0.pt; embeddings -> store model 'ssl::ssl_jepa_cunei400m_adv-s0' L0 site h (31,905 texts)
+# S1 representation probes — ssl::ssl_jepa_cunei400m_adv-s0::L0::h
+
+texts 30,729 · PCA 0 · classes need ≥ 30 docs
+
+## Probes (balanced accuracy, 5-fold, tablet level)
+
+| label | classes | n | linear | MLP | chance |
+|---|---|---|---|---|---|
+| period_norm | 5 | 6,300 | 0.806 ± 0.015 | 0.775 ± 0.045 | 0.200 |
+| genre_raw | 71 | 27,187 | 0.107 ± 0.004 | 0.121 ± 0.004 | 0.014 |
+| provenance | 16 | 30,419 | 0.380 ± 0.014 | 0.367 ± 0.003 | 0.062 |
+| source | 5 | 30,720 | 0.925 ± 0.010 | 0.922 ± 0.012 | 0.200 |
+
+## Period probe WITHIN source (linear)
+
+| source | classes | n | balanced acc | chance |
+|---|---|---|---|---|
+| oracc | 2 | 3,414 | 0.910 ± 0.019 | 0.500 |
+| seal | 3 | 328 | 0.732 ± 0.052 | 0.333 |
+
+## Period probe, HELD-OUT source (train on the other non-dated sources, linear)
+
+| held out | classes | n test | balanced acc | chance |
+|---|---|---|---|---|
+| seal | 3 | 292 | 0.660 | 0.333 |
+| orcc (dated) | 3 | 953 | 0.259 | 0.333 |
+
+## Geometry (period)
+
+silhouette (raw space) +0.035 · permutation null -0.049 ± 0.027 · p = 0.000
+k-NN (k=10) period purity 0.882 · chance ≈ 0.341
+silhouette (UMAP-2d) +0.116 · null -0.052 ± 0.025 · p = 0.000
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 525195eb] C19: ssl_jepa_cunei400m_adv-s0 (job 34176)
+ 3 files changed, 32 insertions(+)
+ create mode 100644 chrono/reports/ssl/S1_ssl_ssl_jepa_cunei400m_adv-s0_L0_h.md
+ create mode 100644 chrono/reports/ssl/umap_ssl_ssl_jepa_cunei400m_adv-s0_L0_h.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   90417569..525195eb  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Fri Sep  4 12:37:20 UTC 2026 ===

@@ -1,0 +1,57 @@
+# job 33341 C1v2_extract exit=1 Wed Sep  2 06:22:53 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C1v2_extract_33341_2.out
+=== C1v2 extract thalesian_cunei400m layers all === job 33341 Wed Sep  2 06:20:00 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: 1bbc382e
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/303 [00:00<?, ?it/s]Loading weights:   5%|▌         | 16/303 [00:00<00:02, 140.06it/s]Loading weights:  10%|█         | 31/303 [00:00<00:01, 136.75it/s]Loading weights:  19%|█▉        | 58/303 [00:00<00:01, 168.39it/s]Loading weights:  30%|███       | 92/303 [00:00<00:01, 197.56it/s]Loading weights:  37%|███▋      | 112/303 [00:00<00:00, 193.94it/s]Loading weights:  46%|████▌     | 138/303 [00:00<00:00, 207.44it/s]Loading weights:  59%|█████▊    | 178/303 [00:00<00:00, 244.74it/s]Loading weights:  69%|██████▉   | 209/303 [00:00<00:00, 260.94it/s]Loading weights:  78%|███████▊  | 236/303 [00:01<00:00, 217.24it/s]Loading weights:  85%|████████▌ | 259/303 [00:01<00:00, 209.15it/s]Loading weights:  93%|█████████▎| 281/303 [00:01<00:00, 210.49it/s]Loading weights: 100%|██████████| 303/303 [00:02<00:00, 71.92it/s] Loading weights: 100%|██████████| 303/303 [00:02<00:00, 138.14it/s]
+[extract] Thalesian/cuneiformBase-400m: 40562 texts, layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], sites ['mean', 'last'], store=chrono.models.store
+[extract] 1024/40562 texts (10.4s)
+[extract] 2048/40562 texts (20.2s)
+[extract] 3072/40562 texts (30.0s)
+[extract] 4096/40562 texts (41.2s)
+[extract] 5120/40562 texts (52.6s)
+[extract] 6144/40562 texts (62.1s)
+[extract] 7168/40562 texts (74.0s)
+[extract] 8192/40562 texts (87.7s)
+[extract] 9216/40562 texts (102.6s)
+[extract] 10240/40562 texts (115.1s)
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 501, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 487, in main
+    meta = extract(table, encode, store=store, model_name=hfid,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 335, in extract
+    _put(store, model_name, ly, st, ids,
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 298, in _put
+    store.put(model, layer, site, ids, X, texts=texts)
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/models/store.py", line 79, in put
+    m = self.manifest()
+        ^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/models/store.py", line 47, in manifest
+    return pd.read_parquet(self.manifest_path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/parquet.py", line 669, in read_parquet
+    return impl.read(
+           ^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/parquet.py", line 265, in read
+    pa_table = self.api.parquet.read_table(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pyarrow/parquet/core.py", line 1844, in read_table
+    dataset = ParquetDataset(
+              ^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pyarrow/parquet/core.py", line 1413, in __init__
+    [fragment], schema=schema or fragment.physical_schema,
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/_dataset.pyx", line 1477, in pyarrow._dataset.Fragment.physical_schema.__get__
+  File "pyarrow/error.pxi", line 155, in pyarrow.lib.pyarrow_internal_check_status
+  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
+OSError: Could not open Parquet input source '<Buffer>': Couldn't deserialize thrift: invalid TType
+
+FAILED extract_embeddings thalesian_cunei400m

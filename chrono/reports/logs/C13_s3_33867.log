@@ -1,0 +1,101 @@
+# job 33867 C13_s3 exit=0 Thu Sep  3 21:14:36 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C13_s3_33674_50.out
+=== C13 s3_llama2_7b_init-jepa_frac50 seed 2 === job 33867 Thu Sep  3 17:14:36 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[labels] label_frac=0.5: 473/925 train docs kept (39 rulers, all retained)
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_llama2_7b-s0.pt: missing [] unexpected []
+epoch 50/200 loss 13.4210
+epoch 100/200 loss 10.2477
+epoch 150/200 loss 8.4687
+epoch 200/200 loss 7.3121
+{
+  "run_id": "s3_llama2_7b_init-jepa_frac50-s2-f0",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.8062092062715315,
+    "train_spearman": 0.8065081076325513,
+    "final_loss": 7.312084674835205,
+    "identical_view_rate": 0.005845665961945031,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-jepa_frac50-s2-f0.parquet"
+}
+[labels] label_frac=0.5: 489/956 train docs kept (39 rulers, all retained)
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_llama2_7b-s0.pt: missing [] unexpected []
+epoch 50/200 loss 12.7528
+epoch 100/200 loss 10.2770
+epoch 150/200 loss 8.3303
+epoch 200/200 loss 7.2566
+{
+  "run_id": "s3_llama2_7b_init-jepa_frac50-s2-f1",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.8275436784113063,
+    "train_spearman": 0.8276654387351057,
+    "final_loss": 7.256593465805054,
+    "identical_view_rate": 0.0054396728016359915,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-jepa_frac50-s2-f1.parquet"
+}
+[labels] label_frac=0.5: 488/963 train docs kept (27 rulers, all retained)
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_llama2_7b-s0.pt: missing [] unexpected []
+epoch 50/200 loss 13.3568
+epoch 100/200 loss 10.0769
+epoch 150/200 loss 8.2092
+epoch 200/200 loss 7.0092
+{
+  "run_id": "s3_llama2_7b_init-jepa_frac50-s2-f2",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.8764110067496692,
+    "train_spearman": 0.876367052229854,
+    "final_loss": 7.009216070175171,
+    "identical_view_rate": 0.011188524590163935,
+    "test_spearman": 0.17252802129058575
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-jepa_frac50-s2-f2.parquet"
+}
+[labels] label_frac=0.5: 490/964 train docs kept (30 rulers, all retained)
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_llama2_7b-s0.pt: missing [] unexpected []
+epoch 50/200 loss 13.1011
+epoch 100/200 loss 10.4166
+epoch 150/200 loss 8.6268
+epoch 200/200 loss 7.3171
+{
+  "run_id": "s3_llama2_7b_init-jepa_frac50-s2-f3",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7961991912948464,
+    "train_spearman": 0.7964110166890569,
+    "final_loss": 7.317135572433472,
+    "identical_view_rate": 0.004653061224489796,
+    "test_spearman": 0.5613281143355463
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-jepa_frac50-s2-f3.parquet"
+}
+[labels] label_frac=0.5: 488/964 train docs kept (25 rulers, all retained)
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_llama2_7b-s0.pt: missing [] unexpected []
+epoch 50/200 loss 13.7105
+epoch 100/200 loss 10.4614
+epoch 150/200 loss 8.8666
+epoch 200/200 loss 7.5639
+{
+  "run_id": "s3_llama2_7b_init-jepa_frac50-s2-f4",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7859676687072441,
+    "train_spearman": 0.78585154124719,
+    "final_loss": 7.563861131668091,
+    "identical_view_rate": 0.006875,
+    "test_spearman": 0.6947929801769406
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-jepa_frac50-s2-f4.parquet"
+}
+[2026-09-03T21:14:36.018] error: *** JOB 33867 ON g0375 CANCELLED AT 2026-09-03T21:14:36 DUE TO TIME LIMIT ***

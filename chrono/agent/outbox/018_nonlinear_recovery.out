@@ -1,0 +1,98 @@
+# 018_nonlinear_recovery  host=g0381  start=Wed Sep  2 14:51:48 UTC 2026  timeout=10800s
+# HEAD=c127fd0d
+# ---------------------------------------------------------
+heads present: 15
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_head_hidden.py", line 93, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_head_hidden.py", line 78, in main
+    bal_acc=probe(F[a], z[a], F[b], z[b], kind)))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_head_hidden.py", line 38, in probe
+    clf.fit(sc.transform(Xa), za)
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/base.py", line 1336, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 853, in fit
+    return self._fit(X, y, sample_weight=sample_weight, incremental=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 512, in _fit
+    self._fit_stochastic(
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 752, in _fit_stochastic
+    self._update_no_improvement_count(
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 802, in _update_no_improvement_count
+    val_score = self._score(X, y, sample_weight=sample_weight)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 1293, in _score
+    return super()._score_with_function(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 868, in _score_with_function
+    if np.isnan(y_pred).any() or np.isinf(y_pred).any():
+       ^^^^^^^^^^^^^^^^
+TypeError: ufunc 'isnan' not supported for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''
+WARN probe failed for cunei400m
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_head_hidden.py", line 93, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_head_hidden.py", line 78, in main
+    bal_acc=probe(F[a], z[a], F[b], z[b], kind)))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_head_hidden.py", line 38, in probe
+    clf.fit(sc.transform(Xa), za)
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/base.py", line 1336, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 853, in fit
+    return self._fit(X, y, sample_weight=sample_weight, incremental=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 512, in _fit
+    self._fit_stochastic(
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 752, in _fit_stochastic
+    self._update_no_improvement_count(
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 802, in _update_no_improvement_count
+    val_score = self._score(X, y, sample_weight=sample_weight)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 1293, in _score
+    return super()._score_with_function(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 868, in _score_with_function
+    if np.isnan(y_pred).any() or np.isinf(y_pred).any():
+       ^^^^^^^^^^^^^^^^
+TypeError: ufunc 'isnan' not supported for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''
+WARN probe failed for llama2_7b
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_head_hidden.py", line 93, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_head_hidden.py", line 78, in main
+    bal_acc=probe(F[a], z[a], F[b], z[b], kind)))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_head_hidden.py", line 38, in probe
+    clf.fit(sc.transform(Xa), za)
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/base.py", line 1336, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 853, in fit
+    return self._fit(X, y, sample_weight=sample_weight, incremental=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 512, in _fit
+    self._fit_stochastic(
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 752, in _fit_stochastic
+    self._update_no_improvement_count(
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 802, in _update_no_improvement_count
+    val_score = self._score(X, y, sample_weight=sample_weight)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 1293, in _score
+    return super()._score_with_function(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/neural_network/_multilayer_perceptron.py", line 868, in _score_with_function
+    if np.isnan(y_pred).any() or np.isinf(y_pred).any():
+       ^^^^^^^^^^^^^^^^
+TypeError: ufunc 'isnan' not supported for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''
+WARN probe failed for qwen3_8b
+fatal: pathspec 'chrono/reports/tier0/ladder/nonlinear_recovery_*.md' did not match any files
+# ---------------------------------------------------------
+# exit=128  end=Wed Sep  2 14:56:40 UTC 2026

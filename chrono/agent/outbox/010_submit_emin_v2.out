@@ -1,0 +1,13 @@
+# 010_submit_emin_v2  host=g0381  start=Wed Sep  2 06:19:59 UTC 2026  timeout=1800s
+# HEAD=fb855fb3
+# ---------------------------------------------------------
+C1v2 array: 33341
+C3v2 array: 33342 (afterok:33341)
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+      33342_[0-44] voltagepa C3v2_emi  yarin.b PD       0:00      1 (Dependency)
+           33341_1 voltagepa C1v2_ext  yarin.b  R       0:04      1 g0376
+           33341_2 voltagepa C1v2_ext  yarin.b  R       0:04      1 g0376
+           33341_0 voltagepa C1v2_ext  yarin.b  R       0:05      1 g0376
+             33315 voltagepa AGENT_ru  yarin.b  R    2:13:56      1 g0381
+# ---------------------------------------------------------
+# exit=0  end=Wed Sep  2 06:20:04 UTC 2026

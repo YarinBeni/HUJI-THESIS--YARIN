@@ -1,0 +1,104 @@
+# job 33364 C3v2_emin exit=0 Wed Sep  2 07:50:11 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C3v2_emin_33352_7.out
+=== C3v2 emin2_llama2_7b_t0_eng seed 2 === job 33364 Wed Sep  2 07:46:30 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: 83e34f65
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+epoch 50/200 loss 6.0009
+epoch 100/200 loss 4.0396
+epoch 150/200 loss 3.1491
+epoch 200/200 loss 2.6573
+{
+  "run_id": "emin2_llama2_7b_t0_eng-s2-f0",
+  "metrics": {
+    "train_soft_spearman": 0.8426091255352209,
+    "train_spearman": 0.842489495032692,
+    "final_loss": 2.657288670539856,
+    "identical_view_rate": 0.010010810810810811,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_eng-s2-f0.parquet"
+}
+epoch 50/200 loss 6.3559
+epoch 100/200 loss 4.4715
+epoch 150/200 loss 3.3072
+epoch 200/200 loss 2.8512
+{
+  "run_id": "emin2_llama2_7b_t0_eng-s2-f1",
+  "metrics": {
+    "train_soft_spearman": 0.895959203385619,
+    "train_spearman": 0.8958112092223732,
+    "final_loss": 2.851176917552948,
+    "identical_view_rate": 0.007322175732217573,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_eng-s2-f1.parquet"
+}
+epoch 50/200 loss 6.4380
+epoch 100/200 loss 4.2564
+epoch 150/200 loss 3.2793
+epoch 200/200 loss 2.8511
+{
+  "run_id": "emin2_llama2_7b_t0_eng-s2-f2",
+  "metrics": {
+    "train_soft_spearman": 0.8462203652133332,
+    "train_spearman": 0.8460070841401671,
+    "final_loss": 2.8511444330215454,
+    "identical_view_rate": 0.009439252336448599,
+    "test_spearman": 0.14273301487976459
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_eng-s2-f2.parquet"
+}
+epoch 50/200 loss 6.6499
+epoch 100/200 loss 4.3808
+epoch 150/200 loss 3.3845
+epoch 200/200 loss 2.8836
+{
+  "run_id": "emin2_llama2_7b_t0_eng-s2-f3",
+  "metrics": {
+    "train_soft_spearman": 0.8574954116248963,
+    "train_spearman": 0.8573975431291565,
+    "final_loss": 2.8835869431495667,
+    "identical_view_rate": 0.0066753112033195025,
+    "test_spearman": 0.4639629323180675
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_eng-s2-f3.parquet"
+}
+epoch 50/200 loss 5.7558
+epoch 100/200 loss 3.9525
+epoch 150/200 loss 3.0487
+epoch 200/200 loss 2.6946
+{
+  "run_id": "emin2_llama2_7b_t0_eng-s2-f4",
+  "metrics": {
+    "train_soft_spearman": 0.8251094940876696,
+    "train_spearman": 0.8251821789490924,
+    "final_loss": 2.6945515275001526,
+    "identical_view_rate": 0.008526970954356847,
+    "test_spearman": 0.6670120850657112
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_eng-s2-f4.parquet"
+}
+[yarin-sandbox 42addde4] C3v2: emin2_llama2_7b_t0_eng seed 2 (job 33364)
+ 6 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 chrono/reports/tier0/scores/emin2_llama2_7b_t0_eng-s2-f0.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_llama2_7b_t0_eng-s2-f1.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_llama2_7b_t0_eng-s2-f2.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_llama2_7b_t0_eng-s2-f3.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_llama2_7b_t0_eng-s2-f4.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: c19323ba
+error: cannot rebase: You have unstaged changes.
+error: Please commit or stash them.
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: c5473e5f
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   0b617518..42addde4  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 07:50:11 UTC 2026 ===

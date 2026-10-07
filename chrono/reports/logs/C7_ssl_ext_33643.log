@@ -1,0 +1,64 @@
+# job 33643 C7_ssl_ext exit=0 Wed Sep  2 19:54:32 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C7_ssl_ext_33641_0.out
+=== C7 ssl extract thalesian_cunei400m L6,12 === job 33643 Wed Sep  2 19:50:49 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/303 [00:00<?, ?it/s]Loading weights: 100%|██████████| 303/303 [00:00<00:00, 2212.11it/s]Loading weights: 100%|██████████| 303/303 [00:00<00:00, 2208.28it/s]
+[extract] Thalesian/cuneiformBase-400m: 31905 texts, layers [6, 12], sites ['mean'], store=chrono.models.store
+[extract] 1024/31905 texts (5.4s)
+[extract] 2048/31905 texts (9.3s)
+[extract] 3072/31905 texts (13.9s)
+[extract] 4096/31905 texts (18.8s)
+[extract] 5120/31905 texts (23.1s)
+[extract] 6144/31905 texts (27.1s)
+[extract] 7168/31905 texts (30.5s)
+[extract] 8192/31905 texts (34.3s)
+[extract] 9216/31905 texts (38.3s)
+[extract] 10240/31905 texts (42.1s)
+[extract] 11264/31905 texts (45.7s)
+[extract] 12288/31905 texts (49.6s)
+[extract] 13312/31905 texts (54.5s)
+[extract] 14336/31905 texts (59.0s)
+[extract] 15360/31905 texts (63.1s)
+[extract] 16384/31905 texts (67.1s)
+[extract] 17408/31905 texts (72.1s)
+[extract] 18432/31905 texts (76.3s)
+[extract] 19456/31905 texts (80.0s)
+[extract] 20480/31905 texts (84.1s)
+[extract] 21504/31905 texts (87.8s)
+[extract] 22528/31905 texts (92.4s)
+[extract] 23552/31905 texts (95.9s)
+[extract] 24576/31905 texts (100.0s)
+[extract] 25600/31905 texts (103.9s)
+[extract] 26624/31905 texts (108.1s)
+[extract] 27648/31905 texts (112.3s)
+[extract] 28672/31905 texts (115.8s)
+[extract] 29696/31905 texts (119.8s)
+[extract] 30720/31905 texts (124.5s)
+[extract] 31744/31905 texts (129.3s)
+[extract] 31905/31905 texts (130.1s)
+[done] {"n_texts": 31905, "n_embedded": 31905, "n_skipped": 0, "layers": [6, 12], "sites": ["mean"], "elapsed_s": 130.1, "model": "thalesian_cunei400m", "hfid": "Thalesian/cuneiformBase-400m", "store_root": "chrono/artifacts_ssl/emb_store", "max_tokens": 512, "dtype": "auto"}
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 25d541e2] C7: ssl features thalesian_cunei400m (job 33643)
+ 1 file changed, 18 insertions(+)
+ create mode 100644 chrono/reports/ssl/extract_meta__thalesian_cunei400m.json
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   e53ceeb8..25d541e2  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 19:54:32 UTC 2026 ===

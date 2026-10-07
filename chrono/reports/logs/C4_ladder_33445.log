@@ -1,0 +1,55 @@
+# job 33445 C4_ladder exit=0 Wed Sep  2 16:31:52 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C4_ladder_33445_5.out
+=== C4 ladder emin2_qwen3_8b_t0_eng === job 33445 Wed Sep  2 14:20:36 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[ladder] L18mean_eng ridge erase=none       mc +0.395 pooled +0.309 readability after nan (k=0)
+[ladder] L18mean_eng ridge erase=ruler      mc -0.044 pooled -0.133 readability after 0.118 (k=40)
+[ladder] L18mean_eng ridge erase=period     mc +0.270 pooled +0.211 readability after 0.249 (k=6)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[ladder] L18mean_eng ridge erase=subgenre   mc +0.187 pooled +0.171 readability after 0.058 (k=21)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[ladder] L18mean_eng ridge erase=provenance mc +0.019 pooled +0.055 readability after 0.069 (k=21)
+[ladder] L18mean_eng ridge erase=length     mc +0.328 pooled +0.207 readability after 0.068 (k=6)
+[ladder] L18mean_eng ridge erase=year10     mc -0.098 pooled +0.012 readability after 0.139 (k=7)
+# Erasure ladder — Qwen/Qwen3-8B L18 mean · langs ['eng'] · ridge
+
+| erased | k | mc ρ | gkf pooled ρ | Δ mc vs none | z readable before → after (bal. acc, classes ≥10 docs; chance = 1/n) |
+|---|---|---|---|---|---|
+| none | 0 | +0.395 | +0.309 | +0.000 | — |
+| ruler | 40 | -0.044 | -0.133 | -0.438 | 0.68 → 0.12 (n=11, chance 0.09) |
+| period | 6 | +0.270 | +0.211 | -0.125 | 0.64 → 0.25 (n=3, chance 0.33) |
+| subgenre | 21 | +0.187 | +0.171 | -0.208 | 0.39 → 0.06 (n=18, chance 0.06) |
+| provenance | 21 | +0.019 | +0.055 | -0.376 | 0.39 → 0.07 (n=15, chance 0.07) |
+| length | 6 | +0.328 | +0.207 | -0.067 | 0.86 → 0.07 (n=5, chance 0.20) |
+| year10 | 7 | -0.098 | +0.012 | -0.493 | 0.68 → 0.14 (n=7, chance 0.14) |
+
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox da469f66] C4: erasure ladder emin2_qwen3_8b_t0_eng (job 33445)
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+ rewrite chrono/reports/tier0/ladder/emin2_qwen3_8b_t0_eng_ridge.md (60%)
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   185c6288..da469f66  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 16:31:52 UTC 2026 ===

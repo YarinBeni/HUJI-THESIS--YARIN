@@ -1,0 +1,80 @@
+# job 34226 C20_wdated exit=0 Fri Sep  4 15:34:51 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C20_wdated_34226_3.out
+=== C20 jepa wdated anti='leace' === job 34226 Fri Sep  4 13:13:08 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[ssl] ssl_jepa_cunei400m_leace_wdated-s0: 25,765 train texts, 283,415 views; loading features
+[ssl] objective=jepa d_in=768 head_params=722,561 steps=3000 batch=512 balance_alpha=0.5 sources={'ebl': 13242, 'oracc': 9016, 'archibab': 1218, 'orcc': 1185, 'lbl_letters': 816, 'seal': 288}
+[ssl] step 0: LEACE refit, rank 5
+[ssl] step 0 loss 2.1003 (0s)
+[ssl] step 200 loss 0.0222 (2s)
+[ssl] step 400 loss 0.0004 (3s)
+[ssl] step 600 loss 0.0397 (5s)
+[ssl] step 800 loss 0.0000 (6s)
+[ssl] step 1000 loss 0.0155 (7s)
+[ssl] step 1200 loss 0.0715 (9s)
+[ssl] step 1400 loss 0.0000 (10s)
+[ssl] step 1600 loss 0.1353 (11s)
+[ssl] step 1800 loss 0.0000 (13s)
+[ssl] step 2000: LEACE refit, rank 5
+[ssl] step 2000 loss 0.0000 (14s)
+[ssl] step 2200 loss 0.0001 (15s)
+[ssl] step 2400 loss 0.0000 (16s)
+[ssl] step 2600 loss 0.0392 (18s)
+[ssl] step 2800 loss 0.0000 (19s)
+[ssl] step 2999 loss 0.0000 (20s)
+[ssl] done ssl_jepa_cunei400m_leace_wdated-s0: head -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts_ssl/ssl_runs/ssl_jepa_cunei400m_leace_wdated-s0.pt; embeddings -> store model 'ssl::ssl_jepa_cunei400m_leace_wdated-s0' L0 site h (31,905 texts)
+# S1 representation probes — ssl::ssl_jepa_cunei400m_leace_wdated-s0::L0::h
+
+texts 30,729 · PCA 0 · classes need ≥ 30 docs
+
+## Probes (balanced accuracy, 5-fold, tablet level)
+
+| label | classes | n | linear | MLP | chance |
+|---|---|---|---|---|---|
+| period_norm | 5 | 6,300 | 0.573 ± 0.004 | 0.579 ± 0.022 | 0.200 |
+| genre_raw | 71 | 27,187 | 0.068 ± 0.001 | 0.085 ± 0.003 | 0.014 |
+| provenance | 16 | 30,419 | 0.065 ± 0.000 | 0.203 ± 0.027 | 0.062 |
+| source | 5 | 30,720 | 0.207 ± 0.001 | 0.440 ± 0.071 | 0.200 |
+
+## Period probe WITHIN source (linear)
+
+| source | classes | n | balanced acc | chance |
+|---|---|---|---|---|
+| oracc | 2 | 3,414 | 0.930 ± 0.014 | 0.500 |
+| seal | 3 | 328 | 0.573 ± 0.026 | 0.333 |
+
+## Period probe, HELD-OUT source (train on the other non-dated sources, linear)
+
+| held out | classes | n test | balanced acc | chance |
+|---|---|---|---|---|
+| seal | 3 | 292 | 0.387 | 0.333 |
+| orcc (dated) | 3 | 953 | 0.058 | 0.333 |
+
+## Geometry (period)
+
+silhouette (raw space) -0.122 · permutation null -0.061 ± 0.038 · p = 0.910
+k-NN (k=10) period purity 0.428 · chance ≈ 0.341
+silhouette (UMAP-2d) -0.096 · null -0.044 ± 0.019 · p = 0.980
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox a65a6718] C20: ssl_jepa_cunei400m_leace_wdated-s0 (job 34226)
+ 3 files changed, 32 insertions(+)
+ create mode 100644 chrono/reports/ssl/S1_ssl_ssl_jepa_cunei400m_leace_wdated-s0_L0_h.md
+ create mode 100644 chrono/reports/ssl/umap_ssl_ssl_jepa_cunei400m_leace_wdated-s0_L0_h.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   fc42a090..a65a6718  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Fri Sep  4 15:34:51 UTC 2026 ===

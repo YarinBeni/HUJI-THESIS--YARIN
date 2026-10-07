@@ -1,0 +1,122 @@
+# job 33787 C14_reprobe exit=0 Thu Sep  3 10:23:28 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C14_reprobe_33784_2.out
+=== C14 Thalesian/AKK_300m L4 mean === job 33787 Thu Sep  3 08:53:00 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: 429498d9
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+# S1 representation probes — Thalesian/AKK_300m::L4::mean
+
+texts 30,729 · PCA 256 · classes need ≥ 30 docs
+
+## Probes (balanced accuracy, 5-fold, tablet level)
+
+| label | classes | n | linear | MLP | chance |
+|---|---|---|---|---|---|
+| period_norm | 5 | 6,300 | 0.841 ± 0.021 | 0.825 ± 0.026 | 0.200 |
+| genre_raw | 71 | 27,187 | 0.273 ± 0.013 | 0.217 ± 0.015 | 0.014 |
+| provenance | 16 | 30,419 | 0.660 ± 0.027 | 0.638 ± 0.036 | 0.062 |
+| source | 5 | 30,720 | 0.961 ± 0.005 | 0.969 ± 0.003 | 0.200 |
+
+## Period probe WITHIN source (linear)
+
+| source | classes | n | balanced acc | chance |
+|---|---|---|---|---|
+| oracc | 2 | 3,414 | 0.992 ± 0.007 | 0.500 |
+| seal | 3 | 328 | 0.795 ± 0.065 | 0.333 |
+
+## Period probe, HELD-OUT source (train on the others, linear)
+
+| held out | n test | balanced acc | chance |
+|---|---|---|---|
+
+## Geometry (period)
+
+silhouette (raw space) +0.096 · permutation null -0.021 ± 0.015 · p = 0.000
+k-NN (k=10) period purity 0.980 · chance ≈ 0.341
+silhouette (UMAP-2d) +0.746 · null -0.060 ± 0.032 · p = 0.000
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 0943ff29] C14: probes Thalesian/AKK_300m L4 (job 33787)
+ 21 files changed, 150 insertions(+)
+ create mode 100644 chrono/reports/ssl/S1_Qwen_Qwen3-8B_L18_mean.md
+ create mode 100644 chrono/reports/ssl/S1_Thalesian_AKK_300m_L4_mean.md
+ create mode 100644 chrono/reports/ssl/S1_Thalesian_AKK_300m_L8_mean.md
+ create mode 100644 chrono/reports/ssl/S1_Thalesian_cuneiformBase-400m_L12_mean.md
+ create mode 100644 chrono/reports/ssl/S1_Thalesian_cuneiformBase-400m_L6_mean.md
+ create mode 100644 chrono/reports/ssl/umap_Qwen_Qwen3-8B_L18_mean.parquet
+ create mode 100644 chrono/reports/ssl/umap_Thalesian_AKK_300m_L4_mean.parquet
+ create mode 100644 chrono/reports/ssl/umap_Thalesian_AKK_300m_L8_mean.parquet
+ create mode 100644 chrono/reports/ssl/umap_Thalesian_cuneiformBase-400m_L12_mean.parquet
+ create mode 100644 chrono/reports/ssl/umap_Thalesian_cuneiformBase-400m_L6_mean.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-barlow_frac25-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-barlow_frac25-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-barlow_frac25-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-barlow_frac25-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-barlow_frac25-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-barlow_frac25-s1-f0.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-barlow_frac25-s1-f1.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-barlow_frac25-s1-f2.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-barlow_frac25-s1-f3.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-barlow_frac25-s1-f4.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+   17de1d93..685d6c3e  yarin-sandbox -> origin/yarin-sandbox
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Rebasing (1/24)Rebasing (2/24)Rebasing (3/24)Rebasing (4/24)Rebasing (5/24)Rebasing (6/24)Rebasing (7/24)Rebasing (8/24)Rebasing (9/24)Rebasing (10/24)Rebasing (11/24)Rebasing (12/24)Rebasing (13/24)Rebasing (14/24)Rebasing (15/24)Rebasing (16/24)Rebasing (17/24)Rebasing (18/24)Rebasing (19/24)Rebasing (20/24)Rebasing (21/24)Rebasing (22/24)Rebasing (23/24)Rebasing (24/24)[KSuccessfully rebased and updated refs/heads/yarin-sandbox.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+[commit_push_sandbox] FAILED after 5 attempts
+=== Done. Thu Sep  3 10:23:28 UTC 2026 ===

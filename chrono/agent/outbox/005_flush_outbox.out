@@ -1,0 +1,38 @@
+# 005_flush_outbox  host=g0381  start=Wed Sep  2 04:19:20 UTC 2026  timeout=1800s
+# HEAD=5adc7c1f
+# ---------------------------------------------------------
+total 7
+drwx------ 2 yarin.b pwuser 4096 Sep  2 04:19 .
+drwx------ 2 yarin.b pwuser 4096 Sep  2 04:07 ..
+-rw------- 1 yarin.b pwuser    0 Sep  2 04:04 .gitkeep
+-rw------- 1 yarin.b pwuser 2903 Sep  2 04:06 001_status.out
+-rw------- 1 yarin.b pwuser  517 Sep  2 04:06 002_submit_C2.out
+-rw------- 1 yarin.b pwuser  523 Sep  2 04:16 003_submit_C2_rowl2.out
+-rw------- 1 yarin.b pwuser  887 Sep  2 04:17 004_submit_C3.out
+-rw------- 1 yarin.b pwuser  158 Sep  2 04:19 005_flush_outbox.out
+## squeue
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+             33315 voltagepa AGENT_ru  yarin.b  R      13:12      1 g0381
+## recent
+JobID                 JobName      State    Elapsed ExitCode 
+------------ ---------------- ---------- ---------- -------- 
+33315            AGENT_runner    RUNNING   00:13:12      0:0 
+33316                 C2_gate  COMPLETED   00:02:14      0:0 
+33317                 C2_gate  COMPLETED   00:02:02      0:0 
+33318_0               C3_emin     FAILED   00:00:29      1:0 
+33318_0.bat+            batch     FAILED   00:00:29      1:0 
+33318_0.ext+           extern  COMPLETED   00:00:29      0:0 
+33318_1               C3_emin     FAILED   00:00:48      1:0 
+33318_1.bat+            batch     FAILED   00:00:48      1:0 
+33318_1.ext+           extern  COMPLETED   00:00:48      0:0 
+33318_2               C3_emin     FAILED   00:00:46      1:0 
+33318_2.bat+            batch     FAILED   00:00:46      1:0 
+33318_2.ext+           extern  COMPLETED   00:00:46      0:0 
+33318_3               C3_emin     FAILED   00:00:36      1:0 
+33318_3.bat+            batch     FAILED   00:00:36      1:0 
+33318_3.ext+           extern  COMPLETED   00:00:36      0:0 
+33318_4               C3_emin     FAILED   00:00:31      1:0 
+33318_4.bat+            batch     FAILED   00:00:31      1:0 
+33318_4.ext+           extern  COMPLETED   00:00:31      0:0 
+# ---------------------------------------------------------
+# exit=0  end=Wed Sep  2 04:19:20 UTC 2026

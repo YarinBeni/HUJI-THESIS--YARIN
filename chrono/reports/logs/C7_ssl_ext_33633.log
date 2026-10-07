@@ -1,0 +1,19 @@
+# job 33633 C7_ssl_ext exit=1 Wed Sep  2 19:46:48 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C7_ssl_ext_33631_0.out
+=== C7 ssl extract thalesian_cunei400m L6,12 === job 33633 Wed Sep  2 19:46:25 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: 9ff85fb9
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 517, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 485, in main
+    raise ValueError("duplicate ids in --table")
+ValueError: duplicate ids in --table
+FAILED extract thalesian_cunei400m

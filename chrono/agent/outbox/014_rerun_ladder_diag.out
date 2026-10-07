@@ -1,0 +1,13 @@
+# 014_rerun_ladder_diag  host=g0381  start=Wed Sep  2 13:14:39 UTC 2026  timeout=1800s
+# HEAD=9b704ccb
+# ---------------------------------------------------------
+Submitted batch job 33445
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+       33445_[0-5] voltagepa C4_ladde  yarin.b PD       0:00      1 (Dependency)
+           33433_2 voltagepa C4_ladde  yarin.b  R      30:37      1 g0377
+           33433_3 voltagepa C4_ladde  yarin.b  R      30:37      1 g0377
+           33433_4 voltagepa C4_ladde  yarin.b  R      30:37      1 g0378
+           33433_5 voltagepa C4_ladde  yarin.b  R      30:37      1 g0378
+             33315 voltagepa AGENT_ru  yarin.b  R    9:08:34      1 g0381
+# ---------------------------------------------------------
+# exit=0  end=Wed Sep  2 13:14:42 UTC 2026

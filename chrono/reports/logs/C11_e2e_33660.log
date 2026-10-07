@@ -1,0 +1,1081 @@
+# job 33660 C11_e2e exit=0 Thu Sep  3 04:45:30 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C11_e2e_33660_7.out
+=== C11 e2e jepa XL === job 33660 Wed Sep  2 23:17:18 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+[e2e] e2e_jepa_XL-s0: size XL params 104.5M vocab 23044 train texts 24,589 objective jepa batch 192 budget 5.0h dev cuda
+[e2e] step 100 loss 0.8184 lr 3.00e-05 0.3 min
+[e2e] step 200 loss 0.1285 lr 6.00e-05 0.5 min
+[e2e] step 300 loss 0.0491 lr 9.00e-05 0.8 min
+[e2e] step 400 loss 0.0312 lr 1.20e-04 1.0 min
+[e2e] step 500 loss 0.0289 lr 1.50e-04 1.3 min
+[e2e] step 600 loss 0.0321 lr 1.80e-04 1.6 min
+[e2e] step 700 loss 0.0401 lr 2.10e-04 1.8 min
+[e2e] step 800 loss 0.0511 lr 2.40e-04 2.1 min
+[e2e] step 900 loss 0.0648 lr 2.70e-04 2.4 min
+[e2e] step 1000 loss 0.0837 lr 3.00e-04 2.6 min
+[e2e] step 1100 loss 0.1042 lr 3.00e-04 2.9 min
+[e2e] step 1200 loss 0.1200 lr 3.00e-04 3.2 min
+[e2e] step 1300 loss 0.1346 lr 3.00e-04 3.5 min
+[e2e] step 1400 loss 0.1442 lr 3.00e-04 3.7 min
+[e2e] step 1500 loss 0.1554 lr 3.00e-04 4.0 min
+[e2e] step 1600 loss 0.1616 lr 3.00e-04 4.2 min
+[e2e] step 1700 loss 0.1646 lr 3.00e-04 4.5 min
+[e2e] step 1800 loss 0.1698 lr 3.00e-04 4.8 min
+[e2e] step 1900 loss 0.1744 lr 3.00e-04 5.0 min
+[e2e] step 2000 loss 0.1818 lr 3.00e-04 5.3 min
+[e2e] step 2000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.841
+[e2e] step 2100 loss 0.1839 lr 3.00e-04 7.3 min
+[e2e] step 2200 loss 0.1900 lr 3.00e-04 7.6 min
+[e2e] step 2300 loss 0.1884 lr 3.00e-04 7.8 min
+[e2e] step 2400 loss 0.1959 lr 3.00e-04 8.1 min
+[e2e] step 2500 loss 0.2007 lr 3.00e-04 8.4 min
+[e2e] step 2600 loss 0.2014 lr 3.00e-04 8.6 min
+[e2e] step 2700 loss 0.2087 lr 3.00e-04 8.9 min
+[e2e] step 2800 loss 0.2114 lr 3.00e-04 9.1 min
+[e2e] step 2900 loss 0.2182 lr 3.00e-04 9.4 min
+[e2e] step 3000 loss 0.2187 lr 3.00e-04 9.7 min
+[e2e] step 3100 loss 0.2241 lr 3.00e-04 10.0 min
+[e2e] step 3200 loss 0.2287 lr 3.00e-04 10.2 min
+[e2e] step 3300 loss 0.2323 lr 3.00e-04 10.5 min
+[e2e] step 3400 loss 0.2392 lr 3.00e-04 10.7 min
+[e2e] step 3500 loss 0.2488 lr 3.00e-04 11.0 min
+[e2e] step 3600 loss 0.2492 lr 3.00e-04 11.3 min
+[e2e] step 3700 loss 0.2492 lr 3.00e-04 11.5 min
+[e2e] step 3800 loss 0.2586 lr 3.00e-04 11.8 min
+[e2e] step 3900 loss 0.2580 lr 3.00e-04 12.1 min
+[e2e] step 4000 loss 0.2625 lr 3.00e-04 12.4 min
+[e2e] step 4000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.842
+[e2e] step 4100 loss 0.2645 lr 3.00e-04 13.9 min
+[e2e] step 4200 loss 0.2708 lr 3.00e-04 14.2 min
+[e2e] step 4300 loss 0.2686 lr 3.00e-04 14.4 min
+[e2e] step 4400 loss 0.2782 lr 3.00e-04 14.7 min
+[e2e] step 4500 loss 0.2796 lr 3.00e-04 14.9 min
+[e2e] step 4600 loss 0.2794 lr 3.00e-04 15.2 min
+[e2e] step 4700 loss 0.2841 lr 3.00e-04 15.5 min
+[e2e] step 4800 loss 0.2834 lr 3.00e-04 15.7 min
+[e2e] step 4900 loss 0.2874 lr 3.00e-04 16.0 min
+[e2e] step 5000 loss 0.2949 lr 3.00e-04 16.2 min
+[e2e] step 5100 loss 0.2929 lr 3.00e-04 16.6 min
+[e2e] step 5200 loss 0.2932 lr 3.00e-04 16.8 min
+[e2e] step 5300 loss 0.2936 lr 3.00e-04 17.1 min
+[e2e] step 5400 loss 0.2925 lr 3.00e-04 17.3 min
+[e2e] step 5500 loss 0.3001 lr 3.00e-04 17.6 min
+[e2e] step 5600 loss 0.2949 lr 3.00e-04 17.9 min
+[e2e] step 5700 loss 0.2941 lr 3.00e-04 18.1 min
+[e2e] step 5800 loss 0.3015 lr 3.00e-04 18.4 min
+[e2e] step 5900 loss 0.3017 lr 3.00e-04 18.7 min
+[e2e] step 6000 loss 0.3002 lr 3.00e-04 18.9 min
+[e2e] step 6000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.849
+[e2e] step 6100 loss 0.3038 lr 3.00e-04 20.2 min
+[e2e] step 6200 loss 0.3094 lr 3.00e-04 20.5 min
+[e2e] step 6300 loss 0.3077 lr 3.00e-04 20.7 min
+[e2e] step 6400 loss 0.3020 lr 3.00e-04 21.0 min
+[e2e] step 6500 loss 0.3036 lr 3.00e-04 21.2 min
+[e2e] step 6600 loss 0.3019 lr 3.00e-04 21.5 min
+[e2e] step 6700 loss 0.2975 lr 3.00e-04 21.8 min
+[e2e] step 6800 loss 0.3048 lr 3.00e-04 22.0 min
+[e2e] step 6900 loss 0.3042 lr 3.00e-04 22.3 min
+[e2e] step 7000 loss 0.3043 lr 3.00e-04 22.6 min
+[e2e] step 7100 loss 0.3090 lr 3.00e-04 22.9 min
+[e2e] step 7200 loss 0.3057 lr 3.00e-04 23.1 min
+[e2e] step 7300 loss 0.3049 lr 3.00e-04 23.4 min
+[e2e] step 7400 loss 0.3042 lr 3.00e-04 23.6 min
+[e2e] step 7500 loss 0.3103 lr 3.00e-04 23.9 min
+[e2e] step 7600 loss 0.3070 lr 3.00e-04 24.2 min
+[e2e] step 7700 loss 0.3107 lr 3.00e-04 24.4 min
+[e2e] step 7800 loss 0.3060 lr 3.00e-04 24.7 min
+[e2e] step 7900 loss 0.3036 lr 3.00e-04 24.9 min
+[e2e] step 8000 loss 0.3125 lr 3.00e-04 25.2 min
+[e2e] step 8000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.815
+[e2e] step 8100 loss 0.3080 lr 3.00e-04 26.8 min
+[e2e] step 8200 loss 0.3078 lr 3.00e-04 27.1 min
+[e2e] step 8300 loss 0.3117 lr 3.00e-04 27.3 min
+[e2e] step 8400 loss 0.3086 lr 3.00e-04 27.6 min
+[e2e] step 8500 loss 0.3043 lr 3.00e-04 27.9 min
+[e2e] step 8600 loss 0.3130 lr 3.00e-04 28.1 min
+[e2e] step 8700 loss 0.3059 lr 3.00e-04 28.4 min
+[e2e] step 8800 loss 0.3139 lr 3.00e-04 28.6 min
+[e2e] step 8900 loss 0.3132 lr 3.00e-04 28.9 min
+[e2e] step 9000 loss 0.3103 lr 3.00e-04 29.2 min
+[e2e] step 9100 loss 0.3179 lr 3.00e-04 29.5 min
+[e2e] step 9200 loss 0.3145 lr 3.00e-04 29.7 min
+[e2e] step 9300 loss 0.3180 lr 3.00e-04 30.0 min
+[e2e] step 9400 loss 0.3082 lr 3.00e-04 30.3 min
+[e2e] step 9500 loss 0.3112 lr 3.00e-04 30.6 min
+[e2e] step 9600 loss 0.3101 lr 3.00e-04 30.8 min
+[e2e] step 9700 loss 0.3169 lr 3.00e-04 31.1 min
+[e2e] step 9800 loss 0.3133 lr 3.00e-04 31.4 min
+[e2e] step 9900 loss 0.3142 lr 3.00e-04 31.6 min
+[e2e] step 10000 loss 0.3178 lr 3.00e-04 31.9 min
+[e2e] step 10000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.828
+[e2e] step 10100 loss 0.3143 lr 3.00e-04 33.2 min
+[e2e] step 10200 loss 0.3148 lr 3.00e-04 33.4 min
+[e2e] step 10300 loss 0.3109 lr 3.00e-04 33.7 min
+[e2e] step 10400 loss 0.3079 lr 3.00e-04 33.9 min
+[e2e] step 10500 loss 0.3145 lr 3.00e-04 34.2 min
+[e2e] step 10600 loss 0.3139 lr 3.00e-04 34.5 min
+[e2e] step 10700 loss 0.3223 lr 3.00e-04 34.7 min
+[e2e] step 10800 loss 0.3139 lr 3.00e-04 35.0 min
+[e2e] step 10900 loss 0.3170 lr 3.00e-04 35.2 min
+[e2e] step 11000 loss 0.3186 lr 3.00e-04 35.5 min
+[e2e] step 11100 loss 0.3186 lr 3.00e-04 35.8 min
+[e2e] step 11200 loss 0.3196 lr 3.00e-04 36.1 min
+[e2e] step 11300 loss 0.3151 lr 3.00e-04 36.3 min
+[e2e] step 11400 loss 0.3137 lr 3.00e-04 36.6 min
+[e2e] step 11500 loss 0.3127 lr 3.00e-04 36.9 min
+[e2e] step 11600 loss 0.3153 lr 3.00e-04 37.1 min
+[e2e] step 11700 loss 0.3097 lr 3.00e-04 37.4 min
+[e2e] step 11800 loss 0.3165 lr 3.00e-04 37.6 min
+[e2e] step 11900 loss 0.3113 lr 3.00e-04 37.9 min
+[e2e] step 12000 loss 0.3114 lr 3.00e-04 38.2 min
+[e2e] step 12000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.841
+[e2e] step 12100 loss 0.3141 lr 3.00e-04 39.5 min
+[e2e] step 12200 loss 0.3160 lr 3.00e-04 39.8 min
+[e2e] step 12300 loss 0.3111 lr 3.00e-04 40.1 min
+[e2e] step 12400 loss 0.3143 lr 3.00e-04 40.3 min
+[e2e] step 12500 loss 0.3127 lr 3.00e-04 40.6 min
+[e2e] step 12600 loss 0.3125 lr 3.00e-04 40.8 min
+[e2e] step 12700 loss 0.3113 lr 3.00e-04 41.1 min
+[e2e] step 12800 loss 0.3151 lr 3.00e-04 41.4 min
+[e2e] step 12900 loss 0.3150 lr 3.00e-04 41.6 min
+[e2e] step 13000 loss 0.3146 lr 3.00e-04 41.9 min
+[e2e] step 13100 loss 0.3177 lr 3.00e-04 42.2 min
+[e2e] step 13200 loss 0.3130 lr 3.00e-04 42.4 min
+[e2e] step 13300 loss 0.3121 lr 3.00e-04 42.7 min
+[e2e] step 13400 loss 0.3152 lr 3.00e-04 43.0 min
+[e2e] step 13500 loss 0.3203 lr 3.00e-04 43.2 min
+[e2e] step 13600 loss 0.3146 lr 3.00e-04 43.5 min
+[e2e] step 13700 loss 0.3198 lr 3.00e-04 43.7 min
+[e2e] step 13800 loss 0.3083 lr 3.00e-04 44.0 min
+[e2e] step 13900 loss 0.3126 lr 3.00e-04 44.3 min
+[e2e] step 14000 loss 0.3139 lr 3.00e-04 44.5 min
+[e2e] step 14000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.812
+[e2e] step 14100 loss 0.3084 lr 3.00e-04 46.0 min
+[e2e] step 14200 loss 0.3133 lr 3.00e-04 46.3 min
+[e2e] step 14300 loss 0.3124 lr 3.00e-04 46.5 min
+[e2e] step 14400 loss 0.3150 lr 3.00e-04 46.8 min
+[e2e] step 14500 loss 0.3177 lr 3.00e-04 47.1 min
+[e2e] step 14600 loss 0.3140 lr 3.00e-04 47.3 min
+[e2e] step 14700 loss 0.3099 lr 3.00e-04 47.6 min
+[e2e] step 14800 loss 0.3105 lr 3.00e-04 47.8 min
+[e2e] step 14900 loss 0.3142 lr 3.00e-04 48.1 min
+[e2e] step 15000 loss 0.3109 lr 3.00e-04 48.4 min
+[e2e] step 15100 loss 0.3107 lr 3.00e-04 48.7 min
+[e2e] step 15200 loss 0.3153 lr 3.00e-04 48.9 min
+[e2e] step 15300 loss 0.3119 lr 3.00e-04 49.2 min
+[e2e] step 15400 loss 0.3104 lr 3.00e-04 49.5 min
+[e2e] step 15500 loss 0.3125 lr 3.00e-04 49.7 min
+[e2e] step 15600 loss 0.3063 lr 3.00e-04 50.0 min
+[e2e] step 15700 loss 0.3088 lr 3.00e-04 50.2 min
+[e2e] step 15800 loss 0.3133 lr 3.00e-04 50.5 min
+[e2e] step 15900 loss 0.3061 lr 3.00e-04 50.7 min
+[e2e] step 16000 loss 0.3076 lr 3.00e-04 51.0 min
+[e2e] step 16000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.836
+[e2e] step 16100 loss 0.3085 lr 3.00e-04 52.3 min
+[e2e] step 16200 loss 0.3035 lr 3.00e-04 52.5 min
+[e2e] step 16300 loss 0.3001 lr 3.00e-04 52.8 min
+[e2e] step 16400 loss 0.3060 lr 3.00e-04 53.1 min
+[e2e] step 16500 loss 0.3063 lr 3.00e-04 53.3 min
+[e2e] step 16600 loss 0.3134 lr 3.00e-04 53.6 min
+[e2e] step 16700 loss 0.3047 lr 3.00e-04 53.8 min
+[e2e] step 16800 loss 0.3014 lr 3.00e-04 54.1 min
+[e2e] step 16900 loss 0.3048 lr 3.00e-04 54.4 min
+[e2e] step 17000 loss 0.2979 lr 3.00e-04 54.6 min
+[e2e] step 17100 loss 0.3031 lr 3.00e-04 54.9 min
+[e2e] step 17200 loss 0.2993 lr 3.00e-04 55.2 min
+[e2e] step 17300 loss 0.2979 lr 3.00e-04 55.5 min
+[e2e] step 17400 loss 0.3003 lr 3.00e-04 55.7 min
+[e2e] step 17500 loss 0.2983 lr 3.00e-04 56.0 min
+[e2e] step 17600 loss 0.2990 lr 3.00e-04 56.3 min
+[e2e] step 17700 loss 0.3011 lr 3.00e-04 56.5 min
+[e2e] step 17800 loss 0.3045 lr 3.00e-04 56.8 min
+[e2e] step 17900 loss 0.2952 lr 3.00e-04 57.0 min
+[e2e] step 18000 loss 0.2979 lr 3.00e-04 57.3 min
+[e2e] step 18000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.821
+[e2e] step 18100 loss 0.2916 lr 3.00e-04 58.6 min
+[e2e] step 18200 loss 0.2961 lr 3.00e-04 58.8 min
+[e2e] step 18300 loss 0.2935 lr 3.00e-04 59.1 min
+[e2e] step 18400 loss 0.2915 lr 3.00e-04 59.4 min
+[e2e] step 18500 loss 0.2978 lr 3.00e-04 59.6 min
+[e2e] step 18600 loss 0.2878 lr 3.00e-04 59.9 min
+[e2e] step 18700 loss 0.2962 lr 3.00e-04 60.2 min
+[e2e] step 18800 loss 0.2924 lr 3.00e-04 60.4 min
+[e2e] step 18900 loss 0.2953 lr 3.00e-04 60.7 min
+[e2e] step 19000 loss 0.2958 lr 3.00e-04 61.0 min
+[e2e] step 19100 loss 0.2855 lr 3.00e-04 61.3 min
+[e2e] step 19200 loss 0.2936 lr 3.00e-04 61.6 min
+[e2e] step 19300 loss 0.2915 lr 3.00e-04 61.8 min
+[e2e] step 19400 loss 0.2963 lr 3.00e-04 62.1 min
+[e2e] step 19500 loss 0.3004 lr 3.00e-04 62.4 min
+[e2e] step 19600 loss 0.2912 lr 3.00e-04 62.6 min
+[e2e] step 19700 loss 0.3016 lr 3.00e-04 62.9 min
+[e2e] step 19800 loss 0.2919 lr 3.00e-04 63.2 min
+[e2e] step 19900 loss 0.2906 lr 3.00e-04 63.4 min
+[e2e] step 20000 loss 0.2948 lr 3.00e-04 63.7 min
+[e2e] step 20000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.814
+[e2e] step 20100 loss 0.2941 lr 3.00e-04 64.9 min
+[e2e] step 20200 loss 0.2953 lr 3.00e-04 65.1 min
+[e2e] step 20300 loss 0.2902 lr 3.00e-04 65.4 min
+[e2e] step 20400 loss 0.2905 lr 3.00e-04 65.6 min
+[e2e] step 20500 loss 0.2828 lr 3.00e-04 65.9 min
+[e2e] step 20600 loss 0.2912 lr 3.00e-04 66.2 min
+[e2e] step 20700 loss 0.2890 lr 3.00e-04 66.4 min
+[e2e] step 20800 loss 0.2964 lr 3.00e-04 66.7 min
+[e2e] step 20900 loss 0.2881 lr 3.00e-04 67.0 min
+[e2e] step 21000 loss 0.2892 lr 3.00e-04 67.2 min
+[e2e] step 21100 loss 0.2917 lr 3.00e-04 67.5 min
+[e2e] step 21200 loss 0.2910 lr 3.00e-04 67.8 min
+[e2e] step 21300 loss 0.2920 lr 3.00e-04 68.0 min
+[e2e] step 21400 loss 0.2886 lr 3.00e-04 68.3 min
+[e2e] step 21500 loss 0.2865 lr 3.00e-04 68.6 min
+[e2e] step 21600 loss 0.2898 lr 3.00e-04 68.8 min
+[e2e] step 21700 loss 0.2897 lr 3.00e-04 69.1 min
+[e2e] step 21800 loss 0.2851 lr 3.00e-04 69.3 min
+[e2e] step 21900 loss 0.2841 lr 3.00e-04 69.6 min
+[e2e] step 22000 loss 0.2849 lr 3.00e-04 69.9 min
+[e2e] step 22000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.820
+[e2e] step 22100 loss 0.2830 lr 3.00e-04 71.4 min
+[e2e] step 22200 loss 0.2871 lr 3.00e-04 71.7 min
+[e2e] step 22300 loss 0.2865 lr 3.00e-04 72.0 min
+[e2e] step 22400 loss 0.2857 lr 3.00e-04 72.2 min
+[e2e] step 22500 loss 0.2879 lr 3.00e-04 72.5 min
+[e2e] step 22600 loss 0.2838 lr 3.00e-04 72.7 min
+[e2e] step 22700 loss 0.2891 lr 3.00e-04 73.0 min
+[e2e] step 22800 loss 0.2837 lr 3.00e-04 73.2 min
+[e2e] step 22900 loss 0.2752 lr 3.00e-04 73.5 min
+[e2e] step 23000 loss 0.2835 lr 3.00e-04 73.8 min
+[e2e] step 23100 loss 0.2859 lr 3.00e-04 74.1 min
+[e2e] step 23200 loss 0.2860 lr 3.00e-04 74.3 min
+[e2e] step 23300 loss 0.2824 lr 3.00e-04 74.6 min
+[e2e] step 23400 loss 0.2761 lr 3.00e-04 74.9 min
+[e2e] step 23500 loss 0.2797 lr 3.00e-04 75.2 min
+[e2e] step 23600 loss 0.2817 lr 3.00e-04 75.4 min
+[e2e] step 23700 loss 0.2787 lr 3.00e-04 75.7 min
+[e2e] step 23800 loss 0.2826 lr 3.00e-04 76.0 min
+[e2e] step 23900 loss 0.2830 lr 3.00e-04 76.2 min
+[e2e] step 24000 loss 0.2786 lr 3.00e-04 76.5 min
+[e2e] step 24000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.818
+[e2e] step 24100 loss 0.2815 lr 3.00e-04 77.5 min
+[e2e] step 24200 loss 0.2810 lr 3.00e-04 77.8 min
+[e2e] step 24300 loss 0.2777 lr 3.00e-04 78.1 min
+[e2e] step 24400 loss 0.2794 lr 3.00e-04 78.3 min
+[e2e] step 24500 loss 0.2791 lr 3.00e-04 78.6 min
+[e2e] step 24600 loss 0.2818 lr 3.00e-04 78.8 min
+[e2e] step 24700 loss 0.2820 lr 3.00e-04 79.1 min
+[e2e] step 24800 loss 0.2789 lr 3.00e-04 79.4 min
+[e2e] step 24900 loss 0.2740 lr 3.00e-04 79.6 min
+[e2e] step 25000 loss 0.2789 lr 3.00e-04 79.9 min
+[e2e] step 25100 loss 0.2754 lr 3.00e-04 80.2 min
+[e2e] step 25200 loss 0.2778 lr 3.00e-04 80.5 min
+[e2e] step 25300 loss 0.2737 lr 3.00e-04 80.7 min
+[e2e] step 25400 loss 0.2715 lr 3.00e-04 81.0 min
+[e2e] step 25500 loss 0.2817 lr 3.00e-04 81.3 min
+[e2e] step 25600 loss 0.2736 lr 3.00e-04 81.5 min
+[e2e] step 25700 loss 0.2699 lr 3.00e-04 81.8 min
+[e2e] step 25800 loss 0.2681 lr 3.00e-04 82.0 min
+[e2e] step 25900 loss 0.2689 lr 3.00e-04 82.3 min
+[e2e] step 26000 loss 0.2694 lr 3.00e-04 82.6 min
+[e2e] step 26000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.831
+[e2e] step 26100 loss 0.2681 lr 3.00e-04 83.7 min
+[e2e] step 26200 loss 0.2742 lr 3.00e-04 83.9 min
+[e2e] step 26300 loss 0.2648 lr 3.00e-04 84.2 min
+[e2e] step 26400 loss 0.2652 lr 3.00e-04 84.5 min
+[e2e] step 26500 loss 0.2704 lr 3.00e-04 84.7 min
+[e2e] step 26600 loss 0.2706 lr 3.00e-04 85.0 min
+[e2e] step 26700 loss 0.2660 lr 3.00e-04 85.2 min
+[e2e] step 26800 loss 0.2652 lr 3.00e-04 85.5 min
+[e2e] step 26900 loss 0.2636 lr 3.00e-04 85.8 min
+[e2e] step 27000 loss 0.2662 lr 3.00e-04 86.0 min
+[e2e] step 27100 loss 0.2678 lr 3.00e-04 86.3 min
+[e2e] step 27200 loss 0.2687 lr 3.00e-04 86.6 min
+[e2e] step 27300 loss 0.2570 lr 3.00e-04 86.9 min
+[e2e] step 27400 loss 0.2638 lr 3.00e-04 87.1 min
+[e2e] step 27500 loss 0.2618 lr 3.00e-04 87.4 min
+[e2e] step 27600 loss 0.2612 lr 3.00e-04 87.7 min
+[e2e] step 27700 loss 0.2549 lr 3.00e-04 87.9 min
+[e2e] step 27800 loss 0.2614 lr 3.00e-04 88.2 min
+[e2e] step 27900 loss 0.2646 lr 3.00e-04 88.5 min
+[e2e] step 28000 loss 0.2617 lr 3.00e-04 88.8 min
+[e2e] step 28000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.819
+[e2e] step 28100 loss 0.2687 lr 3.00e-04 89.9 min
+[e2e] step 28200 loss 0.2598 lr 3.00e-04 90.2 min
+[e2e] step 28300 loss 0.2617 lr 3.00e-04 90.4 min
+[e2e] step 28400 loss 0.2554 lr 3.00e-04 90.7 min
+[e2e] step 28500 loss 0.2608 lr 3.00e-04 91.0 min
+[e2e] step 28600 loss 0.2567 lr 3.00e-04 91.2 min
+[e2e] step 28700 loss 0.2572 lr 3.00e-04 91.5 min
+[e2e] step 28800 loss 0.2615 lr 3.00e-04 91.8 min
+[e2e] step 28900 loss 0.2600 lr 3.00e-04 92.0 min
+[e2e] step 29000 loss 0.2624 lr 3.00e-04 92.3 min
+[e2e] step 29100 loss 0.2562 lr 3.00e-04 92.6 min
+[e2e] step 29200 loss 0.2615 lr 3.00e-04 92.9 min
+[e2e] step 29300 loss 0.2524 lr 3.00e-04 93.2 min
+[e2e] step 29400 loss 0.2537 lr 3.00e-04 93.4 min
+[e2e] step 29500 loss 0.2606 lr 3.00e-04 93.7 min
+[e2e] step 29600 loss 0.2552 lr 3.00e-04 93.9 min
+[e2e] step 29700 loss 0.2514 lr 3.00e-04 94.2 min
+[e2e] step 29800 loss 0.2548 lr 3.00e-04 94.5 min
+[e2e] step 29900 loss 0.2539 lr 3.00e-04 94.7 min
+[e2e] step 30000 loss 0.2569 lr 3.00e-04 95.0 min
+[e2e] step 30000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.844
+[e2e] step 30100 loss 0.2529 lr 3.00e-04 96.1 min
+[e2e] step 30200 loss 0.2573 lr 3.00e-04 96.4 min
+[e2e] step 30300 loss 0.2532 lr 3.00e-04 96.7 min
+[e2e] step 30400 loss 0.2472 lr 3.00e-04 96.9 min
+[e2e] step 30500 loss 0.2553 lr 3.00e-04 97.2 min
+[e2e] step 30600 loss 0.2523 lr 3.00e-04 97.4 min
+[e2e] step 30700 loss 0.2554 lr 3.00e-04 97.7 min
+[e2e] step 30800 loss 0.2611 lr 3.00e-04 98.0 min
+[e2e] step 30900 loss 0.2518 lr 3.00e-04 98.3 min
+[e2e] step 31000 loss 0.2516 lr 3.00e-04 98.5 min
+[e2e] step 31100 loss 0.2506 lr 3.00e-04 98.8 min
+[e2e] step 31200 loss 0.2529 lr 3.00e-04 99.1 min
+[e2e] step 31300 loss 0.2546 lr 3.00e-04 99.4 min
+[e2e] step 31400 loss 0.2537 lr 3.00e-04 99.6 min
+[e2e] step 31500 loss 0.2464 lr 3.00e-04 99.9 min
+[e2e] step 31600 loss 0.2528 lr 3.00e-04 100.1 min
+[e2e] step 31700 loss 0.2559 lr 3.00e-04 100.4 min
+[e2e] step 31800 loss 0.2483 lr 3.00e-04 100.7 min
+[e2e] step 31900 loss 0.2459 lr 3.00e-04 100.9 min
+[e2e] step 32000 loss 0.2428 lr 3.00e-04 101.2 min
+[e2e] step 32000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.832
+[e2e] step 32100 loss 0.2536 lr 3.00e-04 102.3 min
+[e2e] step 32200 loss 0.2451 lr 3.00e-04 102.6 min
+[e2e] step 32300 loss 0.2572 lr 3.00e-04 102.9 min
+[e2e] step 32400 loss 0.2463 lr 3.00e-04 103.1 min
+[e2e] step 32500 loss 0.2566 lr 3.00e-04 103.4 min
+[e2e] step 32600 loss 0.2495 lr 3.00e-04 103.6 min
+[e2e] step 32700 loss 0.2475 lr 3.00e-04 103.9 min
+[e2e] step 32800 loss 0.2493 lr 3.00e-04 104.2 min
+[e2e] step 32900 loss 0.2463 lr 3.00e-04 104.4 min
+[e2e] step 33000 loss 0.2468 lr 3.00e-04 104.7 min
+[e2e] step 33100 loss 0.2480 lr 3.00e-04 105.0 min
+[e2e] step 33200 loss 0.2454 lr 3.00e-04 105.3 min
+[e2e] step 33300 loss 0.2431 lr 3.00e-04 105.5 min
+[e2e] step 33400 loss 0.2417 lr 3.00e-04 105.8 min
+[e2e] step 33500 loss 0.2447 lr 3.00e-04 106.1 min
+[e2e] step 33600 loss 0.2465 lr 3.00e-04 106.3 min
+[e2e] step 33700 loss 0.2472 lr 3.00e-04 106.6 min
+[e2e] step 33800 loss 0.2422 lr 3.00e-04 106.9 min
+[e2e] step 33900 loss 0.2511 lr 3.00e-04 107.1 min
+[e2e] step 34000 loss 0.2461 lr 3.00e-04 107.4 min
+[e2e] step 34000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.833
+[e2e] step 34100 loss 0.2437 lr 3.00e-04 108.5 min
+[e2e] step 34200 loss 0.2380 lr 3.00e-04 108.7 min
+[e2e] step 34300 loss 0.2442 lr 3.00e-04 109.0 min
+[e2e] step 34400 loss 0.2451 lr 3.00e-04 109.3 min
+[e2e] step 34500 loss 0.2477 lr 3.00e-04 109.5 min
+[e2e] step 34600 loss 0.2467 lr 3.00e-04 109.8 min
+[e2e] step 34700 loss 0.2382 lr 3.00e-04 110.0 min
+[e2e] step 34800 loss 0.2448 lr 3.00e-04 110.3 min
+[e2e] step 34900 loss 0.2413 lr 3.00e-04 110.6 min
+[e2e] step 35000 loss 0.2417 lr 3.00e-04 110.8 min
+[e2e] step 35100 loss 0.2423 lr 3.00e-04 111.1 min
+[e2e] step 35200 loss 0.2436 lr 3.00e-04 111.4 min
+[e2e] step 35300 loss 0.2430 lr 3.00e-04 111.6 min
+[e2e] step 35400 loss 0.2431 lr 3.00e-04 111.9 min
+[e2e] step 35500 loss 0.2418 lr 3.00e-04 112.2 min
+[e2e] step 35600 loss 0.2459 lr 3.00e-04 112.4 min
+[e2e] step 35700 loss 0.2409 lr 3.00e-04 112.7 min
+[e2e] step 35800 loss 0.2452 lr 3.00e-04 113.0 min
+[e2e] step 35900 loss 0.2374 lr 3.00e-04 113.2 min
+[e2e] step 36000 loss 0.2451 lr 3.00e-04 113.5 min
+[e2e] step 36000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.818
+[e2e] step 36100 loss 0.2414 lr 3.00e-04 114.6 min
+[e2e] step 36200 loss 0.2394 lr 3.00e-04 114.9 min
+[e2e] step 36300 loss 0.2366 lr 3.00e-04 115.1 min
+[e2e] step 36400 loss 0.2418 lr 3.00e-04 115.4 min
+[e2e] step 36500 loss 0.2412 lr 3.00e-04 115.7 min
+[e2e] step 36600 loss 0.2407 lr 3.00e-04 115.9 min
+[e2e] step 36700 loss 0.2393 lr 3.00e-04 116.2 min
+[e2e] step 36800 loss 0.2405 lr 3.00e-04 116.4 min
+[e2e] step 36900 loss 0.2355 lr 3.00e-04 116.7 min
+[e2e] step 37000 loss 0.2339 lr 3.00e-04 117.0 min
+[e2e] step 37100 loss 0.2375 lr 3.00e-04 117.3 min
+[e2e] step 37200 loss 0.2281 lr 3.00e-04 117.5 min
+[e2e] step 37300 loss 0.2394 lr 3.00e-04 117.8 min
+[e2e] step 37400 loss 0.2379 lr 3.00e-04 118.1 min
+[e2e] step 37500 loss 0.2399 lr 3.00e-04 118.3 min
+[e2e] step 37600 loss 0.2376 lr 3.00e-04 118.6 min
+[e2e] step 37700 loss 0.2424 lr 3.00e-04 118.8 min
+[e2e] step 37800 loss 0.2403 lr 3.00e-04 119.1 min
+[e2e] step 37900 loss 0.2327 lr 3.00e-04 119.4 min
+[e2e] step 38000 loss 0.2286 lr 3.00e-04 119.6 min
+[e2e] step 38000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.819
+[e2e] step 38100 loss 0.2355 lr 3.00e-04 120.6 min
+[e2e] step 38200 loss 0.2382 lr 3.00e-04 120.8 min
+[e2e] step 38300 loss 0.2375 lr 3.00e-04 121.1 min
+[e2e] step 38400 loss 0.2334 lr 3.00e-04 121.4 min
+[e2e] step 38500 loss 0.2320 lr 3.00e-04 121.6 min
+[e2e] step 38600 loss 0.2345 lr 3.00e-04 121.9 min
+[e2e] step 38700 loss 0.2328 lr 3.00e-04 122.2 min
+[e2e] step 38800 loss 0.2355 lr 3.00e-04 122.4 min
+[e2e] step 38900 loss 0.2413 lr 3.00e-04 122.7 min
+[e2e] step 39000 loss 0.2334 lr 3.00e-04 123.0 min
+[e2e] step 39100 loss 0.2275 lr 3.00e-04 123.3 min
+[e2e] step 39200 loss 0.2381 lr 3.00e-04 123.6 min
+[e2e] step 39300 loss 0.2334 lr 3.00e-04 123.9 min
+[e2e] step 39400 loss 0.2268 lr 3.00e-04 124.1 min
+[e2e] step 39500 loss 0.2322 lr 3.00e-04 124.4 min
+[e2e] step 39600 loss 0.2340 lr 3.00e-04 124.6 min
+[e2e] step 39700 loss 0.2265 lr 3.00e-04 124.9 min
+[e2e] step 39800 loss 0.2318 lr 3.00e-04 125.2 min
+[e2e] step 39900 loss 0.2327 lr 3.00e-04 125.4 min
+[e2e] step 40000 loss 0.2289 lr 3.00e-04 125.7 min
+[e2e] step 40000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.838
+[e2e] step 40100 loss 0.2280 lr 3.00e-04 126.8 min
+[e2e] step 40200 loss 0.2321 lr 3.00e-04 127.1 min
+[e2e] step 40300 loss 0.2297 lr 3.00e-04 127.4 min
+[e2e] step 40400 loss 0.2302 lr 3.00e-04 127.6 min
+[e2e] step 40500 loss 0.2287 lr 3.00e-04 127.9 min
+[e2e] step 40600 loss 0.2381 lr 3.00e-04 128.2 min
+[e2e] step 40700 loss 0.2326 lr 3.00e-04 128.4 min
+[e2e] step 40800 loss 0.2257 lr 3.00e-04 128.7 min
+[e2e] step 40900 loss 0.2283 lr 3.00e-04 129.0 min
+[e2e] step 41000 loss 0.2296 lr 3.00e-04 129.2 min
+[e2e] step 41100 loss 0.2265 lr 3.00e-04 129.5 min
+[e2e] step 41200 loss 0.2385 lr 3.00e-04 129.8 min
+[e2e] step 41300 loss 0.2250 lr 3.00e-04 130.1 min
+[e2e] step 41400 loss 0.2339 lr 3.00e-04 130.3 min
+[e2e] step 41500 loss 0.2289 lr 3.00e-04 130.6 min
+[e2e] step 41600 loss 0.2306 lr 3.00e-04 130.8 min
+[e2e] step 41700 loss 0.2293 lr 3.00e-04 131.1 min
+[e2e] step 41800 loss 0.2329 lr 3.00e-04 131.4 min
+[e2e] step 41900 loss 0.2274 lr 3.00e-04 131.6 min
+[e2e] step 42000 loss 0.2369 lr 3.00e-04 131.9 min
+[e2e] step 42000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.806
+[e2e] step 42100 loss 0.2313 lr 3.00e-04 132.9 min
+[e2e] step 42200 loss 0.2185 lr 3.00e-04 133.1 min
+[e2e] step 42300 loss 0.2276 lr 3.00e-04 133.4 min
+[e2e] step 42400 loss 0.2230 lr 3.00e-04 133.7 min
+[e2e] step 42500 loss 0.2282 lr 3.00e-04 133.9 min
+[e2e] step 42600 loss 0.2201 lr 3.00e-04 134.2 min
+[e2e] step 42700 loss 0.2250 lr 3.00e-04 134.4 min
+[e2e] step 42800 loss 0.2251 lr 3.00e-04 134.7 min
+[e2e] step 42900 loss 0.2276 lr 3.00e-04 135.0 min
+[e2e] step 43000 loss 0.2282 lr 3.00e-04 135.3 min
+[e2e] step 43100 loss 0.2224 lr 3.00e-04 135.6 min
+[e2e] step 43200 loss 0.2269 lr 3.00e-04 135.8 min
+[e2e] step 43300 loss 0.2269 lr 3.00e-04 136.1 min
+[e2e] step 43400 loss 0.2283 lr 3.00e-04 136.4 min
+[e2e] step 43500 loss 0.2270 lr 3.00e-04 136.6 min
+[e2e] step 43600 loss 0.2253 lr 3.00e-04 136.9 min
+[e2e] step 43700 loss 0.2253 lr 3.00e-04 137.2 min
+[e2e] step 43800 loss 0.2264 lr 3.00e-04 137.4 min
+[e2e] step 43900 loss 0.2252 lr 3.00e-04 137.7 min
+[e2e] step 44000 loss 0.2168 lr 3.00e-04 138.0 min
+[e2e] step 44000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.831
+[e2e] step 44100 loss 0.2214 lr 3.00e-04 139.1 min
+[e2e] step 44200 loss 0.2224 lr 3.00e-04 139.4 min
+[e2e] step 44300 loss 0.2248 lr 3.00e-04 139.6 min
+[e2e] step 44400 loss 0.2278 lr 3.00e-04 139.9 min
+[e2e] step 44500 loss 0.2267 lr 3.00e-04 140.2 min
+[e2e] step 44600 loss 0.2265 lr 3.00e-04 140.5 min
+[e2e] step 44700 loss 0.2215 lr 3.00e-04 140.8 min
+[e2e] step 44800 loss 0.2187 lr 3.00e-04 141.0 min
+[e2e] step 44900 loss 0.2245 lr 3.00e-04 141.3 min
+[e2e] step 45000 loss 0.2169 lr 3.00e-04 141.6 min
+[e2e] step 45100 loss 0.2309 lr 3.00e-04 141.9 min
+[e2e] step 45200 loss 0.2153 lr 3.00e-04 142.1 min
+[e2e] step 45300 loss 0.2230 lr 3.00e-04 142.4 min
+[e2e] step 45400 loss 0.2232 lr 3.00e-04 142.7 min
+[e2e] step 45500 loss 0.2187 lr 3.00e-04 142.9 min
+[e2e] step 45600 loss 0.2197 lr 3.00e-04 143.2 min
+[e2e] step 45700 loss 0.2229 lr 3.00e-04 143.4 min
+[e2e] step 45800 loss 0.2221 lr 3.00e-04 143.7 min
+[e2e] step 45900 loss 0.2204 lr 3.00e-04 144.0 min
+[e2e] step 46000 loss 0.2313 lr 3.00e-04 144.2 min
+[e2e] step 46000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.827
+[e2e] step 46100 loss 0.2175 lr 3.00e-04 145.5 min
+[e2e] step 46200 loss 0.2191 lr 3.00e-04 145.7 min
+[e2e] step 46300 loss 0.2169 lr 3.00e-04 146.0 min
+[e2e] step 46400 loss 0.2253 lr 3.00e-04 146.3 min
+[e2e] step 46500 loss 0.2177 lr 3.00e-04 146.5 min
+[e2e] step 46600 loss 0.2267 lr 3.00e-04 146.8 min
+[e2e] step 46700 loss 0.2172 lr 3.00e-04 147.0 min
+[e2e] step 46800 loss 0.2125 lr 3.00e-04 147.3 min
+[e2e] step 46900 loss 0.2245 lr 3.00e-04 147.5 min
+[e2e] step 47000 loss 0.2205 lr 3.00e-04 147.8 min
+[e2e] step 47100 loss 0.2200 lr 3.00e-04 148.1 min
+[e2e] step 47200 loss 0.2203 lr 3.00e-04 148.4 min
+[e2e] step 47300 loss 0.2214 lr 3.00e-04 148.7 min
+[e2e] step 47400 loss 0.2112 lr 3.00e-04 148.9 min
+[e2e] step 47500 loss 0.2139 lr 3.00e-04 149.2 min
+[e2e] step 47600 loss 0.2208 lr 3.00e-04 149.5 min
+[e2e] step 47700 loss 0.2230 lr 3.00e-04 149.7 min
+[e2e] step 47800 loss 0.2222 lr 3.00e-04 150.0 min
+[e2e] step 47900 loss 0.2158 lr 3.00e-04 150.2 min
+[e2e] step 48000 loss 0.2184 lr 3.00e-04 150.5 min
+[e2e] step 48000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.812
+[e2e] step 48100 loss 0.2116 lr 3.00e-04 151.6 min
+[e2e] step 48200 loss 0.2127 lr 3.00e-04 151.8 min
+[e2e] step 48300 loss 0.2124 lr 3.00e-04 152.1 min
+[e2e] step 48400 loss 0.2197 lr 3.00e-04 152.3 min
+[e2e] step 48500 loss 0.2183 lr 3.00e-04 152.6 min
+[e2e] step 48600 loss 0.2233 lr 3.00e-04 152.9 min
+[e2e] step 48700 loss 0.2192 lr 3.00e-04 153.2 min
+[e2e] step 48800 loss 0.2172 lr 3.00e-04 153.4 min
+[e2e] step 48900 loss 0.2204 lr 3.00e-04 153.7 min
+[e2e] step 49000 loss 0.2176 lr 3.00e-04 154.0 min
+[e2e] step 49100 loss 0.2142 lr 3.00e-04 154.3 min
+[e2e] step 49200 loss 0.2182 lr 3.00e-04 154.5 min
+[e2e] step 49300 loss 0.2129 lr 3.00e-04 154.8 min
+[e2e] step 49400 loss 0.2111 lr 3.00e-04 155.1 min
+[e2e] step 49500 loss 0.2158 lr 3.00e-04 155.3 min
+[e2e] step 49600 loss 0.2143 lr 3.00e-04 155.6 min
+[e2e] step 49700 loss 0.2077 lr 3.00e-04 155.9 min
+[e2e] step 49800 loss 0.2171 lr 3.00e-04 156.1 min
+[e2e] step 49900 loss 0.2170 lr 3.00e-04 156.4 min
+[e2e] step 50000 loss 0.2124 lr 3.00e-04 156.6 min
+[e2e] step 50000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.841
+[e2e] step 50100 loss 0.2112 lr 3.00e-04 157.7 min
+[e2e] step 50200 loss 0.2195 lr 3.00e-04 157.9 min
+[e2e] step 50300 loss 0.2153 lr 3.00e-04 158.2 min
+[e2e] step 50400 loss 0.2178 lr 3.00e-04 158.5 min
+[e2e] step 50500 loss 0.2118 lr 3.00e-04 158.7 min
+[e2e] step 50600 loss 0.2111 lr 3.00e-04 159.0 min
+[e2e] step 50700 loss 0.2020 lr 3.00e-04 159.2 min
+[e2e] step 50800 loss 0.2195 lr 3.00e-04 159.5 min
+[e2e] step 50900 loss 0.2093 lr 3.00e-04 159.8 min
+[e2e] step 51000 loss 0.2166 lr 3.00e-04 160.0 min
+[e2e] step 51100 loss 0.2084 lr 3.00e-04 160.3 min
+[e2e] step 51200 loss 0.2094 lr 3.00e-04 160.6 min
+[e2e] step 51300 loss 0.2141 lr 3.00e-04 160.9 min
+[e2e] step 51400 loss 0.2089 lr 3.00e-04 161.1 min
+[e2e] step 51500 loss 0.2077 lr 3.00e-04 161.4 min
+[e2e] step 51600 loss 0.2121 lr 3.00e-04 161.6 min
+[e2e] step 51700 loss 0.2105 lr 3.00e-04 161.9 min
+[e2e] step 51800 loss 0.2045 lr 3.00e-04 162.2 min
+[e2e] step 51900 loss 0.1987 lr 3.00e-04 162.4 min
+[e2e] step 52000 loss 0.2030 lr 3.00e-04 162.7 min
+[e2e] step 52000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.816
+[e2e] step 52100 loss 0.2089 lr 3.00e-04 164.0 min
+[e2e] step 52200 loss 0.2110 lr 3.00e-04 164.2 min
+[e2e] step 52300 loss 0.2099 lr 3.00e-04 164.5 min
+[e2e] step 52400 loss 0.2064 lr 3.00e-04 164.7 min
+[e2e] step 52500 loss 0.2068 lr 3.00e-04 165.0 min
+[e2e] step 52600 loss 0.2102 lr 3.00e-04 165.3 min
+[e2e] step 52700 loss 0.2015 lr 3.00e-04 165.5 min
+[e2e] step 52800 loss 0.2081 lr 3.00e-04 165.8 min
+[e2e] step 52900 loss 0.2026 lr 3.00e-04 166.0 min
+[e2e] step 53000 loss 0.2087 lr 3.00e-04 166.3 min
+[e2e] step 53100 loss 0.2015 lr 3.00e-04 166.6 min
+[e2e] step 53200 loss 0.2067 lr 3.00e-04 166.9 min
+[e2e] step 53300 loss 0.2122 lr 3.00e-04 167.2 min
+[e2e] step 53400 loss 0.2089 lr 3.00e-04 167.4 min
+[e2e] step 53500 loss 0.2085 lr 3.00e-04 167.7 min
+[e2e] step 53600 loss 0.1979 lr 3.00e-04 167.9 min
+[e2e] step 53700 loss 0.2081 lr 3.00e-04 168.2 min
+[e2e] step 53800 loss 0.2083 lr 3.00e-04 168.5 min
+[e2e] step 53900 loss 0.2046 lr 3.00e-04 168.7 min
+[e2e] step 54000 loss 0.2060 lr 3.00e-04 169.0 min
+[e2e] step 54000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.825
+[e2e] step 54100 loss 0.2014 lr 3.00e-04 170.3 min
+[e2e] step 54200 loss 0.2026 lr 3.00e-04 170.6 min
+[e2e] step 54300 loss 0.1985 lr 3.00e-04 170.8 min
+[e2e] step 54400 loss 0.2025 lr 3.00e-04 171.1 min
+[e2e] step 54500 loss 0.2107 lr 3.00e-04 171.4 min
+[e2e] step 54600 loss 0.2033 lr 3.00e-04 171.6 min
+[e2e] step 54700 loss 0.2036 lr 3.00e-04 171.9 min
+[e2e] step 54800 loss 0.2085 lr 3.00e-04 172.2 min
+[e2e] step 54900 loss 0.1997 lr 3.00e-04 172.4 min
+[e2e] step 55000 loss 0.2052 lr 3.00e-04 172.7 min
+[e2e] step 55100 loss 0.2078 lr 3.00e-04 173.0 min
+[e2e] step 55200 loss 0.1992 lr 3.00e-04 173.3 min
+[e2e] step 55300 loss 0.2015 lr 3.00e-04 173.5 min
+[e2e] step 55400 loss 0.2021 lr 3.00e-04 173.8 min
+[e2e] step 55500 loss 0.2033 lr 3.00e-04 174.1 min
+[e2e] step 55600 loss 0.1994 lr 3.00e-04 174.3 min
+[e2e] step 55700 loss 0.2060 lr 3.00e-04 174.6 min
+[e2e] step 55800 loss 0.1968 lr 3.00e-04 174.8 min
+[e2e] step 55900 loss 0.1983 lr 3.00e-04 175.1 min
+[e2e] step 56000 loss 0.1967 lr 3.00e-04 175.4 min
+[e2e] step 56000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.819
+[e2e] step 56100 loss 0.1957 lr 3.00e-04 176.4 min
+[e2e] step 56200 loss 0.2001 lr 3.00e-04 176.7 min
+[e2e] step 56300 loss 0.2073 lr 3.00e-04 176.9 min
+[e2e] step 56400 loss 0.1970 lr 3.00e-04 177.2 min
+[e2e] step 56500 loss 0.2067 lr 3.00e-04 177.5 min
+[e2e] step 56600 loss 0.1949 lr 3.00e-04 177.7 min
+[e2e] step 56700 loss 0.1920 lr 3.00e-04 178.0 min
+[e2e] step 56800 loss 0.1987 lr 3.00e-04 178.3 min
+[e2e] step 56900 loss 0.1990 lr 3.00e-04 178.5 min
+[e2e] step 57000 loss 0.1994 lr 3.00e-04 178.8 min
+[e2e] step 57100 loss 0.1924 lr 3.00e-04 179.1 min
+[e2e] step 57200 loss 0.1943 lr 3.00e-04 179.3 min
+[e2e] step 57300 loss 0.1972 lr 3.00e-04 179.6 min
+[e2e] step 57400 loss 0.2039 lr 3.00e-04 179.9 min
+[e2e] step 57500 loss 0.1975 lr 3.00e-04 180.1 min
+[e2e] step 57600 loss 0.2020 lr 3.00e-04 180.4 min
+[e2e] step 57700 loss 0.1995 lr 3.00e-04 180.6 min
+[e2e] step 57800 loss 0.1962 lr 3.00e-04 180.9 min
+[e2e] step 57900 loss 0.1981 lr 3.00e-04 181.1 min
+[e2e] step 58000 loss 0.1910 lr 3.00e-04 181.4 min
+[e2e] step 58000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.833
+[e2e] step 58100 loss 0.1996 lr 3.00e-04 182.5 min
+[e2e] step 58200 loss 0.1933 lr 3.00e-04 182.8 min
+[e2e] step 58300 loss 0.1958 lr 3.00e-04 183.0 min
+[e2e] step 58400 loss 0.1987 lr 3.00e-04 183.3 min
+[e2e] step 58500 loss 0.2003 lr 3.00e-04 183.6 min
+[e2e] step 58600 loss 0.1952 lr 3.00e-04 183.8 min
+[e2e] step 58700 loss 0.1956 lr 3.00e-04 184.1 min
+[e2e] step 58800 loss 0.1989 lr 3.00e-04 184.4 min
+[e2e] step 58900 loss 0.1933 lr 3.00e-04 184.6 min
+[e2e] step 59000 loss 0.1919 lr 3.00e-04 184.9 min
+[e2e] step 59100 loss 0.1989 lr 3.00e-04 185.2 min
+[e2e] step 59200 loss 0.1929 lr 3.00e-04 185.5 min
+[e2e] step 59300 loss 0.1990 lr 3.00e-04 185.7 min
+[e2e] step 59400 loss 0.1917 lr 3.00e-04 186.0 min
+[e2e] step 59500 loss 0.1868 lr 3.00e-04 186.3 min
+[e2e] step 59600 loss 0.1884 lr 3.00e-04 186.6 min
+[e2e] step 59700 loss 0.1885 lr 3.00e-04 186.8 min
+[e2e] step 59800 loss 0.1937 lr 3.00e-04 187.1 min
+[e2e] step 59900 loss 0.1944 lr 3.00e-04 187.3 min
+[e2e] step 60000 loss 0.1956 lr 3.00e-04 187.6 min
+[e2e] step 60000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.823
+[e2e] step 60100 loss 0.1931 lr 3.00e-04 188.6 min
+[e2e] step 60200 loss 0.1998 lr 3.00e-04 188.8 min
+[e2e] step 60300 loss 0.1839 lr 3.00e-04 189.1 min
+[e2e] step 60400 loss 0.1878 lr 3.00e-04 189.4 min
+[e2e] step 60500 loss 0.1919 lr 3.00e-04 189.6 min
+[e2e] step 60600 loss 0.1913 lr 3.00e-04 189.9 min
+[e2e] step 60700 loss 0.1929 lr 3.00e-04 190.1 min
+[e2e] step 60800 loss 0.1872 lr 3.00e-04 190.4 min
+[e2e] step 60900 loss 0.1900 lr 3.00e-04 190.7 min
+[e2e] step 61000 loss 0.1954 lr 3.00e-04 190.9 min
+[e2e] step 61100 loss 0.1932 lr 3.00e-04 191.3 min
+[e2e] step 61200 loss 0.1905 lr 3.00e-04 191.5 min
+[e2e] step 61300 loss 0.1987 lr 3.00e-04 191.8 min
+[e2e] step 61400 loss 0.1921 lr 3.00e-04 192.1 min
+[e2e] step 61500 loss 0.1958 lr 3.00e-04 192.3 min
+[e2e] step 61600 loss 0.1911 lr 3.00e-04 192.6 min
+[e2e] step 61700 loss 0.1959 lr 3.00e-04 192.8 min
+[e2e] step 61800 loss 0.1930 lr 3.00e-04 193.1 min
+[e2e] step 61900 loss 0.1885 lr 3.00e-04 193.4 min
+[e2e] step 62000 loss 0.1946 lr 3.00e-04 193.6 min
+[e2e] step 62000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.824
+[e2e] step 62100 loss 0.1846 lr 3.00e-04 194.7 min
+[e2e] step 62200 loss 0.1941 lr 3.00e-04 195.0 min
+[e2e] step 62300 loss 0.1903 lr 3.00e-04 195.2 min
+[e2e] step 62400 loss 0.1857 lr 3.00e-04 195.5 min
+[e2e] step 62500 loss 0.1902 lr 3.00e-04 195.8 min
+[e2e] step 62600 loss 0.1880 lr 3.00e-04 196.0 min
+[e2e] step 62700 loss 0.1852 lr 3.00e-04 196.3 min
+[e2e] step 62800 loss 0.1845 lr 3.00e-04 196.5 min
+[e2e] step 62900 loss 0.1854 lr 3.00e-04 196.8 min
+[e2e] step 63000 loss 0.1875 lr 3.00e-04 197.1 min
+[e2e] step 63100 loss 0.1882 lr 3.00e-04 197.4 min
+[e2e] step 63200 loss 0.1889 lr 3.00e-04 197.6 min
+[e2e] step 63300 loss 0.1859 lr 3.00e-04 197.9 min
+[e2e] step 63400 loss 0.1914 lr 3.00e-04 198.2 min
+[e2e] step 63500 loss 0.1870 lr 3.00e-04 198.4 min
+[e2e] step 63600 loss 0.1886 lr 3.00e-04 198.7 min
+[e2e] step 63700 loss 0.1892 lr 3.00e-04 199.0 min
+[e2e] step 63800 loss 0.1858 lr 3.00e-04 199.2 min
+[e2e] step 63900 loss 0.1903 lr 3.00e-04 199.5 min
+[e2e] step 64000 loss 0.1935 lr 3.00e-04 199.8 min
+[e2e] step 64000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.816
+[e2e] step 64100 loss 0.1794 lr 3.00e-04 201.0 min
+[e2e] step 64200 loss 0.1838 lr 3.00e-04 201.3 min
+[e2e] step 64300 loss 0.1852 lr 3.00e-04 201.5 min
+[e2e] step 64400 loss 0.1823 lr 3.00e-04 201.8 min
+[e2e] step 64500 loss 0.1846 lr 3.00e-04 202.1 min
+[e2e] step 64600 loss 0.1854 lr 3.00e-04 202.3 min
+[e2e] step 64700 loss 0.1874 lr 3.00e-04 202.6 min
+[e2e] step 64800 loss 0.1874 lr 3.00e-04 202.9 min
+[e2e] step 64900 loss 0.1811 lr 3.00e-04 203.2 min
+[e2e] step 65000 loss 0.1871 lr 3.00e-04 203.4 min
+[e2e] step 65100 loss 0.1825 lr 3.00e-04 203.8 min
+[e2e] step 65200 loss 0.1829 lr 3.00e-04 204.0 min
+[e2e] step 65300 loss 0.1856 lr 3.00e-04 204.3 min
+[e2e] step 65400 loss 0.1733 lr 3.00e-04 204.6 min
+[e2e] step 65500 loss 0.1825 lr 3.00e-04 204.8 min
+[e2e] step 65600 loss 0.1808 lr 3.00e-04 205.1 min
+[e2e] step 65700 loss 0.1806 lr 3.00e-04 205.4 min
+[e2e] step 65800 loss 0.1865 lr 3.00e-04 205.6 min
+[e2e] step 65900 loss 0.1784 lr 3.00e-04 205.9 min
+[e2e] step 66000 loss 0.1829 lr 3.00e-04 206.2 min
+[e2e] step 66000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.822
+[e2e] step 66100 loss 0.1845 lr 3.00e-04 207.2 min
+[e2e] step 66200 loss 0.1864 lr 3.00e-04 207.5 min
+[e2e] step 66300 loss 0.1869 lr 3.00e-04 207.7 min
+[e2e] step 66400 loss 0.1824 lr 3.00e-04 208.0 min
+[e2e] step 66500 loss 0.1770 lr 3.00e-04 208.3 min
+[e2e] step 66600 loss 0.1819 lr 3.00e-04 208.5 min
+[e2e] step 66700 loss 0.1807 lr 3.00e-04 208.8 min
+[e2e] step 66800 loss 0.1874 lr 3.00e-04 209.1 min
+[e2e] step 66900 loss 0.1779 lr 3.00e-04 209.3 min
+[e2e] step 67000 loss 0.1790 lr 3.00e-04 209.6 min
+[e2e] step 67100 loss 0.1846 lr 3.00e-04 209.9 min
+[e2e] step 67200 loss 0.1779 lr 3.00e-04 210.2 min
+[e2e] step 67300 loss 0.1778 lr 3.00e-04 210.5 min
+[e2e] step 67400 loss 0.1828 lr 3.00e-04 210.7 min
+[e2e] step 67500 loss 0.1771 lr 3.00e-04 211.0 min
+[e2e] step 67600 loss 0.1828 lr 3.00e-04 211.2 min
+[e2e] step 67700 loss 0.1728 lr 3.00e-04 211.5 min
+[e2e] step 67800 loss 0.1796 lr 3.00e-04 211.8 min
+[e2e] step 67900 loss 0.1813 lr 3.00e-04 212.1 min
+[e2e] step 68000 loss 0.1785 lr 3.00e-04 212.3 min
+[e2e] step 68000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.832
+[e2e] step 68100 loss 0.1863 lr 3.00e-04 213.5 min
+[e2e] step 68200 loss 0.1793 lr 3.00e-04 213.7 min
+[e2e] step 68300 loss 0.1800 lr 3.00e-04 214.0 min
+[e2e] step 68400 loss 0.1781 lr 3.00e-04 214.3 min
+[e2e] step 68500 loss 0.1741 lr 3.00e-04 214.5 min
+[e2e] step 68600 loss 0.1814 lr 3.00e-04 214.8 min
+[e2e] step 68700 loss 0.1802 lr 3.00e-04 215.1 min
+[e2e] step 68800 loss 0.1770 lr 3.00e-04 215.3 min
+[e2e] step 68900 loss 0.1784 lr 3.00e-04 215.6 min
+[e2e] step 69000 loss 0.1701 lr 3.00e-04 215.8 min
+[e2e] step 69100 loss 0.1725 lr 3.00e-04 216.2 min
+[e2e] step 69200 loss 0.1771 lr 3.00e-04 216.4 min
+[e2e] step 69300 loss 0.1759 lr 3.00e-04 216.7 min
+[e2e] step 69400 loss 0.1791 lr 3.00e-04 217.0 min
+[e2e] step 69500 loss 0.1778 lr 3.00e-04 217.3 min
+[e2e] step 69600 loss 0.1805 lr 3.00e-04 217.5 min
+[e2e] step 69700 loss 0.1758 lr 3.00e-04 217.8 min
+[e2e] step 69800 loss 0.1806 lr 3.00e-04 218.0 min
+[e2e] step 69900 loss 0.1737 lr 3.00e-04 218.3 min
+[e2e] step 70000 loss 0.1798 lr 3.00e-04 218.6 min
+[e2e] step 70000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.838
+[e2e] step 70100 loss 0.1786 lr 3.00e-04 219.5 min
+[e2e] step 70200 loss 0.1833 lr 3.00e-04 219.8 min
+[e2e] step 70300 loss 0.1732 lr 3.00e-04 220.1 min
+[e2e] step 70400 loss 0.1722 lr 3.00e-04 220.3 min
+[e2e] step 70500 loss 0.1863 lr 3.00e-04 220.6 min
+[e2e] step 70600 loss 0.1766 lr 3.00e-04 220.9 min
+[e2e] step 70700 loss 0.1821 lr 3.00e-04 221.1 min
+[e2e] step 70800 loss 0.1692 lr 3.00e-04 221.4 min
+[e2e] step 70900 loss 0.1762 lr 3.00e-04 221.7 min
+[e2e] step 71000 loss 0.1751 lr 3.00e-04 221.9 min
+[e2e] step 71100 loss 0.1777 lr 3.00e-04 222.2 min
+[e2e] step 71200 loss 0.1756 lr 3.00e-04 222.5 min
+[e2e] step 71300 loss 0.1729 lr 3.00e-04 222.8 min
+[e2e] step 71400 loss 0.1821 lr 3.00e-04 223.0 min
+[e2e] step 71500 loss 0.1776 lr 3.00e-04 223.3 min
+[e2e] step 71600 loss 0.1730 lr 3.00e-04 223.6 min
+[e2e] step 71700 loss 0.1748 lr 3.00e-04 223.8 min
+[e2e] step 71800 loss 0.1763 lr 3.00e-04 224.1 min
+[e2e] step 71900 loss 0.1711 lr 3.00e-04 224.4 min
+[e2e] step 72000 loss 0.1771 lr 3.00e-04 224.7 min
+[e2e] step 72000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.823
+[e2e] step 72100 loss 0.1805 lr 3.00e-04 225.8 min
+[e2e] step 72200 loss 0.1730 lr 3.00e-04 226.0 min
+[e2e] step 72300 loss 0.1661 lr 3.00e-04 226.3 min
+[e2e] step 72400 loss 0.1717 lr 3.00e-04 226.6 min
+[e2e] step 72500 loss 0.1727 lr 3.00e-04 226.8 min
+[e2e] step 72600 loss 0.1728 lr 3.00e-04 227.1 min
+[e2e] step 72700 loss 0.1720 lr 3.00e-04 227.3 min
+[e2e] step 72800 loss 0.1711 lr 3.00e-04 227.6 min
+[e2e] step 72900 loss 0.1692 lr 3.00e-04 227.9 min
+[e2e] step 73000 loss 0.1652 lr 3.00e-04 228.1 min
+[e2e] step 73100 loss 0.1679 lr 3.00e-04 228.4 min
+[e2e] step 73200 loss 0.1677 lr 3.00e-04 228.7 min
+[e2e] step 73300 loss 0.1752 lr 3.00e-04 228.9 min
+[e2e] step 73400 loss 0.1712 lr 3.00e-04 229.2 min
+[e2e] step 73500 loss 0.1761 lr 3.00e-04 229.5 min
+[e2e] step 73600 loss 0.1737 lr 3.00e-04 229.7 min
+[e2e] step 73700 loss 0.1684 lr 3.00e-04 230.0 min
+[e2e] step 73800 loss 0.1731 lr 3.00e-04 230.3 min
+[e2e] step 73900 loss 0.1724 lr 3.00e-04 230.5 min
+[e2e] step 74000 loss 0.1709 lr 3.00e-04 230.8 min
+[e2e] step 74000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.829
+[e2e] step 74100 loss 0.1625 lr 3.00e-04 231.9 min
+[e2e] step 74200 loss 0.1756 lr 3.00e-04 232.2 min
+[e2e] step 74300 loss 0.1726 lr 3.00e-04 232.4 min
+[e2e] step 74400 loss 0.1760 lr 3.00e-04 232.7 min
+[e2e] step 74500 loss 0.1677 lr 3.00e-04 232.9 min
+[e2e] step 74600 loss 0.1756 lr 3.00e-04 233.2 min
+[e2e] step 74700 loss 0.1739 lr 3.00e-04 233.5 min
+[e2e] step 74800 loss 0.1642 lr 3.00e-04 233.8 min
+[e2e] step 74900 loss 0.1734 lr 3.00e-04 234.0 min
+[e2e] step 75000 loss 0.1724 lr 3.00e-04 234.3 min
+[e2e] step 75100 loss 0.1730 lr 3.00e-04 234.6 min
+[e2e] step 75200 loss 0.1739 lr 3.00e-04 234.9 min
+[e2e] step 75300 loss 0.1701 lr 3.00e-04 235.1 min
+[e2e] step 75400 loss 0.1712 lr 3.00e-04 235.4 min
+[e2e] step 75500 loss 0.1694 lr 3.00e-04 235.7 min
+[e2e] step 75600 loss 0.1709 lr 3.00e-04 235.9 min
+[e2e] step 75700 loss 0.1702 lr 3.00e-04 236.2 min
+[e2e] step 75800 loss 0.1629 lr 3.00e-04 236.4 min
+[e2e] step 75900 loss 0.1719 lr 3.00e-04 236.7 min
+[e2e] step 76000 loss 0.1644 lr 3.00e-04 237.0 min
+[e2e] step 76000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.834
+[e2e] step 76100 loss 0.1679 lr 3.00e-04 238.0 min
+[e2e] step 76200 loss 0.1708 lr 3.00e-04 238.2 min
+[e2e] step 76300 loss 0.1673 lr 3.00e-04 238.5 min
+[e2e] step 76400 loss 0.1659 lr 3.00e-04 238.7 min
+[e2e] step 76500 loss 0.1710 lr 3.00e-04 239.0 min
+[e2e] step 76600 loss 0.1681 lr 3.00e-04 239.3 min
+[e2e] step 76700 loss 0.1730 lr 3.00e-04 239.5 min
+[e2e] step 76800 loss 0.1713 lr 3.00e-04 239.8 min
+[e2e] step 76900 loss 0.1677 lr 3.00e-04 240.1 min
+[e2e] step 77000 loss 0.1687 lr 3.00e-04 240.3 min
+[e2e] step 77100 loss 0.1711 lr 3.00e-04 240.6 min
+[e2e] step 77200 loss 0.1650 lr 3.00e-04 240.9 min
+[e2e] step 77300 loss 0.1678 lr 3.00e-04 241.2 min
+[e2e] step 77400 loss 0.1728 lr 3.00e-04 241.4 min
+[e2e] step 77500 loss 0.1722 lr 3.00e-04 241.7 min
+[e2e] step 77600 loss 0.1692 lr 3.00e-04 241.9 min
+[e2e] step 77700 loss 0.1706 lr 3.00e-04 242.2 min
+[e2e] step 77800 loss 0.1719 lr 3.00e-04 242.5 min
+[e2e] step 77900 loss 0.1662 lr 3.00e-04 242.7 min
+[e2e] step 78000 loss 0.1632 lr 3.00e-04 243.0 min
+[e2e] step 78000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.832
+[e2e] step 78100 loss 0.1682 lr 3.00e-04 243.9 min
+[e2e] step 78200 loss 0.1650 lr 3.00e-04 244.2 min
+[e2e] step 78300 loss 0.1655 lr 3.00e-04 244.4 min
+[e2e] step 78400 loss 0.1695 lr 3.00e-04 244.7 min
+[e2e] step 78500 loss 0.1692 lr 3.00e-04 244.9 min
+[e2e] step 78600 loss 0.1621 lr 3.00e-04 245.2 min
+[e2e] step 78700 loss 0.1657 lr 3.00e-04 245.5 min
+[e2e] step 78800 loss 0.1671 lr 3.00e-04 245.7 min
+[e2e] step 78900 loss 0.1688 lr 3.00e-04 246.0 min
+[e2e] step 79000 loss 0.1694 lr 3.00e-04 246.2 min
+[e2e] step 79100 loss 0.1622 lr 3.00e-04 246.6 min
+[e2e] step 79200 loss 0.1671 lr 3.00e-04 246.8 min
+[e2e] step 79300 loss 0.1652 lr 3.00e-04 247.1 min
+[e2e] step 79400 loss 0.1703 lr 3.00e-04 247.3 min
+[e2e] step 79500 loss 0.1662 lr 3.00e-04 247.6 min
+[e2e] step 79600 loss 0.1589 lr 3.00e-04 247.9 min
+[e2e] step 79700 loss 0.1624 lr 3.00e-04 248.1 min
+[e2e] step 79800 loss 0.1655 lr 3.00e-04 248.4 min
+[e2e] step 79900 loss 0.1650 lr 3.00e-04 248.7 min
+[e2e] step 80000 loss 0.1617 lr 3.00e-04 248.9 min
+[e2e] step 80000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.817
+[e2e] step 80100 loss 0.1658 lr 3.00e-04 249.8 min
+[e2e] step 80200 loss 0.1734 lr 3.00e-04 250.1 min
+[e2e] step 80300 loss 0.1607 lr 3.00e-04 250.3 min
+[e2e] step 80400 loss 0.1662 lr 3.00e-04 250.6 min
+[e2e] step 80500 loss 0.1642 lr 3.00e-04 250.9 min
+[e2e] step 80600 loss 0.1574 lr 3.00e-04 251.1 min
+[e2e] step 80700 loss 0.1629 lr 3.00e-04 251.4 min
+[e2e] step 80800 loss 0.1699 lr 3.00e-04 251.7 min
+[e2e] step 80900 loss 0.1609 lr 3.00e-04 251.9 min
+[e2e] step 81000 loss 0.1695 lr 3.00e-04 252.2 min
+[e2e] step 81100 loss 0.1650 lr 3.00e-04 252.5 min
+[e2e] step 81200 loss 0.1663 lr 3.00e-04 252.8 min
+[e2e] step 81300 loss 0.1618 lr 3.00e-04 253.0 min
+[e2e] step 81400 loss 0.1600 lr 3.00e-04 253.3 min
+[e2e] step 81500 loss 0.1666 lr 3.00e-04 253.5 min
+[e2e] step 81600 loss 0.1585 lr 3.00e-04 253.8 min
+[e2e] step 81700 loss 0.1589 lr 3.00e-04 254.1 min
+[e2e] step 81800 loss 0.1634 lr 3.00e-04 254.3 min
+[e2e] step 81900 loss 0.1617 lr 3.00e-04 254.6 min
+[e2e] step 82000 loss 0.1617 lr 3.00e-04 254.9 min
+[e2e] step 82000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.826
+[e2e] step 82100 loss 0.1587 lr 3.00e-04 256.0 min
+[e2e] step 82200 loss 0.1617 lr 3.00e-04 256.2 min
+[e2e] step 82300 loss 0.1646 lr 3.00e-04 256.5 min
+[e2e] step 82400 loss 0.1631 lr 3.00e-04 256.8 min
+[e2e] step 82500 loss 0.1628 lr 3.00e-04 257.0 min
+[e2e] step 82600 loss 0.1630 lr 3.00e-04 257.3 min
+[e2e] step 82700 loss 0.1563 lr 3.00e-04 257.5 min
+[e2e] step 82800 loss 0.1639 lr 3.00e-04 257.8 min
+[e2e] step 82900 loss 0.1600 lr 3.00e-04 258.1 min
+[e2e] step 83000 loss 0.1590 lr 3.00e-04 258.3 min
+[e2e] step 83100 loss 0.1569 lr 3.00e-04 258.6 min
+[e2e] step 83200 loss 0.1643 lr 3.00e-04 258.9 min
+[e2e] step 83300 loss 0.1635 lr 3.00e-04 259.2 min
+[e2e] step 83400 loss 0.1581 lr 3.00e-04 259.4 min
+[e2e] step 83500 loss 0.1550 lr 3.00e-04 259.7 min
+[e2e] step 83600 loss 0.1608 lr 3.00e-04 260.0 min
+[e2e] step 83700 loss 0.1619 lr 3.00e-04 260.2 min
+[e2e] step 83800 loss 0.1610 lr 3.00e-04 260.5 min
+[e2e] step 83900 loss 0.1618 lr 3.00e-04 260.8 min
+[e2e] step 84000 loss 0.1523 lr 3.00e-04 261.0 min
+[e2e] step 84000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.824
+[e2e] step 84100 loss 0.1629 lr 3.00e-04 262.3 min
+[e2e] step 84200 loss 0.1660 lr 3.00e-04 262.6 min
+[e2e] step 84300 loss 0.1556 lr 3.00e-04 262.8 min
+[e2e] step 84400 loss 0.1549 lr 3.00e-04 263.1 min
+[e2e] step 84500 loss 0.1583 lr 3.00e-04 263.4 min
+[e2e] step 84600 loss 0.1543 lr 3.00e-04 263.6 min
+[e2e] step 84700 loss 0.1604 lr 3.00e-04 263.9 min
+[e2e] step 84800 loss 0.1636 lr 3.00e-04 264.2 min
+[e2e] step 84900 loss 0.1546 lr 3.00e-04 264.4 min
+[e2e] step 85000 loss 0.1604 lr 3.00e-04 264.7 min
+[e2e] step 85100 loss 0.1613 lr 3.00e-04 265.0 min
+[e2e] step 85200 loss 0.1511 lr 3.00e-04 265.3 min
+[e2e] step 85300 loss 0.1603 lr 3.00e-04 265.5 min
+[e2e] step 85400 loss 0.1553 lr 3.00e-04 265.8 min
+[e2e] step 85500 loss 0.1597 lr 3.00e-04 266.1 min
+[e2e] step 85600 loss 0.1550 lr 3.00e-04 266.4 min
+[e2e] step 85700 loss 0.1543 lr 3.00e-04 266.6 min
+[e2e] step 85800 loss 0.1563 lr 3.00e-04 266.9 min
+[e2e] step 85900 loss 0.1542 lr 3.00e-04 267.2 min
+[e2e] step 86000 loss 0.1638 lr 3.00e-04 267.4 min
+[e2e] step 86000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.838
+[e2e] step 86100 loss 0.1516 lr 3.00e-04 268.3 min
+[e2e] step 86200 loss 0.1575 lr 3.00e-04 268.6 min
+[e2e] step 86300 loss 0.1558 lr 3.00e-04 268.9 min
+[e2e] step 86400 loss 0.1555 lr 3.00e-04 269.1 min
+[e2e] step 86500 loss 0.1566 lr 3.00e-04 269.4 min
+[e2e] step 86600 loss 0.1610 lr 3.00e-04 269.6 min
+[e2e] step 86700 loss 0.1518 lr 3.00e-04 269.9 min
+[e2e] step 86800 loss 0.1622 lr 3.00e-04 270.2 min
+[e2e] step 86900 loss 0.1575 lr 3.00e-04 270.4 min
+[e2e] step 87000 loss 0.1660 lr 3.00e-04 270.7 min
+[e2e] step 87100 loss 0.1578 lr 3.00e-04 271.0 min
+[e2e] step 87200 loss 0.1544 lr 3.00e-04 271.3 min
+[e2e] step 87300 loss 0.1545 lr 3.00e-04 271.5 min
+[e2e] step 87400 loss 0.1513 lr 3.00e-04 271.8 min
+[e2e] step 87500 loss 0.1557 lr 3.00e-04 272.1 min
+[e2e] step 87600 loss 0.1530 lr 3.00e-04 272.3 min
+[e2e] step 87700 loss 0.1491 lr 3.00e-04 272.6 min
+[e2e] step 87800 loss 0.1540 lr 3.00e-04 272.9 min
+[e2e] step 87900 loss 0.1576 lr 3.00e-04 273.1 min
+[e2e] step 88000 loss 0.1536 lr 3.00e-04 273.4 min
+[e2e] step 88000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.838
+[e2e] step 88100 loss 0.1559 lr 3.00e-04 274.4 min
+[e2e] step 88200 loss 0.1517 lr 3.00e-04 274.6 min
+[e2e] step 88300 loss 0.1540 lr 3.00e-04 274.9 min
+[e2e] step 88400 loss 0.1597 lr 3.00e-04 275.2 min
+[e2e] step 88500 loss 0.1533 lr 3.00e-04 275.4 min
+[e2e] step 88600 loss 0.1481 lr 3.00e-04 275.7 min
+[e2e] step 88700 loss 0.1579 lr 3.00e-04 276.0 min
+[e2e] step 88800 loss 0.1522 lr 3.00e-04 276.2 min
+[e2e] step 88900 loss 0.1574 lr 3.00e-04 276.5 min
+[e2e] step 89000 loss 0.1536 lr 3.00e-04 276.8 min
+[e2e] step 89100 loss 0.1611 lr 3.00e-04 277.1 min
+[e2e] step 89200 loss 0.1545 lr 3.00e-04 277.4 min
+[e2e] step 89300 loss 0.1500 lr 3.00e-04 277.6 min
+[e2e] step 89400 loss 0.1472 lr 3.00e-04 277.9 min
+[e2e] step 89500 loss 0.1441 lr 3.00e-04 278.2 min
+[e2e] step 89600 loss 0.1547 lr 3.00e-04 278.5 min
+[e2e] step 89700 loss 0.1496 lr 3.00e-04 278.7 min
+[e2e] step 89800 loss 0.1607 lr 3.00e-04 279.0 min
+[e2e] step 89900 loss 0.1576 lr 3.00e-04 279.3 min
+[e2e] step 90000 loss 0.1485 lr 3.00e-04 279.5 min
+[e2e] step 90000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.825
+[e2e] step 90100 loss 0.1520 lr 3.00e-04 280.7 min
+[e2e] step 90200 loss 0.1508 lr 3.00e-04 281.0 min
+[e2e] step 90300 loss 0.1531 lr 3.00e-04 281.2 min
+[e2e] step 90400 loss 0.1528 lr 3.00e-04 281.5 min
+[e2e] step 90500 loss 0.1594 lr 3.00e-04 281.7 min
+[e2e] step 90600 loss 0.1541 lr 3.00e-04 282.0 min
+[e2e] step 90700 loss 0.1574 lr 3.00e-04 282.3 min
+[e2e] step 90800 loss 0.1582 lr 3.00e-04 282.5 min
+[e2e] step 90900 loss 0.1545 lr 3.00e-04 282.8 min
+[e2e] step 91000 loss 0.1507 lr 3.00e-04 283.1 min
+[e2e] step 91100 loss 0.1503 lr 3.00e-04 283.4 min
+[e2e] step 91200 loss 0.1499 lr 3.00e-04 283.7 min
+[e2e] step 91300 loss 0.1475 lr 3.00e-04 283.9 min
+[e2e] step 91400 loss 0.1537 lr 3.00e-04 284.2 min
+[e2e] step 91500 loss 0.1479 lr 3.00e-04 284.5 min
+[e2e] step 91600 loss 0.1522 lr 3.00e-04 284.7 min
+[e2e] step 91700 loss 0.1533 lr 3.00e-04 285.0 min
+[e2e] step 91800 loss 0.1534 lr 3.00e-04 285.3 min
+[e2e] step 91900 loss 0.1495 lr 3.00e-04 285.6 min
+[e2e] step 92000 loss 0.1455 lr 3.00e-04 285.8 min
+[e2e] step 92000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.836
+[e2e] step 92100 loss 0.1548 lr 3.00e-04 287.3 min
+[e2e] step 92200 loss 0.1529 lr 3.00e-04 287.6 min
+[e2e] step 92300 loss 0.1475 lr 3.00e-04 287.9 min
+[e2e] step 92400 loss 0.1518 lr 3.00e-04 288.1 min
+[e2e] step 92500 loss 0.1535 lr 3.00e-04 288.4 min
+[e2e] step 92600 loss 0.1518 lr 3.00e-04 288.7 min
+[e2e] step 92700 loss 0.1505 lr 3.00e-04 288.9 min
+[e2e] step 92800 loss 0.1515 lr 3.00e-04 289.2 min
+[e2e] step 92900 loss 0.1509 lr 3.00e-04 289.5 min
+[e2e] step 93000 loss 0.1557 lr 3.00e-04 289.7 min
+[e2e] step 93100 loss 0.1516 lr 3.00e-04 290.1 min
+[e2e] step 93200 loss 0.1414 lr 3.00e-04 290.3 min
+[e2e] step 93300 loss 0.1571 lr 3.00e-04 290.6 min
+[e2e] step 93400 loss 0.1514 lr 3.00e-04 290.9 min
+[e2e] step 93500 loss 0.1464 lr 3.00e-04 291.1 min
+[e2e] step 93600 loss 0.1484 lr 3.00e-04 291.4 min
+[e2e] step 93700 loss 0.1506 lr 3.00e-04 291.7 min
+[e2e] step 93800 loss 0.1529 lr 3.00e-04 291.9 min
+[e2e] step 93900 loss 0.1473 lr 3.00e-04 292.2 min
+[e2e] step 94000 loss 0.1450 lr 3.00e-04 292.5 min
+[e2e] step 94000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.850
+[e2e] step 94100 loss 0.1454 lr 3.00e-04 293.6 min
+[e2e] step 94200 loss 0.1501 lr 3.00e-04 293.8 min
+[e2e] step 94300 loss 0.1506 lr 3.00e-04 294.1 min
+[e2e] step 94400 loss 0.1472 lr 3.00e-04 294.4 min
+[e2e] step 94500 loss 0.1463 lr 3.00e-04 294.6 min
+[e2e] step 94600 loss 0.1513 lr 3.00e-04 294.9 min
+[e2e] step 94700 loss 0.1561 lr 3.00e-04 295.2 min
+[e2e] step 94800 loss 0.1435 lr 3.00e-04 295.5 min
+[e2e] step 94900 loss 0.1498 lr 3.00e-04 295.7 min
+[e2e] step 95000 loss 0.1464 lr 3.00e-04 296.0 min
+[e2e] step 95100 loss 0.1506 lr 3.00e-04 296.3 min
+[e2e] step 95200 loss 0.1406 lr 3.00e-04 296.6 min
+[e2e] step 95300 loss 0.1443 lr 3.00e-04 296.9 min
+[e2e] step 95400 loss 0.1446 lr 3.00e-04 297.2 min
+[e2e] step 95500 loss 0.1443 lr 3.00e-04 297.4 min
+[e2e] step 95600 loss 0.1462 lr 3.00e-04 297.7 min
+[e2e] step 95700 loss 0.1481 lr 3.00e-04 298.0 min
+[e2e] step 95800 loss 0.1431 lr 3.00e-04 298.3 min
+[e2e] step 95900 loss 0.1462 lr 3.00e-04 298.5 min
+[e2e] step 96000 loss 0.1396 lr 3.00e-04 298.8 min
+[e2e] step 96000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.832
+[e2e] step 96100 loss 0.1461 lr 3.00e-04 299.8 min
+[e2e] done e2e_jepa_XL-s0: 96173 steps in 5.01h; embeddings -> store 'ssl_e2e::e2e_jepa_XL-s0' (31,905 texts); final.pt in chrono/artifacts_ssl/e2e/e2e_jepa_XL-s0
+[commit_push_sandbox] nothing to commit
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+[commit_push_sandbox] FAILED after 5 attempts
+=== Done. Thu Sep  3 04:45:30 UTC 2026 ===

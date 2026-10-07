@@ -1,0 +1,83 @@
+# job 33438 C4_ladder exit=0 Wed Sep  2 14:07:56 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C4_ladder_33433_3.out
+=== C4 ladder emin2_llama2_7b_t0_eng === job 33438 Wed Sep  2 12:44:05 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[ladder] L16mean_eng ridge erase=none       mc +0.360 pooled +0.297 readability after nan (k=0)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[ladder] L16mean_eng ridge erase=ruler      mc -0.045 pooled -0.120 readability after 0.000 (k=40)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:620: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:620: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+[ladder] L16mean_eng ridge erase=period     mc +0.249 pooled +0.209 readability after 0.557 (k=6)
+[ladder] L16mean_eng ridge erase=subgenre   mc +0.223 pooled +0.211 readability after 0.061 (k=21)
+[ladder] L16mean_eng ridge erase=provenance mc +0.078 pooled +0.121 readability after 0.083 (k=21)
+[ladder] L16mean_eng ridge erase=length     mc +0.282 pooled +0.165 readability after 0.199 (k=6)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[ladder] L16mean_eng ridge erase=year10     mc -0.177 pooled -0.044 readability after 0.033 (k=7)
+# Erasure ladder — NousResearch/Llama-2-7b-hf L16 mean · langs ['eng'] · ridge
+
+| erased | k | mc ρ | gkf pooled ρ | Δ mc vs none | z readable after (bal. acc) |
+|---|---|---|---|---|---|
+| none | 0 | +0.360 | +0.297 | +0.000 | — |
+| ruler | 40 | -0.045 | -0.120 | -0.405 | 0.00 |
+| period | 6 | +0.249 | +0.209 | -0.111 | 0.56 |
+| subgenre | 21 | +0.223 | +0.211 | -0.137 | 0.06 |
+| provenance | 21 | +0.078 | +0.121 | -0.281 | 0.08 |
+| length | 6 | +0.282 | +0.165 | -0.078 | 0.20 |
+| year10 | 7 | -0.177 | -0.044 | -0.537 | 0.03 |
+
+[yarin-sandbox 307285de] C4: erasure ladder emin2_llama2_7b_t0_eng (job 33438)
+ 27 files changed, 11 insertions(+)
+ create mode 100644 chrono/reports/tier0/ladder/emin2_llama2_7b_t0_eng_ridge.md
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_length-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_length-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_length-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_length-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_length-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_provenance-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_provenance-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_year10-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_year10-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_year10-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_year10-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_year10-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_length-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_length-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_length-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_length-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_length-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_provenance-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_provenance-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_provenance-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_year10-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_year10-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_year10-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_eng_provenance-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_eng_provenance-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_eng_provenance-s0-f3.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   0d3d3675..307285de  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 14:07:56 UTC 2026 ===

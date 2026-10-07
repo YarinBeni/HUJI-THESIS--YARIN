@@ -1,0 +1,96 @@
+# job 33491 C5_headlad exit=0 Wed Sep  2 14:26:11 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C5_headlad_33475_10.out
+=== C5 emin2_cunei400m_t0_akk_erase_length seed 1 === job 33491 Wed Sep  2 14:23:06 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[erase] LEACE 'length' (k=6, rank 5) fitted on 925 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.2675
+epoch 100/200 loss 5.0720
+epoch 150/200 loss 4.7088
+epoch 200/200 loss 4.3597
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_length-s1-f0",
+  "metrics": {
+    "train_soft_spearman": 0.6623461438502788,
+    "train_spearman": 0.6620161489592211,
+    "final_loss": 4.359729051589966,
+    "identical_view_rate": 0.007616216216216216,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_length-s1-f0.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 956 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.5906
+epoch 100/200 loss 5.5499
+epoch 150/200 loss 4.8916
+epoch 200/200 loss 4.3732
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_length-s1-f1",
+  "metrics": {
+    "train_soft_spearman": 0.6939999096111934,
+    "train_spearman": 0.693983452800073,
+    "final_loss": 4.373245000839233,
+    "identical_view_rate": 0.006563807531380753,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_length-s1-f1.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 963 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.2930
+epoch 100/200 loss 5.1224
+epoch 150/200 loss 4.6859
+epoch 200/200 loss 4.0026
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_length-s1-f2",
+  "metrics": {
+    "train_soft_spearman": 0.7137984983588939,
+    "train_spearman": 0.7138025021485157,
+    "final_loss": 4.002564072608948,
+    "identical_view_rate": 0.008037383177570093,
+    "test_spearman": 0.26999960571864684
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_length-s1-f2.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.7999
+epoch 100/200 loss 5.4513
+epoch 150/200 loss 4.8805
+epoch 200/200 loss 4.5301
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_length-s1-f3",
+  "metrics": {
+    "train_soft_spearman": 0.6321510395909457,
+    "train_spearman": 0.632159830487946,
+    "final_loss": 4.530096471309662,
+    "identical_view_rate": 0.0034802904564315354,
+    "test_spearman": 0.4776957877965153
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_length-s1-f3.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.3278
+epoch 100/200 loss 5.3789
+epoch 150/200 loss 4.6726
+epoch 200/200 loss 4.1895
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_length-s1-f4",
+  "metrics": {
+    "train_soft_spearman": 0.5794638899751123,
+    "train_spearman": 0.5791908257172538,
+    "final_loss": 4.189505636692047,
+    "identical_view_rate": 0.007287344398340249,
+    "test_spearman": 0.7148626586345423
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_length-s1-f4.parquet"
+}
+[yarin-sandbox f28f415b] C5: head ladder emin2_cunei400m_t0_akk_erase_length seed 1 (job 33491)
+ 1 file changed, 96 insertions(+)
+ create mode 100644 chrono/reports/logs/C5_headlad_33492.log
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   4418b4a8..f28f415b  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 14:26:11 UTC 2026 ===

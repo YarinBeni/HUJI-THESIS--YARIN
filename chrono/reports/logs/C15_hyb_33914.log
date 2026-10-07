@@ -1,0 +1,170 @@
+# job 33914 C15_hyb exit=0 Fri Sep  4 02:05:38 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C15_hyb_33796_6.out
+=== C15 hyb barlow M on llama2_7b L16 === job 33914 Thu Sep  3 19:35:18 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Fetching 18 files:   0%|          | 0/18 [00:00<?, ?it/s]Fetching 18 files: 100%|██████████| 18/18 [00:00<00:00, 2702.32it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights:   0%|          | 1/291 [00:00<02:25,  2.00it/s]Loading weights:   1%|          | 2/291 [00:01<03:14,  1.49it/s]Loading weights:   4%|▍         | 13/291 [00:01<00:24, 11.43it/s]Loading weights:   5%|▌         | 15/291 [00:01<00:25, 10.88it/s]Loading weights:   7%|▋         | 20/291 [00:01<00:17, 15.64it/s]Loading weights:   8%|▊         | 23/291 [00:02<00:25, 10.42it/s]Loading weights:  10%|▉         | 28/291 [00:02<00:18, 14.14it/s]Loading weights:  11%|█         | 31/291 [00:03<00:31,  8.28it/s]Loading weights:  13%|█▎        | 37/291 [00:03<00:23, 10.88it/s]Loading weights:  14%|█▎        | 40/291 [00:04<00:25,  9.80it/s]Loading weights:  14%|█▍        | 42/291 [00:04<00:26,  9.37it/s]Loading weights:  17%|█▋        | 49/291 [00:04<00:21, 11.22it/s]Loading weights:  18%|█▊        | 51/291 [00:05<00:20, 11.80it/s]Loading weights:  19%|█▉        | 56/291 [00:05<00:15, 14.75it/s]Loading weights:  20%|█▉        | 58/291 [00:05<00:22, 10.55it/s]Loading weights:  21%|██        | 60/291 [00:05<00:21, 10.98it/s]Loading weights:  22%|██▏       | 64/291 [00:05<00:15, 14.35it/s]Loading weights:  23%|██▎       | 67/291 [00:06<00:22,  9.81it/s]Loading weights:  24%|██▎       | 69/291 [00:06<00:26,  8.25it/s]Loading weights:  26%|██▌       | 76/291 [00:07<00:20, 10.24it/s]Loading weights:  27%|██▋       | 78/291 [00:07<00:23,  8.95it/s]Loading weights:  29%|██▊       | 83/291 [00:07<00:18, 11.52it/s]Loading weights:  29%|██▉       | 85/291 [00:08<00:24,  8.51it/s]Loading weights:  31%|███▏      | 91/291 [00:08<00:14, 13.46it/s]Loading weights:  32%|███▏      | 94/291 [00:08<00:14, 13.22it/s]Loading weights:  33%|███▎      | 97/291 [00:09<00:17, 10.91it/s]Loading weights:  35%|███▍      | 101/291 [00:09<00:14, 13.46it/s]Loading weights:  35%|███▌      | 103/291 [00:09<00:19,  9.49it/s]Loading weights:  36%|███▌      | 105/291 [00:10<00:17, 10.43it/s]Loading weights:  37%|███▋      | 109/291 [00:10<00:13, 13.18it/s]Loading weights:  38%|███▊      | 112/291 [00:10<00:22,  8.08it/s]Loading weights:  40%|████      | 117/291 [00:11<00:14, 11.83it/s]Loading weights:  42%|████▏     | 121/291 [00:11<00:19,  8.74it/s]Loading weights:  44%|████▎     | 127/291 [00:12<00:13, 11.89it/s]Loading weights:  45%|████▍     | 130/291 [00:12<00:15, 10.18it/s]Loading weights:  45%|████▌     | 132/291 [00:12<00:14, 10.88it/s]Loading weights:  48%|████▊     | 139/291 [00:13<00:15,  9.91it/s]Loading weights:  50%|████▉     | 145/291 [00:13<00:10, 13.61it/s]Loading weights:  51%|█████     | 148/291 [00:13<00:12, 11.12it/s]Loading weights:  52%|█████▏    | 150/291 [00:14<00:12, 11.66it/s]Loading weights:  53%|█████▎    | 154/291 [00:14<00:10, 13.35it/s]Loading weights:  54%|█████▍    | 157/291 [00:14<00:11, 11.32it/s]Loading weights:  55%|█████▍    | 159/291 [00:15<00:13,  9.77it/s]Loading weights:  57%|█████▋    | 166/291 [00:15<00:14,  8.63it/s]Loading weights:  59%|█████▉    | 172/291 [00:16<00:09, 12.25it/s]Loading weights:  60%|██████    | 175/291 [00:16<00:13,  8.83it/s]Loading weights:  61%|██████    | 177/291 [00:16<00:12,  9.24it/s]Loading weights:  62%|██████▏   | 180/291 [00:17<00:09, 11.31it/s]Loading weights:  63%|██████▎   | 184/291 [00:17<00:09, 11.84it/s]Loading weights:  64%|██████▍   | 186/291 [00:17<00:11,  9.44it/s]Loading weights:  66%|██████▌   | 191/291 [00:17<00:07, 13.91it/s]Loading weights:  67%|██████▋   | 194/291 [00:18<00:10,  8.85it/s]Loading weights:  68%|██████▊   | 199/291 [00:18<00:07, 11.68it/s]Loading weights:  69%|██████▉   | 202/291 [00:19<00:09,  9.54it/s]Loading weights:  70%|███████   | 204/291 [00:19<00:09,  9.14it/s]Loading weights:  72%|███████▏  | 209/291 [00:19<00:06, 12.71it/s]Loading weights:  73%|███████▎  | 211/291 [00:19<00:07, 10.70it/s]Loading weights:  73%|███████▎  | 213/291 [00:20<00:09,  8.27it/s]Loading weights:  75%|███████▍  | 218/291 [00:20<00:05, 12.89it/s]Loading weights:  76%|███████▌  | 221/291 [00:21<00:07,  9.13it/s]Loading weights:  78%|███████▊  | 226/291 [00:21<00:04, 13.36it/s]Loading weights:  79%|███████▊  | 229/291 [00:21<00:05, 11.43it/s]Loading weights:  80%|███████▉  | 232/291 [00:21<00:04, 13.09it/s]Loading weights:  81%|████████  | 235/291 [00:21<00:03, 15.22it/s]Loading weights:  82%|████████▏ | 238/291 [00:22<00:03, 13.73it/s]Loading weights:  82%|████████▏ | 240/291 [00:22<00:04, 11.59it/s]Loading weights:  84%|████████▍ | 245/291 [00:22<00:03, 13.08it/s]Loading weights:  85%|████████▍ | 247/291 [00:23<00:04,  8.98it/s]Loading weights:  87%|████████▋ | 252/291 [00:23<00:02, 13.51it/s]Loading weights:  88%|████████▊ | 256/291 [00:23<00:03, 11.21it/s]Loading weights:  89%|████████▊ | 258/291 [00:24<00:03, 10.62it/s]Loading weights:  91%|█████████ | 265/291 [00:24<00:02, 12.07it/s]Loading weights:  93%|█████████▎| 271/291 [00:24<00:01, 16.04it/s]Loading weights:  94%|█████████▍| 274/291 [00:25<00:01, 11.82it/s]Loading weights:  96%|█████████▌| 279/291 [00:25<00:00, 15.46it/s]Loading weights:  97%|█████████▋| 283/291 [00:25<00:00, 13.54it/s]Loading weights:  98%|█████████▊| 285/291 [00:25<00:00, 14.10it/s]Loading weights: 100%|██████████| 291/291 [00:25<00:00, 11.26it/s]
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+[hyb] frozen llama2_7b L16 d=4096 -> trainable M
+[e2e] hyb_barlow_M_llama2_7b-s0: size M params 16.3M vocab 23044 train texts 24,589 objective barlow batch 96 budget 5.0h dev cuda
+Token indices sequence length is longer than the specified maximum sequence length for this model (2788 > 2048). Running this sequence through the model will result in indexing errors
+[e2e] step 100 loss 28.8680 lr 3.00e-05 1.8 min
+[e2e] step 200 loss 18.2078 lr 6.00e-05 3.6 min
+[e2e] step 300 loss 15.1056 lr 9.00e-05 5.3 min
+[e2e] step 400 loss 13.7384 lr 1.20e-04 7.1 min
+[e2e] step 500 loss 12.8891 lr 1.50e-04 8.9 min
+[e2e] step 600 loss 12.4478 lr 1.80e-04 10.7 min
+[e2e] step 700 loss 12.1172 lr 2.10e-04 12.5 min
+[e2e] step 800 loss 12.0829 lr 2.40e-04 14.2 min
+[e2e] step 900 loss 11.6030 lr 2.70e-04 16.0 min
+[e2e] step 1000 loss 11.3551 lr 3.00e-04 17.8 min
+[e2e] step 1100 loss 11.1288 lr 3.00e-04 19.6 min
+[e2e] step 1200 loss 10.9548 lr 3.00e-04 21.4 min
+[e2e] step 1300 loss 10.6097 lr 3.00e-04 23.1 min
+[e2e] step 1400 loss 10.3571 lr 3.00e-04 24.9 min
+[e2e] step 1500 loss 9.9937 lr 3.00e-04 26.7 min
+[e2e] step 1600 loss 9.9770 lr 3.00e-04 28.5 min
+[e2e] step 1700 loss 9.7431 lr 3.00e-04 30.3 min
+[e2e] step 1800 loss 9.4991 lr 3.00e-04 32.0 min
+[e2e] step 1900 loss 9.3840 lr 3.00e-04 33.8 min
+[e2e] step 2000 loss 9.1871 lr 3.00e-04 35.6 min
+[e2e] step 2000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.832
+[e2e] step 2100 loss 9.0893 lr 3.00e-04 41.1 min
+[e2e] step 2200 loss 8.9778 lr 3.00e-04 42.9 min
+[e2e] step 2300 loss 8.9060 lr 3.00e-04 44.6 min
+[e2e] step 2400 loss 8.7631 lr 3.00e-04 46.4 min
+[e2e] step 2500 loss 8.7379 lr 3.00e-04 48.2 min
+[e2e] step 2600 loss 8.5115 lr 3.00e-04 50.0 min
+[e2e] step 2700 loss 8.6401 lr 3.00e-04 51.8 min
+[e2e] step 2800 loss 8.5443 lr 3.00e-04 53.5 min
+[e2e] step 2900 loss 8.4807 lr 3.00e-04 55.3 min
+[e2e] step 3000 loss 8.1767 lr 3.00e-04 57.1 min
+[e2e] step 3100 loss 8.1738 lr 3.00e-04 58.9 min
+[e2e] step 3200 loss 8.2370 lr 3.00e-04 60.7 min
+[e2e] step 3300 loss 8.1544 lr 3.00e-04 62.4 min
+[e2e] step 3400 loss 8.1529 lr 3.00e-04 64.2 min
+[e2e] step 3500 loss 8.1538 lr 3.00e-04 66.0 min
+[e2e] step 3600 loss 7.8755 lr 3.00e-04 67.8 min
+[e2e] step 3700 loss 8.0276 lr 3.00e-04 69.6 min
+[e2e] step 3800 loss 8.1041 lr 3.00e-04 71.3 min
+[e2e] step 3900 loss 7.8237 lr 3.00e-04 73.1 min
+[e2e] step 4000 loss 7.7527 lr 3.00e-04 74.9 min
+[e2e] step 4000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.852
+[e2e] step 4100 loss 7.8748 lr 3.00e-04 79.4 min
+[e2e] step 4200 loss 7.7012 lr 3.00e-04 81.1 min
+[e2e] step 4300 loss 7.8663 lr 3.00e-04 82.9 min
+[e2e] step 4400 loss 7.6895 lr 3.00e-04 84.7 min
+[e2e] step 4500 loss 7.7982 lr 3.00e-04 86.5 min
+[e2e] step 4600 loss 7.7007 lr 3.00e-04 88.2 min
+[e2e] step 4700 loss 7.5639 lr 3.00e-04 90.0 min
+[e2e] step 4800 loss 7.4464 lr 3.00e-04 91.8 min
+[e2e] step 4900 loss 7.4605 lr 3.00e-04 93.6 min
+[e2e] step 5000 loss 7.5215 lr 3.00e-04 95.4 min
+[e2e] step 5100 loss 7.4937 lr 3.00e-04 97.1 min
+[e2e] step 5200 loss 7.4192 lr 3.00e-04 98.9 min
+[e2e] step 5300 loss 7.5239 lr 3.00e-04 100.7 min
+[e2e] step 5400 loss 7.4787 lr 3.00e-04 102.5 min
+[e2e] step 5500 loss 7.3608 lr 3.00e-04 104.3 min
+[e2e] step 5600 loss 7.2293 lr 3.00e-04 106.1 min
+[e2e] step 5700 loss 7.3815 lr 3.00e-04 107.9 min
+[e2e] step 5800 loss 7.4203 lr 3.00e-04 109.6 min
+[e2e] step 5900 loss 7.3215 lr 3.00e-04 111.4 min
+[e2e] step 6000 loss 7.2877 lr 3.00e-04 113.2 min
+[e2e] step 6000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.820
+[e2e] step 6100 loss 7.1892 lr 3.00e-04 118.1 min
+[e2e] step 6200 loss 7.1823 lr 3.00e-04 119.9 min
+[e2e] step 6300 loss 7.1521 lr 3.00e-04 121.6 min
+[e2e] step 6400 loss 7.1396 lr 3.00e-04 123.4 min
+[e2e] step 6500 loss 7.1881 lr 3.00e-04 125.2 min
+[e2e] step 6600 loss 6.9987 lr 3.00e-04 127.0 min
+[e2e] step 6700 loss 7.0021 lr 3.00e-04 128.8 min
+[e2e] step 6800 loss 7.0833 lr 3.00e-04 130.5 min
+[e2e] step 6900 loss 7.2155 lr 3.00e-04 132.3 min
+[e2e] step 7000 loss 7.1282 lr 3.00e-04 134.1 min
+[e2e] step 7100 loss 7.0723 lr 3.00e-04 135.9 min
+[e2e] step 7200 loss 7.0626 lr 3.00e-04 137.7 min
+[e2e] step 7300 loss 7.0148 lr 3.00e-04 139.5 min
+[e2e] step 7400 loss 6.9766 lr 3.00e-04 141.2 min
+[e2e] step 7500 loss 6.8952 lr 3.00e-04 143.0 min
+[e2e] step 7600 loss 6.9490 lr 3.00e-04 144.8 min
+[e2e] step 7700 loss 6.9499 lr 3.00e-04 146.6 min
+[e2e] step 7800 loss 6.8914 lr 3.00e-04 148.4 min
+[e2e] step 7900 loss 6.8357 lr 3.00e-04 150.1 min
+[e2e] step 8000 loss 6.8168 lr 3.00e-04 151.9 min
+[e2e] step 8000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.826
+[e2e] step 8100 loss 6.9469 lr 3.00e-04 156.6 min
+[e2e] step 8200 loss 6.8425 lr 3.00e-04 158.4 min
+[e2e] step 8300 loss 6.8355 lr 3.00e-04 160.2 min
+[e2e] step 8400 loss 6.7871 lr 3.00e-04 161.9 min
+[e2e] step 8500 loss 6.7527 lr 3.00e-04 163.7 min
+[e2e] step 8600 loss 6.8013 lr 3.00e-04 165.5 min
+[e2e] step 8700 loss 6.7794 lr 3.00e-04 167.3 min
+[e2e] step 8800 loss 6.7867 lr 3.00e-04 169.1 min
+[e2e] step 8900 loss 6.7059 lr 3.00e-04 170.8 min
+[e2e] step 9000 loss 6.5703 lr 3.00e-04 172.6 min
+[e2e] step 9100 loss 6.7416 lr 3.00e-04 174.4 min
+[e2e] step 9200 loss 6.6743 lr 3.00e-04 176.2 min
+[e2e] step 9300 loss 6.6166 lr 3.00e-04 178.0 min
+[e2e] step 9400 loss 6.5782 lr 3.00e-04 179.7 min
+[e2e] step 9500 loss 6.6264 lr 3.00e-04 181.5 min
+[e2e] step 9600 loss 6.5740 lr 3.00e-04 183.3 min
+[e2e] step 9700 loss 6.5590 lr 3.00e-04 185.1 min
+[e2e] step 9800 loss 6.4470 lr 3.00e-04 186.9 min
+[e2e] step 9900 loss 6.6089 lr 3.00e-04 188.6 min
+[e2e] step 10000 loss 6.5540 lr 3.00e-04 190.4 min
+[e2e] step 10000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.839
+[e2e] step 10100 loss 6.5132 lr 3.00e-04 195.0 min
+[e2e] step 10200 loss 6.5498 lr 3.00e-04 196.8 min
+[e2e] step 10300 loss 6.4484 lr 3.00e-04 198.6 min
+[e2e] step 10400 loss 6.4954 lr 3.00e-04 200.3 min
+[e2e] step 10500 loss 6.6270 lr 3.00e-04 202.1 min
+[e2e] step 10600 loss 6.5356 lr 3.00e-04 203.9 min
+[e2e] step 10700 loss 6.5044 lr 3.00e-04 205.7 min
+[e2e] step 10800 loss 6.5137 lr 3.00e-04 207.5 min
+[e2e] step 10900 loss 6.5424 lr 3.00e-04 209.2 min
+[e2e] step 11000 loss 6.4198 lr 3.00e-04 211.0 min
+[e2e] step 11100 loss 6.4432 lr 3.00e-04 212.8 min
+[e2e] step 11200 loss 6.4745 lr 3.00e-04 214.6 min
+[e2e] step 11300 loss 6.3981 lr 3.00e-04 216.4 min
+[e2e] step 11400 loss 6.3626 lr 3.00e-04 218.1 min
+[e2e] step 11500 loss 6.4202 lr 3.00e-04 219.9 min
+[e2e] step 11600 loss 6.4005 lr 3.00e-04 221.7 min
+[e2e] step 11700 loss 6.3215 lr 3.00e-04 223.5 min
+[e2e] step 11800 loss 6.3066 lr 3.00e-04 225.3 min
+[e2e] step 11900 loss 6.3618 lr 3.00e-04 227.0 min
+[e2e] step 12000 loss 6.3862 lr 3.00e-04 228.8 min
+[e2e] step 12000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.851
+[e2e] step 12100 loss 6.4564 lr 3.00e-04 233.1 min
+[e2e] step 12200 loss 6.3118 lr 3.00e-04 234.9 min
+[e2e] step 12300 loss 6.3633 lr 3.00e-04 236.7 min
+[e2e] step 12400 loss 6.3645 lr 3.00e-04 238.4 min
+[e2e] step 12500 loss 6.3655 lr 3.00e-04 240.2 min
+[e2e] step 12600 loss 6.2931 lr 3.00e-04 242.0 min
+[e2e] step 12700 loss 6.3342 lr 3.00e-04 243.8 min
+[e2e] step 12800 loss 6.2030 lr 3.00e-04 245.6 min
+[e2e] step 12900 loss 6.1861 lr 3.00e-04 247.4 min
+[e2e] step 13000 loss 6.2424 lr 3.00e-04 249.1 min
+[e2e] step 13100 loss 6.2843 lr 3.00e-04 250.9 min
+[e2e] step 13200 loss 6.2775 lr 3.00e-04 252.7 min
+[e2e] step 13300 loss 6.1847 lr 3.00e-04 254.5 min
+[e2e] step 13400 loss 6.2661 lr 3.00e-04 256.3 min
+[e2e] step 13500 loss 6.1606 lr 3.00e-04 258.1 min
+[e2e] step 13600 loss 6.1667 lr 3.00e-04 259.8 min
+[e2e] step 13700 loss 6.2684 lr 3.00e-04 261.6 min
+[e2e] step 13800 loss 6.1591 lr 3.00e-04 263.4 min
+[e2e] step 13900 loss 6.1066 lr 3.00e-04 265.2 min
+[e2e] step 14000 loss 6.1635 lr 3.00e-04 267.0 min
+[e2e] step 14000 quick period probe (linear, 5 classes, n=4000) bal.acc 0.851
+[e2e] step 14100 loss 6.1744 lr 3.00e-04 271.5 min
+[e2e] step 14200 loss 6.1509 lr 3.00e-04 273.3 min
+[2026-09-04T02:05:38.013] error: *** JOB 33914 ON g0378 CANCELLED AT 2026-09-04T02:05:38 DUE TO TIME LIMIT ***

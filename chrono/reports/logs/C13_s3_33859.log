@@ -1,0 +1,132 @@
+# job 33859 C13_s3 exit=0 Thu Sep  3 20:55:36 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C13_s3_33674_43.out
+=== C13 s3_llama2_7b_init-jepa_frac100 seed 1 === job 33859 Thu Sep  3 16:55:12 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: f8e4d0b1
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_llama2_7b-s0.pt: missing [] unexpected []
+epoch 50/200 loss 11.2631
+epoch 100/200 loss 8.5695
+epoch 150/200 loss 7.1659
+epoch 200/200 loss 6.2732
+{
+  "run_id": "s3_llama2_7b_init-jepa_frac100-s1-f0",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7631725778944046,
+    "train_spearman": 0.7631195571646259,
+    "final_loss": 6.273230075836182,
+    "identical_view_rate": 0.007616216216216216,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-jepa_frac100-s1-f0.parquet"
+}
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_llama2_7b-s0.pt: missing [] unexpected []
+epoch 50/200 loss 11.8100
+epoch 100/200 loss 8.4305
+epoch 150/200 loss 7.0449
+epoch 200/200 loss 6.0466
+{
+  "run_id": "s3_llama2_7b_init-jepa_frac100-s1-f1",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7794556718557958,
+    "train_spearman": 0.7794266470802242,
+    "final_loss": 6.046575307846069,
+    "identical_view_rate": 0.006563807531380753,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-jepa_frac100-s1-f1.parquet"
+}
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_llama2_7b-s0.pt: missing [] unexpected []
+epoch 50/200 loss 11.5077
+epoch 100/200 loss 8.5432
+epoch 150/200 loss 7.1520
+epoch 200/200 loss 5.9621
+{
+  "run_id": "s3_llama2_7b_init-jepa_frac100-s1-f2",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.8165984910251419,
+    "train_spearman": 0.8165496798775326,
+    "final_loss": 5.962130784988403,
+    "identical_view_rate": 0.008037383177570093,
+    "test_spearman": 0.24567546206846103
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-jepa_frac100-s1-f2.parquet"
+}
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_llama2_7b-s0.pt: missing [] unexpected []
+epoch 50/200 loss 11.4290
+epoch 100/200 loss 8.4902
+epoch 150/200 loss 7.2573
+epoch 200/200 loss 6.4064
+{
+  "run_id": "s3_llama2_7b_init-jepa_frac100-s1-f3",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7174961599466623,
+    "train_spearman": 0.7172511283309984,
+    "final_loss": 6.406416893005371,
+    "identical_view_rate": 0.0034802904564315354,
+    "test_spearman": 0.5169166376940822
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-jepa_frac100-s1-f3.parquet"
+}
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_llama2_7b-s0.pt: missing [] unexpected []
+epoch 50/200 loss 12.0391
+epoch 100/200 loss 9.0563
+epoch 150/200 loss 7.3428
+epoch 200/200 loss 6.3906
+{
+  "run_id": "s3_llama2_7b_init-jepa_frac100-s1-f4",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7045931484612616,
+    "train_spearman": 0.7044340859194378,
+    "final_loss": 6.390558481216431,
+    "identical_view_rate": 0.007287344398340249,
+    "test_spearman": 0.6665125914477901
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-jepa_frac100-s1-f4.parquet"
+}
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 9a2043ed] C13: s3_llama2_7b_init-jepa_frac100 seed 1 (job 33859)
+ 1 file changed, 159 insertions(+)
+ create mode 100644 chrono/reports/logs/C13_s3_33858.log
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[2026-09-03T20:55:36.015] error: *** JOB 33859 ON g0381 CANCELLED AT 2026-09-03T20:55:36 DUE TO TIME LIMIT ***

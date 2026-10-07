@@ -1,0 +1,106 @@
+# job 33529 C6_hsic exit=0 Wed Sep  2 15:57:03 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C6_hsic_33529_17.out
+=== C6 emin2_qwen3_8b_t0_akk_hsic10_provenance seed 2 === job 33529 Wed Sep  2 15:45:07 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[hsic] lambda=10.0 confound='provenance' k=21
+epoch 50/200 loss 34.5509
+epoch 100/200 loss 25.4551
+epoch 150/200 loss 23.6136
+epoch 200/200 loss 21.7205
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_hsic10_provenance-s2-f0",
+  "metrics": {
+    "train_soft_spearman": 0.6415223956643892,
+    "train_spearman": 0.6413322026686245,
+    "final_loss": 21.720503330230713,
+    "identical_view_rate": 0.007491891891891892,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_hsic10_provenance-s2-f0.parquet"
+}
+[hsic] lambda=10.0 confound='provenance' k=21
+epoch 50/200 loss 30.7818
+epoch 100/200 loss 24.4966
+epoch 150/200 loss 24.0478
+epoch 200/200 loss 22.8617
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_hsic10_provenance-s2-f1",
+  "metrics": {
+    "train_soft_spearman": 0.6540570041191627,
+    "train_spearman": 0.6537483501045123,
+    "final_loss": 22.86171293258667,
+    "identical_view_rate": 0.00651673640167364,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_hsic10_provenance-s2-f1.parquet"
+}
+[hsic] lambda=10.0 confound='provenance' k=21
+epoch 50/200 loss 36.5180
+epoch 100/200 loss 32.5346
+epoch 150/200 loss 31.7411
+epoch 200/200 loss 26.2582
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_hsic10_provenance-s2-f2",
+  "metrics": {
+    "train_soft_spearman": 0.7127058811176743,
+    "train_spearman": 0.71267515879624,
+    "final_loss": 26.258162021636963,
+    "identical_view_rate": 0.007876427829698858,
+    "test_spearman": 0.18000844133823432
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_hsic10_provenance-s2-f2.parquet"
+}
+[hsic] lambda=10.0 confound='provenance' k=21
+epoch 50/200 loss 30.5794
+epoch 100/200 loss 23.9015
+epoch 150/200 loss 23.6172
+epoch 200/200 loss 22.7183
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_hsic10_provenance-s2-f3",
+  "metrics": {
+    "train_soft_spearman": 0.627421638444151,
+    "train_spearman": 0.6276414010860245,
+    "final_loss": 22.718271732330322,
+    "identical_view_rate": 0.0036566390041493776,
+    "test_spearman": 0.5155688041655576
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_hsic10_provenance-s2-f3.parquet"
+}
+[hsic] lambda=10.0 confound='provenance' k=21
+epoch 50/200 loss 35.0745
+epoch 100/200 loss 27.6528
+epoch 150/200 loss 25.3228
+epoch 200/200 loss 23.7344
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_hsic10_provenance-s2-f4",
+  "metrics": {
+    "train_soft_spearman": 0.4805840898359761,
+    "train_spearman": 0.48080606912501,
+    "final_loss": 23.734378337860107,
+    "identical_view_rate": 0.007287344398340249,
+    "test_spearman": 0.5439621441635633
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_hsic10_provenance-s2-f4.parquet"
+}
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 86085b73] C6: hsic emin2_qwen3_8b_t0_akk_hsic10_provenance seed 2 (job 33529)
+ 1 file changed, 116 insertions(+)
+ create mode 100644 chrono/reports/logs/C6_hsic_33551.log
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   b82ebde6..86085b73  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 15:57:03 UTC 2026 ===

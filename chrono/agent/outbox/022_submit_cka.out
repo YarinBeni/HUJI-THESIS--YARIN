@@ -1,0 +1,16 @@
+# 022_submit_cka  host=g0381  start=Wed Sep  2 16:36:31 UTC 2026  timeout=1800s
+# HEAD=927b639e
+# ---------------------------------------------------------
+Submitted batch job 33585
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+      33585_[4-17] voltagepa  C6b_cka  yarin.b PD       0:00      1 (Resources)
+           33585_1 voltagepa  C6b_cka  yarin.b  R       0:03      1 g0376
+           33585_2 voltagepa  C6b_cka  yarin.b  R       0:03      1 g0376
+           33585_3 voltagepa  C6b_cka  yarin.b  R       0:03      1 g0376
+           33585_0 voltagepa  C6b_cka  yarin.b  R       0:04      1 g0376
+           33445_2 voltagepa C4_ladde  yarin.b  R    2:16:00      1 g0381
+           33445_3 voltagepa C4_ladde  yarin.b  R    2:16:00      1 g0381
+           33445_4 voltagepa C4_ladde  yarin.b  R    2:16:00      1 g0378
+             33315 voltagepa AGENT_ru  yarin.b  R   12:30:28      1 g0381
+# ---------------------------------------------------------
+# exit=0  end=Wed Sep  2 16:36:36 UTC 2026

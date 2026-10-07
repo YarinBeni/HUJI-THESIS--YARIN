@@ -1,0 +1,66 @@
+# job 33351 C1v2_extract exit=0 Wed Sep  2 06:42:43 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C1v2_extract_33351_2.out
+=== C1v2 extract thalesian_cunei400m layers all === job 33351 Wed Sep  2 06:27:36 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: 41f8b9a1
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/303 [00:00<?, ?it/s]Loading weights: 100%|██████████| 303/303 [00:00<00:00, 2376.68it/s]Loading weights: 100%|██████████| 303/303 [00:00<00:00, 2372.30it/s]
+[extract] Thalesian/cuneiformBase-400m: 40562 texts, layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], sites ['mean', 'last'], store=chrono.models.store
+[extract] 1024/40562 texts (12.0s)
+[extract] 2048/40562 texts (22.0s)
+[extract] 3072/40562 texts (32.0s)
+[extract] 4096/40562 texts (44.0s)
+[extract] 5120/40562 texts (54.9s)
+[extract] 6144/40562 texts (64.7s)
+[extract] 7168/40562 texts (77.1s)
+[extract] 8192/40562 texts (90.6s)
+[extract] 9216/40562 texts (106.2s)
+[extract] 10240/40562 texts (118.7s)
+[extract] 11264/40562 texts (131.0s)
+[extract] 12288/40562 texts (146.3s)
+[extract] 13312/40562 texts (161.2s)
+[extract] 14336/40562 texts (176.6s)
+[extract] 15360/40562 texts (194.2s)
+[extract] 16384/40562 texts (213.0s)
+[extract] 17408/40562 texts (233.9s)
+[extract] 18432/40562 texts (251.2s)
+[extract] 19456/40562 texts (271.6s)
+[extract] 20480/40562 texts (290.1s)
+[extract] 21504/40562 texts (314.8s)
+[extract] 22528/40562 texts (338.5s)
+[extract] 23552/40562 texts (361.0s)
+[extract] 24576/40562 texts (386.0s)
+[extract] 25600/40562 texts (408.9s)
+[extract] 26624/40562 texts (434.8s)
+[extract] 27648/40562 texts (462.1s)
+[extract] 28672/40562 texts (497.9s)
+[extract] 29696/40562 texts (523.0s)
+[extract] 30720/40562 texts (548.7s)
+[extract] 31744/40562 texts (577.8s)
+[extract] 32768/40562 texts (608.0s)
+[extract] 33792/40562 texts (639.7s)
+[extract] 34816/40562 texts (672.6s)
+[extract] 35840/40562 texts (703.2s)
+[extract] 36864/40562 texts (736.6s)
+[extract] 37888/40562 texts (770.2s)
+[extract] 38912/40562 texts (804.2s)
+[extract] 39936/40562 texts (846.4s)
+[extract] 40562/40562 texts (886.8s)
+[done] {"n_texts": 40562, "n_embedded": 40562, "n_skipped": 0, "layers": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "sites": ["mean", "last"], "elapsed_s": 886.8, "model": "thalesian_cunei400m", "hfid": "Thalesian/cuneiformBase-400m", "store_root": "chrono/artifacts_tier0/emb_store", "max_tokens": 512, "dtype": "auto"}
+[yarin-sandbox 160fa9f2] C1v2: tier0 features thalesian_cunei400m (job 33351)
+ 1 file changed, 30 insertions(+)
+ create mode 100644 chrono/reports/tier0/extract_meta__thalesian_cunei400m.json
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: 75ae4656
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   0f8b5e68..160fa9f2  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 06:42:43 UTC 2026 ===

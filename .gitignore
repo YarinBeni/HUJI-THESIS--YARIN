@@ -52,3 +52,32 @@ v_1/src/stress_tests/e6_clusters/embedding_panels/standalone.html
 # IS tracked. The per-draw files are scratch, but they were leaving the cluster checkout
 # permanently dirty and blocking `git pull` before sbatch jobs could start.
 v_1/src/chronorank/autopsy/results/probes/*__draw[0-9][0-9][0-9].json
+
+# chrono cluster jobs need their slurm --output dir to EXIST in a fresh
+# clone: Slurm opens the file before the script (and its mkdir) runs.
+!chrono/sbatch/logs/
+!chrono/sbatch/logs/.gitkeep
+
+# chrono cluster jobs push their slurm logs here so a FAILED run can be
+# read from the repo instead of a browser terminal; **/logs/ above
+# would otherwise swallow them.
+!chrono/reports/logs/
+!chrono/reports/logs/**
+
+# runner outputs must reach the repo; *.out above would swallow them
+!chrono/agent/outbox/
+!chrono/agent/outbox/**
+
+# tier0 artifacts root (rebuildable, large)
+chrono/artifacts_tier0/
+
+# SSL corpus root (rebuildable)
+chrono/artifacts_ssl/
+
+# SSL checkpoints must never ride into chrono/reports (2026-09-03 outage:
+# 100-400 MB final.pt files copied here by C11/C15 were swept up by every
+# `commit_push_sandbox ... chrono/reports` and killed pack-objects on the
+# login node -> 8 h without a single successful push). Checkpoints live
+# under chrono/artifacts_ssl/ only.
+chrono/reports/ssl/e2e/*.pt
+chrono/reports/ssl/hyb/*.pt

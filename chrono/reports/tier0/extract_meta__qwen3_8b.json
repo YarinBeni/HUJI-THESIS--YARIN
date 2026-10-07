@@ -1,0 +1,21 @@
+{
+  "n_texts": 40562,
+  "n_embedded": 40562,
+  "n_skipped": 0,
+  "layers": [
+    9,
+    18,
+    27,
+    36
+  ],
+  "sites": [
+    "mean",
+    "last"
+  ],
+  "elapsed_s": 4688.7,
+  "model": "qwen3_8b",
+  "hfid": "Qwen/Qwen3-8B",
+  "store_root": "chrono/artifacts_tier0/emb_store",
+  "max_tokens": 512,
+  "dtype": "auto"
+}

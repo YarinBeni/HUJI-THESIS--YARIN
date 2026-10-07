@@ -1,0 +1,66 @@
+# job 33354 C1v2_extract exit=0 Wed Sep  2 07:46:07 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C1v2_extract_33351_1.out
+=== C1v2 extract qwen3_8b layers 9,18,27,36 === job 33354 Wed Sep  2 06:27:36 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: a573f3c0
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Fetching 15 files:   0%|          | 0/15 [00:00<?, ?it/s]Fetching 15 files: 100%|██████████| 15/15 [00:00<00:00, 5676.67it/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   0%|          | 1/399 [00:00<01:08,  5.79it/s]Loading weights:   1%|          | 2/399 [00:00<01:16,  5.19it/s]Loading weights:   4%|▍         | 17/399 [00:00<00:08, 47.16it/s]Loading weights:  10%|▉         | 38/399 [00:00<00:03, 92.46it/s]Loading weights:  15%|█▍        | 59/399 [00:00<00:02, 123.13it/s]Loading weights:  19%|█▉        | 76/399 [00:00<00:02, 135.38it/s]Loading weights:  24%|██▎       | 94/399 [00:00<00:02, 142.53it/s]Loading weights:  29%|██▉       | 115/399 [00:01<00:01, 159.49it/s]Loading weights:  34%|███▍      | 136/399 [00:01<00:01, 171.82it/s]Loading weights:  39%|███▉      | 155/399 [00:01<00:01, 174.72it/s]Loading weights:  43%|████▎     | 173/399 [00:01<00:01, 172.09it/s]Loading weights:  48%|████▊     | 192/399 [00:01<00:01, 175.53it/s]Loading weights:  53%|█████▎    | 213/399 [00:01<00:01, 183.85it/s]Loading weights:  58%|█████▊    | 232/399 [00:01<00:00, 181.52it/s]Loading weights:  63%|██████▎   | 251/399 [00:01<00:00, 178.92it/s]Loading weights:  67%|██████▋   | 269/399 [00:01<00:00, 178.18it/s]Loading weights:  72%|███████▏  | 289/399 [00:01<00:00, 179.62it/s]Loading weights:  77%|███████▋  | 309/399 [00:02<00:00, 183.78it/s]Loading weights:  82%|████████▏ | 328/399 [00:02<00:00, 180.77it/s]Loading weights:  87%|████████▋ | 347/399 [00:02<00:00, 170.00it/s]Loading weights:  92%|█████████▏| 368/399 [00:02<00:00, 178.17it/s]Loading weights:  97%|█████████▋| 389/399 [00:02<00:00, 184.85it/s]Loading weights: 100%|██████████| 399/399 [00:02<00:00, 154.39it/s]
+[extract] Qwen/Qwen3-8B: 40562 texts, layers [9, 18, 27, 36], sites ['mean', 'last'], store=chrono.models.store
+[extract] 1024/40562 texts (111.1s)
+[extract] 2048/40562 texts (240.0s)
+[extract] 3072/40562 texts (330.3s)
+[extract] 4096/40562 texts (499.4s)
+[extract] 5120/40562 texts (642.3s)
+[extract] 6144/40562 texts (713.1s)
+[extract] 7168/40562 texts (871.4s)
+[extract] 8192/40562 texts (1030.3s)
+[extract] 9216/40562 texts (1217.3s)
+[extract] 10240/40562 texts (1301.2s)
+[extract] 11264/40562 texts (1328.0s)
+[extract] 12288/40562 texts (1432.0s)
+[extract] 13312/40562 texts (1527.5s)
+[extract] 14336/40562 texts (1605.4s)
+[extract] 15360/40562 texts (1761.6s)
+[extract] 16384/40562 texts (1922.5s)
+[extract] 17408/40562 texts (2080.1s)
+[extract] 18432/40562 texts (2134.7s)
+[extract] 19456/40562 texts (2315.9s)
+[extract] 20480/40562 texts (2359.4s)
+[extract] 21504/40562 texts (2445.1s)
+[extract] 22528/40562 texts (2524.4s)
+[extract] 23552/40562 texts (2638.2s)
+[extract] 24576/40562 texts (2795.1s)
+[extract] 25600/40562 texts (2874.7s)
+[extract] 26624/40562 texts (3051.7s)
+[extract] 27648/40562 texts (3167.6s)
+[extract] 28672/40562 texts (3257.9s)
+[extract] 29696/40562 texts (3336.8s)
+[extract] 30720/40562 texts (3448.9s)
+[extract] 31744/40562 texts (3616.4s)
+[extract] 32768/40562 texts (3684.5s)
+[extract] 33792/40562 texts (3805.1s)
+[extract] 34816/40562 texts (3924.0s)
+[extract] 35840/40562 texts (3993.2s)
+[extract] 36864/40562 texts (4099.0s)
+[extract] 37888/40562 texts (4269.7s)
+[extract] 38912/40562 texts (4463.1s)
+[extract] 39936/40562 texts (4621.4s)
+[extract] 40562/40562 texts (4688.7s)
+[done] {"n_texts": 40562, "n_embedded": 40562, "n_skipped": 0, "layers": [9, 18, 27, 36], "sites": ["mean", "last"], "elapsed_s": 4688.7, "model": "qwen3_8b", "hfid": "Qwen/Qwen3-8B", "store_root": "chrono/artifacts_tier0/emb_store", "max_tokens": 512, "dtype": "auto"}
+[yarin-sandbox 94f586f3] C1v2: tier0 features qwen3_8b (job 33354)
+ 1 file changed, 21 insertions(+)
+ create mode 100644 chrono/reports/tier0/extract_meta__qwen3_8b.json
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: 5d450495
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   7954481f..94f586f3  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 07:46:07 UTC 2026 ===

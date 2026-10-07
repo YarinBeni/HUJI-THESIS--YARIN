@@ -1,0 +1,99 @@
+# job 33327 C3_emin exit=0 Wed Sep  2 04:26:00 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C3_emin_33323_3.out
+=== C3 emin seed 3 === job 33327 Wed Sep  2 04:21:32 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: 2f78ce1f
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+epoch 50/200 loss 13.3182
+epoch 100/200 loss 8.0809
+epoch 150/200 loss 6.1097
+epoch 200/200 loss 5.1449
+{
+  "run_id": "emin_thalesian-s3-f0",
+  "metrics": {
+    "train_soft_spearman": 0.6434476851627333,
+    "train_spearman": 0.6433988198142443,
+    "final_loss": 5.144860148429871,
+    "identical_view_rate": 0.022649294245385452,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin_thalesian-s3-f0.parquet"
+}
+epoch 50/200 loss 12.4443
+epoch 100/200 loss 8.2593
+epoch 150/200 loss 6.5389
+epoch 200/200 loss 5.4674
+{
+  "run_id": "emin_thalesian-s3-f1",
+  "metrics": {
+    "train_soft_spearman": 0.6333892196208097,
+    "train_spearman": 0.6333650305717342,
+    "final_loss": 5.467363953590393,
+    "identical_view_rate": 0.020021008403361344,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin_thalesian-s3-f1.parquet"
+}
+epoch 50/200 loss 13.1284
+epoch 100/200 loss 8.5846
+epoch 150/200 loss 6.2148
+epoch 200/200 loss 5.3309
+{
+  "run_id": "emin_thalesian-s3-f2",
+  "metrics": {
+    "train_soft_spearman": 0.685708311315562,
+    "train_spearman": 0.6858277484566704,
+    "final_loss": 5.330921411514282,
+    "identical_view_rate": 0.020621085594989562,
+    "test_spearman": 0.14877316674746108
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin_thalesian-s3-f2.parquet"
+}
+epoch 50/200 loss 14.0173
+epoch 100/200 loss 9.0634
+epoch 150/200 loss 6.7786
+epoch 200/200 loss 5.8996
+{
+  "run_id": "emin_thalesian-s3-f3",
+  "metrics": {
+    "train_soft_spearman": 0.5619614490968745,
+    "train_spearman": 0.5617133135094953,
+    "final_loss": 5.899556756019592,
+    "identical_view_rate": 0.01126304801670146,
+    "test_spearman": 0.5637288393500388
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin_thalesian-s3-f3.parquet"
+}
+epoch 50/200 loss 12.4167
+epoch 100/200 loss 8.4557
+epoch 150/200 loss 6.3906
+epoch 200/200 loss 5.3590
+{
+  "run_id": "emin_thalesian-s3-f4",
+  "metrics": {
+    "train_soft_spearman": 0.4490113774953419,
+    "train_spearman": 0.44865371429021106,
+    "final_loss": 5.358988523483276,
+    "identical_view_rate": 0.01843587069864442,
+    "test_spearman": 0.5051048919535766
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin_thalesian-s3-f4.parquet"
+}
+[yarin-sandbox ac0e10f2] C3: emin thalesian seed 3 (job 33327)
+ 6 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 chrono/reports/scores/emin_thalesian-s3-f0.parquet
+ create mode 100644 chrono/reports/scores/emin_thalesian-s3-f1.parquet
+ create mode 100644 chrono/reports/scores/emin_thalesian-s3-f2.parquet
+ create mode 100644 chrono/reports/scores/emin_thalesian-s3-f3.parquet
+ create mode 100644 chrono/reports/scores/emin_thalesian-s3-f4.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: 2f611744
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   a4155820..ac0e10f2  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 04:26:00 UTC 2026 ===

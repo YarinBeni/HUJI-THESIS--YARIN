@@ -1,0 +1,76 @@
+# job 33444 C3v2c_spread exit=0 Wed Sep  2 12:50:37 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C3v2c_spread_33434_4.out
+=== C3v2c spread emin2_llama2_7b_t0_mix === job 33444 Wed Sep  2 12:44:05 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[baseline] baseline_ridge_L16mean_akk+eng fold 0: fit on 1624 distinct orig views of 925 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s1-f0.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 1: fit on 1695 distinct orig views of 956 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s1-f1.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 2: fit on 1700 distinct orig views of 963 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s1-f2.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 3: fit on 1705 distinct orig views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s1-f3.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 4: fit on 1715 distinct orig views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s1-f4.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 0: fit on 11998 distinct all views of 925 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s1-f0.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 1: fit on 12915 distinct all views of 956 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s1-f1.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 2: fit on 12710 distinct all views of 963 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s1-f2.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 3: fit on 13030 distinct all views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s1-f3.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 4: fit on 12943 distinct all views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s1-f4.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 0: fit on 1628 distinct orig views of 925 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s2-f0.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 1: fit on 1699 distinct orig views of 956 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s2-f1.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 2: fit on 1700 distinct orig views of 963 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s2-f2.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 3: fit on 1712 distinct orig views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s2-f3.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 4: fit on 1717 distinct orig views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s2-f4.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 0: fit on 11936 distinct all views of 925 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s2-f0.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 1: fit on 12846 distinct all views of 956 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s2-f1.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 2: fit on 12664 distinct all views of 963 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s2-f2.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 3: fit on 13066 distinct all views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s2-f3.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 4: fit on 13006 distinct all views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s2-f4.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 0: fit on 1628 distinct orig views of 925 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s3-f0.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 1: fit on 1698 distinct orig views of 956 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s3-f1.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 2: fit on 1701 distinct orig views of 963 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s3-f2.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 3: fit on 1701 distinct orig views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s3-f3.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 4: fit on 1723 distinct orig views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s3-f4.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 0: fit on 11978 distinct all views of 925 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s3-f0.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 1: fit on 12886 distinct all views of 956 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s3-f1.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 2: fit on 12705 distinct all views of 963 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s3-f2.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 3: fit on 12932 distinct all views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s3-f3.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 4: fit on 13002 distinct all views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s3-f4.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 0: fit on 1633 distinct orig views of 925 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s4-f0.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 1: fit on 1700 distinct orig views of 956 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s4-f1.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 2: fit on 1703 distinct orig views of 963 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s4-f2.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 3: fit on 1702 distinct orig views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s4-f3.parquet
+[baseline] baseline_ridge_L16mean_akk+eng fold 4: fit on 1708 distinct orig views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s4-f4.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 0: fit on 12017 distinct all views of 925 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s4-f0.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 1: fit on 12905 distinct all views of 956 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s4-f1.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 2: fit on 12718 distinct all views of 963 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s4-f2.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 3: fit on 13015 distinct all views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s4-f3.parquet
+[baseline] baseline_ridge_L16mean_akk+eng_allviews fold 4: fit on 12944 distinct all views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s4-f4.parquet
+[yarin-sandbox 0da38644] C3v2c: baseline seed spread emin2_llama2_7b_t0_mix (job 33444)
+ 21 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s4-f0.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s4-f1.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s4-f2.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s4-f3.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng-s4-f4.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s4-f0.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s4-f1.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s4-f2.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s4-f3.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L16mean_akk+eng_allviews-s4-f4.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L16mean_akk_allviews-s1-f2.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L16mean_akk_allviews-s1-f3.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng-s4-f0.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng-s4-f1.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng-s4-f2.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng-s4-f3.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng-s4-f4.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng_allviews-s3-f1.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng_allviews-s3-f2.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng_allviews-s3-f3.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng_allviews-s3-f4.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   d50f143a..0da38644  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 12:50:37 UTC 2026 ===

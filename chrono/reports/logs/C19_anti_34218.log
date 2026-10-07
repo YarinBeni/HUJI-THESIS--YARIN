@@ -1,0 +1,103 @@
+# job 34218 C19_anti exit=0 Fri Sep  4 13:28:01 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C19_anti_34180_2.out
+=== C19 barlow + both === job 34218 Fri Sep  4 11:55:07 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[ssl] ssl_barlow_cunei400m_both-s99: 24,589 train texts, 270,479 views; loading features
+[ssl] objective=barlow d_in=768 head_params=722,561 steps=60 batch=512 balance_alpha=0.5 sources={'ebl': 13242, 'oracc': 9016, 'archibab': 1218, 'lbl_letters': 816, 'seal': 288, 'orcc': 9}
+[ssl] step 0: LEACE refit, rank 5
+[ssl] step 0 adv_acc 0.076 lam 0.00
+[ssl] step 0 loss 38.0244 (1s)
+[ssl] step 59 loss 20.0896 (2s)
+[ssl] done ssl_barlow_cunei400m_both-s99: head -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts_ssl/ssl_runs/ssl_barlow_cunei400m_both-s99.pt; embeddings -> store model 'ssl::ssl_barlow_cunei400m_both-s99' L0 site h (31,905 texts)
+[ssl] ssl_barlow_cunei400m_both-s0: 24,589 train texts, 270,479 views; loading features
+[ssl] objective=barlow d_in=768 head_params=722,561 steps=3000 batch=512 balance_alpha=0.5 sources={'ebl': 13242, 'oracc': 9016, 'archibab': 1218, 'lbl_letters': 816, 'seal': 288, 'orcc': 9}
+[ssl] step 0: LEACE refit, rank 5
+[ssl] step 0 adv_acc 0.398 lam 0.00
+[ssl] step 0 loss 36.7100 (1s)
+[ssl] step 200 adv_acc 0.398 lam 0.33
+[ssl] step 200 loss 12.5145 (2s)
+[ssl] step 400 adv_acc 0.363 lam 0.67
+[ssl] step 400 loss 6.1336 (4s)
+[ssl] step 600 adv_acc 0.393 lam 1.00
+[ssl] step 600 loss 15.6381 (6s)
+[ssl] step 800 adv_acc 0.338 lam 1.00
+[ssl] step 800 loss 53.2953 (8s)
+[ssl] step 1000 adv_acc 0.109 lam 1.00
+[ssl] step 1000 loss 1639.9088 (11s)
+[ssl] step 1200 adv_acc 0.400 lam 1.00
+[ssl] step 1200 loss 25357112.2937 (12s)
+[ssl] step 1400 adv_acc 0.137 lam 1.00
+[ssl] step 1400 loss 66326111.3225 (14s)
+[ssl] step 1600 adv_acc 0.311 lam 1.00
+[ssl] step 1600 loss 273136187.8829 (16s)
+[ssl] step 1800 adv_acc 0.404 lam 1.00
+[ssl] step 1800 loss 1189694931.0400 (18s)
+[ssl] step 2000: LEACE refit, rank 5
+[ssl] step 2000 adv_acc 0.061 lam 1.00
+[ssl] step 2000 loss 1941311745.9076 (20s)
+[ssl] step 2200 adv_acc 0.340 lam 1.00
+[ssl] step 2200 loss 1328666476.9125 (21s)
+[ssl] step 2400 adv_acc 0.117 lam 1.00
+[ssl] step 2400 loss 5462639788.8000 (23s)
+[ssl] step 2600 adv_acc 0.102 lam 1.00
+[ssl] step 2600 loss 3445166664.0606 (25s)
+[ssl] step 2800 adv_acc 0.301 lam 1.00
+[ssl] step 2800 loss 320510010.0000 (27s)
+[ssl] step 2999 loss 768095800.7200 (28s)
+[EmbStore] manifest unreadable (OSError); rebuilding from shards
+[ssl] done ssl_barlow_cunei400m_both-s0: head -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts_ssl/ssl_runs/ssl_barlow_cunei400m_both-s0.pt; embeddings -> store model 'ssl::ssl_barlow_cunei400m_both-s0' L0 site h (31,905 texts)
+# S1 representation probes — ssl::ssl_barlow_cunei400m_both-s0::L0::h
+
+texts 30,729 · PCA 0 · classes need ≥ 30 docs
+
+## Probes (balanced accuracy, 5-fold, tablet level)
+
+| label | classes | n | linear | MLP | chance |
+|---|---|---|---|---|---|
+| period_norm | 5 | 6,300 | 0.239 ± 0.005 | 0.209 ± 0.003 | 0.200 |
+| genre_raw | 71 | 27,187 | 0.016 ± 0.000 | 0.015 ± 0.000 | 0.014 |
+| provenance | 16 | 30,419 | 0.062 ± 0.000 | 0.063 ± 0.000 | 0.062 |
+| source | 5 | 30,720 | 0.200 ± 0.000 | 0.201 ± 0.001 | 0.200 |
+
+## Period probe WITHIN source (linear)
+
+| source | classes | n | balanced acc | chance |
+|---|---|---|---|---|
+| oracc | 2 | 3,414 | 0.514 ± 0.016 | 0.500 |
+| seal | 3 | 328 | 0.333 ± 0.000 | 0.333 |
+
+## Period probe, HELD-OUT source (train on the other non-dated sources, linear)
+
+| held out | classes | n test | balanced acc | chance |
+|---|---|---|---|---|
+| seal | 3 | 292 | 0.351 | 0.333 |
+| orcc (dated) | 3 | 953 | 0.268 | 0.333 |
+
+## Geometry (period)
+
+silhouette (raw space) -0.167 · permutation null -0.069 ± 0.041 · p = 0.985
+k-NN (k=10) period purity 0.379 · chance ≈ 0.341
+silhouette (UMAP-2d) -0.100 · null -0.038 ± 0.016 · p = 1.000
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox a09d127f] C19: ssl_barlow_cunei400m_both-s0 (job 34218)
+ 3 files changed, 32 insertions(+)
+ create mode 100644 chrono/reports/ssl/S1_ssl_ssl_barlow_cunei400m_both-s0_L0_h.md
+ create mode 100644 chrono/reports/ssl/umap_ssl_ssl_barlow_cunei400m_both-s0_L0_h.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   ed9d07a5..a09d127f  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Fri Sep  4 13:28:01 UTC 2026 ===

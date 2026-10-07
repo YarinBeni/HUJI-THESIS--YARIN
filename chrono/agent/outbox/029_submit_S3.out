@@ -1,0 +1,18 @@
+# 029_submit_S3  host=g0381  start=Wed Sep  2 21:33:05 UTC 2026  timeout=1800s
+# HEAD=e7380d01
+# ---------------------------------------------------------
+C13 array: 33674 (afterany:33649)
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+     33648_[17-19] voltagepa C9_ssl_v  yarin.b PD       0:00      1 (Resources)
+       33660_[0-7] voltagepa  C11_e2e  yarin.b PD       0:00      1 (Priority)
+      33674_[0-65] voltagepa   C13_s3  yarin.b PD       0:00      1 (Dependency)
+      33649_[0-15] voltagepa  C10_ssl  yarin.b PD       0:00      1 (Dependency)
+       33661_[0-7] voltagepa C12_e2e_  yarin.b PD       0:00      1 (Dependency)
+       33642_[0-7] voltagepa C8_ssl_p  yarin.b PD       0:00      1 (DependencyNeverSatisfied)
+          33648_16 voltagepa C9_ssl_v  yarin.b  R       0:05      1 g0376
+          33648_15 voltagepa C9_ssl_v  yarin.b  R       5:25      1 g0376
+          33648_14 voltagepa C9_ssl_v  yarin.b  R      10:55      1 g0381
+          33648_13 voltagepa C9_ssl_v  yarin.b  R      13:41      1 g0381
+          33648_12 voltagepa C9_ssl_v  yarin.b  R      21:41      1 g0376
+# ---------------------------------------------------------
+# exit=0  end=Wed Sep  2 21:33:10 UTC 2026

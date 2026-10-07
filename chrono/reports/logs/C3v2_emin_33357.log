@@ -1,0 +1,147 @@
+# job 33357 C3v2_emin exit=0 Wed Sep  2 07:51:52 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C3v2_emin_33352_0.out
+=== C3v2 emin2_llama2_7b_t0_akk seed 0 === job 33357 Wed Sep  2 07:46:30 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: f31cc55f
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+epoch 50/200 loss 12.7887
+epoch 100/200 loss 9.2041
+epoch 150/200 loss 7.3758
+epoch 200/200 loss 6.4907
+{
+  "run_id": "emin2_llama2_7b_t0_akk-s0-f0",
+  "metrics": {
+    "train_soft_spearman": 0.7576022733166524,
+    "train_spearman": 0.7575730910540768,
+    "final_loss": 6.490652561187744,
+    "identical_view_rate": 0.0074648648648648645,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk-s0-f0.parquet"
+}
+epoch 50/200 loss 12.2215
+epoch 100/200 loss 8.3930
+epoch 150/200 loss 6.9736
+epoch 200/200 loss 5.7269
+{
+  "run_id": "emin2_llama2_7b_t0_akk-s0-f1",
+  "metrics": {
+    "train_soft_spearman": 0.7908806334372016,
+    "train_spearman": 0.7909451836031122,
+    "final_loss": 5.7268723249435425,
+    "identical_view_rate": 0.006731171548117155,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk-s0-f1.parquet"
+}
+epoch 50/200 loss 11.7787
+epoch 100/200 loss 8.5957
+epoch 150/200 loss 6.6178
+epoch 200/200 loss 6.0380
+{
+  "run_id": "emin2_llama2_7b_t0_akk-s0-f2",
+  "metrics": {
+    "train_soft_spearman": 0.8027007155170717,
+    "train_spearman": 0.8026901690643921,
+    "final_loss": 6.038026213645935,
+    "identical_view_rate": 0.007751817237798546,
+    "test_spearman": 0.20850893061365583
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk-s0-f2.parquet"
+}
+epoch 50/200 loss 12.5960
+epoch 100/200 loss 9.2463
+epoch 150/200 loss 7.2046
+epoch 200/200 loss 6.1749
+{
+  "run_id": "emin2_llama2_7b_t0_akk-s0-f3",
+  "metrics": {
+    "train_soft_spearman": 0.7250376660641146,
+    "train_spearman": 0.7250531463706124,
+    "final_loss": 6.1748844385147095,
+    "identical_view_rate": 0.0035840248962655604,
+    "test_spearman": 0.5919949975904416
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk-s0-f3.parquet"
+}
+epoch 50/200 loss 12.1972
+epoch 100/200 loss 8.6694
+epoch 150/200 loss 6.8136
+epoch 200/200 loss 5.7820
+{
+  "run_id": "emin2_llama2_7b_t0_akk-s0-f4",
+  "metrics": {
+    "train_soft_spearman": 0.6944525820654771,
+    "train_spearman": 0.6943225029114789,
+    "final_loss": 5.78195333480835,
+    "identical_view_rate": 0.007085062240663901,
+    "test_spearman": 0.6926800866057594
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk-s0-f4.parquet"
+}
+[baseline] baseline_ridge_L16mean_akk fold 0: fit on 910 distinct orig views of 925 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk-s0-f0.parquet
+[baseline] baseline_ridge_L16mean_akk fold 1: fit on 947 distinct orig views of 956 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk-s0-f1.parquet
+[baseline] baseline_ridge_L16mean_akk fold 2: fit on 947 distinct orig views of 963 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk-s0-f2.parquet
+[baseline] baseline_ridge_L16mean_akk fold 3: fit on 949 distinct orig views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk-s0-f3.parquet
+[baseline] baseline_ridge_L16mean_akk fold 4: fit on 951 distinct orig views of 964 docs -> chrono/reports/tier0/scores/baseline_ridge_L16mean_akk-s0-f4.parquet
+[baseline] baseline_pls_L16mean_akk fold 0: fit on 910 distinct orig views of 925 docs -> chrono/reports/tier0/scores/baseline_pls_L16mean_akk-s0-f0.parquet
+[baseline] baseline_pls_L16mean_akk fold 1: fit on 947 distinct orig views of 956 docs -> chrono/reports/tier0/scores/baseline_pls_L16mean_akk-s0-f1.parquet
+[baseline] baseline_pls_L16mean_akk fold 2: fit on 947 distinct orig views of 963 docs -> chrono/reports/tier0/scores/baseline_pls_L16mean_akk-s0-f2.parquet
+[baseline] baseline_pls_L16mean_akk fold 3: fit on 949 distinct orig views of 964 docs -> chrono/reports/tier0/scores/baseline_pls_L16mean_akk-s0-f3.parquet
+[baseline] baseline_pls_L16mean_akk fold 4: fit on 951 distinct orig views of 964 docs -> chrono/reports/tier0/scores/baseline_pls_L16mean_akk-s0-f4.parquet
+[gate] ridge L8 mean: mc +0.399±0.058 gkf_pooled +0.388 placebo -0.003±0.075
+[gate] pls L8 mean: mc +0.284±0.058 gkf_pooled +0.278 placebo -0.003±0.076
+[gate] ridge L8 last: mc +0.158±0.065 gkf_pooled +0.173 placebo +0.005±0.079
+[gate] pls L8 last: mc +0.118±0.066 gkf_pooled +0.173 placebo +0.002±0.081
+[gate] ridge L16 mean: mc +0.356±0.056 gkf_pooled +0.313 placebo +0.003±0.079
+[gate] pls L16 mean: mc +0.221±0.059 gkf_pooled +0.247 placebo -0.000±0.078
+[gate] ridge L16 last: mc +0.194±0.066 gkf_pooled +0.220 placebo -0.003±0.079
+[gate] pls L16 last: mc +0.098±0.070 gkf_pooled +0.175 placebo -0.006±0.079
+[gate] ridge L24 mean: mc +0.344±0.058 gkf_pooled +0.271 placebo +0.002±0.078
+[gate] pls L24 mean: mc +0.188±0.062 gkf_pooled +0.201 placebo -0.003±0.081
+[gate] ridge L24 last: mc +0.279±0.061 gkf_pooled +0.257 placebo -0.004±0.079
+[gate] pls L24 last: mc +0.143±0.065 gkf_pooled +0.195 placebo -0.008±0.077
+[gate] ridge L32 mean: mc +0.359±0.059 gkf_pooled +0.315 placebo +0.004±0.078
+[gate] pls L32 mean: mc +0.174±0.061 gkf_pooled +0.185 placebo -0.004±0.082
+[gate] ridge L32 last: mc +0.296±0.057 gkf_pooled +0.265 placebo -0.005±0.077
+[gate] pls L32 last: mc +0.181±0.062 gkf_pooled +0.214 placebo -0.006±0.072
+========================================================================
+P0.4 BASELINE GATE
+========================================================================
+probe  layer site    gkf pooled         mc rho    doc placebo     BLOCK null
+ridge      8 mean        +0.388   +0.399±0.058   -0.003±0.075   +0.011±0.179
+pls        8 mean        +0.278   +0.284±0.058   -0.003±0.076   -0.002±0.153
+ridge      8 last        +0.173   +0.158±0.065   +0.005±0.079   -0.005±0.095
+pls        8 last        +0.173   +0.118±0.066   +0.002±0.081   -0.001±0.086
+ridge     16 mean        +0.313   +0.356±0.056   +0.003±0.079   +0.008±0.165
+pls       16 mean        +0.247   +0.221±0.059   -0.000±0.078   -0.008±0.132
+ridge     16 last        +0.220   +0.194±0.066   -0.003±0.079   -0.005±0.111
+pls       16 last        +0.175   +0.098±0.070   -0.006±0.079   -0.002±0.086
+ridge     24 mean        +0.271   +0.344±0.058   +0.002±0.078   +0.006±0.164
+pls       24 mean        +0.201   +0.188±0.062   -0.003±0.081   -0.022±0.138
+ridge     24 last        +0.257   +0.279±0.061   -0.004±0.079   -0.012±0.132
+pls       24 last        +0.195   +0.143±0.065   -0.008±0.077   -0.005±0.094
+ridge     32 mean        +0.315   +0.359±0.059   +0.004±0.078   +0.008±0.172
+pls       32 mean        +0.185   +0.174±0.061   -0.004±0.082   -0.016±0.134
+ridge     32 last        +0.265   +0.296±0.057   -0.005±0.077   -0.006±0.144
+pls       32 last        +0.214   +0.181±0.062   -0.006±0.072   -0.009±0.108
+------------------------------------------------------------------------
+VERDICT CELL (a priori: pls L16 mean) — mc rho +0.221
+best-of-16 cell (SELECTION-INFLATED, context only): ridge L8 mean mc rho +0.399
+block null (ruler-level, the honest reference): -0.004±0.134 — a max over 16 cells of pure ruler-block noise reaches ~0.72, so never read the best cell as a result.
+gate reference: UNPINNED — re-pin from v_1/src/phase2/pairs/RESULTS.md (plan addendum): the legacy 0.41±0.02 used the 1,202/41-ruler frame, the eligible corpus is now 1,187/40.
+verdict: UNPINNED (comparison only, no pass/fail)
+====================================================================
+[gate] 80 result rows -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/results.parquet; report -> chrono/reports/tier0/gate_emin2_llama2_7b_t0_akk_akk.txt
+[yarin-sandbox ecc0055f] C3v2: emin2_llama2_7b_t0_akk seed 0 (job 33357)
+ 2 files changed, 27 insertions(+)
+ create mode 100644 chrono/reports/tier0/gate_emin2_llama2_7b_t0_akk_akk.txt
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   a9658c70..ecc0055f  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 07:51:52 UTC 2026 ===

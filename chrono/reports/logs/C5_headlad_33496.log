@@ -1,0 +1,101 @@
+# job 33496 C5_headlad exit=0 Wed Sep  2 14:30:42 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C5_headlad_33475_15.out
+=== C5 emin2_llama2_7b_t0_akk_erase_period seed 0 === job 33496 Wed Sep  2 14:26:30 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[erase] LEACE 'period' (k=6, rank 5) fitted on 925 train orig rows, applied to 19088 views
+epoch 50/200 loss 12.1736
+epoch 100/200 loss 8.8006
+epoch 150/200 loss 7.1163
+epoch 200/200 loss 6.1016
+{
+  "run_id": "emin2_llama2_7b_t0_akk_erase_period-s0-f0",
+  "metrics": {
+    "train_soft_spearman": 0.5322587552550132,
+    "train_spearman": 0.5320406467296609,
+    "final_loss": 6.101603865623474,
+    "identical_view_rate": 0.0074648648648648645,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk_erase_period-s0-f0.parquet"
+}
+[erase] LEACE 'period' (k=6, rank 5) fitted on 956 train orig rows, applied to 19088 views
+epoch 50/200 loss 12.4398
+epoch 100/200 loss 8.3024
+epoch 150/200 loss 6.9408
+epoch 200/200 loss 5.8652
+{
+  "run_id": "emin2_llama2_7b_t0_akk_erase_period-s0-f1",
+  "metrics": {
+    "train_soft_spearman": 0.6585992461345006,
+    "train_spearman": 0.658794759199799,
+    "final_loss": 5.865200638771057,
+    "identical_view_rate": 0.006731171548117155,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk_erase_period-s0-f1.parquet"
+}
+[erase] LEACE 'period' (k=6, rank 3) fitted on 963 train orig rows, applied to 19088 views
+epoch 50/200 loss 12.8125
+epoch 100/200 loss 9.2955
+epoch 150/200 loss 7.1524
+epoch 200/200 loss 6.3709
+{
+  "run_id": "emin2_llama2_7b_t0_akk_erase_period-s0-f2",
+  "metrics": {
+    "train_soft_spearman": 0.5760635010005377,
+    "train_spearman": 0.5762099503258354,
+    "final_loss": 6.370899319648743,
+    "identical_view_rate": 0.007751817237798546,
+    "test_spearman": 0.08811772584798
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk_erase_period-s0-f2.parquet"
+}
+[erase] LEACE 'period' (k=6, rank 5) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 12.1266
+epoch 100/200 loss 8.7244
+epoch 150/200 loss 6.9247
+epoch 200/200 loss 5.9981
+{
+  "run_id": "emin2_llama2_7b_t0_akk_erase_period-s0-f3",
+  "metrics": {
+    "train_soft_spearman": 0.5412551063087854,
+    "train_spearman": 0.5411780879294046,
+    "final_loss": 5.998103618621826,
+    "identical_view_rate": 0.0035840248962655604,
+    "test_spearman": 0.5027677915608498
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk_erase_period-s0-f3.parquet"
+}
+[erase] LEACE 'period' (k=6, rank 4) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 12.3679
+epoch 100/200 loss 8.7654
+epoch 150/200 loss 6.8211
+epoch 200/200 loss 5.8428
+{
+  "run_id": "emin2_llama2_7b_t0_akk_erase_period-s0-f4",
+  "metrics": {
+    "train_soft_spearman": 0.5050214912116857,
+    "train_spearman": 0.5049432250366795,
+    "final_loss": 5.842798352241516,
+    "identical_view_rate": 0.007085062240663901,
+    "test_spearman": 0.418361835623316
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_llama2_7b_t0_akk_erase_period-s0-f4.parquet"
+}
+[yarin-sandbox c86cd9e6] C5: head ladder emin2_llama2_7b_t0_akk_erase_period seed 0 (job 33496)
+ 6 files changed, 110 insertions(+)
+ create mode 100644 chrono/reports/logs/C5_headlad_33498.log
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_llama2_7b_t0_akk_erase_period-s1-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_llama2_7b_t0_akk_erase_period-s1-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_llama2_7b_t0_akk_erase_period-s1-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_llama2_7b_t0_akk_erase_period-s1-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_llama2_7b_t0_akk_erase_period-s1-f4.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   4f5b1088..c86cd9e6  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 14:30:42 UTC 2026 ===
