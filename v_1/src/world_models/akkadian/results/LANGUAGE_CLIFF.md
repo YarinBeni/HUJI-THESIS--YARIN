@@ -17,11 +17,11 @@ restricted to exactly the rulers whose Akkadian spelling survived the harvest
 | Qwen3-8B | .596 | .684 | .252 | **.43** |
 | OLMo-2-7B | .526 | .643 | .129 | **.51** |
 | cuneiformBase-400m | .456 | .415 | .451 | **−.04** |
-| gpt-oss-120B | .663 | — | pending (C23b) | — |
+| gpt-oss-120B | .663 | pending (CPU probe) | .265 | **.40 (vs eng40)** |
 
 ## What it says
 
-1. **Three independent LLM families lose 60–80 % of their entity-dating
+1. **Four independent LLM families lose 60–80 % of their entity-dating
    signal when the king's name is written in his own script.** Their
    chronological knowledge is bound to the English surface form.
 2. **The domain encoder has no cliff at all** (−.04): cunei400m knows the
@@ -32,7 +32,7 @@ restricted to exactly the rulers whose Akkadian spelling survived the harvest
    7B–8B LLMs on Akkadian *documents* (E-MIN v2, C18) while losing to them
    on English *names*.
 4. Pooling note: with `ent_mean` over the name span the Akkadian numbers
-   recover substantially (Llama .36, Qwen .44, cunei .51) — the last token
+   recover substantially (Llama .36, Qwen .44, gpt-oss .39, cunei .51) — the last token
    of a long transliterated name is a poor summary; part of the cliff is
    read-out, not knowledge. The cliff survives but narrows.
 
