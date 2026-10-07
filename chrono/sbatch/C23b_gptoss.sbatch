@@ -2,9 +2,9 @@
 #SBATCH --job-name=C23b_gptoss
 #SBATCH --partition=voltagepark
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
-#SBATCH --gres=gpu:8
-#SBATCH --time=03:00:00
+#SBATCH --mem=128G
+#SBATCH --gres=gpu:4
+#SBATCH --time=05:00:00
 
 #SBATCH --output=chrono/sbatch/logs/C23b_gptoss_%j.out
 # ===========================================================================
@@ -25,6 +25,20 @@ source chrono/sbatch/_sandbox.sh
 sync_sandbox || { echo "FAILED sync_sandbox"; exit 1; }
 enable_log_push
 mkdir -p chrono/sbatch/logs
+# WHY gpu:4 not gpu:8: the 8-GPU request sat PENDING for ~2 days — co-locating
+# 8 free GPUs on one node is the bottleneck, not compute. gpt-oss-120b loads
+# bf16 via device_map=auto at ~240 GB of weights, which fits 4x80GB with room
+# for activations (batches here are small probe sentences).
+nvidia-smi --query-gpu=name,memory.total --format=csv || true
+# periodic log push: every 15 min commit the tail of this job's stdout, so a
+# stall is diagnosable from the repo while the job still runs. The subshell
+# dies with the job; the EXIT trap still pushes the final log.
+( OUT="chrono/sbatch/logs/C23b_gptoss_${SLURM_JOB_ID}.out"
+  while sleep 900; do
+      dest="chrono/reports/logs/C23b_gptoss_${SLURM_JOB_ID}.progress.log"
+      { echo "# progress $(date -u)"; tail -n 300 "$OUT" 2>/dev/null; } > "$dest"
+      commit_push_sandbox "logs: C23b ${SLURM_JOB_ID} progress" chrono/reports/logs || true
+  done ) &
 WB=v_1/src/world_models/akkadian
 # dataset build is idempotent and cheap; the flock keeps array tasks off each other
 ( flock -w 600 9
