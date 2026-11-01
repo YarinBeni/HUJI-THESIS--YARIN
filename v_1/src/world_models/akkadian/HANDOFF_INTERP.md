@@ -1,21 +1,42 @@
 # HANDOFF — the interpretability wave, for the Overleaf paper agent
 
-You are writing the thesis paper (repo `YarinBeni/Yarin-Thesis`, `main.tex`).
-This document hands you every experiment run in the interpretability wave
-(Oct 2026), with the numbers, the figure files, and exactly which repo and
-branch each asset lives on. Write measurements as claims; keep mechanisms
-and speculation in the discussion.
+You are writing the thesis paper (repo `YarinBeni/Yarin-Thesis`, working
+branch `claude/thesis-latex-build-qc28vp`, file `main.tex`). This document
+hands you every experiment run in the interpretability wave (Oct 2026),
+with the numbers, the figure files, and exactly where each asset lives.
+Write measurements as claims; keep mechanisms and speculation in the
+discussion.
 
-## 0. Repo map (checked 2026-11-01 — there is NO duplication)
+## Context paper
+
+**NLMCD** = arXiv:2610.01821, https://arxiv.org/html/2610.01821v1 — the
+document-manifold concept-discovery paper. It finds emergent nonlinear
+manifolds in LLM document-embedding spaces (UMAP to low dimension +
+HDBSCAN clustering) and interprets the manifolds as concepts. Cite it
+wherever this handoff says "NLMCD-inspired": Experiment B replicates its
+manifold analysis on the Akkadian corpus, and the atlas figures
+(Experiment C) follow its figure programme. When Yarin says "the manifold
+paper", he means this one.
+
+## Scope
+
+This handoff covers the work that started from Yarin's 2026-10-06
+question: "did we run entity in Akkadian and not English? maybe the cliff
+is language AND text — two cliffs?" plus the NLMCD reading. It is the
+WB-akk entity experiment, the manifold analysis, the alignment atlas, and
+all their controls. The earlier SSL / chrono-rank representation-learning
+programme is OUT of scope for this handoff — do not pull its numbers.
+
+## 0. Repo map (checked 2026-11-01 — no duplicate repos)
 
 | repo | visibility | role |
 |---|---|---|
-| `YarinBeni/Yarin-Thesis` | private | THE PAPER: main.tex, drafts, figs/ |
-| `YarinBeni/HUJI-THESIS--YARIN`, branch `main` | public | M.Sc. code + the WB-akk entity experiment + its results |
-| `YarinBeni/HUJI-THESIS--YARIN`, branch `yarin-sandbox` | public | the document-level interpretability wave: alignment atlas, manifolds, all control reports (everything under `chrono/`) |
+| `YarinBeni/Yarin-Thesis` | private | THE PAPER: main.tex, drafts, figs/. Branches: `main` + your working branch `claude/thesis-latex-build-qc28vp` — only these two exist, no duplicates. |
+| `YarinBeni/HUJI-THESIS--YARIN`, branch `main` | public | EVERYTHING: the M.Sc. code, the WB-akk experiment, and the full interpretability wave (all `chrono/` scripts and reports). `yarin-sandbox` was merged into `main` on 2026-11-01 (merge `05a7ad33`); read every path below from `main`. |
 
-Shorthand below: **[main]** and **[sandbox]** = branches of
-`YarinBeni/HUJI-THESIS--YARIN`.
+The old **** / **** distinction is gone: every path in this
+document is on `main` of `YarinBeni/HUJI-THESIS--YARIN`. (`yarin-sandbox`
+still exists as the historical working branch; ignore it.)
 
 ## 1. Background the paper already has
 
@@ -34,7 +55,7 @@ with the Akkadian set, so eng25-vs-akk is language-only. Probes: frozen
 activations, ridge, Monte-Carlo entity splits, Spearman rho, best layer.
 
 **Headline table** (bare name, ent_last; source of truth
-`v_1/src/world_models/akkadian/results/LANGUAGE_CLIFF.md` [main and sandbox]):
+`v_1/src/world_models/akkadian/results/LANGUAGE_CLIFF.md`):
 
 | model | eng (40) | eng25 (21 matched) | akk name | cliff (eng25−akk) |
 |---|---|---|---|---|
@@ -56,9 +77,8 @@ of a long transliterated name, not missing knowledge.
 the correct king in 96.0% of 476 documents; leakage is genealogy; one enemy
 name (Teumman) was caught by the test. Report:
 `v_1/src/world_models/akkadian/results/VALIDATE_ENTITY_AKK.md`; figure:
-`results/validate_histograms.png` [main]. Full per-site tables:
-`results/RESULTS_entity.md` (the [sandbox] copy includes the final gpt-oss
-eng25 row; [main]'s copy predates it).
+`results/validate_histograms.png`. Full per-site tables:
+`results/RESULTS_entity.md` (includes the final gpt-oss eng25 row).
 
 **Caveats to print.** 25 rulers with surviving spellings (21 matched); MC
 sd in akk cells ±.4–.5 (ranking stable, magnitudes not); R² negative
@@ -73,15 +93,15 @@ documents, per model/layer; ask what the emergent clusters correspond to.
 **Results.** cunei400m L12: 22 manifolds, all explained by corpus×genre;
 Qwen: 8. One mixed eBL cluster carries real internal period structure
 (silhouette +0.152 vs permutation null −.001, p=0.00). Script
-`chrono/scripts/nlmcd_concepts.py` [sandbox]; outputs in
-`chrono/reports/` [sandbox].
+`chrono/scripts/nlmcd_concepts.py`; outputs in
+`chrono/reports/`.
 
 **Backed claim.** Unsupervised document geometry organizes by
 corpus and genre, not by time.
 
 ## 4. Experiment C — the alignment atlas (the good figures)
 
-All under `chrono/reports/tier0/atlas/` [sandbox]; script
+All under `chrono/reports/tier0/atlas/`; script
 `chrono/scripts/alignment_atlas.py`. 1,193 documents embedded twice
 (Akkadian + English translation), mean pooling, per layer.
 
@@ -106,7 +126,7 @@ All under `chrono/reports/tier0/atlas/` [sandbox]; script
 
 ## 5. Experiment D — the controls (what the alignment is NOT)
 
-Reports in `chrono/reports/tier0/atlas/` [sandbox]:
+Reports in `chrono/reports/tier0/atlas/`:
 
 | control | file | result |
 |---|---|---|
@@ -149,7 +169,7 @@ in clustering (consistent with the all-negative silhouettes).
 USE: the four atlas figures (Section 4), `validate_histograms.png`,
 `D_entity_maps.png`. Rebuild Fig B only after seed-averaging if time allows.
 DO NOT USE: `results/cliff_schema.png` and `results/cliff_lattice.png`
-[main] — superseded drafts of the fame×language×form summary; Yarin has
+ — superseded drafts of the fame×language×form summary; Yarin has
 not approved a final design for that figure yet. Leave a placeholder.
 
 ## 9. Pooling (for the methods section)
