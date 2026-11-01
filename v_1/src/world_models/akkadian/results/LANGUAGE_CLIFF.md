@@ -17,7 +17,7 @@ restricted to exactly the rulers whose Akkadian spelling survived the harvest
 | Qwen3-8B | .596 | .684 | .252 | **.43** |
 | OLMo-2-7B | .526 | .643 | .129 | **.51** |
 | cuneiformBase-400m | .456 | .415 | .451 | **−.04** |
-| gpt-oss-120B | .663 | pending (CPU probe) | .265 | **.40 (vs eng40)** |
+| gpt-oss-120B | .663 | .526 | .265 | **.26** |
 
 ## What it says
 
