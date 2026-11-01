@@ -1,0 +1,53 @@
+# job 33486 C4_ladder exit=0 Wed Sep  2 16:50:01 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C4_ladder_33445_4.out
+=== C4 ladder emin2_qwen3_8b_t0_akk === job 33486 Wed Sep  2 14:20:36 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[ladder] L18mean_akk ridge erase=none       mc +0.259 pooled +0.261 readability after nan (k=0)
+[ladder] L18mean_akk ridge erase=ruler      mc -0.023 pooled -0.139 readability after 0.120 (k=40)
+[ladder] L18mean_akk ridge erase=period     mc +0.160 pooled +0.183 readability after 0.253 (k=6)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[ladder] L18mean_akk ridge erase=subgenre   mc +0.214 pooled +0.188 readability after 0.063 (k=21)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[ladder] L18mean_akk ridge erase=provenance mc -0.198 pooled -0.140 readability after 0.066 (k=21)
+[ladder] L18mean_akk ridge erase=length     mc +0.193 pooled +0.158 readability after 0.052 (k=6)
+[ladder] L18mean_akk ridge erase=year10     mc +0.073 pooled +0.143 readability after 0.124 (k=7)
+# Erasure ladder — Qwen/Qwen3-8B L18 mean · langs ['akk'] · ridge
+
+| erased | k | mc ρ | gkf pooled ρ | Δ mc vs none | z readable before → after (bal. acc, classes ≥10 docs; chance = 1/n) |
+|---|---|---|---|---|---|
+| none | 0 | +0.259 | +0.261 | +0.000 | — |
+| ruler | 40 | -0.023 | -0.139 | -0.282 | 0.67 → 0.12 (n=11, chance 0.09) |
+| period | 6 | +0.160 | +0.183 | -0.100 | 0.67 → 0.25 (n=3, chance 0.33) |
+| subgenre | 21 | +0.214 | +0.188 | -0.045 | 0.48 → 0.06 (n=18, chance 0.06) |
+| provenance | 21 | -0.198 | -0.140 | -0.457 | 0.41 → 0.07 (n=15, chance 0.07) |
+| length | 6 | +0.193 | +0.158 | -0.067 | 0.74 → 0.05 (n=5, chance 0.20) |
+| year10 | 7 | +0.073 | +0.143 | -0.186 | 0.68 → 0.12 (n=7, chance 0.14) |
+
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 08289c6a] C4: erasure ladder emin2_qwen3_8b_t0_akk (job 33486)
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+ rewrite chrono/reports/tier0/ladder/emin2_qwen3_8b_t0_akk_ridge.md (60%)
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   d9cfcdec..08289c6a  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 16:50:01 UTC 2026 ===

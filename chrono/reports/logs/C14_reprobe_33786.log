@@ -1,0 +1,104 @@
+# job 33786 C14_reprobe exit=0 Thu Sep  3 10:41:10 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C14_reprobe_33784_1.out
+=== C14 Thalesian/cuneiformBase-400m L12 mean === job 33786 Thu Sep  3 08:53:00 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: 97de7210
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+# S1 representation probes — Thalesian/cuneiformBase-400m::L12::mean
+
+texts 30,729 · PCA 256 · classes need ≥ 30 docs
+
+## Probes (balanced accuracy, 5-fold, tablet level)
+
+| label | classes | n | linear | MLP | chance |
+|---|---|---|---|---|---|
+| period_norm | 5 | 6,300 | 0.890 ± 0.041 | 0.823 ± 0.029 | 0.200 |
+| genre_raw | 71 | 27,187 | 0.273 ± 0.012 | 0.215 ± 0.012 | 0.014 |
+| provenance | 16 | 30,419 | 0.674 ± 0.020 | 0.670 ± 0.023 | 0.062 |
+| source | 5 | 30,720 | 0.963 ± 0.009 | 0.963 ± 0.007 | 0.200 |
+
+## Period probe WITHIN source (linear)
+
+| source | classes | n | balanced acc | chance |
+|---|---|---|---|---|
+| oracc | 2 | 3,414 | 0.993 ± 0.009 | 0.500 |
+| seal | 3 | 328 | 0.775 ± 0.054 | 0.333 |
+
+## Period probe, HELD-OUT source (train on the others, linear)
+
+| held out | n test | balanced acc | chance |
+|---|---|---|---|
+
+## Geometry (period)
+
+silhouette (raw space) +0.092 · permutation null -0.018 ± 0.011 · p = 0.000
+k-NN (k=10) period purity 0.981 · chance ≈ 0.341
+silhouette (UMAP-2d) +0.631 · null -0.057 ± 0.029 · p = 0.000
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 2e76363c] C14: probes Thalesian/cuneiformBase-400m L12 (job 33786)
+ 1 file changed, 104 insertions(+)
+ create mode 100644 chrono/reports/logs/C14_reprobe_33785.log
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+[commit_push_sandbox] FAILED after 5 attempts
+=== Done. Thu Sep  3 10:41:10 UTC 2026 ===

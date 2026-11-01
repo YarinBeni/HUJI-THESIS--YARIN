@@ -1,0 +1,46 @@
+# job 34272 C20b_seed exit=0 Fri Sep  4 17:16:37 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C20b_seed_34272.out
+=== C20b byol wdated anti=leace seed 0 === job 34272 Fri Sep  4 17:15:13 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[ssl] ssl_byol_cunei400m_leace_wdated-s0: 25,765 train texts, 283,415 views; loading features
+[ssl] objective=byol d_in=768 head_params=722,561 steps=3000 batch=512 balance_alpha=0.5 sources={'ebl': 13242, 'oracc': 9016, 'archibab': 1218, 'orcc': 1185, 'lbl_letters': 816, 'seal': 288}
+[ssl] step 0: LEACE refit, rank 5
+[ssl] step 0 loss 2.1003 (0s)
+[ssl] step 200 loss 0.0232 (2s)
+[ssl] step 400 loss 0.0008 (3s)
+[ssl] step 600 loss 0.0396 (5s)
+[ssl] step 800 loss 0.0001 (6s)
+[ssl] step 1000 loss 0.0147 (8s)
+[ssl] step 1200 loss 0.0689 (10s)
+[ssl] step 1400 loss 0.0000 (11s)
+[ssl] step 1600 loss 0.1981 (13s)
+[ssl] step 1800 loss 0.0000 (14s)
+[ssl] step 2000: LEACE refit, rank 5
+[ssl] step 2000 loss 0.0016 (16s)
+[ssl] step 2200 loss 0.4416 (17s)
+[ssl] step 2400 loss 0.0000 (19s)
+[ssl] step 2600 loss 0.0021 (21s)
+[ssl] step 2800 loss 0.0000 (22s)
+[ssl] step 2999 loss 0.0000 (24s)
+[ssl] done ssl_byol_cunei400m_leace_wdated-s0: head -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts_ssl/ssl_runs/ssl_byol_cunei400m_leace_wdated-s0.pt; embeddings -> store model 'ssl::ssl_byol_cunei400m_leace_wdated-s0' L0 site h (31,905 texts)
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox c78abcd4] C20b: ssl_byol_cunei400m_wdated-s0 (job 34272)
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   36e0bae9..c78abcd4  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Fri Sep  4 17:16:37 UTC 2026 ===

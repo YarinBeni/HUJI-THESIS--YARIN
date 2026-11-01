@@ -1,0 +1,21 @@
+# 060_atlas_debug  host=g0378  start=Tue Oct  6 12:35:29 UTC 2026  timeout=900s
+# HEAD=5163032bc
+# ---------------------------------------------------------
+total 453
+drwx------ 2 yarin.b pwuser   4096 Oct  6 12:09 .
+drwx------ 2 yarin.b pwuser   4096 Oct  6 09:22 ..
+-rw------- 1 yarin.b pwuser    637 Oct  6 12:26 ATLAS.md
+-rw------- 1 yarin.b pwuser  36431 Oct  6 09:23 A_layer_alignment.png
+-rw------- 1 yarin.b pwuser  36431 Oct  6 12:16 A_layer_alignment_cuneiformBase-400m.png
+-rw------- 1 yarin.b pwuser   1911 Oct  6 12:22 B_language_alignment.csv
+-rw------- 1 yarin.b pwuser 121493 Oct  6 12:22 B_language_alignment.png
+-rw------- 1 yarin.b pwuser   2190 Oct  6 12:26 C_time_depth.csv
+-rw------- 1 yarin.b pwuser  96369 Oct  6 12:26 C_time_depth.png
+22 chrono/reports/tier0/atlas/B_language_alignment.csv
+manifest llama mean layers: [np.int64(2), np.int64(4), np.int64(6), np.int64(8), np.int64(10), np.int64(12), np.int64(14), np.int64(16), np.int64(18), np.int64(20), np.int64(22), np.int64(24), np.int64(26), np.int64(28), np.int64(30), np.int64(32)]
+L2 akk: all 1193 ids present -> False
+  missing examples: ['Q003736::akk::+s0', 'Q004037::akk::+s0', 'Q004070::akk::+s0', 'Q005597::akk::+s0', 'Q006287::akk::+s0']
+L2 eng: all 1193 ids present -> False
+  missing examples: ['Q003736::eng::+s0', 'Q004037::eng::+s0', 'Q004070::eng::+s0', 'Q005597::eng::+s0', 'Q006287::eng::+s0']
+# ---------------------------------------------------------
+# exit=0  end=Tue Oct  6 12:35:37 UTC 2026

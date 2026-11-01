@@ -1,0 +1,96 @@
+# job 33492 C5_headlad exit=0 Wed Sep  2 14:26:08 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C5_headlad_33475_11.out
+=== C5 emin2_cunei400m_t0_akk_erase_length seed 2 === job 33492 Wed Sep  2 14:23:06 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[erase] LEACE 'length' (k=6, rank 5) fitted on 925 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.1158
+epoch 100/200 loss 5.5258
+epoch 150/200 loss 4.7617
+epoch 200/200 loss 4.3048
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_length-s2-f0",
+  "metrics": {
+    "train_soft_spearman": 0.6384317201386167,
+    "train_spearman": 0.6382832472524451,
+    "final_loss": 4.304841995239258,
+    "identical_view_rate": 0.007491891891891892,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_length-s2-f0.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 956 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.5331
+epoch 100/200 loss 5.5280
+epoch 150/200 loss 4.9942
+epoch 200/200 loss 4.4896
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_length-s2-f1",
+  "metrics": {
+    "train_soft_spearman": 0.7033890964044143,
+    "train_spearman": 0.7032143969062682,
+    "final_loss": 4.489642024040222,
+    "identical_view_rate": 0.00651673640167364,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_length-s2-f1.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 963 train orig rows, applied to 19088 views
+epoch 50/200 loss 6.9055
+epoch 100/200 loss 5.1655
+epoch 150/200 loss 4.2966
+epoch 200/200 loss 3.9050
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_length-s2-f2",
+  "metrics": {
+    "train_soft_spearman": 0.7177684634655805,
+    "train_spearman": 0.7177821120084152,
+    "final_loss": 3.9050379395484924,
+    "identical_view_rate": 0.007876427829698858,
+    "test_spearman": 0.2481589348561162
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_length-s2-f2.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.9084
+epoch 100/200 loss 5.7166
+epoch 150/200 loss 4.9098
+epoch 200/200 loss 4.4812
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_length-s2-f3",
+  "metrics": {
+    "train_soft_spearman": 0.6413780735477539,
+    "train_spearman": 0.6413935589762453,
+    "final_loss": 4.4812222719192505,
+    "identical_view_rate": 0.0036566390041493776,
+    "test_spearman": 0.4566153911253561
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_length-s2-f3.parquet"
+}
+[erase] LEACE 'length' (k=6, rank 5) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.2175
+epoch 100/200 loss 5.1516
+epoch 150/200 loss 4.4545
+epoch 200/200 loss 4.2308
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_length-s2-f4",
+  "metrics": {
+    "train_soft_spearman": 0.6036879694938331,
+    "train_spearman": 0.6034501076359563,
+    "final_loss": 4.230825901031494,
+    "identical_view_rate": 0.007287344398340249,
+    "test_spearman": 0.7194662676312045
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_length-s2-f4.parquet"
+}
+[yarin-sandbox 4418b4a8] C5: head ladder emin2_cunei400m_t0_akk_erase_length seed 2 (job 33492)
+ 1 file changed, 116 insertions(+)
+ create mode 100644 chrono/reports/logs/C5_headlad_33490.log
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   c6d21907..4418b4a8  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 14:26:08 UTC 2026 ===

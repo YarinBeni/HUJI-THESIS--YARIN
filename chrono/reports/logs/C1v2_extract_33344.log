@@ -1,0 +1,58 @@
+# job 33344 C1v2_extract exit=1 Wed Sep  2 06:22:55 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C1v2_extract_33341_1.out
+=== C1v2 extract qwen3_8b layers 9,18,27,36 === job 33344 Wed Sep  2 06:20:00 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: f376b926
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+[corpus] 1193 rows | 40 rulers | 47 distinct t | t in [-1132, -261]
+[spans]  eng coverage 0.459 | akk coverage 0.000
+[write]  chrono/artifacts_tier0/corpus_chrono.parquet
+[write]  chrono/artifacts_tier0/ruler_table.parquet (40 rulers)
+[split] gkf_ruler: 5 folds, test sizes [229, 230, 237, 268] -> chrono/artifacts_tier0/splits/gkf_ruler.json
+[split] mc_balanced: 200 folds, test sizes [168] -> chrono/artifacts_tier0/splits/mc_balanced.json
+[split] loro: 11 folds, test sizes [10, 12, 15, 21, 68, 75] -> chrono/artifacts_tier0/splits/loro.json
+[split] source_held_out: 5 folds, test sizes [59, 98, 99, 121, 497] -> chrono/artifacts_tier0/splits/source_held_out.json
+[split] object_held_out: 5 folds, test sizes [47, 71, 81, 135, 179] -> chrono/artifacts_tier0/splits/object_held_out.json
+38176 views from 1193 docs -> chrono/artifacts_tier0/views.parquet
+confound audit -> chrono/artifacts_tier0/views_audit.parquet
+Fetching 15 files:   0%|          | 0/15 [00:00<?, ?it/s]Fetching 15 files: 100%|██████████| 15/15 [00:00<00:00, 4140.48it/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights:   0%|          | 1/399 [00:01<09:55,  1.50s/it]Loading weights:   1%|          | 2/399 [00:05<19:52,  3.00s/it]Loading weights:   1%|          | 3/399 [00:05<11:50,  1.79s/it]Loading weights:   1%|▏         | 5/399 [00:06<05:49,  1.13it/s]Loading weights:   2%|▏         | 6/399 [00:06<04:44,  1.38it/s]Loading weights:   3%|▎         | 10/399 [00:06<01:54,  3.41it/s]Loading weights:   3%|▎         | 12/399 [00:06<01:25,  4.55it/s]Loading weights:   4%|▍         | 15/399 [00:07<01:09,  5.55it/s]Loading weights:   4%|▍         | 17/399 [00:07<01:29,  4.25it/s]Loading weights:   5%|▌         | 21/399 [00:08<00:56,  6.66it/s]Loading weights:   6%|▌         | 23/399 [00:08<00:48,  7.79it/s]Loading weights:   7%|▋         | 26/399 [00:08<00:51,  7.29it/s]Loading weights:   7%|▋         | 28/399 [00:09<00:52,  7.09it/s]Loading weights:   8%|▊         | 33/399 [00:09<00:31, 11.72it/s]Loading weights:   9%|▉         | 37/399 [00:09<00:26, 13.84it/s]Loading weights:  10%|█         | 40/399 [00:09<00:30, 11.66it/s]Loading weights:  11%|█         | 43/399 [00:09<00:26, 13.21it/s]Loading weights:  12%|█▏        | 48/399 [00:10<00:21, 16.44it/s]Loading weights:  13%|█▎        | 51/399 [00:10<00:26, 13.28it/s]Loading weights:  14%|█▍        | 56/399 [00:10<00:18, 18.34it/s]Loading weights:  15%|█▍        | 59/399 [00:10<00:18, 18.77it/s]Loading weights:  16%|█▌        | 62/399 [00:10<00:23, 14.61it/s]Loading weights:  17%|█▋        | 66/399 [00:11<00:19, 17.52it/s]Loading weights:  18%|█▊        | 70/399 [00:11<00:17, 18.94it/s]Loading weights:  18%|█▊        | 73/399 [00:11<00:20, 16.27it/s]Loading weights:  20%|█▉        | 78/399 [00:11<00:14, 21.81it/s]Loading weights:  20%|██        | 81/399 [00:11<00:16, 19.55it/s]Loading weights:  21%|██        | 84/399 [00:12<00:17, 18.12it/s]Loading weights:  23%|██▎       | 92/399 [00:12<00:13, 23.13it/s]Loading weights:  24%|██▍       | 95/399 [00:12<00:15, 19.70it/s]Loading weights:  26%|██▌       | 103/399 [00:12<00:11, 25.74it/s]Loading weights:  27%|██▋       | 106/399 [00:12<00:14, 20.43it/s]Loading weights:  29%|██▊       | 114/399 [00:13<00:11, 25.08it/s]Loading weights:  29%|██▉       | 117/399 [00:13<00:12, 22.38it/s]Loading weights:  31%|███▏      | 125/399 [00:13<00:10, 27.19it/s]Loading weights:  32%|███▏      | 128/399 [00:13<00:11, 23.32it/s]Loading weights:  33%|███▎      | 131/399 [00:13<00:10, 24.42it/s]Loading weights:  34%|███▍      | 136/399 [00:14<00:09, 26.74it/s]Loading weights:  35%|███▍      | 139/399 [00:14<00:11, 22.34it/s]Loading weights:  37%|███▋      | 147/399 [00:14<00:08, 28.66it/s]Loading weights:  38%|███▊      | 150/399 [00:14<00:10, 23.98it/s]Loading weights:  39%|███▉      | 155/399 [00:14<00:09, 26.63it/s]Loading weights:  40%|███▉      | 158/399 [00:14<00:09, 25.96it/s]Loading weights:  40%|████      | 161/399 [00:15<00:12, 19.32it/s]Loading weights:  42%|████▏     | 167/399 [00:15<00:08, 26.11it/s]Loading weights:  43%|████▎     | 171/399 [00:15<00:11, 20.26it/s]Loading weights:  45%|████▌     | 180/399 [00:15<00:08, 27.01it/s]Loading weights:  46%|████▌     | 184/399 [00:16<00:08, 24.28it/s]Loading weights:  48%|████▊     | 191/399 [00:16<00:07, 27.71it/s]Loading weights:  49%|████▉     | 195/399 [00:16<00:08, 25.32it/s]Loading weights:  50%|████▉     | 199/399 [00:16<00:07, 27.61it/s]Loading weights:  51%|█████     | 203/399 [00:16<00:08, 23.39it/s]Loading weights:  52%|█████▏    | 206/399 [00:16<00:08, 23.38it/s]Loading weights:  53%|█████▎    | 211/399 [00:17<00:06, 28.04it/s]Loading weights:  54%|█████▍    | 215/399 [00:17<00:08, 20.65it/s]Loading weights:  56%|█████▌    | 224/399 [00:17<00:06, 27.80it/s]Loading weights:  57%|█████▋    | 228/399 [00:17<00:06, 25.24it/s]Loading weights:  59%|█████▉    | 235/399 [00:18<00:05, 28.02it/s]Loading weights:  60%|█████▉    | 238/399 [00:18<00:06, 23.41it/s]Loading weights:  61%|██████    | 243/399 [00:18<00:05, 27.80it/s]Loading weights:  62%|██████▏   | 247/399 [00:18<00:06, 24.13it/s]Loading weights:  63%|██████▎   | 250/399 [00:18<00:06, 23.23it/s]Loading weights:  64%|██████▍   | 257/399 [00:18<00:05, 27.71it/s]Loading weights:  65%|██████▌   | 260/399 [00:19<00:05, 23.36it/s]Loading weights:  66%|██████▋   | 265/399 [00:19<00:05, 26.40it/s]Loading weights:  67%|██████▋   | 268/399 [00:19<00:05, 25.63it/s]Loading weights:  68%|██████▊   | 271/399 [00:19<00:07, 18.22it/s]Loading weights:  69%|██████▉   | 275/399 [00:19<00:05, 21.74it/s]Loading weights:  70%|██████▉   | 279/399 [00:20<00:06, 18.52it/s]Loading weights:  71%|███████   | 282/399 [00:20<00:05, 19.96it/s]Loading weights:  71%|███████▏  | 285/399 [00:20<00:05, 19.93it/s]Loading weights:  73%|███████▎  | 290/399 [00:20<00:04, 24.86it/s]Loading weights:  73%|███████▎  | 293/399 [00:20<00:05, 17.96it/s]Loading weights:  74%|███████▍  | 296/399 [00:20<00:05, 19.72it/s]Loading weights:  75%|███████▌  | 301/399 [00:21<00:04, 22.68it/s]Loading weights:  76%|███████▌  | 304/399 [00:21<00:05, 18.91it/s]Loading weights:  78%|███████▊  | 312/399 [00:21<00:03, 25.19it/s]Loading weights:  79%|███████▉  | 315/399 [00:21<00:04, 20.20it/s]Loading weights:  80%|████████  | 320/399 [00:21<00:03, 24.73it/s]Loading weights:  81%|████████  | 323/399 [00:22<00:03, 23.86it/s]Loading weights:  82%|████████▏ | 326/399 [00:22<00:04, 18.11it/s]Loading weights:  83%|████████▎ | 331/399 [00:22<00:03, 22.31it/s]Loading weights:  84%|████████▎ | 334/399 [00:22<00:03, 20.08it/s]Loading weights:  84%|████████▍ | 337/399 [00:22<00:03, 16.05it/s]Loading weights:  86%|████████▌ | 342/399 [00:23<00:02, 21.22it/s]Loading weights:  86%|████████▋ | 345/399 [00:23<00:02, 21.44it/s]Loading weights:  87%|████████▋ | 348/399 [00:23<00:02, 18.59it/s]Loading weights:  89%|████████▉ | 356/399 [00:23<00:01, 22.42it/s]Loading weights:  90%|████████▉ | 359/399 [00:23<00:01, 21.47it/s]Loading weights:  91%|█████████ | 364/399 [00:23<00:01, 25.01it/s]Loading weights:  92%|█████████▏| 367/399 [00:24<00:01, 22.46it/s]Loading weights:  93%|█████████▎| 370/399 [00:24<00:01, 17.43it/s]Loading weights:  94%|█████████▍| 375/399 [00:24<00:01, 21.49it/s]Loading weights:  95%|█████████▍| 378/399 [00:24<00:01, 20.38it/s]Loading weights:  95%|█████████▌| 381/399 [00:25<00:01, 17.07it/s]Loading weights:  97%|█████████▋| 389/399 [00:25<00:00, 23.16it/s]Loading weights:  98%|█████████▊| 392/399 [00:25<00:00, 18.77it/s]Loading weights: 100%|██████████| 399/399 [00:25<00:00, 15.59it/s]
+[extract] Qwen/Qwen3-8B: 40562 texts, layers [9, 18, 27, 36], sites ['mean', 'last'], store=chrono.models.store
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 501, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 487, in main
+    meta = extract(table, encode, store=store, model_name=hfid,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 335, in extract
+    _put(store, model_name, ly, st, ids,
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 298, in _put
+    store.put(model, layer, site, ids, X, texts=texts)
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/models/store.py", line 79, in put
+    m = self.manifest()
+        ^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/models/store.py", line 47, in manifest
+    return pd.read_parquet(self.manifest_path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/parquet.py", line 669, in read_parquet
+    return impl.read(
+           ^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/parquet.py", line 265, in read
+    pa_table = self.api.parquet.read_table(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pyarrow/parquet/core.py", line 1844, in read_table
+    dataset = ParquetDataset(
+              ^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pyarrow/parquet/core.py", line 1413, in __init__
+    [fragment], schema=schema or fragment.physical_schema,
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/_dataset.pyx", line 1477, in pyarrow._dataset.Fragment.physical_schema.__get__
+  File "pyarrow/error.pxi", line 155, in pyarrow.lib.pyarrow_internal_check_status
+  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
+OSError: Could not open Parquet input source '<Buffer>': Couldn't deserialize thrift: invalid TType
+
+FAILED extract_embeddings qwen3_8b

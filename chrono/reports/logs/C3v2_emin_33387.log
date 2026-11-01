@@ -1,0 +1,106 @@
+# job 33387 C3v2_emin exit=0 Wed Sep  2 08:03:01 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C3v2_emin_33352_28.out
+=== C3v2 emin2_qwen3_8b_t0_mix seed 3 === job 33387 Wed Sep  2 07:59:34 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+epoch 50/200 loss 31.3635
+epoch 100/200 loss 25.5057
+epoch 150/200 loss 21.1418
+epoch 200/200 loss 16.7833
+{
+  "run_id": "emin2_qwen3_8b_t0_mix-s3-f0",
+  "metrics": {
+    "train_soft_spearman": 0.7142065497043253,
+    "train_spearman": 0.7142787796049614,
+    "final_loss": 16.78327703475952,
+    "identical_view_rate": 0.008513513513513513,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_mix-s3-f0.parquet"
+}
+epoch 50/200 loss 31.1124
+epoch 100/200 loss 24.7665
+epoch 150/200 loss 21.3360
+epoch 200/200 loss 17.9020
+{
+  "run_id": "emin2_qwen3_8b_t0_mix-s3-f1",
+  "metrics": {
+    "train_soft_spearman": 0.7048975967804306,
+    "train_spearman": 0.7049814846361911,
+    "final_loss": 17.90204381942749,
+    "identical_view_rate": 0.007107740585774058,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_mix-s3-f1.parquet"
+}
+epoch 50/200 loss 30.8869
+epoch 100/200 loss 25.8719
+epoch 150/200 loss 23.0035
+epoch 200/200 loss 20.5093
+{
+  "run_id": "emin2_qwen3_8b_t0_mix-s3-f2",
+  "metrics": {
+    "train_soft_spearman": 0.6310704199473515,
+    "train_spearman": 0.6307329040470435,
+    "final_loss": 20.50926113128662,
+    "identical_view_rate": 0.008592938733125648,
+    "test_spearman": 0.20547431576663738
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_mix-s3-f2.parquet"
+}
+epoch 50/200 loss 31.0616
+epoch 100/200 loss 24.3615
+epoch 150/200 loss 22.7034
+epoch 200/200 loss 18.4913
+{
+  "run_id": "emin2_qwen3_8b_t0_mix-s3-f3",
+  "metrics": {
+    "train_soft_spearman": 0.5763808146815695,
+    "train_spearman": 0.5763337452830323,
+    "final_loss": 18.491342067718506,
+    "identical_view_rate": 0.005191908713692946,
+    "test_spearman": 0.49509390637732414
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_mix-s3-f3.parquet"
+}
+epoch 50/200 loss 29.4888
+epoch 100/200 loss 24.3272
+epoch 150/200 loss 20.6841
+epoch 200/200 loss 16.5111
+{
+  "run_id": "emin2_qwen3_8b_t0_mix-s3-f4",
+  "metrics": {
+    "train_soft_spearman": 0.608903282891532,
+    "train_spearman": 0.6086465888989869,
+    "final_loss": 16.511106967926025,
+    "identical_view_rate": 0.007821576763485476,
+    "test_spearman": 0.7339042019281343
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_mix-s3-f4.parquet"
+}
+[yarin-sandbox dc749993] C3v2: emin2_qwen3_8b_t0_mix seed 3 (job 33387)
+ 16 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 chrono/reports/tier0/scores/baseline_pls_L18mean_akk+eng-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_pls_L18mean_akk+eng-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_pls_L18mean_akk+eng-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_pls_L18mean_akk+eng-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_pls_L18mean_akk+eng-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/scores/baseline_ridge_L18mean_akk+eng-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_qwen3_8b_t0_mix-s3-f0.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_qwen3_8b_t0_mix-s3-f1.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_qwen3_8b_t0_mix-s3-f2.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_qwen3_8b_t0_mix-s3-f3.parquet
+ create mode 100644 chrono/reports/tier0/scores/emin2_qwen3_8b_t0_mix-s3-f4.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+   78dc95ae..5921ee35  yarin-sandbox -> origin/yarin-sandbox
+Rebasing (1/1)[KSuccessfully rebased and updated refs/heads/yarin-sandbox.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   5921ee35..aec5ac17  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 08:03:01 UTC 2026 ===

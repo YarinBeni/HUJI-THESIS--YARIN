@@ -1,0 +1,28 @@
+# Local CPU smoke config (SLA section 6): tfidf features, tiny run.
+# Sanity-checks the whole train_cjb loop with no cluster, no cache.
+run_name: emin_tfidf_smoke
+features:
+  kind: tfidf
+  model: null
+  layer: null
+  site: null
+views:
+  menu_a:
+    - [mask_ruler, crop16]
+    - [mask_ruler, crop32]
+    - [mask_ruler, drop_span]
+    - [orthonorm]
+  menu_b:
+    - []
+  seeds: [0]
+loss:
+  lambda_rank: 1.0
+  lambda_var: 0.1
+  temp: 0.5
+  lambda_offdiag: 0.005
+train:
+  epochs: 30
+  lr: 0.01
+  batch: 128
+  seed: 0
+eval_split: ''

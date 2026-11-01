@@ -1,0 +1,99 @@
+# job 53220 C25_atlas exit=1 Tue Oct  6 12:42:02 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C25_atlas_53220.out
+=== C25 atlas === job 53220 Tue Oct  6 12:38:54 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch                yarin-sandbox -> FETCH_HEAD
+Created autostash: cf626f41f
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+[store] NousResearch/Llama-2-7b-hf: 16 layers at site mean: [np.int64(2), np.int64(4), np.int64(6), np.int64(8), np.int64(10), np.int64(12), np.int64(14), np.int64(16), np.int64(18), np.int64(20), np.int64(22), np.int64(24), np.int64(26), np.int64(28), np.int64(30), np.int64(32)]
+[store] Qwen/Qwen3-8B: 12 layers at site mean: [np.int64(3), np.int64(6), np.int64(9), np.int64(12), np.int64(15), np.int64(18), np.int64(21), np.int64(24), np.int64(27), np.int64(30), np.int64(33), np.int64(36)]
+[store] Thalesian/cuneiformBase-400m: 13 layers at site mean: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9), np.int64(10), np.int64(11), np.int64(12)]
+[store] allenai/OLMo-2-1124-7B: 11 layers at site mean: [np.int64(3), np.int64(6), np.int64(9), np.int64(12), np.int64(15), np.int64(18), np.int64(21), np.int64(24), np.int64(27), np.int64(30), np.int64(32)]
+[fetch] NousResearch/Llama-2-7b-hf L2 akk: 6 ids missing; using the subset
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+[fetch] NousResearch/Llama-2-7b-hf L4 akk: 6 ids missing; using the subset
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+[fetch] NousResearch/Llama-2-7b-hf L6 akk: 6 ids missing; using the subset
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+[fetch] NousResearch/Llama-2-7b-hf L10 akk: 6 ids missing; using the subset
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+[fetch] NousResearch/Llama-2-7b-hf L12 akk: 6 ids missing; using the subset
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+[fetch] NousResearch/Llama-2-7b-hf L14 akk: 6 ids missing; using the subset
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+[fetch] NousResearch/Llama-2-7b-hf L18 akk: 6 ids missing; using the subset
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+[fetch] NousResearch/Llama-2-7b-hf L20 akk: 6 ids missing; using the subset
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+[fetch] NousResearch/Llama-2-7b-hf L22 akk: 6 ids missing; using the subset
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+[fetch] NousResearch/Llama-2-7b-hf L26 akk: 6 ids missing; using the subset
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+[fetch] NousResearch/Llama-2-7b-hf L28 akk: 6 ids missing; using the subset
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+[fetch] NousResearch/Llama-2-7b-hf L30 akk: 6 ids missing; using the subset
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cluster/_hdbscan/hdbscan.py:722: FutureWarning: The default value of `copy` will change from False to True in 1.10. Explicitly set a value for `copy` to silence this warning.
+  warn(
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/alignment_atlas.py", line 292, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/alignment_atlas.py", line 134, in main
+    M[i, j] = 1.0 if i == j else ari(labs[a], labs[b])
+                                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/alignment_atlas.py", line 56, in ari
+    m = (a != -1) & (b != -1)
+        ~~~~~~~~~~^~~~~~~~~~~
+ValueError: operands could not be broadcast together with shapes (1187,) (1193,) 
+FAILED atlas

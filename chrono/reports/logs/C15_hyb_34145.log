@@ -1,0 +1,44 @@
+# job 34145 C15_hyb exit=0 Fri Sep  4 06:04:07 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C15_hyb_34137_2.out
+=== C15 hyb barlow M on thalesian_cunei400m L12 === job 34145 Fri Sep  4 05:56:43 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]Fetching 7 files: 100%|██████████| 7/7 [00:00<00:00, 24385.49it/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/303 [00:00<?, ?it/s]Loading weights: 100%|██████████| 303/303 [00:00<00:00, 1462.90it/s]Loading weights: 100%|██████████| 303/303 [00:00<00:00, 1461.45it/s]
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/torch/nn/modules/transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+[hyb] frozen thalesian_cunei400m L12 d=768 -> trainable M
+[e2e] resumed hyb_barlow_M_thalesian_cunei400m-s0 at step 36000
+[e2e] hyb_barlow_M_thalesian_cunei400m-s0: size M params 15.0M vocab 23044 train texts 24,589 objective barlow batch 256 budget 0.1h dev cuda
+[e2e] step 36100 loss 7.5402 lr 3.00e-04 0.6 min
+[e2e] step 36200 loss 7.5157 lr 3.00e-04 1.2 min
+[e2e] step 36300 loss 7.7618 lr 3.00e-04 1.8 min
+[e2e] step 36400 loss 9.3141 lr 3.00e-04 2.4 min
+[e2e] step 36500 loss 11.4450 lr 3.00e-04 3.0 min
+[e2e] step 36600 loss 11.4794 lr 3.00e-04 3.6 min
+[e2e] step 36700 loss 11.8455 lr 3.00e-04 4.2 min
+[e2e] step 36800 loss 11.5013 lr 3.00e-04 4.8 min
+[e2e] step 36900 loss 11.8114 lr 3.00e-04 5.4 min
+[e2e] done hyb_barlow_M_thalesian_cunei400m-s0: 36992 steps in 0.12h; embeddings -> store 'ssl_hyb::hyb_barlow_M_thalesian_cunei400m-s0' (31,905 texts); final.pt in chrono/artifacts_ssl/hyb/hyb_barlow_M_thalesian_cunei400m-s0
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox d4d502b4] C15: hyb_barlow_M_thalesian_cunei400m-s0 (job 34145)
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   2a8981b7..d4d502b4  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Fri Sep  4 06:04:07 UTC 2026 ===

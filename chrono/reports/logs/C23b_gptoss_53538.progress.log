@@ -1,0 +1,301 @@
+# progress Wed Oct  7 07:11:49 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch                yarin-sandbox -> FETCH_HEAD
+Created autostash: 0b8a8e586
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+name, memory.total [MiB]
+NVIDIA H200, 143771 MiB
+NVIDIA H200, 143771 MiB
+NVIDIA H200, 143771 MiB
+NVIDIA H200, 143771 MiB
+Fetching 37 files:   0%|          | 0/37 [00:00<?, ?it/s]Fetching 37 files: 100%|██████████| 37/37 [00:00<00:00, 3053.22it/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+MXFP4 quantization requires Triton and kernels installed: CUDA requires Triton >= 3.4.0, XPU requires Triton >= 3.5.0, we will default to dequantizing the model to bf16
+[load] sdpa failed (ValueError); default attention
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/615 [00:00<?, ?it/s]Loading weights:   0%|          | 1/615 [00:03<37:28,  3.66s/it]Loading weights:   1%|          | 5/615 [00:20<41:28,  4.08s/it]Loading weights:   1%|          | 7/615 [00:35<55:35,  5.49s/it]Loading weights:   4%|▎         | 22/615 [00:45<15:42,  1.59s/it]Loading weights:   4%|▍         | 24/615 [00:45<13:42,  1.39s/it]Loading weights:   9%|▉         | 56/615 [00:45<03:14,  2.87it/s]Loading weights:  15%|█▍        | 90/615 [00:45<01:26,  6.07it/s]Loading weights:  20%|██        | 124/615 [00:45<00:46, 10.49it/s]Loading weights:  25%|██▌       | 156/615 [00:46<00:33, 13.87it/s]Loading weights:  25%|██▌       | 156/615 [01:00<00:33, 13.87it/s]Loading weights:  26%|██▌       | 160/615 [01:08<03:01,  2.50it/s]Loading weights:  28%|██▊       | 175/615 [01:14<02:56,  2.49it/s]Loading weights:  30%|███       | 185/615 [01:17<02:45,  2.59it/s]Loading weights:  34%|███▍      | 209/615 [01:17<01:35,  4.26it/s]Loading weights:  40%|███▉      | 243/615 [01:18<00:49,  7.56it/s]Loading weights:  45%|████▌     | 277/615 [01:18<00:27, 12.12it/s]Loading weights:  51%|█████     | 311/615 [01:18<00:16, 18.32it/s]Loading weights:  51%|█████     | 311/615 [01:30<00:16, 18.32it/s]Loading weights:  54%|█████▎    | 330/615 [01:46<01:47,  2.65it/s]Loading weights:  56%|█████▌    | 345/615 [01:56<01:57,  2.31it/s]Loading weights:  58%|█████▊    | 359/615 [01:59<01:35,  2.67it/s]Loading weights:  62%|██████▏   | 379/615 [01:59<01:02,  3.79it/s]Loading weights:  67%|██████▋   | 413/615 [01:59<00:31,  6.48it/s]Loading weights:  73%|███████▎  | 447/615 [01:59<00:16, 10.22it/s]Loading weights:  78%|███████▊  | 481/615 [01:59<00:08, 15.36it/s]Loading weights:  78%|███████▊  | 481/615 [02:10<00:08, 15.36it/s]Loading weights:  81%|████████▏ | 500/615 [02:18<00:30,  3.77it/s]Loading weights:  84%|████████▎ | 515/615 [02:20<00:24,  4.10it/s]Loading weights:  89%|████████▉ | 549/615 [02:20<00:09,  6.66it/s]Loading weights:  95%|█████████▍| 583/615 [02:20<00:03, 10.21it/s]Loading weights: 100%|██████████| 615/615 [02:20<00:00,  4.36it/s]
+/home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/world_models/akkadian/extract_entity.py:169: RuntimeWarning: overflow encountered in cast
+  out[site][li][rows] = v.float().cpu().numpy().astype(np.float16)
+[done] gpt_oss_120b/assyrian_ruler_akk: 36 layers x 4 sites, 21 entities, 0 truncated, 10.3s
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 1: mc_r2=-2.842
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 2: mc_r2=-1.886
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 3: mc_r2=-1.575
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 4: mc_r2=-1.699
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 5: mc_r2=-1.560
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 6: mc_r2=-1.341
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 7: mc_r2=-1.458
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 8: mc_r2=-1.303
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 9: mc_r2=-1.435
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 10: mc_r2=-1.448
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 11: mc_r2=-1.422
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 12: mc_r2=-1.476
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 13: mc_r2=-1.503
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 14: mc_r2=-1.475
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 15: mc_r2=-1.290
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 16: mc_r2=-1.372
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 17: mc_r2=-1.370
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 18: mc_r2=-1.619
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 19: mc_r2=-1.800
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 20: mc_r2=-1.725
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 21: mc_r2=-1.728
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 22: mc_r2=-1.658
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 23: mc_r2=-1.605
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 24: mc_r2=-1.700
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 25: mc_r2=-1.567
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 26: mc_r2=-1.611
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 27: mc_r2=-1.778
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 28: mc_r2=-1.654
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 29: mc_r2=-1.582
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 30: mc_r2=-1.644
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 31: mc_r2=-1.641
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 32: mc_r2=-1.669
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 33: mc_r2=-1.793
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 34: mc_r2=-1.983
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 35: mc_r2=-2.183
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] layer 36: mc_r2=-2.453
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 60
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 59
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 60
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 61
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 61
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 61
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 61
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 61
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 61
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 60
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 61
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 61
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 61
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 61
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 60
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 61
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 62
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 60
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 63
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+[gpt_oss_120b/assyrian_ruler_akk/ent_last] k-sweep at best layer 15: k=2
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 1: mc_r2=-1.822
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 2: mc_r2=-1.613
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 3: mc_r2=-1.493
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 4: mc_r2=-1.108
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 5: mc_r2=-0.960
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 6: mc_r2=-0.922
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 7: mc_r2=-0.915
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 8: mc_r2=-0.863
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 9: mc_r2=-1.147
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 10: mc_r2=-1.116
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 11: mc_r2=-1.152
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 12: mc_r2=-1.169
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 13: mc_r2=-1.125
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 14: mc_r2=-1.031
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 15: mc_r2=-0.908
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 16: mc_r2=-1.025
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 17: mc_r2=-1.053
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 18: mc_r2=-1.211
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 19: mc_r2=-1.148
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 20: mc_r2=-1.208
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 21: mc_r2=-1.346
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 22: mc_r2=-1.509
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 23: mc_r2=-1.255
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 24: mc_r2=-1.059
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 25: mc_r2=-0.982
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 26: mc_r2=-0.859
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 27: mc_r2=-0.775
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 28: mc_r2=-0.750
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 29: mc_r2=-0.754
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 30: mc_r2=-0.732
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 31: mc_r2=-0.730
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 32: mc_r2=-0.646
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 33: mc_r2=-0.774
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 34: mc_r2=-0.825
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 35: mc_r2=-0.990
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] layer 36: mc_r2=-1.251
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+[gpt_oss_120b/assyrian_ruler_akk/ent_mean] k-sweep at best layer 32: k=8
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 1: mc_r2=-1.706
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 2: mc_r2=-1.868
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 3: mc_r2=-2.251
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 4: mc_r2=-2.531
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 5: mc_r2=-2.183
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 6: mc_r2=-2.411
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 7: mc_r2=-2.207
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 8: mc_r2=-1.831
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 9: mc_r2=-2.246
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 10: mc_r2=-2.191
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 11: mc_r2=-2.263
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 12: mc_r2=-2.079
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 13: mc_r2=-2.428
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 14: mc_r2=-2.136
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 15: mc_r2=-1.959
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 16: mc_r2=-1.517
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 17: mc_r2=-1.824
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 18: mc_r2=-2.032
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 19: mc_r2=-2.458
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 20: mc_r2=-2.407
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 21: mc_r2=-2.508
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 22: mc_r2=-2.486
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 23: mc_r2=-2.292
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 24: mc_r2=-2.287
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 25: mc_r2=-2.183
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 26: mc_r2=-2.506
+[gpt_oss_120b/assyrian_ruler_akk/last] layer 27: mc_r2=-2.676

@@ -1,0 +1,54 @@
+# job 33484 C4_ladder exit=0 Wed Sep  2 16:39:07 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C4_ladder_33445_2.out
+=== C4 ladder emin2_llama2_7b_t0_akk === job 33484 Wed Sep  2 14:20:36 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[ladder] L16mean_akk ridge erase=none       mc +0.356 pooled +0.313 readability after nan (k=0)
+[ladder] L16mean_akk ridge erase=ruler      mc -0.042 pooled -0.159 readability after 0.107 (k=40)
+[ladder] L16mean_akk ridge erase=period     mc +0.219 pooled +0.180 readability after 0.233 (k=6)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[ladder] L16mean_akk ridge erase=subgenre   mc +0.277 pooled +0.233 readability after 0.054 (k=21)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[ladder] L16mean_akk ridge erase=provenance mc -0.001 pooled -0.004 readability after 0.051 (k=21)
+[ladder] L16mean_akk ridge erase=length     mc +0.255 pooled +0.191 readability after 0.060 (k=6)
+[ladder] L16mean_akk ridge erase=year10     mc +0.044 pooled +0.079 readability after 0.099 (k=7)
+# Erasure ladder — NousResearch/Llama-2-7b-hf L16 mean · langs ['akk'] · ridge
+
+| erased | k | mc ρ | gkf pooled ρ | Δ mc vs none | z readable before → after (bal. acc, classes ≥10 docs; chance = 1/n) |
+|---|---|---|---|---|---|
+| none | 0 | +0.356 | +0.313 | +0.000 | — |
+| ruler | 40 | -0.042 | -0.159 | -0.398 | 0.72 → 0.11 (n=11, chance 0.09) |
+| period | 6 | +0.219 | +0.180 | -0.137 | 0.69 → 0.23 (n=3, chance 0.33) |
+| subgenre | 21 | +0.277 | +0.233 | -0.079 | 0.45 → 0.05 (n=18, chance 0.06) |
+| provenance | 21 | -0.001 | -0.004 | -0.357 | 0.44 → 0.05 (n=15, chance 0.07) |
+| length | 6 | +0.255 | +0.191 | -0.102 | 0.73 → 0.06 (n=5, chance 0.20) |
+| year10 | 7 | +0.044 | +0.079 | -0.312 | 0.70 → 0.10 (n=7, chance 0.14) |
+
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox fcc2b4e1] C4: erasure ladder emin2_llama2_7b_t0_akk (job 33484)
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   4115ee26..fcc2b4e1  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 16:39:07 UTC 2026 ===

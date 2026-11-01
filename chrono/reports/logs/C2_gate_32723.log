@@ -1,0 +1,54 @@
+# job 32723 C2_gate exit=1 Tue Sep  1 20:16:52 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C2_gate_32723.out
+=== C2 baseline gate === job 32723 Tue Sep  1 20:15:46 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Reset branch 'yarin-sandbox'
+M	v_1/src/world_models/activations/llama2_7b/assyrian_ruler/metadata.json
+M	v_1/src/world_models/activations/olmo2_7b/assyrian_ruler/metadata.json
+M	v_1/src/world_models/activations/qwen3_8b/assyrian_ruler/metadata.json
+Your branch is up to date with 'origin/yarin-sandbox'.
+Created autostash: 63f0f267
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+[gate] ridge L0 mean: mc +0.186±0.062 gkf_pooled +0.194 placebo +0.002±0.083
+[gate] pls L0 mean: mc +0.148±0.064 gkf_pooled +0.179 placebo +0.003±0.082
+[gate] ridge L0 last: mc -0.082±0.000 gkf_pooled -0.394 placebo +0.004±0.077
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:90: RuntimeWarning: invalid value encountered in divide
+  y_weights = np.dot(y.T, x_score) / np.dot(x_score.T, x_score)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:328: RuntimeWarning: invalid value encountered in divide
+  x_loadings = np.dot(x_scores, Xk) / np.dot(x_scores, x_scores)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:337: RuntimeWarning: invalid value encountered in divide
+  y_loadings = np.dot(x_scores, yk) / np.dot(x_scores, x_scores)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 1
+  warnings.warn(f"y residual is constant at iteration {k}")
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/run_baseline_gate.py", line 420, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/run_baseline_gate.py", line 361, in main
+    r = evaluate(probe, X, corpus, gkf, mc, args.seed,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/run_baseline_gate.py", line 185, in evaluate
+    by_fold, oof = cross_fit(probe, X_by_doc, corpus.set_index(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/run_baseline_gate.py", line 175, in cross_fit
+    s, s_tr_mean = fit_predict(
+                   ^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/run_baseline_gate.py", line 154, in fit_predict
+    model = PLSRegression(n_components=k).fit(Xtr, ytr)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py", line 653, in fit
+    super().fit(X, y)
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/base.py", line 1336, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py", line 356, in fit
+    pinv(np.dot(self.x_loadings_.T, self.x_weights_), check_finite=False),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/scipy/linalg/_basic.py", line 1607, in pinv
+    u, s, vh = _decomp_svd.svd(a, full_matrices=False, check_finite=False)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/scipy/linalg/_decomp_svd.py", line 168, in svd
+    raise ValueError('illegal value in %dth argument of internal gesdd'
+ValueError: illegal value in 4th argument of internal gesdd
+FAILED baseline gate (akk)

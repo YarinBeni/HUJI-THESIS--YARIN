@@ -1,0 +1,48 @@
+# job 33483 C4_ladder exit=0 Wed Sep  2 15:16:49 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C4_ladder_33445_1.out
+=== C4 ladder emin2_cunei400m_t0_eng === job 33483 Wed Sep  2 14:20:36 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[ladder] L12mean_eng ridge erase=none       mc +0.417 pooled +0.341 readability after nan (k=0)
+[ladder] L12mean_eng ridge erase=ruler      mc +0.000 pooled -0.092 readability after 0.098 (k=40)
+[ladder] L12mean_eng ridge erase=period     mc +0.217 pooled +0.092 readability after 0.252 (k=6)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[ladder] L12mean_eng ridge erase=subgenre   mc +0.301 pooled +0.163 readability after 0.043 (k=21)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[ladder] L12mean_eng ridge erase=provenance mc +0.144 pooled +0.117 readability after 0.057 (k=21)
+[ladder] L12mean_eng ridge erase=length     mc +0.357 pooled +0.204 readability after 0.052 (k=6)
+[ladder] L12mean_eng ridge erase=year10     mc -0.177 pooled +0.009 readability after 0.085 (k=7)
+# Erasure ladder — Thalesian/cuneiformBase-400m L12 mean · langs ['eng'] · ridge
+
+| erased | k | mc ρ | gkf pooled ρ | Δ mc vs none | z readable before → after (bal. acc, classes ≥10 docs; chance = 1/n) |
+|---|---|---|---|---|---|
+| none | 0 | +0.417 | +0.341 | +0.000 | — |
+| ruler | 40 | +0.000 | -0.092 | -0.416 | 0.63 → 0.10 (n=11, chance 0.09) |
+| period | 6 | +0.217 | +0.092 | -0.200 | 0.74 → 0.25 (n=3, chance 0.33) |
+| subgenre | 21 | +0.301 | +0.163 | -0.116 | 0.41 → 0.04 (n=18, chance 0.06) |
+| provenance | 21 | +0.144 | +0.117 | -0.272 | 0.38 → 0.06 (n=15, chance 0.07) |
+| length | 6 | +0.357 | +0.204 | -0.059 | 0.65 → 0.05 (n=5, chance 0.20) |
+| year10 | 7 | -0.177 | +0.009 | -0.594 | 0.63 → 0.08 (n=7, chance 0.14) |
+
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox c951db73] C4: erasure ladder emin2_cunei400m_t0_eng (job 33483)
+ 2 files changed, 17 insertions(+), 7 deletions(-)
+ create mode 100644 chrono/reports/tier0/ladder/nonlinear_recovery_emin2_llama2_7b_t0_akk_erase_provenance.md
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+   a4eef54b..6fb6772b  yarin-sandbox -> origin/yarin-sandbox
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Rebasing (1/1)[KSuccessfully rebased and updated refs/heads/yarin-sandbox.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   6fb6772b..b7a01245  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 15:16:49 UTC 2026 ===

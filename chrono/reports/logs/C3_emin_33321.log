@@ -1,0 +1,24 @@
+# job 33321 C3_emin exit=1 Wed Sep  2 04:17:48 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C3_emin_33318_2.out
+=== C3 emin seed 2 === job 33321 Wed Sep  2 04:17:07 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: 1736b83c
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/train_cjb.py", line 530, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/train_cjb.py", line 522, in main
+    res = train(cfg, corpus, views, store=store,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/train_cjb.py", line 283, in train
+    X = build_features(cfg, views_df, store,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/train_cjb.py", line 153, in build_features
+    return store.get(feats["model"], feats["layer"], feats["site"],
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/models/store.py", line 147, in get
+    raise KeyError(
+KeyError: 'EmbStore missing 56976 id(s) for (Thalesian/AKK_300m, L11, mean): Q003230::akk::+s0, Q003230::akk::+s1, Q003230::akk::+s2, Q003230::akk::mask_ruler+s0, Q003230::akk::mask_ruler+s1, Q003230::akk::mask_ruler+s2, Q003230::akk::strip_formula+s0, Q003230::akk::strip_formula+s1, Q003230::akk::strip_formula+s2, Q003230::akk::mask_ruler,strip_formula+s0, Q003230::akk::mask_ruler,strip_formula+s1, Q003230::akk::mask_ruler,strip_formula+s2, Q003230::akk::mask_ruler,crop16+s0, Q003230::akk::mask_ruler,crop16+s1, Q003230::akk::mask_ruler,crop16+s2, Q003230::akk::mask_ruler,crop32+s0, Q003230::akk::mask_ruler,crop32+s1, Q003230::akk::mask_ruler,crop32+s2, Q003230::akk::orthonorm+s0, Q003230::akk::orthonorm+s1 (+56956 more)'
+FAILED train_cjb seed 2 fold 0

@@ -1,0 +1,205 @@
+# 008_baseline_conditions_dedup  host=g0381  start=Wed Sep  2 04:48:10 UTC 2026  timeout=3600s
+# HEAD=673801f7
+# ---------------------------------------------------------
+[baseline] baseline_ridge_L8mean fold 0: fit on 1739 distinct orig views of 921 docs -> chrono/reports/scores/baseline_ridge_L8mean-s0-f0.parquet
+[baseline] baseline_ridge_L8mean fold 1: fit on 1829 distinct orig views of 952 docs -> chrono/reports/scores/baseline_ridge_L8mean-s0-f1.parquet
+[baseline] baseline_ridge_L8mean fold 2: fit on 1821 distinct orig views of 958 docs -> chrono/reports/scores/baseline_ridge_L8mean-s0-f2.parquet
+[baseline] baseline_ridge_L8mean fold 3: fit on 1818 distinct orig views of 958 docs -> chrono/reports/scores/baseline_ridge_L8mean-s0-f3.parquet
+[baseline] baseline_ridge_L8mean fold 4: fit on 1842 distinct orig views of 959 docs -> chrono/reports/scores/baseline_ridge_L8mean-s0-f4.parquet
+[baseline] baseline_pls_L8mean fold 0: fit on 1739 distinct orig views of 921 docs -> chrono/reports/scores/baseline_pls_L8mean-s0-f0.parquet
+[baseline] baseline_pls_L8mean fold 1: fit on 1829 distinct orig views of 952 docs -> chrono/reports/scores/baseline_pls_L8mean-s0-f1.parquet
+[baseline] baseline_pls_L8mean fold 2: fit on 1821 distinct orig views of 958 docs -> chrono/reports/scores/baseline_pls_L8mean-s0-f2.parquet
+[baseline] baseline_pls_L8mean fold 3: fit on 1818 distinct orig views of 958 docs -> chrono/reports/scores/baseline_pls_L8mean-s0-f3.parquet
+[baseline] baseline_pls_L8mean fold 4: fit on 1842 distinct orig views of 959 docs -> chrono/reports/scores/baseline_pls_L8mean-s0-f4.parquet
+[baseline] baseline_ridge_L8mean_akk fold 0: fit on 843 distinct orig views of 921 docs -> chrono/reports/scores/baseline_ridge_L8mean_akk-s0-f0.parquet
+[baseline] baseline_ridge_L8mean_akk fold 1: fit on 893 distinct orig views of 952 docs -> chrono/reports/scores/baseline_ridge_L8mean_akk-s0-f1.parquet
+[baseline] baseline_ridge_L8mean_akk fold 2: fit on 890 distinct orig views of 958 docs -> chrono/reports/scores/baseline_ridge_L8mean_akk-s0-f2.parquet
+[baseline] baseline_ridge_L8mean_akk fold 3: fit on 884 distinct orig views of 958 docs -> chrono/reports/scores/baseline_ridge_L8mean_akk-s0-f3.parquet
+[baseline] baseline_ridge_L8mean_akk fold 4: fit on 898 distinct orig views of 959 docs -> chrono/reports/scores/baseline_ridge_L8mean_akk-s0-f4.parquet
+[baseline] baseline_pls_L8mean_akk fold 0: fit on 843 distinct orig views of 921 docs -> chrono/reports/scores/baseline_pls_L8mean_akk-s0-f0.parquet
+[baseline] baseline_pls_L8mean_akk fold 1: fit on 893 distinct orig views of 952 docs -> chrono/reports/scores/baseline_pls_L8mean_akk-s0-f1.parquet
+[baseline] baseline_pls_L8mean_akk fold 2: fit on 890 distinct orig views of 958 docs -> chrono/reports/scores/baseline_pls_L8mean_akk-s0-f2.parquet
+[baseline] baseline_pls_L8mean_akk fold 3: fit on 884 distinct orig views of 958 docs -> chrono/reports/scores/baseline_pls_L8mean_akk-s0-f3.parquet
+[baseline] baseline_pls_L8mean_akk fold 4: fit on 898 distinct orig views of 959 docs -> chrono/reports/scores/baseline_pls_L8mean_akk-s0-f4.parquet
+[baseline] baseline_ridge_L8mean_eng fold 0: fit on 896 distinct orig views of 921 docs -> chrono/reports/scores/baseline_ridge_L8mean_eng-s0-f0.parquet
+[baseline] baseline_ridge_L8mean_eng fold 1: fit on 936 distinct orig views of 952 docs -> chrono/reports/scores/baseline_ridge_L8mean_eng-s0-f1.parquet
+[baseline] baseline_ridge_L8mean_eng fold 2: fit on 931 distinct orig views of 958 docs -> chrono/reports/scores/baseline_ridge_L8mean_eng-s0-f2.parquet
+[baseline] baseline_ridge_L8mean_eng fold 3: fit on 934 distinct orig views of 958 docs -> chrono/reports/scores/baseline_ridge_L8mean_eng-s0-f3.parquet
+[baseline] baseline_ridge_L8mean_eng fold 4: fit on 944 distinct orig views of 959 docs -> chrono/reports/scores/baseline_ridge_L8mean_eng-s0-f4.parquet
+[baseline] baseline_pls_L8mean_eng fold 0: fit on 896 distinct orig views of 921 docs -> chrono/reports/scores/baseline_pls_L8mean_eng-s0-f0.parquet
+[baseline] baseline_pls_L8mean_eng fold 1: fit on 936 distinct orig views of 952 docs -> chrono/reports/scores/baseline_pls_L8mean_eng-s0-f1.parquet
+[baseline] baseline_pls_L8mean_eng fold 2: fit on 931 distinct orig views of 958 docs -> chrono/reports/scores/baseline_pls_L8mean_eng-s0-f2.parquet
+[baseline] baseline_pls_L8mean_eng fold 3: fit on 934 distinct orig views of 958 docs -> chrono/reports/scores/baseline_pls_L8mean_eng-s0-f3.parquet
+[baseline] baseline_pls_L8mean_eng fold 4: fit on 944 distinct orig views of 959 docs -> chrono/reports/scores/baseline_pls_L8mean_eng-s0-f4.parquet
+# E-MIN summary — `baseline_ridge_L8mean`
+
+Seeds: 0 · folds per seed: [5] · read-out: SLA §7 (gkf pooled over centred OOF scores; mc = mean of per-draw rho)
+
+## Chrono-Barlow head, by condition (mean ± sd across seeds)
+
+| condition | gkf pooled ρ | mc ρ | seeds |
+|---|---|---|---|
+| `orig` | +0.313 ± nan | +0.376 ± nan | 1 |
+| `mask_ruler` | +0.300 ± nan | +0.333 ± nan | 1 |
+| `strip_formula` | +0.311 ± nan | +0.374 ± nan | 1 |
+| `mask_ruler,strip_formula` | +0.300 ± nan | +0.344 ± nan | 1 |
+| `mask_ruler,crop16` | +0.239 ± nan | +0.271 ± nan | 1 |
+| `mask_ruler,crop32` | +0.270 ± nan | +0.305 ± nan | 1 |
+| `orthonorm` | +0.320 ± nan | +0.389 ± nan | 1 |
+| `mask_ruler,drop_span` | +0.293 ± nan | +0.332 ± nan | 1 |
+
+Ruler-block null on `orig` (all seeds × draws): -0.011 ± 0.182, 95% band [-0.363, +0.307] — that is ONE draw; the reported mc ρ is a mean over draws, whose block null is +0.002 ± 0.012, 95% band [-0.020, +0.025] (200 ruler permutations, seed 0 scores)
+
+## C2 baseline at the same features (Thalesian/AKK_300m L8 mean, lang=akk)
+
+| probe | split | ρ |
+|---|---|---|
+| pls | gkf_ruler | +0.141 |
+| pls | mc_balanced | +0.126 |
+| pls::rowl2 | gkf_ruler | +0.154 |
+| pls::rowl2 | mc_balanced | +0.148 |
+| ridge | gkf_ruler | +0.260 |
+| ridge | mc_balanced | +0.287 |
+| ridge::rowl2 | gkf_ruler | +0.264 |
+| ridge::rowl2 | mc_balanced | +0.296 |
+
+Baseline rows are ONE cross-fit (no seeds); the head has 5. Both use the same folds, the same pooled/mc read-out and the same corpus, so the columns are directly comparable.
+
+# E-MIN summary — `baseline_pls_L8mean`
+
+Seeds: 0 · folds per seed: [5] · read-out: SLA §7 (gkf pooled over centred OOF scores; mc = mean of per-draw rho)
+
+## Chrono-Barlow head, by condition (mean ± sd across seeds)
+
+| condition | gkf pooled ρ | mc ρ | seeds |
+|---|---|---|---|
+| `orig` | +0.246 ± nan | +0.165 ± nan | 1 |
+| `mask_ruler` | +0.250 ± nan | +0.168 ± nan | 1 |
+| `strip_formula` | +0.250 ± nan | +0.168 ± nan | 1 |
+| `mask_ruler,strip_formula` | +0.254 ± nan | +0.173 ± nan | 1 |
+| `mask_ruler,crop16` | +0.175 ± nan | +0.093 ± nan | 1 |
+| `mask_ruler,crop32` | +0.214 ± nan | +0.128 ± nan | 1 |
+| `orthonorm` | +0.229 ± nan | +0.152 ± nan | 1 |
+| `mask_ruler,drop_span` | +0.253 ± nan | +0.174 ± nan | 1 |
+
+Ruler-block null on `orig` (all seeds × draws): -0.019 ± 0.144, 95% band [-0.270, +0.252] — that is ONE draw; the reported mc ρ is a mean over draws, whose block null is +0.002 ± 0.010, 95% band [-0.019, +0.020] (200 ruler permutations, seed 0 scores)
+
+## C2 baseline at the same features (Thalesian/AKK_300m L8 mean, lang=akk)
+
+| probe | split | ρ |
+|---|---|---|
+| pls | gkf_ruler | +0.141 |
+| pls | mc_balanced | +0.126 |
+| pls::rowl2 | gkf_ruler | +0.154 |
+| pls::rowl2 | mc_balanced | +0.148 |
+| ridge | gkf_ruler | +0.260 |
+| ridge | mc_balanced | +0.287 |
+| ridge::rowl2 | gkf_ruler | +0.264 |
+| ridge::rowl2 | mc_balanced | +0.296 |
+
+Baseline rows are ONE cross-fit (no seeds); the head has 5. Both use the same folds, the same pooled/mc read-out and the same corpus, so the columns are directly comparable.
+
+# E-MIN summary — `baseline_ridge_L8mean_akk`
+
+Seeds: 0 · folds per seed: [5] · read-out: SLA §7 (gkf pooled over centred OOF scores; mc = mean of per-draw rho)
+
+## Chrono-Barlow head, by condition (mean ± sd across seeds)
+
+| condition | gkf pooled ρ | mc ρ | seeds |
+|---|---|---|---|
+| `orig` | +0.249 ± nan | +0.288 ± nan | 1 |
+| `mask_ruler` | +0.285 ± nan | +0.276 ± nan | 1 |
+| `strip_formula` | +0.247 ± nan | +0.283 ± nan | 1 |
+| `mask_ruler,strip_formula` | +0.283 ± nan | +0.279 ± nan | 1 |
+| `mask_ruler,crop16` | +0.275 ± nan | +0.267 ± nan | 1 |
+| `mask_ruler,crop32` | +0.285 ± nan | +0.275 ± nan | 1 |
+| `orthonorm` | +0.178 ± nan | +0.257 ± nan | 1 |
+| `mask_ruler,drop_span` | +0.249 ± nan | +0.280 ± nan | 1 |
+
+Ruler-block null on `orig` (all seeds × draws): -0.001 ± 0.156, 95% band [-0.311, +0.293] — that is ONE draw; the reported mc ρ is a mean over draws, whose block null is +0.001 ± 0.012, 95% band [-0.023, +0.024] (200 ruler permutations, seed 0 scores)
+
+## C2 baseline at the same features (Thalesian/AKK_300m L8 mean, lang=akk)
+
+| probe | split | ρ |
+|---|---|---|
+| pls | gkf_ruler | +0.141 |
+| pls | mc_balanced | +0.126 |
+| pls::rowl2 | gkf_ruler | +0.154 |
+| pls::rowl2 | mc_balanced | +0.148 |
+| ridge | gkf_ruler | +0.260 |
+| ridge | mc_balanced | +0.287 |
+| ridge::rowl2 | gkf_ruler | +0.264 |
+| ridge::rowl2 | mc_balanced | +0.296 |
+
+Baseline rows are ONE cross-fit (no seeds); the head has 5. Both use the same folds, the same pooled/mc read-out and the same corpus, so the columns are directly comparable.
+
+# E-MIN summary — `baseline_pls_L8mean_akk`
+
+Seeds: 0 · folds per seed: [5] · read-out: SLA §7 (gkf pooled over centred OOF scores; mc = mean of per-draw rho)
+
+## Chrono-Barlow head, by condition (mean ± sd across seeds)
+
+| condition | gkf pooled ρ | mc ρ | seeds |
+|---|---|---|---|
+| `orig` | +0.215 ± nan | +0.233 ± nan | 1 |
+| `mask_ruler` | +0.228 ± nan | +0.223 ± nan | 1 |
+| `strip_formula` | +0.222 ± nan | +0.239 ± nan | 1 |
+| `mask_ruler,strip_formula` | +0.234 ± nan | +0.232 ± nan | 1 |
+| `mask_ruler,crop16` | +0.213 ± nan | +0.224 ± nan | 1 |
+| `mask_ruler,crop32` | +0.228 ± nan | +0.223 ± nan | 1 |
+| `orthonorm` | +0.223 ± nan | +0.250 ± nan | 1 |
+| `mask_ruler,drop_span` | +0.232 ± nan | +0.229 ± nan | 1 |
+
+Ruler-block null on `orig` (all seeds × draws): -0.009 ± 0.157, 95% band [-0.329, +0.257] — that is ONE draw; the reported mc ρ is a mean over draws, whose block null is +0.002 ± 0.011, 95% band [-0.021, +0.021] (200 ruler permutations, seed 0 scores)
+
+## C2 baseline at the same features (Thalesian/AKK_300m L8 mean, lang=akk)
+
+| probe | split | ρ |
+|---|---|---|
+| pls | gkf_ruler | +0.141 |
+| pls | mc_balanced | +0.126 |
+| pls::rowl2 | gkf_ruler | +0.154 |
+| pls::rowl2 | mc_balanced | +0.148 |
+| ridge | gkf_ruler | +0.260 |
+| ridge | mc_balanced | +0.287 |
+| ridge::rowl2 | gkf_ruler | +0.264 |
+| ridge::rowl2 | mc_balanced | +0.296 |
+
+Baseline rows are ONE cross-fit (no seeds); the head has 5. Both use the same folds, the same pooled/mc read-out and the same corpus, so the columns are directly comparable.
+
+# E-MIN summary — `baseline_ridge_L8mean_eng`
+
+Seeds: 0 · folds per seed: [5] · read-out: SLA §7 (gkf pooled over centred OOF scores; mc = mean of per-draw rho)
+
+## Chrono-Barlow head, by condition (mean ± sd across seeds)
+
+| condition | gkf pooled ρ | mc ρ | seeds |
+|---|---|---|---|
+| `orig` | +0.264 ± nan | +0.378 ± nan | 1 |
+| `mask_ruler` | +0.216 ± nan | +0.327 ± nan | 1 |
+| `strip_formula` | +0.264 ± nan | +0.378 ± nan | 1 |
+| `mask_ruler,strip_formula` | +0.216 ± nan | +0.327 ± nan | 1 |
+| `mask_ruler,crop16` | +0.112 ± nan | +0.179 ± nan | 1 |
+| `mask_ruler,crop32` | +0.168 ± nan | +0.273 ± nan | 1 |
+| `orthonorm` | +0.322 ± nan | +0.402 ± nan | 1 |
+| `mask_ruler,drop_span` | +0.218 ± nan | +0.323 ± nan | 1 |
+
+Ruler-block null on `orig` (all seeds × draws): -0.006 ± 0.176, 95% band [-0.355, +0.322] — that is ONE draw; the reported mc ρ is a mean over draws, whose block null is +0.002 ± 0.011, 95% band [-0.020, +0.023] (200 ruler permutations, seed 0 scores)
+
+## C2 baseline at the same features (Thalesian/AKK_300m L8 mean, lang=akk)
+
+| probe | split | ρ |
+|---|---|---|
+| pls | gkf_ruler | +0.141 |
+| pls | mc_balanced | +0.126 |
+| pls::rowl2 | gkf_ruler | +0.154 |
+| pls::rowl2 | mc_balanced | +0.148 |
+| ridge | gkf_ruler | +0.260 |
+| ridge | mc_balanced | +0.287 |
+| ridge::rowl2 | gkf_ruler | +0.264 |
+| ridge::rowl2 | mc_balanced | +0.296 |
+
+Baseline rows are ONE cross-fit (no seeds); the head has 5. Both use the same folds, the same pooled/mc read-out and the same corpus, so the columns are directly comparable.
+
+# ---------------------------------------------------------
+# exit=0  end=Wed Sep  2 04:55:22 UTC 2026

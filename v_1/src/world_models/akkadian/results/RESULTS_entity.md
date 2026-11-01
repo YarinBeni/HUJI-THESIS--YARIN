@@ -201,18 +201,22 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | arm | site | best layer | MC R2 | +/- | MC rho | +/- |
 |---|---|--:|--:|--:|--:|--:|
 | llama2_7b | ent_last | 6 | -0.470 | 4.240 | 0.519 | 0.416 |
+| gpt_oss_120b | ent_last | 6 | -0.540 | 5.621 | 0.526 | 0.409 |
 | qwen3_8b | ent_last | 17 | -0.487 | 6.059 | 0.684 | 0.323 |
 | thalesian_cunei400m | ent_last | 12 | -0.638 | 2.699 | 0.415 | 0.466 |
 | olmo2_7b | ent_last | 31 | -0.772 | 6.163 | 0.643 | 0.373 |
 | llama2_7b | ent_mean | 12 | -0.378 | 4.687 | 0.689 | 0.332 |
+| gpt_oss_120b | ent_mean | 20 | -0.595 | 4.652 | 0.618 | 0.392 |
 | qwen3_8b | ent_mean | 36 | -0.345 | 5.301 | 0.683 | 0.340 |
 | thalesian_cunei400m | ent_mean | 11 | -0.434 | 4.708 | 0.603 | 0.393 |
 | olmo2_7b | ent_mean | 31 | -0.457 | 5.370 | 0.681 | 0.363 |
 | llama2_7b | last | 6 | -0.470 | 4.240 | 0.519 | 0.416 |
+| gpt_oss_120b | last | 6 | -0.540 | 5.621 | 0.526 | 0.409 |
 | qwen3_8b | last | 17 | -0.487 | 6.059 | 0.684 | 0.323 |
 | thalesian_cunei400m | last | 12 | -0.638 | 2.699 | 0.415 | 0.466 |
 | olmo2_7b | last | 31 | -0.772 | 6.163 | 0.643 | 0.373 |
 | llama2_7b | mean | 12 | -0.378 | 4.687 | 0.689 | 0.332 |
+| gpt_oss_120b | mean | 20 | -0.595 | 4.652 | 0.618 | 0.392 |
 | qwen3_8b | mean | 36 | -0.345 | 5.301 | 0.683 | 0.340 |
 | thalesian_cunei400m | mean | 11 | -0.434 | 4.708 | 0.603 | 0.393 |
 | olmo2_7b | mean | 31 | -0.457 | 5.370 | 0.681 | 0.363 |
@@ -222,18 +226,22 @@ A score witnesses learning only if it beats **both** the TF-IDF floor
 | arm | site | best layer | MC R2 | +/- | MC rho | +/- |
 |---|---|--:|--:|--:|--:|--:|
 | llama2_7b | ent_last | 14 | -0.142 | 2.322 | 0.512 | 0.377 |
+| gpt_oss_120b | ent_last | 18 | -0.401 | 6.125 | 0.623 | 0.358 |
 | qwen3_8b | ent_last | 22 | -0.483 | 3.723 | 0.526 | 0.390 |
 | thalesian_cunei400m | ent_last | 10 | -2.071 | 4.059 | 0.102 | 0.495 |
 | olmo2_7b | ent_last | 31 | -0.882 | 8.361 | 0.574 | 0.352 |
 | llama2_7b | ent_mean | 12 | -0.473 | 6.206 | 0.651 | 0.323 |
+| gpt_oss_120b | ent_mean | 6 | -0.774 | 8.048 | 0.663 | 0.312 |
 | qwen3_8b | ent_mean | 36 | -0.554 | 7.017 | 0.625 | 0.326 |
 | thalesian_cunei400m | ent_mean | 10 | -0.292 | 3.767 | 0.664 | 0.287 |
 | olmo2_7b | ent_mean | 31 | -0.808 | 8.411 | 0.624 | 0.342 |
 | llama2_7b | last | 12 | -0.050 | 2.676 | 0.668 | 0.309 |
+| gpt_oss_120b | last | 12 | -1.175 | 9.050 | 0.606 | 0.272 |
 | qwen3_8b | last | 4 | -0.678 | 5.660 | 0.655 | 0.275 |
 | thalesian_cunei400m | last | 10 | -1.016 | 8.293 | 0.531 | 0.323 |
 | olmo2_7b | last | 8 | -1.075 | 8.908 | 0.636 | 0.324 |
 | llama2_7b | mean | 12 | -0.152 | 2.848 | 0.666 | 0.319 |
+| gpt_oss_120b | mean | 6 | -0.305 | 3.645 | 0.684 | 0.306 |
 | qwen3_8b | mean | 36 | -0.202 | 3.476 | 0.686 | 0.311 |
 | thalesian_cunei400m | mean | 8 | -0.374 | 3.602 | 0.642 | 0.296 |
 | olmo2_7b | mean | 1 | -0.520 | 3.875 | 0.588 | 0.342 |

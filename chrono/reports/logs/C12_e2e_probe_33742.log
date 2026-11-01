@@ -1,0 +1,35 @@
+# job 33742 C12_e2e_probe exit=1 Thu Sep  3 07:31:24 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C12_e2e_probe_33661_3.out
+=== C12 probes e2e_barlow_XL-s0 === job 33742 Thu Sep  3 05:26:31 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_representations.py", line 159, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_representations.py", line 148, in main
+    .to_parquet(os.path.join(args.out_dir, f"umap_{args.model.replace('/', '_')}_L{args.layer}_{args.site}.parquet"), index=False)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/util/_decorators.py", line 333, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/core/frame.py", line 3124, in to_parquet
+    return to_parquet(
+           ^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/parquet.py", line 482, in to_parquet
+    impl.write(
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/parquet.py", line 199, in write
+    path_or_handle, handles, filesystem = _get_path_or_handle(
+                                          ^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/parquet.py", line 141, in _get_path_or_handle
+    handles = get_handle(
+              ^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/common.py", line 882, in get_handle
+    handle = open(handle, ioargs.mode)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument: 'chrono/reports/ssl/umap_ssl_e2e::e2e_barlow_XL-s0_L0_h.parquet'
+FAILED probes e2e_barlow_XL-s0

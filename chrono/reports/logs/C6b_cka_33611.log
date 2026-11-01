@@ -1,0 +1,111 @@
+# job 33611 C6b_cka exit=0 Wed Sep  2 18:11:19 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C6b_cka_33585_16.out
+=== C6 emin2_qwen3_8b_t0_akk_cka5_provenance seed 1 === job 33611 Wed Sep  2 17:39:42 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[hsic] lambda=5.0 measure=cka confound='provenance' k=21
+epoch 50/200 loss 34.8290
+epoch 100/200 loss 29.8208
+epoch 150/200 loss 24.2170
+epoch 200/200 loss 21.4629
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_cka5_provenance-s1-f0",
+  "metrics": {
+    "final_dep": 0.0480264376476407,
+    "train_soft_spearman": 0.6476928884846938,
+    "train_spearman": 0.6474846591073564,
+    "final_loss": 21.46294355392456,
+    "identical_view_rate": 0.007616216216216216,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_cka5_provenance-s1-f0.parquet"
+}
+[hsic] lambda=5.0 measure=cka confound='provenance' k=21
+epoch 50/200 loss 33.0734
+epoch 100/200 loss 24.9646
+epoch 150/200 loss 24.4231
+epoch 200/200 loss 23.5624
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_cka5_provenance-s1-f1",
+  "metrics": {
+    "final_dep": 0.04741801783442497,
+    "train_soft_spearman": 0.6376954680304311,
+    "train_spearman": 0.6377818094463612,
+    "final_loss": 23.562411308288574,
+    "identical_view_rate": 0.006563807531380753,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_cka5_provenance-s1-f1.parquet"
+}
+[hsic] lambda=5.0 measure=cka confound='provenance' k=21
+epoch 50/200 loss 34.0162
+epoch 100/200 loss 32.0059
+epoch 150/200 loss 31.9548
+epoch 200/200 loss 26.3924
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_cka5_provenance-s1-f2",
+  "metrics": {
+    "final_dep": 0.044744275100529196,
+    "train_soft_spearman": 0.6365074152521378,
+    "train_spearman": 0.6365787284557711,
+    "final_loss": 26.392438888549805,
+    "identical_view_rate": 0.008037383177570093,
+    "test_spearman": 0.28822174005634565
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_cka5_provenance-s1-f2.parquet"
+}
+[hsic] lambda=5.0 measure=cka confound='provenance' k=21
+epoch 50/200 loss 33.4642
+epoch 100/200 loss 24.4292
+epoch 150/200 loss 23.9852
+epoch 200/200 loss 24.1781
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_cka5_provenance-s1-f3",
+  "metrics": {
+    "final_dep": 0.03708013106137514,
+    "train_soft_spearman": 0.6575164223411132,
+    "train_spearman": 0.6575048310518119,
+    "final_loss": 24.178107738494873,
+    "identical_view_rate": 0.0034802904564315354,
+    "test_spearman": 0.49313248896877715
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_cka5_provenance-s1-f3.parquet"
+}
+[hsic] lambda=5.0 measure=cka confound='provenance' k=21
+epoch 50/200 loss 35.8193
+epoch 100/200 loss 26.7107
+epoch 150/200 loss 24.3817
+epoch 200/200 loss 23.9967
+{
+  "run_id": "emin2_qwen3_8b_t0_akk_cka5_provenance-s1-f4",
+  "metrics": {
+    "final_dep": 0.03795175060629845,
+    "train_soft_spearman": 0.5122665339812257,
+    "train_spearman": 0.5124105102221788,
+    "final_loss": 23.996700763702393,
+    "identical_view_rate": 0.007287344398340249,
+    "test_spearman": 0.636121405272033
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_qwen3_8b_t0_akk_cka5_provenance-s1-f4.parquet"
+}
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox bd706a29] C6b: cka emin2_qwen3_8b_t0_akk_cka5_provenance seed 1 (job 33611)
+ 1 file changed, 111 insertions(+)
+ create mode 100644 chrono/reports/logs/C6b_cka_33610.log
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   f999d1e4..bd706a29  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 18:11:19 UTC 2026 ===

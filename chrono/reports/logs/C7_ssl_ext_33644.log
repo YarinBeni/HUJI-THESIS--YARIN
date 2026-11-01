@@ -1,0 +1,107 @@
+# job 33644 C7_ssl_ext exit=0 Wed Sep  2 19:53:35 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C7_ssl_ext_33641_1.out
+=== C7 ssl extract thalesian_akk300m L4,8 === job 33644 Wed Sep  2 19:50:49 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: dc09ff85
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[unified] dropped 575,041 exact duplicate word rows (DATA-3)
+[letters] period attached to 3,718 unified rows; 1,268 new texts added
+# SSL corpus census — 2026-09-02
+
+rows before dedupe 43,283 · content duplicates removed 871 (cross-source duplicate groups: 46) · min length 8 words · **final 31,905 texts, 2,195,941 words**
+
+| source | texts | words | median words | with period | with year |
+|---|---|---|---|---|---|
+| archibab | 1,522 | 79,733 | 39 | 1,522 | 0 |
+| ebl | 16,552 | 966,964 | 26 | 0 | 0 |
+| lbl_letters | 1,020 | 62,571 | 53 | 1,020 | 0 |
+| oracc | 11,268 | 800,754 | 28 | 3,431 | 0 |
+| orcc | 1,185 | 245,555 | 49 | 1,172 | 1,176 |
+| seal | 358 | 40,364 | 42 | 355 | 0 |
+
+## period labels (harmonised)
+
+| period | texts | sources |
+|---|---|---|
+| Achaemenid | 15 | oracc:12, orcc:3 |
+| Hellenistic | 401 | oracc:400, orcc:1 |
+| Late Babylonian | 1,084 | lbl_letters:1020, seal:64 |
+| Middle Assyrian | 6 | seal:6 |
+| Middle Babylonian | 80 | seal:52, orcc:28 |
+| Neo-Assyrian | 3,954 | oracc:3014, orcc:924, seal:16 |
+| Neo-Babylonian | 221 | orcc:216, oracc:5 |
+| Old Assyrian | 5 | seal:5 |
+| Old Babylonian | 1,734 | archibab:1522, seal:212 |
+
+unmapped period strings (top): `wall slab (with reliefs)`×4; `Archaic/Old Akkadian/Ebla`×2; `Later Periods (SB, NA, LB)`×1
+
+## splits
+
+| split | archibab | ebl | lbl_letters | oracc | orcc | seal |
+|---|---|---|---|---|---|---|
+| dated | 0 | 0 | 0 | 0 | 1176 | 0 |
+| test | 152 | 1655 | 102 | 1126 | 0 | 35 |
+| train | 1218 | 13242 | 816 | 9016 | 9 | 288 |
+| val | 152 | 1655 | 102 | 1126 | 0 | 35 |
+Invalid model-index. Not loading eval results into CardData.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/204 [00:00<?, ?it/s]Loading weights: 100%|██████████| 204/204 [00:00<00:00, 1997.33it/s]Loading weights: 100%|██████████| 204/204 [00:00<00:00, 1993.00it/s]
+The tied weights mapping and config for this model specifies to tie shared.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+[extract] Thalesian/AKK_300m: 31905 texts, layers [4, 8], sites ['mean'], store=chrono.models.store
+[extract] 1024/31905 texts (3.2s)
+[extract] 2048/31905 texts (5.4s)
+[extract] 3072/31905 texts (7.9s)
+[extract] 4096/31905 texts (10.2s)
+[extract] 5120/31905 texts (12.3s)
+[extract] 6144/31905 texts (14.3s)
+[extract] 7168/31905 texts (16.3s)
+[extract] 8192/31905 texts (18.4s)
+[extract] 9216/31905 texts (20.4s)
+[extract] 10240/31905 texts (22.3s)
+[extract] 11264/31905 texts (24.1s)
+[extract] 12288/31905 texts (26.0s)
+[extract] 13312/31905 texts (28.8s)
+[extract] 14336/31905 texts (31.5s)
+[extract] 15360/31905 texts (33.8s)
+[extract] 16384/31905 texts (35.9s)
+[extract] 17408/31905 texts (38.1s)
+[extract] 18432/31905 texts (40.2s)
+[extract] 19456/31905 texts (42.3s)
+[extract] 20480/31905 texts (44.7s)
+[extract] 21504/31905 texts (47.1s)
+[extract] 22528/31905 texts (49.5s)
+[extract] 23552/31905 texts (51.7s)
+[extract] 24576/31905 texts (54.4s)
+[extract] 25600/31905 texts (56.8s)
+[extract] 26624/31905 texts (59.7s)
+[extract] 27648/31905 texts (62.5s)
+[extract] 28672/31905 texts (64.7s)
+[extract] 29696/31905 texts (67.4s)
+[extract] 30720/31905 texts (70.3s)
+[extract] 31744/31905 texts (73.3s)
+[extract] 31905/31905 texts (74.1s)
+[done] {"n_texts": 31905, "n_embedded": 31905, "n_skipped": 0, "layers": [4, 8], "sites": ["mean"], "elapsed_s": 74.1, "model": "thalesian_akk300m", "hfid": "Thalesian/AKK_300m", "store_root": "chrono/artifacts_ssl/emb_store", "max_tokens": 512, "dtype": "auto"}
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 04a75dda] C7: ssl features thalesian_akk300m (job 33644)
+ 1 file changed, 18 insertions(+)
+ create mode 100644 chrono/reports/ssl/extract_meta__thalesian_akk300m.json
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   39a4fbf9..04a75dda  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 19:53:35 UTC 2026 ===

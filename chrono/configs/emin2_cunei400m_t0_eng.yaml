@@ -1,0 +1,39 @@
+# E-MIN v2 (2026-09-02 review): tier0 Akkadian, cunei400m L12 mean.
+# 12 blocks; top, as L8 was for AKK_300m; the stronger Akkadian encoder per the M.Sc.
+# language arm: eng = ['eng']. Artifacts root: chrono/artifacts_tier0.
+run_name: emin2_cunei400m_t0_eng
+features:
+  kind: emb
+  model: Thalesian/cuneiformBase-400m
+  layer: 12
+  site: mean
+views:
+  menu_a:
+  - - mask_ruler
+    - strip_formula
+  - - mask_ruler
+    - crop16
+  - - mask_ruler
+    - crop32
+  - - mask_ruler
+    - drop_span
+  - - orthonorm
+  menu_b:
+  - []
+  - - mask_ruler
+  seeds:
+  - 0
+  - 1
+  langs:
+  - eng
+loss:
+  lambda_rank: 1.0
+  lambda_var: 0.1
+  temp: 1.0
+  lambda_offdiag: 0.005
+train:
+  epochs: 200
+  lr: 0.001
+  batch: 256
+  seed: 0
+eval_split: gkf_ruler

@@ -1,0 +1,42 @@
+# job 33645 C7_ssl_ext exit=1 Wed Sep  2 19:51:29 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C7_ssl_ext_33641_2.out
+=== C7 ssl extract llama2_7b L16,24 === job 33645 Wed Sep  2 19:50:49 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: The following untracked working tree files would be overwritten by reset --hard:
+	chrono/agent/inbox/026_resubmit_S1.sh
+Please move or remove them before you reset --hard.
+Aborting
+fatal: could not reset --hard
+Created autostash: b9120ba2
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: 388cc77f
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 517, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/extract_embeddings.py", line 480, in main
+    t = pd.read_parquet(args.table, columns=[args.id_col, args.text_col])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/parquet.py", line 669, in read_parquet
+    return impl.read(
+           ^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/parquet.py", line 258, in read
+    path_or_handle, handles, filesystem = _get_path_or_handle(
+                                          ^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/parquet.py", line 141, in _get_path_or_handle
+    handles = get_handle(
+              ^^^^^^^^^^^
+  File "/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/pandas/io/common.py", line 882, in get_handle
+    handle = open(handle, ioargs.mode)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'chrono/artifacts_ssl/corpus_all.parquet'
+FAILED extract llama2_7b

@@ -1,0 +1,63 @@
+# job 33668 C9_ssl_views exit=0 Wed Sep  2 22:12:49 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C9_ssl_views_33648_11.out
+=== C9 views llama2_7b L16 part 7/8 === job 33668 Wed Sep  2 20:57:15 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[extract] part 7/8: rows 307085..350955
+Fetching 18 files:   0%|          | 0/18 [00:00<?, ?it/s]Fetching 18 files: 100%|██████████| 18/18 [00:00<00:00, 351.11it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights:   5%|▌         | 15/291 [00:00<00:02, 132.42it/s]Loading weights:  10%|▉         | 29/291 [00:00<00:01, 136.25it/s]Loading weights:  15%|█▍        | 43/291 [00:00<00:02, 119.03it/s]Loading weights:  19%|█▉        | 56/291 [00:00<00:01, 120.34it/s]Loading weights:  24%|██▎       | 69/291 [00:00<00:01, 117.27it/s]Loading weights:  28%|██▊       | 81/291 [00:00<00:01, 112.08it/s]Loading weights:  32%|███▏      | 94/291 [00:00<00:01, 112.48it/s]Loading weights:  36%|███▋      | 106/291 [00:00<00:01, 114.24it/s]Loading weights:  41%|████      | 119/291 [00:01<00:01, 115.96it/s]Loading weights:  45%|████▌     | 131/291 [00:01<00:01, 109.77it/s]Loading weights:  51%|█████     | 148/291 [00:01<00:01, 117.29it/s]Loading weights:  55%|█████▍    | 160/291 [00:01<00:01, 117.29it/s]Loading weights:  59%|█████▉    | 172/291 [00:01<00:01, 115.88it/s]Loading weights:  63%|██████▎   | 184/291 [00:01<00:01, 105.33it/s]Loading weights:  69%|██████▊   | 200/291 [00:01<00:00, 116.87it/s]Loading weights:  73%|███████▎  | 212/291 [00:01<00:00, 114.09it/s]Loading weights:  78%|███████▊  | 227/291 [00:01<00:00, 118.58it/s]Loading weights:  82%|████████▏ | 239/291 [00:02<00:00, 112.69it/s]Loading weights:  87%|████████▋ | 253/291 [00:02<00:00, 119.64it/s]Loading weights:  91%|█████████▏| 266/291 [00:02<00:00, 107.14it/s]Loading weights:  96%|█████████▌| 280/291 [00:02<00:00, 109.28it/s]Loading weights: 100%|██████████| 291/291 [00:02<00:00, 116.16it/s]
+[extract] NousResearch/Llama-2-7b-hf: 43870 texts, layers [16], sites ['mean'], store=chrono.models.store
+Token indices sequence length is longer than the specified maximum sequence length for this model (3734 > 2048). Running this sequence through the model will result in indexing errors
+[extract] 1024/43870 texts (137.3s)
+[extract] 2048/43870 texts (310.4s)
+[extract] 3072/43870 texts (324.5s)
+[extract] 4096/43870 texts (411.4s)
+[extract] 5120/43870 texts (457.7s)
+[extract] 6144/43870 texts (497.4s)
+[extract] 7168/43870 texts (510.7s)
+[extract] 8192/43870 texts (534.9s)
+[extract] 9216/43870 texts (624.0s)
+[extract] 10240/43870 texts (753.7s)
+[extract] 11264/43870 texts (891.3s)
+[extract] 12288/43870 texts (1062.4s)
+[extract] 13312/43870 texts (1131.4s)
+[extract] 14336/43870 texts (1243.5s)
+[extract] 15360/43870 texts (1280.6s)
+[extract] 16384/43870 texts (1288.0s)
+[extract] 17408/43870 texts (1384.2s)
+[extract] 18432/43870 texts (1490.9s)
+[extract] 19456/43870 texts (1556.8s)
+[extract] 20480/43870 texts (1565.4s)
+[extract] 21504/43870 texts (1631.7s)
+[extract] 22528/43870 texts (1738.3s)
+[extract] 23552/43870 texts (1837.2s)
+[extract] 24576/43870 texts (1951.0s)
+[extract] 25600/43870 texts (2077.9s)
+[extract] 26624/43870 texts (2260.2s)
+[extract] 27648/43870 texts (2408.3s)
+[extract] 28672/43870 texts (2553.7s)
+[extract] 29696/43870 texts (2708.5s)
+[extract] 30720/43870 texts (2782.6s)
+[extract] 31744/43870 texts (2907.8s)
+[extract] 32768/43870 texts (3046.1s)
+[extract] 33792/43870 texts (3173.9s)
+[extract] 34816/43870 texts (3309.7s)
+[extract] 35840/43870 texts (3456.2s)
+[extract] 36864/43870 texts (3566.6s)
+[extract] 37888/43870 texts (3676.1s)
+[extract] 38912/43870 texts (3801.6s)
+[extract] 39936/43870 texts (3958.3s)
+[extract] 40960/43870 texts (4132.3s)
+[extract] 41984/43870 texts (4298.6s)
+[extract] 43008/43870 texts (4394.3s)
+[extract] 43870/43870 texts (4462.4s)
+[done] {"n_texts": 43870, "n_embedded": 43870, "n_skipped": 0, "layers": [16], "sites": ["mean"], "elapsed_s": 4462.4, "model": "llama2_7b", "hfid": "NousResearch/Llama-2-7b-hf", "store_root": "chrono/artifacts_ssl/emb_store", "max_tokens": 512, "dtype": "auto"}
+=== Done. Wed Sep  2 22:12:49 UTC 2026 ===

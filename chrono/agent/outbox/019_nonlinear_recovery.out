@@ -1,0 +1,82 @@
+# 019_nonlinear_recovery  host=g0381  start=Wed Sep  2 14:58:55 UTC 2026  timeout=10800s
+# HEAD=18570ea2
+# ---------------------------------------------------------
+heads present: 15
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 0 done
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 1 done
+[probe] fold 2 done
+[probe] fold 3 done
+[probe] fold 4 done
+# Nonlinear-recovery check — emin2_cunei400m_t0_akk_erase_provenance — erased concept `provenance` (15 classes ≥10 docs, chance 0.07)
+
+| features | probe | balanced acc (mean ± sd over folds) |
+|---|---|---|
+| X raw | linear | 0.444 ± 0.089 |
+| X raw | mlp | 0.439 ± 0.065 |
+| X erased | linear | 0.049 ± 0.024 |
+| X erased | mlp | 0.252 ± 0.032 |
+| head hidden h(X erased) | linear | 0.058 ± 0.018 |
+| head hidden h(X erased) | mlp | 0.173 ± 0.023 |
+
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 0 done
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 1 done
+[probe] fold 2 done
+[probe] fold 3 done
+[probe] fold 4 done
+# Nonlinear-recovery check — emin2_llama2_7b_t0_akk_erase_provenance — erased concept `provenance` (15 classes ≥10 docs, chance 0.07)
+
+| features | probe | balanced acc (mean ± sd over folds) |
+|---|---|---|
+| X raw | linear | 0.423 ± 0.101 |
+| X raw | mlp | 0.435 ± 0.069 |
+| X erased | linear | 0.052 ± 0.022 |
+| X erased | mlp | 0.354 ± 0.063 |
+| head hidden h(X erased) | linear | 0.418 ± 0.053 |
+| head hidden h(X erased) | mlp | 0.390 ± 0.107 |
+
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 0 done
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[probe] fold 1 done
+[probe] fold 2 done
+[probe] fold 3 done
+[probe] fold 4 done
+# Nonlinear-recovery check — emin2_qwen3_8b_t0_akk_erase_provenance — erased concept `provenance` (15 classes ≥10 docs, chance 0.07)
+
+| features | probe | balanced acc (mean ± sd over folds) |
+|---|---|---|
+| X raw | linear | 0.414 ± 0.090 |
+| X raw | mlp | 0.405 ± 0.077 |
+| X erased | linear | 0.066 ± 0.030 |
+| X erased | mlp | 0.417 ± 0.053 |
+| head hidden h(X erased) | linear | 0.464 ± 0.060 |
+| head hidden h(X erased) | mlp | 0.489 ± 0.059 |
+
+# ---------------------------------------------------------
+# exit=0  end=Wed Sep  2 15:17:00 UTC 2026

@@ -1,0 +1,286 @@
+# job 53180 C23_wb_akk exit=0 Tue Oct  6 09:49:37 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C23_wb_akk_53179_0.out
+=== C23 WB-akk llama2_7b === job 53180 Tue Oct  6 09:25:09 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch                yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[harvest] 970/970 PN-bearing docs aligned
+
+[report] ruler -> attested spellings (n docs):
+  Antiochus I                  "m-an-ti-'u-ku-us" (1)
+  Ashurbanipal                 'm-AN-ŠAR2-DU3-A' (81) | 'm-te-um-man' (12)
+  Bel-ibni                     'm-d-AG-ga-mil' (1)
+  Enlil-nadin-apli             'd-en-lil2-SUM-IBILA' (1)
+  Esarhaddon                   'm-aš-šur-PAP-AŠ' (26) | 'm-AN-ŠAR2-ŠEŠ-SUM-NA' (15)
+  Itti-Marduk-balaṭu           'd-AMAR-UTU-DUGUD-ŠEŠ-MEŠ-šu2' (1)
+  Marduk-nadin-ahhe            'd-AMAR-UTU-SUM-ŠEŠ-MEŠ' (2)
+  Marduk-zakir-šumi I          'd-AMAR-UTU-MU-MU' (2)
+  Marduk-šakin-šumi            'm-d-AMAR-UTU-GAR-MU' (1)
+  Nabonidus                    "d-AG-na-'i-id" (8) | "d-na-bi-um-na-'i-id" (8)
+  Nabopolassar                 'd-na-bi-um-IBILA-u2-ṣu-ur2' (5) | 'd-AG-IBILA-u2-ṣur' (3)
+  Nabû-mukin-apli              'm-ri-mut-DINGIR-MEŠ' (2)
+  Nabû-naṣir                   'm-d-EN-ib-ni' (1)
+  Nabû-šuma-iškun              'm-d-AMAR-UTU-IBILA-URU3' (1) | 'm-d-AG-MU-im-bi' (1)
+  Nabû-šumu-libur              'd-AG-MU-li-bur' (1)
+  Nabû-šumu-lišir              'm-d-PA-MU-SI-SA2' (1)
+  Nebuchadnezzar II            'd-na-bi-um-ku-du-ur2-ri-u2-ṣu-ur2' (25) | 'd-AG-NIG2-DU-URU3' (14)
+  Ninurta-kudurri-usur I       'd-MAŠ-NIG2-DU-PAP' (1)
+  Ninurta-nadin-šumi           'd-nin-urta-SUM-MU' (1)
+  Sargon II                    'm-MAN-GIN' (31) | 'm-LUGAL-GI-NA' (30)
+  Sennacherib                  'm-d-30-PAP-MEŠ-SU' (125) | 'm-d-EN-ZU-ŠEŠ-MEŠ-eri-ba' (22)
+  Shalmaneser V                'm-d-SILIM-man-MAŠ' (7) | 'm-SILIM-man-MAŠ' (2)
+  Sîn-šarru-iškun              'm-d-30-LUGAL-GAR-un' (7) | 'm-d-EN-ZU-LUGAL-GAR-un' (2)
+  Tiglath-pileser III          'm-tukul-ti-A-e2-šar2-ra' (13) | 'm-ka-ki-i' (3)
+[report] rulers with no surviving spelling: 16: ['Adad-apla-iddina', 'Amel-Marduk', 'Aššur-etel-ilāni', 'Bazi Dynasty Unidentified Ruler', 'Cyrus II', 'Eriba-Marduk', 'Eulmaš-šakin-šumi', 'Kaššû-nadin-ahhe', 'Mar-biti-apla-uṣur', 'Marduk-apla-iddina II', 'Marduk-šapik-zeri', 'Nebuchadnezzar I', 'Neriglissar', 'Simbar-Šipak', 'Unidentified Neo-Babylonian Ruler', 'Šamaš-šuma-ukin']
+[build] wrote /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/world_models/data/entity_datasets/assyrian_ruler_akk.csv: 96 rows, 21 rulers, 18 test rows
+Fetching 18 files:   0%|          | 0/18 [00:00<?, ?it/s]Fetching 18 files: 100%|██████████| 18/18 [00:00<00:00, 5984.26it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights:   4%|▍         | 13/291 [00:00<00:02, 101.45it/s]Loading weights:  10%|▉         | 29/291 [00:00<00:02, 129.68it/s]Loading weights:  15%|█▍        | 43/291 [00:00<00:02, 120.99it/s]Loading weights:  19%|█▉        | 56/291 [00:00<00:01, 118.52it/s]Loading weights:  23%|██▎       | 68/291 [00:00<00:01, 115.85it/s]Loading weights:  29%|██▊       | 83/291 [00:00<00:01, 120.39it/s]Loading weights:  33%|███▎      | 96/291 [00:00<00:01, 110.43it/s]Loading weights:  38%|███▊      | 111/291 [00:00<00:01, 118.34it/s]Loading weights:  42%|████▏     | 123/291 [00:01<00:01, 103.01it/s]Loading weights:  47%|████▋     | 137/291 [00:01<00:01, 111.51it/s]Loading weights:  51%|█████     | 149/291 [00:01<00:01, 107.46it/s]Loading weights:  56%|█████▌    | 162/291 [00:01<00:01, 109.85it/s]Loading weights:  60%|██████    | 175/291 [00:01<00:01, 106.37it/s]Loading weights:  65%|██████▌   | 190/291 [00:01<00:00, 112.18it/s]Loading weights:  69%|██████▉   | 202/291 [00:01<00:00, 106.80it/s]Loading weights:  74%|███████▎  | 214/291 [00:01<00:00, 109.32it/s]Loading weights:  78%|███████▊  | 226/291 [00:02<00:00, 111.63it/s]Loading weights:  82%|████████▏ | 238/291 [00:02<00:00, 106.25it/s]Loading weights:  87%|████████▋ | 254/291 [00:02<00:00, 120.26it/s]Loading weights:  92%|█████████▏| 267/291 [00:02<00:00, 101.75it/s]Loading weights:  97%|█████████▋| 281/291 [00:02<00:00, 110.90it/s]Loading weights: 100%|██████████| 291/291 [00:02<00:00, 112.14it/s]
+[done] llama2_7b/assyrian_ruler_akk: 32 layers x 4 sites, 21 entities, 0 truncated, 12.7s
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 1: mc_r2=-2.089
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 2: mc_r2=-1.620
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 3: mc_r2=-1.420
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 4: mc_r2=-1.177
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 5: mc_r2=-1.226
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 6: mc_r2=-1.303
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 7: mc_r2=-1.277
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 8: mc_r2=-1.255
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 9: mc_r2=-1.431
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 10: mc_r2=-1.582
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 11: mc_r2=-1.599
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 12: mc_r2=-1.820
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 13: mc_r2=-1.835
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 14: mc_r2=-1.827
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 15: mc_r2=-1.924
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 16: mc_r2=-1.884
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 17: mc_r2=-1.875
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 18: mc_r2=-1.764
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 19: mc_r2=-1.503
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 20: mc_r2=-1.503
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 21: mc_r2=-1.487
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 22: mc_r2=-1.450
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 23: mc_r2=-1.403
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 24: mc_r2=-1.481
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 25: mc_r2=-1.444
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 26: mc_r2=-1.497
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 27: mc_r2=-1.511
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 28: mc_r2=-1.517
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 29: mc_r2=-1.434
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 30: mc_r2=-1.403
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 31: mc_r2=-1.542
+[llama2_7b/assyrian_ruler_akk/ent_last] layer 32: mc_r2=-1.847
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+[llama2_7b/assyrian_ruler_akk/ent_last] k-sweep at best layer 4: k=3
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 1: mc_r2=-1.583
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 2: mc_r2=-1.379
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 3: mc_r2=-1.308
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 4: mc_r2=-1.146
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 5: mc_r2=-1.241
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 6: mc_r2=-1.181
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 7: mc_r2=-1.149
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 8: mc_r2=-1.091
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 9: mc_r2=-1.061
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 10: mc_r2=-1.228
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 11: mc_r2=-1.187
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 12: mc_r2=-1.302
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 13: mc_r2=-1.407
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 14: mc_r2=-1.532
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 15: mc_r2=-1.581
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 16: mc_r2=-1.502
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 17: mc_r2=-1.481
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 18: mc_r2=-1.436
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 19: mc_r2=-1.429
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 20: mc_r2=-1.358
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 21: mc_r2=-1.316
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 22: mc_r2=-1.169
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 23: mc_r2=-1.161
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 24: mc_r2=-1.210
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 25: mc_r2=-1.287
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 26: mc_r2=-1.270
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 27: mc_r2=-1.358
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 28: mc_r2=-1.318
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 29: mc_r2=-1.272
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 30: mc_r2=-1.179
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 31: mc_r2=-1.092
+[llama2_7b/assyrian_ruler_akk/ent_mean] layer 32: mc_r2=-1.191
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+[llama2_7b/assyrian_ruler_akk/ent_mean] k-sweep at best layer 9: k=32
+[llama2_7b/assyrian_ruler_akk/last] layer 1: mc_r2=-1.508
+[llama2_7b/assyrian_ruler_akk/last] layer 2: mc_r2=-1.519
+[llama2_7b/assyrian_ruler_akk/last] layer 3: mc_r2=-1.179
+[llama2_7b/assyrian_ruler_akk/last] layer 4: mc_r2=-0.889
+[llama2_7b/assyrian_ruler_akk/last] layer 5: mc_r2=-1.035
+[llama2_7b/assyrian_ruler_akk/last] layer 6: mc_r2=-1.032
+[llama2_7b/assyrian_ruler_akk/last] layer 7: mc_r2=-1.021
+[llama2_7b/assyrian_ruler_akk/last] layer 8: mc_r2=-1.087
+[llama2_7b/assyrian_ruler_akk/last] layer 9: mc_r2=-1.068
+[llama2_7b/assyrian_ruler_akk/last] layer 10: mc_r2=-1.253
+[llama2_7b/assyrian_ruler_akk/last] layer 11: mc_r2=-1.269
+[llama2_7b/assyrian_ruler_akk/last] layer 12: mc_r2=-1.331
+[llama2_7b/assyrian_ruler_akk/last] layer 13: mc_r2=-1.295
+[llama2_7b/assyrian_ruler_akk/last] layer 14: mc_r2=-1.236
+[llama2_7b/assyrian_ruler_akk/last] layer 15: mc_r2=-1.230
+[llama2_7b/assyrian_ruler_akk/last] layer 16: mc_r2=-1.320
+[llama2_7b/assyrian_ruler_akk/last] layer 17: mc_r2=-1.350
+[llama2_7b/assyrian_ruler_akk/last] layer 18: mc_r2=-1.607
+[llama2_7b/assyrian_ruler_akk/last] layer 19: mc_r2=-1.695
+[llama2_7b/assyrian_ruler_akk/last] layer 20: mc_r2=-1.857
+[llama2_7b/assyrian_ruler_akk/last] layer 21: mc_r2=-2.109
+[llama2_7b/assyrian_ruler_akk/last] layer 22: mc_r2=-2.031
+[llama2_7b/assyrian_ruler_akk/last] layer 23: mc_r2=-1.799
+[llama2_7b/assyrian_ruler_akk/last] layer 24: mc_r2=-1.791
+[llama2_7b/assyrian_ruler_akk/last] layer 25: mc_r2=-1.781
+[llama2_7b/assyrian_ruler_akk/last] layer 26: mc_r2=-1.674
+[llama2_7b/assyrian_ruler_akk/last] layer 27: mc_r2=-1.632
+[llama2_7b/assyrian_ruler_akk/last] layer 28: mc_r2=-1.397
+[llama2_7b/assyrian_ruler_akk/last] layer 29: mc_r2=-1.405
+[llama2_7b/assyrian_ruler_akk/last] layer 30: mc_r2=-1.346
+[llama2_7b/assyrian_ruler_akk/last] layer 31: mc_r2=-1.477
+[llama2_7b/assyrian_ruler_akk/last] layer 32: mc_r2=-2.291
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+[llama2_7b/assyrian_ruler_akk/last] k-sweep at best layer 4: k=64
+[llama2_7b/assyrian_ruler_akk/mean] layer 1: mc_r2=-1.424
+[llama2_7b/assyrian_ruler_akk/mean] layer 2: mc_r2=-1.291
+[llama2_7b/assyrian_ruler_akk/mean] layer 3: mc_r2=-1.204
+[llama2_7b/assyrian_ruler_akk/mean] layer 4: mc_r2=-1.077
+[llama2_7b/assyrian_ruler_akk/mean] layer 5: mc_r2=-1.156
+[llama2_7b/assyrian_ruler_akk/mean] layer 6: mc_r2=-1.169
+[llama2_7b/assyrian_ruler_akk/mean] layer 7: mc_r2=-1.140
+[llama2_7b/assyrian_ruler_akk/mean] layer 8: mc_r2=-1.134
+[llama2_7b/assyrian_ruler_akk/mean] layer 9: mc_r2=-1.010
+[llama2_7b/assyrian_ruler_akk/mean] layer 10: mc_r2=-1.166
+[llama2_7b/assyrian_ruler_akk/mean] layer 11: mc_r2=-1.187
+[llama2_7b/assyrian_ruler_akk/mean] layer 12: mc_r2=-1.317
+[llama2_7b/assyrian_ruler_akk/mean] layer 13: mc_r2=-1.426
+[llama2_7b/assyrian_ruler_akk/mean] layer 14: mc_r2=-1.582
+[llama2_7b/assyrian_ruler_akk/mean] layer 15: mc_r2=-1.605
+[llama2_7b/assyrian_ruler_akk/mean] layer 16: mc_r2=-1.563
+[llama2_7b/assyrian_ruler_akk/mean] layer 17: mc_r2=-1.494
+[llama2_7b/assyrian_ruler_akk/mean] layer 18: mc_r2=-1.379
+[llama2_7b/assyrian_ruler_akk/mean] layer 19: mc_r2=-1.303
+[llama2_7b/assyrian_ruler_akk/mean] layer 20: mc_r2=-1.314
+[llama2_7b/assyrian_ruler_akk/mean] layer 21: mc_r2=-1.255
+[llama2_7b/assyrian_ruler_akk/mean] layer 22: mc_r2=-1.159
+[llama2_7b/assyrian_ruler_akk/mean] layer 23: mc_r2=-1.140
+[llama2_7b/assyrian_ruler_akk/mean] layer 24: mc_r2=-1.186
+[llama2_7b/assyrian_ruler_akk/mean] layer 25: mc_r2=-1.287
+[llama2_7b/assyrian_ruler_akk/mean] layer 26: mc_r2=-1.248
+[llama2_7b/assyrian_ruler_akk/mean] layer 27: mc_r2=-1.326
+[llama2_7b/assyrian_ruler_akk/mean] layer 28: mc_r2=-1.280
+[llama2_7b/assyrian_ruler_akk/mean] layer 29: mc_r2=-1.248
+[llama2_7b/assyrian_ruler_akk/mean] layer 30: mc_r2=-1.151
+[llama2_7b/assyrian_ruler_akk/mean] layer 31: mc_r2=-1.091
+[llama2_7b/assyrian_ruler_akk/mean] layer 32: mc_r2=-1.230
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/cross_decomposition/_pls.py:308: UserWarning: y residual is constant at iteration 23
+  warnings.warn(f"y residual is constant at iteration {k}")
+[llama2_7b/assyrian_ruler_akk/mean] k-sweep at best layer 9: k=32
+[write] summary_entity_layerwise.csv (8428 rows)
+[write] summary_entity_best.csv (282 rows)
+[write] RESULTS_entity.md
+[yarin-sandbox aa6d24042] C23: WB-akk llama2_7b (job 53180)
+ 8 files changed, 9275 insertions(+)
+ create mode 100644 v_1/src/world_models/akkadian/results/probes_entity/llama2_7b/assyrian_ruler_akk.ent_mean.json
+ create mode 100644 v_1/src/world_models/akkadian/results/probes_entity/llama2_7b/assyrian_ruler_akk.last.json
+ create mode 100644 v_1/src/world_models/akkadian/results/probes_entity/llama2_7b/assyrian_ruler_akk.mean.json
+ create mode 100644 v_1/src/world_models/akkadian/results/probes_entity/qwen3_8b/assyrian_ruler_akk.ent_mean.json
+ create mode 100644 v_1/src/world_models/akkadian/results/probes_entity/qwen3_8b/assyrian_ruler_akk.last.json
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch                yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   f8e6e9306..aa6d24042  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Tue Oct  6 09:49:37 UTC 2026 ===

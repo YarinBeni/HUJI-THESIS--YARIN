@@ -1,0 +1,143 @@
+# job 33435 C4_ladder exit=0 Wed Sep  2 13:04:32 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C4_ladder_33433_0.out
+=== C4 ladder emin2_cunei400m_t0_akk === job 33435 Wed Sep  2 12:44:05 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[ladder] L12mean_akk ridge erase=none       mc +0.447 pooled +0.422 readability after nan (k=0)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[ladder] L12mean_akk ridge erase=ruler      mc +0.039 pooled -0.099 readability after 0.000 (k=40)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:620: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:620: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+[ladder] L12mean_akk ridge erase=period     mc +0.246 pooled +0.158 readability after 0.557 (k=6)
+[ladder] L12mean_akk ridge erase=subgenre   mc +0.294 pooled +0.197 readability after 0.061 (k=21)
+[ladder] L12mean_akk ridge erase=provenance mc +0.142 pooled +0.113 readability after 0.083 (k=21)
+[ladder] L12mean_akk ridge erase=length     mc +0.423 pooled +0.312 readability after 0.201 (k=6)
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+/home/yarin.b/miniconda3/envs/thesis/lib/python3.11/site-packages/sklearn/metrics/_classification.py:2924: UserWarning: y_pred contains classes not in y_true
+  warnings.warn("y_pred contains classes not in y_true")
+[ladder] L12mean_akk ridge erase=year10     mc -0.003 pooled +0.093 readability after 0.033 (k=7)
+# Erasure ladder — Thalesian/cuneiformBase-400m L12 mean · langs ['akk'] · ridge
+
+| erased | k | mc ρ | gkf pooled ρ | Δ mc vs none | z readable after (bal. acc) |
+|---|---|---|---|---|---|
+| none | 0 | +0.447 | +0.422 | +0.000 | — |
+| ruler | 40 | +0.039 | -0.099 | -0.408 | 0.00 |
+| period | 6 | +0.246 | +0.158 | -0.201 | 0.56 |
+| subgenre | 21 | +0.294 | +0.197 | -0.152 | 0.06 |
+| provenance | 21 | +0.142 | +0.113 | -0.304 | 0.08 |
+| length | 6 | +0.423 | +0.312 | -0.024 | 0.20 |
+| year10 | 7 | -0.003 | +0.093 | -0.450 | 0.03 |
+
+[yarin-sandbox 2a457e5e] C4: erasure ladder emin2_cunei400m_t0_akk (job 33435)
+ 87 files changed, 11 insertions(+)
+ create mode 100644 chrono/reports/tier0/ladder/emin2_cunei400m_t0_akk_ridge.md
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_length-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_length-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_length-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_length-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_length-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_none-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_none-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_none-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_none-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_none-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_period-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_period-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_period-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_period-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_period-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_provenance-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_provenance-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_provenance-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_provenance-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_provenance-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_ruler-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_ruler-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_ruler-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_ruler-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_ruler-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_subgenre-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_subgenre-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_subgenre-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_subgenre-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_subgenre-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_year10-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_year10-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_year10-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_year10-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_akk_year10-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_none-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_none-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_none-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_none-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_none-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_period-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_period-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_period-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_period-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_period-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_ruler-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_ruler-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_ruler-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_ruler-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_ruler-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_subgenre-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_subgenre-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_subgenre-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L12mean_eng_subgenre-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_akk_none-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_akk_none-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_akk_none-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_akk_none-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_akk_none-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_akk_ruler-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_akk_ruler-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_akk_ruler-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_akk_ruler-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_none-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_none-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_none-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_none-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_none-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_ruler-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_ruler-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L16mean_eng_ruler-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_none-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_none-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_none-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_none-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_none-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_ruler-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_ruler-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_akk_ruler-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_eng_none-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_eng_none-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_eng_none-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_eng_none-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_eng_none-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_eng_ruler-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/scores/ladder_ridge_L18mean_eng_ruler-s0-f1.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   ff6b34bf..2a457e5e  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 13:04:32 UTC 2026 ===

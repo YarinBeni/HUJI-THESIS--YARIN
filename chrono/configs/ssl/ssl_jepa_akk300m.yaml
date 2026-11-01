@@ -1,0 +1,23 @@
+# S2 SSL pretraining: jepa on frozen akk300m features (L8 mean), source-balanced, no labels.
+run_name: ssl_jepa_akk300m
+features:
+  kind: emb
+  model: Thalesian/AKK_300m
+  layer: 8
+  site: mean
+head:
+  d_hidden: 512
+  d_proj: 128
+ssl:
+  objective: jepa
+  balance_alpha: 0.5
+  ema: 0.996
+  lambda_offdiag: 0.005
+  temp: 0.1
+  lambda_var: 0.1
+train:
+  steps: 3000
+  batch: 512
+  lr: 0.001
+  wd: 0.0001
+  seed: 0

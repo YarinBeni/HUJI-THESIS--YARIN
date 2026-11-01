@@ -1,0 +1,57 @@
+# job 34040 C14_reprobe exit=0 Fri Sep  4 01:33:18 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C14_reprobe_33995_0.out
+=== C14 Thalesian/cuneiformBase-400m L6 mean === job 34040 Fri Sep  4 01:12:23 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+# S1 representation probes — Thalesian/cuneiformBase-400m::L6::mean
+
+texts 30,729 · PCA 256 · classes need ≥ 30 docs
+
+## Probes (balanced accuracy, 5-fold, tablet level)
+
+| label | classes | n | linear | MLP | chance |
+|---|---|---|---|---|---|
+| period_norm | 5 | 6,300 | 0.901 ± 0.035 | 0.843 ± 0.036 | 0.200 |
+| genre_raw | 71 | 27,187 | 0.278 ± 0.008 | 0.229 ± 0.015 | 0.014 |
+| provenance | 16 | 30,419 | 0.689 ± 0.025 | 0.666 ± 0.022 | 0.062 |
+| source | 5 | 30,720 | 0.967 ± 0.005 | 0.970 ± 0.005 | 0.200 |
+
+## Period probe WITHIN source (linear)
+
+| source | classes | n | balanced acc | chance |
+|---|---|---|---|---|
+| oracc | 2 | 3,414 | 0.995 ± 0.007 | 0.500 |
+| seal | 3 | 328 | 0.768 ± 0.045 | 0.333 |
+
+## Period probe, HELD-OUT source (train on the other non-dated sources, linear)
+
+| held out | classes | n test | balanced acc | chance |
+|---|---|---|---|---|
+| seal | 3 | 292 | 0.658 | 0.333 |
+| orcc (dated) | 3 | 953 | 0.158 | 0.333 |
+
+## Geometry (period)
+
+silhouette (raw space) +0.138 · permutation null -0.021 ± 0.012 · p = 0.000
+k-NN (k=10) period purity 0.983 · chance ≈ 0.341
+silhouette (UMAP-2d) +0.645 · null -0.058 ± 0.032 · p = 0.000
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox c006457b] C14: probes Thalesian/cuneiformBase-400m L6 (job 34040)
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   763329e6..c006457b  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Fri Sep  4 01:33:18 UTC 2026 ===

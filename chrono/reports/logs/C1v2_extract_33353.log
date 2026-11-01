@@ -1,0 +1,68 @@
+# job 33353 C1v2_extract exit=0 Wed Sep  2 07:41:45 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C1v2_extract_33351_0.out
+=== C1v2 extract llama2_7b layers 8,16,24,32 === job 33353 Wed Sep  2 06:27:36 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: 0b4ad0a0
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Fetching 18 files:   0%|          | 0/18 [00:00<?, ?it/s]Fetching 18 files: 100%|██████████| 18/18 [00:00<00:00, 5777.72it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights:   7%|▋         | 20/291 [00:00<00:01, 176.12it/s]Loading weights:  13%|█▎        | 38/291 [00:00<00:01, 139.76it/s]Loading weights:  18%|█▊        | 53/291 [00:00<00:01, 137.93it/s]Loading weights:  23%|██▎       | 67/291 [00:00<00:01, 125.26it/s]Loading weights:  29%|██▉       | 85/291 [00:00<00:01, 123.62it/s]Loading weights:  35%|███▌      | 103/291 [00:00<00:01, 127.75it/s]Loading weights:  41%|████      | 119/291 [00:00<00:01, 131.33it/s]Loading weights:  46%|████▌     | 133/291 [00:01<00:01, 127.49it/s]Loading weights:  51%|█████     | 148/291 [00:01<00:01, 125.97it/s]Loading weights:  55%|█████▌    | 161/291 [00:01<00:01, 123.40it/s]Loading weights:  60%|██████    | 175/291 [00:01<00:00, 125.47it/s]Loading weights:  66%|██████▋   | 193/291 [00:01<00:00, 126.96it/s]Loading weights:  71%|███████▏  | 208/291 [00:01<00:00, 131.19it/s]Loading weights:  76%|███████▋  | 222/291 [00:01<00:00, 126.04it/s]Loading weights:  81%|████████  | 236/291 [00:01<00:00, 122.91it/s]Loading weights:  86%|████████▌ | 249/291 [00:01<00:00, 122.25it/s]Loading weights:  90%|█████████ | 263/291 [00:02<00:00, 125.66it/s]Loading weights:  95%|█████████▍| 276/291 [00:02<00:00, 124.77it/s]Loading weights: 100%|██████████| 291/291 [00:02<00:00, 129.38it/s]
+[extract] NousResearch/Llama-2-7b-hf: 40562 texts, layers [8, 16, 24, 32], sites ['mean', 'last'], store=chrono.models.store
+Token indices sequence length is longer than the specified maximum sequence length for this model (16677 > 2048). Running this sequence through the model will result in indexing errors
+[extract] 1024/40562 texts (101.9s)
+[extract] 2048/40562 texts (227.4s)
+[extract] 3072/40562 texts (315.7s)
+[extract] 4096/40562 texts (470.8s)
+[extract] 5120/40562 texts (608.4s)
+[extract] 6144/40562 texts (678.7s)
+[extract] 7168/40562 texts (827.8s)
+[extract] 8192/40562 texts (970.0s)
+[extract] 9216/40562 texts (1137.0s)
+[extract] 10240/40562 texts (1217.1s)
+[extract] 11264/40562 texts (1242.5s)
+[extract] 12288/40562 texts (1335.8s)
+[extract] 13312/40562 texts (1427.2s)
+[extract] 14336/40562 texts (1507.2s)
+[extract] 15360/40562 texts (1658.4s)
+[extract] 16384/40562 texts (1811.4s)
+[extract] 17408/40562 texts (1958.7s)
+[extract] 18432/40562 texts (2014.1s)
+[extract] 19456/40562 texts (2178.9s)
+[extract] 20480/40562 texts (2220.0s)
+[extract] 21504/40562 texts (2311.1s)
+[extract] 22528/40562 texts (2385.3s)
+[extract] 23552/40562 texts (2490.6s)
+[extract] 24576/40562 texts (2641.4s)
+[extract] 25600/40562 texts (2719.8s)
+[extract] 26624/40562 texts (2889.6s)
+[extract] 27648/40562 texts (3002.7s)
+[extract] 28672/40562 texts (3093.9s)
+[extract] 29696/40562 texts (3175.5s)
+[extract] 30720/40562 texts (3282.1s)
+[extract] 31744/40562 texts (3438.9s)
+[extract] 32768/40562 texts (3504.0s)
+[extract] 33792/40562 texts (3616.2s)
+[extract] 34816/40562 texts (3726.6s)
+[extract] 35840/40562 texts (3789.7s)
+[extract] 36864/40562 texts (3891.8s)
+[extract] 37888/40562 texts (4048.2s)
+[extract] 38912/40562 texts (4221.9s)
+[extract] 39936/40562 texts (4365.8s)
+[extract] 40562/40562 texts (4428.4s)
+[done] {"n_texts": 40562, "n_embedded": 40562, "n_skipped": 0, "layers": [8, 16, 24, 32], "sites": ["mean", "last"], "elapsed_s": 4428.4, "model": "llama2_7b", "hfid": "NousResearch/Llama-2-7b-hf", "store_root": "chrono/artifacts_tier0/emb_store", "max_tokens": 512, "dtype": "auto"}
+[yarin-sandbox edfcf6e0] C1v2: tier0 features llama2_7b (job 33353)
+ 1 file changed, 21 insertions(+)
+ create mode 100644 chrono/reports/tier0/extract_meta__llama2_7b.json
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Created autostash: ffdc4fd6
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   2fb0dfdd..edfcf6e0  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 07:41:45 UTC 2026 ===

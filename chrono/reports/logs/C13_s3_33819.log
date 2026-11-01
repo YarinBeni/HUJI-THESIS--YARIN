@@ -1,0 +1,175 @@
+# job 33819 C13_s3 exit=0 Thu Sep  3 15:42:57 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C13_s3_33674_16.out
+=== C13 s3_cunei400m_init-jepa_frac50 seed 1 === job 33819 Thu Sep  3 12:05:08 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: cc4d62af
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[labels] label_frac=0.5: 473/925 train docs kept (39 rulers, all retained)
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_cunei400m-s0.pt: missing [] unexpected []
+epoch 50/200 loss 33.7228
+epoch 100/200 loss 28.8245
+epoch 150/200 loss 25.0821
+epoch 200/200 loss 23.2930
+{
+  "run_id": "s3_cunei400m_init-jepa_frac50-s1-f0",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.6963826434914249,
+    "train_spearman": 0.6959629775274384,
+    "final_loss": 23.292996406555176,
+    "identical_view_rate": 0.005443974630021142,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-jepa_frac50-s1-f0.parquet"
+}
+[labels] label_frac=0.5: 489/956 train docs kept (39 rulers, all retained)
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_cunei400m-s0.pt: missing [] unexpected []
+epoch 50/200 loss 32.9871
+epoch 100/200 loss 28.4552
+epoch 150/200 loss 24.8577
+epoch 200/200 loss 23.1289
+{
+  "run_id": "s3_cunei400m_init-jepa_frac50-s1-f1",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7493481481639255,
+    "train_spearman": 0.7492214377126781,
+    "final_loss": 23.12887668609619,
+    "identical_view_rate": 0.0033640081799591,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-jepa_frac50-s1-f1.parquet"
+}
+[labels] label_frac=0.5: 488/963 train docs kept (27 rulers, all retained)
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_cunei400m-s0.pt: missing [] unexpected []
+epoch 50/200 loss 33.2831
+epoch 100/200 loss 28.7047
+epoch 150/200 loss 24.7469
+epoch 200/200 loss 22.7770
+{
+  "run_id": "s3_cunei400m_init-jepa_frac50-s1-f2",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7541869523935527,
+    "train_spearman": 0.7541889910251797,
+    "final_loss": 22.77700424194336,
+    "identical_view_rate": 0.006875,
+    "test_spearman": 0.17796721560627793
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-jepa_frac50-s1-f2.parquet"
+}
+[labels] label_frac=0.5: 490/964 train docs kept (30 rulers, all retained)
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_cunei400m-s0.pt: missing [] unexpected []
+epoch 50/200 loss 33.2098
+epoch 100/200 loss 29.0689
+epoch 150/200 loss 25.1063
+epoch 200/200 loss 23.2649
+{
+  "run_id": "s3_cunei400m_init-jepa_frac50-s1-f3",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7284531079488412,
+    "train_spearman": 0.7282081782757053,
+    "final_loss": 23.264906883239746,
+    "identical_view_rate": 0.0045,
+    "test_spearman": 0.6170602739024584
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-jepa_frac50-s1-f3.parquet"
+}
+[labels] label_frac=0.5: 488/964 train docs kept (25 rulers, all retained)
+[init] loaded chrono/reports/ssl/heads/ssl_jepa_cunei400m-s0.pt: missing [] unexpected []
+epoch 50/200 loss 32.7309
+epoch 100/200 loss 29.4321
+epoch 150/200 loss 25.8691
+epoch 200/200 loss 23.0466
+{
+  "run_id": "s3_cunei400m_init-jepa_frac50-s1-f4",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.6405043789993415,
+    "train_spearman": 0.6408792082064045,
+    "final_loss": 23.046550750732422,
+    "identical_view_rate": 0.007704918032786885,
+    "test_spearman": 0.6756368706053859
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-jepa_frac50-s1-f4.parquet"
+}
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 36f4c027] C13: s3_cunei400m_init-jepa_frac50 seed 1 (job 33819)
+ 7 files changed, 174 insertions(+)
+ create mode 100644 chrono/reports/logs/C13_s3_33817.log
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-none_frac25-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-none_frac25-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-none_frac25-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-none_frac25-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-none_frac25-s0-f4.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: 71b294b7
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: ba5e571c
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: 1ab495c2
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+Everything up-to-date
+[commit_push_sandbox] FAILED after 5 attempts
+=== Done. Thu Sep  3 15:42:57 UTC 2026 ===

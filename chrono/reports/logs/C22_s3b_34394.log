@@ -1,0 +1,115 @@
+# job 34394 C22_s3b exit=0 Sat Sep  5 10:31:46 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C22_s3b_34385_8.out
+=== C22 s3_cunei400m_init-byol_wdated_frac100 seed 2 === job 34394 Sat Sep  5 10:28:50 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[init] loaded chrono/artifacts_ssl/ssl_runs/ssl_byol_cunei400m_wdated-s0.pt: missing [] unexpected []
+epoch 50/200 loss 25.2331
+epoch 100/200 loss 22.3057
+epoch 150/200 loss 18.4756
+epoch 200/200 loss 15.8125
+{
+  "run_id": "s3_cunei400m_init-byol_wdated_frac100-s2-f0",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.6590942406899083,
+    "train_spearman": 0.6589195179027242,
+    "final_loss": 15.812505722045898,
+    "identical_view_rate": 0.007491891891891892,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-byol_wdated_frac100-s2-f0.parquet"
+}
+[init] loaded chrono/artifacts_ssl/ssl_runs/ssl_byol_cunei400m_wdated-s0.pt: missing [] unexpected []
+epoch 50/200 loss 25.1868
+epoch 100/200 loss 20.9845
+epoch 150/200 loss 17.8661
+epoch 200/200 loss 15.7989
+{
+  "run_id": "s3_cunei400m_init-byol_wdated_frac100-s2-f1",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7081552662367969,
+    "train_spearman": 0.7080641065506904,
+    "final_loss": 15.798903465270996,
+    "identical_view_rate": 0.00651673640167364,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-byol_wdated_frac100-s2-f1.parquet"
+}
+[init] loaded chrono/artifacts_ssl/ssl_runs/ssl_byol_cunei400m_wdated-s0.pt: missing [] unexpected []
+epoch 50/200 loss 24.7555
+epoch 100/200 loss 22.2697
+epoch 150/200 loss 18.3492
+epoch 200/200 loss 15.4821
+{
+  "run_id": "s3_cunei400m_init-byol_wdated_frac100-s2-f2",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.732503082276214,
+    "train_spearman": 0.7324687100972447,
+    "final_loss": 15.482126951217651,
+    "identical_view_rate": 0.007876427829698858,
+    "test_spearman": 0.17208355188787344
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-byol_wdated_frac100-s2-f2.parquet"
+}
+[init] loaded chrono/artifacts_ssl/ssl_runs/ssl_byol_cunei400m_wdated-s0.pt: missing [] unexpected []
+epoch 50/200 loss 25.0389
+epoch 100/200 loss 22.3281
+epoch 150/200 loss 18.7187
+epoch 200/200 loss 16.5781
+{
+  "run_id": "s3_cunei400m_init-byol_wdated_frac100-s2-f3",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7118117137418,
+    "train_spearman": 0.7117363132586317,
+    "final_loss": 16.578121185302734,
+    "identical_view_rate": 0.0036566390041493776,
+    "test_spearman": 0.5866439293387478
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-byol_wdated_frac100-s2-f3.parquet"
+}
+[init] loaded chrono/artifacts_ssl/ssl_runs/ssl_byol_cunei400m_wdated-s0.pt: missing [] unexpected []
+epoch 50/200 loss 25.5848
+epoch 100/200 loss 21.4956
+epoch 150/200 loss 17.8364
+epoch 200/200 loss 15.6016
+{
+  "run_id": "s3_cunei400m_init-byol_wdated_frac100-s2-f4",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.6337314128332318,
+    "train_spearman": 0.6338277076738632,
+    "final_loss": 15.601551532745361,
+    "identical_view_rate": 0.007287344398340249,
+    "test_spearman": 0.7177086689317389
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_cunei400m_init-byol_wdated_frac100-s2-f4.parquet"
+}
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 7ef3e037] C22: s3_cunei400m_init-byol_wdated_frac100 seed 2 (job 34394)
+ 6 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-byol_wdated_frac100-s2-f0.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-byol_wdated_frac100-s2-f1.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-byol_wdated_frac100-s2-f2.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-byol_wdated_frac100-s2-f3.parquet
+ create mode 100644 chrono/reports/tier0/s3_scores/s3_cunei400m_init-byol_wdated_frac100-s2-f4.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   3c8d6e63..7ef3e037  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Sat Sep  5 10:31:45 UTC 2026 ===

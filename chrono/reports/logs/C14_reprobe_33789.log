@@ -1,0 +1,22 @@
+# job 33789 C14_reprobe exit=0 Thu Sep  3 09:14:12 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C14_reprobe_33784_4.out
+=== C14 NousResearch/Llama-2-7b-hf L16 mean === job 33789 Thu Sep  3 08:53:00 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: cf9ecd9d
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Traceback (most recent call last):
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_representations.py", line 167, in <module>
+    main()
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/scripts/probe_representations.py", line 91, in main
+    X = store.get(args.model, args.layer, args.site, ids).astype(np.float32)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/models/store.py", line 213, in get
+    raise KeyError(
+KeyError: 'EmbStore missing 30729 id(s) for (NousResearch/Llama-2-7b-hf, L16, mean): ssl::ebl::BM.32779, ssl::ebl::BM.52110, ssl::archibab::ARM 26/1 177, ssl::oracc::X499082, ssl::lbl_letters::NBC 1120, ssl::ebl::K.11230, ssl::ebl::K.15044, ssl::ebl::K.7886, ssl::ebl::1891,0509.101, ssl::ebl::K.3569, ssl::oracc::P334844, ssl::lbl_letters::FLP 1463, ssl::oracc::P335733, ssl::oracc::P235802, ssl::oracc::P335229, ssl::ebl::K.6715, ssl::ebl::K.15314, ssl::oracc::P334915, ssl::ebl::BM.34125, ssl::ebl::K.6834 (+30709 more)'
+SKIP/FAIL NousResearch/Llama-2-7b-hf (cell may not be extracted yet)

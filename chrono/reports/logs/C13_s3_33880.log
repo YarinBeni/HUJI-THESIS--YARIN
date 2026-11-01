@@ -1,0 +1,93 @@
+# job 33880 C13_s3 exit=0 Thu Sep  3 21:58:36 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C13_s3_33674_59.out
+=== C13 s3_llama2_7b_init-none_frac100_h2048 seed 2 === job 33880 Thu Sep  3 17:58:35 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: 6a4506e5
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+epoch 50/200 loss 16.6794
+epoch 100/200 loss 14.0652
+epoch 150/200 loss 11.6008
+epoch 200/200 loss 9.8337
+{
+  "run_id": "s3_llama2_7b_init-none_frac100_h2048-s2-f0",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7228852229047732,
+    "train_spearman": 0.7227604089946041,
+    "final_loss": 9.833712577819824,
+    "identical_view_rate": 0.007491891891891892,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac100_h2048-s2-f0.parquet"
+}
+epoch 50/200 loss 16.6691
+epoch 100/200 loss 12.9911
+epoch 150/200 loss 11.1093
+epoch 200/200 loss 9.2511
+{
+  "run_id": "s3_llama2_7b_init-none_frac100_h2048-s2-f1",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7736116362659423,
+    "train_spearman": 0.7734812765814745,
+    "final_loss": 9.251126289367676,
+    "identical_view_rate": 0.00651673640167364,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac100_h2048-s2-f1.parquet"
+}
+epoch 50/200 loss 16.1417
+epoch 100/200 loss 13.1998
+epoch 150/200 loss 10.8537
+epoch 200/200 loss 9.1852
+{
+  "run_id": "s3_llama2_7b_init-none_frac100_h2048-s2-f2",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7773159409914249,
+    "train_spearman": 0.777061971011382,
+    "final_loss": 9.185186624526978,
+    "identical_view_rate": 0.007876427829698858,
+    "test_spearman": 0.19058459077577425
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac100_h2048-s2-f2.parquet"
+}
+epoch 50/200 loss 15.9720
+epoch 100/200 loss 13.5178
+epoch 150/200 loss 11.1567
+epoch 200/200 loss 9.4162
+{
+  "run_id": "s3_llama2_7b_init-none_frac100_h2048-s2-f3",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7055037443494753,
+    "train_spearman": 0.7055680667817259,
+    "final_loss": 9.416239261627197,
+    "identical_view_rate": 0.0036566390041493776,
+    "test_spearman": 0.5849707394147391
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac100_h2048-s2-f3.parquet"
+}
+epoch 50/200 loss 17.0429
+epoch 100/200 loss 14.8624
+epoch 150/200 loss 12.9196
+epoch 200/200 loss 10.9906
+{
+  "run_id": "s3_llama2_7b_init-none_frac100_h2048-s2-f4",
+  "metrics": {
+    "final_dep": NaN,
+    "train_soft_spearman": 0.7010049506320735,
+    "train_spearman": 0.7011856898829759,
+    "final_loss": 10.99057388305664,
+    "identical_view_rate": 0.007287344398340249,
+    "test_spearman": 0.6405803862733179
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/s3_llama2_7b_init-none_frac100_h2048-s2-f4.parquet"
+}
+[2026-09-03T21:58:36.011] error: *** JOB 33880 ON g0376 CANCELLED AT 2026-09-03T21:58:36 DUE TO TIME LIMIT ***

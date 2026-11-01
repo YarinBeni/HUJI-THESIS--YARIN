@@ -1,0 +1,60 @@
+# job 53143 C23_wb_akk exit=0 Tue Oct  6 09:25:00 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C23_wb_akk_53143_2.out
+=== C23 WB-akk thalesian_cunei400m === job 53143 Tue Oct  6 09:21:38 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Created autostash: 7d7e383a
+Current branch yarin-sandbox is up to date.
+Applied autostash.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[harvest] 970/970 PN-bearing docs aligned
+
+[report] ruler -> attested spellings (n docs):
+  Antiochus I                  "m-an-ti-'u-ku-us" (1) | 'm-si-lu-uk-ku' (1)
+  Ashurbanipal                 'm-AN-ŠAR2-DU3-A' (117) | 'm-te-um-man' (57)
+  Aššur-etel-ilāni             'm-AN-ŠAR2-NIR-GAL2-DINGIR-MEŠ' (2) | 'm-AN-ŠAR2-e-tel-li-DINGIR-MEŠ' (2)
+  Bel-ibni                     'm-mu-še-zib-d-EN' (1) | 'm-d-AG-ga-mil' (1)
+  Cyrus II                     'm-kam-bu-zi-ia' (2)
+  Enlil-nadin-apli             'd-en-lil2-SUM-IBILA' (1)
+  Esarhaddon                   'm-AŠ-PAP-AŠ' (12) | 'm-a-su-hi-li' (10)
+  Itti-Marduk-balaṭu           'd-AMAR-UTU-DUGUD-ŠEŠ-MEŠ-šu2' (1)
+  Marduk-nadin-ahhe            'd-AMAR-UTU-SUM-ŠEŠ-MEŠ' (2)
+  Marduk-zakir-šumi I          'd-AMAR-UTU-MU-MU' (2)
+  Marduk-šakin-šumi            'm-ia-ki-na' (1) | 'm-d-AMAR-UTU-NUMUN-TIN' (1)
+  Nabonidus                    "d-na-bi-um-na-'i-id" (10) | "d-AG-na-'i-id" (9)
+  Nabû-mukin-apli              'm-ri-mut-DINGIR-MEŠ' (2)
+  Nabû-naṣir                   'm-d-AG-NUN-ME-DINGIR-MEŠ' (1) | 'm-nad-na-a' (1)
+  Nabû-šuma-iškun              'm-d-50-AŠ-KUR' (1) | 'm-d-IŠKUR-MU-KAM2' (1)
+  Nabû-šumu-libur              'd-AG-MU-li-bur' (1)
+  Nabû-šumu-lišir              'm-da-kur' (1) | 'm-d-PA-MU-SI-SA2' (1)
+  Nebuchadnezzar I             'm-d-aš-šur-ba-an-IBILA' (2)
+  Nebuchadnezzar II            'd-na-bi-um-ku-du-ur2-ri-u2-ṣu-ur2' (26) | 'd-na-bi-um-IBILA-u2-ṣu-ur2' (23)
+  Ninurta-kudurri-usur I       'd-MAŠ-NIG2-DU-PAP' (1)
+  Sargon II                    'm-d-hum-ba-ni-ga-aš2' (16) | 'm-mi-ta-a' (13)
+  Sennacherib                  'm-d-AMAR-UTU-IBILA-SUM-NA' (27) | 'm-d-EN-ZU-ŠEŠ-MEŠ-eri-ba' (23)
+  Shalmaneser V                'm-d-SILIM-man-MAŠ' (7) | 'm-SILIM-man-MAŠ' (2)
+  Sîn-šarru-iškun              'm-d-30-LUGAL-GAR-un' (9) | 'm-d-EN-ZU-LUGAL-GAR-un' (2)
+  Tiglath-pileser III          'm-tukul-ti-A-e2-šar2-ra' (15) | 'm-su-lu-ma-al' (12)
+[report] rulers with no surviving spelling: 15: ['Adad-apla-iddina', 'Amel-Marduk', 'Bazi Dynasty Unidentified Ruler', 'Eriba-Marduk', 'Eulmaš-šakin-šumi', 'Kaššû-nadin-ahhe', 'Mar-biti-apla-uṣur', 'Marduk-apla-iddina II', 'Marduk-šapik-zeri', 'Nabopolassar', 'Neriglissar', 'Ninurta-nadin-šumi', 'Simbar-Šipak', 'Unidentified Neo-Babylonian Ruler', 'Šamaš-šuma-ukin']
+[build] wrote /home/yarin.b/projects/HUJI-THESIS--YARIN/v_1/src/world_models/data/entity_datasets/assyrian_ruler_akk.csv: 108 rows, 22 rulers, 15 test rows
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]Fetching 7 files: 100%|██████████| 7/7 [00:00<00:00, 2847.46it/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/303 [00:00<?, ?it/s]Loading weights:   6%|▌         | 17/303 [00:00<00:02, 127.61it/s]Loading weights:  14%|█▍        | 43/303 [00:00<00:01, 187.97it/s]Loading weights:  21%|██        | 63/303 [00:00<00:01, 177.29it/s]Loading weights:  31%|███       | 94/303 [00:00<00:00, 221.09it/s]Loading weights:  41%|████▏     | 125/303 [00:00<00:00, 248.29it/s]Loading weights:  50%|████▉     | 151/303 [00:00<00:00, 201.51it/s]Loading weights:  57%|█████▋    | 173/303 [00:00<00:00, 181.67it/s]Loading weights:  67%|██████▋   | 203/303 [00:01<00:00, 210.12it/s]Loading weights:  75%|███████▍  | 226/303 [00:01<00:00, 202.70it/s]Loading weights:  85%|████████▌ | 259/303 [00:01<00:00, 234.36it/s]Loading weights:  94%|█████████▎| 284/303 [00:01<00:00, 226.79it/s]Loading weights: 100%|██████████| 303/303 [00:02<00:00, 127.64it/s]
+[done] thalesian_cunei400m/assyrian_ruler_akk: 12 layers x 4 sites, 22 entities, 0 truncated, 1.9s
+[thalesian_cunei400m/assyrian_ruler_akk/ent_last] layer 1: mc_r2=-9.557
+[thalesian_cunei400m/assyrian_ruler_akk/ent_last] layer 2: mc_r2=-3.320
+[thalesian_cunei400m/assyrian_ruler_akk/ent_last] layer 3: mc_r2=-3.082
+[thalesian_cunei400m/assyrian_ruler_akk/ent_last] layer 4: mc_r2=-3.359
+[thalesian_cunei400m/assyrian_ruler_akk/ent_last] layer 5: mc_r2=-2.069
+[thalesian_cunei400m/assyrian_ruler_akk/ent_last] layer 6: mc_r2=-1.917
+[thalesian_cunei400m/assyrian_ruler_akk/ent_last] layer 7: mc_r2=-1.939
+[thalesian_cunei400m/assyrian_ruler_akk/ent_last] layer 8: mc_r2=-1.476
+[thalesian_cunei400m/assyrian_ruler_akk/ent_last] layer 9: mc_r2=-1.218
+[thalesian_cunei400m/assyrian_ruler_akk/ent_last] layer 10: mc_r2=-1.138
+[thalesian_cunei400m/assyrian_ruler_akk/ent_last] layer 11: mc_r2=-1.330
+[thalesian_cunei400m/assyrian_ruler_akk/ent_last] layer 12: mc_r2=-0.888
+[2026-10-06T09:25:00.912] error: *** JOB 53143 ON g0378 CANCELLED AT 2026-10-06T09:25:00 DUE to SIGNAL Terminated ***

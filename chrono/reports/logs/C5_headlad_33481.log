@@ -1,0 +1,116 @@
+# job 33481 C5_headlad exit=0 Wed Sep  2 14:22:33 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C5_headlad_33475_5.out
+=== C5 emin2_cunei400m_t0_akk_erase_period seed 2 === job 33481 Wed Sep  2 14:19:34 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+[erase] LEACE 'period' (k=6, rank 5) fitted on 925 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.4130
+epoch 100/200 loss 5.7726
+epoch 150/200 loss 4.8032
+epoch 200/200 loss 4.3902
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_period-s2-f0",
+  "metrics": {
+    "train_soft_spearman": 0.2557091953025789,
+    "train_spearman": 0.25557389535897657,
+    "final_loss": 4.390197396278381,
+    "identical_view_rate": 0.007491891891891892,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_period-s2-f0.parquet"
+}
+[erase] LEACE 'period' (k=6, rank 5) fitted on 956 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.9773
+epoch 100/200 loss 6.0695
+epoch 150/200 loss 5.1254
+epoch 200/200 loss 4.6107
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_period-s2-f1",
+  "metrics": {
+    "train_soft_spearman": 0.3291130897999424,
+    "train_spearman": 0.3293864641779949,
+    "final_loss": 4.610696792602539,
+    "identical_view_rate": 0.00651673640167364,
+    "test_spearman": NaN
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_period-s2-f1.parquet"
+}
+[erase] LEACE 'period' (k=6, rank 3) fitted on 963 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.2792
+epoch 100/200 loss 5.4234
+epoch 150/200 loss 4.4771
+epoch 200/200 loss 4.0164
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_period-s2-f2",
+  "metrics": {
+    "train_soft_spearman": 0.32785758797501524,
+    "train_spearman": 0.3278200079597098,
+    "final_loss": 4.016436457633972,
+    "identical_view_rate": 0.007876427829698858,
+    "test_spearman": 0.17296304571849047
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_period-s2-f2.parquet"
+}
+[erase] LEACE 'period' (k=6, rank 5) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 8.0475
+epoch 100/200 loss 6.0169
+epoch 150/200 loss 4.9690
+epoch 200/200 loss 4.5390
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_period-s2-f3",
+  "metrics": {
+    "train_soft_spearman": 0.2847309472887018,
+    "train_spearman": 0.2845401818954812,
+    "final_loss": 4.538972973823547,
+    "identical_view_rate": 0.0036566390041493776,
+    "test_spearman": 0.2580581086999153
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_period-s2-f3.parquet"
+}
+[erase] LEACE 'period' (k=6, rank 4) fitted on 964 train orig rows, applied to 19088 views
+epoch 50/200 loss 7.4661
+epoch 100/200 loss 5.7616
+epoch 150/200 loss 4.8275
+epoch 200/200 loss 4.4507
+{
+  "run_id": "emin2_cunei400m_t0_akk_erase_period-s2-f4",
+  "metrics": {
+    "train_soft_spearman": 0.3204760968740886,
+    "train_spearman": 0.3200484858072099,
+    "final_loss": 4.450693726539612,
+    "identical_view_rate": 0.007287344398340249,
+    "test_spearman": 0.5145116037834553
+  },
+  "scores_path": "/home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts/scores/emin2_cunei400m_t0_akk_erase_period-s2-f4.parquet"
+}
+[yarin-sandbox 1104f1a4] C5: head ladder emin2_cunei400m_t0_akk_erase_period seed 2 (job 33481)
+ 22 files changed, 100 insertions(+)
+ create mode 100644 chrono/reports/logs/C5_headlad_33477.log
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s0-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s0-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s0-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s0-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s0-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s1-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s1-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s1-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s1-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s1-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s2-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s2-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s2-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s2-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_period-s2-f4.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_provenance-s2-f0.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_provenance-s2-f1.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_provenance-s2-f2.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_provenance-s2-f3.parquet
+ create mode 100644 chrono/reports/tier0/ladder/head_scores/emin2_cunei400m_t0_akk_erase_provenance-s2-f4.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Current branch yarin-sandbox is up to date.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   a69da657..1104f1a4  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Wed Sep  2 14:22:33 UTC 2026 ===

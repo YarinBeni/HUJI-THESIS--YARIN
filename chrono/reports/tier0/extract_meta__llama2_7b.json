@@ -1,0 +1,21 @@
+{
+  "n_texts": 40562,
+  "n_embedded": 40562,
+  "n_skipped": 0,
+  "layers": [
+    8,
+    16,
+    24,
+    32
+  ],
+  "sites": [
+    "mean",
+    "last"
+  ],
+  "elapsed_s": 4428.4,
+  "model": "llama2_7b",
+  "hfid": "NousResearch/Llama-2-7b-hf",
+  "store_root": "chrono/artifacts_tier0/emb_store",
+  "max_tokens": 512,
+  "dtype": "auto"
+}

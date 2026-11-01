@@ -1,0 +1,86 @@
+# job 34182 C19_anti exit=0 Fri Sep  4 09:41:50 UTC 2026
+# last 4000 lines of /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/sbatch/logs/C19_anti_34176_0.out
+=== C19 barlow + leace === job 34182 Fri Sep  4 09:18:03 UTC 2026
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[ssl] ssl_barlow_cunei400m_leace-s99: 24,589 train texts, 270,479 views; loading features
+[ssl] objective=barlow d_in=768 head_params=722,561 steps=60 batch=512 balance_alpha=0.5 sources={'ebl': 13242, 'oracc': 9016, 'archibab': 1218, 'lbl_letters': 816, 'seal': 288, 'orcc': 9}
+[ssl] step 0: LEACE refit, rank 5
+[ssl] step 0 loss 36.2212 (0s)
+[ssl] step 59 loss 18.3186 (1s)
+[ssl] done ssl_barlow_cunei400m_leace-s99: head -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts_ssl/ssl_runs/ssl_barlow_cunei400m_leace-s99.pt; embeddings -> store model 'ssl::ssl_barlow_cunei400m_leace-s99' L0 site h (31,905 texts)
+[ssl] ssl_barlow_cunei400m_leace-s0: 24,589 train texts, 270,479 views; loading features
+[ssl] objective=barlow d_in=768 head_params=722,561 steps=3000 batch=512 balance_alpha=0.5 sources={'ebl': 13242, 'oracc': 9016, 'archibab': 1218, 'lbl_letters': 816, 'seal': 288, 'orcc': 9}
+[ssl] step 0: LEACE refit, rank 5
+[ssl] step 0 loss 34.9265 (0s)
+[ssl] step 200 loss 10.8181 (2s)
+[ssl] step 400 loss 4.7158 (3s)
+[ssl] step 600 loss 3.8756 (5s)
+[ssl] step 800 loss 3.4546 (7s)
+[ssl] step 1000 loss 3.1609 (8s)
+[ssl] step 1200 loss 3.0100 (10s)
+[ssl] step 1400 loss 2.8495 (11s)
+[ssl] step 1600 loss 2.7353 (13s)
+[ssl] step 1800 loss 2.6794 (14s)
+[ssl] step 2000: LEACE refit, rank 5
+[ssl] step 2000 loss 2.5793 (16s)
+[ssl] step 2200 loss 2.5438 (18s)
+[ssl] step 2400 loss 2.4705 (19s)
+[ssl] step 2600 loss 2.4277 (21s)
+[ssl] step 2800 loss 2.3828 (22s)
+[ssl] step 2999 loss 2.3342 (24s)
+[ssl] done ssl_barlow_cunei400m_leace-s0: head -> /home/yarin.b/projects/HUJI-THESIS--YARIN/chrono/artifacts_ssl/ssl_runs/ssl_barlow_cunei400m_leace-s0.pt; embeddings -> store model 'ssl::ssl_barlow_cunei400m_leace-s0' L0 site h (31,905 texts)
+# S1 representation probes — ssl::ssl_barlow_cunei400m_leace-s0::L0::h
+
+texts 30,729 · PCA 0 · classes need ≥ 30 docs
+
+## Probes (balanced accuracy, 5-fold, tablet level)
+
+| label | classes | n | linear | MLP | chance |
+|---|---|---|---|---|---|
+| period_norm | 5 | 6,300 | 0.631 ± 0.024 | 0.790 ± 0.017 | 0.200 |
+| genre_raw | 71 | 27,187 | 0.217 ± 0.004 | 0.186 ± 0.007 | 0.014 |
+| provenance | 16 | 30,419 | 0.341 ± 0.014 | 0.589 ± 0.027 | 0.062 |
+| source | 5 | 30,720 | 0.213 ± 0.002 | 0.875 ± 0.016 | 0.200 |
+
+## Period probe WITHIN source (linear)
+
+| source | classes | n | balanced acc | chance |
+|---|---|---|---|---|
+| oracc | 2 | 3,414 | 0.994 ± 0.007 | 0.500 |
+| seal | 3 | 328 | 0.767 ± 0.040 | 0.333 |
+
+## Period probe, HELD-OUT source (train on the other non-dated sources, linear)
+
+| held out | classes | n test | balanced acc | chance |
+|---|---|---|---|---|
+| seal | 3 | 292 | 0.264 | 0.333 |
+| orcc (dated) | 3 | 953 | 0.061 | 0.333 |
+
+## Geometry (period)
+
+silhouette (raw space) -0.054 · permutation null -0.022 ± 0.017 · p = 0.915
+k-NN (k=10) period purity 0.894 · chance ≈ 0.341
+silhouette (UMAP-2d) +0.303 · null -0.054 ± 0.028 · p = 0.000
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+[yarin-sandbox 4453d5a2] C19: ssl_barlow_cunei400m_leace-s0 (job 34182)
+ 3 files changed, 32 insertions(+)
+ create mode 100644 chrono/reports/ssl/S1_ssl_ssl_barlow_cunei400m_leace-s0_L0_h.md
+ create mode 100644 chrono/reports/ssl/umap_ssl_ssl_barlow_cunei400m_leace-s0_L0_h.parquet
+From https://github.com/YarinBeni/HUJI-THESIS--YARIN
+ * branch              yarin-sandbox -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Current branch yarin-sandbox is up to date.
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+To https://github.com/YarinBeni/HUJI-THESIS--YARIN.git
+   3020485e..4453d5a2  HEAD -> yarin-sandbox
+[commit_push_sandbox] pushed to yarin-sandbox
+=== Done. Fri Sep  4 09:41:50 UTC 2026 ===
